@@ -7,7 +7,7 @@ class ViewController: NSViewController {
     private var backend: Backend!
 
     override func loadView() {
-        self.view = NSView(frame: NSRect(x: 0, y: 0, width: 1000, height: 700))
+        self.view = NSView(frame: NSRect(x: 0, y: 400, width: 1600, height: 700))
     }
 
     override func viewDidLoad() {

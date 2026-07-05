@@ -13,6 +13,9 @@ class Backend {
         process.arguments = [scriptPath]
 
         process.currentDirectoryURL = URL(fileURLWithPath: Bundle.main.resourcePath! + "/backend")
+        process.environment = ProcessInfo.processInfo.environment.merging(
+            ["LANG": "en_US.UTF-8", "LC_ALL": "en_US.UTF-8"]
+        ) { _, new in new }
         process.standardInput = pipeIn
         process.standardOutput = pipeOut
         process.standardError = Pipe()

@@ -34,7 +34,7 @@ begin
       returned_data = JSON.parse(res)
     rescue Exception => e
       ok = false
-      returned_error = e.message
+      returned_error = "#{e.message} in : #{res}"
     end
     
   when "workday"
