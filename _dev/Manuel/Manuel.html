@@ -440,6 +440,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
+<h2 id="_todo_list">Todo list</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>pouvoir éditer la fiche du projet dans l&#8217;interface</p>
+</li>
+<li>
+<p>pouvoir créer la fiche du projet dans l&#8217;interface</p>
+</li>
+<li>
+<p>"+"</p>
+</li>
+<li>
+<p>&#8658; ouvre le pan avec l&#8217;éditeur</p>
+</li>
+<li>
+<p>on met le texte type</p>
+<div class="literalblock">
+<div class="content">
+<pre>----
+---
+# Infos générales sur le projet
+- name: Nom du rpojet
+  folder: /absolute/path/to/project/folder
+  services:
+    # Services au démarrage
+    startup:
+----</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_présentation">Présentation</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -511,7 +548,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre>---------------------------————
-|       Titre projet          |
+|       TITRE PROJET          |
 |                       infos |
 |-------------------------————|
 |   Service 1                 |
@@ -526,6 +563,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 |   ...                       |
 |                             |
 –––––––––––––––––––––––––––––––</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_panneau_de_nouveau_projet">Panneau de nouveau projet</h3>
+<div class="paragraph">
+<p>Quand on clique sur le "+" qui se trouve à gauche en bas de l&#8217;interface, un panneau s&#8217;ouvre pour définir le nouveau projet.</p>
+</div>
+<div class="paragraph">
+<p>La partie supérieure permet d&#8217;entrer les informations sur le projet :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>lui donner un titre,</p>
+</li>
+<li>
+<p>indiquer son dossier de référence (un projet doit toujours avoir un dossier),</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>La partie inférieure permet de choisir les <a href="#services">Les services</a> par simple glisser-déposer.</p>
+</div>
+<div class="paragraph">
+<p>Exemple : pour le service “Ouvrir dans le Finder”, une fois qu&#8217;on l&#8217;a glissé sur le projet, une fenêtre s&#8217;ouvre, demandant d&#8217;ouvrir la fenêtre dans le Finder, de la positionner et de la mettre ans la vue désirée (colonnes, lignes, etc.). Une fois que c&#8217;est fait, on clique sur “OK” et l&#8217;application va automatiquement prendre les informations sur la fenêtre au premier plan dans le finder.</p>
 </div>
 </div>
 </div>
@@ -552,13 +614,48 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">open-window</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-finder-window</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">get-finder-window-info.scpt</p></td>
 <td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre par défaut</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvrir le projet dans le Finder</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Définition dans la fiche projet :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-finder-window</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Propriétés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au dossier (absolu ou relatif au projet)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">position</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[top, left], position vertical et horizontal de la fenêtre</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">taille</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[width, height], largeur et hauteur de la fenêtre</p></td>
 </tr>
 </tbody>
 </table>
@@ -658,13 +755,88 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>Dans la fichier projet :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">service : <code>custom-script</code>
+2+</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Propriétés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au script (absolu ou relatif au dossier du projet)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vars</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Variables éventuelles (sous forme d&#8217;une table JSON ?)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_développement">Développement</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_collecte_informations">Collecte informations</h3>
+<div class="paragraph">
+<p><em>Note : Ce fichier définit des processus qui seront en pratique plus tard. Pour le moment, l&#8217;utilisateur remplit des fiches projet qui le définissent explicitement.</em></p>
+</div>
+<div class="paragraph">
+<p>Chaque <a href="#service">[service]</a> a besoin de collecter des informations. Pour ce faire, il y a :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>les informations directement demandées à l&#8217;utilisateur (p.e. : titre à donner à un service)</p>
+</li>
+<li>
+<p>les informations récupérées automatiquement par script (p.e. : information sur la fenêtre dans le Finder)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- un service est déplacé sur la carte du projet
+- le service demande ses informations, c'est une suite d'opérations
+  simples comme :
+    - demander le titre à donner
+    - lancer le script de collecte d'information fenêtre
+    - demander confirmation
+    - créer le service</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le service définit les informations dont il a besoin. Par exemple, pour l&#8217;ouverture d&#8217;une fenêtre Finder :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le path au dossier</p>
+</li>
+<li>
+<p>la position et la taille</p>
+</li>
+<li>
+<p>le type de vue</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-05 06:41:16 +0200
+Last updated 2026-07-05 08:47:14 +0200
 </div>
 </div>
 </body>

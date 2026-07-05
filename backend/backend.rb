@@ -3,6 +3,7 @@ require "json"
 begin
 
   returned_error  = nil
+  error = null
   returned_data   = nil
   
   
@@ -14,20 +15,31 @@ begin
   # ID de la requête (pour suivi)
   request_id = request["id"]
 
+  #######################################
+  ###       Analyse de l'ACTION       ###
+  #######################################
   case request["action"]
 
   when "load"
     returned_message = "Données chargées"
     returned_data     = {projet: "Mon projet"}
     ok = true
+
+  # Lancement d'un script osascript
+  when "run-osascript"
+    begin
+      ok = true
+      res = `osascript 'scripts/#{request["script-name"]}.scpt'`
+      returned_data = JSON.parse(res)
+    rescue Exception => e
+      ok = false
+      returned_error = e.message
+    end
     
   when "workday"
+    # C'était l'essai pourri ChatGPT
     app = request["app"]
     
-
-    system("open -a 'Visual Studio Code'")
-    system("open -a 'Terminal'")
-
     returned_message = "Environnement prêt pour #{app}"
     ok = true
     
@@ -45,7 +57,7 @@ begin
     ok:       ok,
     id:       request_id,
     message:  returned_message,
-    error:    returned_error,
+    error:    error || returned_error,
     data:     returned_data,
     received_request:  request
   }.to_json)

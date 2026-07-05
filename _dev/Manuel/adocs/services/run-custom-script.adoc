@@ -4,3 +4,12 @@
 | Script    | run-custom-script.rb          |
 | Titre     | Jouer le script               |
 |====
+
+Dans la fichier projet :
+
+|====
+| service : `custom-script`
+2+ | Propriétés
+| path  | Chemin d'accès au script (absolu ou relatif au dossier du projet)
+| vars  | Variables éventuelles (sous forme d'une table JSON ?)
+|====

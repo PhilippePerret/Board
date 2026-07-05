@@ -3,6 +3,8 @@
 // Nom des boutons
 :start-work: Démarrer le travail
 
+include::adocs/_TODO_.adoc[]
+
 include::adocs/presentation.adoc[]
 
 include::adocs/prise-en-main.adoc[]

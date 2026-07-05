@@ -1,5 +1,17 @@
 |====
 | Nom     | Ouvrir fenêtre dans le finder |
-| Id      | open-window                   |
+| Id      | open-finder-window            |
 | Script  | get-finder-window-info.scpt   |
+| Titre par défaut  | Ouvrir le projet dans le Finder |
+|====
+
+Définition dans la fiche projet : 
+
+|====
+| service   | open-finder-window
+2+| Propriétés
+| path      | Chemin d'accès au dossier (absolu ou relatif au projet)
+| position  | [top, left], position vertical et horizontal de la fenêtre
+| taille    | [width, height], largeur et hauteur de la fenêtre
+| Type vue  | column|list
 |====
