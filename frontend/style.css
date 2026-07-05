@@ -7,6 +7,12 @@ body {
 * {
   font-size: 16pt;
 }
+textarea {
+  resize: none;
+  width: 100%;
+  min-height: 100px;
+}
+
 header {
   display:block;
   position: fixed;
@@ -43,21 +49,31 @@ footer div#message {
   --editor-width: 300px; 
 }
 /* Panneau d'édition du projet */
-div#edit-panel.opened {
+div#edit-panel {
   top: 0;
   height: calc(100% - 2em);
   width: var(--editor-width);
-  padding: 2em;
   right: 0;
+  padding: 2em;
   position: fixed;
   z-index:100;
   background-color: #c4f4d5;
 }
 div#edit-panel.closed {
-  right: -var(--editor-width);
+  right: calc(-1 * (var(--editor-width) + 100px));
+}
+div#edit-panel button.btn-close {
+  position: absolute;
+  right: 20px;
+  bottom: 60px;
+}
+div#edit-panel fieldset.services {
+  min-height: 12vh;
 }
 
-/* --- Outils --- */
+/* 
+    --- Outils --- 
+*/
 div#tools {
   position: fixed;
   left: 0;
@@ -66,4 +82,25 @@ div#tools {
 }
 div#tools button.btn-add-project {
   font-size: 1.5em;
+}
+
+
+/*
+
+    --- CARTE PROJET ---
+
+*/
+div#project-cards {
+  position: relative;
+}
+div.project-card {
+  position: absolute;
+  width:  300px;
+
+}
+div.project-card div.title {
+  font-size: 1.2em;
+}
+div.project-card fieldset.services {
+  
 }

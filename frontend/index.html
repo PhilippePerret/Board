@@ -10,7 +10,16 @@
   <header>
     <div id="app-name">Tableau de bord</div>
   </header>
-        
+
+  <!--
+
+      === CONTAINER DES PROJETS (CARTES) ===
+  -->
+  <div id="project-cards-container">
+
+  </div>
+     
+  
   <p><button onclick="essayer()">Essayer</button></p>
   <pre id="output" style="white-space:pre-wrap"></pre>
   <footer>
@@ -19,8 +28,28 @@
 
 <button onclick="Services.getInfosFinderWindow()">Information fenêtre Finder</button>
 
-<div id="edit-panel closed">
+<!-- 
+
+    === PANNEAU D'ÉDITION DU PROJET ===
+
+-->
+<div id="edit-panel" class="closed">
+  <div>
+    <label>Titre du projet</label> <input type="text" id="project-title"/>
+    <label>Dossier principal</label> <input type="text" id="project-path"/>
+  </div>
+  <fieldset class="startup-services services">
+    <legend>Services au démarrage</legend>
+  </fieldset>
+  <fieldset class="autres-services services">
+    <legend>Autres services</legend>
+  </fieldset>
+
+  <label>Copier-coller du code</label>
   <textarea id="project-card-editing"></textarea>
+
+
+  <button class="btn-close" onclick="Editor.close()">Fermer</button>
 
 </div>
 
@@ -29,9 +58,10 @@
 </div>
 
 
-  <script src="services.js"></script>
-  <script src="Editor.js"></script>
-  <script src="dashboard.js"></script>
+<script src="Editor.js"></script>
+<script src="Project.js"></script>
+<script src="Services.js"></script>
+<script src="dashboard.js"></script>
   <script src="app.js"></script>
   <script src="xbridge.js"></script>
 </body>

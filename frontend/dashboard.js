@@ -1,6 +1,10 @@
 window.onload = function(ev){
   message("Fenêtre chargé.")
   loadCurrentProjects()
+
+  // POUR ESSAI
+  const projet = new Project({title: "Mon tout premire projet"})
+  projet.buildCard()
 }
 
 function loadCurrentProjects(){

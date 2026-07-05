@@ -22,4 +22,20 @@ class Services {
           view: "${view}"`)
   }
 
+
+  constructor(data){
+    this.name = data.name ?? '-service sans nom-'
+  }
+
+  /* Retourne le div construit */
+  build(){
+    const div = document.createElement('DIV')
+    div.className = 'service'
+    const name = document.createElement('DIV')
+    name.className = 'name'
+    name.textContent = this.name
+    div.appendChild(name)
+    return div
+  }
+
 }
