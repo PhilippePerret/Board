@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg4c" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e96c1b"/>
+      <stop offset="100%" stop-color="#f7c948"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Même fond que l'original -->
+  <rect x="20" y="20" width="472" height="472" rx="108" fill="url(#bg4c)"/>
+
+  <!-- Sol commun -->
+  <ellipse cx="256" cy="407" rx="198" ry="14" fill="rgba(0,0,0,0.15)"/>
+
+  <!--
+    3 piliers isométriques côte à côte, de nous (gauche-bas) vers le fond (droite-haut)
+    W=50, D=25, floor_y=405
+    Pilier 1 (avant, moyennement avancé) : cx=156, H=120
+    Pilier 2 (milieu, peu avancé)         : cx=256, H=55
+    Pilier 3 (arrière-plan, très avancé)  : cx=356, H=200
+    Ordre dessin : arrière → avant
+  -->
+
+  <!-- Pilier 3 — ARRIÈRE — très avancé — bleu — cx=356, H=200, dcy=180 -->
+  <polygon points="306,180 356,205 356,405 306,380" fill="#1a6fa8"/>
+  <polygon points="356,205 406,180 406,380 356,405" fill="#2980b9"/>
+  <polygon points="356,205 406,180 356,155 306,180" fill="#5dade2"/>
+
+  <!-- Pilier 2 — MILIEU — peu avancé — blanc/argent — cx=256, H=55, dcy=325 -->
+  <polygon points="206,325 256,350 256,405 206,380" fill="#95a5a6"/>
+  <polygon points="256,350 306,325 306,380 256,405" fill="#bdc3c7"/>
+  <polygon points="256,350 306,325 256,300 206,325" fill="#ecf0f1"/>
+
+  <!-- Pilier 1 — AVANT — moyennement avancé — vert — cx=156, H=120, dcy=260 -->
+  <polygon points="106,260 156,285 156,405 106,380" fill="#1a8a4a"/>
+  <polygon points="156,285 206,260 206,380 156,405" fill="#27ae60"/>
+  <polygon points="156,285 206,260 156,235 106,260" fill="#2ecc71"/>
+
+</svg>

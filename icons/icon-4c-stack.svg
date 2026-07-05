@@ -8,34 +8,19 @@
 
   <rect x="20" y="20" width="472" height="472" rx="108" fill="url(#bg4c)"/>
 
-  <!--
-    Pile isométrique de 3 blocs carrés
-    Isométrie simple : x' = x - y*0.5,  y' = y*0.87 + x*0.25
-    Centre à 256, 280
-  -->
-
   <!-- Bloc 3 (haut de pile) — bleu -->
-  <!-- Face top -->
   <polygon points="256,148  336,188  256,228  176,188" fill="#4a90e2"/>
-  <!-- Face gauche -->
   <polygon points="176,188  176,258  256,298  256,228" fill="#2471c1"/>
-  <!-- Face droite -->
   <polygon points="336,188  336,258  256,298  256,228" fill="#1a5fa8"/>
 
   <!-- Bloc 2 (milieu) — vert -->
-  <!-- Face top -->
   <polygon points="256,228  336,268  256,308  176,268" fill="#2ecc71"/>
-  <!-- Face gauche -->
   <polygon points="176,268  176,338  256,378  256,308" fill="#1fa85b"/>
-  <!-- Face droite -->
   <polygon points="336,268  336,338  256,378  256,308" fill="#178c4a"/>
 
   <!-- Bloc 1 (bas) — orange foncé -->
-  <!-- Face top (invisible car cachée) — petite bande visible -->
   <polygon points="256,308  336,348  256,388  176,348" fill="#e67e22"/>
-  <!-- Face gauche -->
   <polygon points="176,348  176,400  256,440  256,388" fill="#c9670e"/>
-  <!-- Face droite -->
   <polygon points="336,348  336,400  256,440  256,388" fill="#b05a0c"/>
 
   <!-- Reflets sur arêtes -->

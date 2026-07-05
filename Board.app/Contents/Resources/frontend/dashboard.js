@@ -10,5 +10,5 @@ function loadCurrentProjects(){
 
 function dispatchWorks(retour){
   message("Travaux courants chargés.")
-  feedback(retour)
+  feedback(JSON.stringify(retour))
 }

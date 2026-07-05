@@ -11,7 +11,7 @@ window.server = {
         var reponse = response.ok ? 'OK' : 'Erreur'
         reponse += "\n" + JSON.stringify(response, null, 2);        
         // feedback(reponse)
-        callback(reponse)
+        callback(response)
       }
     );
   }
