@@ -1,0 +1,5 @@
+|====
+| Nom     | Ouvrir fenêtre dans le finder |
+| Id      | open-window                   |
+| Script  | get-finder-window-info.scpt   |
+|====

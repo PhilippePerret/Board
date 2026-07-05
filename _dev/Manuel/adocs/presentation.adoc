@@ -1,0 +1,16 @@
+== Présentation ==
+
+Cette application est pensée pour simplifier la gestion de l'installation du travail lorsqu'on développe plusieurs projets de front.
+
+Elle se présent comme un panneau affichant chaque projet avec, pour chaque projet, un bouton permettant d'installer et de préparer le travail.
+
+Cette instllation peut consister à : 
+
+- ouvrir le dossier du projet dans le finder, dans une fenêtre personnalisée (taille, position, type de vue),
+- actualiser un fichier versionné et mettre l'ancien dans un dossier d'archives,
+- lancer un script qui va chercher une information sur le net,
+- ouvrir un fichier dans LibreOffice,
+- ouvrir un dossier de code dans VSCode,
+- et bien d'autres choses.
+
+On appelle toutes ces opérations des <<services,_services_>> qu'on peut appliquer aux projets.

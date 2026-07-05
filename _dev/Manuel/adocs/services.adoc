@@ -1,0 +1,7 @@
+[[services]]
+== Les services ==
+
+_Cette partie décrit tous les services qu'on peut utiliser pour un projet._
+
+=== Ouvrir une fenêtre dans le Finder ===
+include::services/window-in-finder.adoc[]
