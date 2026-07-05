@@ -5,3 +5,9 @@ _Cette partie décrit tous les services qu'on peut utiliser pour un projet._
 
 === Ouvrir une fenêtre dans le Finder ===
 include::services/window-in-finder.adoc[]
+
+=== Actualiser la version majeur d'un fichier ===
+include::services/update-major-version.adoc[]
+
+=== Actualiser la verion mineure d'un fichier ===
+include::services/update-minor-version.adoc[]

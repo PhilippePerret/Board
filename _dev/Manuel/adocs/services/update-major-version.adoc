@@ -1,0 +1,6 @@
+|====
+| Nom       | Actualiser la version majeure |
+| Id        | update-major-version          |
+| Script    | update-major-version.rb       |
+| Titre     | Updater version majeure       |
+|====

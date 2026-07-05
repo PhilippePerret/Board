@@ -1,0 +1,6 @@
+|====
+| Nom       | Actualiser la version mineure |
+| Id        | update-minor-version          |
+| Script    | update-minor-version.rb       |
+| Titre     | Updater version mineur        |
+|====
