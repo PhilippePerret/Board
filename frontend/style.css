@@ -6,9 +6,25 @@ body {
 }
 * {
   font-size: 16pt;
+  user-select: none !important;
 }
 
 .hidden {display:none;}
+.error {font-weight:bold; color: red;}
+
+fieldset {
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  min-height: 80px;
+  margin-top: 10px;
+}
+
+fieldset > legend {
+  opacity: 0.55;
+  font-style: italic;
+  font-family: Helvetica;
+  font-size: 17px;
+}
 
 textarea {
   resize: none;
@@ -97,12 +113,13 @@ div#project-cards {
   position: relative;
 }
 div.project-card {
+  position: relative;
+  display: inline-block;
   border: 1px solid #CCC;
   border-radius: 1em;
-  position: absolute;
   width:  300px;
   padding: 1em;
-  margin: 0 1em;
+  margin: 0 10px;
   min-height: 30vh;
 
 }

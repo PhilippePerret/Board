@@ -1,8 +1,10 @@
 require "json"
+require 'yaml'
 
 begin
 
   returned_error  = nil
+  ok = true
   error = nil
   returned_data   = nil
   
@@ -11,7 +13,7 @@ begin
   # table JSON
   input = STDIN.read.strip
   request = JSON.parse(input)
-  
+
   # ID de la requête (pour suivi)
   request_id = request["id"]
 
@@ -19,11 +21,22 @@ begin
   ###       Analyse de l'ACTION       ###
   #######################################
   case request["action"]
-
   when "load"
-    returned_message = "Données chargées"
-    returned_data     = {projet: "Mon projet"}
-    ok = true
+    case request['what']
+    when 'projects'
+      # Chargement de tous les projets
+      # (pour le moment dans le dossier de l'application)
+      PROJECT_CARD_FOLDER = "/Users/philippeperret/Programmes/Board/_dev/projects"
+      projects_data = []
+      Dir["#{PROJECT_CARD_FOLDER}/*.yaml"].each do |cardpath|
+        projects_data << YAML.safe_load(IO.read(cardpath))
+      end
+      returned_data = projects_data
+    else
+      ok = false
+      returned_message = "Données inconnues : what = #{request['what']}"
+      returned_data     = {}
+    end
 
   # Lancement d'un script osascript
   when "run-osascript"
@@ -37,14 +50,6 @@ begin
       returned_error = "#{e.message} in : #{res}"
     end
     
-  when "workday"
-    # C'était l'essai pourri ChatGPT
-    app = request["app"]
-    
-    returned_message = "Environnement prêt pour #{app}"
-    ok = true
-    
-
   else # action inconnue
     ok = false
     returned_error = "unknown action: #{request["action"]}"
@@ -64,6 +69,6 @@ begin
   }.to_json)
 
 rescue => e
-  puts({ ok: false, id: nil, error: e.message }.to_json)
+  puts({ ok: false, id: (defined?(request_id) ? request_id : nil), error: e.message }.to_json)
 
 end

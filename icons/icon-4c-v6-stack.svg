@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg4c" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e96c1b"/>
+      <stop offset="100%" stop-color="#f7c948"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="20" y="20" width="472" height="472" rx="108" fill="url(#bg4c)"/>
+
+  <!--
+    Identique à v5 SAUF : axe des piles incliné 8h→2h.
+    cx décalé : avant=216 (gauche), milieu=256 (centre), arrière=296 (droite)
+    Tout le reste identique : tailles, couleurs, sol isométrique, reflets.
+    Dessin arrière → avant.
+  -->
+
+  <!-- Bloc 3 — ARRIÈRE — bleu — cx=296, base y=286, h=140 -->
+  <polygon points="296,146 376,106 296,66  216,106" fill="#4a90e2"/>
+  <polygon points="216,106 216,246 296,286 296,146" fill="#2471c1"/>
+  <polygon points="296,146 376,106 376,246 296,286" fill="#1a5fa8"/>
+
+  <!-- Bloc 2 — MILIEU — vert — cx=256, base y=366, h=35 -->
+  <polygon points="256,331 336,291 256,251 176,291" fill="#2ecc71"/>
+  <polygon points="176,291 176,326 256,366 256,331" fill="#1fa85b"/>
+  <polygon points="256,331 336,291 336,326 256,366" fill="#178c4a"/>
+
+  <!-- Bloc 1 — AVANT — rouge foncé — cx=216, base y=446, h=70 -->
+  <polygon points="216,376 296,336 216,296 136,336" fill="#e74c3c"/>
+  <polygon points="136,336 136,406 216,446 216,376" fill="#a93226"/>
+  <polygon points="216,376 296,336 296,406 216,446" fill="#922b21"/>
+
+  <!-- Reflets arêtes frontales -->
+  <line x1="296" y1="146" x2="296" y2="286" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+  <line x1="256" y1="331" x2="256" y2="366" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+  <line x1="216" y1="376" x2="216" y2="446" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+</svg>

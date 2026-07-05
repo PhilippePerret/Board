@@ -1,6 +1,13 @@
 function jsonize(data){
   return JSON.stringify(data)
 }
+function stopEvent(ev){
+  if (ev){
+    ev.preventDefault()
+    ev.stopPropation()
+  }
+  return false
+}
 
 function essayer(){
   message("Essai pour voir")

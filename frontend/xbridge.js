@@ -8,10 +8,14 @@ window.server = {
     bridge.call(
       data,
       (response) => {
-        var reponse = response.ok ? 'OK' : 'Erreur'
-        reponse += "\n" + JSON.stringify(response, null, 2);        
+        console.log("response", response)
+        if (response.ok) {
+            callback(response)
+        } else {
+            reponse = '<span class="error">ERREUR : ' + JSON.stringify(response, null, 2) + '</span>';
+            message(reponse)
+        }
         // feedback(reponse)
-        callback(response)
       }
     );
   }
