@@ -32,3 +32,16 @@ Chaque carte est composée de trois parties :
 |                             |
 –––––––––––––––––––––––––––––––
 ----
+
+=== Panneau de nouveau projet ===
+
+Quand on clique sur le "+" qui se trouve à gauche en bas de l'interface, un panneau s'ouvre pour définir le nouveau projet. 
+
+La partie supérieure permet d'entrer les informations sur le projet : 
+
+- lui donner un titre,
+- indiquer son dossier de référence (un projet doit toujours avoir un dossier),
+
+La partie inférieure permet de choisir les <<services>> par simple glisser-déposer.
+
+Exemple : pour le service “Ouvrir dans le Finder”, une fois qu'on l'a glissé sur le projet, une fenêtre s'ouvre, demandant d'ouvrir la fenêtre dans le Finder, de la positionner et de la mettre ans la vue désirée (colonnes, lignes, etc.). Une fois que c'est fait, on clique sur “OK” et l'application va automatiquement prendre les informations sur la fenêtre au premier plan dans le finder.

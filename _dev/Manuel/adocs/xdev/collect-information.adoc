@@ -1,0 +1,24 @@
+=== Collecte informations ===
+
+_Note : Ce fichier définit des processus qui seront en pratique plus tard. Pour le moment, l'utilisateur remplit des fiches projet qui le définissent explicitement._
+
+Chaque <<service>> a besoin de collecter des informations. Pour ce faire, il y a :
+
+- les informations directement demandées à l'utilisateur (p.e. : titre à donner à un service)
+- les informations récupérées automatiquement par script (p.e. : information sur la fenêtre dans le Finder)
+
+----
+- un service est déplacé sur la carte du projet
+- le service demande ses informations, c'est une suite d'opérations 
+  simples comme :
+    - demander le titre à donner
+    - lancer le script de collecte d'information fenêtre
+    - demander confirmation
+    - créer le service
+----
+
+Le service définit les informations dont il a besoin. Par exemple, pour l'ouverture d'une fenêtre Finder :
+
+- le path au dossier
+- la position et la taille
+- le type de vue

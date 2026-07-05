@@ -8,3 +8,5 @@ include::adocs/presentation.adoc[]
 include::adocs/prise-en-main.adoc[]
 
 include::adocs/services.adoc[]
+
+include::adocs/xdev.adoc[]
