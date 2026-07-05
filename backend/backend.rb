@@ -3,7 +3,7 @@ require "json"
 begin
 
   returned_error  = nil
-  error = null
+  error = nil
   returned_data   = nil
   
   
@@ -29,7 +29,8 @@ begin
   when "run-osascript"
     begin
       ok = true
-      res = `osascript 'scripts/#{request["script-name"]}.scpt'`
+      res = `osascript 'scripts/#{request["script-name"]}.scpt'`.strip
+      returned_message = res
       returned_data = JSON.parse(res)
     rescue Exception => e
       ok = false

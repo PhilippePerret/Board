@@ -12,6 +12,7 @@ class Backend {
         process.executableURL = URL(fileURLWithPath: NSHomeDirectory() + "/.rbenv/versions/3.4.7/bin/ruby")
         process.arguments = [scriptPath]
 
+        process.currentDirectoryURL = URL(fileURLWithPath: Bundle.main.resourcePath! + "/backend")
         process.standardInput = pipeIn
         process.standardOutput = pipeOut
         process.standardError = Pipe()

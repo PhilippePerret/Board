@@ -1,9 +1,14 @@
 function essayer(){
-  message("j'essayer pour voir")
-  server.send({action:'run-osascript', 'script-name': "finder-front-window-infos"}, onRetourEssai.bind(null))
+  message("Essai pour voir")
+  server.send({
+    action:'run-osascript', 
+    'script-name': "finder-front-window-infos"
+    }, onRetourEssai
+  )
 }
 
 function onRetourEssai(retour){
+  message("-> onRetourEssai")
   feedback(retour)
 }
 
