@@ -1,10 +1,6 @@
 function essayer(){
   message("Essai pour voir")
-  server.send({
-    action:'run-osascript', 
-    'script-name': "finder-front-window-infos"
-    }, onRetourEssai
-  )
+  message("PAS D'ESSAI")
 }
 
 function onRetourEssai(retour){

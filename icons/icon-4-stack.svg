@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5b86e5"/>
+      <stop offset="100%" stop-color="#36d1dc"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle avec marge transparente -->
+  <rect x="20" y="20" width="472" height="472" rx="108" fill="url(#bg4)"/>
+
+  <!-- Couche 3 (fond) -->
+  <rect x="116" y="210" width="280" height="190" rx="18" fill="#e74c3c" opacity="0.55"
+    transform="rotate(-7 256 305)"/>
+
+  <!-- Couche 2 (milieu) -->
+  <rect x="116" y="200" width="280" height="190" rx="18" fill="#f39c12" opacity="0.75"
+    transform="rotate(-2.5 256 295)"/>
+
+  <!-- Couche 1 (avant) -->
+  <rect x="116" y="170" width="280" height="190" rx="18" fill="white" opacity="0.95"/>
+
+  <!-- Contenu carte avant -->
+  <rect x="144" y="196" width="130" height="11" rx="5.5" fill="#5b86e5" opacity="0.8"/>
+  <rect x="144" y="217" width="90" height="8" rx="4" fill="#aaa" opacity="0.4"/>
+
+  <!-- Bouton action -->
+  <rect x="144" y="244" width="220" height="46" rx="11" fill="#5b86e5" opacity="0.9"/>
+  <polygon points="238,267 238,251 252,259" fill="white" opacity="0.95"/>
+  <rect x="254" y="255" width="82" height="8" rx="4" fill="rgba(255,255,255,0.6)"/>
+
+  <!-- Petit badge rouge (notification) -->
+  <circle cx="396" cy="160" r="18" fill="#e74c3c"/>
+  <text x="396" y="166" text-anchor="middle" font-size="18" font-weight="bold"
+    fill="white" font-family="system-ui, -apple-system">3</text>
+</svg>
