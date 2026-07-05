@@ -1,3 +1,7 @@
+function jsonize(data){
+  return JSON.stringify(data)
+}
+
 function essayer(){
   message("Essai pour voir")
   message("PAS D'ESSAI")
