@@ -1,5 +1,5 @@
 class Project {
-  get container(){ return this._container || (this._container = document.querySelector('#project-cards-container'))}
+  static get container(){ return this._container || (this._container = document.querySelector('#project-cards-container'))}
 
   constructor(data){
     this.title = data.title ?? '-projet sans titre-'
@@ -23,7 +23,7 @@ class Project {
     this.autresServices.forEach(service => {
       otherservices.appendChild(service.build())
     })
-    div.appendChild(services)
+    div.appendChild(otherservices)
 
     this.constructor.container.appendChild(div)
   }

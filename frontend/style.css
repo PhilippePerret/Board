@@ -7,6 +7,9 @@ body {
 * {
   font-size: 16pt;
 }
+
+.hidden {display:none;}
+
 textarea {
   resize: none;
   width: 100%;
@@ -94,13 +97,18 @@ div#project-cards {
   position: relative;
 }
 div.project-card {
+  border: 1px solid #CCC;
+  border-radius: 1em;
   position: absolute;
   width:  300px;
+  padding: 1em;
+  margin: 0 1em;
+  min-height: 30vh;
 
 }
 div.project-card div.title {
   font-size: 1.2em;
 }
 div.project-card fieldset.services {
-  
+
 }
