@@ -479,6 +479,58 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="_prise_en_main">Prise en main</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Après avoir lancé l&#8217;application, on se retrouve devant un tableau de bord qui permet d&#8217;ajouter ses projets en définissant pour chacun d&#8217;eux les <a href="#services">Les services</a> dont on a besoin.</p>
+</div>
+<div class="paragraph">
+<p>Chaque projet se présente sous forme d&#8217;une carte (un peu comme dans Trello) qui possède en titre le nom du projet et contient la liste des différents services qui lui ont été affectés.</p>
+</div>
+<div class="paragraph">
+<p><sub>~</sub>
+“Affecter des services” est l&#8217;expression consacrée pour dire qu&#8217;on utilise des <a href="#services">Les services</a> pour un projet.
+<sub>~</sub></p>
+</div>
+<div class="paragraph">
+<p>Chaque carte est composée de trois parties :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>l&#8217;entête, avec le titre du projet et quelques informations le concernant,</p>
+</li>
+<li>
+<p>une partie supérieure contient tous les services qui seront activés lorsque l&#8217;on cliquera sur le bouton “Démarrer le travail”,</p>
+</li>
+<li>
+<p>une partie inférieure contient les boutons qu&#8217;on peut utiliser à l&#8217;occasion pour des traitements particuliers.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---------------------------————
+|       Titre projet          |
+|                       infos |
+|-------------------------————|
+|   Service 1                 |
+|   Service 2                 |
+|                             |
+|    ---------------------    |
+|   | Démarrer le travail |   |
+|    ---------------------    |
+|_____________________________|
+|   Autre service 1           |
+|   Autre service 2           |
+|   ...                       |
+|                             |
+–––––––––––––––––––––––––––––––</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="services">Les services</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -486,14 +538,133 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</h3>
-
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvrir fenêtre dans le finder</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-window</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">get-finder-window-info.scpt</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actualiser la version majeure</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-major-version</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-major-version.rb</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Updater version majeure</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actualiser la version mineure</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-minor-version</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-minor-version.rb</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Updater version mineur</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_lancer_un_script_quelconque">Lancer un script quelconque</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lancer un script personnel</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">custom-script</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">run-custom-script.rb</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jouer le script</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-05 06:17:32 +0200
+Last updated 2026-07-05 06:41:16 +0200
 </div>
 </div>
 </body>

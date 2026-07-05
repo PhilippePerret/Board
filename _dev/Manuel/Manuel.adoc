@@ -1,4 +1,10 @@
 = Board =
 
+// Nom des boutons
+:start-work: Démarrer le travail
+
 include::adocs/presentation.adoc[]
+
+include::adocs/prise-en-main.adoc[]
+
 include::adocs/services.adoc[]

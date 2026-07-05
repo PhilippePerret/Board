@@ -1,0 +1,6 @@
+|====
+| Nom       | Lancer un script personnel    |
+| Id        | custom-script                 |
+| Script    | run-custom-script.rb          |
+| Titre     | Jouer le script               |
+|====

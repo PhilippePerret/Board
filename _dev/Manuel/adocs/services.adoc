@@ -11,3 +11,6 @@ include::services/update-major-version.adoc[]
 
 === Actualiser la verion mineure d'un fichier ===
 include::services/update-minor-version.adoc[]
+
+=== Lancer un script quelconque ===
+include::services/run-custom-script.adoc[]

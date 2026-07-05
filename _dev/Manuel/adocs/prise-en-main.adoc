@@ -1,0 +1,34 @@
+== Prise en main ==
+
+Après avoir lancé l'application, on se retrouve devant un tableau de bord qui permet d'ajouter ses projets en définissant pour chacun d'eux les <<services>> dont on a besoin.
+
+Chaque projet se présente sous forme d'une carte (un peu comme dans Trello) qui possède en titre le nom du projet et contient la liste des différents services qui lui ont été affectés.
+
+~~~
+“Affecter des services” est l'expression consacrée pour dire qu'on utilise des <<services>> pour un projet.
+~~~
+
+Chaque carte est composée de trois parties : 
+
+- l'entête, avec le titre du projet et quelques informations le concernant,
+- une partie supérieure contient tous les services qui seront activés lorsque l'on cliquera sur le bouton “{start-work}”,
+- une partie inférieure contient les boutons qu'on peut utiliser à l'occasion pour des traitements particuliers.
+
+----
+---------------------------————
+|       TITRE PROJET          |
+|                       infos |
+|-------------------------————|
+|   Service 1                 |
+|   Service 2                 |
+|                             |
+|    ---------------------    |
+|   | Démarrer le travail |   |
+|    ---------------------    |
+|_____________________________|
+|   Autre service 1           |
+|   Autre service 2           |
+|   ...                       |
+|                             |
+–––––––––––––––––––––––––––––––
+----
