@@ -8,7 +8,7 @@ class Project {
    * Appelée quand on clique sur une carte de projet
    */
   static onSelect(projet){
-    const same = projet.id == this.current?.id
+    const same = true && (projet.id === this.current?.id)
     this.current && this.deselect(this.current)
     if (same) return // simple désélection
     this.select(projet)
@@ -78,7 +78,7 @@ class Project {
     div.appendChild(dates)
     const crea  = DCreate('SPAN', {class: 'date', text: 'créé : ' + this.createdAt})
     dates.appendChild(crea)
-    const upda  = DCreate('SPAN', {class: 'date', text: 'modifié : ' +this.updatedAt})
+    const upda  = DCreate('SPAN', {class: 'date', text: '/mod.: ' +this.updatedAt})
     dates.appendChild(upda)
     const work = DCreate('DIV', {class: 'worktime', text: 'Temps de travail : ' + this.workTime})
     div.appendChild(work)
@@ -111,7 +111,7 @@ class Project {
     message("Édition du projet " + this.title)
   }
   onMouseDown(ev){
-    Project.select(this)
+    this.constructor.onSelect(this)
     return stopEvent(ev)
   }
 }

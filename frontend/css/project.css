@@ -10,13 +10,17 @@ div#projects {
 div.project {
   position: relative;
   display: inline-block;
-  border: 1px solid #CCC;
+  border: 2px solid #CCC;
   border-radius: 1em;
   width:  300px;
   padding: 1em;
   margin: 0 10px;
   min-height: 30vh;
-
+  opacity: 0.65;
+}
+div.project.selected {
+  opacity: 1;
+  border-color: rgb(98, 154, 232);
 }
 div.project div.title {
   font-size: 1.2em;
@@ -27,10 +31,10 @@ div.project fieldset.services {
 .project .path {
   font-size: 12px;
 }
-.project > span {
+.project > .dates {
   text-align: right;
 }
-.project > span {
+.project .dates > span {
   font-size: 14px;
   font-family: Georgia;
 }
