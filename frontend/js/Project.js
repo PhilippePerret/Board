@@ -134,10 +134,13 @@ class Project {
   }
 
   addStartupService(service){
-    this.addService(service, 'startup')
+    this.preAddService(service, 'startup')
   }
   addOtherService(service){
-    this.addService(service, 'others')
+    this.preAddService(service, 'others')
+  }
+  preAddService(service, where){
+    Services.defineService(service, this.addService.bind(this, service, where))
   }
   addService(service, where /* others ou startup */){
     service.uuid = Project.uniqId()
