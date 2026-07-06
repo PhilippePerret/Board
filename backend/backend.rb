@@ -42,14 +42,14 @@ begin
   case request["action"]
   when 'remove-project'
     id = request["id"]
-    fname = "#{request['id']}.yaml"
+    fname = "#{request['projectId']}.yaml"
     src   = File.join(PROJECT_CARD_FOLDER, fname)
     dest  = File.join(PROJECT_CARD_ARCHIVE, fname)
     if (File.exist?(src))
       FileUtils.mv(src, dest)
     else
       ok = false
-      error = "Le projet est introuvable…"
+      error = "Le projet introuvable : #{src}"
     end
   when "save-project"
     data = request["data"]

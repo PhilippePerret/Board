@@ -54,11 +54,12 @@ class Project {
 
 
   constructor(data){
-    this.id     = data.id ?? Project.uniqId()
-    this.title = data.title ?? '-projet sans titre-'
-    this.path  = data.path ?? raise("Le path du projet est obligatoire.")
-    this.createdAt = data.createdAt
-    this.updatedAt = data.updatedAt
+    console.log("data", data)
+    this.id         = data.id ?? Project.uniqId()
+    this.title      = data.title ?? '-projet sans titre-'
+    this.path       = data.path ?? raise("Le path du projet est obligatoire.")
+    this.createdAt  = data.createdAt
+    this.updatedAt  = data.updatedAt
     this.workTime   = data.workTime ?? 0
     this.startupServices  = data.startup_services ?? []
     this.autresServices   = data.autres_services ?? []
@@ -136,7 +137,7 @@ class Project {
   }
 
   remove(){
-    server.send({action: 'remove-project', id: this.id}, this.afterRemove.bind(this))
+    server.send({action: 'remove-project', projectId: this.id}, this.afterRemove.bind(this))
   }
   afterRemove(retour){
     this.constructor.deselect(this)
