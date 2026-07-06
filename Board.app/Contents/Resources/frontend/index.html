@@ -56,6 +56,9 @@
 
 <div id="tools">
   <button class="btn-add-project" onclick="Editor.addProject()">✚</button>
+    <span id="project-buttons" class="invisible">
+      <button class="btn-remove-project" onclick="Project.remove.call(Project, Project.current)">Retirer le projet</button>
+    </span>
 </div>
 
 

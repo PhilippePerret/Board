@@ -10,6 +10,7 @@ body {
 }
 
 .hidden {display:none;}
+.invisible {visibility: hidden;}
 .error {color: red; background-color: rgb(255, 230, 230);}
 
 button {
@@ -64,10 +65,13 @@ footer {
   background-color: #DDDDDD;
 }
 
-footer div#message {
+footer div#message > span {
   padding: 0.1em 1em;
   font: 12px Arial, Helvetica;
 }
+footer div#message > span.notice {
+  color: rgb(13, 164, 13);
+} 
 
 :root {
   --editor-width: 300px; 

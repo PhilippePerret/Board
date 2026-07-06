@@ -1,7 +1,10 @@
 require "json"
 require 'yaml'
+require "fileutils"
 
-PROJECT_CARD_FOLDER = "/Users/philippeperret/Programmes/Board/_dev/projects"
+MAIN_PROJECT_FOLDER   = "/Users/philippeperret/Programmes/Board/_dev"
+PROJECT_CARD_FOLDER   = File.join(MAIN_PROJECT_FOLDER, 'projects-in')
+PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
 
 
 def run_script(script_name)
@@ -37,6 +40,17 @@ begin
   ###       Analyse de l'ACTION       ###
   #######################################
   case request["action"]
+  when 'remove-project'
+    id = request["id"]
+    fname = "#{request['id']}.yaml"
+    src   = File.join(PROJECT_CARD_FOLDER, fname)
+    dest  = File.join(PROJECT_CARD_ARCHIVE, fname)
+    if (File.exist?(src))
+      FileUtils.mv(src, dest)
+    else
+      ok = false
+      error = "Le projet est introuvable…"
+    end
   when "save-project"
     data = request["data"]
     file = File.join(PROJECT_CARD_FOLDER, "#{data['id']}.yaml")

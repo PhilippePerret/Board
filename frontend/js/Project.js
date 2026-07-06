@@ -4,6 +4,24 @@ class Project {
     return Date.now() + Math.random().toString(16).slice(2);
   }
 
+  static affProjectButtons(){
+    this.divButtons.classList.remove('invisible')
+  }
+  static maskProjectButtons(){
+    this.divButtons.classList.add('invisible')
+  }
+  static get divButtons(){return this._dbutons || (this._dbutons = DGet('span#project-buttons')) }
+
+  static remove(projet){
+    if (!projet) return error("Il faut sélectionner le projet à retirer.")
+    new ConfirmDialog({
+      title: "Confirmation du retrait du projet",
+      message: "Ce retrait ne touche pas du tout le dossier du projet lui-même. Il est juste retiré du tablau de bord",
+      ouiBtn: {name: "Retirer", onclick: projet.remove.bind(projet), w: '160px'},
+      nonBtn: {name: 'Renoncer', w: '160px'}
+    }).show()
+  }
+
   /**
    * Appelée quand on clique sur une carte de projet
    */
@@ -16,10 +34,12 @@ class Project {
   static select(projet){
     projet.obj.classList.add('selected')
     this.current = projet
+    this.affProjectButtons()
   }
   static deselect(projet){
     projet.obj.classList.remove('selected')
     this.current = null
+    this.maskProjectButtons()
   }
   
   static dispatch(retour){
@@ -113,5 +133,14 @@ class Project {
   onMouseDown(ev){
     this.constructor.onSelect(this)
     return stopEvent(ev)
+  }
+
+  remove(){
+    server.send({action: 'remove-project', id: this.id}, this.afterRemove.bind(this))
+  }
+  afterRemove(retour){
+    this.constructor.deselect(this)
+    this.obj.remove()
+    message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
   }
 }

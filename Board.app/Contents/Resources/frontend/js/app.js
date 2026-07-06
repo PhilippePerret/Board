@@ -24,7 +24,7 @@ function onRetourEssai(retour){
 
 
 function message(msg){
-  document.querySelector('#message').textContent = msg
+  document.querySelector('#message').innerHTML = '<span class="notice">' + msg + '</span>'
   return true
 }
 function error(msg){
