@@ -27,7 +27,7 @@ function unlisten(objet, eventType, method){
 function stopEvent(ev){
   if (ev){
     ev.preventDefault()
-    ev.stopPropation()
+    ev.stopPropagation()
   }
   return false
 }

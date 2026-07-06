@@ -12,8 +12,8 @@ window.server = {
         if (response.ok) {
             callback(response)
         } else {
-            reponse = '<span class="error">ERREUR : ' + JSON.stringify(response, null, 2) + '</span>';
-            message(reponse)
+            reponse = 'ERREUR : ' + JSON.stringify(response, null, 2);
+            error(reponse)
         }
         // feedback(reponse)
       }

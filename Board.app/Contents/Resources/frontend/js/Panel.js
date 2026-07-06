@@ -6,8 +6,8 @@ class Panel {
 
   constructor(data){
     this.id    = data.id ?? `panel-${++Panel.panelIndex}`
-    this.width = data.width ?? '520px'
-    this.height = data.height ?? '240px'
+    this.width = data.width ?? data.w ?? '520px'
+    this.height = data.height ?? data.h ?? '240px'
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? '- Panneau sans messsage (message) -'
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
@@ -44,9 +44,6 @@ class Panel {
   onNon(ev){
     if ('function' == typeof this.nonData.onclick) {
       this.nonData.onclick()
-    } else {
-      console.error("this.nonData.onclick", this.nonData.onclick)
-      error('this.nonData.onclick n’est pas une fonction')
     }
     this.hide()
     return stopEvent(ev)

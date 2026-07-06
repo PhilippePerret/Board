@@ -10,7 +10,7 @@ body {
 }
 
 .hidden {display:none;}
-.error {font-weight:bold; color: red;}
+.error {color: red; background-color: rgb(255, 230, 230);}
 
 button {
   padding: 4px 32px;

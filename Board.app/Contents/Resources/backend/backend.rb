@@ -1,6 +1,22 @@
 require "json"
 require 'yaml'
 
+PROJECT_CARD_FOLDER = "/Users/philippeperret/Programmes/Board/_dev/projects"
+
+
+def run_script(script_name)
+  begin
+    res = `osascript 'scripts/#{script_name}.scpt'`.strip
+    JSON.parse(res)
+  rescue Exception => e
+    {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}"}
+  end
+end
+def human_date_to_aaammjj(date)
+  y, m, j = date.split('/')
+  "#{y}/#{m.rjust(2,'0')}/#{j.rjust(2,'0')}"
+end
+
 begin
 
   returned_error  = nil
@@ -21,12 +37,15 @@ begin
   ###       Analyse de l'ACTION       ###
   #######################################
   case request["action"]
+  when "save-project"
+    data = request["data"]
+    file = File.join(PROJECT_CARD_FOLDER, "#{data['id']}.yaml")
+    IO.write(file, data.to_yaml)
   when "load"
     case request['what']
     when 'projects'
       # Chargement de tous les projets
       # (pour le moment dans le dossier de l'application)
-      PROJECT_CARD_FOLDER = "/Users/philippeperret/Programmes/Board/_dev/projects"
       projects_data = []
       Dir["#{PROJECT_CARD_FOLDER}/*.yaml"].each do |cardpath|
         projects_data << YAML.safe_load(IO.read(cardpath))
@@ -42,14 +61,20 @@ begin
   when "run-osascript"
     begin
       ok = true
-      res = `osascript 'scripts/#{request["script-name"]}.scpt'`.strip
-      returned_message = res
-      returned_data = JSON.parse(res)
+      returned_data = run_script(request["script-name"])
     rescue Exception => e
       ok = false
       returned_error = "#{e.message} in : #{res}"
     end
     
+  # Pour récupérer les informations de la sélection du Finder
+  when "getInfoFinderSelection"
+    ok = true
+    returned_data = run_script('getInfoFinderSelection')
+    if returned_data["ok"] != false
+      returned_data['createdAt'] = human_date_to_aaammjj(returned_data['createdAt'])
+      returned_data['updatedAt'] = human_date_to_aaammjj(returned_data['updatedAt'])
+    end
   else # action inconnue
     ok = false
     returned_error = "unknown action: #{request["action"]}"
@@ -72,3 +97,4 @@ rescue => e
   puts({ ok: false, id: (defined?(request_id) ? request_id : nil), error: e.message }.to_json)
 
 end
+
