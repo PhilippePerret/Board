@@ -4,6 +4,49 @@ class Project {
     return Date.now() + Math.random().toString(16).slice(2);
   }
 
+  // 
+  /**
+   * === CRÉATION D'UN NOUVEAU PROJET ===
+   * 
+   * Appelé quand on clique sur le bouton "+"
+   * 
+   * La fonction affiche un panneau indiquant qu'il faut choisir le projet
+   * dans le Finder puis cliquer "OK" pour le prendre en compte.
+   */
+  static addProject(){
+    reset()
+    const conf = new ConfirmDialog({
+      title: "Importation d'un nouveau projet", 
+      message: "Sélectionner le dossier du projet dans le Finder, puis cliquer “OK”.",
+      width: '580px',
+      ouiBtn: {title: 'OK', onclick: this.onProjectSelectedInFinder.bind(this), width: '160px'},
+      nonBtn: {title: "Renoncer", onclick: null, width: '160px'},
+    })
+    conf.show()
+  }
+  static onProjectSelectedInFinder(){
+    server.send({action: 'getInfoFinderSelection', type: 'folder'}, this.onRetourInfoFinderProjet.bind(this))
+  }
+  static onRetourInfoFinderProjet(retour){
+    // console.info("Retour : ", retour)
+    if (retour.data.ok === false) {
+      if (retour.data.error == 'Not a folder') return error('Il faut impérativement choisir un dossier.')
+    }
+    const projet = new Project(Object.assign(retour.data, {
+      id: Project.uniqId(),
+      title: retour.data.name,
+      workTime: 0
+    })).buildCard()
+    const confirm = new ConfirmDialog({
+      title: "Confirmation de l'import",
+      message: "Si tu es d'accord avec ces données, clique le bouton “Importer”", // TODO ajouter les infos
+      ouiBtn: {name:"Importer", onclick: projet.save.bind(projet), w: '160px'},
+      nonBtn: {name: "Renoncer", w: '160px'}
+    }).show()
+  }
+
+
+  // Pour afficher et masquer les boutons du projet sélectionné
   static affProjectButtons(){
     this.divButtons.classList.remove('invisible')
   }
@@ -12,7 +55,8 @@ class Project {
   }
   static get divButtons(){return this._dbutons || (this._dbutons = DGet('span#project-buttons')) }
 
-  static remove(projet){
+  static removeProject(projet){
+    reset()
     if (!projet) return error("Il faut sélectionner le projet à retirer.")
     new ConfirmDialog({
       title: "Confirmation du retrait du projet",

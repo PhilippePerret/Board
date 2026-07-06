@@ -6,6 +6,7 @@ MAIN_PROJECT_FOLDER   = "/Users/philippeperret/Programmes/Board/_dev"
 PROJECT_CARD_FOLDER   = File.join(MAIN_PROJECT_FOLDER, 'projects-in')
 PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
 
+SERVICES_DATA_FILE = File.join(__dir__, 'data', 'services_data.yaml')
 
 def run_script(script_name)
   begin
@@ -89,7 +90,12 @@ begin
       returned_data['createdAt'] = human_date_to_aaammjj(returned_data['createdAt'])
       returned_data['updatedAt'] = human_date_to_aaammjj(returned_data['updatedAt'])
     end
-  else # action inconnue
+
+  # Relève la liste de tous les services accessibles
+  when 'get-all-services'
+    returned_data = YAML.safe_load(IO.read SERVICES_DATA_FILE)
+  # action inconnue => ERRREUR
+  else 
     ok = false
     returned_error = "unknown action: #{request["action"]}"
 

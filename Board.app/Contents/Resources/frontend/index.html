@@ -26,7 +26,6 @@
   <footer>
     <div id="message">Message footer</div>
     <button onclick="essayer()">Essayer</button>
-    <button onclick="Services.getInfosFinderWindow()">Information fenêtre Finder</button>
   </footer>
 
 <!-- 
@@ -34,30 +33,23 @@
     === PANNEAU D'ÉDITION DU PROJET ===
 
 -->
-<div id="edit-panel" class="closed">
-  <div>
-    <label>Titre du projet</label> <input type="text" id="project-title"/>
-    <label>Dossier principal</label> <input type="text" id="project-path"/>
-  </div>
-  <fieldset class="startup-services services">
-    <legend>Services au démarrage</legend>
-  </fieldset>
-  <fieldset class="autres-services services">
-    <legend>Autres services</legend>
-  </fieldset>
+<div id="services-panel" class="closed">
+  <div class="services-listing"></div>
 
   <label>Copier-coller du code</label>
   <textarea id="project-card-editing"></textarea>
 
 
-  <button class="btn-close" onclick="Editor.close()">Fermer</button>
+  <button onclick="ServicesTools.getInfosFinderWindow.call(ServicesTools)">Information fenêtre Finder</button>
+  <button class="btn-close" onclick="Services.close()">Fermer</button>
 
 </div>
 
 <div id="tools">
-  <button class="btn-add-project" onclick="Editor.addProject()">✚</button>
+  <button class="btn-add-project" onclick="Project.addProject()">✚</button>
     <span id="project-buttons" class="invisible">
-      <button class="btn-remove-project" onclick="Project.remove.call(Project, Project.current)">Retirer le projet</button>
+      <button class="btn-remove-project" onclick="Project.removeProject.call(Project, Project.current)">Retirer le projet</button>
+      <button class="btn-deal-with-services" onclick="Services.open.call(Services, Project.current)">Gérer ses services</button>
     </span>
 </div>
 
@@ -66,9 +58,9 @@
 <script src="js/Dom.js"></script>
 <script src="js/Panel.js"></script>
 <script src="js/ConfirmDialog.js"></script>
-<script src="js/Editor.js"></script>
 <script src="js/Project.js"></script>
 <script src="js/Services.js"></script>
+<script src="js/ServicesTools.js"></script>
 <script src="js/Dashboard.js"></script>
 <script src="js/app.js"></script>
 <script src="js/xbridge.js"></script>

@@ -77,7 +77,7 @@ footer div#message > span.notice {
   --editor-width: 300px; 
 }
 /* Panneau d'édition du projet */
-div#edit-panel {
+div#services-panel {
   top: 0;
   height: calc(100% - 2em);
   width: var(--editor-width);
@@ -87,15 +87,15 @@ div#edit-panel {
   z-index:100;
   background-color: #c4f4d5;
 }
-div#edit-panel.closed {
+div#services-panel.closed {
   right: calc(-1 * (var(--editor-width) + 100px));
 }
-div#edit-panel button.btn-close {
+div#services-panel button.btn-close {
   position: absolute;
   right: 20px;
   bottom: 60px;
 }
-div#edit-panel fieldset.services {
+div#services-panel fieldset.services {
   min-height: 12vh;
 }
 
