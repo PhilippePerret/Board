@@ -1,6 +1,6 @@
 window.onload = function(ev){
   message("Fenêtre chargé.")
-  // loadCurrentProjects()
+  loadCurrentProjects()
   // essayer()
 }
 

@@ -1,13 +1,8 @@
 ---
 id: 2783329334557587a854c1dd5d
 services:
-  startup:
-  - id: run-script
-    name: Jouer un script
-    type: startup
-    uuid: 1783350466167a649ee3a9b165
+  startup: []
   others: []
-  autres: []
 title: Board
 workTime: 0
 path: "/Users/philippeperret/Programmes/Board"

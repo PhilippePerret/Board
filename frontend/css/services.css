@@ -34,7 +34,12 @@ div#services-panel .services-listing {
   padding: 5px 18px;
   border-radius: 8px;
   margin-bottom: 8px;
+  background-color: rgb(70, 69, 69);
 }
+  
 .service * {
-  font-size: 16px;
+  font-size: 15px;
+  font-family: Avenir Next Condensed;
+  color: white;
+  text-align: center;
 }

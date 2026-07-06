@@ -1,12 +1,10 @@
 ---
+- id:   'open-project-in-finder'
+  name: 'Ouvrir projet dans Finder'
+  method: null
 - id:   'open-finder-window'
   name: 'Ouvrir une fenêtre dans le Finder'
-  properties:
-    - path: 'get-in-finder' # pour utiliser l'outil
-    - view: 
-        type: 'column view'
-
+  method: defineOpenFinderWindow
 - id:   'run-script'
   name: 'Jouer un script'
-  properties:
-    - path: 'get-in-finder'
+  method: defineScriptToRun

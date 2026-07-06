@@ -40,6 +40,7 @@ begin
   #######################################
   ###       Analyse de l'ACTION       ###
   #######################################
+  
   case request["action"]
   when 'remove-project'
     id = request["id"]

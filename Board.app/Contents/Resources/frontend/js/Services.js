@@ -1,24 +1,10 @@
 class Services {
 
-  /**
-   * 
-   * ==========================================
-   * D É F I N I T I O N   D U   S E R V I C E
-   * ==========================================
-   */
   static defineService(service, callback){
-    new ConfirmDialog({
-      title: "Confirmation du service",
-      message: "Merci de confirmer les informations de ce service.",
-      ouiBtn: {name: 'OK', onclick: this.suiteDefineService.bind(this, service, callback), w: '160px'},
-      nonBtn: {name: 'Renoncer', onclick: null, w: '160px'}
-    }).show()
-
+    if (service.method) {
+      new ServiceDefiner(service, callback).start()
+    } else { return callback() }
   }
-  static suiteDefineService(service, callback){
-    callback()
-  }
-
 
   /**
    * Construit la liste des services en la relevant en backend
@@ -131,5 +117,3 @@ class MiniPanel {
   close(){this.obj.classList.add('closed')}
 
 }
-
-console.log("fin du chargement de Services.js")

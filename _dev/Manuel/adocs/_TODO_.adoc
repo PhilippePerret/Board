@@ -1,22 +1,7 @@
 == Todo list ==
 
-- outil pour relever les informations de la fenêtre du Finder (premier plan)
-  Les donner en : `position: [top, left], size: [width, height], view_type: `
-- pouvoir éditer la fiche du projet dans l'interface
-- pouvoir créer la fiche du projet dans l'interface
-  - "+"
-  - => ouvre le pan avec l'éditeur
-  - on met le texte type
+- Information/données pour le service
+  - chaque service possède son propre nom personnalisé (-> data.data.name pour ne pas confondre avec 'name' du nom abstrait)
+  - chaque service possède ses propres données en fonction de sa nature (cf. ServiceDefiner)
 
-    ---
-    # Infos générales sur le projet
-    - name: Nom du rpojet
-      folder: /absolute/path/to/project/folder
-      services:
-        # Services au démarrage
-        startup:
-          - service: open-finder-window
-            path: .
-            position: [100, 100]
-            taille:   [1000, 800]
-            view: icon|list|colum|group|flow view
+- Implémenter ServiceExecuter pour exécuter les services
