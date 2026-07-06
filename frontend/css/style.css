@@ -107,30 +107,3 @@ div#tools {
 div#tools button.btn-add-project {
   font-size: 1.5em;
 }
-
-
-/*
-
-    --- CARTE PROJET ---
-
-*/
-div#project-cards {
-  position: relative;
-}
-div.project-card {
-  position: relative;
-  display: inline-block;
-  border: 1px solid #CCC;
-  border-radius: 1em;
-  width:  300px;
-  padding: 1em;
-  margin: 0 10px;
-  min-height: 30vh;
-
-}
-div.project-card div.title {
-  font-size: 1.2em;
-}
-div.project-card fieldset.services {
-  background-color: transparent;
-}

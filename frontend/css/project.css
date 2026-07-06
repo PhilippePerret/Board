@@ -1,0 +1,39 @@
+
+/*
+
+    --- CARTE PROJET ---
+
+*/
+div#projects {
+  position: relative;
+}
+div.project {
+  position: relative;
+  display: inline-block;
+  border: 1px solid #CCC;
+  border-radius: 1em;
+  width:  300px;
+  padding: 1em;
+  margin: 0 10px;
+  min-height: 30vh;
+
+}
+div.project div.title {
+  font-size: 1.2em;
+}
+div.project fieldset.services {
+  background-color: transparent;
+}
+.project .path {
+  font-size: 12px;
+}
+.project > span {
+  text-align: right;
+}
+.project > span {
+  font-size: 14px;
+  font-family: Georgia;
+}
+.project .worktime {
+  font-size: 14px;
+}

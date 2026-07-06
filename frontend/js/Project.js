@@ -3,6 +3,24 @@ class Project {
   static uniqId(){
     return Date.now() + Math.random().toString(16).slice(2);
   }
+
+  /**
+   * Appelée quand on clique sur une carte de projet
+   */
+  static onSelect(projet){
+    const same = projet.id == this.current?.id
+    this.current && this.deselect(this.current)
+    if (same) return // simple désélection
+    this.select(projet)
+  }
+  static select(projet){
+    projet.obj.classList.add('selected')
+    this.current = projet
+  }
+  static deselect(projet){
+    projet.obj.classList.remove('selected')
+    this.current = null
+  }
   
   static dispatch(retour){
     console.log("retour", retour)
@@ -50,24 +68,31 @@ class Project {
 
   buildCard(){
     if (this.obj) this.obj.remove()
-    const div = DCreate('DIV', {id: this.id, class: 'project-card'})
+    const div = DCreate('DIV', {id: this.id, class: 'project'})
     this.obj = div
-    const tit = document.createElement('DIV')
-    tit.className = 'title'
-    tit.textContent = this.title
+    const tit = DCreate('DIV', {class:'title', text: this.title})
     div.appendChild(tit)
-    const startup = document.createElement('FIELDSET')
-    const legendstartup = document.createElement('LEGEND')
-    legendstartup.textContent = 'Services au démarrage'
+    const path  = DCreate('DIV', {class:'path', text: this.path})
+    div.appendChild(path)
+    const dates = DCreate('DIV', {class: 'dates'})
+    div.appendChild(dates)
+    const crea  = DCreate('SPAN', {class: 'date', text: 'créé : ' + this.createdAt})
+    dates.appendChild(crea)
+    const upda  = DCreate('SPAN', {class: 'date', text: 'modifié : ' +this.updatedAt})
+    dates.appendChild(upda)
+    const work = DCreate('DIV', {class: 'worktime', text: 'Temps de travail : ' + this.workTime})
+    div.appendChild(work)
+
+    const startup = DCreate('FIELDSET')
+    const legendstartup = DCreate('LEGEND', {text:'Services au démarrage'})
     startup.appendChild(legendstartup)
     this.startupServices.forEach(service => {
       startup.appendChild(service.build())
     })
     div.appendChild(startup)
 
-    const otherservices = document.createElement('FIELDSET')
-    const legendautre = document.createElement('LEGEND')
-    legendautre.textContent = 'Autres services'
+    const otherservices = DCreate('FIELDSET')
+    const legendautre = DCreate('LEGEND', {text: 'Autres services'})
     otherservices.appendChild(legendautre)
     this.autresServices.forEach(service => {
       otherservices.appendChild(service.build())
@@ -86,6 +111,7 @@ class Project {
     message("Édition du projet " + this.title)
   }
   onMouseDown(ev){
+    Project.select(this)
     return stopEvent(ev)
   }
 }

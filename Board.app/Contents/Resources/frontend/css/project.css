@@ -1,0 +1,13 @@
+.project .path {
+  font-size: 12px;
+}
+.project > span {
+  text-align: right;
+}
+.project > span {
+  font-size: 14px;
+  font-family: Georgia;
+}
+.project .worktime {
+  font-size: 14px;
+}
