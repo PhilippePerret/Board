@@ -127,5 +127,5 @@ div.project-card div.title {
   font-size: 1.2em;
 }
 div.project-card fieldset.services {
-
+  background-color: transparent;
 }
