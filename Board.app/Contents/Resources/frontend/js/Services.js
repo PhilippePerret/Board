@@ -38,10 +38,10 @@ class Services {
   }
 
   static add(service){
-    this.services ?? {}
+    this.services || (this.services = {})
     Object.assign(this.services, {[service.id]: service})
   }
-  static get(serviceId){return this.services?[serviceId]}
+  static get(serviceId){return this.services && this.services[serviceId]}
 
   constructor(data){
     this.id = data.id || raise("Il faut fournir un identifiant au service.")
@@ -52,12 +52,31 @@ class Services {
 
   build(){
     const div = DCreate('DIV', {class:'service', id: this.id})
+    div.setAttribute('draggable', true)
     const name = DCreate('DIV', {class:'name', text: this.name})
     div.appendChild(name)
     this.obj = div
     this.constructor.ServicesListing.appendChild(div)
+    this.observe()
+  }
+  observe(){
+    this.obj.addEventListener("dragstart", e => e.dataTransfer.setData("id", this.id));
+  } 
+  
+  // Retourne la carte à insérer dans le projet
+  projectCard(){
+    const div = DCreate('DIV', {text: this.name, class: 'service'})
+    div.draggable = true
+    return div
   }
 }
+
+
+
+
+
+
+
 
 class MiniPanel {
   constructor(obj){

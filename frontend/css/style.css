@@ -73,32 +73,6 @@ footer div#message > span.notice {
   color: rgb(13, 164, 13);
 } 
 
-:root {
-  --editor-width: 300px; 
-}
-/* Panneau d'édition du projet */
-div#services-panel {
-  top: 0;
-  height: calc(100% - 2em);
-  width: var(--editor-width);
-  right: 0;
-  padding: 2em;
-  position: fixed;
-  z-index:100;
-  background-color: #c4f4d5;
-}
-div#services-panel.closed {
-  right: calc(-1 * (var(--editor-width) + 100px));
-}
-div#services-panel button.btn-close {
-  position: absolute;
-  right: 20px;
-  bottom: 60px;
-}
-div#services-panel fieldset.services {
-  min-height: 12vh;
-}
-
 /* 
     --- Outils --- 
 */

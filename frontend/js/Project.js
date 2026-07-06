@@ -105,8 +105,13 @@ class Project {
     this.createdAt  = data.createdAt
     this.updatedAt  = data.updatedAt
     this.workTime   = data.workTime ?? 0
-    this.startupServices  = data.startup_services ?? []
-    this.autresServices   = data.autres_services ?? []
+    this.services   = data.services ?? {startup: [], others: []}
+    this.initServices()
+  }
+
+  initServices(){
+    this.services.startup = (this.services.startup ?? []).map(ds => new Services(ds))
+    this.services.others  = (this.services.others  ?? []).map(ds => new Services(ds))
   }
 
   save(){
@@ -119,10 +124,7 @@ class Project {
         workTime:   this.workTime,
         createdAt:  this.createdAt,
         updatedAt:  this.updatedAt,
-        services: {
-          startup:  this.startupServices,
-          autres:   this.autresServices
-        }
+        services:   this.services
       }
     }, this.afterSave.bind(this))
   }
@@ -130,6 +132,33 @@ class Project {
     console.log("retour", retour)
     message("Projet « " + this.title + ' » enregistré avec succès.')
   }
+
+  addStartupService(service){
+    this.addService(service, 'startup')
+  }
+  addOtherService(service){
+    this.addService(service, 'others')
+  }
+  addService(service, where /* others ou startup */){
+    service.uuid = Project.uniqId()
+    this.services[where].push(service)
+    const startup = (where == 'startup')
+    const card = service.projectCard()
+    this[startup?'startupField':'othersField'].appendChild(card)
+    listen(card, 'dragstart', e => this.draggedService = service)
+    listen(card, 'dragend', e => {
+      if (e.dataTransfer.dropEffect != "none") return
+      this.removeServiceFromListe();
+    })
+    // Il faut encore définir le service, pour le moment on l'enregistre comme ça
+    this.save()
+  }
+  removeServiceFromListe(){
+    const service = this.draggedService
+    message("Supprimer le service " + service.uuid)
+  }
+
+
 
   buildCard(){
     if (this.obj) this.obj.remove()
@@ -148,21 +177,21 @@ class Project {
     const work = DCreate('DIV', {class: 'worktime', text: 'Temps de travail : ' + this.workTime})
     div.appendChild(work)
 
-    const startup = DCreate('FIELDSET')
+    this.startupField = DCreate('FIELDSET')
     const legendstartup = DCreate('LEGEND', {text:'Services au démarrage'})
-    startup.appendChild(legendstartup)
-    this.startupServices.forEach(service => {
-      startup.appendChild(service.build())
+    this.startupField.appendChild(legendstartup)
+    ;(this.services.startup ?? []).forEach((service) => {
+      this.startupField.appendChild(service.projectCard())
     })
-    div.appendChild(startup)
+    div.appendChild(this.startupField)
 
-    const otherservices = DCreate('FIELDSET')
+    this.othersField = DCreate('FIELDSET')
     const legendautre = DCreate('LEGEND', {text: 'Autres services'})
-    otherservices.appendChild(legendautre)
-    this.autresServices.forEach(service => {
-      otherservices.appendChild(service.build())
+    this.othersField.appendChild(legendautre)
+    ;(this.services.others ?? []).forEach((service) => {
+      this.othersField.appendChild(service.projectCard())
     })
-    div.appendChild(otherservices)
+    div.appendChild(this.othersField)
 
     this.constructor.container.appendChild(div)
     this.observe()
@@ -170,14 +199,36 @@ class Project {
   observe(){
     this.obj.addEventListener('dblclick', this.onDblClick.bind(this))
     this.obj.addEventListener('mousedown', this.onMouseDown.bind(this))
+    
+    let dragged = null
+
+    this.startupField.addEventListener("dragover", e => {e.preventDefault()})
+    this.startupField.addEventListener("drop", e => {
+        e.preventDefault();
+        const service = Services.get(e.dataTransfer.getData("id"))
+        // console.log("Drop sur la zone startup", service)
+        this.addStartupService(service)
+      })
+
+    this.othersField.addEventListener("dragover", e => e.preventDefault())
+    this.othersField.addEventListener("drop", e => {
+          e.preventDefault();
+          const service = Services.get(e.dataTransfer.getData("id"))
+          // console.log("Drop sur la zone autres services", service)
+          this.addOtherService(service)
+      })
   }
 
   onDblClick(ev){
     message("Édition du projet " + this.title)
   }
   onMouseDown(ev){
-    this.constructor.onSelect(this)
-    return stopEvent(ev)
+    if (!ev.target.classList.contains('service')){
+      this.constructor.onSelect(this)
+      return stopEvent(ev)
+    } else {
+      return true
+    }
   }
 
   remove(){

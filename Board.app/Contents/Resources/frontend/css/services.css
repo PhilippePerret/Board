@@ -1,0 +1,40 @@
+:root {
+  --editor-width: 300px; 
+}
+/* Panneau d'édition du projet */
+div#services-panel {
+  top: 0;
+  height: calc(100% - 2em);
+  width: var(--editor-width);
+  right: 0;
+  padding: 2em;
+  position: fixed;
+  z-index:100;
+  background-color: #aab2c9;
+}
+div#services-panel.closed {
+  right: calc(-1 * (var(--editor-width) + 100px));
+}
+div#services-panel button.btn-close {
+  position: absolute;
+  right: 20px;
+  bottom: 60px;
+}
+div#services-panel fieldset.services {
+  min-height: 12vh;
+}
+
+
+div#services-panel .services-listing {
+  padding:0.5em;
+  margin-bottom: 1em;
+}
+div#services-panel .services-listing .service {
+  border: 1px solid #888;
+  padding: 5px 18px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+div#services-panel .services-listing .service * {
+  font-size: 16px;
+}
