@@ -11,11 +11,11 @@ class Editor {
   static close(){this.panel.close()}
 
   static get panel(){
-    return this._panel || (this._panel = new Panel(document.querySelector('div#edit-panel')))
+    return this._panel || (this._panel = new MiniPanel(document.querySelector('div#edit-panel')))
   }
 }
 
-class Panel {
+class MiniPanel {
   constructor(obj){
     this.obj = obj
     console.log("obj", obj)

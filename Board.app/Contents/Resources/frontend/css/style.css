@@ -12,6 +12,11 @@ body {
 .hidden {display:none;}
 .error {font-weight:bold; color: red;}
 
+button {
+  padding: 4px 32px;
+  white-space: nowrap;
+  margin: 0 10px;
+}
 fieldset {
   border: 1px solid #CCC;
   border-radius: 5px;
