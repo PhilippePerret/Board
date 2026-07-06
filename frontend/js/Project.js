@@ -141,21 +141,39 @@ class Project {
   }
   addService(service, where /* others ou startup */){
     service.uuid = Project.uniqId()
+    service.type = where
     this.services[where].push(service)
     const startup = (where == 'startup')
-    const card = service.projectCard()
+    const card = this.getServiceCard(service)
     this[startup?'startupField':'othersField'].appendChild(card)
+    // Il faut encore définir le service, pour le moment on l'enregistre comme ça
+    this.save()
+  }
+
+  getServiceCard(service){
+    const card = service.projectCard()
+    this.observeServiceCard(service, card)
+    return card
+  }
+  observeServiceCard(service, card){
     listen(card, 'dragstart', e => this.draggedService = service)
     listen(card, 'dragend', e => {
       if (e.dataTransfer.dropEffect != "none") return
       this.removeServiceFromListe();
     })
-    // Il faut encore définir le service, pour le moment on l'enregistre comme ça
-    this.save()
   }
+
+  /**
+   * SUPPRIMER UN SERVICE
+   * ---------------------
+   */
   removeServiceFromListe(){
     const service = this.draggedService
-    message("Supprimer le service " + service.uuid)
+    service.projectCard.remove()
+    message(`Service supprimé (${service.uuid})`)
+    this.services[service.type] = this.services[service.type].filter(s => s.uuid == service.uuid)
+    Services.remove(service.uuid)
+    this.save()
   }
 
 
@@ -181,7 +199,7 @@ class Project {
     const legendstartup = DCreate('LEGEND', {text:'Services au démarrage'})
     this.startupField.appendChild(legendstartup)
     ;(this.services.startup ?? []).forEach((service) => {
-      this.startupField.appendChild(service.projectCard())
+      this.startupField.appendChild(this.getServiceCard(service))
     })
     div.appendChild(this.startupField)
 
@@ -189,7 +207,7 @@ class Project {
     const legendautre = DCreate('LEGEND', {text: 'Autres services'})
     this.othersField.appendChild(legendautre)
     ;(this.services.others ?? []).forEach((service) => {
-      this.othersField.appendChild(service.projectCard())
+      this.othersField.appendChild(this.getServiceCard(service))
     })
     div.appendChild(this.othersField)
 
@@ -223,7 +241,7 @@ class Project {
     message("Édition du projet " + this.title)
   }
   onMouseDown(ev){
-    if (!ev.target.classList.contains('service')){
+    if (!ev.target.closest(".service")) {
       this.constructor.onSelect(this)
       return stopEvent(ev)
     } else {

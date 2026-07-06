@@ -29,12 +29,12 @@ div#services-panel .services-listing {
   padding:0.5em;
   margin-bottom: 1em;
 }
-div#services-panel .services-listing .service {
+.service {
   border: 1px solid #888;
   padding: 5px 18px;
   border-radius: 8px;
   margin-bottom: 8px;
 }
-div#services-panel .services-listing .service * {
+.service * {
   font-size: 16px;
 }
