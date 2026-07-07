@@ -1,7 +1,16 @@
 ---
 id: 3783329334557587a854c1dd5d
 services:
-  others: []
+  others:
+  - params:
+    - "/Users/philippeperret/Programmes/Board//update.command"
+    - update.command
+    scType: ".rb"
+    id: file-versioning
+    uuid: 17834441262788929b4a4216868
+    type: others
+    name: Versionner un fichier/dossier
+    projectId:
   startup:
   - params:
     - "/Users/philippeperret/Programmes/Eventer3/"
@@ -12,14 +21,13 @@ services:
     - 0
     - group view
     - false
+    scType: ".scpt"
     id: open-finder-window
-    projectId:
-    name: Ouvrir une fenêtre dans le Finder
-    type: startup
     uuid: 1783415096715788be4567f8c5
-  - name: Ouvrir projet dans Finder
-    id: open-folder-project
+    type: startup
+    name: Ouvrir une fenêtre dans le Finder
     projectId:
+  - scType: ".scpt"
     params:
     - "/Users/philippeperret/Programmes/Eventer3/"
     - 2077
@@ -29,8 +37,11 @@ services:
     - 0
     - list view
     - false
-    type: startup
+    id: open-folder-project
     uuid: 178341806595918a052c899d34
+    type: startup
+    name: Ouvrir projet dans Finder
+    projectId:
 title: Eventer
 workTime: 0
 path: "/Users/philippeperret/Programmes/Eventer3"

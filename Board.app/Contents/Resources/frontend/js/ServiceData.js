@@ -14,6 +14,20 @@ const SERVICES_DATA = [
   },
 
   {
+      id: 'file-versioning'
+    , name: 'Versionner un fichier/dossier'
+    , scType: '.rb'
+    , params: [
+        {id: 'path', value: null, type: 'path', required: true}
+
+    ]
+      /* Paramètres à définir au moment du lancement */
+    , dynParams: [
+        {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
+      ] 
+  },
+
+  {
       id: 'run-chronometre'
     , name: "Chronomètre"
     , params: [

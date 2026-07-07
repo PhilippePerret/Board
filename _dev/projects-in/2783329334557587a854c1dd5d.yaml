@@ -1,17 +1,8 @@
 ---
 id: 2783329334557587a854c1dd5d
 services:
-  others:
-  - scType: ".rb"
-    params:
-    - "/Users/philippeperret/Programmes/Board//Info.plist"
-    - Info.plist
-    id: run-script
-    uuid: 17834322113194c316ab7830418
-    type: others
-    name: Jouer un script
-    projectId:
   startup: []
+  others: []
 title: Board
 workTime: 0
 path: "/Users/philippeperret/Programmes/Board"

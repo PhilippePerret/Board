@@ -1,15 +1,22 @@
 /**
  * La classe dont héritent tous les panneaux
+ * 
+ * Passer la données `idValues` pour faire savoir à Panel quelles valeurs
+ * doivent être retournées. Ça doit être obligatoirement l'id DOM d'un
+ * élément qui répond à `value', comme un select par exemple.
+ * 
  */
 class Panel {
   static panelIndex = 0
 
   constructor(data){
+    this.returnedIdValues = data.idValues ?? null // Pour savoir quelles valeurs retourner avec oui
     this.id    = data.id ?? `panel-${++Panel.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
     this.height = data.height ?? data.h ?? '240px'
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? '- Panneau sans messsage (message) -'
+    this.content = data.content ?? null
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
     this.midData = data.midBtn ?? null
     this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
@@ -32,7 +39,17 @@ class Panel {
 
   onOui(ev){
     if ('function' == typeof this.ouiData.onclick) {
-      this.ouiData.onclick()
+      const returnedValues = {};
+      if (this.returnedIdValues) {
+        this.returnedIdValues.forEach(idValue => {
+          console.log("[onOui] idValue = ", idValue)
+          Object.assign(returnedValues, {[idValue]: DGet('#' + idValue, this.obj).value})
+        })
+        console.log("[onOui] returnedValues", returnedValues)
+        this.ouiData.onclick(returnedValues)
+      } else {
+        this.ouiData.onclick()
+      }
     } else {
       console.error("this.ouiData.onclick", this.ouiData.onclick)
       error('this.ouiData.onclick n’est pas une fonction')
@@ -66,7 +83,7 @@ class Panel {
   }
   onKeyDown(ev) {
     var dev;
-    console.log("ev", ev)
+    // console.log("ev", ev)
     if ( (dev = Panel.HANDLED_KEYS[ev.key]) ){
       const method = dev.nokey ;
       this[method]() 
@@ -84,14 +101,15 @@ class Panel {
     const tit = DCreate('DIV', {class: 'title', text: this.title})
     div.appendChild(tit)
     const msg = DCreate('DIV', {class: 'message', text: this.message})
+    // Du contenu HTML dans div.message
     div.appendChild(msg)
+    if (this.content) msg.appendChild(this.content)
+    // Pied de page
     const footer = DCreate('DIV', {class:'footer'})
     this.nonBtn = DCreate('BUTTON', {class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
     footer.appendChild(this.nonBtn)
-    if (this.midData) {
-      this.midBtn = DCreate('BUTTON', {class: 'btn-mid, mid-btn', style: `width:${this.midData.width ?? 'auto'}` , text: this.midData.title || this.midData.name})
-      footer.appendChild(this.midBtn)
-    }
+    this.midBtn = DCreate('BUTTON', {class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
+    footer.appendChild(this.midBtn)
     this.ouiBtn = DCreate('BUTTON', {class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
     footer.appendChild(this.ouiBtn)
 
@@ -105,7 +123,7 @@ class Panel {
   observe(){
     listen(this.ouiBtn, 'click', this.onOui.bind(this))
     listen(this.nonBtn, 'click', this.onNon.bind(this))
-    this.midBtn && listen(this.midBtn, 'click', this.onMid.bind(this))
+    listen(this.midBtn, 'click', this.onMid.bind(this))
     listen(window, 'keydown', this.onKeyDown.bind(this))
   }
 }
