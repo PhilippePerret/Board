@@ -1,5 +1,7 @@
 == Todo list ==
 
+- Bien documenter les données des services pour s'en souvenir
+  Notamment les paramètres dynamiques qui permettent de définir précisément l'effet du bouton
 - Bouton "OK" dans confirmDialog doit être à droite
 - Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
 - Pouvoir déplacer les services, donc : 
