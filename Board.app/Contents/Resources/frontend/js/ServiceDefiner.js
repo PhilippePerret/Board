@@ -39,9 +39,8 @@ class ServiceDefiner {
 
   // On finit
   resolve(){
-    console.log("-> resolve")
     this.service.params = this.paramsValues
-    console.log("Service %s après définition", this.service.id, this.service)
+    console.log("[resolve] Service %s après définition", this.service.id, this.service)
     this.callback(this.service)
   }
 
@@ -78,6 +77,9 @@ class ServiceDefiner {
         break
       case 'path':
         message("Je dois apprendre à définir un chemin d'accès")
+        this.attend(param.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
+          this.getPathOfFinderSelection.bind(this)
+        )
         break
       case 'app':
         message("Je dois apprendre à définir une application (CLI)")
@@ -97,6 +99,17 @@ class ServiceDefiner {
     console.log("retour dans onBooleanResponse", retour)
     this.addParamValue(trueOrFalse)
     this.define()
+  }
+
+  // Va cherche le chemin d'accès à la sélection du finder
+  getPathOfFinderSelection(retour){
+    if (undefined == retour) {
+      server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this))
+    } else {
+      console.log("retour", retour)
+      this.addParamValues([retour.data.filepath, retour.data.filename])
+      this.define()
+    }
   }
 
   // Va chercher les informations sur la fenêtre courante dans le Finder

@@ -1,5 +1,6 @@
 == Todo list ==
 
+- Bouton "OK" dans confirmDialog doit être à droite
 - Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
 - Pouvoir déplacer les services, donc : 
   - click les sélectionne

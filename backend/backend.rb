@@ -8,23 +8,20 @@ PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
 
 SERVICES_DATA_FILE = File.join(__dir__, 'data', 'services_data.yaml')
 
+COMMAND_PER_EXT = {
+  '.scpt' => 'osascript',
+  '.rb'   => 'ruby',
+  '.sh'   => 'zsh'
+}
 ### === Jouer un script du dossier /scripts/ ===
 def run_script(script_name, params = "")
   params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
   cmd = nil
-  case File.extname(script_name)
-  when '.sh'
+  extname = File.extname(script_name)
+  case extname
+  when '.scpt', '.rb', '.sh'
     begin
-      cmd = "scripts/#{script_name} #{params}".strip
-      res = `#{cmd}`
-      if res == "" then {ok: true}
-      else JSON.parse(res) end
-    rescue Exception => e
-      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
-    end
-  when '.scpt'
-    begin
-      cmd = "osascript scripts/#{script_name} #{params}".strip
+      cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
       # return  {script_command: "cmd = #{cmd}"}
       res = `#{cmd}`
       if res == "" then {ok: true}
@@ -33,9 +30,10 @@ def run_script(script_name, params = "")
       {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
     end
   else
-    puts "Je ne sais pas traiter un script #{script_name}"
+    {ok: false, error: "Je ne sais pas traiter un script #{script_name}"}
   end
 end
+
 def human_date_to_aaammjj(date)
   y, m, j = date.split('/')
   "#{y}/#{m.rjust(2,'0')}/#{j.rjust(2,'0')}"

@@ -71,6 +71,7 @@ class Services {
     this.uuid   = data.uuid ?? null // seulement les services de projets
     this.type   = data.type ?? null // idem (others ou startup)
     this.projectId = data.projectId ?? null // pas encore mis (voir si utile)
+    this.scType = data.scType ?? '.scpt'
     this.constructor.get(this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")

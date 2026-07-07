@@ -24,9 +24,9 @@ const SERVICES_DATA = [
   {
       id: 'run-script'
     , name: 'Jouer un script'
+    , scType: '.rb'
     , params: [
-        {id: 'path', value: null, type: 'path', required: true},
-        {id: 'app', value: null, type: 'app', required: false}
+        {id: 'path', value: null, type: 'path', required: true}
       ]
   },
 
