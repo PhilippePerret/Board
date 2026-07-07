@@ -1,7 +1,10 @@
 = Board =
+:toc:
 
 // Nom des boutons
 :start-work: Démarrer le travail
+
+
 
 include::adocs/_TODO_.adoc[]
 

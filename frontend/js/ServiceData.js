@@ -10,6 +10,7 @@ const SERVICES_DATA = [
         {id: 'window', q: null, value: null, type: 'finder-window', required: true},
         {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
       ]
+    , paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']
   },
 
   {

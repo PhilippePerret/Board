@@ -1,3 +1,5 @@
 == Développement ==
 
 include::xdev/collect-information.adoc[]
+
+include::xdev/definition-services.adoc[]

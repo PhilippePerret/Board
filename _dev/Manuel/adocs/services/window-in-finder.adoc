@@ -13,5 +13,5 @@ Définition dans la fiche projet :
 | path      | Chemin d'accès au dossier (absolu ou relatif au projet)
 | position  | [top, left], position vertical et horizontal de la fenêtre
 | taille    | [width, height], largeur et hauteur de la fenêtre
-| Type vue  | column|list
+| Type vue  | column\|list
 |====

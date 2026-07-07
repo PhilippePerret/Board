@@ -1,0 +1,37 @@
+=== Définition des services ===
+
+L'intégralité des services est définie dans le fichier `frontend/js/ServicesData.js`
+
+Les <<services>> connaissent toujours deux états :
+
+- l'état en tant que service absolu, qui peut être incorporé à un projet
+- l'éta dans un projet, donc le service concret.
+
+Par exemple, on peut avoir : 
+
+- le service abstrait `open-finder-window` qui peut ouvrir une fenêtre de Finder,
+- une ouverture de fenêtre précise dans un projet précis.
+
+Les différences se trouvent ici : 
+
+|====
+| **Service abstrait**    | **Service concret**
+| reconnu par `id`        | même id, mais pas utilisé
+| pas d'`uuid`            | reconnu par `uuid`
+| `params` est une table qui définit précisément chaque paramètre utile.
+| `params` est une **liste** de valeurs qui seront ajoutées en argument du script.
+| `params` est une table  
+| `params` est une liste de valeurs sans indication. +
+L'ordre est défini dans `paramsOrder` mais purement à titre indicatif car les nom
+des propriétés ne correspondent à rien.
+|====
+
+Noter surtout la différence importante au niveau de la propriété `params`.
+
+==== Backend ====
+
+Tout comme le reste, le backend (`backend.rb`) est réduit à l'essentiel.
+
+Pour l'exécution du service, rien n'est besoin d'être ajouté. 
+
+Pour la définition, il peut être nécessaire d'ajouter des scripts, mais beaucoup de choses peuvent être faite en utilisant l'action `run-osascript` ou `run-bashscript` pour jouer un script du dossier `backend/scripts/`

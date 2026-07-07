@@ -437,6 +437,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <body class="article">
 <div id="header">
 <h1>Board</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_todo_list">Todo list</a></li>
+<li><a href="#_présentation">Présentation</a></li>
+<li><a href="#_prise_en_main">Prise en main</a>
+<ul class="sectlevel2">
+<li><a href="#_panneau_de_nouveau_projet">Panneau de nouveau projet</a></li>
+</ul>
+</li>
+<li><a href="#services">Les services</a>
+<ul class="sectlevel2">
+<li><a href="#_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</a></li>
+<li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
+<li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
+<li><a href="#_lancer_un_script_quelconque">Lancer un script quelconque</a></li>
+</ul>
+</li>
+<li><a href="#_développement">Développement</a>
+<ul class="sectlevel2">
+<li><a href="#_collecte_informations">Collecte informations</a></li>
+<li><a href="#_définition_des_services">Définition des services</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div class="sect1">
@@ -445,32 +471,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>pouvoir éditer la fiche du projet dans l&#8217;interface</p>
+<p>Information/données pour le service</p>
 </li>
 <li>
-<p>pouvoir créer la fiche du projet dans l&#8217;interface</p>
+<p>chaque service possède son propre nom personnalisé (&#8594; data.data.name pour ne pas confondre avec 'name' du nom abstrait)</p>
 </li>
 <li>
-<p>"+"</p>
+<p>chaque service possède ses propres données en fonction de sa nature (cf. ServiceDefiner)</p>
 </li>
 <li>
-<p>&#8658; ouvre le pan avec l&#8217;éditeur</p>
+<p>Implémenter ServiceExecuter pour exécuter les services</p>
 </li>
 <li>
-<p>on met le texte type</p>
-<div class="literalblock">
-<div class="content">
-<pre>----
----
-# Infos générales sur le projet
-- name: Nom du rpojet
-  folder: /absolute/path/to/project/folder
-  services:
-    # Services au démarrage
-    startup:
-----</pre>
-</div>
-</div>
+<p>Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup</p>
+</li>
+<li>
+<p>Remettre l&#8217;horloge ici avec le calcul des temps</p>
 </li>
 </ul>
 </div>
@@ -657,6 +673,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">taille</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">[width, height], largeur et hauteur de la fenêtre</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type vue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column|list</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -831,12 +851,92 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_définition_des_services">Définition des services</h3>
+<div class="paragraph">
+<p>L&#8217;intégralité des services est définie dans le fichier <code>frontend/js/ServicesData.js</code></p>
+</div>
+<div class="paragraph">
+<p>Les <a href="#services">Les services</a> connaissent toujours deux états :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>l&#8217;état en tant que service absolu, qui peut être incorporé à un projet</p>
+</li>
+<li>
+<p>l&#8217;éta dans un projet, donc le service concret.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Par exemple, on peut avoir :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le service abstrait <code>open-finder-window</code> qui peut ouvrir une fenêtre de Finder,</p>
+</li>
+<li>
+<p>une ouverture de fenêtre précise dans un projet précis.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Les différences se trouvent ici :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Service abstrait</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Service concret</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reconnu par <code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">même id, mais pas utilisé</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pas d'`uuid`</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reconnu par <code>uuid</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une table qui définit précisément chaque paramètre utile.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une <strong>liste</strong> de valeurs qui seront ajoutées en argument du script.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une table</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une liste de valeurs sans indication.<br>
+L&#8217;ordre est défini dans <code>paramsOrder</code> mais purement à titre indicatif car les nom
+des propriétés ne correspondent à rien.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Noter surtout la différence importante au niveau de la propriété <code>params</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_backend">Backend</h4>
+<div class="paragraph">
+<p>Tout comme le reste, le backend (<code>backend.rb</code>) est réduit à l&#8217;essentiel.</p>
+</div>
+<div class="paragraph">
+<p>Pour l&#8217;exécution du service, rien n&#8217;est besoin d&#8217;être ajouté.</p>
+</div>
+<div class="paragraph">
+<p>Pour la définition, il peut être nécessaire d&#8217;ajouter des scripts, mais beaucoup de choses peuvent être faite en utilisant l&#8217;action <code>run-osascript</code> ou <code>run-bashscript</code> pour jouer un script du dossier <code>backend/scripts/</code></p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-05 08:47:14 +0200
+Last updated 2026-07-07 11:39:52 +0200
 </div>
 </div>
 </body>
