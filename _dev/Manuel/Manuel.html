@@ -471,19 +471,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Information/données pour le service</p>
-</li>
-<li>
-<p>chaque service possède son propre nom personnalisé (&#8594; data.data.name pour ne pas confondre avec 'name' du nom abstrait)</p>
-</li>
-<li>
-<p>chaque service possède ses propres données en fonction de sa nature (cf. ServiceDefiner)</p>
-</li>
-<li>
-<p>Implémenter ServiceExecuter pour exécuter les services</p>
-</li>
-<li>
 <p>Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup</p>
+</li>
+<li>
+<p>Pouvoir déplacer les services, donc :</p>
+</li>
+<li>
+<p>click les sélectionne</p>
+</li>
+<li>
+<p>flèches les déplacent</p>
+</li>
+<li>
+<p>Delete les retire</p>
 </li>
 <li>
 <p>Remettre l&#8217;horloge ici avec le calcul des temps</p>
@@ -902,6 +902,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pas d'`uuid`</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">reconnu par <code>uuid</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code> correspond au script qui sera joué : <code>mot-dans-un</code> → <code>scripts/MotDansUn.script</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code> ne correspond à l&#8217;identifiant (utiliser pour suppression, déplacement, etc.)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une table qui définit précisément chaque paramètre utile.</p></td>

@@ -1,12 +1,8 @@
 == Todo list ==
 
-- Information/données pour le service
-  - chaque service possède son propre nom personnalisé (-> data.data.name pour ne pas confondre avec 'name' du nom abstrait)
-  - chaque service possède ses propres données en fonction de sa nature (cf. ServiceDefiner)
-
+- Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
 - Pouvoir déplacer les services, donc : 
   - click les sélectionne
   - flèches les déplacent
   - Delete les retire
-- Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
 - Remettre l'horloge ici avec le calcul des temps
