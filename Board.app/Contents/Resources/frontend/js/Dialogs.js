@@ -14,7 +14,7 @@ class SelectDialog extends Panel {
   }
   buildMenu(){
     const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
-    const select = DCreate('SELECT', {class: this.id})
+    const select = DCreate('SELECT', {id: '__' + this.id + '__'} )
     div.appendChild(select)
     this.values.forEach(value => {
       var tit, val

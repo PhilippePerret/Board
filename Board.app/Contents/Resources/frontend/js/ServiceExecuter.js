@@ -29,7 +29,7 @@ class ServiceExecuter {
     server.send({action: `exec-service`, script: this.script, params: this.params}, this.afterRunService.bind(this))
   }
 
-  treateDynParams(params){
+  treateDynParams(){
     const param = this.dynParams.pop()
     if (param){
       this.defineByType(param)
@@ -39,8 +39,10 @@ class ServiceExecuter {
   }
 
   onDefineDynParam(values){
+    console.log("[onDefineDynParam] arguments", arguments)
     console.log("[onDefineDynParam] values", values)
-    this.params.push(values[this.id])
+    this.params = [...this.params, ...values]
+    this.treateDynParams()
   }
 
   defineByType(param){
@@ -50,7 +52,7 @@ class ServiceExecuter {
             title: 'Paramètres du service'
           , id: param.id
           , message: param.q
-          , idValues: [param.idValues]
+          , idValues: [param.id]
           , values: param.values
           , ouiBtn: {name: 'OK', onclick: this.onDefineDynParam.bind(this)}
         }).show()

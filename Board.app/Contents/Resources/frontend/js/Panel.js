@@ -39,13 +39,19 @@ class Panel {
 
   onOui(ev){
     if ('function' == typeof this.ouiData.onclick) {
-      const returnedValues = {};
+      let returnedValues = [];
       if (this.returnedIdValues) {
         this.returnedIdValues.forEach(idValue => {
           console.log("[onOui] idValue = ", idValue)
-          Object.assign(returnedValues, {[idValue]: DGet('#' + idValue, this.obj).value})
+          const el = DGet('#__' + idValue + '__', this.obj)
+          let value = el.value
+          if (el.TagName == 'SELECT') { value = el.options[el.selectedIndex].value }
+          console.log("[onOui] el = ", el)
+          console.log("[onOui] el.value = ", value)
+          returnedValues.push(value)
         })
         console.log("[onOui] returnedValues", returnedValues)
+        console.log("[onOui] onclick", this.ouiData.onclick)
         this.ouiData.onclick(returnedValues)
       } else {
         this.ouiData.onclick()
