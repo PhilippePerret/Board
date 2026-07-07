@@ -3,7 +3,7 @@ class ServicesTools {
   static getInfosFinderWindow(){
     server.send({
       action:'run-osascript', 
-      'script-name': "finder-front-window-infos"
+      'script-name': "getInfoFinderWindow"
       }, 
       this.setInfosFinderWindow.bind(this)
     )

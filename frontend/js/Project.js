@@ -130,7 +130,7 @@ class Project {
   }
   afterSave(retour){
     console.log("retour", retour)
-    message("Projet « " + this.title + ' » enregistré avec succès.')
+    message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
   }
 
   /**
@@ -144,6 +144,7 @@ class Project {
     this.preAddService(service, 'others')
   }
   preAddService(service, where){
+    // console.log("-> preAddService", service)
     service.define(this, this.addService.bind(this, service, where))
   }
   addService(service, where /* others ou startup */){
@@ -177,7 +178,7 @@ class Project {
     const service = this.draggedService
     service.projectCard.remove()
     message(`Service supprimé (${service.uuid})`)
-    this.services[service.type] = this.services[service.type].filter(s => s.uuid == service.uuid)
+    this.services[service.type] = this.services[service.type].filter(s => s.uuid != service.uuid)
     Services.remove(service.uuid)
     this.save()
   }

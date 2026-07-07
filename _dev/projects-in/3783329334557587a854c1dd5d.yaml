@@ -1,8 +1,19 @@
 ---
 id: 3783329334557587a854c1dd5d
 services:
-  startup: []
   others: []
+  startup:
+  - uuid: 1783409520338f3ba19c42078a
+    id: open-finder-window
+    name: Ouvrir une fenêtre dans le Finder
+    type: startup
+    params:
+      path: "/Users/philippeperret/Programmes/Board/"
+      size: "[1568, 712]"
+      sidebar: false
+      sidebarWidth: '283'
+      position: "[1030, 30]"
+      view: column view
 title: Eventer
 workTime: 0
 path: "/Users/philippeperret/Programmes/Eventer3"

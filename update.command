@@ -15,3 +15,31 @@ sleep 1
 
 open "$CUR_DIR/Board.app"
 
+open_safari_devtools() {
+  sleep 2
+  MenuMacMini=$'Mac mini de Philippe\nmacOS 26.5.1'
+  osascript <<APPLESCRIPT
+tell application "Safari" to activate
+delay 1
+tell application "System Events"
+  tell process "Safari"
+    tell menu bar item "Développement" of menu bar 1
+      click
+      tell menu "Développement"
+        tell menu item "$MenuMacMini"
+          click
+          tell menu "$MenuMacMini"
+            click menu item "Tableau de bord"
+          end tell
+        end tell
+      end tell
+    end tell
+  end tell
+end tell
+tell app "Board" to activate
+APPLESCRIPT
+}
+
+open_safari_devtools
+
+

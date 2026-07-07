@@ -93,7 +93,7 @@ class Services {
 
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
-    new ServiceDefiner(this, callback).start
+    new ServiceDefiner(this, callback).start()
   }
   
   // Retourne la carte à insérer dans le projet

@@ -7,7 +7,7 @@ const SERVICES_DATA = [
       id: 'open-finder-window'
     , name: 'Ouvrir une fenêtre dans le Finder'
     , params: [
-        {id: 'window', q: 'Ouvrez la fenêtre dans le finder, telle que vous la voulez', value: null, type: 'finder-window', required: true},
+        {id: 'window', q: null, value: null, type: 'finder-window', required: true},
         {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
       ]
   },

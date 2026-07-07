@@ -11,6 +11,12 @@
  * À la base, +service+ est une table contenant :id, :name et
  * :method
  * :method est la méthode à appeler pour 1) définir et 2) exécuter le service
+ * 
+ * Le parcours se fait par : 
+ *  start ->
+ *  (boucle) define -> defineByType -> attend -> <methode de récupération> -> backend -> <methode de récupération> -> define (avec data)
+ *  -> resolve (mise des nouveau :params dans service)
+
  */
 class ServiceDefiner {
   
@@ -18,6 +24,9 @@ class ServiceDefiner {
     this.service  = service
     this.params   = service.params.reverse() // pour pouvoir poper
     this.callback = callback
+
+    // Donnée qui remplacement params dans le service pour le projet
+    this.paramsValues = {}
 
   }
 
@@ -30,26 +39,41 @@ class ServiceDefiner {
   // On finit
   resolve(){
     console.log("-> resolve")
-    this.callback(service)
+    this.service.params = this.paramsValues
+    console.log("Service %s après définition", this.service.id, this.service)
+    this.callback(this.service)
   }
 
+
+  // Pour ajouter une valeur
+  addParamValue(paramId, paramValue){
+    Object.assign(this.paramsValues, {[paramId]: paramValue })
+  }
+  // Pour ajouter plusieurs valeurs
+  addParamValues(paramsValues){
+    Object.assign(this.paramsValues, paramsValues)
+  }
 
   /**
    * Méthode principale de définition du service
    */
-  define(retour){
-    param = this.params.pop()
+  define(){
+    console.log("this.paramsValues au début de define", this.paramsValues)
+    const param = this.params.pop()
     console.log("param", param)
     if (param) this.defineByType(param)
     else this.resolve()
   }
   /**
    * Méthode de dispatch de définition en fonction du type
+   * 
    */
   defineByType(param){
     switch(param.type){
       case 'finder-window':
-        message("Je dois apprendre à définir une fenêtre de finder")
+        this.attend(param.q || "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK.",
+          this.getInfoFinderWindow.bind(this)
+        )
         break
       case 'path':
         message("Je dois apprendre à définir un chemin d'accès")
@@ -58,6 +82,7 @@ class ServiceDefiner {
         message("Je dois apprendre à définir une application (CLI)")
         break
       case 'boolean':
+        this.attend(param.q, this.onBooleanResponse.bind(this, param, true), this.onBooleanResponse.bind(this, param, false))
         message("Je dois apprendre à régler une valeur booléenne")
         break
       default:
@@ -66,12 +91,36 @@ class ServiceDefiner {
   }
 
 
-  attend(message, callback){
-    new ConfirmationDialog({
+  // Reçoit la réponse à une question booléenne
+  onBooleanResponse(param, trueOrFalse, retour){
+    console.log("retour dans onBooleanResponse", retour)
+    this.addParamValue(param.id, trueOrFalse)
+    this.define()
+  }
+
+  // Va chercher les informations sur la fenêtre courante dans le Finder
+  // et les ajouter à this.paramsValues
+  // Puis poursuit la définition
+  getInfoFinderWindow(retour){
+    if (undefined == retour) {
+      return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this))
+    } else {
+      console.log("retour", retour)
+      const data = retour.data
+      this.addParamValues({
+        path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
+      })
+      this.define()
+    }
+  }
+
+
+  attend(message, callback, fallback = null){
+    new ConfirmDialog({
       title: "Définition du service",
       message: message,
       ouiBtn: {name: 'OK', onclick: callback},
-      nonBtn: {name: 'Annuler'}
+      nonBtn: {name: 'Annuler', onclick: fallback}
     }).show()
   }
   

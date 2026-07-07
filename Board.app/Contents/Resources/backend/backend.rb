@@ -91,7 +91,10 @@ begin
       returned_data['createdAt'] = human_date_to_aaammjj(returned_data['createdAt'])
       returned_data['updatedAt'] = human_date_to_aaammjj(returned_data['updatedAt'])
     end
-
+  # Pour récupérer les informations de la fenêtre courante du Finder
+  when 'getInfoFinderWindow'
+    ok = true
+    returned_data = run_script('getInfoFinderWindow')
   # action inconnue => ERRREUR
   else 
     ok = false
