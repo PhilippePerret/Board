@@ -26,7 +26,8 @@ class ServiceDefiner {
     this.callback = callback
 
     // Donnée qui remplacement params dans le service pour le projet
-    this.paramsValues = {}
+    // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
+    this.paramsValues = []
 
   }
 
@@ -46,12 +47,12 @@ class ServiceDefiner {
 
 
   // Pour ajouter une valeur
-  addParamValue(paramId, paramValue){
-    Object.assign(this.paramsValues, {[paramId]: paramValue })
+  addParamValue(paramValue){
+    this.paramsValues.push(paramValue)
   }
   // Pour ajouter plusieurs valeurs
   addParamValues(paramsValues){
-    Object.assign(this.paramsValues, paramsValues)
+    this.paramsValues = [...this.paramsValues, ...paramsValues]
   }
 
   /**
@@ -82,7 +83,7 @@ class ServiceDefiner {
         message("Je dois apprendre à définir une application (CLI)")
         break
       case 'boolean':
-        this.attend(param.q, this.onBooleanResponse.bind(this, param, true), this.onBooleanResponse.bind(this, param, false))
+        this.attend(param.q, this.onBooleanResponse.bind(this, param, true), this.onBooleanResponse.bind(this, param, false), {nomBtn: 'Non'})
         message("Je dois apprendre à régler une valeur booléenne")
         break
       default:
@@ -94,7 +95,7 @@ class ServiceDefiner {
   // Reçoit la réponse à une question booléenne
   onBooleanResponse(param, trueOrFalse, retour){
     console.log("retour dans onBooleanResponse", retour)
-    this.addParamValue(param.id, trueOrFalse)
+    this.addParamValue(trueOrFalse)
     this.define()
   }
 
@@ -107,20 +108,21 @@ class ServiceDefiner {
     } else {
       console.log("retour", retour)
       const data = retour.data
-      this.addParamValues({
-        path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
-      })
+      this.addParamValues([
+        // path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
+        data.path, ...data.position, ...data.size, data.sidebarWidth, data.view
+      ])
       this.define()
     }
   }
 
 
-  attend(message, callback, fallback = null){
+  attend(message, callback, fallback = null, options = null){
     new ConfirmDialog({
       title: "Définition du service",
       message: message,
       ouiBtn: {name: 'OK', onclick: callback},
-      nonBtn: {name: 'Annuler', onclick: fallback}
+      nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
     }).show()
   }
   

@@ -8,12 +8,26 @@ PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
 
 SERVICES_DATA_FILE = File.join(__dir__, 'data', 'services_data.yaml')
 
-def run_script(script_name)
-  begin
-    res = `osascript 'scripts/#{script_name}.scpt'`.strip
-    JSON.parse(res)
-  rescue Exception => e
-    {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}"}
+def run_script(script_name, params = "")
+  cmd = nil
+  case File.extname(script_name)
+  when '.scpt'
+    begin
+      params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
+      cmd = "osascript scripts/#{script_name} #{params}".strip
+      # return  {script_command: "cmd = #{cmd}"}
+      res = `#{cmd}`
+      # res = `osascript 'scripts/#{script_name}'`.strip
+      if res == ""
+        {ok: true}
+      else
+        JSON.parse(res)
+      end
+    rescue Exception => e
+      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
+    end
+  else
+    puts "Je ne sais pas traiter un script #{script_name}"
   end
 end
 def human_date_to_aaammjj(date)
@@ -77,7 +91,7 @@ begin
   when "run-osascript"
     begin
       ok = true
-      returned_data = run_script(request["script-name"])
+      returned_data = run_script("#{request['script-name']}.scpt")
     rescue Exception => e
       ok = false
       returned_error = "#{e.message} in : #{res}"
@@ -86,7 +100,7 @@ begin
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
     ok = true
-    returned_data = run_script('getInfoFinderSelection')
+    returned_data = run_script('getInfoFinderSelection.scpt')
     if returned_data["ok"] != false
       returned_data['createdAt'] = human_date_to_aaammjj(returned_data['createdAt'])
       returned_data['updatedAt'] = human_date_to_aaammjj(returned_data['updatedAt'])
@@ -94,7 +108,13 @@ begin
   # Pour récupérer les informations de la fenêtre courante du Finder
   when 'getInfoFinderWindow'
     ok = true
-    returned_data = run_script('getInfoFinderWindow')
+    returned_data = run_script('getInfoFinderWindow.scpt')
+  
+  # ========== EXÉCUTIONS DES SERVICES =================
+  when 'exec-service'
+    ok = true
+    returned_data = run_script(request["script"], request["params"])
+  
   # action inconnue => ERRREUR
   else 
     ok = false

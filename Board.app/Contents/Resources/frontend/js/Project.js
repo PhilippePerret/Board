@@ -163,6 +163,7 @@ class Project {
     return card
   }
   observeServiceCard(service, card){
+    listen(card, 'click', service.exec.bind(service))
     listen(card, 'dragstart', e => this.draggedService = service)
     listen(card, 'dragend', e => {
       if (e.dataTransfer.dropEffect != "none") return
@@ -202,7 +203,7 @@ class Project {
     const work = DCreate('DIV', {class: 'worktime', text: 'Temps de travail : ' + this.workTime})
     div.appendChild(work)
 
-    this.startupField = DCreate('FIELDSET')
+    this.startupField = DCreate('FIELDSET', {class:'services'})
     const legendstartup = DCreate('LEGEND', {text:'Services au démarrage'})
     this.startupField.appendChild(legendstartup)
     ;(this.services.startup ?? []).forEach((service) => {
@@ -210,7 +211,7 @@ class Project {
     })
     div.appendChild(this.startupField)
 
-    this.othersField = DCreate('FIELDSET')
+    this.othersField = DCreate('FIELDSET', {class:'services'})
     const legendautre = DCreate('LEGEND', {text: 'Autres services'})
     this.othersField.appendChild(legendautre)
     ;(this.services.others ?? []).forEach((service) => {

@@ -36,6 +36,12 @@ div#services-panel .services-listing {
   margin-bottom: 8px;
   background-color: rgb(70, 69, 69);
 }
+.services-listing .service {
+  cursor: move;
+}
+fieldset.services .service {
+  cursor: pointer;
+}
   
 .service * {
   font-size: 15px;

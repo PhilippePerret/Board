@@ -12,6 +12,13 @@ const SERVICES_DATA = [
       ]
   },
 
+  {
+      id: 'run-chronometre'
+    , name: "Chronomètre"
+    , params: [
+        {id: 'save-time', q: 'Faut-il enregistrer le temps de travail ?', type: 'boolean', required: true}     
+      ]
+  },
 
   {
       id: 'run-script'
@@ -21,6 +28,7 @@ const SERVICES_DATA = [
         {id: 'app', value: null, type: 'app', required: false}
       ]
   },
+
   {
       id: 'open-folder-project'
     , name: 'Ouvrir projet dans Finder'

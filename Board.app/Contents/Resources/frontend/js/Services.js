@@ -70,6 +70,7 @@ class Services {
     this.params = data.params || raise("Il faut définir les :params du servive " + this.id)
     this.uuid   = data.uuid ?? null // seulement les services de projets
     this.type   = data.type ?? null // idem (others ou startup)
+    this.projectId = data.projectId ?? null // pas encore mis (voir si utile)
     this.constructor.get(this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")
@@ -91,6 +92,12 @@ class Services {
     this.obj.addEventListener("dragstart", e => e.dataTransfer.setData("id", this.id));
   } 
 
+  // Exécution du service
+  exec(){
+    this.executor.exec()
+  }
+  get executor(){ return this._executor || (this._executor = new ServiceExecuter(this))}
+  
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
     new ServiceDefiner(this, callback).start()

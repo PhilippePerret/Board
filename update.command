@@ -11,16 +11,16 @@ CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
 cp -R $CUR_DIR/frontend/* "$CUR_DIR/Board.app/Contents/Resources/frontend/"
 cp -R $CUR_DIR/backend/* "$CUR_DIR/Board.app/Contents/Resources/backend/"
 
-sleep 1
+sleep 0.5
 
 open "$CUR_DIR/Board.app"
 
 open_safari_devtools() {
-  sleep 2
+  sleep 1
   MenuMacMini=$'Mac mini de Philippe\nmacOS 26.5.1'
   osascript <<APPLESCRIPT
 tell application "Safari" to activate
-delay 1
+delay 0.5
 tell application "System Events"
   tell process "Safari"
     tell menu bar item "Développement" of menu bar 1
