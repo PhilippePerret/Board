@@ -16,12 +16,14 @@ class ServiceDefiner {
   
   constructor(service, callback){
     this.service  = service
+    this.data     = this.service.data.reverse() // pour pouvoir poper
     this.callback = callback
+
   }
 
   // On commence
   start(){
-    this.service.method()
+    this.define()
   }
 
   // On finit
@@ -29,26 +31,38 @@ class ServiceDefiner {
     this.callback(service)
   }
 
+
   /**
-   * --------------------———————————————————————
-   * Les fonctions de définition
-   * (les 'method' des services)
+   * Méthode principale de définition du service
    */
-  defineOpenFinderWindow(retour){
-    if (undefined == retour) {
-      return this.attend(
-        "Définir la fenêtre dans le finder, puis OK.", 
-        this.defineOpenFinderWindow.bind(this))
-    } else {
-      server.send({action: 'getInfoFinderSelection'}, this.onReturnedData.bind(this))
+  define(retour){
+    param = this.data.pop()
+    if (param) this.defineByType(param)
+    else this.resolve()
+  }
+  /**
+   * Méthode de dispatch de définition en fonction du type
+   */
+  defineByType(param){
+    switch(param.type){
+      case 'finder-window':
+        message("Je dois apprendre à définir une fenêtre de finder")
+        break
+      case 'path':
+        message("Je dois apprendre à définir un chemin d'accès")
+        break
+      case 'app':
+        message("Je dois apprendre à définir une application (CLI)")
+        break
+      case 'boolean':
+        message("Je dois apprendre à régler une valeur booléenne")
+        break
+      default:
+        error("Je ne connais pas le type " + param.type)
     }
   }
 
 
-/*
-  /Fin des méthodes de définition
-  --------------------———————————————————————
- **/
   attend(message, callback){
     new ConfirmationDialog({
       title: "Définition du service",

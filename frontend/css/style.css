@@ -65,9 +65,12 @@ footer {
   background-color: #DDDDDD;
 }
 
+footer div#message {
+  padding: 8px 40px;
+}
 footer div#message > span {
   padding: 0.1em 1em;
-  font: 12px Arial, Helvetica;
+  font: 20px Arial, Helvetica;
 }
 footer div#message > span.notice {
   color: rgb(13, 164, 13);

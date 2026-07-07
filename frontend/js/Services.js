@@ -11,11 +11,7 @@ class Services {
    * 
    */
   static buildServiceList(retour){
-    if (undefined == retour){
-      return server.send({action:'get-all-services'}, this.buildServiceList.bind(this))
-    }
-    console.log("retour", retour)
-    retour.data
+    SERVICES_DATA
       .map(dataService => new Services(dataService))
       .forEach( service => service.build())
   }
@@ -76,6 +72,10 @@ class Services {
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")
   }
+
+  //'open-finder-window' => defineOpenFinderWindow
+  defineMethod(){ return ServiceDefiner['defined' + kebabToPascalCase(this.id)].bind(ServiceDefiner)}
+  execMethod(){return ServiceExecuter['exec' + kebabToPascalCase(this.id)].bind(ServiceExecuter)}
 
   build(){
     const div = DCreate('DIV', {class:'service', id: this.id})

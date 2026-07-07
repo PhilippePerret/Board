@@ -3,7 +3,7 @@
   name: 'Ouvrir projet dans Finder'
   method: null
 - id:   'open-finder-window'
-  name: 'Ouvrir une fenêtre dans le Finder'
+  name: 
   method: defineOpenFinderWindow
 - id:   'run-script'
   name: 'Jouer un script'

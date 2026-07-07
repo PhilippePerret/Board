@@ -1,6 +1,19 @@
 ---
 id: 3783329334557587a854c1dd5d
 services:
+  others:
+  - id: open-finder-window
+    name: Ouvrir une fenêtre dans le Finder
+    type: others
+    uuid: 1783361605103f7faa8db228758
+  - id: open-finder-window
+    type: others
+    name: Ouvrir une fenêtre dans le Finder
+    uuid: 1783401622603854657bb8dc47
+  - id: run-script
+    name: Jouer un script
+    type: others
+    uuid: 1783401645712e062bc358c413
   startup:
   - id: open-finder-window
     type: startup
@@ -10,11 +23,6 @@ services:
     type: startup
     name: Ouvrir une fenêtre dans le Finder
     uuid: 17833615811657644cc5673e6b8
-  others:
-  - id: open-finder-window
-    name: Ouvrir une fenêtre dans le Finder
-    type: others
-    uuid: 1783361605103f7faa8db228758
 title: Eventer
 workTime: 0
 path: "/Users/philippeperret/Programmes/Eventer3"

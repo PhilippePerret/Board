@@ -4,4 +4,8 @@ class ServiceExecuter {
     this.service = service
   }
   
+
+  execOpenFinderWindow(){
+    message("Je dois exécuter " + this.name)
+  }
 }

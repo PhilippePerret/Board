@@ -92,9 +92,6 @@ begin
       returned_data['updatedAt'] = human_date_to_aaammjj(returned_data['updatedAt'])
     end
 
-  # Relève la liste de tous les services accessibles
-  when 'get-all-services'
-    returned_data = YAML.safe_load(IO.read SERVICES_DATA_FILE)
   # action inconnue => ERRREUR
   else 
     ok = false
