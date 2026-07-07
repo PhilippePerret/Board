@@ -25,6 +25,7 @@ window.bridge = {
     _callbacks: {},
 
     __send(payload) {
+        console.log("payload", payload)
         window.webkit.messageHandlers.bridge.postMessage(payload);
     },
 

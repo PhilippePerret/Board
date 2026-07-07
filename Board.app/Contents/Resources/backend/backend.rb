@@ -8,21 +8,27 @@ PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
 
 SERVICES_DATA_FILE = File.join(__dir__, 'data', 'services_data.yaml')
 
+### === Jouer un script du dossier /scripts/ ===
 def run_script(script_name, params = "")
+  params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
   cmd = nil
   case File.extname(script_name)
+  when '.sh'
+    begin
+      cmd = "scripts/#{script_name} #{params}".strip
+      res = `#{cmd}`
+      if res == "" then {ok: true}
+      else JSON.parse(res) end
+    rescue Exception => e
+      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
+    end
   when '.scpt'
     begin
-      params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
       cmd = "osascript scripts/#{script_name} #{params}".strip
       # return  {script_command: "cmd = #{cmd}"}
       res = `#{cmd}`
-      # res = `osascript 'scripts/#{script_name}'`.strip
-      if res == ""
-        {ok: true}
-      else
-        JSON.parse(res)
-      end
+      if res == "" then {ok: true}
+      else JSON.parse(res) end
     rescue Exception => e
       {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
     end
@@ -56,6 +62,8 @@ begin
   #######################################
   
   case request["action"]
+
+  # === Destuction d'un projet ===
   when 'remove-project'
     id = request["id"]
     fname = "#{request['projectId']}.yaml"
@@ -67,12 +75,18 @@ begin
       ok = false
       error = "Le projet introuvable : #{src}"
     end
+
+  # === Sauvegarde d'un projet ===
   when "save-project"
     data = request["data"]
     file = File.join(PROJECT_CARD_FOLDER, "#{data['id']}.yaml")
     IO.write(file, data.to_yaml)
+
+  # === Chargement de :what ===
   when "load"
     case request['what']
+
+    # === Chargement des projets ===
     when 'projects'
       # Chargement de tous les projets
       # (pour le moment dans le dossier de l'application)
@@ -89,14 +103,11 @@ begin
 
   # Lancement d'un script osascript
   when "run-osascript"
-    begin
-      ok = true
-      returned_data = run_script("#{request['script-name']}.scpt")
-    rescue Exception => e
-      ok = false
-      returned_error = "#{e.message} in : #{res}"
-    end
-    
+    returned_data = run_script("#{request['script-name']}.scpt")
+
+  when 'run-bashscript'
+    returned_data = run_script("#{request['script-name']}.sh")
+
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
     ok = true

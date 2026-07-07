@@ -1,6 +1,7 @@
 ---
 id: 3783329334557587a854c1dd5d
 services:
+  others: []
   startup:
   - params:
     - "/Users/philippeperret/Programmes/Eventer3/"
@@ -13,10 +14,23 @@ services:
     - false
     id: open-finder-window
     projectId:
-    type: startup
     name: Ouvrir une fenêtre dans le Finder
+    type: startup
     uuid: 1783415096715788be4567f8c5
-  others: []
+  - name: Ouvrir projet dans Finder
+    id: open-folder-project
+    projectId:
+    params:
+    - "/Users/philippeperret/Programmes/Eventer3/"
+    - 2077
+    - 240
+    - 995
+    - 532
+    - 0
+    - list view
+    - false
+    type: startup
+    uuid: 178341806595918a052c899d34
 title: Eventer
 workTime: 0
 path: "/Users/philippeperret/Programmes/Eventer3"

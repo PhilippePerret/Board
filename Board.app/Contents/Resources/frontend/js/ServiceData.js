@@ -10,6 +10,7 @@ const SERVICES_DATA = [
         {id: 'window', q: null, value: null, type: 'finder-window', required: true},
         {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
       ]
+    , paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']
   },
 
   {
@@ -33,7 +34,8 @@ const SERVICES_DATA = [
       id: 'open-folder-project'
     , name: 'Ouvrir projet dans Finder'
     , params: [
-      {id: 'window', value: null, type: 'finder-window'}
+        {id: 'window', q: "Disposez le dossier du projet tel que vous le voulez", value: null, type: 'finder-window'}
+      , {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
     ]
   }
 ]

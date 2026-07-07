@@ -18,6 +18,10 @@ Les différences se trouvent ici :
 | **Service abstrait**    | **Service concret**
 | reconnu par `id`        | même id, mais pas utilisé
 | pas d'`uuid`            | reconnu par `uuid`
+
+| `id` correspond au script qui sera joué : `mot-dans-un` → `scripts/MotDansUn.script`
+| `uuid` ne correspond à l'identifiant (utiliser pour suppression, déplacement, etc.)
+
 | `params` est une table qui définit précisément chaque paramètre utile.
 | `params` est une **liste** de valeurs qui seront ajoutées en argument du script.
 | `params` est une table  

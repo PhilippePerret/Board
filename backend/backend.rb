@@ -19,6 +19,9 @@ def run_script(script_name, params = "")
       res = `#{cmd}`
       if res == "" then {ok: true}
       else JSON.parse(res) end
+    rescue Exception => e
+      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
+    end
   when '.scpt'
     begin
       cmd = "osascript scripts/#{script_name} #{params}".strip
@@ -59,6 +62,8 @@ begin
   #######################################
   
   case request["action"]
+
+  # === Destuction d'un projet ===
   when 'remove-project'
     id = request["id"]
     fname = "#{request['projectId']}.yaml"
@@ -70,12 +75,18 @@ begin
       ok = false
       error = "Le projet introuvable : #{src}"
     end
+
+  # === Sauvegarde d'un projet ===
   when "save-project"
     data = request["data"]
     file = File.join(PROJECT_CARD_FOLDER, "#{data['id']}.yaml")
     IO.write(file, data.to_yaml)
+
+  # === Chargement de :what ===
   when "load"
     case request['what']
+
+    # === Chargement des projets ===
     when 'projects'
       # Chargement de tous les projets
       # (pour le moment dans le dossier de l'application)
