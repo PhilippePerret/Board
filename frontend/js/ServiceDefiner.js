@@ -16,18 +16,20 @@ class ServiceDefiner {
   
   constructor(service, callback){
     this.service  = service
-    this.data     = this.service.data.reverse() // pour pouvoir poper
+    this.params   = service.params.reverse() // pour pouvoir poper
     this.callback = callback
 
   }
 
   // On commence
   start(){
+    console.log("-> start")
     this.define()
   }
 
   // On finit
   resolve(){
+    console.log("-> resolve")
     this.callback(service)
   }
 
@@ -36,7 +38,8 @@ class ServiceDefiner {
    * Méthode principale de définition du service
    */
   define(retour){
-    param = this.data.pop()
+    param = this.params.pop()
+    console.log("param", param)
     if (param) this.defineByType(param)
     else this.resolve()
   }

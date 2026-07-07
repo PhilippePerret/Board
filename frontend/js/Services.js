@@ -1,11 +1,5 @@
 class Services {
 
-  static defineService(service, callback){
-    if (service.method) {
-      new ServiceDefiner(service, callback).start()
-    } else { return callback() }
-  }
-
   /**
    * Construit la liste des services en la relevant en backend
    * 
@@ -15,6 +9,7 @@ class Services {
       .map(dataService => new Services(dataService))
       .forEach( service => service.build())
   }
+
   // Construction complète du panneau
   static build(){
     this.buildServiceList()
@@ -65,18 +60,24 @@ class Services {
 
 
   constructor(data){
+    console.log("data", data)
     this.id = data.id || raise("Il faut fournir un identifiant au service.")
-    this.uuid = data.uuid ?? null // seulement les services de projets
-    this.type = data.type ?? null // idem (others ou startup)
+    /**
+     * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
+     * sont différentes des données abstraites qui définissent ce qu'il faut pour
+     * définir le service.
+     */
+    this.params = data.params || raise("Il faut définir les :params du servive " + this.id)
+    this.uuid   = data.uuid ?? null // seulement les services de projets
+    this.type   = data.type ?? null // idem (others ou startup)
     this.constructor.get(this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")
   }
 
-  //'open-finder-window' => defineOpenFinderWindow
-  defineMethod(){ return ServiceDefiner['defined' + kebabToPascalCase(this.id)].bind(ServiceDefiner)}
-  execMethod(){return ServiceExecuter['exec' + kebabToPascalCase(this.id)].bind(ServiceExecuter)}
-
+  /**
+   * Construction dans le listing des services
+   */
   build(){
     const div = DCreate('DIV', {class:'service', id: this.id})
     div.setAttribute('draggable', true)
@@ -89,6 +90,11 @@ class Services {
   observe(){
     this.obj.addEventListener("dragstart", e => e.dataTransfer.setData("id", this.id));
   } 
+
+  // Appelée pour définir le service pour le projet, +projet+
+  define(projet, callback){
+    new ServiceDefiner(this, callback).start
+  }
   
   // Retourne la carte à insérer dans le projet
   projectCard(){

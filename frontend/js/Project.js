@@ -87,7 +87,7 @@ class Project {
   }
   
   static dispatch(retour){
-    console.log("retour", retour)
+    // console.log("retour", retour)
     message("Travaux courants chargés.")
     feedback(JSON.stringify(retour))
     retour.data.forEach(projectCard => new Project(projectCard).buildCard())
@@ -133,6 +133,10 @@ class Project {
     message("Projet « " + this.title + ' » enregistré avec succès.')
   }
 
+  /**
+   * 
+   * === MÉTHODES D'AJOUT DES SERVICES ===
+   */
   addStartupService(service){
     this.preAddService(service, 'startup')
   }
@@ -140,7 +144,7 @@ class Project {
     this.preAddService(service, 'others')
   }
   preAddService(service, where){
-    Services.defineService(service, this.addService.bind(this, service, where))
+    service.define(this, this.addService.bind(this, service, where))
   }
   addService(service, where /* others ou startup */){
     service.uuid = Project.uniqId()
@@ -149,7 +153,6 @@ class Project {
     const startup = (where == 'startup')
     const card = this.getServiceCard(service)
     this[startup?'startupField':'othersField'].appendChild(card)
-    // Il faut encore définir le service, pour le moment on l'enregistre comme ça
     this.save()
   }
 
