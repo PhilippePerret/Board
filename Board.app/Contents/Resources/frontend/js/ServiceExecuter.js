@@ -67,6 +67,6 @@ class ServiceExecuter {
   // Appelée après avoir exécuté le service
   afterRunService(retour){
     console.log("retour du run de service", retour)
-    message(retour.message + ` (service ${this.id})` || "Service " + this.name + " joué avec succès.")
+    message(retour.message + ` <span class="tiny">(service ${this.id})</span>` || "Service " + this.name + " joué avec succès.")
   }
 }

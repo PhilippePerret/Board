@@ -12,6 +12,8 @@ body {
 .hidden {display:none;}
 .invisible {visibility: hidden;}
 .error {color: red; background-color: rgb(255, 230, 230);}
+.small {font-size: 0.85em;}
+.tiny {font-size: 0.75em;}
 
 button {
   padding: 4px 32px;

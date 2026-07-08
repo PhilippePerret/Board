@@ -12,7 +12,7 @@ body {
 .hidden {display:none;}
 .invisible {visibility: hidden;}
 .error {color: red; background-color: rgb(255, 230, 230);}
-
+.tiny {font-size: 0.55em;}
 button {
   padding: 4px 32px;
   white-space: nowrap;
