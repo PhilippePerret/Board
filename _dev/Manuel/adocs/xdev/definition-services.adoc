@@ -39,3 +39,106 @@ Tout comme le reste, le backend (`backend.rb`) est réduit à l'essentiel.
 Pour l'exécution du service, rien n'est besoin d'être ajouté. 
 
 Pour la définition, il peut être nécessaire d'ajouter des scripts, mais beaucoup de choses peuvent être faite en utilisant l'action `run-osascript` ou `run-bashscript` pour jouer un script du dossier `backend/scripts/`
+
+=== Définition des services ===
+
+Les services sont définis précisément dans le fichier `frontend/js/ServiceData.js`.
+
+[cols="1,3,1"]
+|====
+| **Propriété** | **Description** | **Note**
+| `id`        | Identifiant du service |
+|           2+| Cet identifiant permet de produire le nom du <<script-backend, script backend>>.
+| `name`    2+| Nom du service, qui sera personnalisé par l'user dès l'affectation.
+| `params`    | Définition des <<fix-params, _paramètres fixes_>> |
+| `dynParams` | Définition des <<dyn-params, _paramètres dynamiques_>> |
+| `scType`    | Le type du <<script-backend, script backend>> si ça n'est pas un AppleScript | `.rb`, `.py`
+|====
+
+
+==== Paramètres fixes et paramètres dynamiques ====
+
+Tous les services fonctionnent avec des **paramètres fixes** défines au moment de l'affectation d'un service à un projet. La première de ces paramètres fixes est le nom propre au projet du service. Par exemple, si le nom (`name`) du service est “Versionner un fichier”, le nom défini pour le projet par l'utilisateur au moment de l'affectation du service peut devenir “Versionner le manuscrit”.
+
+Certains services nécessitent aussi des _paramètres dynamique_ qui, elles, sont définies à la volée au moment de l'utilisation du service. Par exemple, au moment de versionner le manuscrit, _Board_ va demander s'il faut incrémenter le numéro de path, de version mineur ou de version majeure.
+
+[#fix-params]
+===== Définition des paramètres fixes =====
+
+Ces paramètres sont définis dans le fichier `frontend/js/ServiceData.js`. Si ces données sont modifiées, il faut lancer le script `update.command` à la racine de l'application.
+
+Une définition ressemble à :
+
+====
+include::{js-folder}/ServiceData.js[tag=exemple-fix-param]
+====
+
+
+[cols="1,3"]
+|====
+| `id`    | fournit l'identifiant de l'élément DOM qui va contenir la valeur (`#__<id>__.value`)
+| `q`     | définit la question qui sera posée à l'utilisateur pour définir le paramètre.
+| `type`  | définit le type du champ d'édition(select, text-field, etc.). Voir tous les <<types-champ-param, types de champ d'édition>>
+2+| Autres valeurs qui peuvent être définies en fonction du `type``
+| `values`  | définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]
+|====
+
+Ces paramètres doivent être définis dans l'ordre où ils seront consommés par le <<script-backend, script backdend>> qui va les jouer.
+
+Pour mémoire seulement, on peut les définir dans `paramsOrder` :
+
+====
+include::{js-folder}/ServiceData.js[tag="exemple-param-order"]
+====
+
+[[types-champ-param]] **Types de champs d'édition des paramètres**
+
+[cols="1,2,1"]
+|====
+| ** Type***      | **Description** | **Valeurs** (if any)
+| `boolean`       | True ou False   | ---
+| `select`        | Un menu classique | `[x, y, ...]` ou `[[x, "nom x"], [y, "nom y"], …]`
+| `path`          | Un chemin d'accès | ---
+| `finder-window` 2+| Une fenêtre de Finder (position, taille, type de vue, sidebar, etc.)
+|====
+
+[#dyn-params]
+===== Défintion des paramètres dynamiques =====
+
+Ils se définissent dans la propriété `dynParams`. Par exemple : 
+
+
+====
+include::{js-folder}/ServiceData.js[tag="exemple-dyn-params"]
+====
+
+[cols="1,3"]
+|====
+| `id`    | fournit l'identifiant de l'élément DOM qui va contenir la valeur (`#__<id>`.value)
+| `q`     | définit la question qui sera posée à l'utilisateur.
+| `type`  | définit le type d'interface (select, text-field, etc.).
+2+| Autres valeurs qui peuvent être définies en fonction du `type``
+| `values`  | définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]
+|====
+
+Comme pour les _paramètres fixes_, ces paramètres doivent être définis dans l'ordre où ils seront consommés par le <<script-backend, script backdend>> qui va les jouer.
+
+
+[#script-backend]
+==== Script Backend ====
+
+On appelle _Script Backend_ le script placé dans le dossier `backend/scripts/` qui va procéder à l'opération propre au service. Le script, par exemple, qui va changer la version du fichier.
+
+Le **nom** du script ne peut pas être choisi au hasard, il correspond à l'`id` du service (par exemple "versionner-fichier") camelisé ("VersionnerFichier"). Son extension correspond bien entendu à son langage.
+
+Dans ce script, qui peut être un script AppleScript, un script ruby, bash ou autre langage, les paramètres sont reçus _à l'aveugle_ et en string.
+
+[cols="1,3", width="auto"]
+|====
+| _À l'aveugle_ | Ils sont connus par leur ordre, sans aucune indication de ce qu'ils sont
+| _En string_     | Toutes les valeurs sont des chaines de caractères, mais "true" ou "12".
+|====
+
+**Ordre des paramètres dans le script**
+
+L'ordre de réception des paramètres est celui défini par l'ordre des définitions des paramètres dans le fichier `ServiceData.js`. Le problème est que certains type de champ retourne plusieurs valeurs. C'est le cas typique, par exemple, pour le type `finder-window` qui retourne la position (2 valeurs), la taille (2 valeurs), le type de vue, etc. pour le seul paramètre `window`. Pour parlier ce problème, on peut renseigner la propriété d'aide `paramsOrder` avec l'ordre des paramètres.

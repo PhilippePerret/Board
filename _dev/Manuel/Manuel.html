@@ -459,6 +459,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_collecte_informations">Collecte informations</a></li>
 <li><a href="#_définition_des_services">Définition des services</a></li>
+<li><a href="#_définition_des_services_2">Définition des services</a></li>
 </ul>
 </li>
 </ul>
@@ -470,6 +471,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="ulist">
 <ul>
+<li>
+<p>Bien documenter les données des services pour s&#8217;en souvenir
+Notamment les paramètres dynamiques qui permettent de définir précisément l&#8217;effet du bouton</p>
+</li>
+<li>
+<p>Bouton "OK" dans confirmDialog doit être à droite</p>
+</li>
 <li>
 <p>Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup</p>
 </li>
@@ -935,12 +943,249 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_définition_des_services_2">Définition des services</h3>
+<div class="paragraph">
+<p>Les services sont définis précisément dans le fichier <code>frontend/js/ServiceData.js</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Propriété</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Note</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du service</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Cet identifiant permet de produire le nom du <a href="#script-backend">script backend</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Nom du service, qui sera personnalisé par l&#8217;user dès l&#8217;affectation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des <a href="#fix-params"><em>paramètres fixes</em></a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dynParams</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des <a href="#dyn-params"><em>paramètres dynamiques</em></a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le type du <a href="#script-backend">script backend</a> si ça n&#8217;est pas un AppleScript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.rb</code>, <code>.py</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_paramètres_fixes_et_paramètres_dynamiques">Paramètres fixes et paramètres dynamiques</h4>
+<div class="paragraph">
+<p>Tous les services fonctionnent avec des <strong>paramètres fixes</strong> défines au moment de l&#8217;affectation d&#8217;un service à un projet. La première de ces paramètres fixes est le nom propre au projet du service. Par exemple, si le nom (<code>name</code>) du service est “Versionner un fichier”, le nom défini pour le projet par l&#8217;utilisateur au moment de l&#8217;affectation du service peut devenir “Versionner le manuscrit”.</p>
+</div>
+<div class="paragraph">
+<p>Certains services nécessitent aussi des <em>paramètres dynamique</em> qui, elles, sont définies à la volée au moment de l&#8217;utilisation du service. Par exemple, au moment de versionner le manuscrit, <em>Board</em> va demander s&#8217;il faut incrémenter le numéro de path, de version mineur ou de version majeure.</p>
+</div>
+<div class="sect4">
+<h5 id="fix-params">Définition des paramètres fixes</h5>
+<div class="paragraph">
+<p>Ces paramètres sont définis dans le fichier <code>frontend/js/ServiceData.js</code>. Si ces données sont modifiées, il faut lancer le script <code>update.command</code> à la racine de l&#8217;application.</p>
+</div>
+<div class="paragraph">
+<p>Une définition ressemble à :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>, params: [
+    {id: 'window', q: null, value: null, type: 'finder-window', required: true},
+    {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
+  ]</pre>
+</div>
+</div>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fournit l&#8217;identifiant de l&#8217;élément DOM qui va contenir la valeur (<code>#<em>&lt;id&gt;</em>.value</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>q</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit la question qui sera posée à l&#8217;utilisateur pour définir le paramètre.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit le type du champ d&#8217;édition(select, text-field, etc.). Voir tous les <a href="#types-champ-param">types de champ d&#8217;édition</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Autres valeurs qui peuvent être définies en fonction du <code>type`</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
+</div>
+<div class="paragraph">
+<p>Pour mémoire seulement, on peut les définir dans <code>paramsOrder</code> :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>, paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p><a id="types-champ-param"></a> <strong>Types de champs d&#8217;édition des paramètres</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 50%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong> Type</strong>*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Valeurs</strong> (if any)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True ou False</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">---</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>select</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un menu classique</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[x, y, &#8230;&#8203;]</code> ou <code>[[x, "nom x"], [y, "nom y"], …]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un chemin d&#8217;accès</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">---</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>finder-window</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Une fenêtre de Finder (position, taille, type de vue, sidebar, etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="dyn-params">Défintion des paramètres dynamiques</h5>
+<div class="paragraph">
+<p>Ils se définissent dans la propriété <code>dynParams</code>. Par exemple :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>, dynParams: [
+    {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
+  ] </pre>
+</div>
+</div>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fournit l&#8217;identifiant de l&#8217;élément DOM qui va contenir la valeur (<code>#__&lt;id&gt;</code>.value)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>q</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit la question qui sera posée à l&#8217;utilisateur.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit le type d&#8217;interface (select, text-field, etc.).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Autres valeurs qui peuvent être définies en fonction du <code>type`</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Comme pour les <em>paramètres fixes</em>, ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="script-backend">Script Backend</h4>
+<div class="paragraph">
+<p>On appelle <em>Script Backend</em> le script placé dans le dossier <code>backend/scripts/</code> qui va procéder à l&#8217;opération propre au service. Le script, par exemple, qui va changer la version du fichier.</p>
+</div>
+<div class="paragraph">
+<p>Le <strong>nom</strong> du script ne peut pas être choisi au hasard, il correspond à l'`id` du service (par exemple "versionner-fichier") camelisé ("VersionnerFichier"). Son extension correspond bien entendu à son langage.</p>
+</div>
+<div class="paragraph">
+<p>Dans ce script, qui peut être un script AppleScript, un script ruby, bash ou autre langage, les paramètres sont reçus <em>à l&#8217;aveugle</em> et en string.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>À l&#8217;aveugle</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ils sont connus par leur ordre, sans aucune indication de ce qu&#8217;ils sont</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>En string</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Toutes les valeurs sont des chaines de caractères, mais "true" ou "12".</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Ordre des paramètres dans le script</strong></p>
+</div>
+<div class="paragraph">
+<p>L&#8217;ordre de réception des paramètres est celui défini par l&#8217;ordre des définitions des paramètres dans le fichier <code>ServiceData.js</code>. Le problème est que certains type de champ retourne plusieurs valeurs. C&#8217;est le cas typique, par exemple, pour le type <code>finder-window</code> qui retourne la position (2 valeurs), la taille (2 valeurs), le type de vue, etc. pour le seul paramètre <code>window</code>. Pour parlier ce problème, on peut renseigner la propriété d&#8217;aide <code>paramsOrder</code> avec l&#8217;ordre des paramètres.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-07 11:39:52 +0200
+Last updated 2026-07-08 05:33:48 +0200
 </div>
 </div>
 </body>

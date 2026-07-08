@@ -4,12 +4,13 @@ table = {ok: true, error: nil, message: nil}
 
 begin
 
-  FILEPATH = ARGV[0] 
-  FILENAME = ARGV[1] 
-  VERSIONTERM = ARGV[2]
+  FILEPATH    = ARGV[0] 
+  FILENAME    = ARGV[1] 
+  ARCHIVER    = ARGV[2] == 'true'
+  VERSIONTERM = ARGV[3]
 
     
-  table[:message] =  "Je dois versionner le #{VERSIONTERM} DE #{FILENAME}"
+  table[:message] =  "Je dois versionner le #{VERSIONTERM} DE #{FILENAME} (#{ARCHIVER ? 'archiver' : 'ne pas archiver'})"
 
 rescue Exception => e
 

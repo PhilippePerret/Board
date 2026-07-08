@@ -3,7 +3,8 @@
 
 // Nom des boutons
 :start-work: Démarrer le travail
-
+// Chemins d'accès
+:js-folder: ../../../../frontend/js
 
 
 include::adocs/_TODO_.adoc[]
