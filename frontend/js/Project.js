@@ -204,11 +204,38 @@ class Project {
     div.appendChild(work)
 
     this.startupField = DCreate('FIELDSET', {class:'services'})
+
+    /**
+     * Fieldset des SERVICES AU DÉMARRAGE
+     * 
+     * S'il n'y en a pas, on fait l'affichage normal. S'il y en a,
+     * on les met dans un div qui sera masqué et l'on mettra un gros
+     * bouton "Démarrer" qui lancera tous les services. Quand on laissera
+     * la souris sur le bouton, le div contenant tous les services 
+     * apparaitra, permettant d'en choisir un.
+     */
     const legendstartup = DCreate('LEGEND', {text:'Services au démarrage'})
     this.startupField.appendChild(legendstartup)
-    ;(this.services.startup ?? []).forEach((service) => {
-      this.startupField.appendChild(this.getServiceCard(service))
-    })
+    const startupServices = this.services.startup ?? []
+    const hasStartup = startupServices.length > 0
+    if ( hasStartup ) {
+      const startupContainer = DCreate('DIV', {class:'startup-services', style:'position:relative;min-height:100px;'})
+      const divSServices = DCreate('DIV', {id:'startup-services', class: 'hidden'})
+      const divBtnStartup = DCreate('DIV', {class:'service'})
+      const btnStartup = DCreate('DIV', {class:'name', text: 'GO !'})
+      // Avec des services au démarrage
+      startupServices.forEach((service) => {
+        divSServices.appendChild(this.getServiceCard(service))
+      })
+      divBtnStartup.appendChild(btnStartup)
+      startupContainer.appendChild(divBtnStartup)
+      startupContainer.appendChild(divSServices)
+      this.startupField.appendChild(startupContainer)
+      listen(startupContainer, 'mouseenter', function(ev){
+        setTimeout(function(){divSServices.classList.remove('hidden')}, 1000)
+      })
+      listen(startupContainer, 'mouseleave', ev => {divSServices.classList.add('hidden')})
+    }
     div.appendChild(this.startupField)
 
     this.othersField = DCreate('FIELDSET', {class:'services'})

@@ -1,10 +1,10 @@
 == Todo list ==
 
-  Notamment les paramètres dynamiques qui permettent de définir précisément l'effet du bouton
-- Bouton "OK" dans confirmDialog doit être à droite
+– Pouvoir changer le titre du projet
 - Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
-- Pouvoir déplacer les services, donc : 
-  - click les sélectionne
-  - flèches les déplacent
-  - Delete les retire
-- Remettre l'horloge ici avec le calcul des temps
+- Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
+  - Pouvoir déplacer les services, donc : 
+    - click les sélectionne
+    - flèches les déplacent
+    - Delete les retire
+- Reprendre le module horloge ici avec le calcul des temps

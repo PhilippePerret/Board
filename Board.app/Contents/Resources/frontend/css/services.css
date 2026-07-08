@@ -24,6 +24,14 @@ div#services-panel fieldset.services {
   min-height: 12vh;
 }
 
+/* Panneau qui contient les services au démarrage (caché) */
+div#startup-services {
+  position: absolute;
+  top: 31px;
+  background-color: #AAA;
+  padding: 4px;
+}
+
 
 div#services-panel .services-listing {
   padding:0.5em;
@@ -41,6 +49,9 @@ div#services-panel .services-listing {
 }
 fieldset.services .service {
   cursor: pointer;
+}
+fieldset.services .service:active {
+  background-color: #444;
 }
   
 .service * {
