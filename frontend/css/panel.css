@@ -41,13 +41,11 @@ button.mid-btn {
   padding: 0.2em 2em;
 }
 .panel .message {
-  padding: 2em;
+  padding: 1em 2em;
+  font-family: Avenir Next, serif;
 }
 
 .panel .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
   border-top: 1px solid #EEE;
   padding: 16px 20px;
   /* text-align: right; */

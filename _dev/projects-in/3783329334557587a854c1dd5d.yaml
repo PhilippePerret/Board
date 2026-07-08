@@ -11,6 +11,22 @@ services:
     type: others
     name: Versionner un fichier/dossier
     projectId:
+  - params:
+    - "/Users/philippeperret/Programmes/Board/"
+    - 1100
+    - 30
+    - 1568
+    - 712
+    - 239
+    - column view
+    - false
+    scType: ".scpt"
+    id: open-folder-project
+    uuid: 1783488212658a7edabdc5a647
+    type: others
+    name:
+    - Ouvrir projet mon Finder
+    projectId:
   startup:
   - params:
     - "/Users/philippeperret/Programmes/Eventer3/"
@@ -27,8 +43,7 @@ services:
     type: startup
     name: Ouvrir une fenêtre dans le Finder
     projectId:
-  - scType: ".scpt"
-    params:
+  - params:
     - "/Users/philippeperret/Programmes/Eventer3/"
     - 2077
     - 240
@@ -37,6 +52,7 @@ services:
     - 0
     - list view
     - false
+    scType: ".scpt"
     id: open-folder-project
     uuid: 178341806595918a052c899d34
     type: startup

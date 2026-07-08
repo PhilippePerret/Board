@@ -2,7 +2,15 @@
 id: 2783329334557587a854c1dd5d
 services:
   startup: []
-  others: []
+  others:
+  - scType: ".scpt"
+    params:
+    - true
+    id: run-chronometre
+    uuid: 17834835655528b5ed9e91318c
+    type: others
+    name: Nom propre du service
+    projectId:
 title: Board
 workTime: 0
 path: "/Users/philippeperret/Programmes/Board"

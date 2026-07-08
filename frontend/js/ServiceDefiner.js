@@ -29,6 +29,9 @@ class ServiceDefiner {
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
     this.paramsValues = []
 
+    // Tant que le nom propre du service n'est pas donné par l'utilisateur
+    this.unnamed = true
+
   }
 
   // On commence
@@ -56,13 +59,34 @@ class ServiceDefiner {
 
   /**
    * Méthode principale de définition du service
+   * Elle commence progressivement les paramètres à définir.
    */
   define(){
     console.log("this.paramsValues au début de define", this.paramsValues)
+    // Si le service n'est pas encore nommé, il faut le nommer
+    if (this.unnamed) return this.fixCustomName()
     const param = this.params.pop()
     console.log("param", param)
     if (param) this.defineByType(param)
     else this.resolve()
+  }
+
+  fixCustomName(name){
+    console.log("->fixCustomName name = ", name)
+    if (undefined == name) {
+      new TextFieldDialog({
+          title: "Nom du service"
+        , id: 'service_name'
+        , message: `Comment renommer “${this.service.name}” spécialement pour ce projet ?`
+        , defaultValue: this.service.name
+        , ouiBtn: {name: 'OK', onclick: this.fixCustomName.bind(this)}
+        , nonBtn: {name: 'Renoncer'}
+      }).show()
+    } else {
+      this.service.name = name
+      this.unnamed = false
+      this.define() // poursuite de la définition
+    }
   }
   /**
    * Méthode de dispatch de définition en fonction du type
@@ -85,7 +109,11 @@ class ServiceDefiner {
         message("Je dois apprendre à définir une application (CLI)")
         break
       case 'boolean':
-        this.attend(param.q, this.onBooleanResponse.bind(this, param, true), this.onBooleanResponse.bind(this, param, false), {nomBtn: 'Non'})
+        this.attend(
+          param.q, 
+          this.onBooleanResponse.bind(this, param, true), 
+          this.onBooleanResponse.bind(this, param, false), 
+          {ouiBtn: 'Oui', nonBtn: 'Non'})
         message("Je dois apprendre à régler une valeur booléenne")
         break
       default:
@@ -134,7 +162,7 @@ class ServiceDefiner {
     new ConfirmDialog({
       title: "Définition du service",
       message: message,
-      ouiBtn: {name: 'OK', onclick: callback},
+      ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback},
       nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
     }).show()
   }

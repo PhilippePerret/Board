@@ -6,11 +6,16 @@ const SERVICES_DATA = [
   {
       id: 'open-finder-window'
     , name: 'Ouvrir une fenêtre dans le Finder'
+    /* tag::exemple-fix-param[] */
     , params: [
         {id: 'window', q: null, value: null, type: 'finder-window', required: true},
         {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
       ]
+    /* end::exemple-fix-param[] */
+
+    /* tag::exemple-param-order[] */
     , paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']
+    /* end::exemple-param-order[] */
   },
 
   {
@@ -18,13 +23,16 @@ const SERVICES_DATA = [
     , name: 'Versionner un fichier/dossier'
     , scType: '.rb'
     , params: [
-        {id: 'path', value: null, type: 'path', required: true}
+        {id: 'path', value: null, type: 'path', required: true},
+        {id: 'archive', q: 'Faut-il archiver le fichier ?', type: 'boolean', default: true}
 
     ]
-      /* Paramètres à définir au moment du lancement */
+    /* Paramètres à définir au moment du lancement */
+    /* tag::exemple-dyn-params[] */
     , dynParams: [
         {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
       ] 
+    /* end::exemple-dyn-params[] */
   },
 
   {

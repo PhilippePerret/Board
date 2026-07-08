@@ -5,6 +5,8 @@
  * doivent être retournées. Ça doit être obligatoirement l'id DOM d'un
  * élément qui répond à `value', comme un select par exemple.
  * 
+ * Si onShow est défini, c'est une fonction qui est appelée après l'ouverture
+ * du panneau.
  */
 class Panel {
   static panelIndex = 0
@@ -13,10 +15,10 @@ class Panel {
     this.returnedIdValues = data.idValues ?? null // Pour savoir quelles valeurs retourner avec oui
     this.id    = data.id ?? `panel-${++Panel.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
-    this.height = data.height ?? data.h ?? '240px'
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? '- Panneau sans messsage (message) -'
     this.content = data.content ?? null
+    this.defaultValue = data.defaultValue ?? null
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
     this.midData = data.midBtn ?? null
     this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
@@ -27,7 +29,9 @@ class Panel {
     this.built || this.build()
     listen(window, 'keydown', this.onKeyDown.bind(this))
     this.obj.classList.remove('hidden')
+    this.onShow && this.onShow()
   }
+  
   hide(){
     unlisten(window, 'keydown', this.onKeyDown.bind(this))
     this.obj.classList.add('hidden')
@@ -102,7 +106,7 @@ class Panel {
    */
   build(){
     const scrim = DCreate('DIV', {class: 'scrim hidden'})
-    const div = DCreate('DIV', {class: 'overlay modal panel', id: this.id, style: `width:${this.width};height:${this.height}`})
+    const div = DCreate('DIV', {class: 'overlay modal panel', id: this.id, style: `width:${this.width};`})
     scrim.appendChild(div)
     const tit = DCreate('DIV', {class: 'title', text: this.title})
     div.appendChild(tit)

@@ -5,6 +5,29 @@ class ConfirmDialog extends Panel {
   }
 }
 
+// Pour faire une fenêtre présentant un champ de texte pour entrer une valeur
+class TextFieldDialog extends Panel {
+  constructor(data){
+    super(data)
+    this.content = this.buildField()
+    this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
+    this.onShow = ()=>{const tf = DGet(`#__${this.id}__`); tf.focus(); tf.select()}
+  }
+
+  buildField(){
+    const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
+    const input = DCreate('INPUT', {type: 'text', id: '__' + this.id + '__', style: 'width: 100%', value: this.defaultValue})
+    div.appendChild(input)
+    listen(input, 'keydown', this.onKeyDown.bind(this))
+    return div
+  }
+  onKeyDown(ev){
+    ev.stopPropagation();
+    if (ev.key == 'Enter') this.onOui(ev)
+    return true 
+  }
+}
+
 // Pour faire une fenêtre présentant un menu de choix (et seulement ça)
 class SelectDialog extends Panel {
   constructor(data){

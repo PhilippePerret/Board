@@ -469,34 +469,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_todo_list">Todo list</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Bien documenter les données des services pour s&#8217;en souvenir
-Notamment les paramètres dynamiques qui permettent de définir précisément l&#8217;effet du bouton</p>
-</li>
-<li>
-<p>Bouton "OK" dans confirmDialog doit être à droite</p>
-</li>
-<li>
-<p>Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup</p>
-</li>
-<li>
-<p>Pouvoir déplacer les services, donc :</p>
-</li>
-<li>
-<p>click les sélectionne</p>
-</li>
-<li>
-<p>flèches les déplacent</p>
-</li>
-<li>
-<p>Delete les retire</p>
-</li>
-<li>
-<p>Remettre l&#8217;horloge ici avec le calcul des temps</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>  Notamment les paramètres dynamiques qui permettent de définir précisément l'effet du bouton
+- Bouton "OK" dans confirmDialog doit être à droite
+- Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
+- Pouvoir déplacer les services, donc :
+  - click les sélectionne
+  - flèches les déplacent
+  - Delete les retire
+- Remettre l'horloge ici avec le calcul des temps</pre>
+</div>
 </div>
 </div>
 </div>
@@ -813,6 +796,12 @@ Notamment les paramètres dynamiques qui permettent de définir précisément l&
 <div class="sect1">
 <h2 id="_développement">Développement</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><strong>Pas de Promise</strong></p>
+</div>
+<div class="paragraph">
+<p>Comme je n&#8217;aime pas vraiment les promesses (<code>Promise</code>), je suis revenu dans cette application à un traitement à l&#8217;ancienne avec les <em>callbacks</em>.</p>
+</div>
 <div class="sect2">
 <h3 id="_collecte_informations">Collecte informations</h3>
 <div class="paragraph">
