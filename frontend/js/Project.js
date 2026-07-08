@@ -214,6 +214,9 @@ class Project {
     listen(card, 'click', service.exec.bind(service))
     listen(card, 'dragstart', e => this.draggedService = service)
     listen(card, 'dragend', e => {
+      console.log("e dragend", e)
+      card.classList.add('hidden')
+      e.target.classList.add('hidden')
       if (e.dataTransfer.dropEffect != "none") return
       this.removeServiceFromListe();
     })

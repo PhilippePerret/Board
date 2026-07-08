@@ -1,30 +1,18 @@
 ---
 id: 2783329334557587a854c1dd5d
 services:
-  startup: []
   others:
-  - scType: ".rb"
-    params:
+  - params:
     - "/Users/philippeperret/Programmes/Board//update.command"
     - update.command
+    scType: ".rb"
     id: run-script
     uuid: 178351269770970b50505050028
     type: others
     name:
     - Actualiser l'application
     projectId:
-  - params:
-    - "/Users/philippeperret/Programmes/Board//versionned.md"
-    - versionned.md
-    - "/Users/philippeperret/Programmes/Board//fausses-archives"
-    - fausses-archives
-    scType: ".rb"
-    id: file-versioning
-    uuid: 1783517280600405f8514fc956
-    type: others
-    name:
-    - Versionner un fichier/dossier
-    projectId:
+  startup: []
 title: Board
 workTime: 0
 path: "/Users/philippeperret/Programmes/Board"

@@ -1,35 +1,8 @@
 ---
 id: 3783329334557587a854c1dd5d
 services:
-  others:
-  - scType: ".rb"
-    params:
-    - "/Users/philippeperret/Programmes/Eventer3//CHANGELOG.md"
-    - CHANGELOG.md
-    -
-    id: file-versioning
-    uuid: 1783515518089f7621f8699337
-    type: others
-    name:
-    - Versionner un fichier/dossier
-    projectId:
-  startup:
-  - scType: ".scpt"
-    params:
-    - "/Users/philippeperret/Programmes/Board/"
-    - 1099
-    - 30
-    - 1568
-    - 561
-    - 239
-    - column view
-    - false
-    id: open-finder-window
-    uuid: 1783494183974c2f9882a62179
-    type: startup
-    name:
-    - Ouvre le projet
-    projectId:
+  startup: []
+  others: []
 title: Eventer
 workTime: 0
 path: "/Users/philippeperret/Programmes/Eventer3"
