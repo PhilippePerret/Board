@@ -12,8 +12,7 @@ window.server = {
         if (response.ok) {
             callback(response)
         } else {
-            reponse = 'ERREUR : ' + JSON.stringify(response, null, 2);
-            error(reponse)
+            error(response.error)
         }
         // feedback(reponse)
       }

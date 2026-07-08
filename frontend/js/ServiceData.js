@@ -24,8 +24,7 @@ const SERVICES_DATA = [
     , scType: '.rb'
     , params: [
         {id: 'path', value: null, type: 'path', required: true},
-        {id: 'archive', q: 'Faut-il archiver le fichier ?', type: 'boolean', default: true}
-
+        {id: 'archive-folder', type: 'path-or-null', q: 'Sélectionner le dossier archives dans le Finder (ou aucun si le fichier ne doit pas être archivé).'}
     ]
     /* Paramètres à définir au moment du lancement */
     /* tag::exemple-dyn-params[] */

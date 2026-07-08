@@ -1,9 +1,21 @@
 ---
 id: 3783329334557587a854c1dd5d
 services:
-  others: []
+  others:
+  - scType: ".rb"
+    params:
+    - "/Users/philippeperret/Programmes/Eventer3//CHANGELOG.md"
+    - CHANGELOG.md
+    -
+    id: file-versioning
+    uuid: 1783515518089f7621f8699337
+    type: others
+    name:
+    - Versionner un fichier/dossier
+    projectId:
   startup:
-  - params:
+  - scType: ".scpt"
+    params:
     - "/Users/philippeperret/Programmes/Board/"
     - 1099
     - 30
@@ -12,7 +24,6 @@ services:
     - 239
     - column view
     - false
-    scType: ".scpt"
     id: open-finder-window
     uuid: 1783494183974c2f9882a62179
     type: startup

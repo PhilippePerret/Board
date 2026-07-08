@@ -24,7 +24,7 @@ def run_script(script_name, params = "")
       cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
       # return  {script_command: "cmd = #{cmd}"}
       res = `#{cmd}`
-      if res == "" then {ok: true}
+      if res == "" then {ok: null, message: "Aucun retour de la commande."}
       else JSON.parse(res) end
     rescue Exception => e
       {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
@@ -80,6 +80,7 @@ begin
     file = File.join(PROJECT_CARD_FOLDER, "#{data['id']}.yaml")
     IO.write(file, data.to_yaml)
 
+
   # === Chargement de :what ===
   when "load"
     case request['what']
@@ -99,9 +100,11 @@ begin
       returned_data     = {}
     end
 
+
   # Lancement d'un script osascript
   when "run-osascript"
     returned_data = run_script("#{request['script-name']}.scpt")
+
 
   when 'run-bashscript'
     returned_data = run_script("#{request['script-name']}.sh")
@@ -123,7 +126,9 @@ begin
   when 'exec-service'
     ok = true
     returned_data = run_script(request["script"], request["params"])
-  
+    ok = returned_data["ok"] if returned_data.key?("ok")
+    error = returned_data["error"] if returned_data.key?("error") && returned_data["error"]
+    returned_message = returned_data["message"] if returned_data.key?("message") && returned_data["message"]  
   # action inconnue => ERRREUR
   else 
     ok = false

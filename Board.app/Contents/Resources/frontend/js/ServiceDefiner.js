@@ -99,6 +99,23 @@ class ServiceDefiner {
           this.getInfoFinderWindow.bind(this)
         )
         break
+      /**
+       * Quand on doit choisir un chemin d'accès ou retourner NULL
+       * quand on en choisit pas, mais en continuant
+       */
+      case 'path-or-null':
+        new ConfirmDialog({
+          title: "Définition du service",
+          message: param.q || "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'.",
+          ouiBtn: {name: 'OK'   , onclick: this.getPathOfFinderSelection.bind(this)},
+          nonBtn: {name: 'Aucun', onclick: this.returnNull.bind(this)}
+        }).show()
+        break
+      /**
+       * Demande un chemin d'accès (en le sélectionnant dans le Finder)
+       * La touche "Annuler", interrompt l'opération, contrairement à
+       * 'path-or-null'
+       */
       case 'path':
         message("Je dois apprendre à définir un chemin d'accès")
         this.attend(param.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
@@ -126,6 +143,14 @@ class ServiceDefiner {
   onBooleanResponse(param, trueOrFalse, retour){
     console.log("retour dans onBooleanResponse", retour)
     this.addParamValue(trueOrFalse)
+    this.define()
+  }
+
+  /**
+   * Quand on doit juste retourner une valeur null
+   */
+  returnNull() {
+    this.addParamValue(null)
     this.define()
   }
 
