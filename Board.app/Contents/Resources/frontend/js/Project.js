@@ -163,6 +163,22 @@ class Project {
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
   }
 
+  /**
+   * Quand on clique sur le bouton de démarrage, on doit lancer tous
+   * les services de démarrage
+   */
+  startStartupServices(ev){
+    if (undefined == this.startupservices) this.startupservices = [...this.services.startup].reverse()
+    const startupservice = this.startupservices.pop()
+    if (startupservice) {
+      message(`Lancement du service ${startupservice.name}…`)
+      startupservice.exec(null /* event */, this.startStartupServices.bind(this))
+    } else {
+      message("Fin de démarrage du projet.")
+    }
+    return stopEvent(ev)
+  }
+
   /* Modification du titre (click sur titre) */
   modifyTitle(ev, aryData) {
     if (undefined == aryData) {
@@ -211,12 +227,8 @@ class Project {
     return card
   }
   observeServiceCard(service, card){
-    listen(card, 'click', service.exec.bind(service))
     listen(card, 'dragstart', e => this.draggedService = service)
     listen(card, 'dragend', e => {
-      console.log("e dragend", e)
-      card.classList.add('hidden')
-      e.target.classList.add('hidden')
       if (e.dataTransfer.dropEffect != "none") return
       this.removeServiceFromListe();
     })
@@ -274,12 +286,12 @@ class Project {
       const startupContainer = DCreate('DIV', {class:'startup-services', style:'position:relative;min-height:100px;'})
       const divSServices = DCreate('DIV', {id:'startup-services', class: 'hidden'})
       const divBtnStartup = DCreate('DIV', {class:'service'})
-      const btnStartup = DCreate('DIV', {class:'name', text: 'GO !'})
+      this.btnStartup = DCreate('DIV', {class:'name', text: 'GO !'})
       // Avec des services au démarrage
       startupServices.forEach((service) => {
         divSServices.appendChild(this.getServiceCard(service))
       })
-      divBtnStartup.appendChild(btnStartup)
+      divBtnStartup.appendChild(this.btnStartup)
       startupContainer.appendChild(divBtnStartup)
       startupContainer.appendChild(divSServices)
       this.startupField.appendChild(startupContainer)
@@ -301,8 +313,14 @@ class Project {
     this.constructor.container.appendChild(div)
     this.observe()
   }
+
+
   observe(){
 
+    // Lancer les sercices de démarrage
+    if (this.btnStartup) {
+      listen(this.btnStartup, 'click', this.startStartupServices.bind(this))
+    }
     // Pour pouvoir modifier le titre
     listen(this.divTitle, 'click', this.modifyTitle.bind(this))
     this.obj.addEventListener('dblclick', this.onDblClick.bind(this))

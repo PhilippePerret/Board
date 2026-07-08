@@ -1,16 +1,18 @@
 class ServiceExecuter {
 
-  constructor(service){
+  constructor(service, callback){
     this.service  = service
     this.id       = service.id
     this.name     = service.name
     this.params   = service.params
     this.scType   = service.scType ?? '.scpt'
     this.script   = kebabToPascalCase(this.id) + this.scType
+    this.callback = callback ?? null
   }
   
   // Exécution du service
-  exec(){
+  exec(callback){
+    if (typeof callback == 'function') this.callback = callback
     const SDATA = SERVICES_DATA.filter(d => d.id == this.id)[0]
     // S'il existe des paramètres dynamiques, il faut les traiters
     if (SDATA.dynParams) {
@@ -27,6 +29,14 @@ class ServiceExecuter {
     // console.log("Je dois exécuter ", this.service)
     // Note : pour le moment, ça ne joue que des osascript
     server.send({action: `exec-service`, script: this.script, params: this.params}, this.afterRunService.bind(this))
+  }
+
+  // Appelée après avoir exécuté le service
+  afterRunService(retour){
+    console.log("retour du run de service", retour)
+    message(retour.message + ` <span class="tiny">(service ${this.id})</span>` || "Service " + this.name + " joué avec succès.")
+    if (typeof this.callback == 'finder') { setTimeout(this.callback, 2000) }
+    console.log("ServiceExecuter#afterRunService termine normalement.")
   }
 
   treateDynParams(){
@@ -64,9 +74,5 @@ class ServiceExecuter {
   }
 
 
-  // Appelée après avoir exécuté le service
-  afterRunService(retour){
-    console.log("retour du run de service", retour)
-    message(retour.message + ` <span class="tiny">(service ${this.id})</span>` || "Service " + this.name + " joué avec succès.")
-  }
+
 }

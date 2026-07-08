@@ -60,7 +60,7 @@ class Services {
 
 
   constructor(data){
-    console.log("data", data)
+    console.log("data Service", data)
     this.id = data.id || raise("Il faut fournir un identifiant au service.")
     /**
      * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
@@ -90,12 +90,14 @@ class Services {
     this.observe()
   }
   observe(){
-    this.obj.addEventListener("dragstart", e => e.dataTransfer.setData("id", this.id));
+    listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
   } 
 
   // Exécution du service
-  exec(){
-    this.executor.exec()
+  exec(ev, callback){
+    console.log("callback dans Service#exec", callback)
+    this.executor.exec(callback)
+    console.log("Service#exec se termine bien")
   }
   get executor(){ return this._executor || (this._executor = new ServiceExecuter(this))}
   
@@ -111,6 +113,7 @@ class Services {
     div.appendChild(name)
     div.draggable = true
     this.projectCard = div
+    listen(div, 'click', this.exec.bind(this))
     return div
   }
 }
