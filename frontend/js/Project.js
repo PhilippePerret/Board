@@ -24,6 +24,7 @@ class Project {
     })
     conf.show()
   }
+
   static onProjectSelectedInFinder(){
     server.send({action: 'getInfoFinderSelection', type: 'folder'}, this.onRetourInfoFinderProjet.bind(this))
   }
@@ -36,7 +37,20 @@ class Project {
       id: Project.uniqId(),
       title: retour.data.name,
       workTime: 0
-    })).buildCard()
+    }))
+    new TextFieldDialog({
+        title: "Nom du nouveau projet"
+      , message: "Nom à donner à ce projet"
+      , defaultValue: retour.data.name
+      , ouiBtn: {name: "Appliquer", onclick: this.buildCardNewProject.bind(this, projet.id)}
+    }).show()
+    // Pour définir le titre à donner
+  }
+  static buildCardNewProject(idProject, aryTransData){
+    const projet = Project.get(idProject)
+    // console.log("idProjet", idProject, "projectName", projectName, "projet", projet)
+    projet.title = aryTransData[0]
+    projet.buildCard()
     const confirm = new ConfirmDialog({
       title: "Confirmation de l'import",
       message: "Si tu es d'accord avec ces données, clique le bouton “Importer”", // TODO ajouter les infos
@@ -95,6 +109,20 @@ class Project {
     } 
   static get container(){ return this._container || (this._container = document.querySelector('#project-cards-container'))}
 
+  static get(idProject){
+    this.projects = this.projects || []
+    return this.projects[idProject]
+  }
+  static add(project){
+    this.projects = this.projects || []
+    Object.assign(this.projects, {[project.id]: project})
+  }
+  static remove(idProject){
+    if (idProject.id) idProject = idProject.id
+    delete this.projects[idProject]
+    if (this.current?.id  == idProject) this.constructor.deselect(this.current)
+    message("Projet retiré de la liste des projets.")
+  }
 
 
   constructor(data){
@@ -106,7 +134,9 @@ class Project {
     this.updatedAt  = data.updatedAt
     this.workTime   = data.workTime ?? 0
     this.services   = data.services ?? {startup: [], others: []}
+    this.constructor.add(this)
     this.initServices()
+    
   }
 
   initServices(){
@@ -288,7 +318,7 @@ class Project {
     server.send({action: 'remove-project', projectId: this.id}, this.afterRemove.bind(this))
   }
   afterRemove(retour){
-    this.constructor.deselect(this)
+    this.constructor.remove(this)
     this.obj.remove()
     message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
   }
