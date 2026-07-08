@@ -46,10 +46,10 @@ class Project {
     }).show()
     // Pour définir le titre à donner
   }
-  static buildCardNewProject(idProject, projectName){
+  static buildCardNewProject(idProject, aryTransData){
     const projet = Project.get(idProject)
-    console.log("idProjet", idProject, "projectName", projectName, "projet", projet)
-    projet.title = projectName
+    // console.log("idProjet", idProject, "projectName", projectName, "projet", projet)
+    projet.title = aryTransData[0]
     projet.buildCard()
     const confirm = new ConfirmDialog({
       title: "Confirmation de l'import",
@@ -163,6 +163,24 @@ class Project {
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
   }
 
+  /* Modification du titre (click sur titre) */
+  modifyTitle(ev, aryData) {
+    if (undefined == aryData) {
+      stopEvent(ev)
+      new TextFieldDialog({
+          title: "Modification du titre du projet"
+        , message: "Nom à donner à ce projet"
+        , defaultValue: this.title
+        , ouiBtn: {name: "Appliquer", onclick: this.modifyTitle.bind(this, null)}
+      }).show()
+      return false
+    } else {
+      // Enregistrement du titre
+      this.title = aryData[0]
+      this.divTitle.textContent = this.title
+      this.save()
+    }
+  }
   /**
    * 
    * === MÉTHODES D'AJOUT DES SERVICES ===
@@ -220,7 +238,8 @@ class Project {
     if (this.obj) this.obj.remove()
     const div = DCreate('DIV', {id: this.id, class: 'project'})
     this.obj = div
-    const tit = DCreate('DIV', {class:'title', text: this.title})
+    const tit = DCreate('DIV', {class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
+    this.divTitle = tit
     div.appendChild(tit)
     const path  = DCreate('DIV', {class:'path', text: this.path})
     div.appendChild(path)
@@ -280,6 +299,9 @@ class Project {
     this.observe()
   }
   observe(){
+
+    // Pour pouvoir modifier le titre
+    listen(this.divTitle, 'click', this.modifyTitle.bind(this))
     this.obj.addEventListener('dblclick', this.onDblClick.bind(this))
     this.obj.addEventListener('mousedown', this.onMouseDown.bind(this))
     

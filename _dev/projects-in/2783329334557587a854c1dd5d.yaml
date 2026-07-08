@@ -1,8 +1,18 @@
 ---
 id: 2783329334557587a854c1dd5d
 services:
+  others:
+  - params:
+    - "/Users/philippeperret/Programmes/Board//update.command"
+    - update.command
+    scType: ".rb"
+    id: run-script
+    uuid: 178351269770970b50505050028
+    type: others
+    name:
+    - Actualiser l'application
+    projectId:
   startup: []
-  others: []
 title: Board
 workTime: 0
 path: "/Users/philippeperret/Programmes/Board"
