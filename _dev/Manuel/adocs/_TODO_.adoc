@@ -1,6 +1,5 @@
 == Todo list ==
 
-– Pouvoir changer le titre du projet
 - Pouvoir déplacer les projets (à la souris, avec les flèches)
 - Bouton "Démarrer" pour démarrer le projet, dès que des services sont dans le startup
 - Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
