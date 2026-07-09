@@ -6,28 +6,10 @@
 
 == Tout de suite
 
-- suppresion d'un projet
-  setup: fixture avec un projet
-  - Lancer
-  - le sélectionner (clic sur sa carte)
-  - jouer "Le retirer"
-  - confirmer
-  → la ficher du projet doit toujours exister dans dossier project-cards
-    le projet doit avoir été retiré de appdata.json (projects-in → projects-out)
-    le projet ne doit plus être affiché
-
-- modification du titre d'un projet 
-  setup: fixture avec un projet
-  - Cliquer sur le titre
-  - modifier le titre dans la champ qui s'ouvre
-  - enregistrer
-  → titre modifié sur l'interface
-    titre modifié dans la fiche dans project-cards
-
+  
 
 == Plus tard
 
-- déplacement du projet
-  setup: fixture avec 3 projest
-  - les déplacer les trois
-  - voir si c'est persistant (PAS ENCORE IMPLÉMENTÉ)
+- Ajout d'un service "autre"
+  setup : un projet
+- Ajout d'un service au startup
