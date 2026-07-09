@@ -77,6 +77,17 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'deselect')
   end
 
+  # Ouvre une fenêtre Finder neutre (rien de sélectionné dedans), exécute le
+  # bloc, puis referme cette fenêtre (best-effort).
+  def with_finder_deselected
+    before_ids = finder_window_ids
+    finder_deselect
+    new_ids = finder_window_ids - before_ids
+    yield
+  ensure
+    new_ids&.each { |id| finder_close_window(id) }
+  end
+
   # Poll côté Ruby (utile pour attendre un texte/état qui dépend d'un
   # aller-retour backend, pas juste de la présence d'un élément DOM).
   def wait_until(timeout = 5, interval = 0.2)

@@ -35,7 +35,11 @@ end axDomId
 
 on axChildren(elem)
 	tell application "System Events"
-		return UI elements of elem
+		try
+			return UI elements of elem
+		on error
+			return {}
+		end try
 	end tell
 end axChildren
 
@@ -60,11 +64,13 @@ on collectText(elem)
 		if v is missing value then return ""
 		return (v as text)
 	end if
-	set result to ""
+	-- "result" est un mot-clé implicite d'AppleScript (résultat de la
+	-- dernière instruction) : ne jamais l'utiliser comme nom de variable.
+	set txt to ""
 	repeat with kid in (my axChildren(elem))
-		set result to result & (my collectText(kid))
+		set txt to txt & (my collectText(kid))
 	end repeat
-	return result
+	return txt
 end collectText
 
 -- Recherche récursive par égalité stricte de AXDOMIdentifier

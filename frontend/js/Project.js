@@ -32,7 +32,7 @@ class Project {
     // console.info("Retour : ", retour)
     if (retour.data.ok === false) {
       if (retour.data.error == 'Not a folder') return error(getErr('folder-required'))
-        else if (retour.data.error == 'No selection') return error(getErr('project-folder-not-selected'))
+      else if (retour.data.error == 'No selection') return error(getErr('project-folder-not-selected'))
     }
     const projet = new Project(Object.assign(retour.data, {
       id: Project.uniqId(),
@@ -112,17 +112,18 @@ class Project {
     } 
   static get container(){ return this._container || (this._container = document.querySelector('#project-cards-container'))}
 
+  static get ensureProjects() {
+    return this._projects ?? (this._projects = {})
+  }
   static get(idProject){
-    this.projects = this.projects || []
-    return this.projects[idProject]
+    return this.ensureProjects[idProject]
   }
   static add(project){
-    this.projects = this.projects || []
-    Object.assign(this.projects, {[project.id]: project})
+    Object.assign(this.ensureProjects, {[project.id]: project})
   }
   static remove(idProject){
     if (idProject.id) idProject = idProject.id
-    delete this.projects[idProject]
+    delete this.ensureProjects[idProject]
     if (this.current?.id  == idProject) this.constructor.deselect(this.current)
     message("Projet retiré de la liste des projets.")
   }

@@ -4,7 +4,7 @@
 --
 -- Usage : osascript Tests/support/finder.applescript <action> [args]
 --   select       <posixPath>
---   deselect                    (vide la sélection Finder)
+--   deselect                    (ouvre une fenêtre sur un dossier neutre, sans rien sélectionner dedans)
 --   window-ids                 (id des fenêtres Finder ouvertes, une par ligne)
 --   close-window <id>          (ferme la fenêtre si elle existe encore)
 
@@ -17,8 +17,11 @@ on run argv
 		end tell
 
 	else if theAction is "deselect" then
+		-- "set selection to {}" ne vide pas fiablement la sélection Finder.
+		-- Ouvrir une fenêtre sur un dossier, sans cliquer dessus, donne une
+		-- sélection vide par construction (rien n'est sélectionné dedans).
 		tell application "Finder"
-			set selection to {}
+			make new Finder window to (path to home folder)
 		end tell
 
 	else if theAction is "window-ids" then

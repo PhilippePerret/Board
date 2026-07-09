@@ -66,7 +66,7 @@ FAILURES=()
 
 for spec in "$CUR_DIR"/specs/e2e/*.rb; do
   [ -e "$spec" ] || continue
-  rel_spec="${spec#$APP_DIR/}"
+  rel_spec="${spec#$CUR_DIR/}"
   echo "${GRAY}--- $rel_spec ---${RESET}"
   if output=$(ruby "$spec" 2>&1); then code=0; else code=$?; fi
   echo "$output"
