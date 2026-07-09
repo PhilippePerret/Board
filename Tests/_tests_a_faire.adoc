@@ -1,0 +1,16 @@
+= Tests à faire
+
+:dossier support: ~/Libary/Application\ Support/Board
+:bouton add project: button#btn-add-project
+:bouton oui: div#btn-oui
+
+- création simple d'un nouveau projet
+  Setup : {dossier support} inexistant
+  - Click sur le bouton {add project}
+  → Une fenêtre s'ouvre, demandant de choisir le dossier dans le Finder
+  - on choisit un dossier dans le Finder  [TEST À FAIRE : 1) fichier choisi, 2) rien choisi]
+  - on click sur le bouton "OK" ({bouton oui})
+  → Une fenêtre s'ouvre, pour entrer le titre à donner au projet
+  - on écrit "Tout premier projet" (input#__panel-2__)
+  - on clique sur le bouton "Appliquer" ({bouton oui})
+  - on confirme l'import en cliquant sur "Importer" ({bouton oui})

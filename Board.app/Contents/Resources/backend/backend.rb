@@ -1,59 +1,11 @@
-require "json"
-require 'yaml'
-require "fileutils"
-
-MAIN_PROJECT_FOLDER   = "/Users/philippeperret/Programmes/Board/_dev"
-PROJECT_CARD_FOLDER   = File.join(MAIN_PROJECT_FOLDER, 'projects-in')
-PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
-
-DATA_SUPPORT_FOLDER = File.join(Dir.home, "Library", "Application Support", "Board")
-FileUtils.mkdir_p(DATA_SUPPORT_FOLDER)
-APP_DATA_FILE = File.join(DATA_SUPPORT_FOLDER, 'appdata.json')
-APP_DATA = if File.exist?(APP_DATA_FILE)
-  JSON.parse(IO.read(APP_DATA_FILE))
-else
-  {}
-end
-
+require './lib/usefull.rb'
   
-COMMAND_PER_EXT = {
-  '.scpt' => 'osascript',
-  '.rb'   => 'ruby',
-  '.sh'   => 'zsh'
-}
-### === Jouer un script du dossier /scripts/ ===
-def run_script(script_name, params = "")
-  params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
-  cmd = nil
-  extname = File.extname(script_name)
-  case extname
-  when '.scpt', '.rb', '.sh'
-    begin
-      cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
-      # return  {script_command: "cmd = #{cmd}"}
-      res = `#{cmd}`
-      if res == "" then {ok: null, message: "Aucun retour de la commande."}
-      else JSON.parse(res) end
-    rescue Exception => e
-      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
-    end
-  else
-    {ok: false, error: "Je ne sais pas traiter un script #{script_name}"}
-  end
-end
-
-def human_date_to_aaammjj(date)
-  y, m, j = date.split('/')
-  "#{y}/#{m.rjust(2,'0')}/#{j.rjust(2,'0')}"
-end
-
 begin
 
   returned_error  = nil
   ok = true
   error = nil
   returned_data   = nil
-  
   
   # La requête frontend se trouve dans cette requête qui est une
   # table JSON
@@ -72,22 +24,23 @@ begin
   # === Destuction d'un projet ===
   when 'remove-project'
     id = request["id"]
-    fname = "#{request['projectId']}.yaml"
-    src   = File.join(PROJECT_CARD_FOLDER, fname)
-    dest  = File.join(PROJECT_CARD_ARCHIVE, fname)
-    if (File.exist?(src))
-      FileUtils.mv(src, dest)
+    project_id = request['projectId']
+    ok = File.exist?(project_path(project_id))
+    if ok
+      APP_DATA['projects-out'] << APP_DATA['project-in'].delete(project_id)
+      save_app_data
     else
-      ok = false
-      error = "Le projet introuvable : #{src}"
+      error = "Le projet introuvable : #{project_id} (dans #{PROJECT_CARD_FOLDER})"
     end
 
   # === Sauvegarde d'un projet ===
+
   when "save-project"
     data = request["data"]
-    file = File.join(PROJECT_CARD_FOLDER, "#{data['id']}.yaml")
-    IO.write(file, data.to_yaml)
-
+    project_id = data['id']
+    IO.write(project_path(project_id), data.to_yaml)
+    APP_DATA['projects-in'] << project_id unless APP_DATA['projects-in'].include?(project_id)
+    save_app_data
 
   # === Chargement de :what ===
   when "load"
@@ -96,11 +49,10 @@ begin
     # === Chargement des projets ===
     when 'projects'
       # Chargement de tous les projets
-      # (pour le moment dans le dossier de l'application)
-      projects_data = []
-      Dir["#{PROJECT_CARD_FOLDER}/*.yaml"].each do |cardpath|
-        projects_data << YAML.safe_load(IO.read(cardpath))
-      end
+      projects_data =
+        APP_DATA['projects-in'].map do |project_id|
+          YAML.safe_load(IO.read(project_path(project_id)))
+        end
       returned_data = projects_data
     else
       ok = false
