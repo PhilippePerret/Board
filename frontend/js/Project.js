@@ -256,7 +256,7 @@ class Project {
   buildCard(){
     if (this.obj) this.obj.remove()
     const divId = `project-${this.id}`
-    const div = DCreate('DIV', {id: divId, class: 'project'})
+    const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})
     this.obj = div
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
     this.divTitle = tit
@@ -366,7 +366,6 @@ class Project {
     server.send({action: 'remove-project', projectId: this.id}, this.afterRemove.bind(this))
   }
   afterRemove(retour){
-    this.constructor.remove(this)
     this.obj.remove()
     message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
   }

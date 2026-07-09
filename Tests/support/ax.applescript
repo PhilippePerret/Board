@@ -18,6 +18,8 @@
 --   get-text        <domId>        (texte de tous les AXStaticText descendants, concaténés)
 --   get-text-prefix <domIdPrefix>
 --   exists          <domId>        ("true"/"false", recherche immédiate, pas d'attente)
+--   click-parent        <domId>        (clique le parent AX de l'élément trouvé)
+--   click-parent-prefix <domIdPrefix>
 
 use AppleScript version "2.4"
 use scripting additions
@@ -55,6 +57,16 @@ on axValue(elem)
 		return value of elem
 	end tell
 end axValue
+
+-- Certains éléments structurels (ex. la div d'une carte projet) sont
+-- "aplatis" par WebKit et n'apparaissent jamais comme nœud AX distinct,
+-- même avec un id DOM. On les atteint en remontant depuis un enfant qui,
+-- lui, est bien exposé (ex. son titre).
+on axParent(elem)
+	tell application "System Events"
+		return (value of attribute "AXParent" of elem)
+	end tell
+end axParent
 
 -- Concatène le texte de tous les AXStaticText descendants (le contenu
 -- textuel d'un élément non-formulaire, ex. #message, n'est pas exposé
@@ -188,12 +200,25 @@ on run argv
 		return my collectText(el)
 
 	else if theAction is "exists" then
-		set found to my findByDomId(my rootWindow(), needle)
+		set found to missing value
+		try
+			set found to my findByDomId(my rootWindow(), needle)
+		end try
 		if found is missing value then
 			return "false"
 		else
 			return "true"
 		end if
+
+	else if theAction is "click-parent" then
+		set el to my waitForMatch("exact", needle, defaultTimeout)
+		set parentEl to my axParent(el)
+		tell application "System Events" to perform action "AXPress" of parentEl
+
+	else if theAction is "click-parent-prefix" then
+		set el to my waitForMatch("prefix", needle, defaultTimeout)
+		set parentEl to my axParent(el)
+		tell application "System Events" to perform action "AXPress" of parentEl
 
 	else
 		error "Action AppleScript inconnue : " & theAction

@@ -48,7 +48,16 @@ cp -R "$APP_DIR/backend/"* "$APP_DIR/Board.app/Contents/Resources/backend/"
 
 quit_app
 until ! pgrep -x Board >/dev/null 2>&1; do sleep 0.1; done
-open "$APP_DIR/Board.app"
+
+# "open" échoue parfois juste après un pkill (LaunchServices pas encore à
+# jour : _LSOpenURLsWithCompletionHandler error -600) — quelques essais.
+opened=0
+for i in 1 2 3; do
+  if open "$APP_DIR/Board.app"; then opened=1; break; fi
+  sleep 0.5
+done
+[ "$opened" -eq 1 ] || { echo "open Board.app a échoué après 3 essais" >&2; exit 1; }
+
 osascript "$CUR_DIR/support/ax.applescript" wait-for btn-add-project 10 >/dev/null
 
 GREEN=$'\e[32m'
@@ -104,7 +113,8 @@ else
     matched=0
     while IFS= read -r f; do
       relf="${f#$CUR_DIR/specs/}"
-      if [[ "$relf" == $~arg || "$f" == $~arg ]]; then
+      base="${f##*/}"
+      if [[ "$relf" == $~arg || "$f" == $~arg || "$base" == $~arg ]]; then
         ALL_SPECS+=("$f")
         matched=1
       fi

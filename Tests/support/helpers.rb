@@ -92,11 +92,17 @@ module BoardTest
 
   # Poll côté Ruby (utile pour attendre un texte/état qui dépend d'un
   # aller-retour backend, pas juste de la présence d'un élément DOM).
-  def wait_until(timeout = 5, interval = 0.2)
+  #
+  # desc: proc appelé SEULEMENT en cas de timeout, pour rapporter l'état réel
+  # à ce moment-là (pas au moment de l'appel) dans le message d'erreur.
+  def wait_until(timeout = 5, interval = 0.2, desc: nil)
     deadline = Time.now + timeout
     loop do
       return true if yield
-      raise "Timeout d'attente dépassé (#{timeout}s)" if Time.now > deadline
+      if Time.now > deadline
+        detail = desc && (desc.call rescue "(desc a échoué : #{$!.message})")
+        raise "Timeout d'attente dépassé (#{timeout}s)" + (detail ? " — #{detail}" : "")
+      end
       sleep interval
     end
   end
@@ -130,9 +136,19 @@ module BoardTest
   # qui peuvent laisser un ancien et un nouveau process se chevaucher).
   def launch_app
     system('pkill', '-x', 'Board', out: File::NULL, err: File::NULL)
-    wait_until(5, 0.1) { !board_running? }
-    system('open', BOARD_APP)
-    wait_until(10, 0.2) { exists?('btn-add-project') }
+    wait_until(5, 0.1, desc: -> { 'process Board encore actif après pkill' }) { !board_running? }
+
+    # "open" échoue parfois juste après un pkill (LaunchServices pas encore
+    # à jour : _LSOpenURLsWithCompletionHandler error -600) — quelques essais.
+    opened = false
+    3.times do
+      opened = system('open', BOARD_APP)
+      break if opened
+      sleep 0.5
+    end
+    raise "\"open #{BOARD_APP}\" a échoué après 3 essais" unless opened
+
+    wait_until(10, 0.2, desc: -> { 'btn-add-project introuvable après ouverture de Board.app' }) { exists?('btn-add-project') }
   end
 
   def quit_app

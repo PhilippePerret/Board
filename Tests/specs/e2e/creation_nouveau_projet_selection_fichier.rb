@@ -26,12 +26,7 @@ def run_test
     click('btn-oui')
 
     # ==| Erreur : la sélection doit être un dossier
-    begin
-      wait_until(5) { get_text('message').include?(expected_error) }
-    rescue RuntimeError => e
-      raise "#{e.message} — message affiché : #{get_text('message').inspect}" if e.message.start_with?('Timeout')
-      raise
-    end
+    wait_until(5, desc: -> { "message affiché : #{get_text('message').inspect}" }) { get_text('message').include?(expected_error) }
   end
 ensure
   fixture_file&.close
