@@ -107,15 +107,25 @@ class Services {
   }
   
   // Retourne la carte à insérer dans le projet
-  projectCard(){
+  projectCard(projet){
     const div = DCreate('DIV', {class: 'service'})
     const name = DCreate('DIV', {class:'name',text: this.name})
     div.appendChild(name)
     div.draggable = true
     this.projectCard = div
-    listen(div, 'click', this.exec.bind(this))
+    this.observeServiceCard(projet, div)
     return div
   }
+
+  observeServiceCard(projet, card){
+    listen(card, 'click', this.exec.bind(this))
+    listen(card, 'dragstart', e => projet.draggedService = this)
+    listen(card, 'dragend', e => {
+      if (e.dataTransfer.dropEffect != "none") return
+      projet.removeServiceFromListe();
+    })
+  }
+
 }
 
 

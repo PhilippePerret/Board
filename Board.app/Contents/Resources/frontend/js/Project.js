@@ -124,6 +124,15 @@ class Project {
     message("Projet retiré de la liste des projets.")
   }
 
+  // ---- Pour déplacer le projet couvant
+  static moveCurrentToLeft(){
+    const proj = this.current
+    proj.obj.parentNode.insertBefore(proj.obj, proj.obj.previousSibling)
+  }
+  static moveCurrentToRight(){
+    const proj = this.current
+    proj.obj.parentNode.insertBefore(proj.obj, proj.obj.nextSibling?.nextSibling)
+  }
 
   constructor(data){
     console.log("data", data)
@@ -222,16 +231,7 @@ class Project {
   }
 
   getServiceCard(service){
-    const card = service.projectCard()
-    this.observeServiceCard(service, card)
-    return card
-  }
-  observeServiceCard(service, card){
-    listen(card, 'dragstart', e => this.draggedService = service)
-    listen(card, 'dragend', e => {
-      if (e.dataTransfer.dropEffect != "none") return
-      this.removeServiceFromListe();
-    })
+    return service.projectCard(this)
   }
 
   /**

@@ -52,7 +52,10 @@
 
 <div id="tools">
   <button class="btn-add-project" onclick="Project.addProject()">✚</button>
+    <!-- ======= BOUTONS DES PROJETS ============ -->
     <span id="project-buttons" class="invisible">
+      <button class="btn-move-project-to-left" onclick="Project.moveCurrentToLeft()">←</button>
+      <button class="btn-move-project-to-right" onclick="Project.moveCurrentToRight()">→</button>
       <button class="btn-remove-project" onclick="Project.removeProject.call(Project, Project.current)">Retirer le projet</button>
       <button class="btn-deal-with-services" onclick="Services.open.call(Services, Project.current)">Gérer ses services</button>
     </span>

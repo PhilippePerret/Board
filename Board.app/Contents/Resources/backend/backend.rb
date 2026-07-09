@@ -6,8 +6,16 @@ MAIN_PROJECT_FOLDER   = "/Users/philippeperret/Programmes/Board/_dev"
 PROJECT_CARD_FOLDER   = File.join(MAIN_PROJECT_FOLDER, 'projects-in')
 PROJECT_CARD_ARCHIVE  = File.join(MAIN_PROJECT_FOLDER, 'projects-out')
 
-SERVICES_DATA_FILE = File.join(__dir__, 'data', 'services_data.yaml')
+DATA_SUPPORT_FOLDER = File.join(Dir.home, "Library", "Application Support", "Board")
+FileUtils.mkdir_p(DATA_SUPPORT_FOLDER)
+APP_DATA_FILE = File.join(DATA_SUPPORT_FOLDER, 'appdata.json')
+APP_DATA = if File.exist?(APP_DATA_FILE)
+  JSON.parse(IO.read(APP_DATA_FILE))
+else
+  {}
+end
 
+  
 COMMAND_PER_EXT = {
   '.scpt' => 'osascript',
   '.rb'   => 'ruby',
