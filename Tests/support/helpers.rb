@@ -9,7 +9,7 @@ require 'tmpdir'
 module BoardTest
   ROOT                 = File.expand_path('../..', __dir__)
   AX_SCRIPT             = File.join(ROOT, 'Tests', 'support', 'ax.applescript')
-  FINDER_SELECT_SCRIPT  = File.join(ROOT, 'Tests', 'support', 'finder_select.applescript')
+  FINDER_SCRIPT          = File.join(ROOT, 'Tests', 'support', 'finder.applescript')
   BOARD_APP             = File.join(ROOT, 'Board.app')
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
@@ -57,7 +57,27 @@ module BoardTest
   def wait_for_prefix(prefix, timeout = 5) = osascript(AX_SCRIPT, 'wait-for-prefix', prefix, timeout)
 
   def finder_select(posix_path)
-    osascript(FINDER_SELECT_SCRIPT, posix_path)
+    osascript(FINDER_SCRIPT, 'select', posix_path)
+  end
+
+  def finder_window_ids
+    osascript(FINDER_SCRIPT, 'window-ids').split("\n")
+  end
+
+  def finder_close_window(window_id)
+    osascript(FINDER_SCRIPT, 'close-window', window_id)
+  end
+
+  # Sélectionne posix_path dans le Finder, exécute le bloc, puis ferme les
+  # fenêtres Finder que la sélection a ouvertes (best-effort : si le dossier
+  # a déjà été supprimé et sa fenêtre déjà fermée par macOS, no-op).
+  def with_finder_selection(posix_path)
+    before_ids = finder_window_ids
+    finder_select(posix_path)
+    new_ids = finder_window_ids - before_ids
+    yield
+  ensure
+    new_ids&.each { |id| finder_close_window(id) }
   end
 
   def launch_app

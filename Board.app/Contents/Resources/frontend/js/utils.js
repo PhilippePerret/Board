@@ -1,4 +1,25 @@
 
+function textSubstitute(msg, params){
+  if (params) {
+    if (Array.isArray(params)) {
+      var i = 0
+      params.forEach( param => {
+        i++
+        const regexp = new RegExp(`\\$\\{?${i}\\}?`, 'g')
+        msg = msg.replace(regexp, param)
+      })
+    } else if ('object' == typeof params) {
+      for(var key in params){
+        const regexp = new RegExp(`\\$\\{?${key}\\}?`, 'g')
+        msg = msg.replace(regexp, params[key])
+      }
+    } else {
+      msg = msg.replace(/\$1/g, String(params))
+    }
+  }
+  return msg
+}
+
 // 'mon-change-on' => MonChangeOn
 function kebabToPascalCase(str) {
   return str.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('')
@@ -13,3 +34,4 @@ function heureCourante(withSeconds = true){
   withSeconds && heure.concat(`:${s}`)
   return heure
 }
+

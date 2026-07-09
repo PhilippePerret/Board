@@ -16,26 +16,27 @@ def run_test
     # → Une fenêtre s'ouvre, demandant de choisir le dossier dans le Finder
     wait_for('btn-oui')
 
-    # - on choisit un dossier dans le Finder
-    finder_select(fixture_dir)
+    # - on choisit un dossier dans le Finder (fenêtre(s) Finder ouverte(s)
+    #   par la sélection refermées en sortie de bloc)
+    with_finder_selection(fixture_dir) do
+      # - on click sur le bouton "OK"
+      click('btn-oui')
 
-    # - on click sur le bouton "OK"
-    click('btn-oui')
+      # → Une fenêtre s'ouvre, pour entrer le titre à donner au projet
+      wait_for_prefix('__panel-')
 
-    # → Une fenêtre s'ouvre, pour entrer le titre à donner au projet
-    wait_for_prefix('__panel-')
+      # - on écrit "Tout premier projet"
+      set_value_prefix('__panel-', 'Tout premier projet')
 
-    # - on écrit "Tout premier projet"
-    set_value_prefix('__panel-', 'Tout premier projet')
+      # - on clique sur le bouton "Appliquer"
+      click('btn-oui')
 
-    # - on clique sur le bouton "Appliquer"
-    click('btn-oui')
+      # → confirmation de l'import
+      wait_for('btn-oui')
 
-    # → confirmation de l'import
-    wait_for('btn-oui')
-
-    # - on confirme l'import en cliquant sur "Importer"
-    click('btn-oui')
+      # - on confirme l'import en cliquant sur "Importer"
+      click('btn-oui')
+    end
 
     # Vérification : une carte projet a été écrite sur disque
     sleep 0.5

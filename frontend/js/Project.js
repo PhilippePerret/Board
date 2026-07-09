@@ -31,7 +31,8 @@ class Project {
   static onRetourInfoFinderProjet(retour){
     // console.info("Retour : ", retour)
     if (retour.data.ok === false) {
-      if (retour.data.error == 'Not a folder') return error('Il faut impérativement choisir un dossier.')
+      if (retour.data.error == 'Not a folder') return error(getErr('folder-required'))
+        else if (retour.data.error == 'No selection') return error(getErr('project-folder-not-selected'))
     }
     const projet = new Project(Object.assign(retour.data, {
       id: Project.uniqId(),
