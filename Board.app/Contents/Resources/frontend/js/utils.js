@@ -20,6 +20,19 @@ function textSubstitute(msg, params){
   return msg
 }
 
+// Pour retirer le scrimmage (quand on veut voir derrière)
+function unScrim(scrim){
+  console.log("-> unScrim")
+  setTimeout(function() {
+    console.log("scrim", scrim)
+    scrim.style = "backdrop-filter: none; background: rgba(0,0,0,0.1);"
+    // scrim.style.backdropFilter = 'none!important'
+    // scrim.style.background = 'rgba(0, 0, 0, 0.1)!important'
+    // scrim.style.backgroundColor = 'red'
+    console.log("<- unScrim")
+  }, 0)
+}
+
 // 'mon-change-on' => MonChangeOn
 function kebabToPascalCase(str) {
   return str.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('')

@@ -53,10 +53,12 @@ class Project {
     projet.title = aryTransData[0]
     projet.buildCard()
     const confirm = new ConfirmDialog({
-      title: "Confirmation de l'import",
-      message: "Si tu es d'accord avec ces données, clique le bouton “Importer”", // TODO ajouter les infos
-      ouiBtn: {name:"Importer", onclick: projet.save.bind(projet), w: '160px'},
-      nonBtn: {name: "Renoncer", w: '160px'}
+        title: "Confirmation de l'import"
+      , message: "Si tu es d'accord avec ces données, clique le bouton “Importer”"
+      , ouiBtn: {name:"Importer", onclick: projet.save.bind(projet), w: '160px'}
+      , nonBtn: {name: "Renoncer", w: '160px'}
+      , unscrimmed: true
+
     }).show()
   }
 

@@ -22,11 +22,12 @@ class Panel {
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
     this.midData = data.midBtn ?? null
     this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
+    this.unscrimmed = data.unscrimmed ?? false // pour ne pas mettre de flou
     this.built = false
   }
 
   show(){
-    this.built || this.build()
+    this.build()
     listen(window, 'keydown', this.onKeyDown.bind(this))
     this.obj.classList.remove('hidden')
     this.onShow && this.onShow()
@@ -35,6 +36,8 @@ class Panel {
   hide(){
     unlisten(window, 'keydown', this.onKeyDown.bind(this))
     this.obj.classList.add('hidden')
+    // ça ne suffit plus, il faut détruire
+    this.obj.remove()
   }
 
   /**
@@ -128,6 +131,7 @@ class Panel {
     document.body.appendChild(scrim)
     this.observe()
     this.built = true
+    if ( this.unscrimmed ) unScrim(scrim)
   }
 
   observe(){
