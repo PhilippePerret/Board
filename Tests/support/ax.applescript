@@ -1,0 +1,148 @@
+-- Pilotage de Board.app via System Events, ciblage des éléments par
+-- AXDOMIdentifier (= attribut `id` du DOM dans la WKWebView).
+--
+-- Un seul panneau modal (ConfirmDialog/TextFieldDialog/SelectDialog) est
+-- visible à la fois dans l'app ; les éléments cachés (display:none) ne sont
+-- pas exposés dans l'arbre d'accessibilité, donc une recherche par id
+-- retourne toujours l'élément visible courant, sans ambiguïté.
+--
+-- Usage : osascript Tests/support/ax.applescript <action> <args...>
+--   click        <domId>
+--   click-prefix <domIdPrefix>
+--   set-value        <domId>       <value>
+--   set-value-prefix <domIdPrefix> <value>
+--   get-value        <domId>
+--   get-value-prefix <domIdPrefix>
+--   wait-for        <domId>       [timeoutSeconds]
+--   wait-for-prefix <domIdPrefix> [timeoutSeconds]
+
+use AppleScript version "2.4"
+use scripting additions
+
+property appName : "Board"
+property defaultTimeout : 5
+
+-- Le vocabulaire System Events ("attribute", "UI elements", ...) doit être
+-- résolu à la compilation dans un bloc `tell application "System Events"`
+-- lexical : la portée dynamique d'un `tell` appelant ne suffit pas.
+on axDomId(elem)
+	tell application "System Events"
+		return value of attribute "AXDOMIdentifier" of elem
+	end tell
+end axDomId
+
+on axChildren(elem)
+	tell application "System Events"
+		return UI elements of elem
+	end tell
+end axChildren
+
+-- Recherche récursive par égalité stricte de AXDOMIdentifier
+on findByDomId(elem, domId)
+	try
+		if (my axDomId(elem)) is domId then return elem
+	end try
+	try
+		set kids to my axChildren(elem)
+	on error
+		return missing value
+	end try
+	repeat with kid in kids
+		set found to my findByDomId(kid, domId)
+		if found is not missing value then return found
+	end repeat
+	return missing value
+end findByDomId
+
+-- Recherche récursive par préfixe de AXDOMIdentifier (ids générés
+-- dynamiquement, ex. "__panel-3__")
+on findByDomIdPrefix(elem, prefixStr)
+	try
+		set theId to (my axDomId(elem))
+		if theId starts with prefixStr then return elem
+	end try
+	try
+		set kids to my axChildren(elem)
+	on error
+		return missing value
+	end try
+	repeat with kid in kids
+		set found to my findByDomIdPrefix(kid, prefixStr)
+		if found is not missing value then return found
+	end repeat
+	return missing value
+end findByDomIdPrefix
+
+on rootWindow()
+	tell application "System Events"
+		tell application process appName
+			return window 1
+		end tell
+	end tell
+end rootWindow
+
+on waitForMatch(matcher, needle, timeoutSeconds)
+	set startTime to (current date)
+	repeat
+		set found to missing value
+		try
+			set root to my rootWindow()
+			if matcher is "prefix" then
+				set found to my findByDomIdPrefix(root, needle)
+			else
+				set found to my findByDomId(root, needle)
+			end if
+		end try
+		if found is not missing value then return found
+		if ((current date) - startTime) > timeoutSeconds then
+			error "Timeout : élément introuvable (" & matcher & "=" & needle & ") après " & timeoutSeconds & "s"
+		end if
+		delay 0.2
+	end repeat
+end waitForMatch
+
+on run argv
+	if (count of argv) < 2 then error "Usage: ax.applescript <action> <domId> [value|timeout]"
+	set theAction to item 1 of argv
+	set needle to item 2 of argv
+
+	if theAction is "click" then
+		set el to my waitForMatch("exact", needle, defaultTimeout)
+		tell application "System Events" to perform action "AXPress" of el
+
+	else if theAction is "click-prefix" then
+		set el to my waitForMatch("prefix", needle, defaultTimeout)
+		tell application "System Events" to perform action "AXPress" of el
+
+	else if theAction is "set-value" then
+		set el to my waitForMatch("exact", needle, defaultTimeout)
+		tell application "System Events" to set value of el to (item 3 of argv)
+
+	else if theAction is "set-value-prefix" then
+		set el to my waitForMatch("prefix", needle, defaultTimeout)
+		tell application "System Events" to set value of el to (item 3 of argv)
+
+	else if theAction is "get-value" then
+		set el to my waitForMatch("exact", needle, defaultTimeout)
+		tell application "System Events" to return value of el
+
+	else if theAction is "get-value-prefix" then
+		set el to my waitForMatch("prefix", needle, defaultTimeout)
+		tell application "System Events" to return value of el
+
+	else if theAction is "wait-for" then
+		set t to defaultTimeout
+		if (count of argv) > 2 then set t to (item 3 of argv) as number
+		my waitForMatch("exact", needle, t)
+		return "ok"
+
+	else if theAction is "wait-for-prefix" then
+		set t to defaultTimeout
+		if (count of argv) > 2 then set t to (item 3 of argv) as number
+		my waitForMatch("prefix", needle, t)
+		return "ok"
+
+	else
+		error "Action AppleScript inconnue : " & theAction
+	end if
+end run

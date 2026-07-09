@@ -26,7 +26,7 @@
   <pre id="output" class="hidden" style="white-space:pre-wrap"></pre>
   <footer>
     <div id="message">Message footer</div>
-    <button onclick="essayer()">Essayer</button>
+    <button id="btn-try" onclick="essayer()">Essayer</button>
   </footer>
 
 <!-- 
@@ -45,19 +45,19 @@
     <label>Copier-coller du code</label>
     <textarea id="project-card-editing"></textarea>
   </div>
-  <button onclick="ServicesTools.getInfosFinderWindow.call(ServicesTools)">Information fenêtre Finder</button>
-  <button class="btn-close" onclick="Services.close()">Fermer</button>
+  <button id="btn-info-finder-window" onclick="ServicesTools.getInfosFinderWindow.call(ServicesTools)">Information fenêtre Finder</button>
+  <button id="btn-close-services-panel" class="btn-close" onclick="Services.close()">Fermer</button>
 
 </div>
 
 <div id="tools">
-  <button class="btn-add-project" onclick="Project.addProject()">✚</button>
+  <button id="btn-add-project" class="btn-add-project" onclick="Project.addProject()">✚</button>
     <!-- ======= BOUTONS DES PROJETS ============ -->
     <span id="project-buttons" class="invisible">
-      <button class="btn-move-project-to-left" onclick="Project.moveCurrentToLeft()">←</button>
-      <button class="btn-move-project-to-right" onclick="Project.moveCurrentToRight()">→</button>
-      <button class="btn-remove-project" onclick="Project.removeProject.call(Project, Project.current)">Retirer le projet</button>
-      <button class="btn-deal-with-services" onclick="Services.open.call(Services, Project.current)">Gérer ses services</button>
+      <button id="btn-move-project-to-left" class="btn-move-project-to-left" onclick="Project.moveCurrentToLeft()">←</button>
+      <button id="btn-move-project-to-right" class="btn-move-project-to-right" onclick="Project.moveCurrentToRight()">→</button>
+      <button id="btn-remove-project" class="btn-remove-project" onclick="Project.removeProject.call(Project, Project.current)">Retirer le projet</button>
+      <button id="btn-open-services-panel" class="btn-deal-with-services" onclick="Services.open.call(Services, Project.current)">Gérer ses services</button>
     </span>
 </div>
 

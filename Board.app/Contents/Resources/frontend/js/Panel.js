@@ -116,11 +116,11 @@ class Panel {
     if (this.content) msg.appendChild(this.content)
     // Pied de page
     const footer = DCreate('DIV', {class:'footer'})
-    this.nonBtn = DCreate('BUTTON', {class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
+    this.nonBtn = DCreate('BUTTON', {id: 'btn-non', class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
     footer.appendChild(this.nonBtn)
-    this.midBtn = DCreate('BUTTON', {class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
+    this.midBtn = DCreate('BUTTON', {id: 'btn-mid', class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
     footer.appendChild(this.midBtn)
-    this.ouiBtn = DCreate('BUTTON', {class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
+    this.ouiBtn = DCreate('BUTTON', {id: 'btn-oui', class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
     footer.appendChild(this.ouiBtn)
 
     div.appendChild(footer)

@@ -27,13 +27,33 @@ restore_board() {
   rm -rf "$BACKUP_DIR"
 }
 
-trap restore_board EXIT INT TERM
+CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="$(dirname "$CUR_DIR")"
+
+quit_app() {
+  pkill -x Board 2>/dev/null || true
+}
+
+teardown() {
+  quit_app
+  restore_board
+}
+
+trap teardown EXIT INT TERM
 
 backup_board
 
-CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
+quit_app
+sleep 0.5
+open "$APP_DIR/Board.app"
+sleep 1.5
 
-# === TODO : lancement des specs (Tests/specs/e2e, Tests/specs/unit) ===
-echo "TODO: lancer les specs depuis $CUR_DIR/specs"
+EXIT_CODE=0
+for spec in "$CUR_DIR"/specs/e2e/*.rb; do
+  [ -e "$spec" ] || continue
+  echo "--- $spec ---"
+  ruby "$spec" || EXIT_CODE=1
+done
 
-# la restauration se fait automatiquement via le trap
+# quit + restauration se font automatiquement via le trap (teardown)
+exit $EXIT_CODE
