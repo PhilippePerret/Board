@@ -18,7 +18,7 @@ const TESTS  = [
   ['test-objet', {ceci: 'oui ceci', cela: 'oui cela'}, 'remplace oui ceci et oui cela'],
 ]
 
-//*
+/*
 var errorCount = 0, id, params, expected;
 for (var k in TESTS) {
   [id, params, expected] = TESTS[k]

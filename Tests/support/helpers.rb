@@ -13,9 +13,10 @@ module BoardTest
   BOARD_APP             = File.join(ROOT, 'Board.app')
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
+  LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'js', 'LOC_ERRORS.js')
 
   GREEN  = "\e[32m"
-  RED    = "\e[31m"
+  RED    = "\e[91m"
   YELLOW = "\e[33m"
   RESET  = "\e[0m"
 
@@ -27,17 +28,27 @@ module BoardTest
     raise Pending, message
   end
 
-  # Encadre un test : imprime PASS/FAIL/PENDING et sort avec le code
-  # correspondant (0/1/2), lu par Tests/run_tests.sh pour le résumé.
+  # Lit le message d'erreur directement dans frontend/js/LOC_ERRORS.js
+  # (ERRORS[key]) au lieu de le dupliquer en dur dans les tests.
+  def loc_error(key)
+    content = File.read(LOC_ERRORS_FILE)
+    match = content.match(/'#{Regexp.escape(key)}'\s*:\s*'((?:\\.|[^'\\])*)'/)
+    raise "Clé introuvable dans LOC_ERRORS.js : #{key.inspect}" unless match
+    match[1].gsub(/\\(.)/, '\1')
+  end
+
+  # Encadre un test : imprime le résultat (coche verte/rouge, ligne rouge
+  # entière en cas d'échec) et sort avec le code correspondant (0/1/2),
+  # lu par Tests/run_tests.sh pour le résumé.
   def board_test(name)
     yield
-    puts "#{GREEN}PASS#{RESET}: #{name}"
+    puts "#{GREEN}✓ #{name}#{RESET}"
     exit 0
   rescue Pending => e
-    puts "#{YELLOW}PENDING#{RESET}: #{name} — #{e.message}"
+    puts "#{YELLOW}○ #{name}\n    #{e.message}#{RESET}"
     exit 2
   rescue => e
-    puts "#{RED}FAIL#{RESET}: #{name} — #{e.message}"
+    puts "#{RED}✗ #{name}\n    #{e.message}#{RESET}"
     exit 1
   end
 
@@ -55,9 +66,26 @@ module BoardTest
   def get_value_prefix(prefix)      = osascript(AX_SCRIPT, 'get-value-prefix', prefix)
   def wait_for(dom_id, timeout = 5) = osascript(AX_SCRIPT, 'wait-for', dom_id, timeout)
   def wait_for_prefix(prefix, timeout = 5) = osascript(AX_SCRIPT, 'wait-for-prefix', prefix, timeout)
+  def get_text(dom_id)              = osascript(AX_SCRIPT, 'get-text', dom_id)
+  def get_text_prefix(prefix)       = osascript(AX_SCRIPT, 'get-text-prefix', prefix)
 
   def finder_select(posix_path)
     osascript(FINDER_SCRIPT, 'select', posix_path)
+  end
+
+  def finder_deselect
+    osascript(FINDER_SCRIPT, 'deselect')
+  end
+
+  # Poll côté Ruby (utile pour attendre un texte/état qui dépend d'un
+  # aller-retour backend, pas juste de la présence d'un élément DOM).
+  def wait_until(timeout = 5, interval = 0.2)
+    deadline = Time.now + timeout
+    loop do
+      return true if yield
+      raise "Timeout d'attente dépassé (#{timeout}s)" if Time.now > deadline
+      sleep interval
+    end
   end
 
   def finder_window_ids

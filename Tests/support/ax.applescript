@@ -15,6 +15,8 @@
 --   get-value-prefix <domIdPrefix>
 --   wait-for        <domId>       [timeoutSeconds]
 --   wait-for-prefix <domIdPrefix> [timeoutSeconds]
+--   get-text        <domId>        (texte de tous les AXStaticText descendants, concaténés)
+--   get-text-prefix <domIdPrefix>
 
 use AppleScript version "2.4"
 use scripting additions
@@ -36,6 +38,34 @@ on axChildren(elem)
 		return UI elements of elem
 	end tell
 end axChildren
+
+on axRole(elem)
+	tell application "System Events"
+		return role of elem
+	end tell
+end axRole
+
+on axValue(elem)
+	tell application "System Events"
+		return value of elem
+	end tell
+end axValue
+
+-- Concatène le texte de tous les AXStaticText descendants (le contenu
+-- textuel d'un élément non-formulaire, ex. #message, n'est pas exposé
+-- directement sur lui mais sur ses enfants AXStaticText).
+on collectText(elem)
+	if (my axRole(elem)) is "AXStaticText" then
+		set v to my axValue(elem)
+		if v is missing value then return ""
+		return (v as text)
+	end if
+	set result to ""
+	repeat with kid in (my axChildren(elem))
+		set result to result & (my collectText(kid))
+	end repeat
+	return result
+end collectText
 
 -- Recherche récursive par égalité stricte de AXDOMIdentifier
 on findByDomId(elem, domId)
@@ -141,6 +171,14 @@ on run argv
 		if (count of argv) > 2 then set t to (item 3 of argv) as number
 		my waitForMatch("prefix", needle, t)
 		return "ok"
+
+	else if theAction is "get-text" then
+		set el to my waitForMatch("exact", needle, defaultTimeout)
+		return my collectText(el)
+
+	else if theAction is "get-text-prefix" then
+		set el to my waitForMatch("prefix", needle, defaultTimeout)
+		return my collectText(el)
 
 	else
 		error "Action AppleScript inconnue : " & theAction

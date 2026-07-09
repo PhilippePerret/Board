@@ -4,6 +4,7 @@
 --
 -- Usage : osascript Tests/support/finder.applescript <action> [args]
 --   select       <posixPath>
+--   deselect                    (vide la sélection Finder)
 --   window-ids                 (id des fenêtres Finder ouvertes, une par ligne)
 --   close-window <id>          (ferme la fenêtre si elle existe encore)
 
@@ -13,6 +14,11 @@ on run argv
 	if theAction is "select" then
 		tell application "Finder"
 			select (POSIX file (item 2 of argv) as alias)
+		end tell
+
+	else if theAction is "deselect" then
+		tell application "Finder"
+			set selection to {}
 		end tell
 
 	else if theAction is "window-ids" then

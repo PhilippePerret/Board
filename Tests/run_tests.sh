@@ -43,37 +43,54 @@ trap teardown EXIT INT TERM
 
 backup_board
 
+cp -R "$APP_DIR/frontend/"* "$APP_DIR/Board.app/Contents/Resources/frontend/"
+cp -R "$APP_DIR/backend/"* "$APP_DIR/Board.app/Contents/Resources/backend/"
+
 quit_app
 sleep 0.5
 open "$APP_DIR/Board.app"
 sleep 1.5
 
 GREEN=$'\e[32m'
-RED=$'\e[31m'
+RED=$'\e[91m'
 YELLOW=$'\e[33m'
+WHITE=$'\e[37m'
+GRAY=$'\e[90m'
 RESET=$'\e[0m'
 
 TOTAL=0
 NB_PASS=0
 NB_FAIL=0
 NB_PENDING=0
+FAILURES=()
 
 for spec in "$CUR_DIR"/specs/e2e/*.rb; do
   [ -e "$spec" ] || continue
-  echo "--- $spec ---"
-  if ruby "$spec"; then code=0; else code=$?; fi
+  rel_spec="${spec#$APP_DIR/}"
+  echo "${GRAY}--- $rel_spec ---${RESET}"
+  if output=$(ruby "$spec" 2>&1); then code=0; else code=$?; fi
+  echo "$output"
   TOTAL=$((TOTAL + 1))
   case $code in
     0) NB_PASS=$((NB_PASS + 1)) ;;
     2) NB_PENDING=$((NB_PENDING + 1)) ;;
-    *) NB_FAIL=$((NB_FAIL + 1)) ;;
+    *) NB_FAIL=$((NB_FAIL + 1)); FAILURES+=("$output") ;;
   esac
 done
 
 if [ "$NB_FAIL" -gt 0 ]; then MAIN_COLOR=$RED; else MAIN_COLOR=$GREEN; fi
 if [ "$NB_PENDING" -gt 0 ]; then PENDING_COLOR=$YELLOW; else PENDING_COLOR=$MAIN_COLOR; fi
 
+if [ "$NB_FAIL" -gt 0 ]; then
+  echo ""
+  echo "${RED}Échecs :${RESET}"
+  for f in "${FAILURES[@]}"; do
+    echo "$f"
+  done
+fi
+
 echo ""
+echo "${WHITE}-------------------${RESET}"
 echo "${MAIN_COLOR}Success: ${NB_PASS}  Failures: ${NB_FAIL}  ${PENDING_COLOR}Pendings: ${NB_PENDING}${MAIN_COLOR}  Test count: ${TOTAL}${RESET}"
 
 # quit + restauration se font automatiquement via le trap (teardown)
