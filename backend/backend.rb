@@ -25,9 +25,9 @@ begin
   when 'remove-project'
     id = request["id"]
     project_id = request['projectId']
-    ok = (File.exist?(project_path(project_id))
+    ok = File.exist?(project_path(project_id))
     if ok
-      APP_DATA['project-out'] << APP_DATA['project-in'].delete(project_id)
+      APP_DATA['projects-out'] << APP_DATA['project-in'].delete(project_id)
       save_app_data
     else
       error = "Le projet introuvable : #{project_id} (dans #{PROJECT_CARD_FOLDER})"
@@ -37,7 +37,10 @@ begin
 
   when "save-project"
     data = request["data"]
-    IO.write(project_path(data['id']), data.to_yaml)
+    project_id = data['id']
+    IO.write(project_path(project_id), data.to_yaml)
+    APP_DATA['projects-in'] << project_id unless APP_DATA['projects-in'].include?(project_id)
+    save_app_data
 
   # === Chargement de :what ===
   when "load"

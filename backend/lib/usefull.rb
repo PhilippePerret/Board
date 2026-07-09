@@ -28,7 +28,7 @@ def save_app_data
 end
 #
 def project_path(project_id)
-  File.join(PROJECT_CARD_FOLDER, "#{project_id}")
+  File.join(PROJECT_CARD_FOLDER, "#{project_id}.yaml")
 end
 
   
