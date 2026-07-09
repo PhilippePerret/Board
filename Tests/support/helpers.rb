@@ -14,7 +14,32 @@ module BoardTest
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
 
+  GREEN  = "\e[32m"
+  RED    = "\e[31m"
+  YELLOW = "\e[33m"
+  RESET  = "\e[0m"
+
+  class Pending < StandardError; end
+
   module_function
+
+  def pending(message)
+    raise Pending, message
+  end
+
+  # Encadre un test : imprime PASS/FAIL/PENDING et sort avec le code
+  # correspondant (0/1/2), lu par Tests/run_tests.sh pour le résumé.
+  def board_test(name)
+    yield
+    puts "#{GREEN}PASS#{RESET}: #{name}"
+    exit 0
+  rescue Pending => e
+    puts "#{YELLOW}PENDING#{RESET}: #{name} — #{e.message}"
+    exit 2
+  rescue => e
+    puts "#{RED}FAIL#{RESET}: #{name} — #{e.message}"
+    exit 1
+  end
 
   def osascript(script, *args)
     out = IO.popen(['osascript', script, *args.map(&:to_s)], err: [:child, :out], &:read)

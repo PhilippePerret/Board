@@ -48,12 +48,33 @@ sleep 0.5
 open "$APP_DIR/Board.app"
 sleep 1.5
 
-EXIT_CODE=0
+GREEN=$'\e[32m'
+RED=$'\e[31m'
+YELLOW=$'\e[33m'
+RESET=$'\e[0m'
+
+TOTAL=0
+NB_PASS=0
+NB_FAIL=0
+NB_PENDING=0
+
 for spec in "$CUR_DIR"/specs/e2e/*.rb; do
   [ -e "$spec" ] || continue
   echo "--- $spec ---"
-  ruby "$spec" || EXIT_CODE=1
+  if ruby "$spec"; then code=0; else code=$?; fi
+  TOTAL=$((TOTAL + 1))
+  case $code in
+    0) NB_PASS=$((NB_PASS + 1)) ;;
+    2) NB_PENDING=$((NB_PENDING + 1)) ;;
+    *) NB_FAIL=$((NB_FAIL + 1)) ;;
+  esac
 done
 
+if [ "$NB_FAIL" -gt 0 ]; then MAIN_COLOR=$RED; else MAIN_COLOR=$GREEN; fi
+if [ "$NB_PENDING" -gt 0 ]; then PENDING_COLOR=$YELLOW; else PENDING_COLOR=$MAIN_COLOR; fi
+
+echo ""
+echo "${MAIN_COLOR}Success: ${NB_PASS}  Failures: ${NB_FAIL}  ${PENDING_COLOR}Pendings: ${NB_PENDING}${MAIN_COLOR}  Test count: ${TOTAL}${RESET}"
+
 # quit + restauration se font automatiquement via le trap (teardown)
-exit $EXIT_CODE
+[ "$NB_FAIL" -eq 0 ]

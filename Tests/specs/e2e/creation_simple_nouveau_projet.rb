@@ -47,16 +47,10 @@ def run_test
     unless data['title'] == 'Tout premier projet'
       raise "Titre attendu 'Tout premier projet', trouvé #{data['title'].inspect}"
     end
-    unless data['path'] == fixture_dir
+    unless File.realpath(data['path']) == File.realpath(fixture_dir)
       raise "Path attendu #{fixture_dir.inspect}, trouvé #{data['path'].inspect}"
     end
   end
 end
 
-begin
-  run_test
-  puts "PASS: création simple d'un nouveau projet"
-rescue => e
-  puts "FAIL: création simple d'un nouveau projet — #{e.message}"
-  exit 1
-end
+board_test("création simple d'un nouveau projet") { run_test }
