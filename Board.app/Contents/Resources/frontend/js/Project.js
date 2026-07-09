@@ -255,9 +255,10 @@ class Project {
 
   buildCard(){
     if (this.obj) this.obj.remove()
-    const div = DCreate('DIV', {id: this.id, class: 'project'})
+    const divId = `project-${this.id}`
+    const div = DCreate('DIV', {id: divId, class: 'project'})
     this.obj = div
-    const tit = DCreate('DIV', {class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
+    const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
     this.divTitle = tit
     div.appendChild(tit)
     const path  = DCreate('DIV', {class:'path', text: this.path})

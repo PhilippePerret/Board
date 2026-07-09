@@ -27,7 +27,7 @@ begin
     project_id = request['projectId']
     ok = File.exist?(project_path(project_id))
     if ok
-      APP_DATA['projects-out'] << APP_DATA['project-in'].delete(project_id)
+      APP_DATA['projects-out'] << APP_DATA['projects-in'].delete(project_id)
       save_app_data
     else
       error = "Le projet introuvable : #{project_id} (dans #{PROJECT_CARD_FOLDER})"

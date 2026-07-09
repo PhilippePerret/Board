@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
+exec "$CUR_DIR/Tests/run_tests.sh" "$@"

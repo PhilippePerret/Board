@@ -17,6 +17,7 @@
 --   wait-for-prefix <domIdPrefix> [timeoutSeconds]
 --   get-text        <domId>        (texte de tous les AXStaticText descendants, concaténés)
 --   get-text-prefix <domIdPrefix>
+--   exists          <domId>        ("true"/"false", recherche immédiate, pas d'attente)
 
 use AppleScript version "2.4"
 use scripting additions
@@ -185,6 +186,14 @@ on run argv
 	else if theAction is "get-text-prefix" then
 		set el to my waitForMatch("prefix", needle, defaultTimeout)
 		return my collectText(el)
+
+	else if theAction is "exists" then
+		set found to my findByDomId(my rootWindow(), needle)
+		if found is missing value then
+			return "false"
+		else
+			return "true"
+		end if
 
 	else
 		error "Action AppleScript inconnue : " & theAction
