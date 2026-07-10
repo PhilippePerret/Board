@@ -1,4 +1,16 @@
 #!/bin/zsh
 
+# Pour modifier le logiciel de test, utiliser "-v <logiciel>"
+# Par défaut : "-v base" pour 'tests/version-base/'
+
+tvers="base"
+while getopts "v:b:c:" opt; 
+  do case $opt in v) tvers=$OPTARG;;
+    b) b=$OPTARG;; 
+    c) =$OPTARG;; 
+  esac; 
+done
+
+TEST_VERSION="$tvers"
 CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$CUR_DIR/Tests/run_tests.sh" "$@"
+exec "$CUR_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "$@"

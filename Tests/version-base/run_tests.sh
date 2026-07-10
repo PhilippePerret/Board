@@ -27,8 +27,13 @@ restore_board() {
   rm -rf "$BACKUP_DIR"
 }
 
-CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
-APP_DIR="$(dirname "$CUR_DIR")"
+# VTEST_DIR = Dossier de la version de test (base, améliorée, etc.)
+VTEST_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Dossier principal des tests de l'application
+MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
+# Dossier contenant les tests eux-mêmes
+SPECS_DIR="$MAIN_TESTS_DIR/specs"
+APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 
 quit_app() {
   pkill -x Board 2>/dev/null || true
@@ -58,7 +63,7 @@ for i in 1 2 3; do
 done
 [ "$opened" -eq 1 ] || { echo "open Board.app a échoué après 3 essais" >&2; exit 1; }
 
-osascript "$CUR_DIR/support/ax.applescript" wait-for btn-add-project 10 >/dev/null
+osascript "$MAIN_TESTS_DIR/support/ax.applescript" wait-for btn-add-project 10 >/dev/null
 
 GREEN=$'\e[32m'
 RED=$'\e[91m'
@@ -86,16 +91,16 @@ RESET=$'\e[0m'
 resolve_path() {
   if [ -e "$1" ]; then
     echo "$1"
-  elif [ -e "$CUR_DIR/$1" ]; then
-    echo "$CUR_DIR/$1"
-  elif [ -e "$CUR_DIR/specs/$1" ]; then
-    echo "$CUR_DIR/specs/$1"
+  elif [ -e "$MAIN_TESTS_DIR/$1" ]; then
+    echo "$MAIN_TESTS_DIR/$1"
+  elif [ -e "$SPECS_DIR/$1" ]; then
+    echo "$SPECS_DIR/$1"
   fi
 }
 
 ALL_SPECS=()
 if [ "$#" -eq 0 ]; then
-  for f in "$CUR_DIR"/specs/e2e/*.rb; do
+  for f in "$SPECS_DIR/e2e/*.rb"; do
     [ -e "$f" ] && ALL_SPECS+=("$f")
   done
 else
@@ -112,13 +117,13 @@ else
     # pas un chemin littéral : traité comme motif, relatif à Tests/specs/
     matched=0
     while IFS= read -r f; do
-      relf="${f#$CUR_DIR/specs/}"
+      relf="${f#$SPECS_DIR/}"
       base="${f##*/}"
       if [[ "$relf" == $~arg || "$f" == $~arg || "$base" == $~arg ]]; then
         ALL_SPECS+=("$f")
         matched=1
       fi
-    done < <(find "$CUR_DIR/specs" -name '*.rb' | sort)
+    done < <(find "$SPECS_DIR" -name '*.rb' | sort)
     [ "$matched" -eq 0 ] && echo "${RED}Aucun test ne correspond à : $arg${RESET}" >&2
   done
 fi
@@ -144,7 +149,7 @@ FAILURES=()
 
 for spec in "${SPECS[@]}"; do
   [ -e "$spec" ] || continue
-  rel_spec="${spec#$CUR_DIR/}"
+  rel_spec="${spec#$VTEST_DIR/}"
   echo "${GRAY}--- $rel_spec ---${RESET}"
   if output=$(ruby "$spec" 2>&1); then code=0; else code=$?; fi
   echo "$output"

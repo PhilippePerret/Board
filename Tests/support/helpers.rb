@@ -7,7 +7,7 @@ require 'fileutils'
 require 'tmpdir'
 
 module BoardTest
-  ROOT                 = File.expand_path('../..', __dir__)
+  ROOT                  = File.expand_path('../..', __dir__)
   AX_SCRIPT             = File.join(ROOT, 'Tests', 'support', 'ax.applescript')
   FINDER_SCRIPT          = File.join(ROOT, 'Tests', 'support', 'finder.applescript')
   BOARD_APP             = File.join(ROOT, 'Board.app')
