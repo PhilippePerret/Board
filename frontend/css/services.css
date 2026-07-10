@@ -51,7 +51,7 @@ fieldset.services .service {
   cursor: pointer;
 }
 fieldset.services .service:active {
-  background-color: #444;
+  background-color: rgb(14, 14, 14);
 }
   
 .service * {
