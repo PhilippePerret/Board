@@ -4,6 +4,8 @@
 
 Comme je n'aime pas vraiment les promesses (`Promise`), je suis revenu dans cette application à un traitement à l'ancienne avec les _callbacks_.
 
+include::xdev/projets.adoc[]
+
 include::xdev/collect-information.adoc[]
 
 include::xdev/definition-services.adoc[]

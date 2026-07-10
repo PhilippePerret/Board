@@ -1,0 +1,3 @@
+=== Les projet ===
+
+La persistance de l'ordre est définie dans `appdata.json`, dans la propriété `projects-in`. Cette donnée contient l'identifiant des projets, donc le root du fichier YAML de leurs données.

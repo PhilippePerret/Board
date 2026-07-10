@@ -2,7 +2,7 @@
 
 _Note : Ce fichier définit des processus qui seront en pratique plus tard. Pour le moment, l'utilisateur remplit des fiches projet qui le définissent explicitement._
 
-Chaque <<service>> a besoin de collecter des informations. Pour ce faire, il y a :
+Chaque <<services, service>> a besoin de collecter des informations. Pour ce faire, il y a :
 
 - les informations directement demandées à l'utilisateur (p.e. : titre à donner à un service)
 - les informations récupérées automatiquement par script (p.e. : information sur la fenêtre dans le Finder)
