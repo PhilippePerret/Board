@@ -10,6 +10,8 @@
 
 == Plus tard
 
+(si le test commence par "[BUG]", on retire évidemment ce "[BUG]" du nom du test)
+- [BUG] On peut cliquer deux fois sur le même service
 - Ajout d'un service "autre"
   setup : un projet
 - Ajout d'un service au startup
