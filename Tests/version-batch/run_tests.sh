@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-# Suite de tests d'intégration de Board.
+# Suite de tests d'intégration de Board — moteur "batch" (BOARD_TEST_ENGINE
+# force Tests/support/helpers.rb à charger version-batch/support/helpers.rb :
+# les actions sans valeur de retour (click, set_value...) sont regroupées et
+# exécutées en un seul appel osascript au lieu d'un par action).
 #
 # - sauvegarde ~/Library/Application Support/Board avant la suite
 # - restaure ce dossier tel quel (présent ou absent) après la suite,
@@ -153,7 +156,7 @@ for spec in "${SPECS[@]}"; do
   rel_spec="${spec#$VTEST_DIR/}"
   echo "${GRAY}--- $rel_spec ---${RESET}"
   t_start=$(date +%s.%N)
-  if output=$(ruby "$spec" 2>&1); then code=0; else code=$?; fi
+  if output=$(BOARD_TEST_ENGINE=batch ruby "$spec" 2>&1); then code=0; else code=$?; fi
   t_end=$(date +%s.%N)
   spec_dur=$(awk -v a="$t_start" -v b="$t_end" 'BEGIN{printf "%.3f", b-a}')
   TOTAL_DUR=$(awk -v t="$TOTAL_DUR" -v d="$spec_dur" 'BEGIN{printf "%.3f", t+d}')
@@ -181,7 +184,7 @@ fi
 echo ""
 echo "${WHITE}-------------------${RESET}"
 echo "${MAIN_COLOR}Success: ${NB_PASS}  Failures: ${NB_FAIL}  ${PENDING_COLOR}Pendings: ${NB_PENDING}${MAIN_COLOR}  Test count: ${TOTAL}${RESET}"
-echo "${WHITE}Durée totale (moteur : base) : ${TOTAL_DUR}s${RESET}"
+echo "${WHITE}Durée totale (moteur : batch) : ${TOTAL_DUR}s${RESET}"
 
 # quit + restauration se font automatiquement via le trap (teardown)
 [ "$NB_FAIL" -eq 0 ]

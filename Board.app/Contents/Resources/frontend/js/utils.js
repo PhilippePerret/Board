@@ -1,3 +1,16 @@
+/**
+ * Utilisation 
+ * const fonction = debounce( (arg) => {
+ *  // opération
+ * }, delai_mms)
+ */
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
 
 function textSubstitute(msg, params){
   if (params) {
@@ -23,6 +36,29 @@ function textSubstitute(msg, params){
 // Pour retirer le scrimmage (quand on veut voir derrière)
 function unScrim(scrim){
   scrim.style = "backdrop-filter: none; background: rgba(0,0,0,0.1);"
+}
+
+// Historique
+function historize(msg) {
+  console.log("%c" + msg, 'color: #b9b9b9;')
+  if (undefined == window.HISTORIQUE) window.HISTORIQUE = []
+  window.HISTORIQUE.push(msg)
+}
+
+function jsonize(data){
+  return JSON.stringify(data)
+}
+function message(msg){
+  document.querySelector('#message').innerHTML = '<span class="notice">' + msg + '</span>'
+  return true
+}
+function error(msg){
+  document.querySelector('#message').innerHTML = '<span class="error">' + msg + '</span>'
+  return false
+}
+
+function raise(msg){
+  throw new Error(msg)
 }
 
 // 'mon-change-on' => MonChangeOn

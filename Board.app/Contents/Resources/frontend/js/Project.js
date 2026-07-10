@@ -4,6 +4,31 @@ class Project {
     return Date.now() + Math.random().toString(16).slice(2);
   }
 
+  /**
+   * Chargement de tous les projets
+   * ------------------------------
+   * On remonte les données de tous les projets + leur ordre, 
+   * défini dans appdata['projects-in']
+   */
+  static initAllProjects(projectsData){
+    historize("-> Project#initAllProjects")
+    // Note : les projest sont remontés classés
+    this.sortedProjects = projectsData
+    this.sortedProjects.map(dataProjet => {
+      new Project(dataProjet).buildCard()
+    })
+    message("Projets courants affichés.")
+  } 
+
+  // Boucler une méthode sur tous les projets
+  static mapAll(method) {
+    if ('string' == typeof method) {
+      this.sortedProjects.map(projet => projet[methdod].call(projet))
+    } else {
+      this.sortedProjects.map(projet => method(projet))
+    }
+  }
+
   // 
   /**
    * === CRÉATION D'UN NOUVEAU PROJET ===
@@ -103,13 +128,6 @@ class Project {
     this.maskProjectButtons()
   }
   
-  static dispatch(retour){
-    // console.log("retour", retour)
-    message("Travaux courants chargés.")
-    feedback(JSON.stringify(retour))
-    retour.data.forEach(projectCard => new Project(projectCard).buildCard())
-    message("Projets courants affichés.")
-    } 
   static get container(){ return this._container || (this._container = document.querySelector('#project-cards-container'))}
 
   static get ensureProjects() {
@@ -128,14 +146,22 @@ class Project {
     message("Projet retiré de la liste des projets.")
   }
 
+
+
   // ---- Pour déplacer le projet couvant
   static moveCurrentToLeft(){
     const proj = this.current
     proj.obj.parentNode.insertBefore(proj.obj, proj.obj.previousSibling)
+    App.updataData('projects-in')
   }
   static moveCurrentToRight(){
     const proj = this.current
     proj.obj.parentNode.insertBefore(proj.obj, proj.obj.nextSibling?.nextSibling)
+    App.updateData('projects-in')
+  }
+  // Retourne le nouvel ordre
+  static getProjectsOrder(){
+    return DGetAll('div.project', this.container).map( div => div.dataset.projectId)
   }
 
   constructor(data){
@@ -257,6 +283,7 @@ class Project {
     if (this.obj) this.obj.remove()
     const divId = `project-${this.id}`
     const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})
+    div.dataset.projectId = this.id
     this.obj = div
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
     this.divTitle = tit

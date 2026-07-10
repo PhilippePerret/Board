@@ -20,6 +20,12 @@
 --   exists          <domId>        ("true"/"false", recherche immédiate, pas d'attente)
 --   click-parent        <domId>        (clique le parent AX de l'élément trouvé)
 --   click-parent-prefix <domIdPrefix>
+--   batch <payload>  (moteur "version-batch" — exécute plusieurs actions sans
+--     valeur de retour en un seul process osascript. <payload> : lignes
+--     séparées par des retours à la ligne, chaque ligne = action, needle et
+--     éventuel 3e argument séparés par des tabulations. Actions supportées :
+--     click, click-prefix, set-value, set-value-prefix. Échoue au premier
+--     item en erreur, message préfixé par son rang dans le batch.)
 
 use AppleScript version "2.4"
 use scripting additions
@@ -150,11 +156,10 @@ on waitForMatch(matcher, needle, timeoutSeconds)
 	end repeat
 end waitForMatch
 
-on run argv
-	if (count of argv) < 2 then error "Usage: ax.applescript <action> <domId> [value|timeout]"
-	set theAction to item 1 of argv
-	set needle to item 2 of argv
-
+-- Actions sans valeur de retour, factorisées pour être appelables une par
+-- une (on run) ou en séquence (action "batch", cf. plus bas). extraArg n'est
+-- utilisé que par set-value(-prefix) ; passer "" pour les autres.
+on performOne(theAction, needle, extraArg)
 	if theAction is "click" then
 		set el to my waitForMatch("exact", needle, defaultTimeout)
 		tell application "System Events" to perform action "AXPress" of el
@@ -165,11 +170,57 @@ on run argv
 
 	else if theAction is "set-value" then
 		set el to my waitForMatch("exact", needle, defaultTimeout)
-		tell application "System Events" to set value of el to (item 3 of argv)
+		tell application "System Events" to set value of el to extraArg
 
 	else if theAction is "set-value-prefix" then
 		set el to my waitForMatch("prefix", needle, defaultTimeout)
-		tell application "System Events" to set value of el to (item 3 of argv)
+		tell application "System Events" to set value of el to extraArg
+
+	else
+		error "Action batch inconnue : " & theAction
+	end if
+end performOne
+
+on run argv
+	if (count of argv) < 2 then error "Usage: ax.applescript <action> <domId> [value|timeout]"
+	set theAction to item 1 of argv
+	set needle to item 2 of argv
+
+	if theAction is "click" then
+		my performOne("click", needle, "")
+
+	else if theAction is "click-prefix" then
+		my performOne("click-prefix", needle, "")
+
+	else if theAction is "set-value" then
+		my performOne("set-value", needle, (item 3 of argv))
+
+	else if theAction is "set-value-prefix" then
+		my performOne("set-value-prefix", needle, (item 3 of argv))
+
+	else if theAction is "batch" then
+		set batchText to needle
+		set AppleScript's text item delimiters to linefeed
+		set theLines to text items of batchText
+		set AppleScript's text item delimiters to ""
+		repeat with i from 1 to (count of theLines)
+			set theLine to item i of theLines
+			if theLine is not "" then
+				set AppleScript's text item delimiters to tab
+				set theFields to text items of theLine
+				set AppleScript's text item delimiters to ""
+				set subAction to item 1 of theFields
+				set subNeedle to item 2 of theFields
+				set subExtra to ""
+				if (count of theFields) > 2 then set subExtra to item 3 of theFields
+				try
+					my performOne(subAction, subNeedle, subExtra)
+				on error errMsg
+					error "batch item " & i & " (" & subAction & " " & subNeedle & ") a échoué : " & errMsg
+				end try
+			end if
+		end repeat
+		return "ok"
 
 	else if theAction is "get-value" then
 		set el to my waitForMatch("exact", needle, defaultTimeout)

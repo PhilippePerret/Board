@@ -42,23 +42,35 @@ begin
     APP_DATA['projects-in'] << project_id unless APP_DATA['projects-in'].include?(project_id)
     save_app_data
 
-  # === Chargement de :what ===
-  when "load"
-    case request['what']
+  # === Sauvegarde des données de l'application ===
 
-    # === Chargement des projets ===
-    when 'projects'
-      # Chargement de tous les projets
-      projects_data =
-        APP_DATA['projects-in'].map do |project_id|
-          YAML.safe_load(IO.read(project_path(project_id)))
-        end
-      returned_data = projects_data
-    else
-      ok = false
-      returned_message = "Données inconnues : what = #{request['what']}"
-      returned_data     = {}
-    end
+  when 'save-app-data'
+    IO.write(APP_DATA_FILE, request['data'].to_json)
+    ok = true
+    returned_message = "Données de l'application sauvées."
+   
+  # à l'initialisation (App.init)
+  when 'load-all'
+    # Chargement de toutes les données de projets, classés
+    projects_data =
+      APP_DATA['projects-in'].map do |project_id|
+        YAML.safe_load(IO.read(project_path(project_id)))
+      end
+    returned_data = {
+      appData: APP_DATA,
+      projectsData: projects_data
+    }
+    
+    # === Chargement de :what ===
+  # when "load"
+  #   case request['what']
+
+  #   # === Chargement des projets ===
+  #   else
+  #     ok = false
+  #     returned_message = "Données inconnues : what = #{request['what']}"
+  #     returned_data     = {}
+  #   end
 
 
   # Lancement d'un script osascript

@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-# Suite de tests d'intégration de Board.
+# Suite de tests d'intégration de Board — moteur "compiled" (même
+# ax.applescript que le moteur base, mais précompilé une fois via osacompile
+# en support/ax.scpt : élimine le coût de parsing/compilation AppleScript à
+# chaque appel osascript, sans changer le nombre d'appels ni leur contenu).
 #
 # - sauvegarde ~/Library/Application Support/Board avant la suite
 # - restaure ce dossier tel quel (présent ou absent) après la suite,
@@ -35,6 +38,14 @@ MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
 SPECS_DIR="$MAIN_TESTS_DIR/specs"
 APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 
+# Recompile uniquement si absent ou si la source a changé depuis.
+AX_SOURCE="$MAIN_TESTS_DIR/support/ax.applescript"
+AX_COMPILED="$VTEST_DIR/support/ax.scpt"
+if [ ! -e "$AX_COMPILED" ] || [ "$AX_SOURCE" -nt "$AX_COMPILED" ]; then
+  osacompile -o "$AX_COMPILED" "$AX_SOURCE"
+fi
+export BOARD_TEST_AX_SCRIPT="$AX_COMPILED"
+
 quit_app() {
   pkill -x Board 2>/dev/null || true
 }
@@ -63,7 +74,7 @@ for i in 1 2 3; do
 done
 [ "$opened" -eq 1 ] || { echo "open Board.app a échoué après 3 essais" >&2; exit 1; }
 
-osascript "$MAIN_TESTS_DIR/support/ax.applescript" wait-for btn-add-project 10 >/dev/null
+osascript "$AX_COMPILED" wait-for btn-add-project 10 >/dev/null
 
 GREEN=$'\e[32m'
 RED=$'\e[91m'
@@ -181,7 +192,7 @@ fi
 echo ""
 echo "${WHITE}-------------------${RESET}"
 echo "${MAIN_COLOR}Success: ${NB_PASS}  Failures: ${NB_FAIL}  ${PENDING_COLOR}Pendings: ${NB_PENDING}${MAIN_COLOR}  Test count: ${TOTAL}${RESET}"
-echo "${WHITE}Durée totale (moteur : base) : ${TOTAL_DUR}s${RESET}"
+echo "${WHITE}Durée totale (moteur : compiled) : ${TOTAL_DUR}s${RESET}"
 
 # quit + restauration se font automatiquement via le trap (teardown)
 [ "$NB_FAIL" -eq 0 ]

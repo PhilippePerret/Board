@@ -3,7 +3,8 @@
  * 
  * Utilitaire pour DOM
  * 
- * verion 2.1
+ * verion 2.2
+ *  DGetAll retourne un Array
  * 
  * 
  */
@@ -38,7 +39,9 @@ function DGet(selector, container){
 }
 function DGetAll(selector, container){
   container = container || document
-  return container.querySelectorAll(selector)
+  const asArray = []
+  container.querySelectorAll(selector).forEach(el => asArray.push(el))
+  return asArray
 }
 
 function DCreate(tagName,attrs){

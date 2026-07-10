@@ -1,16 +1,25 @@
 #!/bin/zsh
 
-# Pour modifier le logiciel de test, utiliser "-v <logiciel>"
+# Pour modifier le logiciel de test, utiliser "-v <logiciel>", à n'importe
+# quelle position parmi les arguments (avant, après ou entre les motifs de
+# specs).
 # Par défaut : "-v base" pour 'tests/version-base/'
 
 tvers="base"
-while getopts "v:b:c:" opt; 
-  do case $opt in v) tvers=$OPTARG;;
-    b) b=$OPTARG;; 
-    c) =$OPTARG;; 
-  esac; 
+args=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -v)
+      tvers="$2"
+      shift 2
+      ;;
+    *)
+      args+=("$1")
+      shift
+      ;;
+  esac
 done
 
 TEST_VERSION="$tvers"
 CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$CUR_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "$@"
+exec "$CUR_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "${args[@]}"
