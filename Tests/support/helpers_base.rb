@@ -234,15 +234,16 @@ module BoardTest
   end
 
   # Sélectionne le projet +project_id+, ouvre son panneau de services, glisse
-  # le service +service_id+ jusqu'à "Autres services", puis répond aux 3
-  # boîtes de dialogue qui suivent (nom, fenêtre Finder, sidebar) — cf.
+  # le service +service_id+ jusqu'à "Autres services" (ou "Services au
+  # démarrage" si where: 'startup'), puis répond aux 3 boîtes de dialogue qui
+  # suivent (nom, fenêtre Finder, sidebar) — cf.
   # Tests/specs/e2e/attribution_service.rb pour le détail de ce déroulé.
   # +fixture_dir+ : dossier réel du projet (nécessaire pour l'étape fenêtre
   # Finder). Retourne l'uuid attribué au service une fois attaché et
   # confirmé persisté dans la carte projet.
-  def attach_service_to_project(service_id, project_id, fixture_dir, custom_name:)
+  def attach_service_to_project(service_id, project_id, fixture_dir, custom_name:, where: 'others')
     card = "project-#{project_id}"
-    others_field = "project-#{project_id}-others-field"
+    drop_field = "project-#{project_id}-#{where}-field"
 
     wait_for(card)
     click(card)
@@ -250,7 +251,7 @@ module BoardTest
     click('btn-open-services-panel')
     wait_for(service_id)
 
-    drag(service_id, others_field)
+    drag(service_id, drop_field)
 
     wait_for('__service_name__', 10)
     set_value('__service_name__', custom_name)
@@ -265,8 +266,8 @@ module BoardTest
 
     uuid = nil
     wait_until(10, desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do
-      others = read_project_card(project_id)['services']['others']
-      found = others.is_a?(Array) && others.find { |s| Array(s['name']).include?(custom_name) }
+      list = read_project_card(project_id)['services'][where]
+      found = list.is_a?(Array) && list.find { |s| Array(s['name']).include?(custom_name) }
       uuid = found['uuid'] if found
       !!found
     end

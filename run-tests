@@ -3,9 +3,9 @@
 # Pour modifier le logiciel de test, utiliser "-v <logiciel>", à n'importe
 # quelle position parmi les arguments (avant, après ou entre les motifs de
 # specs).
-# Par défaut : "-v swift" pour 'tests/version-swift/'
+# Par défaut : "-v pont" pour 'tests/version-pont/'
 
-tvers="swift"
+tvers="pont"
 args=()
 while [ "$#" -gt 0 ]; do
   case "$1" in

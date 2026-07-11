@@ -254,14 +254,46 @@ class Project {
     service.uuid = Project.uniqId()
     service.type = where
     this.services[where].push(service)
-    const startup = (where == 'startup')
     const card = this.getServiceCard(service)
-    this[startup?'startupField':'othersField'].appendChild(card)
+    if (where == 'startup') {
+      // Premier service au démarrage ajouté en direct (glisser-déposer, pas
+      // au chargement) : le bouton "GO !" et son conteneur n'existent pas
+      // encore (buildCard() ne les crée que si hasStartup était vrai AU
+      // CHARGEMENT) — on les construit ici à la demande, une seule fois.
+      this.buildStartupContainer()
+      this.divSServices.appendChild(card)
+    } else {
+      this.othersField.appendChild(card)
+    }
     this.save()
   }
 
   getServiceCard(service){
     return service.projectCard(this)
+  }
+
+  // Construit le bouton "GO !" + son conteneur masqué (révélé au survol),
+  // qui reçoit les cartes des services au démarrage — idempotent, pour être
+  // appelable aussi bien depuis buildCard() (chargement, services déjà
+  // présents) que depuis addService() (premier ajout en direct).
+  buildStartupContainer(){
+    if (this.startupContainer) return this.startupContainer
+    const startupContainer = DCreate('DIV', {class:'startup-services', style:'position:relative;min-height:100px;'})
+    const divSServices = DCreate('DIV', {id:`${this.obj.id}-startup-services`, class: 'startup-services-panel hidden'})
+    const divBtnStartup = DCreate('DIV', {class:'service'})
+    this.btnStartup = DCreate('DIV', {id:`${this.obj.id}-btn-startup`, class:'name', text: 'GO !'})
+    divBtnStartup.appendChild(this.btnStartup)
+    startupContainer.appendChild(divBtnStartup)
+    startupContainer.appendChild(divSServices)
+    this.startupField.appendChild(startupContainer)
+    listen(startupContainer, 'mouseenter', function(ev){
+      setTimeout(function(){divSServices.classList.remove('hidden')}, 1000)
+    })
+    listen(startupContainer, 'mouseleave', ev => {divSServices.classList.add('hidden')})
+    listen(this.btnStartup, 'click', this.startStartupServices.bind(this))
+    this.startupContainer = startupContainer
+    this.divSServices = divSServices
+    return startupContainer
   }
 
   /**
@@ -299,7 +331,7 @@ class Project {
     const work = DCreate('DIV', {class: 'worktime', text: 'Temps de travail : ' + this.workTime})
     div.appendChild(work)
 
-    this.startupField = DCreate('FIELDSET', {class:'services'})
+    this.startupField = DCreate('FIELDSET', {id: `${divId}-startup-field`, class:'services'})
 
     /**
      * Fieldset des SERVICES AU DÉMARRAGE
@@ -315,22 +347,11 @@ class Project {
     const startupServices = this.services.startup ?? []
     const hasStartup = startupServices.length > 0
     if ( hasStartup ) {
-      const startupContainer = DCreate('DIV', {class:'startup-services', style:'position:relative;min-height:100px;'})
-      const divSServices = DCreate('DIV', {id:'startup-services', class: 'hidden'})
-      const divBtnStartup = DCreate('DIV', {class:'service'})
-      this.btnStartup = DCreate('DIV', {class:'name', text: 'GO !'})
+      this.buildStartupContainer()
       // Avec des services au démarrage
       startupServices.forEach((service) => {
-        divSServices.appendChild(this.getServiceCard(service))
+        this.divSServices.appendChild(this.getServiceCard(service))
       })
-      divBtnStartup.appendChild(this.btnStartup)
-      startupContainer.appendChild(divBtnStartup)
-      startupContainer.appendChild(divSServices)
-      this.startupField.appendChild(startupContainer)
-      listen(startupContainer, 'mouseenter', function(ev){
-        setTimeout(function(){divSServices.classList.remove('hidden')}, 1000)
-      })
-      listen(startupContainer, 'mouseleave', ev => {divSServices.classList.add('hidden')})
     }
     div.appendChild(this.startupField)
 
@@ -349,10 +370,6 @@ class Project {
 
   observe(){
 
-    // Lancer les sercices de démarrage
-    if (this.btnStartup) {
-      listen(this.btnStartup, 'click', this.startStartupServices.bind(this))
-    }
     // Pour pouvoir modifier le titre
     listen(this.divTitle, 'click', this.modifyTitle.bind(this))
     this.obj.addEventListener('dblclick', this.onDblClick.bind(this))

@@ -24,8 +24,9 @@ div#services-panel fieldset.services {
   min-height: 12vh;
 }
 
-/* Panneau qui contient les services au démarrage (caché) */
-div#startup-services {
+/* Panneau qui contient les services au démarrage (caché) — id unique par
+   projet (project-<id>-startup-services), classe stable pour le style */
+div.startup-services-panel {
   position: absolute;
   top: 31px;
   background-color: #AAA;
