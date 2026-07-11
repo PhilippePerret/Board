@@ -9,6 +9,7 @@ require_relative '../../support/helpers'
 include BoardTest
 
 def run_test
+  created_id = nil
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
     # - Click sur le bouton "add project"
     click('btn-add-project')
@@ -45,6 +46,7 @@ def run_test
     raise "Plusieurs cartes projet trouvées : #{cards.inspect}" if cards.size > 1
 
     data = YAML.safe_load(File.read(cards.first))
+    created_id = data['id']
     unless data['title'] == 'Tout premier projet'
       raise "Titre attendu 'Tout premier projet', trouvé #{data['title'].inspect}"
     end
@@ -52,6 +54,8 @@ def run_test
       raise "Path attendu #{fixture_dir.inspect}, trouvé #{data['path'].inspect}"
     end
   end
+ensure
+  remove_fixture_project(created_id) if created_id
 end
 
 board_test("création simple d'un nouveau projet") { run_test }

@@ -1,9 +1,19 @@
 #!/bin/zsh
 
-# Suite de tests d'intégration de Board — moteur "batch" (BOARD_TEST_ENGINE
-# force Tests/support/helpers.rb à charger version-batch/support/helpers.rb :
-# les actions sans valeur de retour (click, set_value...) sont regroupées et
-# exécutées en un seul appel osascript au lieu d'un par action).
+# Suite de tests d'intégration de Board — moteur "swift" (un seul process
+# natif, Tests/version-swift/support/ax_helper.swift compilé en binaire,
+# appelant directement l'API Accessibility AXUIElement — sans passer par
+# System Events/AppleScript comme intermédiaire —, lancé une fois et gardé
+# ouvert par une pipe stdin/stdout pour toute une spec, comme le moteur
+# "pers").
+#
+# Nécessite que le binaire compilé (support/ax_helper) soit autorisé dans
+# Réglages Système > Confidentialité et sécurité > Accessibilité : la
+# permission est liée au chemin de l'exécutable, donc distincte de celle
+# déjà accordée à osascript/System Events pour les autres moteurs. Au
+# premier lancement, macOS doit faire apparaître la boîte de dialogue système
+# (AXIsProcessTrustedWithOptions + prompt) ; sans autorisation, chaque appel
+# du moteur échoue avec un message explicite.
 #
 # - sauvegarde ~/Library/Application Support/Board avant la suite
 # - restaure ce dossier tel quel (présent ou absent) après la suite,
@@ -72,6 +82,14 @@ restore_board() {
   rmdir "$BACKUP_DIR" 2>/dev/null || true
 }
 
+# Recompile uniquement si absent ou si la source a changé depuis.
+AX_SWIFT_SOURCE="$VTEST_DIR/support/ax_helper.swift"
+AX_SWIFT_BIN="$VTEST_DIR/support/ax_helper"
+if [ ! -e "$AX_SWIFT_BIN" ] || [ "$AX_SWIFT_SOURCE" -nt "$AX_SWIFT_BIN" ]; then
+  echo "Compilation de ax_helper.swift…"
+  swiftc "$AX_SWIFT_SOURCE" -framework ApplicationServices -o "$AX_SWIFT_BIN"
+fi
+
 quit_app() {
   pkill -x Board 2>/dev/null || true
 }
@@ -107,6 +125,9 @@ for i in 1 2 3; do
 done
 [ "$opened" -eq 1 ] || { echo "open Board.app a échoué après 3 essais" >&2; exit 1; }
 
+# Attente initiale via l'AppleScript de base (pas ax_helper) : évite de
+# dépendre de la permission Accessibilité spécifique au binaire swift avant
+# même d'avoir démarré la mesure.
 osascript "$MAIN_TESTS_DIR/support/ax.applescript" wait-for btn-add-project 10 >/dev/null
 
 GREEN=$'\e[32m'
@@ -197,7 +218,7 @@ for spec in "${SPECS[@]}"; do
   rel_spec="${spec#$VTEST_DIR/}"
   echo "${GRAY}--- $rel_spec ---${RESET}"
   t_start=$(date +%s.%N)
-  if output=$(BOARD_TEST_ENGINE=batch ruby "$spec" 2>&1); then code=0; else code=$?; fi
+  if output=$(BOARD_TEST_ENGINE=swift ruby "$spec" 2>&1); then code=0; else code=$?; fi
   t_end=$(date +%s.%N)
   spec_dur=$(awk -v a="$t_start" -v b="$t_end" 'BEGIN{printf "%.3f", b-a}')
   TOTAL_DUR=$(awk -v t="$TOTAL_DUR" -v d="$spec_dur" 'BEGIN{printf "%.3f", t+d}')
@@ -227,7 +248,7 @@ fi
 echo ""
 echo "${WHITE}-------------------${RESET}"
 echo "${MAIN_COLOR}Success: ${NB_PASS}  Failures: ${NB_FAIL}  ${PENDING_COLOR}Pendings: ${NB_PENDING}${MAIN_COLOR}  Test count: ${TOTAL}${RESET}"
-echo "${WHITE}Durée totale (moteur : batch) : ${TOTAL_DUR}s${RESET}"
+echo "${WHITE}Durée totale (moteur : swift) : ${TOTAL_DUR}s${RESET}"
 
 # quit + restauration se font automatiquement via le trap (teardown)
 [ "$NB_FAIL" -eq 0 ]

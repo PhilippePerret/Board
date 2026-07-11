@@ -26,6 +26,29 @@ MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
 SPECS_DIR="$MAIN_TESTS_DIR/specs"
 APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 
+# Snapshot de toutes les fenêtres Finder ouvertes AVANT toute action de la
+# suite (dossier, position, sélection) : restauré à l'identique en teardown,
+# quel que soit ce que les tests ont ouvert/fermé entre-temps.
+FINDER_SNAPSHOT=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" snapshot-windows 2>/dev/null || true)
+osascript "$MAIN_TESTS_DIR/support/finder.applescript" close-all-windows >/dev/null 2>&1 || true
+
+# Fenêtre plein écran, sans titre ni bouton, pendant toute la suite
+# (Tests/support/overlay.swift, compilé une fois) : pilotée par une FIFO,
+# jamais de focus clavier/souris volé (les clics AX des tests ne passent pas
+# par de vrais événements souris, donc rien à perturber).
+OVERLAY_SWIFT_SOURCE="$MAIN_TESTS_DIR/support/overlay.swift"
+OVERLAY_BIN="$MAIN_TESTS_DIR/support/overlay"
+if [ ! -e "$OVERLAY_BIN" ] || [ "$OVERLAY_SWIFT_SOURCE" -nt "$OVERLAY_BIN" ]; then
+  swiftc "$OVERLAY_SWIFT_SOURCE" -framework Cocoa -o "$OVERLAY_BIN"
+fi
+mkdir -p "$MAIN_TESTS_DIR/.board-backups"
+OVERLAY_FIFO=$(mktemp -u "$MAIN_TESTS_DIR/.board-backups/overlay-fifo.XXXXXX")
+mkfifo "$OVERLAY_FIFO"
+"$OVERLAY_BIN" < "$OVERLAY_FIFO" &
+OVERLAY_PID=$!
+exec 3>"$OVERLAY_FIFO"
+echo "SET TESTS BOARD EN COURS. NE RIEN TOUCHER." >&3
+
 BACKUPS_ROOT="$MAIN_TESTS_DIR/.board-backups"
 mkdir -p "$BACKUPS_ROOT"
 BACKUP_DIR=$(mktemp -d "$BACKUPS_ROOT/board-test-backup.XXXXXX")
@@ -56,6 +79,13 @@ quit_app() {
 teardown() {
   quit_app
   restore_board
+  osascript "$MAIN_TESTS_DIR/support/finder.applescript" restore-windows "$FINDER_SNAPSHOT" >/dev/null 2>&1 || true
+  echo "SET MERCI." >&3 2>/dev/null || true
+  sleep 2
+  echo "QUIT" >&3 2>/dev/null || true
+  exec 3>&- 2>/dev/null || true
+  kill "$OVERLAY_PID" 2>/dev/null || true
+  rm -f "$OVERLAY_FIFO" 2>/dev/null || true
 }
 
 trap teardown EXIT INT TERM
@@ -187,8 +217,10 @@ if [ "$NB_PENDING" -gt 0 ]; then PENDING_COLOR=$YELLOW; else PENDING_COLOR=$MAIN
 if [ "$NB_FAIL" -gt 0 ]; then
   echo ""
   echo "${RED}Échecs :${RESET}"
+  i=0
   for f in "${FAILURES[@]}"; do
-    echo "$f"
+    i=$((i + 1))
+    echo "$f" | sed "s/✗/${i}./"
   done
 fi
 

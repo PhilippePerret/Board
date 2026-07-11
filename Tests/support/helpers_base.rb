@@ -168,11 +168,17 @@ module BoardTest
   end
 
   # Ouvre une fenêtre Finder neutre (rien de sélectionné dedans), exécute le
-  # bloc. Ne referme PLUS la fenêtre après coup (retiré à la demande de
-  # l'utilisateur — risque de fermer des fenêtres Finder personnelles).
+  # bloc, puis referme CETTE fenêtre précise — "make new Finder window"
+  # (finder_deselect) devient toujours la fenêtre au premier plan par
+  # construction (même garantie que click_service_and_wait_folder), donc son
+  # nom capturé à l'ouverture est sans ambiguïté ; on revérifie quand même ce
+  # nom juste avant de fermer (finder_close_front_window_if_named), au cas où
+  # autre chose aurait pris le focus entre-temps — sinon on ne ferme rien.
   def with_finder_deselected
-    finder_deselect
+    expected_name = finder_deselect
     yield
+  ensure
+    (finder_close_front_window_if_named(expected_name) rescue nil) if expected_name && !expected_name.empty?
   end
 
   # Poll côté Ruby (utile pour attendre un texte/état qui dépend d'un
@@ -200,12 +206,31 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'close-window', window_id)
   end
 
-  # Sélectionne posix_path dans le Finder, exécute le bloc. Ne referme PLUS
-  # les fenêtres après coup (retiré à la demande de l'utilisateur — risque
-  # de fermer des fenêtres Finder personnelles).
+  # Snapshot/restore de toutes les fenêtres Finder ouvertes (dossier,
+  # position, sélection de la fenêtre de devant) — appelé une fois avant et
+  # une fois après toute la suite (Tests/version-*/run_tests.sh), pas par
+  # spec : filet de sécurité global plutôt qu'une fermeture au cas par cas.
+  def finder_snapshot_windows
+    osascript(FINDER_SCRIPT, 'snapshot-windows')
+  end
+
+  def finder_close_all_windows
+    osascript(FINDER_SCRIPT, 'close-all-windows')
+  end
+
+  def finder_restore_windows(snapshot)
+    osascript(FINDER_SCRIPT, 'restore-windows', snapshot)
+  end
+
+  # Sélectionne posix_path dans le Finder ("reveal", garanti fenêtre au
+  # premier plan sur l'élément précis — cf. finder.applescript), exécute le
+  # bloc, puis referme CETTE fenêtre précise (nom revérifié juste avant
+  # fermeture, même sécurité que with_finder_deselected).
   def with_finder_selection(posix_path)
-    finder_select(posix_path)
+    expected_name = finder_select(posix_path)
     yield
+  ensure
+    (finder_close_front_window_if_named(expected_name) rescue nil) if expected_name && !expected_name.empty?
   end
 
   # Sélectionne le projet +project_id+, ouvre son panneau de services, glisse
