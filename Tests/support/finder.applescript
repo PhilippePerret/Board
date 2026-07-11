@@ -18,11 +18,14 @@
 --   close-all-windows           (ferme toutes les fenêtres Finder actuelles —
 --     à utiliser seulement après un snapshot-windows, pour repartir propre
 --     en début de suite ; la restauration se fait via restore-windows)
---   snapshot-windows            (dossier + position + sélection de TOUTES
---     les fenêtres Finder ouvertes, une ligne par fenêtre, champs séparés
---     par tabulation : targetPath, bounds "x1,y1,x2,y2", sélection (chemins
---     séparés par virgule, uniquement pour la fenêtre de devant — la
---     sélection Finder n'est exposée qu'au niveau app, pas par fenêtre)
+--   snapshot-windows            (dossier + position de TOUTES les fenêtres
+--     Finder ouvertes, une ligne par fenêtre, champs séparés par tabulation :
+--     targetPath, bounds "x1,y1,x2,y2", sélection (chemins séparés par
+--     virgule). Sélection capturée SEULEMENT pour la fenêtre de devant —
+--     "selection" ne suit pas "index" (vérifié empiriquement : la même
+--     sélection remonte pour toutes les fenêtres si on essaie de les amener
+--     au premier plan une par une), pas de moyen fiable trouvé pour lire la
+--     sélection propre à une fenêtre en arrière-plan.
 --   restore-windows <payload>   (ferme toutes les fenêtres Finder actuelles
 --     puis recrée exactement celles du payload, dans l'ordre, avec leur
 --     position et leur sélection si connue — ne restaure PAS la vue
@@ -107,46 +110,68 @@ on run argv
 		return "ok"
 
 	else if theAction is "snapshot-windows" then
+		-- Essai précédent (2026-07-11) : "set index of w to 1" seul ne change
+		-- pas ce que "selection" renvoie (vérifié : même sélection remontée
+		-- pour toutes les fenêtres). Nouvel essai : "activate" Finder en plus
+		-- de l'index, avec un court délai, avant de lire la sélection.
 		set outText to ""
+		set widList to {}
 		tell application "Finder"
-			set winCount to count of windows
-			repeat with i from 1 to winCount
-				set w to window i
-				set targetPath to ""
+			set widList to id of every window
+			activate
+		end tell
+		repeat with wid in widList
+			set targetPath to ""
+			set boundsText to ""
+			set selText to ""
+			tell application "Finder"
+				set w to (first window whose id is wid)
 				try
 					set targetPath to (POSIX path of (target of w as alias))
 				end try
-				set boundsText to ""
 				try
 					set b to bounds of w
 					set boundsText to ((item 1 of b) as string) & "," & ((item 2 of b) as string) & "," & ((item 3 of b) as string) & "," & ((item 4 of b) as string)
 				end try
-				set selText to ""
-				if i is 1 then
-					try
-						set selPaths to {}
-						repeat with s in (selection as list)
-							set end of selPaths to (POSIX path of (s as alias))
-						end repeat
-						set AppleScript's text item delimiters to ","
-						set selText to selPaths as text
-						set AppleScript's text item delimiters to ""
-					end try
-				end if
-				set outText to outText & targetPath & tab & boundsText & tab & selText & linefeed
-			end repeat
-		end tell
+				try
+					set index of w to 1
+				end try
+			end tell
+			delay 0.3
+			tell application "Finder"
+				try
+					set selPaths to {}
+					repeat with s in (selection as list)
+						set end of selPaths to (POSIX path of (s as alias))
+					end repeat
+					set AppleScript's text item delimiters to ","
+					set selText to selPaths as text
+					set AppleScript's text item delimiters to ""
+				end try
+			end tell
+			set outText to outText & targetPath & tab & boundsText & tab & selText & linefeed
+		end repeat
 		return outText
 
 	else if theAction is "restore-windows" then
+		-- Chaque étape a son propre try (au lieu d'un seul englobant tout) :
+		-- une erreur de sélection, par exemple, ne doit pas rester invisible
+		-- juste parce que la création de fenêtre a réussi.
 		set payload to item 2 of argv
+		set diag to ""
 		tell application "Finder"
 			close every window
 		end tell
 		set AppleScript's text item delimiters to linefeed
 		set theLines to text items of payload
 		set AppleScript's text item delimiters to ""
+		-- Capturé devant → derrière ; "make new Finder window" passe toujours
+		-- devant les autres, donc il faut recréer dans l'ordre inverse
+		-- (derrière d'abord) pour retrouver le même ordre au premier plan.
+		set theLines to (reverse of theLines)
+		set lineIndex to 0
 		repeat with theLine in theLines
+			set lineIndex to lineIndex + 1
 			if theLine is not "" then
 				set AppleScript's text item delimiters to tab
 				set theFields to text items of theLine
@@ -158,30 +183,43 @@ on run argv
 				if (count of theFields) > 2 then set selText to item 3 of theFields
 				if targetPath is not "" then
 					try
-						tell application "Finder"
-							make new Finder window to (POSIX file targetPath)
-							if boundsText is not "" then
-								set AppleScript's text item delimiters to ","
-								set boundsList to text items of boundsText
-								set AppleScript's text item delimiters to ""
-								set bounds of front window to {(item 1 of boundsList) as integer, (item 2 of boundsList) as integer, (item 3 of boundsList) as integer, (item 4 of boundsList) as integer}
-							end if
-							if selText is not "" then
-								set AppleScript's text item delimiters to ","
-								set selPaths to text items of selText
-								set AppleScript's text item delimiters to ""
-								set selItems to {}
-								repeat with p in selPaths
-									set end of selItems to ((POSIX file p) as alias)
-								end repeat
-								select selItems
-							end if
-						end tell
+						tell application "Finder" to make new Finder window to (POSIX file targetPath)
+					on error errMsg
+						set diag to diag & "fenêtre " & lineIndex & " (création) : " & errMsg & linefeed
 					end try
+					if boundsText is not "" then
+						try
+							set AppleScript's text item delimiters to ","
+							set boundsList to text items of boundsText
+							set AppleScript's text item delimiters to ""
+							tell application "Finder" to set bounds of front window to {(item 1 of boundsList) as integer, (item 2 of boundsList) as integer, (item 3 of boundsList) as integer, (item 4 of boundsList) as integer}
+						on error errMsg
+							set diag to diag & "fenêtre " & lineIndex & " (position) : " & errMsg & linefeed
+						end try
+					end if
+					if selText is not "" then
+						try
+							set AppleScript's text item delimiters to ","
+							set selPaths to text items of selText
+							set AppleScript's text item delimiters to ""
+							set selItems to {}
+							repeat with p in selPaths
+								set end of selItems to ((POSIX file p) as alias)
+							end repeat
+							delay 0.3
+							tell application "Finder" to select selItems
+						on error errMsg
+							set diag to diag & "fenêtre " & lineIndex & " (sélection) : " & errMsg & linefeed
+						end try
+					end if
 				end if
 			end if
 		end repeat
-		return "ok"
+		if diag is "" then
+			return "ok"
+		else
+			return "ok (avec erreurs)" & linefeed & diag
+		end if
 
 	else
 		error "Action Finder inconnue : " & theAction

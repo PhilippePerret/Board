@@ -50,6 +50,8 @@ class ViewController: NSViewController {
 
         view.addSubview(webView)
 
+        TestBridge.shared.attach(webView: webView)
+
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

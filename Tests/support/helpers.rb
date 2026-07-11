@@ -12,6 +12,8 @@
 # - "swift"       → version-swift/support/helpers.rb (1 seul process natif,
 #   binaire Swift compilé qui appelle AXUIElement directement, sans System
 #   Events)
+# - "pont"        → version-pont/support/helpers.rb (canal direct vers le JS
+#   de la WKWebView via Sources/Board/TestBridge.swift, aucune accessibilité)
 #
 # Le moteur "compiled" n'a pas besoin d'entrée ici : il réutilise
 # helpers_base.rb tel quel, seul BOARD_TEST_AX_SCRIPT change (cf. plus bas).
@@ -23,6 +25,8 @@ when 'pers'
   require_relative '../version-pers/support/helpers'
 when 'swift'
   require_relative '../version-swift/support/helpers'
+when 'pont'
+  require_relative '../version-pont/support/helpers'
 else
   require_relative 'helpers_base'
 end

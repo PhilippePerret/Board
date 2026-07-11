@@ -286,9 +286,19 @@ module BoardTest
 
     # "open" échoue parfois juste après un pkill (LaunchServices pas encore
     # à jour : _LSOpenURLsWithCompletionHandler error -600) — quelques essais.
+    # "open" ne transmet PAS l'environnement du shell appelant à l'app lancée
+    # (moteur "pont") : sans --env ici, Sources/Board/TestBridge.swift ne
+    # verrait jamais BOARD_TEST_BRIDGE_SOCKET lors d'un rechargement en cours
+    # de spec — no-op pour les autres moteurs (variable absente de leur env).
+    open_args = ['open']
+    if ENV['BOARD_TEST_BRIDGE_SOCKET']
+      open_args += ['--env', "BOARD_TEST_BRIDGE_SOCKET=#{ENV['BOARD_TEST_BRIDGE_SOCKET']}"]
+    end
+    open_args << BOARD_APP
+
     opened = false
     3.times do
-      opened = system('open', BOARD_APP)
+      opened = system(*open_args)
       break if opened
       sleep 0.5
     end
