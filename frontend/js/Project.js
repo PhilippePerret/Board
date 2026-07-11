@@ -278,8 +278,8 @@ class Project {
   // présents) que depuis addService() (premier ajout en direct).
   buildStartupContainer(){
     if (this.startupContainer) return this.startupContainer
-    const startupContainer = DCreate('DIV', {class:'startup-services', style:'position:relative;min-height:100px;'})
-    const divSServices = DCreate('DIV', {id:`${this.obj.id}-startup-services`, class: 'startup-services-panel hidden'})
+    const startupContainer = DCreate('DIV', {id:`${this.obj.id}-startup-container`, class:'startup-services', role: 'group', style:'position:relative;min-height:100px;'})
+    const divSServices = DCreate('DIV', {id:`${this.obj.id}-startup-services`, class: 'startup-services-panel hidden', role: 'group'})
     const divBtnStartup = DCreate('DIV', {class:'service'})
     this.btnStartup = DCreate('DIV', {id:`${this.obj.id}-btn-startup`, class:'name', text: 'GO !'})
     divBtnStartup.appendChild(this.btnStartup)
@@ -306,6 +306,16 @@ class Project {
     message(`Service supprimé (${service.uuid})`)
     this.services[service.type] = this.services[service.type].filter(s => s.uuid != service.uuid)
     Services.remove(service.uuid)
+    // Plus aucun service au démarrage : le bouton "GO !" (et son conteneur)
+    // n'a plus lieu d'être — le retirer, et remettre à zéro les références
+    // pour que buildStartupContainer() le reconstruise proprement si un
+    // service au démarrage est réattaché ensuite.
+    if (service.type == 'startup' && this.services.startup.length == 0 && this.startupContainer) {
+      this.startupContainer.remove()
+      this.startupContainer = null
+      this.divSServices = null
+      this.btnStartup = null
+    }
     this.save()
   }
 

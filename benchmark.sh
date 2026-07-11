@@ -1,18 +1,20 @@
 #!/bin/zsh
 
-# Lance un test donné sur chaque moteur (base, batch, compiled, pers, swift,
-# pont), dans l'ordre, et affiche un tableau récapitulatif des durées totales
-# + résultats à la fin.
+# Lance un test donné sur chaque moteur (swift, pont), dans l'ordre, et
+# affiche un tableau récapitulatif des durées totales + résultats à la fin.
+#
+# base/batch/compiled/pers retirés (2026-07-11) : benchmarkés, nettement plus
+# lents, gardés seulement le temps de la comparaison.
 #
 # Usage :
-#   ./benchmark.sh e2e/modification_titre_projet.rb   → ce test, sur les 6 moteurs
-#   ./benchmark.sh --all                               → suite complète, sur les 6 moteurs
-#   ./benchmark.sh --all "e2e/dep*"                    → motif de specs, sur les 6 moteurs
+#   ./benchmark.sh e2e/modification_titre_projet.rb   → ce test, sur les 2 moteurs
+#   ./benchmark.sh --all                               → suite complète, sur les 2 moteurs
+#   ./benchmark.sh --all "e2e/dep*"                    → motif de specs, sur les 2 moteurs
 
 set -e
 
 CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
-ENGINES=(base batch compiled pers swift pont)
+ENGINES=(swift pont)
 
 GREEN=$'\e[32m'
 RED=$'\e[91m'

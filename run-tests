@@ -5,6 +5,9 @@
 # specs).
 # Par défaut : "-v pont" pour 'tests/version-pont/'
 
+clear
+clear
+
 tvers="pont"
 args=()
 while [ "$#" -gt 0 ]; do

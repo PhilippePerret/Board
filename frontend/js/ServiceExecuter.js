@@ -35,7 +35,7 @@ class ServiceExecuter {
   afterRunService(retour){
     console.log("retour du run de service", retour)
     message(retour.message + ` <span class="tiny">(service ${this.id})</span>` || "Service " + this.name + " joué avec succès.")
-    if (typeof this.callback == 'finder') { setTimeout(this.callback, 2000) }
+    if (typeof this.callback == 'function') { setTimeout(this.callback, 2000) }
     console.log("ServiceExecuter#afterRunService termine normalement.")
   }
 

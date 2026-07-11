@@ -14,6 +14,7 @@ module BoardTest
   AX_SCRIPT             = ENV['BOARD_TEST_AX_SCRIPT'] || File.join(ROOT, 'Tests', 'support', 'ax.applescript')
   FINDER_SCRIPT          = File.join(ROOT, 'Tests', 'support', 'finder.applescript')
   DRAG_SCRIPT            = File.join(ROOT, 'Tests', 'support', 'drag.js')
+  HOVER_SCRIPT           = File.join(ROOT, 'Tests', 'support', 'hover.js')
   BOARD_APP             = File.join(ROOT, 'Board.app')
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
@@ -122,6 +123,18 @@ module BoardTest
     out = IO.popen(['osascript', '-l', 'JavaScript', DRAG_SCRIPT, from_dom_id, to_dom_id], err: [:child, :out], &:read)
     record_osascript_call(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
     raise "drag a échoué (#{from_dom_id} → #{to_dom_id}) : #{out}" unless $?.success?
+    out.strip
+  end
+
+  # Survol réel (souris déplacée par CoreGraphics, pas juste un événement JS
+  # de synthèse) — nécessaire pour révéler un élément caché par
+  # "display:none" (ex. les services au démarrage, Project.js), qui n'a
+  # aucune représentation dans l'arbre d'accessibilité tant qu'il est masqué.
+  def hover(dom_id, seconds = 1.5)
+    t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    out = IO.popen(['osascript', '-l', 'JavaScript', HOVER_SCRIPT, dom_id, seconds.to_s], err: [:child, :out], &:read)
+    record_osascript_call(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
+    raise "hover a échoué (#{dom_id}) : #{out}" unless $?.success?
     out.strip
   end
 
@@ -334,14 +347,53 @@ module BoardTest
   # create_fixture_project(services: {'startup' => [], 'others' => [...]}) —
   # évite de repasser par le glisser-déposer quand ce n'est pas l'objet du
   # test (cf. Tests/specs/e2e/attribution_service.rb pour ce cas-là).
-  def fixture_open_folder_service(path, name: 'Ouvrir projet A')
+  def fixture_open_folder_service(path, name: 'Ouvrir projet A', type: 'others')
     {
       'id' => 'open-folder-project',
       'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",
-      'type' => 'others',
+      'type' => type,
       'scType' => '.scpt',
       'name' => name,
       'params' => [path, 100, 100, 600, 400, 200, 'list view', true],
+      'projectId' => nil
+    }
+  end
+
+  # Même forme de params que open-folder-project (paramsOrder identique,
+  # ServiceData.js) mais ouvre N'IMPORTE QUEL dossier, pas forcément celui du
+  # projet — utile pour distinguer les deux dans un même test.
+  def fixture_open_finder_window_service(path, name: 'Ouvrir un dossier', type: 'others')
+    {
+      'id' => 'open-finder-window',
+      'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",
+      'type' => type,
+      'scType' => '.scpt',
+      'name' => name,
+      'params' => [path, 100, 100, 600, 400, 200, 'list view', true],
+      'projectId' => nil
+    }
+  end
+
+  # backend/scripts/RunScript.rb exécute réellement le script selon son
+  # extension (.rb -> ruby, .py -> python3, .sh -> bash, sinon "open") et
+  # capture sa sortie comme "message" — un script .rb qui fait juste "puts"
+  # suffit, rien n'est ouvert (ni Terminal, ni fichier à nettoyer).
+  def create_fixture_run_script(dir, marker_value = 'run-script-executed')
+    script_path = File.join(dir, 'test_run_script.rb')
+    File.write(script_path, <<~RUBY)
+      puts "#{marker_value}"
+    RUBY
+    script_path
+  end
+
+  def fixture_run_script_service(script_path, name: 'Jouer un script', type: 'others')
+    {
+      'id' => 'run-script',
+      'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",
+      'type' => type,
+      'scType' => '.rb',
+      'name' => name,
+      'params' => [script_path, File.basename(script_path)],
       'projectId' => nil
     }
   end
