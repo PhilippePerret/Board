@@ -20,6 +20,12 @@
 --   exists          <domId>        ("true"/"false", recherche immédiate, pas d'attente)
 --   click-parent        <domId>        (clique le parent AX de l'élément trouvé)
 --   click-parent-prefix <domIdPrefix>
+--   order-of <domIds>  (domIds : plusieurs ids exacts séparés par des
+--     tabulations. Un seul parcours récursif de l'arbre AX depuis la racine ;
+--     renvoie, en lignes séparées par des retours à la ligne, ceux de ces ids
+--     effectivement trouvés, dans l'ordre où le parcours les rencontre —
+--     donc l'ordre réel d'affichage/DOM. Les ids absents de l'arbre sont
+--     simplement omis du résultat.)
 --   batch <payload>  (moteur "version-batch" — exécute plusieurs actions sans
 --     valeur de retour en un seul process osascript. <payload> : lignes
 --     séparées par des retours à la ligne, chaque ligne = action, needle et
@@ -127,6 +133,27 @@ on findByDomIdPrefix(elem, prefixStr)
 	end repeat
 	return missing value
 end findByDomIdPrefix
+
+-- Parcours récursif unique, collecte (dans foundList) l'AXDOMIdentifier de
+-- chaque nœud rencontré dont l'id figure dans targetIds — dans l'ordre de
+-- rencontre du parcours (= ordre DOM pour des éléments frères).
+on collectInOrder(elem, targetIds, foundList)
+	try
+		set theId to (my axDomId(elem))
+		if targetIds contains theId then
+			set end of foundList to theId
+		end if
+	end try
+	try
+		set kids to my axChildren(elem)
+	on error
+		return foundList
+	end try
+	repeat with kid in kids
+		set foundList to my collectInOrder(kid, targetIds, foundList)
+	end repeat
+	return foundList
+end collectInOrder
 
 on rootWindow()
 	tell application "System Events"
@@ -270,6 +297,16 @@ on run argv
 		set el to my waitForMatch("prefix", needle, defaultTimeout)
 		set parentEl to my axParent(el)
 		tell application "System Events" to perform action "AXPress" of parentEl
+
+	else if theAction is "order-of" then
+		set AppleScript's text item delimiters to tab
+		set targetIds to text items of needle
+		set AppleScript's text item delimiters to ""
+		set foundList to my collectInOrder(my rootWindow(), targetIds, {})
+		set AppleScript's text item delimiters to linefeed
+		set outText to foundList as text
+		set AppleScript's text item delimiters to ""
+		return outText
 
 	else
 		error "Action AppleScript inconnue : " & theAction

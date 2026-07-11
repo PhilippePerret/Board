@@ -69,6 +69,21 @@ module BoardTest
     flush_batch!
     osascript(AX_SCRIPT, 'get-text-prefix', prefix)
   end
+
+  def order_of(*dom_ids)
+    flush_batch!
+    out = osascript(AX_SCRIPT, 'order-of', dom_ids.join("\t"))
+    out.empty? ? [] : out.split("\n")
+  end
+
+  def drag(from_dom_id, to_dom_id)
+    flush_batch!
+    t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    out = IO.popen(['osascript', '-l', 'JavaScript', DRAG_SCRIPT, from_dom_id, to_dom_id], err: [:child, :out], &:read)
+    record_osascript_call(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
+    raise "drag a échoué (#{from_dom_id} → #{to_dom_id}) : #{out}" unless $?.success?
+    out.strip
+  end
 end
 
 at_exit { BoardTest.flush_batch! }

@@ -7,6 +7,9 @@
 --   deselect                    (ouvre une fenêtre sur un dossier neutre, sans rien sélectionner dedans)
 --   window-ids                 (id des fenêtres Finder ouvertes, une par ligne)
 --   close-window <id>          (ferme la fenêtre si elle existe encore)
+--   front-window-name          (nom de la fenêtre Finder au premier plan, "" si aucune)
+--   close-front-window-if-named <name> (ferme la fenêtre Finder au premier
+--     plan SEULEMENT si elle porte ce nom — sinon ignore, ne ferme rien)
 
 on run argv
 	set theAction to item 1 of argv
@@ -39,6 +42,38 @@ on run argv
 		tell application "Finder"
 			try
 				close (first window whose id is targetId)
+			end try
+		end tell
+
+	else if theAction is "front-window-name" then
+		tell application "Finder"
+			try
+				return name of front window
+			on error
+				return ""
+			end try
+		end tell
+
+	else if theAction is "close-front-window-if-named" then
+		-- Ne ferme QUE si la fenêtre Finder au premier plan porte bien ce nom
+		-- juste avant de fermer (pas seulement au moment de l'ouverture) :
+		-- si autre chose a pris le focus entre-temps (une fenêtre Finder
+		-- personnelle de l'utilisateur, par exemple), on ne touche à rien.
+		set expectedName to item 2 of argv
+		tell application "Finder"
+			try
+				set actualName to name of front window
+			on error
+				return "erreur : aucune fenêtre Finder au premier plan"
+			end try
+			if actualName is not expectedName then
+				return "ignoré : fenêtre au premier plan = " & actualName & " (attendu " & expectedName & ")"
+			end if
+			try
+				close front window
+				return "ok"
+			on error errMsg
+				return "erreur fermeture : " & errMsg
 			end try
 		end tell
 

@@ -152,7 +152,7 @@ class Project {
   static moveCurrentToLeft(){
     const proj = this.current
     proj.obj.parentNode.insertBefore(proj.obj, proj.obj.previousSibling)
-    App.updataData('projects-in')
+    App.updateData('projects-in')
   }
   static moveCurrentToRight(){
     const proj = this.current
@@ -334,7 +334,7 @@ class Project {
     }
     div.appendChild(this.startupField)
 
-    this.othersField = DCreate('FIELDSET', {class:'services'})
+    this.othersField = DCreate('FIELDSET', {id: `${divId}-others-field`, class:'services'})
     const legendautre = DCreate('LEGEND', {text: 'Autres services'})
     this.othersField.appendChild(legendautre)
     ;(this.services.others ?? []).forEach((service) => {

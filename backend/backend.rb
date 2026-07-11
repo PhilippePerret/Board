@@ -1,4 +1,5 @@
 require './lib/usefull.rb'
+require './lib/debug.rb'
   
 begin
 
@@ -45,6 +46,7 @@ begin
   # === Sauvegarde des données de l'application ===
 
   when 'save-app-data'
+    Debug.log("save-app-data reçu, projects-in=#{request['data']['projects-in'].inspect}")
     IO.write(APP_DATA_FILE, request['data'].to_json)
     ok = true
     returned_message = "Données de l'application sauvées."
@@ -96,8 +98,10 @@ begin
   
   # ========== EXÉCUTIONS DES SERVICES =================
   when 'exec-service'
+    Debug.log("exec-service reçu, script=#{request['script']} params=#{request['params'].inspect}")
     ok = true
     returned_data = run_script(request["script"], request["params"])
+    Debug.log("exec-service résultat = #{returned_data.inspect}")
     ok = returned_data["ok"] if returned_data.key?("ok")
     error = returned_data["error"] if returned_data.key?("error") && returned_data["error"]
     returned_message = returned_data["message"] if returned_data.key?("message") && returned_data["message"]  

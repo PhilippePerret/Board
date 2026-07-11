@@ -13,6 +13,7 @@ module BoardTest
   # osacompile) sans dupliquer ce fichier. Non défini → chemin historique.
   AX_SCRIPT             = ENV['BOARD_TEST_AX_SCRIPT'] || File.join(ROOT, 'Tests', 'support', 'ax.applescript')
   FINDER_SCRIPT          = File.join(ROOT, 'Tests', 'support', 'finder.applescript')
+  DRAG_SCRIPT            = File.join(ROOT, 'Tests', 'support', 'drag.js')
   BOARD_APP             = File.join(ROOT, 'Board.app')
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
@@ -74,11 +75,19 @@ module BoardTest
     puts "#{GRAY}  (osascript : #{calls} appel#{'s' if calls != 1}, #{'%.3f' % time}s)#{RESET}"
   end
 
+  # Extrait pour que les moteurs qui n'appellent pas osascript() directement
+  # (ex. version-pers, qui parle à un process déjà lancé par pipe)
+  # alimentent quand même les mêmes stats / la même ligne affichée par
+  # print_timing.
+  def record_osascript_call(elapsed)
+    @@osascript_calls += 1
+    @@osascript_time += elapsed
+  end
+
   def osascript(script, *args)
     t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     out = IO.popen(['osascript', script, *args.map(&:to_s)], err: [:child, :out], &:read)
-    @@osascript_time += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
-    @@osascript_calls += 1
+    record_osascript_call(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
     raise "osascript a échoué (#{script} #{args.join(' ')}) : #{out}" unless $?.success?
     out.strip
   end
@@ -95,6 +104,27 @@ module BoardTest
   def get_text(dom_id)              = osascript(AX_SCRIPT, 'get-text', dom_id)
   def get_text_prefix(prefix)       = osascript(AX_SCRIPT, 'get-text-prefix', prefix)
 
+  # Ordre réel (DOM/affichage) des domIds donnés, tel que rencontré par un
+  # unique parcours de l'arbre AX. Ceux non trouvés sont omis du résultat
+  # (donc order_of(*ids).size peut être < ids.size si un élément n'est plus
+  # affiché).
+  def order_of(*dom_ids)
+    out = osascript(AX_SCRIPT, 'order-of', dom_ids.join("\t"))
+    out.empty? ? [] : out.split("\n")
+  end
+
+  # Glisser-déposer par coordonnées écran (mouse down/move/up réels) — pour
+  # le drag-and-drop HTML5 natif, qu'un simple click() (AXPress) ne peut pas
+  # déclencher. Voir Tests/support/drag.js. Non vérifié en conditions
+  # réelles (CoreGraphics/CGEvent jamais testé en live dans cette session).
+  def drag(from_dom_id, to_dom_id)
+    t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    out = IO.popen(['osascript', '-l', 'JavaScript', DRAG_SCRIPT, from_dom_id, to_dom_id], err: [:child, :out], &:read)
+    record_osascript_call(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
+    raise "drag a échoué (#{from_dom_id} → #{to_dom_id}) : #{out}" unless $?.success?
+    out.strip
+  end
+
   def finder_select(posix_path)
     osascript(FINDER_SCRIPT, 'select', posix_path)
   end
@@ -103,15 +133,46 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'deselect')
   end
 
+  def finder_front_window_name
+    osascript(FINDER_SCRIPT, 'front-window-name')
+  end
+
+  # Ne ferme QUE si la fenêtre Finder au premier plan porte bien ce nom au
+  # moment de fermer (pas seulement au moment de l'ouverture) — si autre
+  # chose a pris le focus entre-temps (une fenêtre Finder personnelle de
+  # l'utilisateur, par exemple), on ne touche à rien.
+  def finder_close_front_window_if_named(expected_name)
+    osascript(FINDER_SCRIPT, 'close-front-window-if-named', expected_name)
+  end
+
+  # OpenFolderProject.scpt fait "activate" + "make new Finder window" : la
+  # fenêtre qui nous intéresse est donc, par construction, celle au premier
+  # plan juste après le clic — pas besoin de comparer des chemins (source de
+  # bugs : liens symboliques macOS type /var -> /private/var, entre autres).
+  # On vérifie juste que son nom (= nom du dossier affiché) correspond.
+  def click_service_and_wait_folder(service_dom_id, fixture_dir, timeout: 10)
+    click(service_dom_id)
+    raise "Board a quitté juste après le clic sur #{service_dom_id}" unless board_running?
+    expected_name = File.basename(fixture_dir)
+    wait_until(timeout, desc: -> { "nom de la fenêtre Finder au premier plan = #{finder_front_window_name.inspect} (attendu #{expected_name.inspect})" }) do
+      finder_front_window_name == expected_name
+    end
+  end
+
+  def close_folder_and_wait(fixture_dir, timeout: 5)
+    expected_name = File.basename(fixture_dir)
+    result = finder_close_front_window_if_named(expected_name)
+    raise "fermeture du dossier échouée : #{result}" unless result == 'ok'
+    raise "Board a quitté juste après la fermeture du dossier Finder" unless board_running?
+    result
+  end
+
   # Ouvre une fenêtre Finder neutre (rien de sélectionné dedans), exécute le
-  # bloc, puis referme cette fenêtre (best-effort).
+  # bloc. Ne referme PLUS la fenêtre après coup (retiré à la demande de
+  # l'utilisateur — risque de fermer des fenêtres Finder personnelles).
   def with_finder_deselected
-    before_ids = finder_window_ids
     finder_deselect
-    new_ids = finder_window_ids - before_ids
     yield
-  ensure
-    new_ids&.each { |id| finder_close_window(id) }
   end
 
   # Poll côté Ruby (utile pour attendre un texte/état qui dépend d'un
@@ -139,16 +200,52 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'close-window', window_id)
   end
 
-  # Sélectionne posix_path dans le Finder, exécute le bloc, puis ferme les
-  # fenêtres Finder que la sélection a ouvertes (best-effort : si le dossier
-  # a déjà été supprimé et sa fenêtre déjà fermée par macOS, no-op).
+  # Sélectionne posix_path dans le Finder, exécute le bloc. Ne referme PLUS
+  # les fenêtres après coup (retiré à la demande de l'utilisateur — risque
+  # de fermer des fenêtres Finder personnelles).
   def with_finder_selection(posix_path)
-    before_ids = finder_window_ids
     finder_select(posix_path)
-    new_ids = finder_window_ids - before_ids
     yield
-  ensure
-    new_ids&.each { |id| finder_close_window(id) }
+  end
+
+  # Sélectionne le projet +project_id+, ouvre son panneau de services, glisse
+  # le service +service_id+ jusqu'à "Autres services", puis répond aux 3
+  # boîtes de dialogue qui suivent (nom, fenêtre Finder, sidebar) — cf.
+  # Tests/specs/e2e/attribution_service.rb pour le détail de ce déroulé.
+  # +fixture_dir+ : dossier réel du projet (nécessaire pour l'étape fenêtre
+  # Finder). Retourne l'uuid attribué au service une fois attaché et
+  # confirmé persisté dans la carte projet.
+  def attach_service_to_project(service_id, project_id, fixture_dir, custom_name:)
+    card = "project-#{project_id}"
+    others_field = "project-#{project_id}-others-field"
+
+    wait_for(card)
+    click(card)
+    wait_until(5, desc: -> { 'btn-open-services-panel pas apparu après sélection' }) { exists?('btn-open-services-panel') }
+    click('btn-open-services-panel')
+    wait_for(service_id)
+
+    drag(service_id, others_field)
+
+    wait_for('__service_name__', 10)
+    set_value('__service_name__', custom_name)
+    click('btn-oui')
+
+    wait_for('btn-oui', 10)
+    with_finder_selection(fixture_dir) do
+      click('btn-oui')
+      wait_for('btn-oui', 10)
+    end
+    click('btn-oui')
+
+    uuid = nil
+    wait_until(10, desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do
+      others = read_project_card(project_id)['services']['others']
+      found = others.is_a?(Array) && others.find { |s| Array(s['name']).include?(custom_name) }
+      uuid = found['uuid'] if found
+      !!found
+    end
+    uuid
   end
 
   def board_running?
@@ -193,6 +290,24 @@ module BoardTest
 
   def project_card_path(project_id)
     File.join(PROJECT_CARD_FOLDER, "#{project_id}.yaml")
+  end
+
+  # Hash de service "open-folder-project" déjà attaché, au format persisté
+  # (params dans l'ordre lu par backend/scripts/OpenFolderProject.scpt :
+  # chemin, x, y, w, h, sidebarWidth, view, showSidebar). Pour
+  # create_fixture_project(services: {'startup' => [], 'others' => [...]}) —
+  # évite de repasser par le glisser-déposer quand ce n'est pas l'objet du
+  # test (cf. Tests/specs/e2e/attribution_service.rb pour ce cas-là).
+  def fixture_open_folder_service(path, name: 'Ouvrir projet A')
+    {
+      'id' => 'open-folder-project',
+      'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",
+      'type' => 'others',
+      'scType' => '.scpt',
+      'name' => name,
+      'params' => [path, 100, 100, 600, 400, 200, 'list view', true],
+      'projectId' => nil
+    }
   end
 
   # Crée directement une carte projet sur disque + l'enregistre dans

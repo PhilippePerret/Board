@@ -93,12 +93,6 @@ class Services {
     listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
   } 
 
-  // Exécution du service
-  exec(ev, callback){
-    console.log("callback dans Service#exec", callback)
-    this.executor.exec(callback)
-    console.log("Service#exec se termine bien")
-  }
   get executor(){ return this._executor || (this._executor = new ServiceExecuter(this))}
   
   // Appelée pour définir le service pour le projet, +projet+
@@ -108,7 +102,7 @@ class Services {
   
   // Retourne la carte à insérer dans le projet
   projectCard(projet){
-    const div = DCreate('DIV', {class: 'service'})
+    const div = DCreate('DIV', {class: 'service', id: `service-${this.uuid}`})
     const name = DCreate('DIV', {class:'name',text: this.name})
     div.appendChild(name)
     div.draggable = true
@@ -118,12 +112,26 @@ class Services {
   }
 
   observeServiceCard(projet, card){
-    listen(card, 'click', this.exec.bind(this))
+    listen(card, 'click', this.onClickOnProjectService.bind(this))
     listen(card, 'dragstart', e => projet.draggedService = this)
     listen(card, 'dragend', e => {
       if (e.dataTransfer.dropEffect != "none") return
       projet.removeServiceFromListe();
     })
+  }
+
+  onClickOnProjectService(ev){
+    if (ev.shiftKey) {
+      message("Apprendre à sélectionner le service")
+    } else {
+      this.exec(ev)
+    }
+  }
+  // Exécution du service
+  exec(ev, callback){
+    console.log("callback dans Service#exec", callback)
+    this.executor.exec(callback)
+    console.log("Service#exec se termine bien")
   }
 
 }

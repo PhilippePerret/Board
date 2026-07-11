@@ -5,11 +5,27 @@
 # - sauvegarde ~/Library/Application Support/Board avant la suite
 # - restaure ce dossier tel quel (présent ou absent) après la suite,
 #   même en cas d'erreur ou d'interruption (Ctrl-C)
+#
+# La sauvegarde va dans Tests/.board-backups/ (dans le dépôt, visible par
+# "git status"), PAS dans un dossier temporaire système ($TMPDIR) : ce
+# dernier peut être nettoyé par macOS avant restauration — ce qui a déjà
+# causé une perte réelle de données.
 
 set -e
 
 BOARD_DIR="$HOME/Library/Application Support/Board"
-BACKUP_DIR=$(mktemp -d "${TMPDIR:-/tmp}/board-test-backup.XXXXXX")
+
+# VTEST_DIR = Dossier de la version de test (base, améliorée, etc.)
+VTEST_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Dossier principal des tests de l'application
+MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
+# Dossier contenant les tests eux-mêmes
+SPECS_DIR="$MAIN_TESTS_DIR/specs"
+APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
+
+BACKUPS_ROOT="$MAIN_TESTS_DIR/.board-backups"
+mkdir -p "$BACKUPS_ROOT"
+BACKUP_DIR=$(mktemp -d "$BACKUPS_ROOT/board-test-backup.XXXXXX")
 BOARD_EXISTED=0
 
 backup_board() {
@@ -24,16 +40,11 @@ restore_board() {
   if [ "$BOARD_EXISTED" -eq 1 ]; then
     mv "$BACKUP_DIR/Board" "$BOARD_DIR"
   fi
-  rm -rf "$BACKUP_DIR"
+  # rmdir (pas rm -rf) : ne supprime que si vide, donc seulement si le mv
+  # ci-dessus a réussi. Avant, la sauvegarde était effacée même en cas
+  # d'échec du mv.
+  rmdir "$BACKUP_DIR" 2>/dev/null || true
 }
-
-# VTEST_DIR = Dossier de la version de test (base, améliorée, etc.)
-VTEST_DIR="$(cd "$(dirname "$0")" && pwd)"
-# Dossier principal des tests de l'application
-MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
-# Dossier contenant les tests eux-mêmes
-SPECS_DIR="$MAIN_TESTS_DIR/specs"
-APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 
 quit_app() {
   pkill -x Board 2>/dev/null || true
@@ -100,7 +111,7 @@ resolve_path() {
 
 ALL_SPECS=()
 if [ "$#" -eq 0 ]; then
-  for f in "$SPECS_DIR/e2e/*.rb"; do
+  for f in "$SPECS_DIR"/e2e/*.rb; do
     [ -e "$f" ] && ALL_SPECS+=("$f")
   done
 else
