@@ -31,21 +31,21 @@
 
 <!-- 
 
-    === PANNEAU DES SERVICES ===
+    === PANNEAU DES SERVICES (CUSTOM ET COMMON) ===
 
 -->
 <div id="common-services-panel" class="services-panel closed">
   <fieldset class="services-listing">
     <legend>Services commun</legend>
   </fieldset>
-  <button id="btn-close-services-panel" class="btn-close" onclick="Services.close()">Fermer</button>
+  <button id="btn-toggle-common-services-panel" class="btn-deal-with-services" onclick="Service.toggle.call(Service)">Services personnalisés</button>
 </div>
-<div id="customs-services-panel" class="services-panel closed">
+<div id="custom-services-panel" class="services-panel closed">
   <fieldset class="services-listing">
     <legend>Services personnalisés</legend>
     <span class="tiny italic">(à glisser-déposer sur le projet)</span>
   </fieldset>
-  <button id="btn-close-services-panel" class="btn-close" onclick="Services.close()">Fermer</button>
+  <button id="btn-toggle-custom-services-panel" class="btn-deal-with-services" onclick="Service.toggle.call(Service)">Services communs</button>
 </div>
 
 <div id="tools">
@@ -55,7 +55,6 @@
       <button id="btn-move-project-to-left" class="btn-move-project-to-left" onclick="Project.moveCurrentToLeft()">←</button>
       <button id="btn-move-project-to-right" class="btn-move-project-to-right" onclick="Project.moveCurrentToRight()">→</button>
       <button id="btn-remove-project" class="btn-remove-project" onclick="Project.removeProject.call(Project, Project.current)">Retirer le projet</button>
-      <button id="btn-open-services-panel" class="btn-deal-with-services" onclick="Services.toggle.call(Services)">Gérer ses services</button>
     </span>
 </div>
 
@@ -67,7 +66,7 @@
 <script src="js/Panel.js"></script>
 <script src="js/Dialogs.js"></script>
 <script src="js/Project.js"></script>
-<script src="js/Services.js"></script>
+<script src="js/Service.js"></script>
 <script src="js/ServicesTools.js"></script>
 <script src="js/LOC_ERRORS.js"></script>
 <script src="js/LOC_MESSAGES.js"></script>

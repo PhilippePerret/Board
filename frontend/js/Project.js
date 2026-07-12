@@ -91,9 +91,11 @@ class Project {
   // Pour afficher et masquer les boutons du projet sélectionné
   static affProjectButtons(){
     this.divButtons.classList.remove('invisible')
+    Service.showCommonPanel()
   }
   static maskProjectButtons(){
     this.divButtons.classList.add('invisible')
+    Service.maskCommonPanel()
   }
   static get divButtons(){return this._dbutons || (this._dbutons = DGet('span#project-buttons')) }
 

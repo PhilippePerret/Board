@@ -91,9 +91,11 @@ class Project {
   // Pour afficher et masquer les boutons du projet sélectionné
   static affProjectButtons(){
     this.divButtons.classList.remove('invisible')
+    Service.showCommonPanel()
   }
   static maskProjectButtons(){
     this.divButtons.classList.add('invisible')
+    Service.maskCommonPanel()
   }
   static get divButtons(){return this._dbutons || (this._dbutons = DGet('span#project-buttons')) }
 
@@ -180,8 +182,8 @@ class Project {
   }
 
   initServices(){
-    this.services.startup = (this.services.startup ?? []).map(ds => new Services(ds))
-    this.services.others  = (this.services.others  ?? []).map(ds => new Services(ds))
+    this.services.startup = (this.services.startup ?? []).map(ds => new ServiceCustom(ds))
+    this.services.others  = (this.services.others  ?? []).map(ds => new ServiceCustom(ds))
   }
 
   save(callback){
@@ -308,7 +310,7 @@ class Project {
     service.projectCard.remove()
     message(`Service supprimé (${service.uuid})`)
     this.services[service.type] = this.services[service.type].filter(s => s.uuid != service.uuid)
-    Services.remove(service.uuid)
+    ServiceCustom.remove(service.uuid)
     // Plus aucun service au démarrage : le bouton "GO !" (et son conteneur)
     // n'a plus lieu d'être — le retirer, et remettre à zéro les références
     // pour que buildStartupContainer() le reconstruise proprement si un
@@ -393,7 +395,7 @@ class Project {
     this.startupField.addEventListener("dragover", e => {e.preventDefault()})
     this.startupField.addEventListener("drop", e => {
         e.preventDefault();
-        const service = Services.get(e.dataTransfer.getData("id"))
+        const service = ServiceCustom.get(e.dataTransfer.getData("id"))
         // console.log("Drop sur la zone startup", service)
         this.addStartupService(service)
       })
@@ -401,7 +403,7 @@ class Project {
     this.othersField.addEventListener("dragover", e => e.preventDefault())
     this.othersField.addEventListener("drop", e => {
           e.preventDefault();
-          const service = Services.get(e.dataTransfer.getData("id"))
+          const service = ServiceCustom.get(e.dataTransfer.getData("id"))
           // console.log("Drop sur la zone autres services", service)
           this.addOtherService(service)
       })

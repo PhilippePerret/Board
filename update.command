@@ -17,7 +17,9 @@ open "$CUR_DIR/Board.app"
 
 open_safari_devtools() {
   sleep 1
-  MenuMacMini=$'Mac mini de Philippe\nmacOS 26.5.1'
+  macVersion="macOS $(sw_vers -productVersion)"
+  MenuMacMini="Mac mini de Philippe
+$macVersion"
   osascript <<APPLESCRIPT
 tell application "Safari" to activate
 delay 0.5

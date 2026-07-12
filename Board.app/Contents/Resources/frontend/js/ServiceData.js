@@ -36,8 +36,20 @@ const COMMON_SERVICES_DATA = [
           {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
         ]
     }
-  , {id: 'update-documentation'}
-  , {id: 'read-documentation'}
+  , {
+        id: 'update-documentation'
+      , name: 'Actualiser la documentation'
+      , params: [
+          {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation', type: 'path'}
+        ]
+      }
+      , {
+        id:   'read-documentation'
+        , name: 'Ouvrir la documentation'
+        , params: [
+          {id: 'docu-main-file', q: 'Sélectionner le fichier HTML/PDF du manuel', type: 'path'}
+      ]
+    }
 ]
 
 /*******************************************************************/

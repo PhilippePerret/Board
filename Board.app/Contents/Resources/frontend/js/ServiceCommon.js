@@ -2,10 +2,15 @@
  * Gestion des services communs
  */
 class ServiceCommon extends Service {
-  static get panelId(){ return 'common-services-panel'}
+  static get serviceType(){ return 'common'}
+  static get klass(){ return ServiceCommon}
 
   static get SERVICES_DATA(){return COMMON_SERVICES_DATA}
 
+  static get oppositeButton(){return "Services personnalisés"}
+  static get panel(){
+    return this._panel || (this._panel = new MiniPanel(DGet(`div#common-services-panel`)))
+  }
   
   constructor(serviceData){
     super(serviceData)

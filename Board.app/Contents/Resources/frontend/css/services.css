@@ -3,18 +3,30 @@
 }
 /* Panneau d'édition du projet */
 div.services-panel {
+  position: fixed;
   top: 0;
   height: calc(100% - 2em);
   width: var(--editor-width);
   right: 0;
   padding: 2em;
-  position: fixed;
   z-index:100;
   background-color: #aab2c9;
 }
 div.services-panel.closed {
   right: calc(-1 * (var(--editor-width) + 100px));
 }
+div.services-panel .btn-deal-with-services {
+  position:absolute;
+  bottom:10px;
+  left: 50%;
+  transform:translate(-50%, -40px);
+  font-family: "Arial Narrow";
+  font-size: 13px;
+}
+/* div.services-panel.closed .btn-deal-with-services {
+  display:none;
+} */
+
 div.services-panel button.btn-close {
   position: absolute;
   right: 20px;
