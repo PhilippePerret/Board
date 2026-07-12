@@ -15,42 +15,49 @@
 /**                     SERVICES COMMUNS                          **/
 /*******************************************************************/
 const COMMON_SERVICES_DATA = [
-    {
-        id: 'open-folder-project'
-      , name: 'Ouvrir dossier du projet'
-      , params: [
-            {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
-          , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
-        ]
-    }
-  , {
-        id: 'work-clock'
-      , name: 'Démarrer l’horloge'
-      , params: [
-          {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer'}
-        ]
-    }
-  , {
-        id: 'edit-documentation'
-      , name: 'Éditer la documentation'
-      , params: [
-          {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
-        ]
-    }
-  , {
-        id: 'update-documentation'
-      , name: 'Actualiser la documentation'
-      , params: [
-          {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation', type: 'path'}
-        ]
-      }
-  , {
-        id:   'read-documentation'
-        , name: 'Ouvrir la documentation'
-        , params: [
-          {id: 'docu-main-file', q: 'Sélectionner le fichier HTML/PDF du manuel', type: 'path'}
+  {
+      id: 'open-folder-project'
+    , name: 'Ouvrir dossier du projet'
+    , params: [
+          {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
+        , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
       ]
-    }
+  },
+  {
+      id: 'work-clock'
+    , name: 'Démarrer l’horloge'
+    , params: [
+        {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer'}
+      ]
+  },
+  {
+      id: 'edit-documentation'
+    , name: 'Éditer la documentation'
+    , params: [
+        {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+      ]
+  },
+  {
+      id: 'update-documentation'
+    , name: 'Actualiser la documentation'
+    , params: [
+        {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation', type: 'path'}
+      ]
+  },
+  {
+      id:   'read-documentation'
+      , name: 'Ouvrir la documentation'
+      , params: [
+        {id: 'docu-main-file', q: 'Sélectionner le fichier HTML/PDF du manuel', type: 'path'}
+    ]
+  },
+  {
+      id: 'open-terminal-at-folder'
+    , name: 'Terminal au dossier'
+    , params: [
+        {id: 'path', type: 'project'}
+      ]
+  }
 ]
 
 /*******************************************************************/
