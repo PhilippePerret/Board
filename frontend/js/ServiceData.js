@@ -19,7 +19,8 @@ const COMMON_SERVICES_DATA = [
         id: 'open-folder-project'
       , name: 'Ouvrir dossier du projet'
       , params: [
-          {id: 'window-bounds', q: 'Positioner le dossier du projet dans le Finder', type: 'bounds'}
+            {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
+          , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
         ]
     }
   , {

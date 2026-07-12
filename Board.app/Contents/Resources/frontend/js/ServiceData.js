@@ -19,7 +19,8 @@ const COMMON_SERVICES_DATA = [
         id: 'open-folder-project'
       , name: 'Ouvrir dossier du projet'
       , params: [
-          {id: 'window-bounds', q: 'Positioner et dimmensionner dans le Finder', type: 'bounds'}
+            {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
+          , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
         ]
     }
   , {
@@ -43,7 +44,7 @@ const COMMON_SERVICES_DATA = [
           {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation', type: 'path'}
         ]
       }
-      , {
+  , {
         id:   'read-documentation'
         , name: 'Ouvrir la documentation'
         , params: [
@@ -56,15 +57,6 @@ const COMMON_SERVICES_DATA = [
 /**                     SERVICES PERSONNALISÉS                    **/
 /*******************************************************************/
 const CUSTOM_SERVICES_DATA = [
- {
-      id: 'open-folder-project'
-    , name: 'Ouvrir projet dans Finder'
-    , params: [
-        {id: 'window', q: "Disposez le dossier du projet tel que vous le voulez", value: null, type: 'finder-window'}
-      , {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
-    ]
-  },
-
   {
       id: 'open-finder-window'
     , name: 'Ouvrir une fenêtre dans le Finder'

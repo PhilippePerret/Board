@@ -28,9 +28,9 @@ class ServiceCommon extends Service {
    */
   execOn(projet){
     if (!this.ensureServiceData(projet)) return
-    this.executor.execReally()
+    console.log("exécution (really) de ", this)
+    this.executor.execOnProject(projet)
   }
-
 
   /**
    * Fonction qui s'assure que toutes les informations requises sont
@@ -38,25 +38,16 @@ class ServiceCommon extends Service {
    * les définis
    */
   ensureServiceData(projet){
-    if (projet.sdata) {
-      var projetIsDefined = true
-      for (var param of this.params) {
-        if (undefined == projet.sdata[param.id]){
-          // Si une donnée utile au service commun n'est pas définie
-          // par le projet, il faut les définir.
-          projetIsDefined = false
-        }
-      }
-      if ( projetIsDefined ) return true
-    }
+    console.log("-> ensureServiceData avec projet : ", projet, this)
+    if (projet.sdata && projet.sdata[this.id]) return true
     const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet))
     definer.define()
     return false
   }
 
   onReturnFromDefineProjetParams(projet, _service){
-    const values = _service.params
-    projet = Object.assign(projet, values)
+    projet.sdata = projet.sdata ?? {}
+    Object.assign(projet.sdata, {[_service.id]: _service.params})
     console.log("Projet après définition des paramètres", projet)
     projet.save(this.execOn.bind(this, projet))
   }

@@ -57,9 +57,13 @@ div.services-panel .services-listing {
   margin-bottom: 8px;
   background-color: rgb(70, 69, 69);
 }
-.services-listing .service {
+#custom-services-panel .services-listing .service {
   cursor: move;
 }
+#common-services-panel .services-listing .service {
+  cursor: pointer;
+}
+
 fieldset.services .service {
   cursor: pointer;
 }

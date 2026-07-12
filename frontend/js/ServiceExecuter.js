@@ -24,11 +24,27 @@ class ServiceExecuter {
     }
   }
 
+  /**
+   * Exécution d'un service custom
+   */
   execReally(){
-    // message("Je dois apprendre à exécuter " + this.name)
-    // console.log("Je dois exécuter ", this.service)
-    // Note : pour le moment, ça ne joue que des osascript
-    server.send({action: `exec-service`, script: this.script, params: this.params}, this.afterRunService.bind(this))
+    this.finalyExec(this.params)
+  }
+
+  /**
+   * Exécution d'un service commun
+   * 
+   * La principale différence réside dans le fait que pour un service personnalisé,
+   * les paramètres se trouvent dans son .params propre. Alors que dans le service
+   * commun, c'est dans le projet.sdata que ça se trouve.
+   */
+  execOnProject(projet){
+    this.finalyExec(projet.sdata[this.id])
+  }
+
+  finalyExec(params){
+    console.log("finalyExec avec les paramètres : ", params)
+    server.send({action: `exec-service`, script: this.script, params}, this.afterRunService.bind(this))
   }
 
   // Appelée après avoir exécuté le service

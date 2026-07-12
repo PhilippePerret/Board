@@ -21,6 +21,7 @@
 class ServiceDefiner {
   
   constructor(service, callback){
+    console.log("service", service)
     this.service  = service
     this.params   = service.params.reverse() // pour pouvoir poper
     this.callback = callback
@@ -30,7 +31,8 @@ class ServiceDefiner {
     this.paramsValues = []
 
     // Tant que le nom propre du service n'est pas donné par l'utilisateur
-    this.unnamed = true
+    // (service custom only)
+    this.unnamed = this.service.stype == 'custom'
 
   }
 
@@ -64,9 +66,9 @@ class ServiceDefiner {
   define(){
     console.log("this.paramsValues au début de define", this.paramsValues)
     // Si le service n'est pas encore nommé, il faut le nommer
-    if (this.unnamed) return this.fixCustomName()
+    if (this.unnamed) return this.fixCustomName() // service custom only
     const param = this.params.pop()
-    console.log("param", param)
+    // console.log("param", param)
     if (param) this.defineByType(param)
     else this.resolve()
   }
@@ -94,6 +96,13 @@ class ServiceDefiner {
    */
   defineByType(param){
     switch(param.type){
+      case 'project':
+        /**
+         * Pour les services common, le type 'project' permet de définir une de ses propriétés
+         */
+        this.addParamValue(Project.current[param.id])
+        this.define()
+        break
       case 'finder-window':
         this.attend(param.q || "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK.",
           this.getInfoFinderWindow.bind(this, 'all')
@@ -104,7 +113,6 @@ class ServiceDefiner {
           param.q || "Positionner la fenêtre dans le Finder et cliquer “OK”.",
           this.getInfoFinderWindow.bind(this, 'bounds')
         )
-        console.error("Je dois apprendre à demander le bounds d'une fenêtre Finder")
         break
       /**
        * Quand on doit choisir un chemin d'accès ou retourner NULL
@@ -186,11 +194,11 @@ class ServiceDefiner {
     if (undefined == retour) {
       return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this, what))
     } else {
-      console.log("retour", retour)
+      // console.log("retour", retour)
       const data = retour.data
       if (what === 'bounds'){
         this.addParamValues([
-          ...data.position, ...data.size
+          ...data.position, ...data.size, data.view
         ])
       } else {
         this.addParamValues([

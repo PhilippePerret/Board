@@ -95,6 +95,8 @@ class Service {
     this.name = data.name || raise("Un service doit avoir un :name.")
   }
 
+  get stype(){ return this.constructor.serviceType }
+
   /**
    * Construction dans le listing des services
    */
