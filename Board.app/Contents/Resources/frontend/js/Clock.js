@@ -117,6 +117,7 @@ class Clock {
     if (this.workCheckId) { clearInterval(this.workCheckId); this.workCheckId = null }
   }
   static checkStillWorking(){
+    return null // débranché (Phil s'en occupe lui-même) — TODO
     this.promptCheck(
       "Le travail est-il toujours en cours sur ce projet ?",
       "Mettre en pause",
@@ -134,6 +135,7 @@ class Clock {
     if (this.pauseCheckId) { clearInterval(this.pauseCheckId); this.pauseCheckId = null }
   }
   static checkStillPaused(){
+    return null // débranché (Phil s'en occupe lui-même) — TODO
     this.promptCheck(
       "Le travail a-t-il repris (l'horloge est en pause) ?",
       "Redémarrer",

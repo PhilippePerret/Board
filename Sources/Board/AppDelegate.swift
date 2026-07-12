@@ -35,8 +35,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
 
         // window.center()
-        window.setFrameAutosaveName("MainWindow")
         window.contentViewController = contentViewController
+        // setFrameAutosaveName APRÈS contentViewController : l'assignation du
+        // contentViewController redimensionne la fenêtre selon la vue de
+        // ViewController#loadView (taille codée en dur) — si l'autosave est
+        // restauré avant, ce redimensionnement écrase la taille restaurée
+        // (la position, elle, n'est pas affectée, d'où le symptôme initial :
+        // position persistée, taille jamais).
+        window.setFrameAutosaveName("MainWindow")
         // POSITIONNEMENT PAR DÉFAUT — premier lancement uniquement
         if UserDefaults.standard.object(forKey: "NSWindow Frame MainWindow") == nil {
             window.setFrameOrigin(NSPoint(x: 600, y: 400))
