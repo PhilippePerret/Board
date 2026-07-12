@@ -1,4 +1,4 @@
-class Services {
+class Service {
 
   /**
    * Fonction appelée par le "bouton des services"
@@ -21,7 +21,7 @@ class Services {
    */
   static buildServiceList(retour){
     this.SERVICES_DATA
-      .map(dataService => new Services(dataService))
+      .map(dataService => new this.klass(dataService))
       .forEach( service => service.build())
   }
 

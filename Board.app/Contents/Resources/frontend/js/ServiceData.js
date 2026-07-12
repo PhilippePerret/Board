@@ -1,8 +1,49 @@
 /**
  * Ce fichier déinit les données de tous les services
+ * C'est-à-dire : 
+ * 
+ *  CUSTOM_SERVICES_DATA
+ *    Services de projet personnalisés, à définir pour chaque projet.
+ * 
+ *  COMMON_SERVICES_DATA
+ *    Services commun à tous les projets (par exemple l'ouverture du dossier
+ *    du projet)
  */
 
-const SERVICES_DATA = [
+
+/*******************************************************************/
+/**                     SERVICES COMMUNS                          **/
+/*******************************************************************/
+const COMMON_SERVICES_DATA = [
+    {
+        id: 'open-folder-project'
+      , name: 'Ouvrir dossier du projet'
+      , params: [
+          {id: 'window-bounds', q: 'Positioner et dimmensionner dans le Finder', type: 'bounds'}
+        ]
+    }
+  , {
+        id: 'work-clock'
+      , name: 'Démarrer l’horloge'
+      , params: [
+          {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer'}
+        ]
+    }
+  , {
+        id: 'edit-documentation'
+      , name: 'Éditer la documentation'
+      , params: [
+          {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+        ]
+    }
+  , {id: 'update-documentation'}
+  , {id: 'read-documentation'}
+]
+
+/*******************************************************************/
+/**                     SERVICES PERSONNALISÉS                    **/
+/*******************************************************************/
+const CUSTOM_SERVICES_DATA = [
  {
       id: 'open-folder-project'
     , name: 'Ouvrir projet dans Finder'
@@ -46,6 +87,7 @@ const SERVICES_DATA = [
   {
       id: 'open-terminal'
     , name: 'Ouvrir un Terminal au dossier du projet'
+    , scType: '.rb'
     , params: []
   },
 

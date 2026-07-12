@@ -40,7 +40,7 @@ Three layers, talking over a JSON message bridge:
 3. **Frontend** (`frontend/js/`, plain JS, no framework/bundler, no Promises — see "no-Promise" convention below):
    - `xbridge.js` — `window.bridge` (postMessage/receive plumbing keyed by generated request ids + per-call callbacks) and `window.server.send(data, callback)` as the app-facing API.
    - `Project.js` — project card model/rendering/CRUD.
-   - `Services.js`, `ServiceData.js`, `ServiceDefiner.js`, `ServiceExecuter.js`, `ServicesTools.js` — the services system (see below).
+   - `Service.js`, `ServiceData.js`, `ServiceDefiner.js`, `ServiceExecuter.js`, `ServicesTools.js` — the services system (see below).
    - `Panel.js`, `Dialogs.js`, `Dom.js`, `Dashboard.js`, `utils.js`, `app.js` — UI plumbing/dialogs/misc.
    - Scripts are loaded via plain `<script>` tags in `index.html` (order matters — no module system).
 

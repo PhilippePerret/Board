@@ -3,7 +3,6 @@
  */
 class ServiceCommon extends Service {
   static get panelId(){ return 'common-services-panel'}
-  static get klass(){ return ServiceCommon}
 
   static get SERVICES_DATA(){return COMMON_SERVICES_DATA}
 

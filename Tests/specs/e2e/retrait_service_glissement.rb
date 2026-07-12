@@ -2,7 +2,7 @@
 # Source : demande explicite (2026-07-11), en complément de
 # Tests/_tests_a_faire.adoc "Ajout d'un service au startup"
 #
-# Mécanisme (frontend/js/Services.js, observeServiceCard) : "dragend" sur la
+# Mécanisme (frontend/js/Service.js, observeServiceCard) : "dragend" sur la
 # carte du service appelle projet.removeServiceFromListe() SEULEMENT si
 # e.dataTransfer.dropEffect == "none" — c'est-à-dire seulement si le drop
 # n'a atterri sur AUCUNE zone avec un handler "drop" (othersField/

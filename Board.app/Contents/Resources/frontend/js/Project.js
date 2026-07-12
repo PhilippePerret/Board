@@ -169,6 +169,7 @@ class Project {
     this.id         = data.id ?? Project.uniqId()
     this.title      = data.title ?? '-projet sans titre-'
     this.path       = data.path ?? raise("Le path du projet est obligatoire.")
+    this.sdata      = data.sdata ?? null // données pour les services communs
     this.createdAt  = data.createdAt
     this.updatedAt  = data.updatedAt
     this.workTime   = data.workTime ?? 0
@@ -183,23 +184,25 @@ class Project {
     this.services.others  = (this.services.others  ?? []).map(ds => new Services(ds))
   }
 
-  save(){
+  save(callback){
     server.send({
       action: "save-project",
       data: {
-        id:         this.id,
-        title:      this.title,
-        path:       this.path,
-        workTime:   this.workTime,
-        createdAt:  this.createdAt,
-        updatedAt:  this.updatedAt,
-        services:   this.services
+          id:         this.id
+        , title:      this.title
+        , path:       this.path
+        , sdata:      this.sdata
+        , workTime:   this.workTime
+        , createdAt:  this.createdAt
+        , updatedAt:  this.updatedAt
+        , services:   this.services
       }
-    }, this.afterSave.bind(this))
+    }, this.afterSave.bind(this, callback))
   }
-  afterSave(retour){
-    console.log("retour", retour)
+  afterSave(callback, retour){
+    console.log("retour Project.afterSave", retour)
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
+    callback && callback()
   }
 
   /**

@@ -14,7 +14,7 @@
 # retenu.
 #
 # Setup : service attaché en "others" (pas "startup" — un simple clic suffit
-# à l'exécuter, cf. Services.js#onClickOnProjectService).
+# à l'exécuter, cf. Service.js#onClickOnProjectService).
 #
 # Vérification : le titre par défaut d'une fenêtre Terminal reflète le
 # dossier courant du shell (BoardTest#terminal_front_window_name) —

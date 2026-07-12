@@ -1,7 +1,6 @@
 class ServiceCustom extends Service {
   static get panelId(){ return 'custom-services-panel'}
-  static get klass(){ return ServiceCustom }
-
+  
   static get SERVICES_DATA(){return CUSTOM_SERVICES_DATA}
 
   constructor(data){
