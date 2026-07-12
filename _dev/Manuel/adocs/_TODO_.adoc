@@ -1,6 +1,7 @@
 == Todo list ==
 
 - pouvoir renommer un service
+  - en fait : MAJ + clik (ou meta + click ?) pour rééditer le service (valable pour service custom et common)
 - Service communs
 - Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
   - Pouvoir déplacer les services, donc : 

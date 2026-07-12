@@ -29,7 +29,11 @@ class ServiceCommon extends Service {
   execOn(projet){
     if (!this.ensureServiceData(projet)) return
     console.log("exécution (really) de ", this)
-    this.executor.execOnProject(projet)
+    if (this.id === 'work-clock') {
+      Clock.open(projet, projet.sdata[this.id])
+    } else {
+      this.executor.execOnProject(projet)
+    }
   }
 
   /**

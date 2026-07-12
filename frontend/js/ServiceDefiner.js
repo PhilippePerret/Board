@@ -150,10 +150,20 @@ class ServiceDefiner {
         break
       case 'boolean':
         this.attend(
-          param.q, 
-          this.onBooleanResponse.bind(this, param, true), 
-          this.onBooleanResponse.bind(this, param, false), 
+          param.q,
+          this.onBooleanResponse.bind(this, param, true),
+          this.onBooleanResponse.bind(this, param, false),
           {ouiBtn: 'Oui', nonBtn: 'Non'})
+        break
+      case 'integer':
+        new TextFieldDialog({
+            title: "Définition du service"
+          , id: param.id
+          , message: param.q
+          , defaultValue: param.useLastAsDefault ? this.paramsValues[this.paramsValues.length - 1] : (param.default ?? '')
+          , ouiBtn: {name: 'OK', onclick: this.onIntegerResponse.bind(this, param)}
+          , nonBtn: {name: 'Annuler'}
+        }).show()
         break
       default:
         error("Je ne connais pas le type " + param.type)
@@ -165,6 +175,12 @@ class ServiceDefiner {
   onBooleanResponse(param, trueOrFalse, retour){
     console.log("retour dans onBooleanResponse", retour)
     this.addParamValue(trueOrFalse)
+    this.define()
+  }
+
+  // Reçoit la réponse à une question demandant un entier (minutes, etc.)
+  onIntegerResponse(param, values){
+    this.addParamValue(parseInt(values[0], 10))
     this.define()
   }
 

@@ -1,0 +1,90 @@
+/* Horloge de séance de travail (service commun "work-clock") */
+
+/* Plus de scrim plein écran : petit panneau flottant, ne doit jamais
+   bloquer l'accès aux boutons du reste de l'app. Position de départ
+   bas-gauche, déplaçable (JS) horizontalement seulement — "bottom" n'est
+   jamais touché par le JS. Largeur FIXE : ne doit pas dépendre du nombre
+   de boutons visibles ni du texte affiché (Pause/Restart). */
+.clock-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 500;
+  width: 220px;
+  background: #111118;
+  border-radius: 12px;
+  padding: 18px 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+}
+.clock-panel.hidden { display: none; }
+.clock-panel.dragging { cursor: grabbing; }
+
+.clock-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clock-digits {
+  font-family: 'Avenir Next', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #a9c26a;
+  position: relative;
+  z-index: 1;
+}
+
+.clock-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.clock-ring-bg {
+  fill: none;
+  stroke: #24242f;
+  stroke-width: 5;
+}
+.clock-ring-progress {
+  fill: none;
+  stroke: #a9c26a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.9s linear;
+}
+
+/* Ligne de boutons toujours pleine largeur du panneau (fixe) : cacher un
+   bouton (display:none) ne fait donc jamais varier la taille du panneau,
+   seulement le nombre de boutons centrés dans cette largeur. */
+.clock-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+.clock-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid #8fb454;
+  color: #d3ecA0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  min-width: 68px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+.clock-btn:hover { color: #e8ffb8; border-color: #b8dd7a; background: rgba(255, 255, 255, 0.1); }
+.clock-btn-stop  { border-color: #d16a6a; color: #ffb3b3; }
+.clock-btn-stop:hover { border-color: #ff8a8a; color: #ffd0d0; }

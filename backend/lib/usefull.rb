@@ -1,6 +1,7 @@
 require "json"
 require 'yaml'
 require "fileutils"
+require "timeout"
 
 def ensure_folder(dpath)
   File.join(dpath).tap { |p| FileUtils.mkdir_p(p) }
@@ -37,6 +38,7 @@ end
   '.rb'   => 'ruby',
   '.sh'   => 'zsh'
 }
+SCRIPT_TIMEOUT = 8 # secondes
 ### === Jouer un script du dossier /scripts/ ===
 
 def run_script(script_name, params = "")
@@ -58,15 +60,34 @@ def run_script(script_name, params = "")
       extname = File.extname(script_name)
     end
   end
+  pid = nil
   begin
     cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
     # return  {script_command: "cmd = #{cmd}"}
-    res = `#{cmd} 2>&1`
+    res = nil
+    # Timeout dur : un script (ou une commande qu'il lance, ex. osascript
+    # "tell application Board to activate" pendant que le thread principal
+    # de Board attend justement CE process) peut bloquer indéfiniment sinon,
+    # gelant toute l'app (le bridge est synchrone côté Swift).
+    Timeout.timeout(SCRIPT_TIMEOUT) do
+      IO.popen("#{cmd} 2>&1") do |io|
+        pid = io.pid
+        res = io.read
+      end
+    end
     if res == "" then {ok: null, message: "Aucun retour de la commande."}
     else JSON.parse(res) end
+  rescue Timeout::Error
+    (Process.kill('TERM', pid) rescue nil) if pid
+    {
+      ok: false,
+      warning: "### TIMEOUT SCRIPT (> #{SCRIPT_TIMEOUT}s) ###",
+      cmd: cmd,
+      params: params.inspect
+    }
   rescue Exception => e
     {
-      ok: false, 
+      ok: false,
       warning: "### ERREUR DE SCRIPT ###",
       script_error: e.message,
       cmd: cmd,
