@@ -441,6 +441,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_todo_list">Todo list</a></li>
+<li><a href="#_idées_de_nouveaux_services_2026_07_11">Idées de nouveaux services (2026-07-11)</a></li>
 <li><a href="#_présentation">Présentation</a></li>
 <li><a href="#_prise_en_main">Prise en main</a>
 <ul class="sectlevel2">
@@ -449,6 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#services">Les services</a>
 <ul class="sectlevel2">
+<li><a href="#_définition_des_services">Définition des services</a></li>
 <li><a href="#_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</a></li>
 <li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
@@ -459,8 +461,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_les_projet">Les projet</a></li>
 <li><a href="#_collecte_informations">Collecte informations</a></li>
-<li><a href="#_définition_des_services">Définition des services</a></li>
 <li><a href="#_définition_des_services_2">Définition des services</a></li>
+<li><a href="#_définition_des_services_3">Définition des services</a></li>
 </ul>
 </li>
 </ul>
@@ -473,7 +475,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Pouvoir déplacer les projets (à la souris, avec les flèches)</p>
+<p>pouvoir renommer un service</p>
+</li>
+<li>
+<p>Service communs</p>
 </li>
 <li>
 <p>Maj+click sur service pour le sélectionner &#8658; boutons services ("↑", "↓", delete)</p>
@@ -492,6 +497,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>Reprendre le module horloge ici avec le calcul des temps</p>
+</li>
+<li>
+<p>pouvoir redéfinir la position/taille d&#8217;une fenêtre de service</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_idées_de_nouveaux_services_2026_07_11">Idées de nouveaux services (2026-07-11)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Terminal positionné sur le dossier du projet (juste <code>cd</code>, sans rien lancer) — en cours</p>
+</li>
+<li>
+<p>Ouvrir dans VSCode (déjà mentionné comme exemple dans <code>CLAUDE.md</code>, jamais implémenté)</p>
+</li>
+<li>
+<p>Lancer un serveur de dev (<code>npm run dev</code>, <code>rails server</code>&#8230;&#8203;) — terminal dédié, pas juste "jouer un script"</p>
+</li>
+<li>
+<p>Ouvrir le repo Git (statut, ou <code>git pull</code>/<code>push</code>)</p>
+</li>
+<li>
+<p>Ouvrir l&#8217;URL locale du projet dans le navigateur</p>
+</li>
+<li>
+<p>pouvoir définir :</p>
+</li>
+<li>
+<p>le navigateur par défaut</p>
+</li>
+<li>
+<p>l&#8217;éditeur de documentation (asciidoctor) par défaut  (CotEditor)</p>
+</li>
+<li>
+<p>le traitement de texte par défaut</p>
 </li>
 </ul>
 </div>
@@ -616,8 +660,42 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="services">Les services</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_définition_des_services">Définition des services</h3>
+<div class="paragraph">
+<p>Il existe deux grandes catégories de services :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>les <a href="#custom-services">services personnalisés</a></p>
+</li>
+<li>
+<p>les <a href="#common-services">services communs</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="custom-services">Services personnalisés</h4>
+<div class="paragraph">
+<p>On peut basculer des <a href="#common-services">services communs</a> aux custom-services grâce au bouton “Services communs”.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="common-services">Services communs</h4>
+<div class="paragraph">
+<p>Les services communs ne s&#8217;ajoutent pas aux projets, ils sont toujours accessibles par eux. Le premier service commun est par exemple “Ouvrir le dossier du projet”</p>
+</div>
+<div class="paragraph">
+<p>On affiche les services communs simplement en cliquant sur la fiche d&#8217;un projet. En même temps qu&#8217;il se met en sélection, la liste des services communs s&#8217;affiche à droite de l&#8217;interface.</p>
+</div>
+<div class="paragraph">
+<p>On peut basculer des <a href="#custom-services">services personnalisés</a> aux services communs grâce au bouton “Services personnalisés”.</p>
+</div>
 <div class="paragraph">
 <p><em>Cette partie décrit tous les services qu&#8217;on peut utiliser pour un projet.</em></p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</h3>
@@ -869,7 +947,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_définition_des_services">Définition des services</h3>
+<h3 id="_définition_des_services_2">Définition des services</h3>
 <div class="paragraph">
 <p>L&#8217;intégralité des services est définie dans le fichier <code>frontend/js/ServicesData.js</code></p>
 </div>
@@ -953,7 +1031,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_définition_des_services_2">Définition des services</h3>
+<h3 id="_définition_des_services_3">Définition des services</h3>
 <div class="paragraph">
 <p>Les services sont définis précisément dans le fichier <code>frontend/js/ServiceData.js</code>.</p>
 </div>

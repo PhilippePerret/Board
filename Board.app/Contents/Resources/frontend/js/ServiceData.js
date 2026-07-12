@@ -42,8 +42,9 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'update-documentation'
     , name: 'Actualiser la documentation'
+    , scType: '.rb'
     , params: [
-        {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation', type: 'path'}
+        {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation (.adoc)', type: 'path'}
       ]
   },
   {
