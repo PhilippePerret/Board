@@ -17,6 +17,10 @@ class App {
     }
   }
 
+  static getData(key){
+    return this.data[key]
+  }
+
   static get saveData(){ return this._savedata || (this._savedata = debounce(this.execSaveData.bind(this), 1000))}
   static execSaveData(){
     // historize("-> execSaveData")

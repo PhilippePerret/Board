@@ -33,8 +33,10 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'edit-documentation'
     , name: 'Éditer la documentation'
+    , scType: '.rb'
     , params: [
-        {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+          {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+        , {id: 'documentation-editor', type: 'app'}
       ]
   },
   {

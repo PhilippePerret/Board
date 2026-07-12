@@ -96,6 +96,10 @@ class ServiceDefiner {
    */
   defineByType(param){
     switch(param.type){
+      case 'app':
+        this.addParamValue(App.getData([param.id]))
+        this.define()
+        break
       case 'project':
         /**
          * Pour les services common, le type 'project' permet de définir une de ses propriétés

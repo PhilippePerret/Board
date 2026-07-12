@@ -52,7 +52,10 @@ def run_script(script_name, params = "")
       if res == "" then {ok: null, message: "Aucun retour de la commande."}
       else JSON.parse(res) end
     rescue Exception => e
-      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}"}
+      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}",
+        cmd: cmd,
+        params: params.inspect
+      }
     end
   else
     {ok: false, error: "Je ne sais pas traiter un script #{script_name}"}
