@@ -48,15 +48,23 @@ const COMMON_SERVICES_DATA = [
       ]
   },
   {
-      id:   'read-documentation'
-      , name: 'Ouvrir la documentation'
-      , params: [
-        {id: 'docu-main-file', q: 'Sélectionner le fichier HTML/PDF du manuel', type: 'path'}
-    ]
+      id:   'open-a-file'
+    , name: 'Ouvrir la documentation'
+    , params: [
+        {id: 'docu-main-file', q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}
+      ]
   },
   {
       id: 'open-terminal-at-folder'
     , name: 'Terminal au dossier'
+    , params: [
+        {id: 'path', type: 'project'}
+      ]
+  },
+  {
+      id: 'open-in-vscode'
+    , name: 'Ouvrir dans VSCode'
+    , scType: '.sh'
     , params: [
         {id: 'path', type: 'project'}
       ]

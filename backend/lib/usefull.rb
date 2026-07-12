@@ -40,26 +40,51 @@ end
 ### === Jouer un script du dossier /scripts/ ===
 
 def run_script(script_name, params = "")
+  # - Préambule -
+  # Quand script_name a pour extension .scpt, c'est peut-être un
+  # scType oublié dans le service.
+  # Mais comme je ne veux plus que ça soit indiqué, on fait un test 
+  # ici pour trouver vraiment le script quand il n'existe pas.
   params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
   cmd = nil
   extname = File.extname(script_name)
-  case extname
-  when '.scpt', '.rb', '.sh'
-    begin
-      cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
-      # return  {script_command: "cmd = #{cmd}"}
-      res = `#{cmd}`
-      if res == "" then {ok: null, message: "Aucun retour de la commande."}
-      else JSON.parse(res) end
-    rescue Exception => e
-      {ok: false, error: "### ERREUR DE SCRIPT : #{e.message}\navec la commande : #{cmd}",
-        cmd: cmd,
-        params: params.inspect
-      }
+  if extname == '.scpt'
+    unless File.exist?("./scripts/#{script_name}")
+      ini_script_name = "#{script_name}"
+      script_name = search_real_scriptname(script_name)
+      if script_name.nil?
+        return {ok: false, name: "Impossible de trouver le script à jouer (#{ini_script_name})"}
+      end
+      extname = File.extname(script_name)
     end
-  else
-    {ok: false, error: "Je ne sais pas traiter un script #{script_name}"}
   end
+  begin
+    cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
+    # return  {script_command: "cmd = #{cmd}"}
+    res = `#{cmd} 2>&1`
+    if res == "" then {ok: null, message: "Aucun retour de la commande."}
+    else JSON.parse(res) end
+  rescue Exception => e
+    {
+      ok: false, 
+      warning: "### ERREUR DE SCRIPT ###",
+      script_error: e.message,
+      cmd: cmd,
+      params: params.inspect
+    }
+  end
+end
+
+def search_real_scriptname(script_name)
+  folder = File.dirname(script_name)
+  rootname = File.basename(script_name, File.extname(script_name))
+  ['rb', 'sh', 'py', 'scpt'].each do |extension|
+    # raise "Premier : #{File.absolute_path(File.join('scripts', "#{rootname}.#{extension}"))}"
+    if File.exist?( File.join('scripts', new_file_name = "#{rootname}.#{extension}"))
+      return new_file_name
+    end
+  end
+  return nil
 end
 
 def human_date_to_aaammjj(date)

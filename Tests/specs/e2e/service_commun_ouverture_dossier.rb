@@ -12,8 +12,10 @@
 #   - sélection du projet → le panneau des services communs s'ouvre seul
 #     (Project.js#affProjectButtons -> Service.showCommonPanel)
 #   - clic sur "Ouvrir dossier du projet"
-#   - dialogue de nommage (ServiceDefiner#fixCustomName, commun à toute
-#     définition de service, cf. attribution_service.rb)
+#   - PAS de dialogue de nommage : ServiceDefiner#unnamed vaut
+#     `this.service.stype == 'custom'` (Service.js#stype), donc false pour un
+#     service commun — contrairement à un service custom (cf.
+#     attribution_service.rb, qui lui passe par ce dialogue)
 #   - dialogue de positionnement de fenêtre Finder → OK
 #   → le dossier du projet doit s'ouvrir dans le Finder
 #   - rechargement de l'app, re-sélection du projet, nouveau clic sur le
@@ -42,10 +44,6 @@ def run_test
     # → le panneau des services communs s'ouvre automatiquement à la sélection
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
-
-    # → dialogue de nommage, premier écran de toute définition de service
-    wait_for('__service_name__', 10)
-    click('btn-oui')
 
     # → dialogue de positionnement (bounds) : nécessite une fenêtre Finder au
     #   premier plan au moment de valider — n'importe laquelle convient
