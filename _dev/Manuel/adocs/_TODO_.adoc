@@ -1,8 +1,24 @@
 == Todo list ==
 
+- pouvoir renommer un service
+- Services communs
 - Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
   - Pouvoir déplacer les services, donc : 
     - click les sélectionne
     - flèches les déplacent
     - Delete les retire
 - Reprendre le module horloge ici avec le calcul des temps
+- pouvoir redéfinir la position/taille d'une fenêtre de service
+
+== Idées de nouveaux services (2026-07-11) ==
+
+- Terminal positionné sur le dossier du projet (juste `cd`, sans rien lancer) — en cours
+- Ouvrir dans VSCode (déjà mentionné comme exemple dans `CLAUDE.md`, jamais implémenté)
+- Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
+- Ouvrir le repo Git (statut, ou `git pull`/`push`)
+- Ouvrir l'URL locale du projet dans le navigateur
+
+- pouvoir définir : 
+ - le navigateur par défaut
+ - l'éditeur de documentation (asciidoctor) par défaut  (CotEditor)
+ - le traitement de texte par défaut

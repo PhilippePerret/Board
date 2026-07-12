@@ -3,6 +3,15 @@
  */
 
 const SERVICES_DATA = [
+ {
+      id: 'open-folder-project'
+    , name: 'Ouvrir projet dans Finder'
+    , params: [
+        {id: 'window', q: "Disposez le dossier du projet tel que vous le voulez", value: null, type: 'finder-window'}
+      , {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
+    ]
+  },
+
   {
       id: 'open-finder-window'
     , name: 'Ouvrir une fenêtre dans le Finder'
@@ -35,6 +44,20 @@ const SERVICES_DATA = [
   },
 
   {
+      id: 'open-terminal'
+    , name: 'Ouvrir un Terminal au dossier du projet'
+    , params: []
+  },
+
+  {
+      id: 'open-URL'
+    , name: 'Ouvrir l’URL…'
+    , params: [
+      {id: 'url', q:'Quel URL faut-il rejoindre ?', type: 'url', required: true}
+    ]
+  },
+
+  {
       id: 'run-chronometre'
     , name: "Chronomètre"
     , params: [
@@ -51,12 +74,4 @@ const SERVICES_DATA = [
       ]
   },
 
-  {
-      id: 'open-folder-project'
-    , name: 'Ouvrir projet dans Finder'
-    , params: [
-        {id: 'window', q: "Disposez le dossier du projet tel que vous le voulez", value: null, type: 'finder-window'}
-      , {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
-    ]
-  }
-]
+ ]

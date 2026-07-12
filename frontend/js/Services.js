@@ -1,11 +1,26 @@
 class Services {
 
   /**
+   * Fonction appelée par le "bouton des services"
+   * Il permet de basculer entre le panneau des services communs et
+   * le panneau des services personnalisés
+   */
+  static toggle(){
+    if (this.panelId == 'common-services-panel'){
+      this.panelId = 'custom-services-panel'
+      ServiceCustom.openPanel()
+    } else {
+      this.panelId = 'common-services-panel'
+      ServiceCommon.openPanel()
+    }
+  }
+
+  /**
    * Construit la liste des services en la relevant en backend
    * 
    */
   static buildServiceList(retour){
-    SERVICES_DATA
+    this.SERVICES_DATA
       .map(dataService => new Services(dataService))
       .forEach( service => service.build())
   }
@@ -16,7 +31,7 @@ class Services {
     this.built = true
   }
 
-  static open(){
+  static openPanel(){
     this.built || this.build()
     this.panel.open()
   }
@@ -28,10 +43,12 @@ class Services {
 
 
   static get ServicesListing(){
-    return this._servlist || (this._servlist = DGet('#services-panel .services-listing'))
+    return this._servlist || (this._servlist = DGet('.services-listing', this.panel))
   }
+  static get panelId(){return this._panelid ?? 'custom-services-panel'}
+  static set panelId(v){ this._panelid = v}
   static get panel(){
-    return this._panel || (this._panel = new MiniPanel(DGet('div#services-panel')))
+    return this._panel || (this._panel = new MiniPanel(DGet(`div#${this.panelId}`)))
   }
 
   /**
@@ -89,9 +106,6 @@ class Services {
     this.constructor.ServicesListing.appendChild(div)
     this.observe()
   }
-  observe(){
-    listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
-  } 
 
   get executor(){ return this._executor || (this._executor = new ServiceExecuter(this))}
   

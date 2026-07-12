@@ -13,7 +13,7 @@ class ServiceExecuter {
   // Exécution du service
   exec(callback){
     if (typeof callback == 'function') this.callback = callback
-    const SDATA = SERVICES_DATA.filter(d => d.id == this.id)[0]
+    const SDATA = CUSTOM_SERVICES_DATA.filter(d => d.id == this.id)[0]
     // S'il existe des paramètres dynamiques, il faut les traiters
     if (SDATA.dynParams) {
       this.dynParams = SDATA.dynParams.reverse()

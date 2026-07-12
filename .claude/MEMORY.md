@@ -14,3 +14,4 @@
 - [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
 - [État des moteurs de test](project_test_engines_status.md) — base/batch/compiled/pers retirés (benchmarkés, plus lents), swift+pont gardés, pont défaut
 - [Bug clic double service ouvert](project_double_click_service_bug.md) — AXPress ne reproduit pas le bug réel, investigation à reprendre côté console dev live
+- [PRIORITÉ — service open-terminal en cours](project_open_terminal_service_wip.md) — test écrit/échec confirmé, backend + injection du path pas encore faits

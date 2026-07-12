@@ -25,4 +25,5 @@ done
 
 TEST_VERSION="$tvers"
 CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$CUR_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "${args[@]}"
+APP_DIR=$(dirname $CURDIR)
+exec "$APP_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "${args[@]}"

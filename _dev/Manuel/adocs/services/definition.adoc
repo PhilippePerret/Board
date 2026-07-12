@@ -1,0 +1,20 @@
+=== Définition des services ===
+
+Il existe deux grandes catégories de services : 
+
+- les <<custom-services, services personnalisés>>
+- les <<common-services, services communs>>
+
+[[custom-services, services personnalisés]]
+==== Services personnalisés
+
+On peut basculer des <<services communs>> aux custom-services grâce au bouton “Services communs”.
+
+[[common-services, services communs]]
+==== Services communs ====
+
+Les services communs ne s'ajoutent pas aux projets, ils sont toujours accessibles par eux. Le premier service commun est par exemple “Ouvrir le dossier du projet”
+
+On affiche les services communs simplement en cliquant sur la fiche d'un projet. En même temps qu'il se met en sélection, la liste des services communs s'affiche à droite de l'interface.
+
+On peut basculer des <<custom-services>> aux services communs grâce au bouton “Services personnalisés”.

@@ -117,10 +117,14 @@ class ServiceDefiner {
        * 'path-or-null'
        */
       case 'path':
-        message("Je dois apprendre à définir un chemin d'accès")
         this.attend(param.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
           this.getPathOfFinderSelection.bind(this)
         )
+        break
+      case 'url':
+        message("")
+        this.attendsPourTexte(param.q || "Quelle URL faut-il rejoindre ?"),
+          this
         break
       case 'app':
         message("Je dois apprendre à définir une application (CLI)")
@@ -182,13 +186,20 @@ class ServiceDefiner {
     }
   }
 
-
+  attendsPourTexte(message, callback, fallback = null, options = null){
+    new TextFieldDialog({
+        title: "Définition d'URL"
+      , message: message
+      , ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback}
+      , nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
+    }).show()
+  }
   attend(message, callback, fallback = null, options = null){
     new ConfirmDialog({
-      title: "Définition du service",
-      message: message,
-      ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback},
-      nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
+        title: "Définition du service"
+      , message: message
+      , ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback}
+      , nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
     }).show()
   }
   

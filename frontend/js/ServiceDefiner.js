@@ -96,8 +96,15 @@ class ServiceDefiner {
     switch(param.type){
       case 'finder-window':
         this.attend(param.q || "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK.",
-          this.getInfoFinderWindow.bind(this)
+          this.getInfoFinderWindow.bind(this, 'all')
         )
+        break
+      case 'bounds':
+        this.attend(
+          param.q || "Positionner la fenêtre dans le Finder et cliquer “OK”.",
+          this.getInfoFinderWindow.bind(this, 'bounds')
+        )
+        console.error("Je dois apprendre à demander le bounds d'une fenêtre Finder")
         break
       /**
        * Quand on doit choisir un chemin d'accès ou retourner NULL
@@ -117,13 +124,17 @@ class ServiceDefiner {
        * 'path-or-null'
        */
       case 'path':
-        message("Je dois apprendre à définir un chemin d'accès")
         this.attend(param.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
           this.getPathOfFinderSelection.bind(this)
         )
         break
+      case 'url':
+        message("")
+        this.attendsPourTexte(param.q || "Quelle URL faut-il rejoindre ?"),
+          this
+        break
       case 'app':
-        message("Je dois apprendre à définir une application (CLI)")
+        message("Je dois apprendre à définir une application (CLI, bash, ruby, zsh, python3, etc.)")
         break
       case 'boolean':
         this.attend(
@@ -131,7 +142,6 @@ class ServiceDefiner {
           this.onBooleanResponse.bind(this, param, true), 
           this.onBooleanResponse.bind(this, param, false), 
           {ouiBtn: 'Oui', nonBtn: 'Non'})
-        message("Je dois apprendre à régler une valeur booléenne")
         break
       default:
         error("Je ne connais pas le type " + param.type)
@@ -168,27 +178,44 @@ class ServiceDefiner {
   // Va chercher les informations sur la fenêtre courante dans le Finder
   // et les ajouter à this.paramsValues
   // Puis poursuit la définition
-  getInfoFinderWindow(retour){
+  /**
+   * @param what 'bounds' ou 'all'
+   * @param retour Retourne du serveur avec les informations
+   */
+  getInfoFinderWindow(what, retour){
     if (undefined == retour) {
-      return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this))
+      return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this, what))
     } else {
       console.log("retour", retour)
       const data = retour.data
-      this.addParamValues([
-        // path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
-        data.path, ...data.position, ...data.size, data.sidebarWidth, data.view
-      ])
+      if (what === 'bounds'){
+        this.addParamValues([
+          ...data.position, ...data.size
+        ])
+      } else {
+        this.addParamValues([
+          // path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
+          data.path, ...data.position, ...data.size, data.sidebarWidth, data.view
+        ])
+      }
       this.define()
     }
   }
 
-
+  attendsPourTexte(message, callback, fallback = null, options = null){
+    new TextFieldDialog({
+        title: "Définition d'URL"
+      , message: message
+      , ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback}
+      , nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
+    }).show()
+  }
   attend(message, callback, fallback = null, options = null){
     new ConfirmDialog({
-      title: "Définition du service",
-      message: message,
-      ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback},
-      nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
+        title: "Définition du service"
+      , message: message
+      , ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback}
+      , nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
     }).show()
   }
   

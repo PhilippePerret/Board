@@ -150,6 +150,16 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'front-window-name')
   end
 
+  # Pour le service "open-terminal" : le titre par défaut d'une fenêtre
+  # Terminal reflète le dossier courant du shell — pas de script dédié, une
+  # ligne d'AppleScript suffit (pas de fermeture/nettoyage à gérer ici, à
+  # la différence de Finder — cf. feedback finder_window_closing_safety).
+  def terminal_front_window_name
+    out = IO.popen(['osascript', '-e', 'tell application "Terminal" to get name of front window'], err: [:child, :out], &:read)
+    raise "lecture du nom de la fenêtre Terminal a échoué : #{out}" unless $?.success?
+    out.strip
+  end
+
   # Ne ferme QUE si la fenêtre Finder au premier plan porte bien ce nom au
   # moment de fermer (pas seulement au moment de l'ouverture) — si autre
   # chose a pris le focus entre-temps (une fenêtre Finder personnelle de

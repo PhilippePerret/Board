@@ -1,6 +1,9 @@
 [[services]]
 == Les services ==
 
+include::services/definition.adoc[]
+
+
 _Cette partie décrit tous les services qu'on peut utiliser pour un projet._
 
 === Ouvrir une fenêtre dans le Finder ===
