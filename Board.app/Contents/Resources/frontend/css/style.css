@@ -1,5 +1,5 @@
 :root {
-  --hauteur-footer: '40px'
+  --hauteur-footer: 40px;
 }
 body {
   font-size: 16pt;
@@ -57,6 +57,7 @@ header div#app-name {
   color: white;
   font: 32px Avenir Next;
   padding: 0.1em 1em;
+  cursor: pointer;
 }
 
 div#current-project-mark {

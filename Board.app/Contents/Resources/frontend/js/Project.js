@@ -263,7 +263,7 @@ class Project {
     this.preAddService(service, 'others')
   }
   preAddService(service, where){
-    // console.log("-> preAddService", service)
+    console.log("-> preAddService", service)
     service.define(this, this.addService.bind(this, service, where))
   }
   addService(service, where /* others ou startup */){

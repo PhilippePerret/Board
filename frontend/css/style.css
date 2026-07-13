@@ -57,6 +57,7 @@ header div#app-name {
   color: white;
   font: 32px Avenir Next;
   padding: 0.1em 1em;
+  cursor: pointer;
 }
 
 div#current-project-mark {

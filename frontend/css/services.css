@@ -1,5 +1,5 @@
 :root {
-  --editor-width: 300px; 
+  --editor-width: 380px; 
 }
 /* Panneau d'édition du projet */
 div.services-panel {
@@ -8,7 +8,7 @@ div.services-panel {
   height: calc(100% - 2em);
   width: var(--editor-width);
   right: 0;
-  padding: 2em;
+  padding: 1em;
   z-index:100;
   background-color: #aab2c9;
 }
@@ -80,4 +80,15 @@ fieldset.services .service:active {
 
 fieldset.services fieldset.services-group legend {
   color: rgb(28, 0, 140);
+}
+
+/* Panneau de réglages de l'application (AppDataPanel) */
+#app-data-panel .services-listing .service {
+  cursor: pointer;
+}
+.app-data-row .app-data-value {
+  font-size: 14px;
+  font-style: italic;
+  color: #ccc;
+  margin-top: 4px;
 }

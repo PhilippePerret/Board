@@ -1,6 +1,7 @@
 window.onload = function(ev){
   historize("Application chargée.")
   App.init()
+  listen(DGet('#app-name'), 'click', () => AppDataPanel.toggle())
 }
 
 class App {
