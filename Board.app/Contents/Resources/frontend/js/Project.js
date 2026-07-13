@@ -181,6 +181,7 @@ class Project {
     this.title      = data.title ?? '-projet sans titre-'
     this.path       = data.path ?? raise("Le path du projet est obligatoire.")
     this.sdata      = data.sdata ?? null // données pour les services communs
+    this.background = data.background ?? null
     this.createdAt  = data.createdAt
     this.updatedAt  = data.updatedAt
     this.workTime   = data.workTime ?? 0
@@ -340,6 +341,7 @@ class Project {
     const divId = `project-${this.id}`
     const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})
     div.dataset.projectId = this.id
+    if (this.background) div.style.background = this.background
     this.obj = div
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
     this.divTitle = tit
