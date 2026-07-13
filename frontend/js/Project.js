@@ -175,18 +175,17 @@ class Project {
     return DGetAll('div.project', this.container).map( div => div.dataset.projectId)
   }
 
+  static PROPERTIES = [
+    'id', 'title', 'path', 'sdata', 'workTime', 'createdAt', 'updatedAt',
+    'services', 'background', 'icon'
+  ]
+
   constructor(data){
     console.log("data", data)
-    this.id         = data.id ?? Project.uniqId()
-    this.title      = data.title ?? '-projet sans titre-'
-    this.path       = data.path ?? raise("Le path du projet est obligatoire.")
-    this.sdata      = data.sdata ?? null // données pour les services communs
-    this.background = data.background ?? null
-    this.icon       = data.icon ?? null
-    this.createdAt  = data.createdAt
-    this.updatedAt  = data.updatedAt
-    this.workTime   = data.workTime ?? 0
-    this.services   = data.services ?? {startup: [], others: []}
+    this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
+    if (this.id     === null) this.id = Project.uniqId()
+    if (this.title  === null) this.title = '-projet sans titre-'
+    if (this.path   === null) raise("Le path du projet est obligatoire.")
     this.constructor.add(this)
     this.initServices()
     
@@ -198,19 +197,11 @@ class Project {
   }
 
   save(callback){
-    server.send({
-      action: "save-project",
-      data: {
-          id:         this.id
-        , title:      this.title
-        , path:       this.path
-        , sdata:      this.sdata
-        , workTime:   this.workTime
-        , createdAt:  this.createdAt
-        , updatedAt:  this.updatedAt
-        , services:   this.services
-      }
-    }, this.afterSave.bind(this, callback))
+    const newData = {}
+    this.constructor.PROPERTIES.forEach(prop => Object.assign(newData, {[prop]: this[prop]}))
+    server.send(
+        {action: "save-project", data: newData}
+      , this.afterSave.bind(this, callback))
   }
   afterSave(callback, retour){
     console.log("retour Project.afterSave", retour)
