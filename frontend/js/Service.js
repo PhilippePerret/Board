@@ -103,6 +103,7 @@ class Service {
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.scType     = data.scType ?? '.scpt'
     this.script     = data.script ?? (kebabToPascalCase(this.id) + this.scType)
+    this.front      = data.front ?? null
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")
