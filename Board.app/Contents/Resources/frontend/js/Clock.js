@@ -32,10 +32,8 @@ class Clock {
     panel.appendChild(wrap)
 
     const btnRow = DCreate('DIV', {class: 'clock-btn-row'})
-    this.btnStart = DCreate('BUTTON', {id: 'btn-clock-start', class: 'clock-btn clock-btn-start', text: 'Start'})
-    this.btnPause = DCreate('BUTTON', {id: 'btn-clock-pause', class: 'clock-btn hidden', text: 'Pause'})
-    this.btnStop  = DCreate('BUTTON', {id: 'btn-clock-stop', class: 'clock-btn clock-btn-stop hidden', text: 'Stop'})
-    btnRow.appendChild(this.btnStart)
+    this.btnPause = DCreate('BUTTON', {id: 'btn-clock-pause', class: 'clock-btn clock-btn-invisible', text: 'Pause'})
+    this.btnStop  = DCreate('BUTTON', {id: 'btn-clock-stop', class: 'clock-btn clock-btn-stop clock-btn-invisible', text: 'Stop'})
     btnRow.appendChild(this.btnPause)
     btnRow.appendChild(this.btnStop)
     panel.appendChild(btnRow)
@@ -43,10 +41,11 @@ class Clock {
     document.body.appendChild(panel)
 
     this._panel  = panel
+    this._wrap   = wrap
     this._ring   = DGet('#clock-ring', panel)
     this._digits = DGet('#clock-digits', panel)
 
-    listen(this.btnStart, 'click', this.onClickStart.bind(this))
+    listen(this._wrap,     'click', this.onClickStart.bind(this))
     listen(this.btnPause, 'click', this.onClickPause.bind(this))
     listen(this.btnStop,  'click', this.onClickStop.bind(this))
 
@@ -57,7 +56,7 @@ class Clock {
   }
 
   static onDragStart(ev){
-    if (ev.target.closest('.clock-btn')) return
+    if (ev.target.closest('.clock-btn') || ev.target.closest('.clock-wrap')) return
     this._dragging     = true
     this._dragStartX   = ev.clientX
     this._panelStartLeft = this._panel.getBoundingClientRect().left
@@ -196,19 +195,18 @@ class Clock {
 
   static setState(state){
     if (state === 'prelaunch') {
-      this.btnStart.classList.remove('hidden')
-      this.btnPause.classList.add('hidden')
-      this.btnStop.classList.add('hidden')
+      this.btnPause.classList.add('clock-btn-invisible')
+      this.btnStop.classList.add('clock-btn-invisible')
     } else if (state === 'running') {
-      this.btnStart.classList.add('hidden')
-      this.btnPause.classList.remove('hidden')
+      this.btnPause.classList.remove('clock-btn-invisible')
       this.btnPause.textContent = 'Pause'
-      this.btnStop.classList.remove('hidden')
+      this.btnStop.classList.remove('clock-btn-invisible')
     }
   }
 
   static onClickStart(){
-    if (!this.startTime) this.startTime = Date.now()
+    if (this.startTime) return // déjà démarrée : le clic sur l'horloge ne relance rien
+    this.startTime = Date.now()
     this.paused = false
     this.startTicking()
     this.startWorkCheck()

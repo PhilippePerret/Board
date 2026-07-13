@@ -70,10 +70,14 @@ fieldset.services .service {
 fieldset.services .service:active {
   background-color: rgb(14, 14, 14);
 }
-  
+
 .service * {
   font-size: 19px;
   font-family: Avenir Next Condensed;
   color: white;
   text-align: center;
+}
+
+fieldset.services fieldset.services-group legend {
+  color: rgb(28, 0, 140);
 }

@@ -1,13 +1,14 @@
 # Test : service commun "work-clock" ("Démarrer l'horloge")
-# Source : demande explicite (2026-07-12).
+# Source : demande explicite (2026-07-12), UI horloge revue (2026-07-13).
 #
 # Déroulé : sélection projet -> clic "Démarrer l'horloge" -> 1re définition
 # (durée de session puis durée de tranche, préremplie avec la session,
 # ServiceDefiner#defineByType case 'integer') -> sdata['work-clock'] enregistrée
 # en tableau positionnel [session, work] (PAS un objet nommé) -> horloge
-# affichée (Clock.js) -> Start/Pause/Restart/Stop -> Stop enchaîne 2
-# TextareaDialog (changelog puis todo) -> backend 'update-project-notes' écrit
-# CHANGELOG.md/TODO.md à la racine du projet -> workTime incrémenté.
+# affichée (Clock.js) -> clic sur le rond (#clock-dial) = start -> pause ->
+# restart -> bouton Stop séparé -> Stop enchaîne 2 TextareaDialog (changelog
+# puis todo) -> backend 'update-project-notes' écrit CHANGELOG.md/TODO.md à
+# la racine du projet -> workTime incrémenté.
 #
 # Second passage (après rechargement) : même service, sans redemander
 # session/work (déjà en sdata).
@@ -49,25 +50,18 @@ def run_test
       read_project_card(id).dig('sdata', 'work-clock') == [20, 15]
     end
 
-    # → l'horloge s'affiche, bouton Start visible
-    wait_for('btn-clock-start', 10)
+    # → l'horloge s'affiche, rond cliquable, bouton Stop pas encore visible
+    wait_for('clock-dial', 10)
 
-    # - Start
-    click('btn-clock-start')
-    wait_for('btn-clock-pause', 5)
+    # - Start (clic sur le rond)
+    click('clock-dial')
     wait_for('btn-clock-stop', 5)
 
-    # - Pause
-    click('btn-clock-pause')
-    wait_until(5, desc: -> { "texte bouton pause = #{get_text('btn-clock-pause').inspect}" }) do
-      get_text('btn-clock-pause') == 'Restart'
-    end
+    # - Pause (2e clic sur le rond)
+    click('clock-dial')
 
-    # - Restart
-    click('btn-clock-pause')
-    wait_until(5, desc: -> { "texte bouton pause = #{get_text('btn-clock-pause').inspect}" }) do
-      get_text('btn-clock-pause') == 'Pause'
-    end
+    # - Restart (3e clic sur le rond)
+    click('clock-dial')
 
     # - Stop → changelog puis todo
     click('btn-clock-stop')
@@ -106,7 +100,7 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → cette fois, aucun dialogue de définition : l'horloge s'affiche direct
-    wait_for('btn-clock-start', 10)
+    wait_for('clock-dial', 10)
     raise 'dialogue de définition réapparu après rechargement' if exists?('__session-duration__')
   end
 ensure
