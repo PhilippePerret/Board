@@ -9,28 +9,45 @@
  */
 
 // Liste commune aux 3 réglages de type 'app' (éditeurs)
-const APP_DATA_EDITORS = [
+const CODE_EDITORS = [
     'Visual Studio Code'
   , 'Sublime Text'
   , 'TextMate'
+  , 'CotEditor'
   , 'BBEdit'
   , 'Xcode'
-  , 'Typora'
-  , 'TextEdit'
   , 'Nova'
   , 'Zed'
   , 'Atom'
   , 'IntelliJ IDEA'
   , 'WebStorm'
-  , 'Finder'
+]
+const TEXT_EDITORS = [
+    'CotEditor'
+  , 'Typora'
+  , 'TextEdit'
+  , 'LibreOffice'
+  , 'Word'
+  , 'Note.app'
+  , 'BBEdit'
 ]
 
+const BROWSERS = [
+    'Firefox'
+  , 'Safari'
+  , 'Google Chrome'
+  , 'Edge'
+  , 'Thor'
+]
+
+
 const APP_DATA = [
-    {id: 'version',                    name: 'Version de l’application',            type: 'string', locked: true}
-  , {id: 'documentation-editor',       name: 'Éditeur pour la documentation',       type: 'app',    values: APP_DATA_EDITORS}
-  , {id: 'code-editor',                name: 'Éditeur pour le code',                type: 'app',    values: APP_DATA_EDITORS, default: 'Visual Studio Code'}
-  , {id: 'text-editor',                name: 'Éditeur pour les textes simples',     type: 'app',    values: APP_DATA_EDITORS, default: 'Typora'}
-  , {id: 'documentation-folder-name',  name: 'Nom du dossier de documentation',     type: 'string', default: 'Documentation'}
-  , {id: 'changelog-file',             name: 'Nom du fichier changelog',            type: 'string', default: 'CHANGELOG.md'}
-  , {id: 'todo-file',                  name: 'Nom du fichier TODO',                 type: 'string', default: 'TODO.md'}
+    {id: 'documentation-editor'       , name: 'Éditeur pour la documentation'     , type: 'select'    , values: TEXT_EDITORS}
+  , {id: 'default-browser'            , name: 'Navigateur par défaut'             , type: 'select'    , values : BROWSERS }
+  , {id: 'code-editor'                , name: 'Éditeur pour le code'              , type: 'select'     , values: CODE_EDITORS, default: 'Visual Studio Code'}
+  , {id: 'text-editor'                , name: 'Éditeur pour les textes simples'   , type: 'select'    , values: TEXT_EDITORS, default: 'Typora'}
+  , {id: 'documentation-folder-name'  , name: 'Nom du dossier de documentation'   , type: 'string'    , default: 'Documentation'}
+  , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md'}
+  , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}
+  , {id: 'version'                    , name: 'Version de l’application'          , type: 'string'    , locked: true}
 ]
