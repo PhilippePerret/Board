@@ -4,21 +4,15 @@
   - couleur de fond,
   - icone à utiliser (svg, png, etc.)
 
-- git init (tout le flux, juste en donnant le nom sur Github)
-- installation documentation (regrouper tout ce qui concerne la documentation)
+- Autres services : 
+  - git init (tout le flux, juste en donnant le nom sur Github)
+  - installation documentation (regrouper tout ce qui concerne la documentation)
+
 - meta + click = modification du service personnalisé (fait avec les commons)
 - Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
-  - Pouvoir déplacer les services, donc : 
-    - click les sélectionne
-    - flèches les déplacent
-    - Delete les retire
-- Reprendre le module horloge ici avec le calcul des temps
-- pouvoir redéfinir la position/taille d'une fenêtre de service
 
 == Idées de nouveaux services (2026-07-11) ==
 
-- Terminal positionné sur le dossier du projet (juste `cd`, sans rien lancer) — en cours
-- Ouvrir dans VSCode (déjà mentionné comme exemple dans `CLAUDE.md`, jamais implémenté)
 - Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
 - Ouvrir le repo Git (statut, ou `git pull`/`push`)
 - Ouvrir l'URL locale du projet dans le navigateur

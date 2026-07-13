@@ -59,11 +59,7 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'open-iterm-at-folder'
     , name: 'iTerm au dossier'
-    , script: 'ExecCommand.sh'
-    , params: [
-          {type: 'raw', value: 'open -a iTerm'}
-        , {id: 'path', type: 'project'}
-      ]
+    , params: [ {id: 'path', type: 'project'} ]
   },
   {
       id: 'open-terminal-at-folder'

@@ -101,12 +101,14 @@ class ServiceExecuter {
    */
   escapeParamsIfRequired(){
     if (this.script != 'ExecCommand.sh') return
+    console.log("params non escapés : ", JSON.stringify(this.params))
     this.params = this.params.map(param => {
       if ('string' == typeof param) {
         param = param.replace(' ', '\ ')
       } 
       return param
     })
+    console.log("params escapés : ", this.params)
   }
 
 

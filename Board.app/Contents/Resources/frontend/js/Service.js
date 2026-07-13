@@ -112,8 +112,6 @@ class Service {
     this.observe()
   }
 
-  get executor(){ return this._executor || (this._executor = new ServiceExecuter(this))}
-  
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
     new ServiceDefiner(this, callback).start()
@@ -151,7 +149,7 @@ class Service {
   // Exécution du service
   exec(ev, callback){
     console.log("callback dans Service#exec", callback)
-    this.executor.exec(callback)
+    new ServiceExecuter(this).exec(callback)
     console.log("Service#exec se termine bien")
   }
 
