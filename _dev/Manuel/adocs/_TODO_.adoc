@@ -1,9 +1,8 @@
 == Todo list ==
 
-- Pouvoir définir la couleur de fond (projet.background)
-  En fait, il faudrait un outil pour définir les propriétés "extra" du projet
+- Outil pour définir des propriétés accessoires du projet
   - couleur de fond,
-  - icone à utiliser (si différente de icone de dossier)
+  - icone à utiliser (svg, png, etc.)
 
 - git init (tout le flux, juste en donnant le nom sur Github)
 - iTerm

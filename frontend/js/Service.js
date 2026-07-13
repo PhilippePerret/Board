@@ -85,11 +85,12 @@ class Service {
      * sont différentes des données abstraites qui définissent ce qu'il faut pour
      * définir le service.
      */
-    this.params = data.params || raise("Il faut définir les :params du servive " + this.id)
-    this.uuid   = data.uuid ?? null // seulement les services de projets
-    this.type   = data.type ?? null // idem (others ou startup)
-    this.projectId = data.projectId ?? null // pas encore mis (voir si utile)
-    this.scType = data.scType ?? '.scpt'
+    this.params     = data.params || raise("Il faut définir les :params du servive " + this.id)
+    this.uuid       = data.uuid ?? null // seulement les services de projets
+    this.type       = data.type ?? null // idem (others ou startup)
+    this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
+    this.scType     = data.scType ?? '.scpt'
+    this.script     = data.script ?? (kebabToPascalCase(this.id) + this.scType)
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")

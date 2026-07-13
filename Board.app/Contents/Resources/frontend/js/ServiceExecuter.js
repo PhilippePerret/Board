@@ -6,9 +6,9 @@ class ServiceExecuter {
     this.name     = service.name
     this.front    = service.front ?? null
     this.params   = service.params
-    this.scType   = service.scType ?? '.scpt'
-    this.script   = service.script ?? kebabToPascalCase(this.id) + this.scType
+    this.script   = service.script
     this.callback = callback ?? null
+    this.escapeParamsIfRequired()
   }
   
   // Exécution du service
@@ -48,7 +48,7 @@ class ServiceExecuter {
   }
 
   finalyExec(params){
-    console.log("finalyExec avec les paramètres : ", params)
+    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
     server.send({action: `exec-service`, script: this.script, params}, this.afterRunService.bind(this))
   }
 
@@ -92,6 +92,21 @@ class ServiceExecuter {
         console.error('Type de paramètre dynamique inconnu :', param.type, param)
         return null
     }
+  }
+
+  /**
+   * Pour tous les services utilisant le script ExecCommand.sh, il faut
+   * échapper les espaces pour que les arguments soient bien pris en 
+   * compte par la commande.
+   */
+  escapeParamsIfRequired(){
+    if (this.script != 'ExecCommand.sh') return
+    this.params = this.params.map(param => {
+      if ('string' == typeof param) {
+        param = param.replace(' ', '\ ')
+      } 
+      return param
+    })
   }
 
 

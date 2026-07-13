@@ -346,10 +346,7 @@ class Project {
     this.obj = div
     if (this.icon){
       const iconPath = `file://${this.path}/${this.icon}`
-      const icon = DCreate('IMG', {src: iconPath, style: 'width:32px;float:left;'})
-      // <object data="icone.svg" type="image/svg+xml"></object>
-      // const icon = DCreate('OBJECT', {type: 'image/svg+xml'})
-      icon.data = iconPath
+      const icon = DCreate('IMG', {src: iconPath, style: 'width:32px;float:left;margin-right:0.4em'})
       div.appendChild(icon)
     }
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
