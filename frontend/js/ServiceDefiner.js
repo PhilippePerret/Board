@@ -34,6 +34,8 @@ class ServiceDefiner {
     // (service custom only)
     this.unnamed = this.service.stype == 'custom'
 
+    // Mis à true quand on redéfinition un service (juste pour le titre)
+    this.redefinition = false
   }
 
   // On commence
@@ -77,7 +79,7 @@ class ServiceDefiner {
     console.log("->fixCustomName name = ", name)
     if (undefined == name) {
       new TextFieldDialog({
-          title: "Nom du service"
+          title: ` ${this.redefinition ? "Renommage" : "Nom"} du service`
         , id: 'service_name'
         , message: `Comment renommer “${this.service.name}” spécialement pour ce projet ?`
         , defaultValue: this.service.name
@@ -124,7 +126,7 @@ class ServiceDefiner {
        */
       case 'path-or-null':
         new ConfirmDialog({
-          title: "Définition du service",
+          title: `${this.redefinition?'Red':'D'}éfinition du service`,
           message: param.q || "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'.",
           ouiBtn: {name: 'OK'   , onclick: this.getPathOfFinderSelection.bind(this)},
           nonBtn: {name: 'Aucun', onclick: this.returnNull.bind(this)}
@@ -145,9 +147,6 @@ class ServiceDefiner {
         this.attendsPourTexte(param.q || "Quelle URL faut-il rejoindre ?"),
           this
         break
-      case 'app':
-        message("Je dois apprendre à définir une application (CLI, bash, ruby, zsh, python3, etc.)")
-        break
       case 'boolean':
         this.attend(
           param.q,
@@ -157,7 +156,7 @@ class ServiceDefiner {
         break
       case 'integer':
         new TextFieldDialog({
-            title: "Définition du service"
+            title: `${this.redefinition?'Red':'D'}éfinition du service`
           , id: param.id
           , message: param.q
           , defaultValue: param.useLastAsDefault ? this.paramsValues[this.paramsValues.length - 1] : (param.default ?? '')
@@ -232,7 +231,7 @@ class ServiceDefiner {
 
   attendsPourTexte(message, callback, fallback = null, options = null){
     new TextFieldDialog({
-        title: "Définition d'URL"
+        title: `${this.redefinition?'Red':'D'}éfinition de l’URL`
       , message: message
       , ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback}
       , nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}
@@ -240,7 +239,7 @@ class ServiceDefiner {
   }
   attend(message, callback, fallback = null, options = null){
     new ConfirmDialog({
-        title: "Définition du service"
+        title: `${this.redefinition?'Red':'D'}éfinition du service`
       , message: message
       , ouiBtn: {name: options?.ouiBtn ?? 'OK', onclick: callback}
       , nonBtn: {name: options?.nonBtn ?? 'Annuler', onclick: fallback}

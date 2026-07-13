@@ -141,6 +141,8 @@ class Service {
   onClickOnProjectService(ev){
     if (ev.shiftKey) {
       message("Apprendre à sélectionner le service")
+    } else if (ev.metaKey) {
+      message("Je dois apprendre à redéfinir le service personnalisé")
     } else {
       this.exec(ev)
     }

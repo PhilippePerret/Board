@@ -6,7 +6,7 @@ class ServiceExecuter {
     this.name     = service.name
     this.params   = service.params
     this.scType   = service.scType ?? '.scpt'
-    this.script   = kebabToPascalCase(this.id) + this.scType
+    this.script   = service.script ?? kebabToPascalCase(this.id) + this.scType
     this.callback = callback ?? null
   }
   

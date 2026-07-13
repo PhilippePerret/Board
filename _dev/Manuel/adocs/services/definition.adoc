@@ -18,3 +18,53 @@ Les services communs ne s'ajoutent pas aux projets, ils sont toujours accessible
 On affiche les services communs simplement en cliquant sur la fiche d'un projet. En même temps qu'il se met en sélection, la liste des services communs s'affiche à droite de l'interface.
 
 On peut basculer des <<custom-services>> aux services communs grâce au bouton “Services personnalisés”.
+
+[[services-data, données des sercices]]
+=== Données des services ===
+
+[cols="1,4"]
+|====
+|`id`       | Identifiant du service
+|           | Cet identifiant sert aussi à définir le nom du script à jouer (`mon-id-script` → `MonIdScript.scpt`) +
+(les scripts sont définis dans `backend/scripts/`)
+| `script`  | Si le script ne doit pas être déduit de l'identifiant
+| `scType`  | Extension du script à jouer quand ça n'est pas `.scpt` +
+(mais de toutes façons, il y a une recherche automatique du bon script en cas d'introuvabilité).
+|`name`     | Le nom affiché du service +
+(pour les <<custom-services>>, ce nom est modifiable dès l'attribution.)
+| `params`  | Les <<script-params>> (très importants, ils font l'objet d'un détail propre)
+|====
+
+[[script-params, paramètres de script]]
+==== Paramètres des script ====
+
+Ils sont très important car ils définissent les paramètres exacts qui seront transmis aux scripts.
+
+Principes : 
+
+- Les valeurs paramètres sont transmis dans l'ordre exact où ils sont définis,
+- chaque _paramètre_ peut définir plusieurs valeurs.
+
+[cols="1,4"]
+|====
+| `id`    | Identifiant du paramètres (peut être répété dans les paramètres qui est un Array)
+| `type`  | Le type précis qui va définir exactement la valeur transmise. Voir les <<params-types>>
+|====
+
+[[params-types, types de paramètres]]
+==== Types de paramètres ====
+
+Ils s'agit de la propriété `type` des <<script-params>>. _Ces types sont utiles dans le fichier `frontend/js/ServiceDefiner.js`_
+
+[cols="1,4"]
+|====
+| `bounds`        | 
+| `finder-window` |  Pour obtenir toutes les informations sur la fenêtre courante
+| `path`          | Un chemin d'accès à n'importe quoi, fichier, dossier, script…
+| `path-or-null`  | Chemin d'accès optionnel.
+| `url`           | Une URL existante.
+| `boolean`       | Soit false soit true
+| `integer`       | Un entier
+| `project`       | Une donnée projet déjà définie. L'identifiant est le nom de la propriété. Par exemple `path`
+| `app`           | Une donnée application déjà définie. L'identifiant est le nom de la propriété. Par exemple `documentation-editor`
+|====

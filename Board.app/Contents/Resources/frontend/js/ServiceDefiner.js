@@ -145,9 +145,6 @@ class ServiceDefiner {
         this.attendsPourTexte(param.q || "Quelle URL faut-il rejoindre ?"),
           this
         break
-      case 'app':
-        message("Je dois apprendre à définir une application (CLI, bash, ruby, zsh, python3, etc.)")
-        break
       case 'boolean':
         this.attend(
           param.q,

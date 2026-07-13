@@ -26,10 +26,14 @@ class ServiceCommon extends Service {
    * paramètres requis.
    * 
    */
-  execOn(projet){
-    if (!this.ensureServiceData(projet)) return
+  execOn(projet, ev){
+    if (ev?.metaKey) {
+      return this.defineCommonServiceParameters(projet, true) // rappellera cette fonction
+    } else if (!this.ensureServiceData(projet)) {
+      return null
+    }
     console.log("exécution (really) de ", this)
-    if (this.id === 'work-clock') {
+    if (this.id === 'work-clock') { // C'EST QUOI CE MERDIER AJOUTÉ PAR CLAUDE ????
       Clock.open(projet, projet.sdata[this.id])
     } else {
       this.executor.execOnProject(projet)
@@ -44,9 +48,14 @@ class ServiceCommon extends Service {
   ensureServiceData(projet){
     console.log("-> ensureServiceData avec projet : ", projet, this)
     if (projet.sdata && projet.sdata[this.id]) return true
+    return this.defineCommonServiceParameters(projet, false /* 1re définition */)
+  }
+
+  defineCommonServiceParameters(projet, redefine = false){
     const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet))
+    definer.redefinition = redefine
     definer.define()
-    return false
+    return false    
   }
 
   onReturnFromDefineProjetParams(projet, _service){
