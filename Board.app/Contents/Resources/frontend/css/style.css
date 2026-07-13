@@ -56,6 +56,13 @@ header div#app-name {
   padding: 0.1em 1em;
 }
 
+div#current-project-mark {
+  position:absolute;
+  right: 1em;
+  top: 1em;
+  color: yellow;
+}
+
 footer {
   display:block;
   position: fixed;

@@ -4,6 +4,15 @@ class Project {
     return Date.now() + Math.random().toString(16).slice(2);
   }
 
+  static get current(){ return this._current}
+  static set current(p){
+    this._current = p
+    this.markCurrentProject.textContent = p.title
+  }
+  static get markCurrentProject(){
+    return this._markcurproj || (this._markcurproj = DGet('#current-project-mark'))
+  }
+
   /**
    * Chargement de tous les projets
    * ------------------------------

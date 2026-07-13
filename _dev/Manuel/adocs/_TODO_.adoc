@@ -1,11 +1,10 @@
 == Todo list ==
 
+- BUG : Toujours le même service courant
 - git init (tout le flux, juste en donnant le nom sur Github)
 - iTerm
 - installation documentation (regrouper tout ce qui concerne la documentation)
-- meta + click = modification du service
-  - en fait : MAJ + clik (ou meta + click ?) pour rééditer le service (valable pour service custom et common)
-- Service communs
+- meta + click = modification du service personnalisé (fait avec les commons)
 - Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
   - Pouvoir déplacer les services, donc : 
     - click les sélectionne
