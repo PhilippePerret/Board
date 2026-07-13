@@ -37,7 +37,7 @@ const COMMON_SERVICES_DATA = [
     , name: 'Éditer la documentation'
     , scType: '.rb'
     , params: [
-          {id: 'docu-folder', q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+          {id: 'docu-folder', absolute: true, q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
         , {id: 'documentation-editor', type: 'app'}
       ]
   },
@@ -61,7 +61,7 @@ const COMMON_SERVICES_DATA = [
     , name: "Initier documentation"
     , scType: '.rb'
     , params: [
-        {id: 'container-folder', q:'Sélection le dossier dans lequel placer la documentation, puis “OK”.', type: 'path'}
+        {id: 'docu-folder', absolute: true, q:'Sélection le dossier dans lequel placer la documentation, puis “OK”.', type: 'path'}
       ]
   },
   {

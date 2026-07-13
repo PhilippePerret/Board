@@ -22,7 +22,11 @@ begin
   cmd = %Q(find "#{HOME}" -type f -name 'macros.rb' -exec stat -f '%m %N' {} \\; | sort -nr | head -n1 | cut -d' ' -f2-)
   last_macro_file = `#{cmd}`
 
+  if File.exist?(File.join(CONTAINER, 'Documentation'))
+    raise "Le dossier existe déjà, je ne peux pas créer la documentation ici."
+  end
   DOCU_FOLDER = ensure_folder(CONTAINER, 'Documentation')
+
   ADOCS_FOLDER = ensure_folder(DOCU_FOLDER, 'adocs')
   FIRST_ADOC_FILE = File.join(ADOCS_FOLDER, 'introduction.adoc')
   MAIN_DOCU_FILE = File.join(DOCU_FOLDER, "docu.adoc")

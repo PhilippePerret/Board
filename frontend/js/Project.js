@@ -175,9 +175,12 @@ class Project {
     return DGetAll('div.project', this.container).map( div => div.dataset.projectId)
   }
 
+  // Toutes les propriétés des projets doivent être définies ici
+  // sdata : données pour les services communs
+  // adata : données absolues pour les services communs
   static PROPERTIES = [
     'id', 'title', 'path', 'sdata', 'workTime', 'createdAt', 'updatedAt',
-    'services', 'background', 'icon'
+    'services', 'background', 'icon', 'adata'
   ]
 
   constructor(data){
@@ -194,6 +197,11 @@ class Project {
   initServices(){
     this.services.startup = (this.services.startup ?? []).map(ds => new ServiceCustom(ds))
     this.services.others  = (this.services.others  ?? []).map(ds => new ServiceCustom(ds))
+  }
+
+  addToAData(values){
+    this.adata = this.adata || {}
+    Object.assign(this.adata, values)
   }
 
   save(callback){

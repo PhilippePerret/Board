@@ -71,6 +71,13 @@ class ServiceDefiner {
     if (this.unnamed) return this.fixCustomName() // service custom only
     const param = this.params.pop()
     // console.log("param", param)
+    if (param.absolute){
+      if ( undefined != Project.current.adata??[param.id] ) {
+        console.log("Project.current.adata", Project.current.adata)
+        this.addParamValues(Project.current.adata[param.id])
+        return this.define()
+      }
+    }
     if (param) this.defineByType(param)
     else this.resolve()
   }
