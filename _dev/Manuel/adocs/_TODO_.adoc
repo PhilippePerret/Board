@@ -1,5 +1,11 @@
+== BUGS ==
+
+- Quand on annule un service commun, les données s'enregsitrent quand même…
+
 == Todo list ==
 
+- pouvoir prendre une donnée sdata ailleurs (typiquement, le dossier de documentation, qui est demandé par plusieurs service Solution : préciser que c'est une donnée 'absolue' et l'ajouter à 'edata' de projet (à ajouter) quand elle est définie ou essayer de l'obtenir là quand elle ne l'est pas !)
+- Groupes de services
 - Outil pour définir des propriétés accessoires du projet
   - couleur de fond,
   - icone à utiliser (svg, png, etc.)

@@ -57,6 +57,14 @@ const COMMON_SERVICES_DATA = [
       ]
   },
   {
+      id:   'init-documentation'
+    , name: "Initier documentation"
+    , scType: '.rb'
+    , params: [
+        {id: 'container-folder', q:'Sélection le dossier dans lequel placer la documentation, puis “OK”.', type: 'path'}
+      ]
+  },
+  {
       id: 'open-iterm-at-folder'
     , name: 'iTerm au dossier'
     , params: [ {id: 'path', type: 'project'} ]
