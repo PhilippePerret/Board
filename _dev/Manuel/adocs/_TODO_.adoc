@@ -5,7 +5,6 @@
   - icone à utiliser (svg, png, etc.)
 
 - git init (tout le flux, juste en donnant le nom sur Github)
-- iTerm
 - installation documentation (regrouper tout ce qui concerne la documentation)
 - meta + click = modification du service personnalisé (fait avec les commons)
 - Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)

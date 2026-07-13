@@ -33,7 +33,7 @@ class ServiceCommon extends Service {
     } else if (!this.ensureServiceData(projet)) {
       return null
     }
-    this.executor.execOnProject(projet)
+    new ServiceExecuter(this).execOnProject(projet)
   }
 
   /**
