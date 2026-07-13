@@ -33,12 +33,7 @@ class ServiceCommon extends Service {
     } else if (!this.ensureServiceData(projet)) {
       return null
     }
-    console.log("exécution (really) de ", this)
-    if (this.id === 'work-clock') { // C'EST QUOI CE MERDIER AJOUTÉ PAR CLAUDE ????
-      Clock.open(projet, projet.sdata[this.id])
-    } else {
-      this.executor.execOnProject(projet)
-    }
+    this.executor.execOnProject(projet)
   }
 
   /**

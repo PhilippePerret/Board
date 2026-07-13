@@ -182,6 +182,7 @@ class Project {
     this.path       = data.path ?? raise("Le path du projet est obligatoire.")
     this.sdata      = data.sdata ?? null // données pour les services communs
     this.background = data.background ?? null
+    this.icon       = data.icon ?? null
     this.createdAt  = data.createdAt
     this.updatedAt  = data.updatedAt
     this.workTime   = data.workTime ?? 0
@@ -343,6 +344,11 @@ class Project {
     div.dataset.projectId = this.id
     if (this.background) div.style.background = this.background
     this.obj = div
+    if (this.icon){
+      const iconPath = `file://${this.path}/${this.icon}`
+      const icon = DCreate('IMG', {src: iconPath, style: 'width:32px;float:left;margin-right:0.4em'})
+      div.appendChild(icon)
+    }
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
     this.divTitle = tit
     div.appendChild(tit)

@@ -63,7 +63,7 @@ class ViewController: NSViewController {
 
         webView.loadFileURL(
             url,
-            allowingReadAccessTo: url.deletingLastPathComponent()
+            allowingReadAccessTo: URL(fileURLWithPath: "/")
         )
     }
 }
