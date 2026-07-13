@@ -23,5 +23,3 @@
 
 - pouvoir définir 'données de l'app' : 
  - le navigateur par défaut
- - l'éditeur de documentation (asciidoctor) par défaut  (CotEditor)
- - le traitement de texte par défaut

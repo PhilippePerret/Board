@@ -32,13 +32,22 @@ const TEXT_EDITORS = [
   , 'BBEdit'
 ]
 
+const BROWSERS = [
+    'Firefox'
+  , 'Safari'
+  , 'Google Chrome'
+  , 'Edge'
+  , 'Thor'
+]
+
 
 const APP_DATA = [
-    {id: 'documentation-editor',       name: 'Éditeur pour la documentation',       type: 'app',    values: TEXT_EDITORS}
-  , {id: 'code-editor',                name: 'Éditeur pour le code',                type: 'app',    values: CODE_EDITORS, default: 'Visual Studio Code'}
-  , {id: 'text-editor',                name: 'Éditeur pour les textes simples',     type: 'app',    values: TEXT_EDITORS, default: 'Typora'}
-  , {id: 'documentation-folder-name',  name: 'Nom du dossier de documentation',     type: 'string', default: 'Documentation'}
-  , {id: 'changelog-file',             name: 'Nom du fichier changelog',            type: 'string', default: 'CHANGELOG.md'}
-  , {id: 'todo-file',                  name: 'Nom du fichier TODO',                 type: 'string', default: 'TODO.md'}
-  , {id: 'version',                    name: 'Version de l’application',            type: 'string', locked: true}
+    {id: 'documentation-editor'       , name: 'Éditeur pour la documentation'     , type: 'select'    , values: TEXT_EDITORS}
+  , {id: 'default-browser'            , name: 'Navigateur par défaut'             , type: 'select'    , values : BROWSERS }
+  , {id: 'code-editor'                , name: 'Éditeur pour le code'              , type: 'select'     , values: CODE_EDITORS, default: 'Visual Studio Code'}
+  , {id: 'text-editor'                , name: 'Éditeur pour les textes simples'   , type: 'select'    , values: TEXT_EDITORS, default: 'Typora'}
+  , {id: 'documentation-folder-name'  , name: 'Nom du dossier de documentation'   , type: 'string'    , default: 'Documentation'}
+  , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md'}
+  , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}
+  , {id: 'version'                    , name: 'Version de l’application'          , type: 'string'    , locked: true}
 ]

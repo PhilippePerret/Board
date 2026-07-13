@@ -75,6 +75,8 @@ def run_test
   raise "Board a quitté juste après la fermeture du panneau" unless board_running?
 ensure
   app_data = read_app_data
+  app_data.delete('changelog-file')
+  app_data.delete('code-editor')
   app_data.merge!(original) if original
   write_app_data(app_data)
 end
