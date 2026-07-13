@@ -18,6 +18,7 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'open-folder-project'
     , name: 'Ouvrir dossier du projet'
+    , group: 'Outils'
     , params: [
           {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
         , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
@@ -26,6 +27,7 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'work-clock'
     , name: 'Démarrer l’horloge'
+    , group: 'Outils'
     , front: Clock.open.bind(Clock)
     , params: [
           {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer'}
@@ -35,6 +37,7 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'edit-documentation'
     , name: 'Éditer la documentation'
+    , group: 'Documentation'
     , scType: '.rb'
     , params: [
           {id: 'docu-folder', absolute: true, q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
@@ -44,6 +47,7 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'update-documentation'
     , name: 'Actualiser la documentation'
+    , group: 'Documentation'
     , scType: '.rb'
     , params: [
         {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation (.adoc)', type: 'path'}
@@ -52,6 +56,7 @@ const COMMON_SERVICES_DATA = [
   {
       id:   'open-a-file'
     , name: 'Ouvrir la documentation'
+    , group: 'Documentation'
     , params: [
         {id: 'docu-main-file', q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}
       ]
@@ -59,6 +64,7 @@ const COMMON_SERVICES_DATA = [
   {
       id:   'init-documentation'
     , name: "Initier documentation"
+    , group: 'Documentation'
     , scType: '.rb'
     , params: [
         {id: 'docu-folder', absolute: true, q:'Sélection le dossier dans lequel placer la documentation, puis “OK”.', type: 'path'}
@@ -67,11 +73,13 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'open-iterm-at-folder'
     , name: 'iTerm au dossier'
+    , group: 'Consoles'
     , params: [ {id: 'path', type: 'project'} ]
   },
   {
       id: 'open-terminal-at-folder'
     , name: 'Terminal au dossier'
+    , group: 'Consoles'
     , params: [
         {id: 'path', type: 'project'}
       ]
@@ -79,6 +87,7 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'open-in-vscode'
     , name: 'Ouvrir dans VSCode'
+    , group: 'Consoles'
     , scType: '.sh'
     , params: [
         {id: 'path', type: 'project'}

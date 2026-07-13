@@ -28,13 +28,24 @@ class Service {
     this.activeService.closePanel()
   }
   /**
-   * Construit la liste des services en la relevant en backend
+   * Construit la liste des services
+   * Dans COMMON_SERVICES_DATA et CUSTOM_SERVICES_DATA
    * 
    */
   static buildServiceList(retour){
+    var currentGroup, currentGroupName // pour les communs
     this.SERVICES_DATA
       .map(dataService => new this.klass(dataService))
-      .forEach( service => service.build())
+      .forEach( service => {
+        if (service.group != currentGroupName) {
+          currentGroup = DCreate('FIELDSET', {class:'services-group'})
+          const legend = DCreate('LEGEND', {text: service.group})
+          currentGroup.appendChild(legend)
+          this.listing.appendChild(currentGroup)
+          currentGroupName = String(service.group)
+        }
+        service.build(currentGroup || this.listing)
+      })
   }
 
   // Construction complète du panneau
@@ -79,7 +90,8 @@ class Service {
 
   constructor(data){
     console.log("data Service", data)
-    this.id = data.id || raise("Il faut fournir un identifiant au service.")
+    this.id     = data.id || raise("Il faut fournir un identifiant au service.")
+    this.group  = data.group ?? null
     /**
      * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
      * sont différentes des données abstraites qui définissent ce qu'il faut pour
@@ -101,14 +113,14 @@ class Service {
   /**
    * Construction dans le listing des services
    */
-  build(){
+  build(contenant){
     const div = DCreate('DIV', {class:'service', id: this.id})
     div.setAttribute('draggable', true)
     const name = DCreate('DIV', {class:'name', text: this.name})
     div.appendChild(name)
     this.obj = div
     console.log("this.constructor", this.constructor)
-    this.constructor.listing.appendChild(div)
+    contenant.appendChild(div)
     this.observe()
   }
 
