@@ -59,7 +59,7 @@ header div#app-name {
 div#current-project-mark {
   position:absolute;
   left: 50%;
-  top: 50%;
+  top: 20%;
   color: rgb(249, 249, 21);
 }
 

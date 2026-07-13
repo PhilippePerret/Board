@@ -4,6 +4,7 @@ class ServiceExecuter {
     this.service  = service
     this.id       = service.id
     this.name     = service.name
+    this.front    = service.front ?? null
     this.params   = service.params
     this.scType   = service.scType ?? '.scpt'
     this.script   = service.script ?? kebabToPascalCase(this.id) + this.scType
@@ -39,7 +40,11 @@ class ServiceExecuter {
    * commun, c'est dans le projet.sdata que ça se trouve.
    */
   execOnProject(projet){
-    this.finalyExec(projet.sdata[this.id])
+    if (this.front) {
+      this.front(projet, projet.sdata[this.id])
+    } else {
+      this.finalyExec(projet.sdata[this.id])
+    }
   }
 
   finalyExec(params){

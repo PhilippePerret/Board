@@ -30,6 +30,7 @@ On peut basculer des <<custom-services>> aux services communs grâce au bouton �
 | `script`  | Si le script ne doit pas être déduit de l'identifiant
 | `scType`  | Extension du script à jouer quand ça n'est pas `.scpt` +
 (mais de toutes façons, il y a une recherche automatique du bon script en cas d'introuvabilité).
+| `front`   | Propriété très importante qui définit **une méthode** frontend qui sera utilisée pour exécuter le service. Cf. <<exec-service-frontend>>.
 |`name`     | Le nom affiché du service +
 (pour les <<custom-services>>, ce nom est modifiable dès l'attribution.)
 | `params`  | Les <<script-params>> (très importants, ils font l'objet d'un détail propre)
@@ -68,3 +69,15 @@ Ils s'agit de la propriété `type` des <<script-params>>. _Ces types sont utile
 | `project`       | Une donnée projet déjà définie. L'identifiant est le nom de la propriété. Par exemple `path`
 | `app`           | Une donnée application déjà définie. L'identifiant est le nom de la propriété. Par exemple `documentation-editor`
 |====
+
+[[exec-service-frontend]]
+==== Exécution frontend d'un service ====
+
+La plupart des services appellent un script qui se trouve backend. Mais certains, comme l'horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu'à l'enregistrement du temps et des changelogs/todo).
+
+Pour caractériser ce genre de service, on définit dans leur <<services-data, données>> la propriété `front` qui sera la méthode (bindée) à appeler.
+
+Cette méthode doit recevoir :
+
+- le projet en premier argument,
+- les données propres au service (`sdata[<service-id>]`) en second argument, comme une liste de valeurs.
