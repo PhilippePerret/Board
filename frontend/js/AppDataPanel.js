@@ -33,6 +33,7 @@ class AppDataPanel extends SidePanel {
           , message: entry.name
           , idValues: [entry.id]
           , values: entry.values
+          , defaultValue: this.currentValue(entry)
           , ouiBtn: {name: 'OK', onclick: this.onEdited.bind(this, entry, valueEl)}
           , nonBtn: {name: 'Annuler'}
         }).show()
