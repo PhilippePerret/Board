@@ -451,6 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#services">Les services</a>
 <ul class="sectlevel2">
 <li><a href="#_définition_des_services">Définition des services</a></li>
+<li><a href="#services-data">Données des services</a></li>
 <li><a href="#_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</a></li>
 <li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
@@ -475,10 +476,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>pouvoir renommer un service</p>
+<p>BUG : Toujours le même service courant</p>
 </li>
 <li>
-<p>Service communs</p>
+<p>git init (tout le flux, juste en donnant le nom sur Github)</p>
+</li>
+<li>
+<p>iTerm</p>
+</li>
+<li>
+<p>installation documentation (regrouper tout ce qui concerne la documentation)</p>
+</li>
+<li>
+<p>meta + click = modification du service personnalisé (fait avec les commons)</p>
 </li>
 <li>
 <p>Maj+click sur service pour le sélectionner &#8658; boutons services ("↑", "↓", delete)</p>
@@ -691,6 +701,155 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="paragraph">
 <p>On peut basculer des <a href="#custom-services">services personnalisés</a> aux services communs grâce au bouton “Services personnalisés”.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="services-data">Données des services</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cet identifiant sert aussi à définir le nom du script à jouer (<code>mon-id-script</code> → <code>MonIdScript.scpt</code>)<br>
+(les scripts sont définis dans <code>backend/scripts/</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>script</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si le script ne doit pas être déduit de l&#8217;identifiant</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Extension du script à jouer quand ça n&#8217;est pas <code>.scpt</code><br>
+(mais de toutes façons, il y a une recherche automatique du bon script en cas d&#8217;introuvabilité).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>front</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Propriété très importante qui définit <strong>une méthode</strong> frontend qui sera utilisée pour exécuter le service. Cf. <a href="#exec-service-frontend">Exécution frontend d&#8217;un service</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le nom affiché du service<br>
+(pour les <a href="#custom-services">services personnalisés</a>, ce nom est modifiable dès l&#8217;attribution.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les <a href="#script-params">paramètres de script</a> (très importants, ils font l&#8217;objet d&#8217;un détail propre)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="script-params">Paramètres des script</h4>
+<div class="paragraph">
+<p>Ils sont très important car ils définissent les paramètres exacts qui seront transmis aux scripts.</p>
+</div>
+<div class="paragraph">
+<p>Principes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Les valeurs paramètres sont transmis dans l&#8217;ordre exact où ils sont définis,</p>
+</li>
+<li>
+<p>chaque <em>paramètre</em> peut définir plusieurs valeurs.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du paramètres (peut être répété dans les paramètres qui est un Array)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le type précis qui va définir exactement la valeur transmise. Voir les <a href="#params-types">types de paramètres</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="params-types">Types de paramètres</h4>
+<div class="paragraph">
+<p>Ils s&#8217;agit de la propriété <code>type</code> des <a href="#script-params">paramètres de script</a>. <em>Ces types sont utiles dans le fichier `frontend/js/ServiceDefiner.js`</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bounds</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>finder-window</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour obtenir toutes les informations sur la fenêtre courante</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un chemin d&#8217;accès à n&#8217;importe quoi, fichier, dossier, script…</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path-or-null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès optionnel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une URL existante.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Soit false soit true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un entier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une donnée projet déjà définie. L&#8217;identifiant est le nom de la propriété. Par exemple <code>path</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une donnée application déjà définie. L&#8217;identifiant est le nom de la propriété. Par exemple <code>documentation-editor</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="exec-service-frontend">Exécution frontend d&#8217;un service</h4>
+<div class="paragraph">
+<p>La plupart des services appellent un script qui se trouve backend. Mais certains, comme l&#8217;horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu&#8217;à l&#8217;enregistrement du temps et des changelogs/todo).</p>
+</div>
+<div class="paragraph">
+<p>Pour caractériser ce genre de service, on définit dans leur <a href="#services-data">données</a> la propriété <code>front</code> qui sera la méthode (bindée) à appeler.</p>
+</div>
+<div class="paragraph">
+<p>Cette méthode doit recevoir :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le projet en premier argument,</p>
+</li>
+<li>
+<p>les données propres au service (<code>sdata[&lt;service-id&gt;]</code>) en second argument, comme une liste de valeurs.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p><em>Cette partie décrit tous les services qu&#8217;on peut utiliser pour un projet.</em></p>

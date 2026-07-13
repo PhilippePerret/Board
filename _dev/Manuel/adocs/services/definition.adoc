@@ -73,7 +73,7 @@ Ils s'agit de la propriété `type` des <<script-params>>. _Ces types sont utile
 [[exec-service-frontend]]
 ==== Exécution frontend d'un service ====
 
-La plupart des services appellent un script qui se trouve backend. Mais certains, comme l'horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu'à l'enregistrement du temps et des changelogs/todo).
+La plupart des services appellent un script qui se trouve backend (dont le nom est tiré de l'`id` du service ou définit explicitement par la propriété `script`). Mais certains services, comme l'horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu'à l'enregistrement du temps et des changelogs/todo).
 
 Pour caractériser ce genre de service, on définit dans leur <<services-data, données>> la propriété `front` qui sera la méthode (bindée) à appeler.
 
