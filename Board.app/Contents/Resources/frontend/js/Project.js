@@ -186,9 +186,10 @@ class Project {
   constructor(data){
     console.log("data", data)
     this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
-    if (this.id     === null) this.id = Project.uniqId()
-    if (this.title  === null) this.title = '-projet sans titre-'
-    if (this.path   === null) raise("Le path du projet est obligatoire.")
+    if (!this.id ) this.id = Project.uniqId()
+    if (!this.title) this.title = '-projet sans titre-'
+    if (!this.path ) raise("Le path du projet est obligatoire.")
+    if (!this.services) this.services = {startup: [], others: []}
     this.constructor.add(this)
     this.initServices()
     
@@ -197,6 +198,11 @@ class Project {
   initServices(){
     this.services.startup = (this.services.startup ?? []).map(ds => new ServiceCustom(ds))
     this.services.others  = (this.services.others  ?? []).map(ds => new ServiceCustom(ds))
+  }
+
+  addToAData(values){
+    this.adata = this.adata || {}
+    Object.assign(this.adata, values)
   }
 
   save(callback){

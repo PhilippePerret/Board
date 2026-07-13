@@ -186,9 +186,10 @@ class Project {
   constructor(data){
     console.log("data", data)
     this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
-    if (this.id     === null) this.id = Project.uniqId()
-    if (this.title  === null) this.title = '-projet sans titre-'
-    if (this.path   === null) raise("Le path du projet est obligatoire.")
+    if (!this.id ) this.id = Project.uniqId()
+    if (!this.title) this.title = '-projet sans titre-'
+    if (!this.path ) raise("Le path du projet est obligatoire.")
+    if (!this.services) this.services = {startup: [], others: []}
     this.constructor.add(this)
     this.initServices()
     

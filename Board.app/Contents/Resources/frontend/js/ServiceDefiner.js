@@ -40,7 +40,7 @@ class ServiceDefiner {
 
   // On commence
   start(){
-    console.log("-> start")
+    // console.log("-> start")
     this.define()
   }
 
@@ -53,12 +53,14 @@ class ServiceDefiner {
 
 
   // Pour ajouter une valeur
-  addParamValue(paramValue){
+  addParamValue(param, paramValue){
     this.paramsValues.push(paramValue)
+    param.absolute && Project.current.addToAData({[param.id]: paramValue})
   }
   // Pour ajouter plusieurs valeurs
-  addParamValues(paramsValues){
+  addParamValues(param, paramsValues){
     this.paramsValues = [...this.paramsValues, ...paramsValues]
+    param.absolute && Project.current.addToAData({[param.id]: paramsValues})
   }
 
   /**
@@ -71,15 +73,16 @@ class ServiceDefiner {
     if (this.unnamed) return this.fixCustomName() // service custom only
     const param = this.params.pop()
     // console.log("param", param)
-    if (param.absolute){
-      if ( undefined != Project.current.adata??[param.id] ) {
-        console.log("Project.current.adata", Project.current.adata)
-        this.addParamValues(Project.current.adata[param.id])
-        return this.define()
+    if (param){ 
+      if (param.absolute){
+        if ( undefined != Project.current.adata??[param.id] ) {
+          console.log("Project.current.adata", Project.current.adata)
+          this.addParamValues(param, Project.current.adata[param.id])
+          return this.define()
+        }
       }
-    }
-    if (param) this.defineByType(param)
-    else this.resolve()
+      this.defineByType(param)
+    } else this.resolve()
   }
 
   fixCustomName(name){
@@ -106,29 +109,29 @@ class ServiceDefiner {
   defineByType(param){
     switch(param.type){
       case 'raw':
-        this.addParamValue(param.value)
+        this.addParamValue(param, param.value)
         this.define()
         break
       case 'app':
-        this.addParamValue(App.getData([param.id]))
+        this.addParamValue(param, App.getData([param.id]))
         this.define()
         break
       case 'project':
         /**
          * Pour les services common, le type 'project' permet de définir une de ses propriétés
          */
-        this.addParamValue(Project.current[param.id])
+        this.addParamValue(param, Project.current[param.id])
         this.define()
         break
       case 'finder-window':
         this.attend(param.q || "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK.",
-          this.getInfoFinderWindow.bind(this, 'all')
+          this.getInfoFinderWindow.bind(this, param, 'all')
         )
         break
       case 'bounds':
         this.attend(
           param.q || "Positionner la fenêtre dans le Finder et cliquer “OK”.",
-          this.getInfoFinderWindow.bind(this, 'bounds')
+          this.getInfoFinderWindow.bind(this, param, 'bounds')
         )
         break
       /**
@@ -139,8 +142,8 @@ class ServiceDefiner {
         new ConfirmDialog({
           title: `${this.redefinition?'Red':'D'}éfinition du service`,
           message: param.q || "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'.",
-          ouiBtn: {name: 'OK'   , onclick: this.getPathOfFinderSelection.bind(this)},
-          nonBtn: {name: 'Aucun', onclick: this.returnNull.bind(this)}
+          ouiBtn: {name: 'OK'   , onclick: this.getPathOfFinderSelection.bind(this, param)},
+          nonBtn: {name: 'Aucun', onclick: this.returnNull.bind(this, param)}
         }).show()
         break
       /**
@@ -150,7 +153,7 @@ class ServiceDefiner {
        */
       case 'path':
         this.attend(param.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
-          this.getPathOfFinderSelection.bind(this)
+          this.getPathOfFinderSelection.bind(this, param)
         )
         break
       case 'url':
@@ -184,31 +187,31 @@ class ServiceDefiner {
   // Reçoit la réponse à une question booléenne
   onBooleanResponse(param, trueOrFalse, retour){
     console.log("retour dans onBooleanResponse", retour)
-    this.addParamValue(trueOrFalse)
+    this.addParamValue(param, trueOrFalse)
     this.define()
   }
 
   // Reçoit la réponse à une question demandant un entier (minutes, etc.)
   onIntegerResponse(param, values){
-    this.addParamValue(parseInt(values[0], 10))
+    this.addParamValue(param, parseInt(values[0], 10))
     this.define()
   }
 
   /**
    * Quand on doit juste retourner une valeur null
    */
-  returnNull() {
-    this.addParamValue(null)
+  returnNull(param) {
+    this.addParamValue(param, null)
     this.define()
   }
 
   // Va cherche le chemin d'accès à la sélection du finder
-  getPathOfFinderSelection(retour){
+  getPathOfFinderSelection(param, retour){
     if (undefined == retour) {
-      server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this))
+      server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this, param))
     } else {
       console.log("retour", retour)
-      this.addParamValues([retour.data.filepath, retour.data.filename])
+      this.addParamValues(param, [retour.data.filepath, retour.data.filename])
       this.define()
     }
   }
@@ -220,18 +223,18 @@ class ServiceDefiner {
    * @param what 'bounds' ou 'all'
    * @param retour Retourne du serveur avec les informations
    */
-  getInfoFinderWindow(what, retour){
+  getInfoFinderWindow(param, what, retour){
     if (undefined == retour) {
-      return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this, what))
+      return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this, param, what))
     } else {
       // console.log("retour", retour)
       const data = retour.data
       if (what === 'bounds'){
-        this.addParamValues([
+        this.addParamValues(param, [
           ...data.position, ...data.size, data.view
         ])
       } else {
-        this.addParamValues([
+        this.addParamValues(param, [
           // path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
           data.path, ...data.position, ...data.size, data.sidebarWidth, data.view
         ])
