@@ -31,6 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .clock-digits {
@@ -60,8 +61,14 @@
   stroke: #a9c26a;
   stroke-width: 4;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.9s linear;
+  transition: stroke-dashoffset 0.9s linear, stroke 1s;
 }
+
+/* Seuils d'alerte (modèle : Todoist-server/minuteur/timer.html) */
+.clock-panel.clock-warning .clock-digits      { color: #ff8c00; }
+.clock-panel.clock-warning .clock-ring-progress { stroke: #ff8c00; }
+.clock-panel.clock-danger .clock-digits       { color: #ff2020; }
+.clock-panel.clock-danger .clock-ring-progress  { stroke: #ff2020; }
 
 /* Ligne de boutons toujours pleine largeur du panneau (fixe) : cacher un
    bouton (display:none) ne fait donc jamais varier la taille du panneau,
@@ -79,6 +86,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
   width: 80px;
   padding: 6px 0;
   border-radius: 4px;

@@ -1,5 +1,5 @@
 :root {
-  --hauteur-footer: '40px'
+  --hauteur-footer: 40px;
 }
 body {
   font-size: 16pt;

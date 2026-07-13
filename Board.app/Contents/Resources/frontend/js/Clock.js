@@ -21,7 +21,7 @@ class Clock {
   static build(){
     const panel = DCreate('DIV', {class: 'clock-panel hidden'})
 
-    const wrap = DCreate('DIV', {class: 'clock-wrap'})
+    const wrap = DCreate('DIV', {class: 'clock-wrap', id: 'clock-dial'})
     wrap.innerHTML = `
       <svg class="clock-ring-svg" viewBox="0 0 160 160">
         <circle class="clock-ring-bg" cx="80" cy="80" r="72"/>
@@ -31,47 +31,75 @@ class Clock {
     `
     panel.appendChild(wrap)
 
+    // Marqueur texte, invisible mais présent dans l'arbre d'accessibilité
+    // (contrairement à display:none) — sert uniquement aux tests e2e (AX
+    // n'a pas accès aux classes CSS) à lire l'état d'alerte courant.
+    const stateMarker = DCreate('SPAN', {id: 'clock-state-marker', text: 'normal'})
+    stateMarker.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;'
+    panel.appendChild(stateMarker)
+
     const btnRow = DCreate('DIV', {class: 'clock-btn-row'})
-    this.btnPause = DCreate('BUTTON', {id: 'btn-clock-pause', class: 'clock-btn clock-btn-invisible', text: 'Pause'})
     this.btnStop  = DCreate('BUTTON', {id: 'btn-clock-stop', class: 'clock-btn clock-btn-stop clock-btn-invisible', text: 'Stop'})
-    btnRow.appendChild(this.btnPause)
     btnRow.appendChild(this.btnStop)
     panel.appendChild(btnRow)
 
     document.body.appendChild(panel)
 
-    this._panel  = panel
-    this._wrap   = wrap
-    this._ring   = DGet('#clock-ring', panel)
-    this._digits = DGet('#clock-digits', panel)
+    this._panel       = panel
+    this._wrap        = wrap
+    this._ring        = DGet('#clock-ring', panel)
+    this._digits      = DGet('#clock-digits', panel)
+    this._stateMarker = stateMarker
 
-    listen(this._wrap,     'click', this.onClickStart.bind(this))
-    listen(this.btnPause, 'click', this.onClickPause.bind(this))
     listen(this.btnStop,  'click', this.onClickStop.bind(this))
 
-    // Déplacement HORIZONTAL seulement (le "bottom" CSS n'est jamais touché)
+    // Un clic sur le rond (#clock-dial) fait avancer l'horloge d'un état
+    // (start -> pause -> restart -> …). Un drag (mouvement au-delà d'un
+    // seuil) sur ce même rond déplace le panneau à la place — le clic
+    // "natif" qui suit le mouseup dans ce cas est alors ignoré (voir
+    // onDragEnd/_suppressWrapClick), pour pouvoir toujours déplacer
+    // l'horloge sans la faire démarrer/pauser par erreur.
+    listen(this._wrap, 'click', this.onWrapClick.bind(this))
+
+    // Déplacement HORIZONTAL du panneau (le "bottom" CSS n'est jamais touché)
     listen(panel, 'mousedown', this.onDragStart.bind(this))
     listen(document, 'mousemove', this.onDragMove.bind(this))
     listen(document, 'mouseup', this.onDragEnd.bind(this))
   }
 
+  static get DRAG_THRESHOLD_PX(){ return 4 }
+
+  static onWrapClick(){
+    if (this._suppressWrapClick) { this._suppressWrapClick = false; return }
+    this.onClickRing()
+  }
+
   static onDragStart(ev){
-    if (ev.target.closest('.clock-btn') || ev.target.closest('.clock-wrap')) return
-    this._dragging     = true
-    this._dragStartX   = ev.clientX
-    this._panelStartLeft = this._panel.getBoundingClientRect().left
-    this._panel.classList.add('dragging')
+    if (ev.target.closest('.clock-btn')) return
+    this._dragging        = true
+    this._dragMoved       = false
+    this._dragStartX      = ev.clientX
+    this._dragStartY      = ev.clientY
+    this._panelStartLeft  = this._panel.getBoundingClientRect().left
     stopEvent(ev)
   }
   static onDragMove(ev){
     if (!this._dragging) return
     const dx = ev.clientX - this._dragStartX
+    const dy = ev.clientY - this._dragStartY
+    if (!this._dragMoved && Math.hypot(dx, dy) > this.DRAG_THRESHOLD_PX) {
+      this._dragMoved = true
+      this._panel.classList.add('dragging')
+    }
+    if (!this._dragMoved) return
     const maxLeft = window.innerWidth - this._panel.offsetWidth
     const newLeft = Math.max(0, Math.min(maxLeft, this._panelStartLeft + dx))
     this._panel.style.left = newLeft + 'px'
   }
   static onDragEnd(){
-    this._dragging = false
+    if (this._dragMoved) this._suppressWrapClick = true
+    this._dragging  = false
+    this._dragMoved = false
     this._panel.classList.remove('dragging')
   }
 
@@ -89,8 +117,12 @@ class Clock {
     this.totalPaused = 0
     this.intervalId  = null
     this.paused      = false
+    this.warned      = false // passage à 10 min de l'échéance déjà signalé ?
+    this.ended       = false // passage à l'échéance déjà signalé ?
 
     this.panel // s'assure que le panneau est construit
+    this._panel.classList.remove('clock-warning', 'clock-danger')
+    this._stateMarker.textContent = 'normal'
     this.updateDisplay()
     this.setState('prelaunch')
     this.panel.classList.remove('hidden')
@@ -101,6 +133,31 @@ class Clock {
     this.stopWorkCheck()
     this.stopPauseCheck()
     this.panel.classList.add('hidden')
+  }
+
+  // Force Board au premier plan (échéance proche/atteinte) puis avale le
+  // premier clic ou la première touche qui suivrait, pour que le geste que
+  // l'user était en train de faire ailleurs ne se retrouve pas mal aiguillé
+  // dans Board juste parce que la fenêtre vient de passer devant lui.
+  static alertForeground(){
+    server.send({action: 'run-osascript', 'script-name': 'ActivateApp'}, () => {
+      this.armEventSwallow()
+    })
+  }
+
+  static armEventSwallow(){
+    const opts = {capture: true}
+    const disarm = () => {
+      window.removeEventListener('mousedown', swallow, opts)
+      window.removeEventListener('keydown',   swallow, opts)
+      clearTimeout(safety)
+    }
+    const swallow = (ev) => { stopEvent(ev); disarm() }
+    window.addEventListener('mousedown', swallow, opts)
+    window.addEventListener('keydown',   swallow, opts)
+    // Garde-fou : si rien ne se produit, désarme quand même (jamais de
+    // swallow qui reste armé indéfiniment).
+    const safety = setTimeout(disarm, 4000)
   }
 
   static get CHECK_INTERVAL_MS(){ return 30000 }
@@ -120,12 +177,12 @@ class Clock {
     this.promptCheck(
       "Le travail est-il toujours en cours sur ce projet ?",
       "Mettre en pause",
-      this.onClickPause.bind(this)
+      this.onClickRing.bind(this)
     )
   }
 
   // Vérifie périodiquement (30s), pendant la pause, que le travail n'a pas
-  // repris sans clic sur "Restart". Même remarque TODO que ci-dessus.
+  // repris sans clic sur le rond. Même remarque TODO que ci-dessus.
   static startPauseCheck(){
     this.stopPauseCheck()
     this.pauseCheckId = setInterval(this.checkStillPaused.bind(this), this.CHECK_INTERVAL_MS)
@@ -138,7 +195,7 @@ class Clock {
     this.promptCheck(
       "Le travail a-t-il repris (l'horloge est en pause) ?",
       "Redémarrer",
-      this.onClickPause.bind(this) // même bascule : relance le décompte
+      this.onClickRing.bind(this) // même bascule : relance le décompte
     )
   }
 
@@ -191,45 +248,49 @@ class Clock {
     const R = 72, CIRCUMFERENCE = 2 * Math.PI * R
     this._ring.setAttribute('stroke-dasharray', CIRCUMFERENCE)
     this._ring.setAttribute('stroke-dashoffset', CIRCUMFERENCE * (1 - remaining / this.workDuration))
+
+    // Seuils d'alerte : orange à 10 min de l'échéance, rouge à l'échéance
+    // (modèle : Todoist-server/minuteur/timer.html, classes body.warn/.end)
+    const isWarn = remaining <= 600 && remaining > 0
+    const isEnd  = remaining <= 0
+    this._panel.classList.toggle('clock-warning', isWarn)
+    this._panel.classList.toggle('clock-danger', isEnd)
+    this._stateMarker.textContent = isEnd ? 'danger' : (isWarn ? 'warning' : 'normal')
+
+    if (isWarn && !this.warned) { this.warned = true; this.alertForeground() }
+    if (isEnd && !this.ended)   { this.ended = true; this.alertForeground() }
   }
 
   static setState(state){
     if (state === 'prelaunch') {
-      this.btnPause.classList.add('clock-btn-invisible')
       this.btnStop.classList.add('clock-btn-invisible')
     } else if (state === 'running') {
-      this.btnPause.classList.remove('clock-btn-invisible')
-      this.btnPause.textContent = 'Pause'
       this.btnStop.classList.remove('clock-btn-invisible')
     }
   }
 
-  static onClickStart(){
-    if (this.startTime) return // déjà démarrée : le clic sur l'horloge ne relance rien
-    this.startTime = Date.now()
-    this.paused = false
-    this.startTicking()
-    this.startWorkCheck()
-    this.setState('running')
-  }
-
-  // Bascule Pause <-> Restart
-  static onClickPause(){
-    if (this.paused) {
+  // Un clic (sans déplacement) sur le rond fait avancer l'horloge d'un
+  // état : pas démarrée -> start ; en marche -> pause ; en pause -> restart.
+  static onClickRing(){
+    if (!this.startTime) {
+      this.startTime = Date.now()
+      this.paused = false
+      this.startTicking()
+      this.startWorkCheck()
+      this.setState('running')
+    } else if (this.paused) {
       this.totalPaused += Date.now() - this.pauseStart
       this.pauseStart = null
       this.paused = false
       this.stopPauseCheck()
       this.startTicking()
       this.startWorkCheck()
-      this.btnPause.textContent = 'Pause'
     } else {
       this.pauseStart = Date.now()
       this.paused = true
       this.stopTicking()
       this.stopWorkCheck()
       this.startPauseCheck()
-      this.btnPause.textContent = 'Restart'
     }
   }
 

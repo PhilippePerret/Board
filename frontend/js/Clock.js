@@ -31,6 +31,13 @@ class Clock {
     `
     panel.appendChild(wrap)
 
+    // Marqueur texte, invisible mais présent dans l'arbre d'accessibilité
+    // (contrairement à display:none) — sert uniquement aux tests e2e (AX
+    // n'a pas accès aux classes CSS) à lire l'état d'alerte courant.
+    const stateMarker = DCreate('SPAN', {id: 'clock-state-marker', text: 'normal'})
+    stateMarker.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;'
+    panel.appendChild(stateMarker)
+
     const btnRow = DCreate('DIV', {class: 'clock-btn-row'})
     this.btnStop  = DCreate('BUTTON', {id: 'btn-clock-stop', class: 'clock-btn clock-btn-stop clock-btn-invisible', text: 'Stop'})
     btnRow.appendChild(this.btnStop)
@@ -38,10 +45,11 @@ class Clock {
 
     document.body.appendChild(panel)
 
-    this._panel  = panel
-    this._wrap   = wrap
-    this._ring   = DGet('#clock-ring', panel)
-    this._digits = DGet('#clock-digits', panel)
+    this._panel       = panel
+    this._wrap        = wrap
+    this._ring        = DGet('#clock-ring', panel)
+    this._digits      = DGet('#clock-digits', panel)
+    this._stateMarker = stateMarker
 
     listen(this.btnStop,  'click', this.onClickStop.bind(this))
 
@@ -114,6 +122,7 @@ class Clock {
 
     this.panel // s'assure que le panneau est construit
     this._panel.classList.remove('clock-warning', 'clock-danger')
+    this._stateMarker.textContent = 'normal'
     this.updateDisplay()
     this.setState('prelaunch')
     this.panel.classList.remove('hidden')
@@ -246,6 +255,7 @@ class Clock {
     const isEnd  = remaining <= 0
     this._panel.classList.toggle('clock-warning', isWarn)
     this._panel.classList.toggle('clock-danger', isEnd)
+    this._stateMarker.textContent = isEnd ? 'danger' : (isWarn ? 'warning' : 'normal')
 
     if (isWarn && !this.warned) { this.warned = true; this.alertForeground() }
     if (isEnd && !this.ended)   { this.ended = true; this.alertForeground() }
