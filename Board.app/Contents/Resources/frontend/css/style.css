@@ -58,9 +58,9 @@ header div#app-name {
 
 div#current-project-mark {
   position:absolute;
-  right: 1em;
-  top: 1em;
-  color: yellow;
+  left: 50%;
+  top: 50%;
+  color: rgb(249, 249, 21);
 }
 
 footer {

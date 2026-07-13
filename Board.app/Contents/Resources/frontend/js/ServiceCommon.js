@@ -17,7 +17,7 @@ class ServiceCommon extends Service {
   }
 
   observe(){
-    listen(this.obj, 'click', this.execOn.bind(this, Project.current))
+    listen(this.obj, 'click', this.execOn.bind(this, null))
   } 
 
   /**
@@ -27,6 +27,7 @@ class ServiceCommon extends Service {
    * 
    */
   execOn(projet, ev){
+    projet = projet ?? Project.current
     if (ev?.metaKey) {
       return this.defineCommonServiceParameters(projet, true) // rappellera cette fonction
     } else if (!this.ensureServiceData(projet)) {

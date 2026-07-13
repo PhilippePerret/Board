@@ -41,13 +41,6 @@ class App {
   }
 }
 
-// À appeler avant toute opération
-function reset(){
-  message("")
-}
-
-
-
 function essayer(){
 }
 

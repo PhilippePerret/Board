@@ -7,7 +7,7 @@ class Project {
   static get current(){ return this._current}
   static set current(p){
     this._current = p
-    this.markCurrentProject.textContent = p.title
+    this.markCurrentProject.textContent = p?.title ?? ""
   }
   static get markCurrentProject(){
     return this._markcurproj || (this._markcurproj = DGet('#current-project-mark'))
@@ -435,6 +435,7 @@ class Project {
   }
   afterRemove(retour){
     this.obj.remove()
+    if (this.id == this.constructor.current.id) this.constructor.deselect(this)
     message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
   }
 }
