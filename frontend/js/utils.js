@@ -76,3 +76,8 @@ function heureCourante(withSeconds = true){
   return heure
 }
 
+// À appeler avant toute opération
+function reset(){
+  message("")
+}
+

@@ -435,6 +435,7 @@ class Project {
   }
   afterRemove(retour){
     this.obj.remove()
+    if (this.id == this.constructor.current.id) this.constructor.deselect(this)
     message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
   }
 }
