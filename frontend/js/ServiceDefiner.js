@@ -98,6 +98,10 @@ class ServiceDefiner {
    */
   defineByType(param){
     switch(param.type){
+      case 'raw':
+        this.addParamValue(param.value)
+        this.define()
+        break
       case 'app':
         this.addParamValue(App.getData([param.id]))
         this.define()

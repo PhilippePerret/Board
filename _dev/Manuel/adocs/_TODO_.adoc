@@ -1,6 +1,10 @@
 == Todo list ==
 
-- BUG : Toujours le même service courant
+- Pouvoir définir la couleur de fond (projet.background)
+  En fait, il faudrait un outil pour définir les propriétés "extra" du projet
+  - couleur de fond,
+  - icone à utiliser (si différente de icone de dossier)
+
 - git init (tout le flux, juste en donnant le nom sur Github)
 - iTerm
 - installation documentation (regrouper tout ce qui concerne la documentation)

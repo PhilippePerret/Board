@@ -48,8 +48,11 @@ Principes :
 
 [cols="1,4"]
 |====
+| **Propriété**   | **Description**
 | `id`    | Identifiant du paramètres (peut être répété dans les paramètres qui est un Array)
 | `type`  | Le type précis qui va définir exactement la valeur transmise. Voir les <<params-types>>
+| `values`  | Quand le `type` est `select`, pour définir les valeurs à proposer.
+| `value`   | La valeur par défaut ou la valeur brute.
 |====
 
 [[params-types, types de paramètres]]
@@ -59,7 +62,9 @@ Ils s'agit de la propriété `type` des <<script-params>>. _Ces types sont utile
 
 [cols="1,4"]
 |====
-| `bounds`        | 
+| **Type**        | **Description**
+| `raw`           | Donnée brute fournie dans `value`
+| `bounds`        | Pour obtenir les dimensions d'une fenêtre Finder
 | `finder-window` |  Pour obtenir toutes les informations sur la fenêtre courante
 | `path`          | Un chemin d'accès à n'importe quoi, fichier, dossier, script…
 | `path-or-null`  | Chemin d'accès optionnel.
