@@ -30,10 +30,6 @@ class ServiceDefiner {
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
     this.paramsValues = []
 
-    // Tant que le nom propre du service n'est pas donné par l'utilisateur
-    // (service custom only)
-    this.unnamed = this.service.stype == 'custom'
-
     // Mis à true quand on redéfinition un service (juste pour le titre)
     this.redefinition = false
   }

@@ -13,7 +13,7 @@ On peut basculer des <<services communs>> aux custom-services grâce au bouton �
 [[common-services, services communs]]
 ==== Services communs ====
 
-Les services communs ne s'ajoutent pas aux projets, ils sont toujours accessibles par eux. Le premier service commun est par exemple “Ouvrir le dossier du projet”
+Les services communs peuvent s'ajouter aux projets, mais ils peuvent aussi être cliqués dans la liste. Ils s'appliquent alors au projet courant.
 
 On affiche les services communs simplement en cliquant sur la fiche d'un projet. En même temps qu'il se met en sélection, la liste des services communs s'affiche à droite de l'interface.
 
@@ -33,7 +33,9 @@ On peut basculer des <<custom-services>> aux services communs grâce au bouton �
 | `front`   | Propriété très importante qui définit **une méthode** frontend qui sera utilisée pour exécuter le service. Cf. <<exec-service-frontend>>.
 |`name`     | Le nom affiché du service +
 (pour les <<custom-services>>, ce nom est modifiable dès l'attribution.)
-| `params`  | Les <<script-params>> (très importants, ils font l'objet d'un détail propre)
+| `params`    | Les <<script-params>> (très importants, ils font l'objet d'un détail propre)
+| `dynParams` | Optionnellement, il peut y avoir des paramètres à définir à l'utilisation du bouton. +
+Ils fonctionnent essentiellement commes les <<script-params>>, mais les valeurs ne sont pas persistées.
 |====
 
 [[script-params, paramètres de script]]
@@ -54,7 +56,9 @@ Principes :
 | `values`    | Quand le `type` est `select`, pour définir les valeurs à proposer.
 | `value`     | La valeur par défaut ou la valeur brute.
 | `absolute`  | Si true, la propriété est enregistrée ou relevée dans project.adata. +
-Cette propriété peut alors être partagée entre plusieurs services (typiquement : le dossier de documentation).
+Cette propriété peut alors être partagée entre plusieurs services (typiquement : le dossier de documentation). +
+**DOIT DEVENIR OBSOLÈTE**
+**Maintenant, il existe une façon plus simple de le faire, en mettant le type _`projet`_ ou _`app`_ et en identifiant (`ìd`) la propriété du projet ou de l'application à prendre.**
 |====
 
 [[params-types, types de paramètres]]

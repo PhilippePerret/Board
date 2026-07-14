@@ -41,7 +41,7 @@ Three layers, talking over a JSON message bridge:
 3. **Frontend** (`frontend/js/`, plain JS, no framework/bundler, no Promises — see "no-Promise" convention below):
    - `xbridge.js` — `window.bridge` (postMessage/receive plumbing keyed by generated request ids + per-call callbacks) and `window.server.send(data, callback)` as the app-facing API.
    - `Project.js` — project card model/rendering/CRUD.
-   - `Service.js`, `ServiceData.js`, `ServiceDefiner.js`, `ServiceExecuter.js`, `ServicesTools.js` — the services system (see below).
+   - `Service.js`, `ServiceData.js`, `ServiceDefiner.js`, `ServiceExecuter.js`, `ServicePanel.js`, `SidePanel.js`, `ServicesTools.js` — the services system (see below).
    - `Panel.js`, `Dialogs.js`, `Dom.js`, `Dashboard.js`, `utils.js`, `app.js` — UI plumbing/dialogs/misc.
    - Scripts are loaded via plain `<script>` tags in `index.html` (order matters — no module system).
 
@@ -49,8 +49,10 @@ Three layers, talking over a JSON message bridge:
 
 A **service** is an operation that can be attached to a project (open a Finder window, bump a version number, run an arbitrary script, etc). Full spec: `_dev/Manuel/adocs/xdev/definition-services.adoc`.
 
-- All services are declared in `frontend/js/ServiceData.js` (`CUSTOM_SERVICES_DATA`). Each entry has `id`, `name`, `params` (fixed params, defined when the service is attached to a project), optionally `dynParams` (dynamic params, asked at run time), optionally `scType` (script extension if not AppleScript, e.g. `.rb`) and `paramsOrder` (needed when a param type expands to several backend args, e.g. `finder-window`).
-- A service has two states: **abstract** (in `CUSTOM_SERVICES_DATA`, identified by `id`) vs **concrete** (attached to a project, identified by `uuid`, `params` becomes a flat ordered list of values rather than a keyed table).
+- All services are declared in `frontend/js/ServiceData.js`, split across two arrays: `CUSTOM_SERVICES_DATA` and `COMMON_SERVICES_DATA` (merged into `ALL_SERVICES_DATA` for id-based lookups, e.g. dynParams resolution in `ServiceExecuter.js`). Each entry has `id`, `name`, `params` (fixed params, defined when the service is attached to a project), optionally `dynParams` (dynamic params, asked at run time), optionally `scType` (script extension if not AppleScript, e.g. `.rb`) and `paramsOrder` (needed when a param type expands to several backend args, e.g. `finder-window`).
+- Single `Service` class (`Service.js`) for both custom and common services — no subclassing. Which array a service comes from sets its `stype` (`'custom'`/`'common'`), injected at panel-build time (`ServicePanel.js`). A common service (`stype == 'common'`) additionally gets a click listener on its panel button to run it directly on the current project (`Service#execCommonServiceOn`); a custom service only supports drag-and-drop onto a project.
+- Each panel (`#common-services-panel` / `#custom-services-panel`) is a `SidePanel` subclass (`ServicePanel.js`: `CommonPanel`/`CustomPanel`), built dynamically and appended to `document.body` — not the static markup in `index.html`.
+- A service has two states: **abstract** (in `ALL_SERVICES_DATA`, identified by `id`) vs **concrete** (attached to a project, identified by `uuid`, `params` becomes a flat ordered list of values rather than a keyed table). A common service run directly by click (not attached to a project) instead stores its params in `project.sdata[id]`, not in `project.services`.
 - Each service `id` maps to a **backend script** in `backend/scripts/`, named by camelizing the id (`file-versioning` → `FileVersioning.rb`). The script receives its params positionally, as strings, with no indication of what they are — order comes from declaration order in `ServiceData.js`, or from `paramsOrder` (for user info only) if a param type expands to multiple values.
 - Editing `ServiceData.js` requires running `update.command` to push the change into the built app bundle.
 - Simple OS-level actions can skip a dedicated script by using `exec-service` with `run-osascript` / `run-bashscript` against a script already in `backend/scripts/`.

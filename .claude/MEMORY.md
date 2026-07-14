@@ -12,6 +12,7 @@
 - [Sécurité fermeture fenêtres Finder](feedbacks/finder_window_closing_safety.md) — vérifier le nom juste avant de fermer, jamais de balayage
 - [Pas d'explications techniques](feedbacks/no_code_explanations.md) — user ne lit pas le code, format "<Ça> : normalement, corrigé."
 - [Décision vs détail d'implémentation](feedbacks/decision_vs_implementation_detail.md) — réponse de décision = uniquement ce qui pèse sur le choix, jamais mêlé aux détails mécaniques (ordre scripts, imports…)
+- [Dossier .claude = à moi](feedbacks/claude_dir_is_mine.md) — CLAUDE.md et tout .claude/ sous ma responsabilité, tenir à jour sans demander
 - [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
 - [État des moteurs de test](project_test_engines_status.md) — base/batch/compiled/pers retirés (benchmarkés, plus lents), swift+pont gardés, pont défaut
 - [Bug clic double service ouvert](project_double_click_service_bug.md) — AXPress ne reproduit pas le bug réel, investigation à reprendre côté console dev live

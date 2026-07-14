@@ -321,7 +321,7 @@ class Project {
     service.projectCard.remove()
     message(`Service supprimé (${service.uuid})`)
     this.services[service.type] = this.services[service.type].filter(s => s.uuid != service.uuid)
-    ServiceCustom.remove(service.uuid)
+    Service.remove(service.uuid)
     // Plus aucun service au démarrage : le bouton "GO !" (et son conteneur)
     // n'a plus lieu d'être — le retirer, et remettre à zéro les références
     // pour que buildStartupContainer() le reconstruise proprement si un
@@ -412,7 +412,7 @@ class Project {
     this.startupField.addEventListener("dragover", e => {e.preventDefault()})
     this.startupField.addEventListener("drop", e => {
         e.preventDefault();
-        const service = ServiceCustom.get(e.dataTransfer.getData("id"))
+        const service = Service.get(e.dataTransfer.getData("id"))
         // console.log("Drop sur la zone startup", service)
         this.addStartupService(service)
       })
@@ -420,7 +420,7 @@ class Project {
     this.othersField.addEventListener("dragover", e => e.preventDefault())
     this.othersField.addEventListener("drop", e => {
           e.preventDefault();
-          const service = ServiceCustom.get(e.dataTransfer.getData("id"))
+          const service = Service.get(e.dataTransfer.getData("id"))
           // console.log("Drop sur la zone autres services", service)
           this.addOtherService(service)
       })
