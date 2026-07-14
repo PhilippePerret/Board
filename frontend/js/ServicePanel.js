@@ -2,7 +2,7 @@ class ServicePanel extends SidePanel {
   buildContent(){
     var currentGroup, currentGroupName // pour les communs
     this.SERVICES_DATA
-      .map(dataService => new this.Service(Object.assign(dataService, {stype: this.serviceType})))
+      .map(dataService => new Service(Object.assign(dataService, {stype: this.serviceType})))
       .forEach( service => {
         if (service.group != currentGroupName) {
           currentGroup = DCreate('FIELDSET', {class:'services-group'})
