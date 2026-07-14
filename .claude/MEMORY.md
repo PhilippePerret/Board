@@ -11,8 +11,8 @@
 - [Sauvegarde jamais dans un tmp volatile](feedbacks/backup_volatile_tmp.md) — perte de données réelle, backup doit être dans le repo, jamais $TMPDIR
 - [Sécurité fermeture fenêtres Finder](feedbacks/finder_window_closing_safety.md) — vérifier le nom juste avant de fermer, jamais de balayage
 - [Pas d'explications techniques](feedbacks/no_code_explanations.md) — user ne lit pas le code, format "<Ça> : normalement, corrigé."
+- [Décision vs détail d'implémentation](feedbacks/decision_vs_implementation_detail.md) — réponse de décision = uniquement ce qui pèse sur le choix, jamais mêlé aux détails mécaniques (ordre scripts, imports…)
 - [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
 - [État des moteurs de test](project_test_engines_status.md) — base/batch/compiled/pers retirés (benchmarkés, plus lents), swift+pont gardés, pont défaut
 - [Bug clic double service ouvert](project_double_click_service_bug.md) — AXPress ne reproduit pas le bug réel, investigation à reprendre côté console dev live
-- [PRIORITÉ — service open-terminal en cours](project_open_terminal_service_wip.md) — test écrit/échec confirmé, backend + injection du path pas encore faits
 - [PRIORITÉ — 7 échecs suite e2e (2026-07-13)](project_test_suite_failures.md) — diagnostics posés (SERVICE_ID drag faux, fixture 8 vs 6 params, sbarWidth non défini, test horloge seuils à revoir), rien corrigé

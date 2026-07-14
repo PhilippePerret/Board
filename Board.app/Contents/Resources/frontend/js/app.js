@@ -10,6 +10,7 @@ class App {
 
   static init(retour){
     historize("-> App#init")
+    Service.init()
     if (undefined == retour) {
       server.send({action: 'load-all'}, this.init.bind(this))
     } else {

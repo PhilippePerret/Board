@@ -118,7 +118,7 @@ class ServiceDefiner {
         break
       case 'project':
         /**
-         * Pour les services common, le type 'project' permet de définir une de ses propriétés
+         * Pour les services common, le type 'project' permet de récupérer une de ses propriétés
          */
         this.addParamValue(param, Project.current[param.id])
         this.define()

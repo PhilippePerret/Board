@@ -1,31 +1,31 @@
 class Service {
 
+  static init(){
+    // juste pour les instancier
+    this.CustomPanel
+    this.CommonPanel
+  }
+
+  static get CustomPanel(){ return this._cuspanel || (this._cuspanel = new CustomPanel())}
+  static get CommonPanel(){ return this._companel || (this._companel = new CommonPanel())}
   /**
    * Fonction appelée par le "bouton des services"
    * Il permet de basculer entre le panneau des services communs et
    * le panneau des services personnalisés
    */
-  static toggle(){
-    console.log("-> Service#toggle this.activeService.serviceType = %s", String(this.activeService.serviceType))
-    this.activeService.closePanel()
-    if (this.activeService.serviceType == 'custom'){
-      console.log("this.serviceType est 'custom'", this.activeService.serviceType)
-      this.activeService = ServiceCommon
-    } else {
-      this.activeService = ServiceCustom
-    }
-    this.activeService.openPanel()
-    this.btnToggleService.textContent = this.activeService.oppositeButton
+  static togglePanel(){
+    this.activePanel = this.activePanel.toggle()
   }
   static get btnToggleService(){return this._btntogserv || ( this._btntogserv = DGet('#btn-toggle-common-services-panel'))}
 
+  // Parce qu'on commence toujours par celui-ci
   static showCommonPanel(){
-    this.activeService = ServiceCustom
-    this.toggle()
+    this.activePanel = this.CustomPanel
+    this.togglePanel()
   }
   static maskCommonPanel(){
-    console.log("this.activeService", this.activeService)
-    this.activeService.closePanel()
+    console.log("this.activePanel", this.activePanel)
+    this.activePanel.close()
   }
   /**
    * Construit la liste des services
@@ -48,17 +48,17 @@ class Service {
       })
   }
 
-  // Construction complète du panneau
-  static build(){
-    this.buildServiceList()
-    this.built = true
-  }
+  // // Construction complète du panneau
+  // static build(){
+  //   this.buildServiceList()
+  //   this.built = true
+  // }
 
-  static openPanel(){
-    this.built || this.build()
-    this.panel.open()
-  }
-  static closePanel(){this.panel.close()}
+  // static openPanel(){
+  //   this.built || this.build()
+  //   this.panel.open()
+  // }
+  // static closePanel(){this.panel.close()}
 
 
   static get listing(){ return DGet('.services-listing', this.panel.obj) }
@@ -99,6 +99,7 @@ class Service {
      */
     this.params     = data.params || raise("Il faut définir les :params du servive " + this.id)
     this.uuid       = data.uuid ?? null // seulement les services de projets
+    this.stype      = data.stype || 'custom' // plus tard : raise("Le service-type (stype) doit être défini.") // 'custom'|'common'
     this.type       = data.type ?? null // idem (others ou startup)
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.scType     = data.scType ?? '.scpt'
@@ -108,8 +109,6 @@ class Service {
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")
   }
-
-  get stype(){ return this.constructor.serviceType }
 
   /**
    * Construction dans le listing des services

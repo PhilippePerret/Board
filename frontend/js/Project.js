@@ -196,8 +196,8 @@ class Project {
   }
 
   initServices(){
-    this.services.startup = (this.services.startup ?? []).map(ds => new ServiceCustom(ds))
-    this.services.others  = (this.services.others  ?? []).map(ds => new ServiceCustom(ds))
+    this.services.startup = (this.services.startup ?? []).map(ds => new Service(ds))
+    this.services.others  = (this.services.others  ?? []).map(ds => new Service(ds))
   }
 
   addToAData(values){

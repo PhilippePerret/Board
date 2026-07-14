@@ -7,7 +7,6 @@ class ServiceCommon extends Service {
 
   static get SERVICES_DATA(){return COMMON_SERVICES_DATA}
 
-  static get oppositeButton(){return "Services personnalisés"}
   static get panel(){
     return this._panel || (this._panel = new MiniPanel(DGet(`div#common-services-panel`)))
   }

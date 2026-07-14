@@ -9,7 +9,6 @@
  */
 class SidePanel {
   static get instance(){ return this._instance || (this._instance = new this()) }
-  static toggle(){ this.instance.toggle() }
   static open(){ this.instance.open() }
   static close(){ this.instance.close() }
 
@@ -24,16 +23,28 @@ class SidePanel {
   // À redéfinir dans les sous-classes, pour remplir this.listingEl
   buildContent(){}
 
+  // Quand on bascule d'un panneau à l'autre (this.oppositePanel doit
+  // être défini.)
+  // Retourne l'instance du nouveau panneau actif
   toggle(){
-    this.built || this.build()
-    this.obj.classList.contains('closed') ? this.open() : this.close()
+    this.close()
+    console.log("this", this)
+    console.log("this.oppositePanel", this.oppositePanel)
+    this.oppositePanel.open()
+    return this.oppositePanel
   }
   open(){
     this.built || this.build()
     this.obj.classList.remove('closed')
+    this.setOppositeButton()
   }
   close(){
-    this.built && this.obj.classList.add('closed')
+    this.obj?.classList.add('closed')
+  }
+  setOppositeButton(){
+    if (this.oppositeButton){
+      this.toggleBtn.textContent = this.oppositeButton
+    }
   }
 
   build(){
@@ -42,16 +53,24 @@ class SidePanel {
     fieldset.appendChild(DCreate('LEGEND', {text: this.title}))
     panel.appendChild(fieldset)
 
-    const closeBtn = DCreate('BUTTON', {id: `${this.domId}-close`, class: 'btn-deal-with-services', text: this.closeLabel})
-    listen(closeBtn, 'click', this.close.bind(this))
-    panel.appendChild(closeBtn)
+    if (this.oppositePanel) {
+      const toggleBtn = DCreate('BUTTON', {id: `${this.domId}-toggle`, class: 'btn-deal-with-services', text: this.toggleLabel})
+      listen(toggleBtn, 'click', this.toggle.bind(this, this.oppositePanel))
+      panel.appendChild(toggleBtn)
+      this.toggleBtn = toggleBtn
+    }
+    if (this.closeLabel) {
+      const closeBtn = DCreate('BUTTON', {id: `${this.domId}-close`, class: 'btn-deal-with-services', text: this.closeLabel})
+      listen(closeBtn, 'click', this.close.bind(this))
+      panel.appendChild(closeBtn)
+    }
 
     document.body.appendChild(panel)
 
     this.obj = panel
     this.listingEl = fieldset
+    this.buildContent(this.obj)
+    
     this.built = true
-
-    this.buildContent()
   }
 }

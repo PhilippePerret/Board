@@ -4,7 +4,12 @@
 
 == Todo list ==
 
-- Outil pour définir des propriétés accessoires du projet
+- un DataDefiner (reprise de ServiceDefiner#defineByType) qui servirait pour tout le monde
+  - servirait pour les services
+  - servirait pour les données de l'application
+  - servirait pour les données supplémentaires du projet (cf. ci-dessous)
+- implémentation des données supplémentaire du projet (couleur, logo, etc.)
+  Comme les données de l'application, mettre en commun des éléments (gestion du panneau, définition des données, etc.)
   - couleur de fond,
   - icone à utiliser (svg, png, etc.)
 
