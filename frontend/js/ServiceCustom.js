@@ -8,13 +8,5 @@ class ServiceCustom extends Service {
     return this._panel || (this._panel = new MiniPanel(DGet(`div#custom-services-panel`)))
   }
 
-  constructor(data){
-    super(data)
-  }
-
-  observe(){
-    listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
-  } 
-
 
 }

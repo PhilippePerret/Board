@@ -23,30 +23,13 @@ class Service {
     this.activePanel = this.CustomPanel
     this.togglePanel()
   }
-  static maskCommonPanel(){
-    console.log("this.activePanel", this.activePanel)
-    this.activePanel.close()
-  }
+  static maskCommonPanel(){this.activePanel.close()}
+
   /**
    * Construit la liste des services
    * Dans COMMON_SERVICES_DATA et CUSTOM_SERVICES_DATA
    * 
    */
-  static buildServiceList(retour){
-    var currentGroup, currentGroupName // pour les communs
-    this.SERVICES_DATA
-      .map(dataService => new this.klass(dataService))
-      .forEach( service => {
-        if (service.group != currentGroupName) {
-          currentGroup = DCreate('FIELDSET', {class:'services-group'})
-          const legend = DCreate('LEGEND', {text: service.group})
-          currentGroup.appendChild(legend)
-          this.listing.appendChild(currentGroup)
-          currentGroupName = String(service.group)
-        }
-        service.build(currentGroup || this.listing)
-      })
-  }
 
   // // Construction complète du panneau
   // static build(){
@@ -61,7 +44,6 @@ class Service {
   // static closePanel(){this.panel.close()}
 
 
-  static get listing(){ return DGet('.services-listing', this.panel.obj) }
 
   /**
    * Ajout du service dans le dictionnaire
@@ -108,6 +90,8 @@ class Service {
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.name = data.name || raise("Un service doit avoir un :name.")
+
+    this.isCommonService = this.stype === 'common'
   }
 
   /**
@@ -123,6 +107,13 @@ class Service {
     contenant.appendChild(div)
     this.observe()
   }
+
+  observe(){
+    listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
+    if (this.isCommonService) {
+      listen(this.obj, 'click', this.execCommonServiceOn.bind(this, null))
+    }
+  } 
 
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
@@ -140,6 +131,9 @@ class Service {
     return div
   }
 
+  /**
+   * Observation de la carte insérée dans le projet
+   */
   observeServiceCard(projet, card){
     listen(card, 'click', this.onClickOnProjectService.bind(this))
     listen(card, 'dragstart', e => projet.draggedService = this)
@@ -163,6 +157,54 @@ class Service {
     console.log("callback dans Service#exec", callback)
     new ServiceExecuter(this).exec(callback)
     console.log("Service#exec se termine bien")
+  }
+
+
+
+  /**
+   ********************* SERVICES COMMUNS *************************
+   */
+
+
+  /**
+   * Fonction qui exécute le service commum sur le projet +projet+
+   * après s'être assuré que le projet définissait tous les
+   * paramètres requis.
+   * 
+   */
+  execCommonServiceOn(projet, ev){
+    projet = projet ?? Project.current
+    if (ev?.metaKey) {
+      return this.defineCommonServiceParameters(projet, true) // rappellera cette fonction
+    } else if (!this.ensureServiceData(projet)) {
+      return null
+    }
+    new ServiceExecuter(this).execOnProject(projet)
+  }
+
+  /**
+   * Fonction qui s'assure que toutes les informations requises sont
+   * bien définies pour le projet +projet+. Dans le cas contraire, on
+   * les définis
+   */
+  ensureServiceData(projet){
+    console.log("-> ensureServiceData avec projet : ", projet, this)
+    if (projet.sdata && projet.sdata[this.id]) return true
+    return this.defineCommonServiceParameters(projet, false /* 1re définition */)
+  }
+
+  defineCommonServiceParameters(projet, redefine = false){
+    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet))
+    definer.redefinition = redefine
+    definer.define()
+    return false    
+  }
+
+  onReturnFromDefineProjetParams(projet, _service){
+    projet.sdata = projet.sdata ?? {}
+    Object.assign(projet.sdata, {[_service.id]: _service.params})
+    console.log("Projet après définition des paramètres", projet)
+    projet.save(this.execOn.bind(this, projet))
   }
 
 }
