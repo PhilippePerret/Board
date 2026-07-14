@@ -50,7 +50,7 @@ class Service {
 
 
   constructor(data){
-    console.log("data Service", data)
+    // console.log("data Service", data)
     this.id     = data.id || raise("Il faut fournir un identifiant au service.")
     this.group  = data.group ?? null
     /**

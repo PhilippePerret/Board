@@ -1,5 +1,15 @@
 class Project {
 
+  // Toutes les propriétés des projets doivent être définies ici
+  // sdata : données pour les services communs
+  // adata : données absolues pour les services communs
+  static PROPERTIES = [
+    'id', 'title', 'path', 'sdata', 'workTime', 'createdAt', 'updatedAt',
+    'services', 'background', 'icon', 'adata',
+    // documentation
+    'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html'
+  ]
+
   static uniqId(){
     return Date.now() + Math.random().toString(16).slice(2);
   }
@@ -175,13 +185,6 @@ class Project {
     return DGetAll('div.project', this.container).map( div => div.dataset.projectId)
   }
 
-  // Toutes les propriétés des projets doivent être définies ici
-  // sdata : données pour les services communs
-  // adata : données absolues pour les services communs
-  static PROPERTIES = [
-    'id', 'title', 'path', 'sdata', 'workTime', 'createdAt', 'updatedAt',
-    'services', 'background', 'icon', 'adata'
-  ]
 
   constructor(data){
     console.log("data", data)

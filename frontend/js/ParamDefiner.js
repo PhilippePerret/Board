@@ -61,6 +61,7 @@ class ParamDefiner {
     this.id       = param.id      ?? raise('Un identifiant est obligatoire.', param)
     this.name     = param.name    ?? param.id
     this.type     = param.type    ?? raise('Le type doit être défini.', param)
+    this.q        = param.q       ?? null
     this.message  = param.message ?? this.q ?? null
     this.default  = param.default ?? null
     this.values   = param.values  ?? null
@@ -71,7 +72,7 @@ class ParamDefiner {
    this.defineByType()
   }
 
-  setValue(ev, value){
+  setValue(value){
     this.value = value
     this.paramLister.define()
   }
@@ -80,8 +81,7 @@ class ParamDefiner {
     if ( value === null ) {
       this.abort()
     } else {
-      this.value = value
-      this.paramLister.define()
+      this.setValue(value)
     }
   }
 
@@ -108,28 +108,33 @@ class ParamDefiner {
 
 
   onRaw(){
-    this.value = this.value || this.default
+    this.setValue(this.value || this.default)
   }
 
   onApp(){
-    this.value = App.getData([this.id])
-    if (!this.value) {
+    const value = App.getData([this.id])
+    if (!value) {
       console.error("Je dois apprendre à définir une valeur application.")
+    } else {
+      this.setValue(value)
     }
   }
 
   onProject(){
-    this.value = Project.current[this.id]
-    if (!this.value) {
-      const definers =  new ParamsDefiner({params: [this.param.if_undefined]}, this.onDefineProjectValue.bind(this))
+    const value = Project.current[this.id]
+    if (!value) {
+      const definers =  new ParamsDefiner([Object.assign(this.param.if_undefined, {id: this.param.id})], this.onDefineProjectValue.bind(this))
       definers.define()
+    } else {
+      this.setValue(value)
     }
   }
   onDefineProjectValue(definers){
+    historize('-> ParamDefiner.onDefineProjectValue')
     const valueDefiner = definers[0]
     const prop = valueDefiner.id
-    // TODO S'assurer que la propriété est dans la liste, sinon => erreur développer
-
+    // S'assurer que la propriété est dans la liste, sinon => erreur développer
+    Project.PROPERTIES.indexOf(prop) > -1 || raise(`La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
     Project.current[prop] = valueDefiner.value
     console.info("Propriété '%s' mises à %s", prop, Project.current[prop])
     Project.current.save()
@@ -277,7 +282,7 @@ class ParamDefiner {
 
   // Reçoit la réponse à une question demandant un entier (minutes, etc.)
   onIntegerResponse(values){
-    this.value = parseInt(values[0], 10)
+    this.setValue(parseInt(values[0], 10))
   }
 
   // Va chercher les informations sur la fenêtre courante dans le Finder
@@ -291,9 +296,10 @@ class ParamDefiner {
       return server.send({action: 'getInfoFinderWindow', type: 'folder'}, this.getInfoFinderWindow.bind(this, properties))
     } else {
       // console.log("retour", retour)
+      let value
       const data = retour.data
       if (properties == 'all') {
-        this.value = {
+        value = {
             path:       data.path
           , position:   data.position
           , left:       data.position[0]
@@ -304,11 +310,12 @@ class ParamDefiner {
           , viewType:   data.view
         }
       } else {
-        this.value = properties.reduce((accu, property) => {
+        value = properties.reduce((accu, property) => {
             Object.assign(accu, {[property]: data[property]})
             return {}
           })
       }
+      this.setValue(value)
     }
   }
 
@@ -319,7 +326,7 @@ class ParamDefiner {
       server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this))
     } else {
       // console.log("retour", retour)
-      this.value = {path: retour.data.filepath, name: retour.data.filename}
+      this.setValue(retour.data.filepath)
     }
   }
 

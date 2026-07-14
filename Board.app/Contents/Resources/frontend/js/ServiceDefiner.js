@@ -23,7 +23,7 @@ class ServiceDefiner {
   constructor(service, callback){
     console.log("service à définir", service)
     this.service  = service
-    this.params   = service.params.reverse() // pour pouvoir poper
+    this.params   = service.params
     this.callback = callback
 
     // Donnée qui remplacement params dans le service pour le projet

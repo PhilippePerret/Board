@@ -2,6 +2,8 @@
 
 - Quand on annule un service commun, les données s'enregsitrent quand même…
 
+- Un bug prévisible : avant, pour toutes les paramètres de type :path, il était retourné et enregistré le path ET le nom du fichier. Maintenant, ParamDefiner ne retourne que la path. Corriger tous les services (backend/scripts)
+
 == Todo list ==
 
 - un DataDefiner (reprise de ServiceDefiner#defineByType) qui servirait pour tout le monde

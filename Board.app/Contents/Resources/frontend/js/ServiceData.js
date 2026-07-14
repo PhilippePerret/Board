@@ -53,7 +53,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Documentation'
     , scType: '.rb'
     , params: [
-        {id: 'docu-main-file', q: 'Sélectionner le fichier principal de documentation (.adoc)', type: 'path'}
+        {id: 'docu-main-file-adoc', type: 'project', if_undefined: {q: 'Sélectionner le fichier principal de documentation (.adoc)', type: 'path'}}
       ]
   },
   {
@@ -61,7 +61,7 @@ const COMMON_SERVICES_DATA = [
     , name: 'Ouvrir la documentation'
     , group: 'Documentation'
     , params: [
-        {id: 'docu-main-file', q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}
+        {id: 'docu-main-file-html', type: 'project', if_undefined: {q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}}
       ]
   },
   {
