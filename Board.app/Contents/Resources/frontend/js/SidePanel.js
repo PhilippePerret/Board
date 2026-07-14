@@ -65,7 +65,7 @@ class SidePanel {
       panel.appendChild(closeBtn)
     }
 
-    document.body.appendChild(panel)
+    DGet('#panels-container').appendChild(panel)
 
     this.obj = panel
     this.listingEl = fieldset

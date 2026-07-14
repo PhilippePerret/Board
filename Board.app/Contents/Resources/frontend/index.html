@@ -36,18 +36,7 @@
     === PANNEAU DES SERVICES (CUSTOM ET COMMON) ===
 
 -->
-<div id="common-services-panel" class="services-panel closed">
-  <fieldset class="services-listing">
-    <legend>Services commun</legend>
-  </fieldset>
-  <button id="btn-toggle-common-services-panel" class="btn-deal-with-services" onclick="Service.toggle.call(Service)">Services personnalisés</button>
-</div>
-<div id="custom-services-panel" class="services-panel closed">
-  <fieldset class="services-listing">
-    <legend>Services personnalisés</legend>
-    <span class="tiny italic">(à glisser-déposer sur le projet)</span>
-  </fieldset>
-  <button id="btn-toggle-custom-services-panel" class="btn-deal-with-services" onclick="Service.toggle.call(Service)">Services communs</button>
+<div id="panels-container">
 </div>
 
 <div id="tools">
@@ -67,6 +56,7 @@
 <script src="js/Dom.js"></script>
 <script src="js/Panel.js"></script>
 <script src="js/SidePanel.js"></script>
+<script src="js/ParamDefiner.js"></script>
 <script src="js/Dialogs.js"></script>
 <script src="js/Project.js"></script>
 <script src="js/Service.js"></script>

@@ -25,32 +25,7 @@ class AppDataPanel extends SidePanel {
   }
 
   onClickRow(entry, valueEl){
-    switch(entry.type) {
-      case 'select':
-        new SelectDialog({
-            title: this.title
-          , id: entry.id
-          , message: entry.name
-          , idValues: [entry.id]
-          , values: entry.values
-          , defaultValue: this.currentValue(entry)
-          , ouiBtn: {name: 'OK', onclick: this.onEdited.bind(this, entry, valueEl)}
-          , nonBtn: {name: 'Annuler'}
-        }).show()
-        break
-      case 'string': 
-        new TextFieldDialog({
-            title: this.title
-          , id: entry.id
-          , message: entry.name
-          , defaultValue: this.currentValue(entry)
-          , ouiBtn: {name: 'OK', onclick: this.onEdited.bind(this, entry, valueEl)}
-          , nonBtn: {name: 'Annuler'}
-        }).show()
-        break;
-      default: 
-        console.error("Type de valeur inconnue dans les données de l'application : ", entry)
-    }
+    console.error("Il faut apprendre à définir Param(s)Definer")
   }
 
   onEdited(entry, valueEl, values){

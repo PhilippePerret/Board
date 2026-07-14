@@ -16,7 +16,6 @@ class Service {
   static togglePanel(){
     this.activePanel = this.activePanel.toggle()
   }
-  static get btnToggleService(){return this._btntogserv || ( this._btntogserv = DGet('#btn-toggle-common-services-panel'))}
 
   // Parce qu'on commence toujours par celui-ci
   static showCommonPanel(){
@@ -24,26 +23,6 @@ class Service {
     this.togglePanel()
   }
   static maskCommonPanel(){this.activePanel.close()}
-
-  /**
-   * Construit la liste des services
-   * Dans COMMON_SERVICES_DATA et CUSTOM_SERVICES_DATA
-   * 
-   */
-
-  // // Construction complète du panneau
-  // static build(){
-  //   this.buildServiceList()
-  //   this.built = true
-  // }
-
-  // static openPanel(){
-  //   this.built || this.build()
-  //   this.panel.open()
-  // }
-  // static closePanel(){this.panel.close()}
-
-
 
   /**
    * Ajout du service dans le dictionnaire
@@ -204,7 +183,7 @@ class Service {
     projet.sdata = projet.sdata ?? {}
     Object.assign(projet.sdata, {[_service.id]: _service.params})
     console.log("Projet après définition des paramètres", projet)
-    projet.save(this.execOn.bind(this, projet))
+    projet.save(this.execCommonServiceOn.bind(this, projet))
   }
 
 }
