@@ -82,13 +82,15 @@ class Service {
     const name = DCreate('DIV', {class:'name', text: this.name})
     div.appendChild(name)
     this.obj = div
-    console.log("this.constructor", this.constructor)
+    // console.log("this.constructor", this.constructor)
     contenant.appendChild(div)
     this.observe()
   }
 
   observe(){
     listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
+
+    // Pour les services communs, on les rend sensibles au click
     if (this.isCommonService) {
       listen(this.obj, 'click', this.execCommonServiceOn.bind(this, null))
     }
@@ -96,7 +98,7 @@ class Service {
 
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
-    new ServiceDefiner(this, callback).start()
+    new ServiceDefiner(this, callback).define()
   }
   
   // Retourne la carte à insérer dans le projet
@@ -126,7 +128,8 @@ class Service {
     if (ev.shiftKey) {
       message("Apprendre à sélectionner le service")
     } else if (ev.metaKey) {
-      message("Je dois apprendre à redéfinir le service personnalisé")
+      message("Je dois apprendre à redéfinir le service")
+      console.error("La redéfinition du service n'est pas encore implémentée.")
     } else {
       this.exec(ev)
     }

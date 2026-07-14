@@ -82,13 +82,15 @@ class Service {
     const name = DCreate('DIV', {class:'name', text: this.name})
     div.appendChild(name)
     this.obj = div
-    console.log("this.constructor", this.constructor)
+    // console.log("this.constructor", this.constructor)
     contenant.appendChild(div)
     this.observe()
   }
 
   observe(){
     listen(this.obj, 'dragstart', e => e.dataTransfer.setData("id", this.id))
+
+    // Pour les services communs, on les rend sensibles au click
     if (this.isCommonService) {
       listen(this.obj, 'click', this.execCommonServiceOn.bind(this, null))
     }
@@ -96,7 +98,7 @@ class Service {
 
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
-    new ServiceDefiner(this, callback).start()
+    new ServiceDefiner(this, callback).define()
   }
   
   // Retourne la carte à insérer dans le projet
@@ -126,7 +128,8 @@ class Service {
     if (ev.shiftKey) {
       message("Apprendre à sélectionner le service")
     } else if (ev.metaKey) {
-      message("Je dois apprendre à redéfinir le service personnalisé")
+      message("Je dois apprendre à redéfinir le service")
+      console.error("La redéfinition du service n'est pas encore implémentée.")
     } else {
       this.exec(ev)
     }
@@ -177,15 +180,15 @@ class Service {
   defineCommonServiceParameters(projet, redefine = false){
     historize('-> defineCommonServiceParameters')
     this.unnamed = false // Pour ne pas redemander le nomage
-    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet))
+    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet, this))
     definer.redefinition = redefine
     definer.define()
     return false    
   }
 
-  onReturnFromDefineProjetParams(projet, _service){
+  onReturnFromDefineProjetParams(projet, service){
     projet.sdata = projet.sdata ?? {}
-    Object.assign(projet.sdata, {[_service.id]: _service.params})
+    Object.assign(projet.sdata, {[service.id]: service.params})
     console.log("Projet après définition des paramètres", projet)
     projet.save(this.execCommonServiceOn.bind(this, projet))
   }

@@ -3,27 +3,15 @@
  * =============================================
  *    D É F I N I T I O N   D U   S E R V I C E
  * =============================================
- * Cette méthode permet de définir les données nécessaires
- * au service.
- * 
- * Fonctionnement
- * --------------
- * À la base, +service+ est une table contenant :id, :name et
- * :method
- * :method est la méthode à appeler pour 1) définir et 2) exécuter le service
- * 
- * Le parcours se fait par : 
- *  start ->
- *  (boucle) define -> defineByType -> attend -> <methode de récupération> -> backend -> <methode de récupération> -> define (avec data)
- *  -> resolve (mise des nouveau :params dans service)
-
+ *
  */
 class ServiceDefiner {
   
   constructor(service, callback){
     console.log("service à définir", service)
+    this.id       = service.id
     this.service  = service
-    this.params   = service.params
+    this.params   = [...service.params]
     this.callback = callback
 
     // Donnée qui remplacement params dans le service pour le projet
@@ -36,17 +24,6 @@ class ServiceDefiner {
     // Mis à false quand le service est renommé
     this.unnamed = service.unnamed ?? true
     // console.log("this.unamed (false attendu)", this.unnamed)
-  }
-
-  // Pour ajouter une valeur
-  addParamValue(param, paramValue){
-    this.paramsValues.push(paramValue)
-    param.absolute && Project.current.addToAData({[param.id]: paramValue})
-  }
-  // Pour ajouter plusieurs valeurs
-  addParamValues(param, paramsValues){
-    this.paramsValues = [...this.paramsValues, ...paramsValues]
-    param.absolute && Project.current.addToAData({[param.id]: paramsValues})
   }
 
   /**
@@ -63,11 +40,56 @@ class ServiceDefiner {
     const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this))
     serviceDefiner.define()
   }
+  /**
+   * Méthode appelée à la fin de la définition des valeurs de 
+   * paramètres.
+   */
   onDefined(definers){
     if (definers) {
       console.info("Définers retournés", definers)
+
+      // Pour savoir si les valeurs projets on été
+      // modifiées => save
+      var projectHasNewValue = false
+      // Boucle sur tous les paramètres.
+      // On définit ceux qui sont des propriétés du projet
+      // et l'on rassemble tous les paramètres pour pour service
+      const paramsValues = []
+      definers.forEach(definer => {
+        switch(definer.type){
+          case 'project':
+            if (Project.current[definer.id] != definer.value){
+              projectHasNewValue = true
+              Project.current[definer.id] = definer.value
+            }
+            break
+          case 'finder-window':
+            paramsValues = [...paramsValues, ...definer.value.position, ...definer.value.size, definer.value.viewType]
+            break
+          case 'bounds':
+            paramsValues = [...paramsValues, ...definer.value.position]
+            break
+          default:
+            paramsValues.push(definer.value)
+        }
+      })
+      this.service.params = paramsValues
+
+      // Si des propriétés projet ont été modifiées, il 
+      // faut enregistrer le projet
+      if (projectHasNewValue) {
+        Project.current.save(this.callback /* ajout ou jeu */)
+      } else {
+        this.callback.call(this) // Ajout ou jeu
+      }
+
     } else {
+      // <= Il n'y a pas de definers
+      // => Procédure abandonnée
+
+      message('Définition abandonnée.')
       console.log("Définition abandonnée.")
+
     }
   }
 }

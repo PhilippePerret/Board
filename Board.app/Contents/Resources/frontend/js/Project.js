@@ -203,6 +203,9 @@ class Project {
     this.services.others  = (this.services.others  ?? []).map(ds => new Service(ds))
   }
 
+  /**
+   * OBSOLÈTE
+   */
   addToAData(values){
     this.adata = this.adata || {}
     Object.assign(this.adata, values)
@@ -216,7 +219,7 @@ class Project {
       , this.afterSave.bind(this, callback))
   }
   afterSave(callback, retour){
-    console.log("retour Project.afterSave", retour)
+    console.log("retour Project.afterSave et callback", retour, callback)
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
     callback && callback()
   }

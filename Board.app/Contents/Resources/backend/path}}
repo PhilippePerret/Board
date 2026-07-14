@@ -1,0 +1,1 @@
+{"ok":true,"message":"asciidoctor: FAILED: input file = is missing\n","error":null,"command":"cd '.' && open . && asciidoctor ="}

@@ -326,7 +326,7 @@ class ParamDefiner {
       server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this))
     } else {
       // console.log("retour", retour)
-      this.setValue({path: retour.data.filepath, name: retour.data.filename})
+      this.setValue(retour.data.filepath)
     }
   }
 

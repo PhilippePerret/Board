@@ -48,6 +48,7 @@ class Panel {
     if ('function' == typeof this.ouiData.onclick) {
       let returnedValues = [];
       if (this.returnedIdValues) {
+        const onlyOne = this.returnedIdValues.length == 1
         this.returnedIdValues.forEach(idValue => {
           console.log("[onOui] idValue = ", idValue)
           const el = DGet('#__' + idValue + '__', this.obj)
@@ -57,6 +58,7 @@ class Panel {
           console.log("[onOui] el.value = ", value)
           returnedValues.push(value)
         })
+        if (onlyOne) returnedValues = returnedValues[0]
         console.log("[onOui] returnedValues", returnedValues)
         console.log("[onOui] onclick", this.ouiData.onclick)
         this.ouiData.onclick(returnedValues)
