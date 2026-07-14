@@ -28,6 +28,7 @@ class ParamsDefiner {
     this.callback = callback
   }
   define(){
+    historize('-> ParamsDefiner.define', this)
     const param = this.params.pop()
     if (param) {
       const thedefiner = new ParamDefiner(this, param)
@@ -43,6 +44,7 @@ class ParamsDefiner {
     return error('Définition abandonnée')
   }
   resolve(){
+    historize('-> ParamsDefiner.resolve', this)
     this.callback(this.definers)
   }
 }
@@ -65,7 +67,8 @@ class ParamDefiner {
   }
 
   define() {
-    this.defineByType()
+   historize('-> ParamDefiner.define', this)
+   this.defineByType()
   }
 
   setValue(ev, value){
@@ -110,10 +113,27 @@ class ParamDefiner {
 
   onApp(){
     this.value = App.getData([this.id])
+    if (!this.value) {
+      console.error("Je dois apprendre à définir une valeur application.")
+    }
   }
 
   onProject(){
     this.value = Project.current[this.id]
+    if (!this.value) {
+      const definers =  new ParamsDefiner({params: [this.param.if_undefined]}, this.onDefineProjectValue.bind(this))
+      definers.define()
+    }
+  }
+  onDefineProjectValue(definers){
+    const valueDefiner = definers[0]
+    const prop = valueDefiner.id
+    // TODO S'assurer que la propriété est dans la liste, sinon => erreur développer
+
+    Project.current[prop] = valueDefiner.value
+    console.info("Propriété '%s' mises à %s", prop, Project.current[prop])
+    Project.current.save()
+    this.paramLister.define() // Pour poursuivre
   }
 
   onBoolean(){
@@ -144,7 +164,16 @@ class ParamDefiner {
   }
 
   onUrl(){
-    this.waitForText(this.q || "Quelle URL faut-il rejoindre ?")
+    this.waitForText()
+    new TextFieldDialog({
+        title:        'Définition d’URL'
+      , id:           this.id
+      , message:      this.message || "Quelle URL faut-il rejoindre ?"
+      , defaultValue: this.default || 'https://'
+      , ouiBtn:       {name: 'OK', onclick: this.setValue.bind(this)}
+      , nonBtn:       {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
+    }).show()
+
   }
 
   onSelect(){

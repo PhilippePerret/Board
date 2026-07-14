@@ -40,7 +40,10 @@ const COMMON_SERVICES_DATA = [
     , group: 'Documentation'
     , scType: '.rb'
     , params: [
-          {id: 'docu-folder', absolute: true, q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+        // Ancienne forme {id: 'docu-folder', absolute: true, q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
+        // Nouvelle forme : on récupère la valeur dans le projet, mais si elle n'existe pas
+        // on se sert de if_undefined pour la déterminer
+          {id: 'docu-folder', type: 'project', if_undefined: {type: 'path', q: 'Sélectionner le dossier de documentation dans le Finder'}}
         , {id: 'documentation-editor', type: 'app'}
       ]
   },

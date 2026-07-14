@@ -39,10 +39,15 @@ function unScrim(scrim){
 }
 
 // Historique
-function historize(msg) {
-  console.log("%c" + msg, 'color: #b9b9b9;')
+function historize(msg, params) {
   if (undefined == window.HISTORIQUE) window.HISTORIQUE = []
-  window.HISTORIQUE.push(msg)
+  if (params) {
+    console.log("%c" + msg, 'color: #b9b9b9;', params)
+    window.HISTORIQUE.push([msg, params])
+  } else {
+    console.log("%c" + msg, 'color: #b9b9b9;')
+    window.HISTORIQUE.push(msg)
+  }
 }
 
 function jsonize(data){

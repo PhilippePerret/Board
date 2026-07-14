@@ -149,12 +149,14 @@ class Service {
    * Fonction qui exécute le service commum sur le projet +projet+
    * après s'être assuré que le projet définissait tous les
    * paramètres requis.
+   * Appelée depuis le panneau
    * 
    */
   execCommonServiceOn(projet, ev){
+    historize('-> execCommonServiceOn')
     projet = projet ?? Project.current
     if (ev?.metaKey) {
-      return this.defineCommonServiceParameters(projet, true) // rappellera cette fonction
+      return this.defineCommonServiceParameters(projet, true)
     } else if (!this.ensureServiceData(projet)) {
       return null
     }
@@ -173,6 +175,8 @@ class Service {
   }
 
   defineCommonServiceParameters(projet, redefine = false){
+    historize('-> defineCommonServiceParameters')
+    this.unnamed = false // Pour ne pas redemander le nomage
     const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet))
     definer.redefinition = redefine
     definer.define()
@@ -185,22 +189,5 @@ class Service {
     console.log("Projet après définition des paramètres", projet)
     projet.save(this.execCommonServiceOn.bind(this, projet))
   }
-
-}
-
-
-
-
-
-
-
-
-class MiniPanel {
-  constructor(obj){
-    this.obj = obj
-    console.log("obj", obj)
-  }
-  open(){ this.obj.classList.remove('closed')}
-  close(){this.obj.classList.add('closed')}
 
 }
