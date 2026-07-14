@@ -19,6 +19,7 @@ class SidePanel {
 
   get title(){ return '- panneau sans titre -' }
   get domId(){ return `panel-${this.constructor.name}` }
+  get closeLabel(){ return 'Fermer' }
 
   // À redéfinir dans les sous-classes, pour remplir this.listingEl
   buildContent(){}
@@ -40,6 +41,11 @@ class SidePanel {
     const fieldset = DCreate('FIELDSET', {class: 'services-listing'})
     fieldset.appendChild(DCreate('LEGEND', {text: this.title}))
     panel.appendChild(fieldset)
+
+    const closeBtn = DCreate('BUTTON', {id: `${this.domId}-close`, class: 'btn-deal-with-services', text: this.closeLabel})
+    listen(closeBtn, 'click', this.close.bind(this))
+    panel.appendChild(closeBtn)
+
     document.body.appendChild(panel)
 
     this.obj = panel

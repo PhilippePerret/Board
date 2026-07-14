@@ -4,6 +4,7 @@
 
 - Parler à l'user en FRANÇAIS
 - l'user s'appelle Phil
+- OBLIGATOIRE en début de session : lire `.claude/MEMORY.md`. Traiter en premier toute entrée marquée "PRIORITÉ" (avant tout le reste). Une fois une entrée PRIORITÉ lue et prise en compte, la retirer de `.claude/MEMORY.md` et supprimer le fichier `.claude/project_*.md` qu'elle référence — ne pas la laisser traîner.
 
 ## Présentation
 

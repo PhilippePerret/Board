@@ -20,6 +20,3 @@
 - Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
 - Ouvrir le repo Git (statut, ou `git pull`/`push`)
 - Ouvrir l'URL locale du projet dans le navigateur
-
-- pouvoir définir 'données de l'app' : 
- - le navigateur par défaut

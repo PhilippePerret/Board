@@ -75,6 +75,8 @@ class SelectDialog extends Panel {
       select.appendChild(opt)
     })
 
+    if (this.defaultValue != null) select.value = this.defaultValue
+
     return div
   }
 }
