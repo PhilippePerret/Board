@@ -6,22 +6,13 @@
 
 == Todo list ==
 
+- Test et implémentation de la redéfinition à l'aide de meta+click sur service
+- ajouter une propriété "Type" à projet (type métier : "Application", "Scénario", "Roman", "Script-doctoring", "Maison", etc. — la liste doit pouvoir être alimentée à la main = nouvelle fonctionnalité du ParamDefiner)
 - pouvoir éditer le fichier d'un script perso
-- un DataDefiner (reprise de ServiceDefiner#defineByType) qui servirait pour tout le monde
-  - servirait pour les services
-  - servirait pour les données de l'application
-  - servirait pour les données supplémentaires du projet (cf. ci-dessous)
-- implémentation des données supplémentaire du projet (couleur, logo, etc.)
-  Comme les données de l'application, mettre en commun des éléments (gestion du panneau, définition des données, etc.)
-  - couleur de fond,
-  - icone à utiliser (svg, png, etc.)
 
 - Autres services : 
   - git init (tout le flux, juste en donnant le nom du repo sur Github)
   - installation documentation (regrouper tout ce qui concerne la documentation)
-
-- meta + click = modification du service personnalisé (fait avec les commons)
-- Maj+click sur service pour le sélectionner => boutons services ("↑", "↓", delete)
 
 == Idées de nouveaux services (2026-07-11) ==
 

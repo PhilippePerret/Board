@@ -1,0 +1,116 @@
+Moteur : pont
+Arguments : (aucun — specs/e2e/*.rb)
+Date : 2026-07-15 20h27
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+✓ ajout d'un service au démarrage
+  (osascript : 25 appels, 4.204s)
+  (durée totale de la spec : 5.423s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ panneau de réglages de l'application : édition string + app, persistance après rechargement
+  (osascript : 21 appels, 0.310s)
+  (durée totale de la spec : 4.482s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✓ attribution d'un service puis exécution deux fois de suite
+  (osascript : 24 appels, 7.478s)
+  (durée totale de la spec : 10.843s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+✓ attribution d'un service à un projet
+  (osascript : 23 appels, 4.299s)
+  (durée totale de la spec : 5.522s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_sans_selection_finder.rb ---
+✓ création d'un nouveau projet SANS SÉLECTION FINDER
+  (osascript : 6 appels, 0.642s)
+  (durée totale de la spec : 0.767s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✗ création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — message affiché : "Le dossier du projet doit être sélectionné dans le Finder."
+  (osascript : 27 appels, 0.568s)
+  (durée totale de la spec : 4.749s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✓ création simple d'un nouveau projet
+  (osascript : 10 appels, 0.865s)
+  (durée totale de la spec : 1.500s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/deplacement_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ déplacement du projet
+  (osascript : 12 appels, 0.252s)
+  (durée totale de la spec : 4.379s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_double_service.rb ---
+✓ exécuter un service attaché deux fois de suite (dossier fermé entre les deux)
+  (osascript : 9 appels, 3.322s)
+  (durée totale de la spec : 6.030s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+  (osascript : 19 appels, 9.503s)
+  (durée totale de la spec : 12.143s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/modification_titre_projet.rb ---
+✓ modification du titre d'un projet
+  (osascript : 8 appels, 0.201s)
+  (durée totale de la spec : 0.831s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_service_glissement.rb ---
+✓ retrait d'un service par glissement hors de la carte projet
+  (osascript : 13 appels, 1.918s)
+  (durée totale de la spec : 3.663s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 20 appels, 7.993s)
+  (durée totale de la spec : 9.832s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 21 appels, 1.695s)
+  (durée totale de la spec : 3.605s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_seuils.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'horloge' : seuils d'alerte orange/rouge
+  (osascript : 310 appels, 0.574s)
+  (durée totale de la spec : 61.645s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✓ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+  (osascript : 33 appels, 0.428s)
+  (durée totale de la spec : 1.587s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+  (osascript : 16 appels, 1.795s)
+  (durée totale de la spec : 6.383s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+✓ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 16 appels, 1.109s)
+  (durée totale de la spec : 3.275s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+  (osascript : 23 appels, 3.179s)
+  (durée totale de la spec : 5.640s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : exécution directe, sans dialogue
+  (osascript : 12 appels, 0.514s)
+  (durée totale de la spec : 2.930s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.858s)
+  (durée totale de la spec : 3.526s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ suppression d'un projet
+  (osascript : 9 appels, 0.177s)
+  (durée totale de la spec : 1.351s)
+
+Échecs :
+1. création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — message affiché : "Le dossier du projet doit être sélectionné dans le Finder."
+  (osascript : 27 appels, 0.568s)
+
+-------------------
+Success: 21  Failures: 1  Pendings: 0  Test count: 22
+Durée totale (moteur : pont) : 160.106s

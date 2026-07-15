@@ -14,7 +14,6 @@
 - [Décision vs détail d'implémentation](feedbacks/decision_vs_implementation_detail.md) — réponse de décision = uniquement ce qui pèse sur le choix, jamais mêlé aux détails mécaniques (ordre scripts, imports…)
 - [Dossier .claude = à moi](feedbacks/claude_dir_is_mine.md) — CLAUDE.md et tout .claude/ sous ma responsabilité, tenir à jour sans demander
 - [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
-- [État des moteurs de test](project_test_engines_status.md) — base/batch/compiled/pers retirés (benchmarkés, plus lents), swift+pont gardés, pont défaut
-- [Bug clic double service ouvert](project_double_click_service_bug.md) — AXPress ne reproduit pas le bug réel, investigation à reprendre côté console dev live
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
+- [PRIORITÉ — État fin de session (2026-07-15)](2026-07-15-Etat-fin-de-session.md) — 21/22 tests e2e passent, 1 échec restant (création projet/fichier), tests extradata à écrire, fonctionnalités restantes à implémenter
