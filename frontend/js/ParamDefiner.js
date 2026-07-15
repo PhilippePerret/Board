@@ -165,7 +165,7 @@ class ParamDefiner {
       , message: this.message
       , defaultValue: defaultValue
       , toRealValue: (n) => parseInt(n)
-      , ouiBtn: {name: 'OK', onclick: this.onIntegerResponse.bind(this)}
+      , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
 
@@ -287,11 +287,6 @@ class ParamDefiner {
   /**
    ******** MÉTHODES DE RÉCUPÉRATION DES INFORMATIONS ***********
    */
-
-  // Reçoit la réponse à une question demandant un entier (minutes, etc.)
-  onIntegerResponse(value){
-    this.setValue(value)
-  }
 
   // Va chercher les informations sur la fenêtre courante dans le Finder
   // Puis poursuit la définition
