@@ -180,15 +180,15 @@ class Service {
   defineCommonServiceParameters(projet, redefine = false){
     historize('-> defineCommonServiceParameters')
     this.unnamed = false // Pour ne pas redemander le nomage
-    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet))
+    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet, this))
     definer.redefinition = redefine
     definer.define()
     return false    
   }
 
-  onReturnFromDefineProjetParams(projet, _service){
+  onReturnFromDefineProjetParams(projet, service){
     projet.sdata = projet.sdata ?? {}
-    Object.assign(projet.sdata, {[_service.id]: _service.params})
+    Object.assign(projet.sdata, {[service.id]: service.params})
     console.log("Projet après définition des paramètres", projet)
     projet.save(this.execCommonServiceOn.bind(this, projet))
   }

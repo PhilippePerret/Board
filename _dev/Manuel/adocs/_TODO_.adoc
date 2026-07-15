@@ -6,6 +6,7 @@
 
 == Todo list ==
 
+- pouvoir éditer le fichier d'un script perso
 - un DataDefiner (reprise de ServiceDefiner#defineByType) qui servirait pour tout le monde
   - servirait pour les services
   - servirait pour les données de l'application

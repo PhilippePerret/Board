@@ -1,0 +1,3 @@
+==== Redéfinition du service ====
+
+On peut redéfinir les données d'un service quelconque en cliquant sur lui tout en tenant la touche combo:meta appuyée.

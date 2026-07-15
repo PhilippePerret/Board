@@ -77,7 +77,7 @@ class ParamDefiner {
     this.paramLister.define()
   }
   // Méthode appelée quand on renonce ou qu'on fait non
-  onNonButton(ev, value) {
+  onNonButton(value) {
     if ( value === null ) {
       this.abort()
     } else {
@@ -157,7 +157,7 @@ class ParamDefiner {
       , message: this.message
       , defaultValue: this.default
       , ouiBtn: {name: 'OK', onclick: this.onIntegerResponse.bind(this)}
-      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this)}
+      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
 
   }
@@ -169,14 +169,13 @@ class ParamDefiner {
   }
 
   onUrl(){
-    this.waitForText()
     new TextFieldDialog({
         title:        'Définition d’URL'
       , id:           this.id
       , message:      this.message || "Quelle URL faut-il rejoindre ?"
       , defaultValue: this.default || 'https://'
       , ouiBtn:       {name: 'OK', onclick: this.setValue.bind(this)}
-      , nonBtn:       {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
+      , nonBtn:       {name: 'Annuler', onclick: this.onNonButton.bind(this, null /* valeur reçue par setValue */)}
     }).show()
 
   }
@@ -190,7 +189,7 @@ class ParamDefiner {
       , values: this.values
       , defaultValue: this.default
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
-      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this)}
+      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
   }
 
@@ -201,7 +200,7 @@ class ParamDefiner {
       , message:  this.message
       , defaultValue: this.default
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
-      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this)}
+      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
   }
 
@@ -226,8 +225,8 @@ class ParamDefiner {
 
   // type 'bounds'
   onBounds(){
-    this.attend(
-      param.q || "Positionner la fenêtre dans le Finder et cliquer “OK”.",
+    this.waitForWindow(
+      this.q || "Positionner la fenêtre dans le Finder et cliquer “OK”.",
       this.getInfoFinderWindow.bind(this, ['position', 'size'])
     )
   }
@@ -267,7 +266,7 @@ class ParamDefiner {
         title: `${this.redefinition?'Red':'D'}éfinition de l’URL`
       , message: message
       , ouiBtn: {name: options?.ouiBtn ?? 'OK'      , onclick: this.setValue.bind(this)}
-      , nonBtn: {name: options?.nonBtn ?? 'Annuler' , onclick: this.onNonButton.bind(this)}
+      , nonBtn: {name: options?.nonBtn ?? 'Annuler' , onclick: this.onNonButton.bind(this, null)}
     }).show()
   }
   
@@ -288,7 +287,7 @@ class ParamDefiner {
   // Va chercher les informations sur la fenêtre courante dans le Finder
   // Puis poursuit la définition
   /**
-   * @param what 'bounds' ou 'all'
+   * @param properties 'bounds' ou 'all'
    * @param retour Retourne du serveur avec les informations
    */
   getInfoFinderWindow(properties, retour){
@@ -312,8 +311,8 @@ class ParamDefiner {
       } else {
         value = properties.reduce((accu, property) => {
             Object.assign(accu, {[property]: data[property]})
-            return {}
-          })
+            return accu
+          }, {})
       }
       this.setValue(value)
     }

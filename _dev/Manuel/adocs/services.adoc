@@ -3,6 +3,8 @@
 
 include::services/definition.adoc[]
 
+include::services/redefinir.adoc[]
+
 
 _Cette partie décrit tous les services qu'on peut utiliser pour un projet._
 

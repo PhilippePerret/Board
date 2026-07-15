@@ -9,8 +9,9 @@ class ServiceDefiner {
   
   constructor(service, callback){
     console.log("service à définir", service)
+    this.id       = service.id
     this.service  = service
-    this.params   = service.params
+    this.params   = [...service.params]
     this.callback = callback
 
     // Donnée qui remplacement params dans le service pour le projet
@@ -66,13 +67,13 @@ class ServiceDefiner {
             paramsValues = [...paramsValues, ...definer.value.position, ...definer.value.size, definer.value.viewType]
             break
           case 'bounds':
-            paramsValues = [...paramsValues, ...definer.value.bounds]
+            paramsValues = [...paramsValues, ...definer.value.position]
             break
           default:
             paramsValues.push(definer.value)
         }
       })
-      this.params = paramsValues // this.service.params ?
+      this.service.params = paramsValues
 
       // Si des propriétés projet ont été modifiées, il 
       // faut enregistrer le projet
