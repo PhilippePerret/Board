@@ -10,7 +10,7 @@
 # purement filesystem, vérifiable directement (pas besoin de Finder/app
 # externe) : les assertions portent sur les fichiers créés.
 #
-# 2e clic (même projet, sans rechargement) : sdata déjà en carte projet ->
+# 2e clic (même projet, sans rechargement) : service_common_data déjà en carte projet ->
 # le script est rejoué avec le même dossier -> tombe sur son propre garde-fou
 # ("Le dossier existe déjà...", table[:ok] = false côté script) -> vérifie
 # que Board ne plante pas et que les fichiers déjà créés ne sont pas altérés.
@@ -56,14 +56,14 @@ def run_test
     intro_content = File.read(first_adoc)
     raise "introduction.adoc sans titre '== Introduction ==' : #{intro_content.inspect}" unless intro_content.start_with?('== Introduction ==')
 
-    # → sdata enregistrée : [dossier_conteneur, nom_dossier_conteneur]
+    # → service_common_data enregistrée : [dossier_conteneur, nom_dossier_conteneur]
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      sdata = read_project_card(id).dig('sdata', 'init-documentation')
-      sdata.is_a?(Array) && sdata[1] == File.basename(fixture_dir)
+      service_common_data = read_project_card(id).dig('service_common_data', 'init-documentation')
+      service_common_data.is_a?(Array) && service_common_data[1] == File.basename(fixture_dir)
     end
 
     # - recharger l'application : re-sélection, nouveau clic sur le service
-    #   -> sdata déjà présente -> pas de redialogue, le script retombe sur
+    #   -> service_common_data déjà présente -> pas de redialogue, le script retombe sur
     #   son garde-fou ("dossier existe déjà")
     launch_app
     wait_for(card)

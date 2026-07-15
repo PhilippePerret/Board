@@ -52,7 +52,7 @@ class Service {
   constructor(data){
     // console.log("data Service", data)
     this.id     = data.id || raise("Il faut fournir un identifiant au service.")
-    this.group  = data.group ?? null
+    this.data   = data
     /**
      * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
      * sont différentes des données abstraites qui définissent ce qu'il faut pour
@@ -60,18 +60,32 @@ class Service {
      */
     this.params     = data.params || raise("Il faut définir les :params du servive " + this.id)
     this.uuid       = data.uuid ?? null // seulement les services de projets
-    this.stype      = data.stype || 'custom' // plus tard : raise("Le service-type (stype) doit être défini.") // 'custom'|'common'
     this.type       = data.type ?? null // idem (others ou startup)
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
-    this.scType     = data.scType ?? '.scpt'
-    this.script     = data.script ?? (kebabToPascalCase(this.id) + this.scType)
-    this.front      = data.front ?? null
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
-    this.name = data.name || raise("Un service doit avoir un :name.")
 
     this.isCommonService = this.stype === 'common'
   }
+
+  get(key, defValue = null) {return this.data[key] ?? this.absData[key] ?? defValue}
+
+  get name()    { return this.get('name') || raise("Un service doit avoir un :name.") }
+  get group()   { return this.get('group', null) }
+  get stype()   { return this.get('stype', 'custom') }
+  get front()   { return this.get('front', null) }
+  get script()  { return this.get('script', (kebabToPascalCase(this.id) + this.scType)) }
+  get scType()  { return this.get('scType', '.scpt') }
+
+  // Seules données à persister pour un service attaché à un projet — tout
+  // le reste (script, name, group…) se retrouve via absData.
+  toPersistData(){
+    return {id: this.id, name: this.name, uuid: this.uuid, params: this.params}
+  }
+
+  // Donnée abstraite du service (ServiceData.js), retrouvée par id — jamais
+  // de find(...) dans ALL_SERVICES_DATA, lookup direct dans la table.
+  get absData(){ return SERVICES_DATA_TABLE[this.id] ?? raise(`[ERREUR SYSTÉMIQUE] Service introuvable : ${this.id}`) }
 
   /**
    * Construction dans le listing des services

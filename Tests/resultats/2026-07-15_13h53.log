@@ -1,0 +1,19 @@
+Moteur : pont
+Arguments : e2e/service_commun_horloge_seuils.rb
+Date : 2026-07-15 13h53
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_seuils.rb ---
+✗ service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan
+    pont ne répond pas après 15s (!!document.getElementById("clock-dial")…)
+  (osascript : 12 appels, 0.165s)
+  (durée totale de la spec : 30.826s)
+
+Échecs :
+1. service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan
+    pont ne répond pas après 15s (!!document.getElementById("clock-dial")…)
+  (osascript : 12 appels, 0.165s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 30.826s

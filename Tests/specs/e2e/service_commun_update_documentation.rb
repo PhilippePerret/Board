@@ -50,10 +50,10 @@ def run_test
       end
     end
 
-    # → sdata enregistrée : [chemin_fichier, nom_fichier]
+    # → service_common_data enregistrée : [chemin_fichier, nom_fichier]
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      sdata = read_project_card(id).dig('sdata', 'update-documentation')
-      sdata.is_a?(Array) && sdata[1] == 'docu.adoc'
+      service_common_data = read_project_card(id).dig('service_common_data', 'update-documentation')
+      service_common_data.is_a?(Array) && service_common_data[1] == 'docu.adoc'
     end
 
     finder_close_all_windows

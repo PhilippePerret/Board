@@ -81,12 +81,12 @@ _LSOpenURLsWithCompletionHandler() failed with error -609.
 [90m  (durée totale de la spec : 0.773s)[0m
 [90m--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---[0m
 [91m✗ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
-    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092658g7ig", "sdata" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}[0m
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092658g7ig", "service_common_data" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}[0m
 [90m  (osascript : 10 appels, 0.734s)[0m
 [90m  (durée totale de la spec : 8.352s)[0m
 [90m--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---[0m
 [91m✗ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
-    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092666hzyw", "sdata" => {"open-a-file" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9176-ja482d", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092666hzyw", "service_common_data" => {"open-a-file" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9176-ja482d", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
 [90m  (osascript : 10 appels, 0.909s)[0m
 [90m  (durée totale de la spec : 6.688s)[0m
 [90m--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---[0m
@@ -102,7 +102,7 @@ _LSOpenURLsWithCompletionHandler() failed with error -600.
 [90m  (durée totale de la spec : 11.734s)[0m
 [90m--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---[0m
 [91m✗ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
-    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-17840926973msr", "sdata" => {"update-documentation" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9498-ua8vch", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-17840926973msr", "service_common_data" => {"update-documentation" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9498-ua8vch", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
 [90m  (osascript : 12 appels, 1.088s)[0m
 [90m  (durée totale de la spec : 6.848s)[0m
 [90m--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---[0m
@@ -144,10 +144,10 @@ _LSOpenURLsWithCompletionHandler() failed with error -609.
     work-duration pas préremplie avec la session ("null")[0m
 [90m  (osascript : 11 appels, 0.132s)[0m
 [91m11. service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
-    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092658g7ig", "sdata" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}[0m
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092658g7ig", "service_common_data" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9085-t9z362", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}[0m
 [90m  (osascript : 10 appels, 0.734s)[0m
 [91m12. service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
-    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092666hzyw", "sdata" => {"open-a-file" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9176-ja482d", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784092666hzyw", "service_common_data" => {"open-a-file" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9176-ja482d", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
 [90m  (osascript : 10 appels, 0.909s)[0m
 [91m13. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
     Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-9245-5oe3pq")[0m
@@ -157,7 +157,7 @@ _LSOpenURLsWithCompletionHandler() failed with error -600.
     Timeout d'attente dépassé (10s) — nom de la fenêtre Terminal au premier plan = "philippeperret — run-tests — tee ◂ run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-9361-sw3tm6")[0m
 [90m  (osascript : 6 appels, 0.181s)[0m
 [91m15. service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
-    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-17840926973msr", "sdata" => {"update-documentation" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9498-ua8vch", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-17840926973msr", "service_common_data" => {"update-documentation" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-9498-ua8vch", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}[0m
 [90m  (osascript : 12 appels, 1.088s)[0m
 
 [37m-------------------[0m

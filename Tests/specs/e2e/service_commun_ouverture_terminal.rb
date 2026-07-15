@@ -50,7 +50,7 @@ def run_test
     click(card)
     wait_for(SERVICE_DOM_ID)
 
-    # → même chose après rechargement (sdata persistée, mais de toute façon
+    # → même chose après rechargement (service_common_data persistée, mais de toute façon
     #   ce service n'a jamais demandé de dialogue)
     click(SERVICE_DOM_ID)
     check_terminal_opened_on.call

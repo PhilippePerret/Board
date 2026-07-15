@@ -3,7 +3,7 @@
 #
 # Déroulé : sélection projet -> clic "Démarrer l'horloge" -> 1re définition
 # (durée de session puis durée de tranche, préremplie avec la session,
-# ServiceDefiner#defineByType case 'integer') -> sdata['work-clock'] enregistrée
+# ServiceDefiner#defineByType case 'integer') -> service_common_data['work-clock'] enregistrée
 # en tableau positionnel [session, work] (PAS un objet nommé) -> horloge
 # affichée (Clock.js) -> clic sur le rond (#clock-dial) = start -> pause ->
 # restart -> bouton Stop séparé -> Stop enchaîne 2 TextareaDialog (changelog
@@ -11,7 +11,7 @@
 # la racine du projet -> workTime incrémenté.
 #
 # Second passage (après rechargement) : même service, sans redemander
-# session/work (déjà en sdata).
+# session/work (déjà en service_common_data).
 
 require_relative '../../support/helpers'
 
@@ -45,9 +45,9 @@ def run_test
     set_value('__work-duration__', '15')
     click('btn-oui')
 
-    # → sdata enregistrée en tableau positionnel [session, work]
+    # → service_common_data enregistrée en tableau positionnel [session, work]
     wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      read_project_card(id).dig('sdata', 'work-clock') == [20, 15]
+      read_project_card(id).dig('service_common_data', 'work-clock') == [20, 15]
     end
 
     # → l'horloge s'affiche, rond cliquable, bouton Stop pas encore visible

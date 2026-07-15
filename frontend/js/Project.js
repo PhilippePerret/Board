@@ -1,11 +1,10 @@
 class Project {
 
   // Toutes les propriétés des projets doivent être définies ici
-  // sdata : données pour les services communs
-  // adata : données absolues pour les services communs
+  // service_common_data : données pour les services communs
   static PROPERTIES = [
-    'id', 'title', 'path', 'sdata', 'workTime', 'createdAt', 'updatedAt',
-    'services', 'background', 'icon', 'adata',
+    'id', 'title', 'path', 'service_common_data', 'workTime', 'createdAt', 'updatedAt',
+    'services', 'background', 'icon',
     // documentation
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html'
   ]

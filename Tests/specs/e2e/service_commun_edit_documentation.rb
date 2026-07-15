@@ -17,7 +17,7 @@
 # donne un effet observable fiable (finder_front_window_name) sans dépendre
 # d'un éditeur/IDE précis installé sur la machine de test.
 #
-# Second passage (après rechargement) : même service, sdata déjà en carte
+# Second passage (après rechargement) : même service, service_common_data déjà en carte
 # projet -> exécution directe, aucun dialogue.
 
 require_relative '../../support/helpers'
@@ -59,10 +59,10 @@ def run_test
       end
     end
 
-    # → sdata enregistrée : [dossier, éditeur]
+    # → service_common_data enregistrée : [dossier, éditeur]
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      sdata = read_project_card(id).dig('sdata', 'edit-documentation')
-      sdata.is_a?(Array) && sdata[1] == 'Finder'
+      service_common_data = read_project_card(id).dig('service_common_data', 'edit-documentation')
+      service_common_data.is_a?(Array) && service_common_data[1] == 'Finder'
     end
 
     finder_close_all_windows

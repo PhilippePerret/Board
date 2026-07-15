@@ -39,9 +39,11 @@ begin
   when "save-project"
     data = request["data"]
     project_id = data['id']
+    Debug.log("save-project reçu, id=#{project_id.inspect}")
     IO.write(project_path(project_id), data.to_yaml)
     APP_DATA['projects-in'] << project_id unless APP_DATA['projects-in'].include?(project_id)
     save_app_data
+    Debug.log("save-project terminé, id=#{project_id.inspect}")
 
   # === Sauvegarde des données de l'application ===
 

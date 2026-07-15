@@ -187,7 +187,7 @@ class Service {
    */
   ensureServiceData(projet){
     console.log("-> ensureServiceData avec projet : ", projet, this)
-    if (projet.sdata && projet.sdata[this.id]) return true
+    if (projet.service_common_data && projet.service_common_data[this.id]) return true
     return this.defineCommonServiceParameters(projet, false /* 1re définition */)
   }
 
@@ -201,8 +201,8 @@ class Service {
   }
 
   onReturnFromDefineProjetParams(projet, service){
-    projet.sdata = projet.sdata ?? {}
-    Object.assign(projet.sdata, {[service.id]: service.params})
+    projet.service_common_data = projet.service_common_data ?? {}
+    Object.assign(projet.service_common_data, {[service.id]: service.params})
     console.log("Projet après définition des paramètres", projet)
     projet.save(this.execCommonServiceOn.bind(this, projet))
   }
