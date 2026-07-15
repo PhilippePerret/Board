@@ -2,26 +2,27 @@
 /**
  * Classe qui permet de définir des paramètres
  * (paramètres tel que définis dans params des Services par exemple)
-
-ANCIENS APPELS À FONCTION :
-*/
-        /* pour 'bounds'
-        this.addParamValues(param, [
-          ...data.position, ...data.size, data.view
-        ])
-        */
-        /* pour 'all'
-        this.addParamValues(param, [
-          // path: data.path, position: data.position, size: data.size, sidebarWidth: data.sidebarWidth, view: data.view
-          data.path, ...data.position, ...data.size, data.sidebarWidth, data.view
-        ])
-        */
-
-
-/**
- * DÉFINITION D'UNE LISTE DE PARAMÈTRES
+ * 
+ * Utilisation
+ * ------------
+ * on crée une instance ParamsDefiner en lui transmettant en premier
+ * argument, une liste des paramètres redéfinir, tel que défini dans 
+ * les listes de paramètres de l'application, du projet, du service, 
+ * etc., et en second argument, la fonction callback qui devra être 
+ * appelée en fin de processus. 
+ * 
+ * La fonction +callback+ reçoit en fin de processus la liste des 
+ * instances ParamDefiner qui correspondent à chaque paramètre. Il 
+ * suffit de passer en revue cette liste en récupérant l'identifiant 
+ * (id) et la valeur (value) pour obtenir les valeurs définies.
  */
+
 class ParamsDefiner {
+  /**
+   * @param params Array des paramètres (p.e. {id: 'mon-id', name: 'Nome' ………})
+   * @param callback Function à appeler enfin de processus avec la liste des
+   *                  ParamDefiner créer pour chaque paramètre.
+   */
   constructor(params, callback){
     this.params   = [...params].reverse()
     this.definers = []

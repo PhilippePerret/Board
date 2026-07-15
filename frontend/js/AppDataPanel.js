@@ -8,29 +8,38 @@ class AppDataPanel extends SidePanel {
   get domId(){ return 'app-data-panel' }
 
   buildContent(){
-    APP_DATA.forEach(entry => this.buildRow(entry))
+    APP_DATA.forEach(dParam => this.buildRow(dParam))
   }
 
-  currentValue(entry){
-    return App.getData(entry.id) ?? entry.default ?? '(non défini)'
+  currentValue(dParam){
+    return App.getData(dParam.id) ?? dParam.default ?? '(non défini)'
   }
 
-  buildRow(entry){
-    const row = DCreate('DIV', {class: 'service app-data-row', id: `app-data-${entry.id}`})
-    row.appendChild(DCreate('DIV', {class: 'name', text: entry.name}))
-    const valueEl = DCreate('DIV', {class: 'app-data-value', text: this.currentValue(entry)})
-    row.appendChild(valueEl)
+  buildRow(dParam){
+    dParam.default = this.currentValue(dParam)
+    const row = DCreate('DIV', {class: 'service app-data-row', id: `app-data-${dParam.id}`})
+    row.appendChild(DCreate('DIV', {class: 'name', text: dParam.name}))
+    const valueDomEl = DCreate('DIV', {class: 'app-data-value', text: dParam.default})
+    row.appendChild(valueDomEl)
     this.listingEl.appendChild(row)
-    listen(row, 'click', this.onClickRow.bind(this, entry, valueEl))
+    Object.assign(dParam, {valueDomEl, currentValue: dParam.default})
+    listen(row, 'click', this.onClickRow.bind(this, dParam))
   }
 
-  onClickRow(entry, valueEl){
-    console.error("Il faut apprendre à définir Param(s)Definer")
+  // Appelé quand on clique sur la propriété dans le panneau
+  onClickRow(dParam){
+    const definer = new ParamsDefiner([dParam], this.onEdited.bind(this, dParam))
+    definer.define()
   }
 
-  onEdited(entry, valueEl, values){
-    App.data[entry.id] = values[0]
-    App.saveData()
-    valueEl.textContent = App.data[entry.id]
+  onEdited(dParam, definers){
+    if (!definers) return // annulation
+    const oldValue = dParam.currentValue
+    const newValue = definers[0].value
+    if (oldValue != newValue) {
+      App.data[dParam.id] = newValue
+      dParam.valueDomEl.textContent = App.data[dParam.id]
+      App.saveData()
+    }
   }
 }

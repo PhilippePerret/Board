@@ -270,8 +270,8 @@ module BoardTest
 
     wait_for(card)
     click(card)
-    wait_until(5, desc: -> { 'btn-toggle-common-services-panel pas apparu après sélection' }) { exists?('btn-toggle-common-services-panel') }
-    click('btn-toggle-common-services-panel')
+    wait_until(5, desc: -> { 'common-services-panel-toggle pas apparu après sélection' }) { exists?('common-services-panel-toggle') }
+    click('common-services-panel-toggle')
     wait_for(service_id)
 
     drag(service_id, drop_field)

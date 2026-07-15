@@ -58,7 +58,7 @@ class Panel {
           console.log("[onOui] el.value = ", value)
           returnedValues.push(value)
         })
-        if (onlyOne) returnedValues = returnedValues[0]
+        if (onlyOne && Array.isArray(returnedValues)) returnedValues = returnedValues[0]
         console.log("[onOui] returnedValues", returnedValues)
         console.log("[onOui] onclick", this.ouiData.onclick)
         this.ouiData.onclick(returnedValues)

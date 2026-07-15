@@ -1,7 +1,6 @@
 window.onload = function(ev){
   historize("Application chargée.")
   App.init()
-  listen(DGet('#app-name'), 'click', () => AppDataPanel.toggle())
 }
 
 class App {
@@ -10,6 +9,7 @@ class App {
 
   static init(retour){
     historize("-> App#init")
+    this.observe()
     Service.init()
     if (undefined == retour) {
       server.send({action: 'load-all'}, this.init.bind(this))
@@ -17,6 +17,10 @@ class App {
       this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
     }
+  }
+
+  static observe(){
+    listen(DGet('#app-name'), 'click', () => AppDataPanel.open())
   }
 
   static getData(key){
@@ -41,12 +45,4 @@ class App {
   static updateProjectsIn() {
     return Project.getProjectsOrder()
   }
-}
-
-function essayer(){
-}
-
-function onRetourEssai(retour){
-  message("-> onRetourEssai")
-  feedback(retour)
 }

@@ -33,6 +33,20 @@ MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
 SPECS_DIR="$MAIN_TESTS_DIR/specs"
 APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 
+# Sortie double : couleur sur l'écran (inchangée), texte brut (codes ANSI
+# retirés) dans un fichier sous tests/resultats/ à la racine du dépôt.
+TEST_VERSION="$(basename "$VTEST_DIR" | sed 's/^version-//')"
+RESULTS_DIR="$APP_DIR/tests/resultats"
+mkdir -p "$RESULTS_DIR"
+RESULT_FILE="$RESULTS_DIR/$(date +%Y-%m-%d_%Hh%M).log"
+{
+  echo "Moteur : $TEST_VERSION"
+  echo "Arguments : ${*:-(aucun — specs/e2e/*.rb)}"
+  echo "Date : $(date '+%Y-%m-%d %Hh%M')"
+  echo ""
+} > "$RESULT_FILE"
+exec > >(tee >(sed -E $'s/\x1b\\[[0-9;]*m//g' >> "$RESULT_FILE")) 2>&1
+
 # Snapshot de toutes les fenêtres Finder ouvertes AVANT toute action de la
 # suite (dossier, position, sélection) : restauré à l'identique en teardown,
 # quel que soit ce que les tests ont ouvert/fermé entre-temps.
@@ -53,7 +67,7 @@ mkfifo "$OVERLAY_FIFO"
 "$OVERLAY_BIN" < "$OVERLAY_FIFO" &
 OVERLAY_PID=$!
 exec 3>"$OVERLAY_FIFO"
-echo "SET TESTS BOARD EN COURS. NE RIEN TOUCHER." >&3
+echo "SET TESTS BOARD EN COURS…" >&3
 
 BACKUPS_ROOT="$MAIN_TESTS_DIR/.board-backups"
 mkdir -p "$BACKUPS_ROOT"

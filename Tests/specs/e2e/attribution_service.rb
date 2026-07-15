@@ -20,7 +20,7 @@ require_relative '../../support/helpers'
 
 include BoardTest
 
-SERVICE_ID = 'open-folder-project'
+SERVICE_ID = 'open-finder-window'
 CUSTOM_NAME = 'Ouvrir projet A'
 
 def run_test

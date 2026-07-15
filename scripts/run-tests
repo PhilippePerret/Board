@@ -27,10 +27,6 @@ TEST_VERSION="$tvers"
 CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_DIR=$(dirname $CUR_DIR)
 
-RESULTS_DIR="$APP_DIR/tests/resultats"
-mkdir -p "$RESULTS_DIR"
-RESULT_FILE="$RESULTS_DIR/${TEST_VERSION}-$(date +%Y%m%d-%H%M%S).log"
-
-"$APP_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "${args[@]}" 2>&1 | tee "$RESULT_FILE"
+"$APP_DIR/Tests/version-$TEST_VERSION/run_tests.sh" "${args[@]}"
 
 read "?Appuyez sur Entrée pour fermer..."
