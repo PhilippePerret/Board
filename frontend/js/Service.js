@@ -80,7 +80,7 @@ class Service {
   // Seules données à persister pour un service attaché à un projet — tout
   // le reste (script, name, group…) se retrouve via absData.
   toPersistData(){
-    return {id: this.id, uuid: this.uuid, params: this.params}
+    return {id: this.id, name: this.name, uuid: this.uuid, params: this.params}
   }
 
   // Donnée abstraite du service (ServiceData.js), retrouvée par id — jamais
