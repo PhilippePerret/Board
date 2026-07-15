@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : e2e/ajout_service_startup.rb
+Date : 2026-07-15 09h34
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+✗ ajout d'un service au démarrage
+    Timeout d'attente dépassé (10s) — carte projet = {"id" => "fixture-17841008883sat", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-54123-6rgbfi", "title" => "Projet A", "services" => {"others" => [], "startup" => [{"id" => "open-finder-window", "uuid" => "1784100893530e4edc4200c68d8", "stype" => "custom", "params" => ["Ouvrir au démarrage", 100, 100, 600, 400, "list view", true], "type" => "startup", "scType" => ".scpt", "script" => "OpenFinderWindow.scpt", "isCommonService" => false, "projectId" => nil, "group" => nil, "front" => nil, "name" => "Ouvrir une fenêtre dans le Finder"}]}, "workTime" => 0}
+  (osascript : 18 appels, 4.104s)
+  (durée totale de la spec : 14.899s)
+
+Échecs :
+1. ajout d'un service au démarrage
+    Timeout d'attente dépassé (10s) — carte projet = {"id" => "fixture-17841008883sat", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-54123-6rgbfi", "title" => "Projet A", "services" => {"others" => [], "startup" => [{"id" => "open-finder-window", "uuid" => "1784100893530e4edc4200c68d8", "stype" => "custom", "params" => ["Ouvrir au démarrage", 100, 100, 600, 400, "list view", true], "type" => "startup", "scType" => ".scpt", "script" => "OpenFinderWindow.scpt", "isCommonService" => false, "projectId" => nil, "group" => nil, "front" => nil, "name" => "Ouvrir une fenêtre dans le Finder"}]}, "workTime" => 0}
+  (osascript : 18 appels, 4.104s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 14.899s

@@ -35,10 +35,10 @@ def run_test
     drag(service_card, title_target)
 
     # → la carte du service doit disparaître du DOM tout de suite
-    wait_until(5, desc: -> { 'carte du service encore présente après glissement hors de la carte projet' }) { !exists?(service_card) }
+    wait_until(desc: -> { 'carte du service encore présente après glissement hors de la carte projet' }) { !exists?(service_card) }
 
     # → et le service doit avoir disparu des données persistées
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       others = read_project_card(id)['services']['others']
       !(others.is_a?(Array) && others.any? { |s| s['uuid'] == service['uuid'] })
     end

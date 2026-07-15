@@ -34,39 +34,39 @@ def run_test
   raise 'app-data-panel présent dans le DOM avant tout clic sur "Tableau de bord"' if exists?('app-data-panel')
 
   click('app-name')
-  wait_for('app-data-panel', 5)
+  wait_for('app-data-panel')
 
   # - édition d'une valeur simple (type 'string')
   click('app-data-changelog-file')
-  wait_for('btn-oui', 10)
+  wait_for('btn-oui')
   set_value('__changelog-file__', 'HISTORIQUE.md')
   click('btn-oui')
 
-  wait_until(5, desc: -> { "appdata.json = #{read_app_data.inspect}" }) do
+  wait_until(desc: -> { "appdata.json = #{read_app_data.inspect}" }) do
     read_app_data['changelog-file'] == 'HISTORIQUE.md'
   end
-  wait_until(5, desc: -> { "texte de la ligne = #{get_text('app-data-changelog-file').inspect}" }) do
+  wait_until(desc: -> { "texte de la ligne = #{get_text('app-data-changelog-file').inspect}" }) do
     get_text('app-data-changelog-file').include?('HISTORIQUE.md')
   end
 
   # - édition d'une valeur choisie dans une liste fixe (type 'app')
   click('app-data-code-editor')
-  wait_for('btn-oui', 10)
+  wait_for('btn-oui')
   set_value('__code-editor__', 'Sublime Text')
   click('btn-oui')
 
-  wait_until(5, desc: -> { "appdata.json = #{read_app_data.inspect}" }) do
+  wait_until(desc: -> { "appdata.json = #{read_app_data.inspect}" }) do
     read_app_data['code-editor'] == 'Sublime Text'
   end
-  wait_until(5, desc: -> { "texte de la ligne = #{get_text('app-data-code-editor').inspect}" }) do
+  wait_until(desc: -> { "texte de la ligne = #{get_text('app-data-code-editor').inspect}" }) do
     get_text('app-data-code-editor').include?('Sublime Text')
   end
 
   # → persistance après rechargement (App.init relit appdata.json)
   launch_app
   click('app-name')
-  wait_for('app-data-panel', 5)
-  wait_until(5, desc: -> { "texte de la ligne = #{get_text('app-data-changelog-file').inspect}" }) do
+  wait_for('app-data-panel')
+  wait_until(desc: -> { "texte de la ligne = #{get_text('app-data-changelog-file').inspect}" }) do
     get_text('app-data-changelog-file').include?('HISTORIQUE.md')
   end
 

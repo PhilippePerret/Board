@@ -28,10 +28,10 @@ def run_test
   click('btn-oui')
 
   # → titre modifié sur l'interface
-  wait_until(5, desc: -> { "titre affiché : #{get_text(title_id).inspect}" }) { get_text(title_id) == NEW_TITLE }
+  wait_until(desc: -> { "titre affiché : #{get_text(title_id).inspect}" }) { get_text(title_id) == NEW_TITLE }
 
   # → titre modifié dans la fiche dans project-cards
-  wait_until(5, desc: -> { "titre en fiche : #{read_project_card(project_id)['title'].inspect}" }) { read_project_card(project_id)['title'] == NEW_TITLE }
+  wait_until(desc: -> { "titre en fiche : #{read_project_card(project_id)['title'].inspect}" }) { read_project_card(project_id)['title'] == NEW_TITLE }
 ensure
   remove_fixture_project(project_id) if project_id
 end

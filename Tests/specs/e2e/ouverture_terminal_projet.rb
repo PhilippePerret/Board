@@ -46,7 +46,7 @@ def run_test
     click(service_card)
 
     expected_name = File.basename(fixture_dir)
-    wait_until(10, desc: -> { "nom de la fenêtre Terminal au premier plan = #{(terminal_front_window_name rescue '(erreur)').inspect} (attendu un nom contenant #{expected_name.inspect})" }) do
+    wait_until(desc: -> { "nom de la fenêtre Terminal au premier plan = #{(terminal_front_window_name rescue '(erreur)').inspect} (attendu un nom contenant #{expected_name.inspect})" }) do
       terminal_front_window_name.include?(expected_name)
     end
   end

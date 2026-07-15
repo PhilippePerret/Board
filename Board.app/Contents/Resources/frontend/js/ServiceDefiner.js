@@ -54,9 +54,12 @@ class ServiceDefiner {
       // Boucle sur tous les paramètres.
       // On définit ceux qui sont des propriétés du projet
       // et l'on rassemble tous les paramètres pour pour service
-      const paramsValues = []
+      let paramsValues = []
       definers.forEach(definer => {
         switch(definer.type){
+          case 'service-name':
+            this.service.name = definer.value
+            break
           case 'project':
             if (Project.current[definer.id] != definer.value){
               projectHasNewValue = true

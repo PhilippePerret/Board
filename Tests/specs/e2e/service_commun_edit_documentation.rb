@@ -49,18 +49,18 @@ def run_test
 
     # → dialogue de sélection du dossier de documentation dans le Finder
     #   (documentation-editor ne redemande rien : type 'app')
-    wait_for('btn-oui', 10)
+    wait_for('btn-oui')
     with_finder_selection(fixture_dir) do
       click('btn-oui')
 
       # → le dossier doit s'ouvrir dans le Finder (éditeur de test = Finder)
-      wait_until(10, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+      wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
         finder_front_window_name == expected_name
       end
     end
 
     # → sdata enregistrée : [dossier, nom_dossier, éditeur]
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       sdata = read_project_card(id).dig('sdata', 'edit-documentation')
       sdata.is_a?(Array) && sdata[1] == expected_name && sdata[2] == 'Finder'
     end
@@ -76,7 +76,7 @@ def run_test
     # → cette fois, aucun dialogue : le dossier s'ouvre direct dans le Finder
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
-    wait_until(10, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+    wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
       finder_front_window_name == expected_name
     end
   end

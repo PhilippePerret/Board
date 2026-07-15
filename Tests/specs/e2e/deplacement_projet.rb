@@ -23,14 +23,14 @@ def run_test
   click(card2)
 
   # → les boutons projets s'affichent
-  wait_until(5, desc: -> { 'btn-remove-project pas apparu après sélection' }) { exists?('btn-remove-project') }
+  wait_until(desc: -> { 'btn-remove-project pas apparu après sélection' }) { exists?('btn-remove-project') }
 
   # - le déplacer à gauche (flèche "←")
   click('btn-move-project-to-left')
 
   # → la carte doit avoir bougé dans la fenêtre tout de suite (réordonnancement
   #   DOM synchrone au click, pas lié au débounce de sauvegarde)
-  wait_until(2, desc: -> { "ordre affiché = #{order_of(card1, card2, card3).inspect}" }) do
+  wait_until(desc: -> { "ordre affiché = #{order_of(card1, card2, card3).inspect}" }) do
     order_of(card1, card2, card3) == [card2, card1, card3]
   end
 
@@ -38,7 +38,7 @@ def run_test
   sleep 1
 
   # - la donnée 'projects-in' de appdata.json doit avoir été actualisée (projet bougé en premier)
-  wait_until(5, desc: -> { "projects-in = #{read_app_data['projects-in'].inspect}" }) do
+  wait_until(desc: -> { "projects-in = #{read_app_data['projects-in'].inspect}" }) do
     read_app_data['projects-in'] == [id2, id1, id3]
   end
 
@@ -50,7 +50,7 @@ def run_test
   sleep 1
 
   # - la donnée 'projects-in' de appdata.json doit avoir été actualisée (projet bougé en 3e)
-  wait_until(5, desc: -> { "projects-in = #{read_app_data['projects-in'].inspect}" }) do
+  wait_until(desc: -> { "projects-in = #{read_app_data['projects-in'].inspect}" }) do
     read_app_data['projects-in'] == [id1, id3, id2]
   end
 
@@ -58,13 +58,13 @@ def run_test
   launch_app
 
   # → le projet doit bien être en 3e position, à la fois dans les données...
-  wait_until(5, desc: -> { "projects-in après rechargement = #{read_app_data['projects-in'].inspect}" }) do
+  wait_until(desc: -> { "projects-in après rechargement = #{read_app_data['projects-in'].inspect}" }) do
     read_app_data['projects-in'] == [id1, id3, id2]
   end
 
   # ... et affiché dans la fenêtre (l'ordre au rechargement dépend de la
   # lecture d'appdata.json, pas d'un état DOM qui aurait survécu au restart)
-  wait_until(5, desc: -> { "ordre affiché après rechargement = #{order_of(card1, card2, card3).inspect}" }) do
+  wait_until(desc: -> { "ordre affiché après rechargement = #{order_of(card1, card2, card3).inspect}" }) do
     order_of(card1, card2, card3) == [card1, card3, card2]
   end
 ensure

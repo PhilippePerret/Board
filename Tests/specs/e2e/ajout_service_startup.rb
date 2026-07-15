@@ -39,12 +39,12 @@ def run_test
 
     # → le bouton "GO !" doit apparaître TOUT DE SUITE (pas seulement après
     #   rechargement)
-    wait_until(5, desc: -> { 'bouton GO! pas apparu tout de suite après le premier ajout' }) { exists?(btn_startup) }
+    wait_until(desc: -> { 'bouton GO! pas apparu tout de suite après le premier ajout' }) { exists?(btn_startup) }
 
     # → la carte du service doit exister dans le DOM (même masquée derrière
     #   le survol du bouton "GO !" — exists? teste la présence DOM, pas la
     #   visibilité)
-    wait_until(5, desc: -> { 'carte du service startup pas trouvée dans le DOM' }) { exists?(service_card) }
+    wait_until(desc: -> { 'carte du service startup pas trouvée dans le DOM' }) { exists?(service_card) }
 
     # - recharger l'application
     launch_app
@@ -56,8 +56,8 @@ def run_test
     startup = data['services']['startup']
     found = startup.is_a?(Array) && startup.find { |s| Array(s['name']).include?(CUSTOM_NAME) }
     raise "service startup absent de la carte projet après rechargement : #{data.inspect}" unless found
-    wait_until(5, desc: -> { 'carte du service startup absente du DOM après rechargement' }) { exists?(service_card) }
-    wait_until(5, desc: -> { 'bouton GO! absent après rechargement' }) { exists?(btn_startup) }
+    wait_until(desc: -> { 'carte du service startup absente du DOM après rechargement' }) { exists?(service_card) }
+    wait_until(desc: -> { 'bouton GO! absent après rechargement' }) { exists?(btn_startup) }
   end
 ensure
   remove_fixture_project(id) if id

@@ -40,13 +40,13 @@ def run_test
 
     # → dialogue de sélection du dossier CONTENEUR (le service crée
     #   lui-même le sous-dossier "Documentation" dedans)
-    wait_for('btn-oui', 10)
+    wait_for('btn-oui')
     with_finder_selection(fixture_dir) do
       click('btn-oui')
     end
 
     # → arborescence créée
-    wait_until(10, desc: -> { "docu.adoc existe ? #{File.exist?(main_docu_file)}" }) { File.exist?(main_docu_file) }
+    wait_until(desc: -> { "docu.adoc existe ? #{File.exist?(main_docu_file)}" }) { File.exist?(main_docu_file) }
     raise "adocs/introduction.adoc pas créé" unless File.exist?(first_adoc)
 
     main_content = File.read(main_docu_file)
@@ -57,7 +57,7 @@ def run_test
     raise "introduction.adoc sans titre '== Introduction ==' : #{intro_content.inspect}" unless intro_content.start_with?('== Introduction ==')
 
     # → sdata enregistrée : [dossier_conteneur, nom_dossier_conteneur]
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       sdata = read_project_card(id).dig('sdata', 'init-documentation')
       sdata.is_a?(Array) && sdata[1] == File.basename(fixture_dir)
     end

@@ -39,19 +39,19 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → dialogue de sélection du fichier .adoc principal dans le Finder
-    wait_for('btn-oui', 10)
+    wait_for('btn-oui')
     with_finder_selection(main_file) do
       click('btn-oui')
 
       # → le dossier contenant le fichier doit s'ouvrir dans le Finder
       #   (`open .` du script, avant l'appel à asciidoctor)
-      wait_until(10, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+      wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
         finder_front_window_name == expected_name
       end
     end
 
     # → sdata enregistrée : [chemin_fichier, nom_fichier]
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       sdata = read_project_card(id).dig('sdata', 'update-documentation')
       sdata.is_a?(Array) && sdata[1] == 'docu.adoc'
     end
@@ -67,7 +67,7 @@ def run_test
     # → cette fois, aucun dialogue : le dossier s'ouvre direct dans le Finder
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
-    wait_until(10, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+    wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
       finder_front_window_name == expected_name
     end
   end

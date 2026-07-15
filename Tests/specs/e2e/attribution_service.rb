@@ -35,7 +35,7 @@ def run_test
     attach_service_to_project(SERVICE_ID, id, fixture_dir, custom_name: CUSTOM_NAME)
 
     # → le badge du service doit s'afficher
-    wait_until(5, desc: -> { "texte affiché = #{get_text(others_field).inspect}" }) do
+    wait_until(desc: -> { "texte affiché = #{get_text(others_field).inspect}" }) do
       get_text(others_field).include?(CUSTOM_NAME)
     end
 
@@ -44,7 +44,7 @@ def run_test
 
     # → le badge doit toujours s'afficher après rechargement
     wait_for(card)
-    wait_until(5, desc: -> { "texte affiché après rechargement = #{get_text(others_field).inspect}" }) do
+    wait_until(desc: -> { "texte affiché après rechargement = #{get_text(others_field).inspect}" }) do
       get_text(others_field).include?(CUSTOM_NAME)
     end
   end

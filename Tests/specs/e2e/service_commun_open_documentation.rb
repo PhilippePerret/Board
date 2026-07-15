@@ -44,13 +44,13 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → dialogue de sélection du fichier dans le Finder
-    wait_for('btn-oui', 10)
+    wait_for('btn-oui')
     with_finder_selection(main_file) do
       click('btn-oui')
     end
 
     # → sdata enregistrée : [chemin_fichier, nom_fichier]
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       sdata = read_project_card(id).dig('sdata', 'open-a-file')
       sdata.is_a?(Array) && sdata[1] == 'manuel.txt'
     end

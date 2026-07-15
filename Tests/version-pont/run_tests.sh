@@ -25,6 +25,11 @@ set -e
 
 BOARD_DIR="$HOME/Library/Application Support/Board"
 
+# Si Board tournait déjà (lancé à la main par l'utilisateur) avant la suite,
+# on le relance en fin de suite pour le remettre tel qu'il était.
+BOARD_WAS_RUNNING=0
+pgrep -x Board >/dev/null 2>&1 && BOARD_WAS_RUNNING=1
+
 # VTEST_DIR = Dossier de la version de test (base, améliorée, etc.)
 VTEST_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Dossier principal des tests de l'application
@@ -119,6 +124,9 @@ teardown() {
   quit_app
   restore_board
   osascript "$MAIN_TESTS_DIR/support/finder.applescript" restore-windows "$FINDER_SNAPSHOT" >/dev/null 2>&1 || true
+  if [ "$BOARD_WAS_RUNNING" -eq 1 ]; then
+    open "$APP_DIR/Board.app"
+  fi
   echo "SET MERCI." >&3 2>/dev/null || true
   sleep 2
   echo "QUIT" >&3 2>/dev/null || true

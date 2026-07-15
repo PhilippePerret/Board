@@ -56,7 +56,7 @@ def run_test
 
         btn_startup = "project-#{id}-btn-startup"
         wait_for("project-#{id}")
-        wait_until(5, desc: -> { 'bouton GO! absent alors que 3 services au démarrage sont attachés' }) { exists?(btn_startup) }
+        wait_until(desc: -> { 'bouton GO! absent alors que 3 services au démarrage sont attachés' }) { exists?(btn_startup) }
 
         go_and_verify = lambda do
           click(btn_startup)
@@ -64,12 +64,12 @@ def run_test
           # → run-script (dernier de la liste) a bien été exécuté et sa
           #   sortie capturée — à vérifier AVANT que "Fin de démarrage" ne
           #   remplace ce message
-          wait_until(20, desc: -> { "message = #{get_text('message').inspect}" }) do
+          wait_until(desc: -> { "message = #{get_text('message').inspect}" }) do
             get_text('message').include?(MARKER_VALUE)
           end
 
           # → les 3 services doivent s'exécuter jusqu'au bout
-          wait_until(5, desc: -> { "message = #{get_text('message').inspect}" }) do
+          wait_until(desc: -> { "message = #{get_text('message').inspect}" }) do
             get_text('message').include?('Fin de démarrage')
           end
 
@@ -87,7 +87,7 @@ def run_test
         # - recharger l'application
         launch_app
         wait_for("project-#{id}")
-        wait_until(5, desc: -> { 'bouton GO! absent après rechargement' }) { exists?(btn_startup) }
+        wait_until(desc: -> { 'bouton GO! absent après rechargement' }) { exists?(btn_startup) }
 
         # - GO! à nouveau, mêmes vérifications
         go_and_verify.call

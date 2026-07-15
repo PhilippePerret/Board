@@ -192,12 +192,12 @@ module BoardTest
   # Pas d'attente côté JS : polling Ruby, comme wait_until ailleurs dans la
   # suite (round-trip pont largement plus rapide qu'un parcours AX, pas
   # besoin d'une attente asynchrone côté JS).
-  def wait_for(dom_id, timeout = 5)
+  def wait_for(dom_id, timeout = 4)
     wait_until(timeout, 0.1, desc: -> { "élément introuvable : #{dom_id}" }) { exists?(dom_id) }
     'ok'
   end
 
-  def wait_for_prefix(prefix, timeout = 5)
+  def wait_for_prefix(prefix, timeout = 4)
     wait_until(timeout, 0.1, desc: -> { "élément introuvable (prefix) : #{prefix}" }) { exists_prefix?(prefix) }
     'ok'
   end

@@ -22,7 +22,7 @@ def run_test
     click('btn-oui')
 
     # ==| Erreur : aucune sélection finder
-    wait_until(5, desc: -> { "message affiché : #{get_text('message').inspect}" }) { get_text('message').include?(expected_error) }
+    wait_until(desc: -> { "message affiché : #{get_text('message').inspect}" }) { get_text('message').include?(expected_error) }
   end
 end
 

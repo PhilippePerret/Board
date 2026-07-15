@@ -99,8 +99,8 @@ module BoardTest
   def set_value_prefix(prefix, value) = osascript(AX_SCRIPT, 'set-value-prefix', prefix, value)
   def get_value(dom_id)             = osascript(AX_SCRIPT, 'get-value', dom_id)
   def get_value_prefix(prefix)      = osascript(AX_SCRIPT, 'get-value-prefix', prefix)
-  def wait_for(dom_id, timeout = 5) = osascript(AX_SCRIPT, 'wait-for', dom_id, timeout)
-  def wait_for_prefix(prefix, timeout = 5) = osascript(AX_SCRIPT, 'wait-for-prefix', prefix, timeout)
+  def wait_for(dom_id, timeout = 4) = osascript(AX_SCRIPT, 'wait-for', dom_id, timeout)
+  def wait_for_prefix(prefix, timeout = 4) = osascript(AX_SCRIPT, 'wait-for-prefix', prefix, timeout)
   def exists?(dom_id)               = osascript(AX_SCRIPT, 'exists', dom_id) == 'true'
   def get_text(dom_id)              = osascript(AX_SCRIPT, 'get-text', dom_id)
   def get_text_prefix(prefix)       = osascript(AX_SCRIPT, 'get-text-prefix', prefix)
@@ -209,7 +209,7 @@ module BoardTest
   #
   # desc: proc appelé SEULEMENT en cas de timeout, pour rapporter l'état réel
   # à ce moment-là (pas au moment de l'appel) dans le message d'erreur.
-  def wait_until(timeout = 5, interval = 0.2, desc: nil)
+  def wait_until(timeout = 4, interval = 0.2, desc: nil)
     deadline = Time.now + timeout
     loop do
       return true if yield
@@ -276,19 +276,19 @@ module BoardTest
 
     drag(service_id, drop_field)
 
-    wait_for('__service_name__', 10)
-    set_value('__service_name__', custom_name)
+    wait_for('__service-name__')
+    set_value('__service-name__', custom_name)
     click('btn-oui')
 
-    wait_for('btn-oui', 10)
+    wait_for('btn-oui')
     with_finder_selection(fixture_dir) do
       click('btn-oui')
-      wait_for('btn-oui', 10)
+      wait_for('btn-oui')
     end
     click('btn-oui')
 
     uuid = nil
-    wait_until(10, desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do
+    wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do
       list = read_project_card(project_id)['services'][where]
       found = list.is_a?(Array) && list.find { |s| Array(s['name']).include?(custom_name) }
       uuid = found['uuid'] if found
@@ -328,7 +328,7 @@ module BoardTest
     end
     raise "\"open #{BOARD_APP}\" a échoué après 3 essais" unless opened
 
-    wait_until(10, 0.2, desc: -> { 'btn-add-project introuvable après ouverture de Board.app' }) { exists?('btn-add-project') }
+    wait_until(desc: -> { 'btn-add-project introuvable après ouverture de Board.app' }) { exists?('btn-add-project') }
   end
 
   def quit_app

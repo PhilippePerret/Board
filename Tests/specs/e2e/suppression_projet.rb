@@ -27,10 +27,10 @@ def run_test
   click('btn-oui')
 
   # → le projet ne doit plus être affiché
-  wait_until(5, desc: -> { "#{card_id} toujours présent dans l'accessibilité" }) { !exists?(card_id) }
+  wait_until(desc: -> { "#{card_id} toujours présent dans l'accessibilité" }) { !exists?(card_id) }
 
   # → le projet doit avoir été retiré de appdata.json (projects-in → projects-out)
-  wait_until(5, desc: -> { "appdata.json = #{read_app_data.inspect}" }) do
+  wait_until(desc: -> { "appdata.json = #{read_app_data.inspect}" }) do
     app_data = read_app_data
     !app_data['projects-in'].to_a.include?(project_id) &&
       app_data['projects-out'].to_a.include?(project_id)

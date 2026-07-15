@@ -1,0 +1,173 @@
+Moteur : pont
+Arguments : (aucun — specs/e2e/*.rb)
+Date : 2026-07-15 09h17
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ ajout d'un service au démarrage
+    Timeout d'attente dépassé (10s) — élément introuvable : __service_name__
+  (osascript : 104 appels, 3.312s)
+  (durée totale de la spec : 14.442s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+✓ panneau de réglages de l'application : édition string + app, persistance après rechargement
+  (osascript : 21 appels, 0.199s)
+  (durée totale de la spec : 3.840s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+✗ attribution d'un service puis exécution deux fois de suite
+    Timeout d'attente dépassé (10s) — élément introuvable : __service_name__
+  (osascript : 105 appels, 3.488s)
+  (durée totale de la spec : 14.011s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+✗ attribution d'un service à un projet
+    Timeout d'attente dépassé (10s) — élément introuvable : __service_name__
+  (osascript : 104 appels, 3.338s)
+  (durée totale de la spec : 13.873s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_sans_selection_finder.rb ---
+✗ création d'un nouveau projet SANS SÉLECTION FINDER
+    Timeout d'attente dépassé (5s) — message affiché : ""
+  (osascript : 32 appels, 0.568s)
+  (durée totale de la spec : 5.807s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✓ création d'un nouveau projet, sélection Finder = un fichier
+  (osascript : 6 appels, 0.786s)
+  (durée totale de la spec : 0.891s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✗ création simple d'un nouveau projet
+    Timeout d'attente dépassé (5s) — élément introuvable (prefix) : __panel-
+  (osascript : 54 appels, 0.879s)
+  (durée totale de la spec : 5.987s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/deplacement_projet.rb ---
+✓ déplacement du projet
+  (osascript : 12 appels, 0.197s)
+  (durée totale de la spec : 3.765s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_double_service.rb ---
+✓ exécuter un service attaché deux fois de suite (dossier fermé entre les deux)
+  (osascript : 9 appels, 3.306s)
+  (durée totale de la spec : 6.041s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+✓ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+  (osascript : 79 appels, 10.421s)
+  (durée totale de la spec : 23.796s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/modification_titre_projet.rb ---
+✗ modification du titre d'un projet
+    Timeout d'attente dépassé (5s) — titre affiché : "T"
+  (osascript : 34 appels, 0.182s)
+  (durée totale de la spec : 5.930s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ouverture_terminal_projet.rb ---
+✗ ouverture d'un Terminal au dossier du projet
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Terminal au premier plan = "philippeperret — run-tests — osascript ◂ run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-48680-aq208k")
+  (osascript : 5 appels, 0.110s)
+  (durée totale de la spec : 11.026s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_service_glissement.rb ---
+✓ retrait d'un service par glissement hors de la carte projet
+  (osascript : 13 appels, 1.808s)
+  (durée totale de la spec : 3.563s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 20 appels, 7.937s)
+  (durée totale de la spec : 9.788s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✗ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-48860-s7d8dv")
+  (osascript : 43 appels, 4.706s)
+  (durée totale de la spec : 11.478s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_seuils.rb ---
+✗ service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan
+    pont ne répond pas après 15s (!!document.getElementById("clock-dial")…)
+  (osascript : 12 appels, 0.138s)
+  (durée totale de la spec : 30.762s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    work-duration pas préremplie avec la session ("null")
+  (osascript : 11 appels, 0.071s)
+  (durée totale de la spec : 1.232s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+✗ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784100000o5em", "sdata" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49086-m37dft"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49086-m37dft", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.727s)
+  (durée totale de la spec : 8.551s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784100008cvzv", "sdata" => {"open-a-file" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49156-ia2zlf", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.816s)
+  (durée totale de la spec : 7.141s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-49220-s37px5")
+  (osascript : 43 appels, 5.124s)
+  (durée totale de la spec : 12.442s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+✗ service commun 'terminal au dossier' : exécution directe, sans dialogue
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Terminal au premier plan = "philippeperret — run-tests — osascript ◂ run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-49314-upc7nf")
+  (osascript : 6 appels, 0.140s)
+  (durée totale de la spec : 10.965s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784100039e29w", "sdata" => {"update-documentation" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49402-ywqhwa", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 12 appels, 1.040s)
+  (durée totale de la spec : 7.320s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ suppression d'un projet
+  (osascript : 9 appels, 0.159s)
+  (durée totale de la spec : 1.315s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. ajout d'un service au démarrage
+    Timeout d'attente dépassé (10s) — élément introuvable : __service_name__
+  (osascript : 104 appels, 3.312s)
+2. attribution d'un service puis exécution deux fois de suite
+    Timeout d'attente dépassé (10s) — élément introuvable : __service_name__
+  (osascript : 105 appels, 3.488s)
+3. attribution d'un service à un projet
+    Timeout d'attente dépassé (10s) — élément introuvable : __service_name__
+  (osascript : 104 appels, 3.338s)
+4. création d'un nouveau projet SANS SÉLECTION FINDER
+    Timeout d'attente dépassé (5s) — message affiché : ""
+  (osascript : 32 appels, 0.568s)
+5. création simple d'un nouveau projet
+    Timeout d'attente dépassé (5s) — élément introuvable (prefix) : __panel-
+  (osascript : 54 appels, 0.879s)
+6. modification du titre d'un projet
+    Timeout d'attente dépassé (5s) — titre affiché : "T"
+  (osascript : 34 appels, 0.182s)
+7. ouverture d'un Terminal au dossier du projet
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Terminal au premier plan = "philippeperret — run-tests — osascript ◂ run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-48680-aq208k")
+  (osascript : 5 appels, 0.110s)
+8. service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-48860-s7d8dv")
+  (osascript : 43 appels, 4.706s)
+9. service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan
+    pont ne répond pas après 15s (!!document.getElementById("clock-dial")…)
+  (osascript : 12 appels, 0.138s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+10. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    work-duration pas préremplie avec la session ("null")
+  (osascript : 11 appels, 0.071s)
+11. service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784100000o5em", "sdata" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49086-m37dft"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49086-m37dft", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.727s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+12. service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784100008cvzv", "sdata" => {"open-a-file" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49156-ia2zlf", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.816s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+13. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-49220-s37px5")
+  (osascript : 43 appels, 5.124s)
+14. service commun 'terminal au dossier' : exécution directe, sans dialogue
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Terminal au premier plan = "philippeperret — run-tests — osascript ◂ run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-49314-upc7nf")
+  (osascript : 6 appels, 0.140s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+15. service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-1784100039e29w", "sdata" => {"update-documentation" => []}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-49402-ywqhwa", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 12 appels, 1.040s)
+
+-------------------
+Success: 8  Failures: 15  Pendings: 0  Test count: 23
+Durée totale (moteur : pont) : 213.966s

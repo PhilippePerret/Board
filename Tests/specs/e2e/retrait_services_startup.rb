@@ -45,19 +45,19 @@ def run_test
     wait_for("project-#{id}")
 
     # → le bouton GO! doit exister (2 services au démarrage dès le chargement)
-    wait_until(5, desc: -> { 'bouton GO! absent alors que 2 services au démarrage sont attachés' }) { exists?(btn_startup) }
+    wait_until(desc: -> { 'bouton GO! absent alors que 2 services au démarrage sont attachés' }) { exists?(btn_startup) }
 
     # - survoler pour révéler les cartes (display:none tant qu'on ne survole pas)
     hover(startup_container)
-    wait_until(5, desc: -> { 'carte du 1er service startup jamais révélée après survol' }) { exists?(card1) }
+    wait_until(desc: -> { 'carte du 1er service startup jamais révélée après survol' }) { exists?(card1) }
 
     # - glisser le 1er service en dehors de la carte projet
     drag(card1, title_target)
 
     # → ce service a disparu, mais le bouton GO! doit toujours exister (il en reste un)
-    wait_until(5, desc: -> { 'carte du 1er service startup encore présente après glissement hors carte' }) { !exists?(card1) }
-    wait_until(5, desc: -> { "bouton GO! disparu alors qu'il reste un service au démarrage" }) { exists?(btn_startup) }
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { 'carte du 1er service startup encore présente après glissement hors carte' }) { !exists?(card1) }
+    wait_until(desc: -> { "bouton GO! disparu alors qu'il reste un service au démarrage" }) { exists?(btn_startup) }
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       startup = read_project_card(id)['services']['startup']
       startup.is_a?(Array) && startup.size == 1 && startup.first['uuid'] == service2['uuid']
     end
@@ -65,15 +65,15 @@ def run_test
     # - re-survoler (le conteneur a pu se re-masquer après le mouseleave du
     #   glissement précédent)
     hover(startup_container)
-    wait_until(5, desc: -> { '2e carte de service startup jamais révélée après nouveau survol' }) { exists?(card2) }
+    wait_until(desc: -> { '2e carte de service startup jamais révélée après nouveau survol' }) { exists?(card2) }
 
     # - glisser le 2e (dernier) service en dehors de la carte projet
     drag(card2, title_target)
 
     # → plus aucun service au démarrage : le bouton GO! doit avoir disparu
-    wait_until(5, desc: -> { 'carte du 2e service startup encore présente après glissement hors carte' }) { !exists?(card2) }
-    wait_until(5, desc: -> { 'bouton GO! encore présent alors que plus aucun service au démarrage' }) { !exists?(btn_startup) }
-    wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+    wait_until(desc: -> { 'carte du 2e service startup encore présente après glissement hors carte' }) { !exists?(card2) }
+    wait_until(desc: -> { 'bouton GO! encore présent alors que plus aucun service au démarrage' }) { !exists?(btn_startup) }
+    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       startup = read_project_card(id)['services']['startup']
       startup.nil? || startup.empty?
     end

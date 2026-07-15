@@ -47,12 +47,12 @@ def run_test
 
     # → dialogue de positionnement (bounds) : nécessite une fenêtre Finder au
     #   premier plan au moment de valider — n'importe laquelle convient
-    wait_for('btn-oui', 10)
+    wait_for('btn-oui')
     with_finder_selection(fixture_dir) do
       click('btn-oui')
 
       # → le dossier du projet doit s'ouvrir dans le Finder
-      wait_until(10, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+      wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
         finder_front_window_name == expected_name
       end
     end
