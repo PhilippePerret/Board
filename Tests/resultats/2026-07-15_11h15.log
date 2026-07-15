@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : e2e/service_commun_edit_documentation.rb
+Date : 2026-07-15 11h15
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✗ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-85518-iyoxqa")
+  (osascript : 25 appels, 2.677s)
+  (durée totale de la spec : 5.769s)
+
+Échecs :
+1. service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-85518-iyoxqa")
+  (osascript : 25 appels, 2.677s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 5.769s

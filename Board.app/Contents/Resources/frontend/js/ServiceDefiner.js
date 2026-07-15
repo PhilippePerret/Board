@@ -65,13 +65,17 @@ class ServiceDefiner {
               projectHasNewValue = true
               Project.current[definer.id] = definer.value
             }
+            paramsValues.push(definer.value)
             break
           case 'finder-window':
-            paramsValues = [...paramsValues, ...definer.value.position, ...definer.value.size, definer.value.viewType]
+            paramsValues = [...paramsValues, definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType]
             break
-          case 'bounds':
-            paramsValues = [...paramsValues, ...definer.value.position]
+          case 'bounds': {
+            const [boundsX, boundsY] = definer.value.position
+            const [boundsW, boundsH] = definer.value.size
+            paramsValues = [...paramsValues, boundsX, boundsY, boundsX + boundsW, boundsY + boundsH]
             break
+          }
           default:
             paramsValues.push(definer.value)
         }

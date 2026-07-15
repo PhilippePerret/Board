@@ -91,10 +91,10 @@ class Project {
     }).show()
     // Pour définir le titre à donner
   }
-  static buildCardNewProject(idProject, aryTransData){
+  static buildCardNewProject(idProject, title){
     const projet = Project.get(idProject)
     // console.log("idProjet", idProject, "projectName", projectName, "projet", projet)
-    projet.title = aryTransData[0]
+    projet.title = title
     projet.buildCard()
     const confirm = new ConfirmDialog({
         title: "Confirmation de l'import"
@@ -253,7 +253,7 @@ class Project {
       return false
     } else {
       // Enregistrement du titre
-      this.title = aryData[0]
+      this.title = aryData
       this.divTitle.textContent = this.title
       this.save()
     }

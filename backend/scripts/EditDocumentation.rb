@@ -1,8 +1,7 @@
 require 'json'
 
 DOCU_FOLDER = ARGV[0]
-DOCU_NAME   = ARGV[1]
-EDITOR_NAME = ARGV[2]
+EDITOR_NAME = ARGV[1]
 
 table = {ok: true, message: nil, error: nil}
 

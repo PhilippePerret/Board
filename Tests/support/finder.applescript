@@ -9,6 +9,9 @@
 --     window" plus bas. Hypothèse non confirmée : "select" seul, sans
 --     fenêtre déjà ouverte sur l'élément, pouvait laisser la sélection de
 --     Finder retomber sur autre chose (ex. une fenêtre déjà ouverte ailleurs).
+--   open-window  <posixPath>    (ouvre une vraie fenêtre CIBLÉE sur ce dossier
+--     précis — contrairement à "select"/reveal, qui ouvre une fenêtre sur le
+--     dossier PARENT avec l'élément juste sélectionné dedans)
 --   deselect                    (ouvre une fenêtre sur un dossier neutre, sans rien sélectionner dedans)
 --   window-ids                 (id des fenêtres Finder ouvertes, une par ligne)
 --   close-window <id>          (ferme la fenêtre si elle existe encore)
@@ -37,6 +40,12 @@ on run argv
 	if theAction is "select" then
 		tell application "Finder"
 			reveal (POSIX file (item 2 of argv) as alias)
+			return name of front window
+		end tell
+
+	else if theAction is "open-window" then
+		tell application "Finder"
+			make new Finder window to (POSIX file (item 2 of argv) as alias)
 			return name of front window
 		end tell
 

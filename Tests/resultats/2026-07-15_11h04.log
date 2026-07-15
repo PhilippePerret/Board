@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/modification_titre_projet.rb
+Date : 2026-07-15 11h04
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/modification_titre_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ modification du titre d'un projet
+  (osascript : 8 appels, 0.154s)
+  (durée totale de la spec : 1.351s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.351s

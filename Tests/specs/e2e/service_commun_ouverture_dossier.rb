@@ -17,11 +17,13 @@
 #     service commun — contrairement à un service custom (cf.
 #     attribution_service.rb, qui lui passe par ce dialogue)
 #   - dialogue de positionnement de fenêtre Finder → OK
+#   - dialogue de taille de sidebar (3e param, "sidebar", type "integer",
+#     défaut 0) → OK (valeur par défaut acceptée)
 #   → le dossier du projet doit s'ouvrir dans le Finder
 #   - rechargement de l'app, re-sélection du projet, nouveau clic sur le
 #     service
 #   → le dossier doit s'ouvrir directement, sans plus rien redemander
-#     (bounds déjà enregistrés côté projet)
+#     (bounds + sidebar déjà enregistrés côté projet)
 
 require_relative '../../support/helpers'
 
@@ -50,11 +52,15 @@ def run_test
     wait_for('btn-oui')
     with_finder_selection(fixture_dir) do
       click('btn-oui')
+    end
 
-      # → le dossier du projet doit s'ouvrir dans le Finder
-      wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
-        finder_front_window_name == expected_name
-      end
+    # → dialogue de taille de la sidebar (nouveau 3e param, valeur par défaut acceptée)
+    wait_for('__sidebar__')
+    click('btn-oui')
+
+    # → le dossier du projet doit s'ouvrir dans le Finder
+    wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+      finder_front_window_name == expected_name
     end
 
     finder_close_all_windows

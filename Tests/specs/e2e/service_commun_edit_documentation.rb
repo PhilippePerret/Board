@@ -59,10 +59,10 @@ def run_test
       end
     end
 
-    # → sdata enregistrée : [dossier, nom_dossier, éditeur]
+    # → sdata enregistrée : [dossier, éditeur]
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       sdata = read_project_card(id).dig('sdata', 'edit-documentation')
-      sdata.is_a?(Array) && sdata[1] == expected_name && sdata[2] == 'Finder'
+      sdata.is_a?(Array) && sdata[1] == 'Finder'
     end
 
     finder_close_all_windows

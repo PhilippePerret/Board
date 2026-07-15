@@ -1,0 +1,20 @@
+Moteur : pont
+Arguments : e2e/attribution_puis_execution_double_service.rb
+Date : 2026-07-15 09h56
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✗ attribution d'un service puis exécution deux fois de suite
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-service-20260715-62029-bi58zf")
+  (osascript : 52 appels, 8.276s)
+  (durée totale de la spec : 15.764s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+1. attribution d'un service puis exécution deux fois de suite
+    Timeout d'attente dépassé (10s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-service-20260715-62029-bi58zf")
+  (osascript : 52 appels, 8.276s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 15.764s

@@ -1,0 +1,14 @@
+Moteur : pont
+Arguments : e2e/attribution_service.rb
+Date : 2026-07-15 10h54
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ attribution d'un service à un projet
+  (osascript : 23 appels, 4.117s)
+  (durée totale de la spec : 5.907s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 5.907s

@@ -139,7 +139,7 @@ class ParamDefiner {
     Project.current[prop] = valueDefiner.value
     console.info("Propriété '%s' mises à %s", prop, Project.current[prop])
     Project.current.save()
-    this.paramLister.define() // Pour poursuivre
+    this.setValue(valueDefiner.value) // Fixe aussi la valeur de ce definer, puis poursuit
   }
 
   onBoolean(){
@@ -152,11 +152,18 @@ class ParamDefiner {
   }
 
   onInteger(){
+    let defaultValue = this.default
+    if (this.param.useLastAsDefault) {
+      // this.paramLister.definers contient déjà ce definer (poussé avant
+      // define() par ParamsDefiner#define) : l'avant-dernier est le param précédent
+      const previous = this.paramLister.definers[this.paramLister.definers.length - 2]
+      if (previous) defaultValue = previous.value
+    }
     new TextFieldDialog({
         title: this.name
       , id: this.id
       , message: this.message
-      , defaultValue: this.default
+      , defaultValue: defaultValue
       , ouiBtn: {name: 'OK', onclick: this.onIntegerResponse.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
@@ -308,6 +315,7 @@ class ParamDefiner {
           , width:      data.size[0]
           , height:     data.size[1]
           , viewType:   data.view
+          , sidebarWidth: data.sidebarWidth
         }
       } else {
         value = properties.reduce((accu, property) => {

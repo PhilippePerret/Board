@@ -22,15 +22,17 @@ const COMMON_SERVICES_DATA = [
     , params: [
           {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
         , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
+        , {id: 'sidebar', name: "Réglage de la Sidebar", q: 'Quelle taille donner à la sidebar (mettre 0 pour la cacher) ?', default: 0, type: 'integer'}
       ]
   },
+  
   {
       id: 'work-clock'
     , name: 'Démarrer l’horloge'
     , group: 'Outils'
     , front: Clock.open.bind(Clock)
     , params: [
-          {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer'}
+          {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer', default: 120}
         , {id: 'work-duration', q: 'Durée d’une tranche de travail (minutes)', type: 'integer', useLastAsDefault: true}
       ]
   },

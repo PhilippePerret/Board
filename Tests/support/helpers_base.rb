@@ -142,6 +142,12 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'select', posix_path)
   end
 
+  # Ouvre une vraie fenêtre CIBLÉE sur posix_path (contrairement à
+  # finder_select/reveal, qui ouvre une fenêtre sur le dossier parent).
+  def finder_open_window(posix_path)
+    osascript(FINDER_SCRIPT, 'open-window', posix_path)
+  end
+
   def finder_deselect
     osascript(FINDER_SCRIPT, 'deselect')
   end
@@ -256,6 +262,17 @@ module BoardTest
     (finder_close_front_window_if_named(expected_name) rescue nil) if expected_name && !expected_name.empty?
   end
 
+  # Ouvre une vraie fenêtre CIBLÉE sur posix_path (finder_open_window, pas un
+  # reveal), exécute le bloc, puis referme cette fenêtre précise. Nécessaire
+  # dès qu'un param de type 'finder-window' est en jeu : le script backend a
+  # besoin du CHEMIN réel de la fenêtre, pas seulement de sa position/taille.
+  def with_finder_window(posix_path)
+    expected_name = finder_open_window(posix_path)
+    yield
+  ensure
+    (finder_close_front_window_if_named(expected_name) rescue nil) if expected_name && !expected_name.empty?
+  end
+
   # Sélectionne le projet +project_id+, ouvre son panneau de services, glisse
   # le service +service_id+ jusqu'à "Autres services" (ou "Services au
   # démarrage" si where: 'startup'), puis répond aux 3 boîtes de dialogue qui
@@ -281,7 +298,7 @@ module BoardTest
     click('btn-oui')
 
     wait_for('btn-oui')
-    with_finder_selection(fixture_dir) do
+    with_finder_window(fixture_dir) do
       click('btn-oui')
       wait_for('btn-oui')
     end

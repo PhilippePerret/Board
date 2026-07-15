@@ -1,0 +1,12 @@
+Moteur : pont
+Arguments : e2e/creation_simple_nouveau_projet.rb
+Date : 2026-07-15 11h02
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✓ création simple d'un nouveau projet
+  (osascript : 10 appels, 0.880s)
+  (durée totale de la spec : 1.539s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.539s

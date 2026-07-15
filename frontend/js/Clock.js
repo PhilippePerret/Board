@@ -107,10 +107,16 @@ class Clock {
    * @param projet Le projet courant
    * @param data   [sessionDuration, workDuration] en minutes (projet.sdata['work-clock'])
    */
+  static get MIN_MINUTES(){ return 1 }
+  static get FALLBACK_MINUTES(){ return 15 }
+
   static open(projet, data){
     this.projet         = projet
-    this.sessionDuration = data[0] * 60 // secondes
-    this.workDuration    = data[1] * 60 // secondes (durée d'une tranche)
+    // Aucune durée (session ou tranche) en dessous d'1 minute : remplacée par 15 min
+    const sessionMinutes = data[0] < this.MIN_MINUTES ? this.FALLBACK_MINUTES : data[0]
+    const workMinutes    = data[1] < this.MIN_MINUTES ? this.FALLBACK_MINUTES : data[1]
+    this.sessionDuration = sessionMinutes * 60 // secondes
+    this.workDuration    = workMinutes * 60 // secondes (durée d'une tranche)
 
     this.startTime   = null
     this.pauseStart  = null
