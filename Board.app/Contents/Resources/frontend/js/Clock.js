@@ -105,7 +105,7 @@ class Clock {
 
   /**
    * @param projet Le projet courant
-   * @param data   [sessionDuration, workDuration] en minutes (projet.sdata['work-clock'])
+   * @param data   [sessionDuration, workDuration] en minutes (projet.service_common_data['work-clock'])
    */
   static get MIN_MINUTES(){ return 1 }
   static get FALLBACK_MINUTES(){ return 15 }
@@ -141,30 +141,6 @@ class Clock {
     this.panel.classList.add('hidden')
   }
 
-  // Force Board au premier plan (échéance proche/atteinte) puis avale le
-  // premier clic ou la première touche qui suivrait, pour que le geste que
-  // l'user était en train de faire ailleurs ne se retrouve pas mal aiguillé
-  // dans Board juste parce que la fenêtre vient de passer devant lui.
-  static alertForeground(){
-    server.send({action: 'run-osascript', 'script-name': 'ActivateApp'}, () => {
-      this.armEventSwallow()
-    })
-  }
-
-  static armEventSwallow(){
-    const opts = {capture: true}
-    const disarm = () => {
-      window.removeEventListener('mousedown', swallow, opts)
-      window.removeEventListener('keydown',   swallow, opts)
-      clearTimeout(safety)
-    }
-    const swallow = (ev) => { stopEvent(ev); disarm() }
-    window.addEventListener('mousedown', swallow, opts)
-    window.addEventListener('keydown',   swallow, opts)
-    // Garde-fou : si rien ne se produit, désarme quand même (jamais de
-    // swallow qui reste armé indéfiniment).
-    const safety = setTimeout(disarm, 4000)
-  }
 
   static get CHECK_INTERVAL_MS(){ return 30000 }
 
@@ -262,9 +238,6 @@ class Clock {
     this._panel.classList.toggle('clock-warning', isWarn)
     this._panel.classList.toggle('clock-danger', isEnd)
     this._stateMarker.textContent = isEnd ? 'danger' : (isWarn ? 'warning' : 'normal')
-
-    if (isWarn && !this.warned) { this.warned = true; this.alertForeground() }
-    if (isEnd && !this.ended)   { this.ended = true; this.alertForeground() }
   }
 
   static setState(state){
@@ -351,7 +324,7 @@ class Clock {
       , todo:       todo
     }, () => {
       // projet.workTime = temps de travail TOTAL cumulé sur le projet —
-      // distinct de sdata['work-clock'] (durée fixe d'une tranche, réglée
+      // distinct de service_common_data['work-clock'] (durée fixe d'une tranche, réglée
       // une fois)
       this.projet.workTime = (this.projet.workTime ?? 0) + this.pendingElapsedMinutes
       this.projet.save(() => {

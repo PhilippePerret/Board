@@ -164,6 +164,7 @@ class ParamDefiner {
       , id: this.id
       , message: this.message
       , defaultValue: defaultValue
+      , toRealValue: (n) => parseInt(n)
       , ouiBtn: {name: 'OK', onclick: this.onIntegerResponse.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
@@ -288,8 +289,8 @@ class ParamDefiner {
    */
 
   // Reçoit la réponse à une question demandant un entier (minutes, etc.)
-  onIntegerResponse(values){
-    this.setValue(parseInt(values[0], 10))
+  onIntegerResponse(value){
+    this.setValue(value)
   }
 
   // Va chercher les informations sur la fenêtre courante dans le Finder

@@ -23,6 +23,8 @@ class Panel {
     this.midData = data.midBtn ?? null
     this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
     this.unscrimmed = data.unscrimmed ?? false // pour ne pas mettre de flou
+    // Une fonction qui peut tranformer la valeur avant de la retourner
+    this.toRealValue = data.toRealValue ?? ((v) => v)
     this.built = false
   }
 
@@ -61,7 +63,9 @@ class Panel {
         if (onlyOne && Array.isArray(returnedValues)) returnedValues = returnedValues[0]
         console.log("[onOui] returnedValues", returnedValues)
         console.log("[onOui] onclick", this.ouiData.onclick)
-        this.ouiData.onclick(returnedValues)
+        const realValue = this.toRealValue(returnedValues)
+        console.log("[onOui] Valeur réelle retournée", realValue)
+        this.ouiData.onclick(realValue)
       } else {
         this.ouiData.onclick()
       }
@@ -90,6 +94,7 @@ class Panel {
 
     this.hide()
     return stopEvent(ev)
+
   }
 
   static HANDLED_KEYS = {

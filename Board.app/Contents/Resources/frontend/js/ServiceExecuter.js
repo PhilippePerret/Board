@@ -37,13 +37,13 @@ class ServiceExecuter {
    * 
    * La principale différence réside dans le fait que pour un service personnalisé,
    * les paramètres se trouvent dans son .params propre. Alors que dans le service
-   * commun, c'est dans le projet.sdata que ça se trouve.
+   * commun, c'est dans le projet.service_common_data que ça se trouve.
    */
   execOnProject(projet){
     if (this.front) {
-      this.front(projet, projet.sdata[this.id])
+      this.front(projet, projet.service_common_data[this.id])
     } else {
-      this.finalyExec(projet.sdata[this.id])
+      this.finalyExec(projet.service_common_data[this.id])
     }
   }
 
