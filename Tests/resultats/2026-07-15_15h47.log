@@ -1,0 +1,188 @@
+Moteur : pont
+Arguments : (aucun — specs/e2e/*.rb)
+Date : 2026-07-15 15h47
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ ajout d'un service au démarrage
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123266j6zs", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-72087-cd2661", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 18 appels, 3.951s)
+  (durée totale de la spec : 9.340s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ panneau de réglages de l'application : édition string + app, persistance après rechargement
+    Error Domain=WKErrorDomain Code=4 "A JavaScript exception occurred" UserInfo={WKJavaScriptExceptionLineNumber=9, WKJavaScriptExceptionMessage=Error: introuvable: app-data-changelog-file, WKJavaScriptExceptionColumnNumber=69, WKJavaScriptExceptionSourceURL=file:///Users/philippeperret/Programmes/Board/Board.app/Contents/Resources/frontend/index.html, NSLocalizedDescription=A JavaScript exception occurred}
+  (osascript : 6 appels, 0.119s)
+  (durée totale de la spec : 1.289s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✗ attribution d'un service puis exécution deux fois de suite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-17841232778zb2", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-72199-5pydfu", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 19 appels, 4.109s)
+  (durée totale de la spec : 9.484s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+✗ attribution d'un service à un projet
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123286wgz9", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-72279-seysim", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 18 appels, 3.923s)
+  (durée totale de la spec : 8.736s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_sans_selection_finder.rb ---
+✗ création d'un nouveau projet SANS SÉLECTION FINDER
+    Timeout d'attente dépassé (4s) — message affiché : ""
+  (osascript : 27 appels, 0.497s)
+  (durée totale de la spec : 4.712s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✗ création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — message affiché : ""
+  (osascript : 27 appels, 0.572s)
+  (durée totale de la spec : 4.773s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✗ création simple d'un nouveau projet
+    Timeout d'attente dépassé (4s) — élément introuvable (prefix) : __panel-
+  (osascript : 44 appels, 0.590s)
+  (durée totale de la spec : 4.657s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/deplacement_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ déplacement du projet
+  (osascript : 12 appels, 0.193s)
+  (durée totale de la spec : 4.311s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_double_service.rb ---
+✓ exécuter un service attaché deux fois de suite (dossier fermé entre les deux)
+  (osascript : 9 appels, 3.307s)
+  (durée totale de la spec : 6.004s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (4s) — message = "Fenêtre ouverte avec succès. (service open-finder-window)"
+  (osascript : 20 appels, 2.808s)
+  (durée totale de la spec : 6.617s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/modification_titre_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ modification du titre d'un projet
+  (osascript : 8 appels, 0.188s)
+  (durée totale de la spec : 1.348s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ouverture_terminal_projet.rb ---
+✗ ouverture d'un Terminal au dossier du projet
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Terminal au premier plan = "Board — prox2.command — osascript ◂ zsh scripts/run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-72709-5b1jj2")
+  (osascript : 5 appels, 0.131s)
+  (durée totale de la spec : 5.039s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_service_glissement.rb ---
+✓ retrait d'un service par glissement hors de la carte projet
+  (osascript : 13 appels, 1.844s)
+  (durée totale de la spec : 3.568s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 20 appels, 7.959s)
+  (durée totale de la spec : 9.803s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✗ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-72913-oe1bkn")
+  (osascript : 25 appels, 2.677s)
+  (durée totale de la spec : 5.737s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_seuils.rb ---
+✓ service commun 'horloge' : seuils d'alerte orange/rouge
+  (osascript : 310 appels, 0.560s)
+  (durée totale de la spec : 61.113s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    CHANGELOG.md sans le texte saisi : "# Changelog
+
+## 2026/07/15
+
+E
+
+"
+  (osascript : 25 appels, 0.216s)
+  (durée totale de la spec : 0.842s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123414f1w1", "service_common_data" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73313-wt5be8"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73313-wt5be8", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.846s)
+  (durée totale de la spec : 8.181s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✗ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123422dy21", "service_common_data" => {"open-a-file" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73406-h3xc2z/manuel.txt"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73406-h3xc2z", "title" => "Projet A", "docu-main-file-html" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73406-h3xc2z/manuel.txt", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.790s)
+  (durée totale de la spec : 6.065s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+✓ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+  (osascript : 23 appels, 3.082s)
+  (durée totale de la spec : 4.427s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : exécution directe, sans dialogue
+  (osascript : 12 appels, 0.451s)
+  (durée totale de la spec : 2.869s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123435at38", "docu-main-file-adoc" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73803-aq1570/docu.adoc", "service_common_data" => {"update-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73803-aq1570/docu.adoc"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73803-aq1570", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 12 appels, 1.152s)
+  (durée totale de la spec : 6.419s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---
+✓ suppression d'un projet
+  (osascript : 9 appels, 0.142s)
+  (durée totale de la spec : 0.736s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. ajout d'un service au démarrage
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123266j6zs", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-72087-cd2661", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 18 appels, 3.951s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+2. panneau de réglages de l'application : édition string + app, persistance après rechargement
+    Error Domain=WKErrorDomain Code=4 "A JavaScript exception occurred" UserInfo={WKJavaScriptExceptionLineNumber=9, WKJavaScriptExceptionMessage=Error: introuvable: app-data-changelog-file, WKJavaScriptExceptionColumnNumber=69, WKJavaScriptExceptionSourceURL=file:///Users/philippeperret/Programmes/Board/Board.app/Contents/Resources/frontend/index.html, NSLocalizedDescription=A JavaScript exception occurred}
+  (osascript : 6 appels, 0.119s)
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+3. attribution d'un service puis exécution deux fois de suite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-17841232778zb2", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-72199-5pydfu", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 19 appels, 4.109s)
+4. attribution d'un service à un projet
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123286wgz9", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-service-20260715-72279-seysim", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 18 appels, 3.923s)
+5. création d'un nouveau projet SANS SÉLECTION FINDER
+    Timeout d'attente dépassé (4s) — message affiché : ""
+  (osascript : 27 appels, 0.497s)
+6. création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — message affiché : ""
+  (osascript : 27 appels, 0.572s)
+7. création simple d'un nouveau projet
+    Timeout d'attente dépassé (4s) — élément introuvable (prefix) : __panel-
+  (osascript : 44 appels, 0.590s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+8. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (4s) — message = "Fenêtre ouverte avec succès. (service open-finder-window)"
+  (osascript : 20 appels, 2.808s)
+9. ouverture d'un Terminal au dossier du projet
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Terminal au premier plan = "Board — prox2.command — osascript ◂ zsh scripts/run-tests — 82×30" (attendu un nom contenant "board-test-project-20260715-72709-5b1jj2")
+  (osascript : 5 appels, 0.131s)
+10. service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "T" (attendu "board-test-project-20260715-72913-oe1bkn")
+  (osascript : 25 appels, 2.677s)
+11. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    CHANGELOG.md sans le texte saisi : "# Changelog
+
+## 2026/07/15
+
+E
+
+"
+  (osascript : 25 appels, 0.216s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+12. service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123414f1w1", "service_common_data" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73313-wt5be8"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73313-wt5be8", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.846s)
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+13. service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123422dy21", "service_common_data" => {"open-a-file" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73406-h3xc2z/manuel.txt"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73406-h3xc2z", "title" => "Projet A", "docu-main-file-html" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73406-h3xc2z/manuel.txt", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.790s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+14. service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784123435at38", "docu-main-file-adoc" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73803-aq1570/docu.adoc", "service_common_data" => {"update-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73803-aq1570/docu.adoc"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-73803-aq1570", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 12 appels, 1.152s)
+
+-------------------
+Success: 9  Failures: 14  Pendings: 0  Test count: 23
+Durée totale (moteur : pont) : 176.070s

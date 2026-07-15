@@ -181,14 +181,6 @@ class ParamDefiner {
     this.waitForWindow(this.q || "Sélectionner l'élément dans le dossier du projet et cliquer sur OK.",
       this.getPathOfFinderSelection.bind(this, transformer)
     )
-
-
-    // new ConfirmDialog({
-    //     title: this.name || "Sélection d'élément dans projet"
-    //   , message: this.message || "Sélectioner un élément dans le dossier du projet."
-    //   , ouiBtn: {name: 'Oui' , onclick: this.getPathOfFinderSelection.bind(this, transformer)}
-    //   , nonBtn: {name: 'Non' , onclick: this.setValue.bind(this, null)}
-    // }).show()
   }
 
   onUrl(){

@@ -294,8 +294,8 @@ class Clock {
     }).show()
   }
 
-  static onChangelogEntered(values){
-    this.pendingChangelog = values[0]
+  static onChangelogEntered(value){
+    this.pendingChangelog = value
     this.promptTodo()
   }
 
@@ -311,8 +311,7 @@ class Clock {
     }).show()
   }
 
-  static onTodoEntered(values){
-    const todo = values[0]
+  static onTodoEntered(todo){
     this.finalizeStop(this.pendingChangelog, todo)
   }
 

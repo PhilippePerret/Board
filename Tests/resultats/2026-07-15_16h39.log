@@ -1,0 +1,20 @@
+Moteur : pont
+Arguments : e2e/execution_services_startup.rb
+Date : 2026-07-15 16h39
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (4s) — message = "Fenêtre ouverte avec succès. (service open-finder-window)"
+  (osascript : 20 appels, 2.842s)
+  (durée totale de la spec : 6.667s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (4s) — message = "Fenêtre ouverte avec succès. (service open-finder-window)"
+  (osascript : 20 appels, 2.842s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 6.667s

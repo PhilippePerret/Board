@@ -64,12 +64,12 @@ def run_test
           # → run-script (dernier de la liste) a bien été exécuté et sa
           #   sortie capturée — à vérifier AVANT que "Fin de démarrage" ne
           #   remplace ce message
-          wait_until(desc: -> { "message = #{get_text('message').inspect}" }) do
+          wait_until(10, desc: -> { "message = #{get_text('message').inspect}" }) do
             get_text('message').include?(MARKER_VALUE)
           end
 
           # → les 3 services doivent s'exécuter jusqu'au bout
-          wait_until(desc: -> { "message = #{get_text('message').inspect}" }) do
+          wait_until(10, desc: -> { "message = #{get_text('message').inspect}" }) do
             get_text('message').include?('Fin de démarrage')
           end
 

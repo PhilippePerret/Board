@@ -58,7 +58,7 @@ class ServiceDefiner {
       definers.forEach(definer => {
         switch(definer.type){
           case 'service-name':
-            this.service.name = definer.value
+            this.service.data.name = definer.value
             break
           case 'project':
             if (Project.current[definer.id] != definer.value){

@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/ajout_service_startup.rb
+Date : 2026-07-15 16h25
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ ajout d'un service au démarrage
+  (osascript : 25 appels, 4.129s)
+  (durée totale de la spec : 5.912s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 5.912s
