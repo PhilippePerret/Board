@@ -30,9 +30,8 @@ class SidePanelDefiner extends SidePanel {
     const oldValue = dParam.currentValue
     const newValue = definers[0].value
     if (oldValue != newValue) {
-      App.data[dParam.id] = newValue
-      dParam.valueDomEl.textContent = App.data[dParam.id]
-      App.saveData()
+      dParam.valueDomEl.textContent = newValue
+      this.updateValue(dParam.id, newValue)
     }
   }
 

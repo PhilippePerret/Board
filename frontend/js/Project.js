@@ -69,6 +69,16 @@ class Project {
     conf.show()
   }
 
+  // Définition des extra-data du projet courant
+  static defineExtraData(){
+    if (this.current) {
+      this.current.definExtraData.call(this.current)
+    } else {
+      erreur("Aucun projet courant.")
+    }
+  }
+
+  // Sélection du projet dans le Finder
   static onProjectSelectedInFinder(){
     server.send({action: 'getInfoFinderSelection', type: 'folder'}, this.onRetourInfoFinderProjet.bind(this))
   }
@@ -199,21 +209,30 @@ class Project {
   }
 
   initServices(){
-    this.services.startup = (this.services.startup ?? []).map(ds => new Service(ds))
-    this.services.others  = (this.services.others  ?? []).map(ds => new Service(ds))
+    this.services.startup = (this.services.startup ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'startup'})))
+    this.services.others  = (this.services.others  ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'others'})))
   }
 
-  /**
-   * OBSOLÈTE
-   */
-  addToAData(values){
-    this.adata = this.adata || {}
-    Object.assign(this.adata, values)
-  }
+  // /**
+  //  * OBSOLÈTE
+  //  */
+  // addToAData(values){
+  //   this.adata = this.adata || {}
+  //   Object.assign(this.adata, values)
+  // }
 
   save(callback){
     const newData = {}
-    this.constructor.PROPERTIES.forEach(prop => Object.assign(newData, {[prop]: this[prop]}))
+    this.constructor.PROPERTIES.forEach(prop => {
+      if (prop === 'services') {
+        newData.services = {
+            startup: (this.services?.startup ?? []).map(s => s.toPersistData())
+          , others:  (this.services?.others  ?? []).map(s => s.toPersistData())
+        }
+      } else {
+        newData[prop] = this[prop]
+      }
+    })
     server.send(
         {action: "save-project", data: newData}
       , this.afterSave.bind(this, callback))
@@ -222,6 +241,13 @@ class Project {
     console.log("retour Project.afterSave et callback", retour, callback)
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
     callback && callback()
+  }
+
+  definExtraData(){
+    if (undefined == this._edatapanel){
+      this._edatapanel = new ProjectExtraDataPanel(this)
+    }
+    this._edatapanel.open()
   }
 
   /**

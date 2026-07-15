@@ -171,3 +171,9 @@ const CUSTOM_SERVICES_DATA = [
 
 
  const ALL_SERVICES_DATA = [...CUSTOM_SERVICES_DATA, ...COMMON_SERVICES_DATA]
+
+// Table de lookup par id (O(1)), pour Service#absData — jamais de find(...)
+// dans ALL_SERVICES_DATA à l'exécution.
+const SERVICES_DATA_TABLE = {}
+CUSTOM_SERVICES_DATA.forEach(d => SERVICES_DATA_TABLE[d.id] = Object.assign({stype: 'custom'}, d))
+COMMON_SERVICES_DATA.forEach(d => SERVICES_DATA_TABLE[d.id] = Object.assign({stype: 'common'}, d))
