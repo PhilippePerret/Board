@@ -1,6 +1,5 @@
 # Test : service commun "work-clock" — seuils d'alerte (orange à 10 min de
-# l'échéance, rouge à l'échéance) et mise au premier plan de Board à chaque
-# seuil.
+# l'échéance, rouge à l'échéance).
 # Source : demande explicite (2026-07-13), suite à la revue de l'UI horloge.
 #
 # Durée de tranche réglée à 1 minute (minimum pratique) pour que le seuil
@@ -15,31 +14,15 @@
 # un marqueur texte dédié aux tests, #clock-state-marker
 # ('normal'/'warning'/'danger'), invisible mais présent dans l'arbre AX.
 #
-# Le premier plan est vérifié seulement au seuil rouge (le seuil orange
-# survient dans une fenêtre de ~250ms après le clic Start, trop courte pour
-# fiabiliser un "activer une autre app avant" côté test) : on bascule
-# Finder au premier plan juste avant le seuil rouge, puis on vérifie que
-# Board revient devant.
-#
-# Ce que cette spec NE couvre PAS : le "swallow" du 1er clic/touche qui
-# suivrait la mise au premier plan (Clock.js#armEventSwallow). Les clics AX
-# utilisés par cette suite ne passent pas par de vrais événements souris
-# (voir commentaire run_tests.sh sur l'overlay) : rien à avaler à tester par
-# ce biais. Non vérifié.
+# La mise au premier plan de Board à l'échéance (Clock.js#alertForeground)
+# a été retirée du code (2026-07-15, plantage app) : plus rien à vérifier
+# de ce côté-là dans cette spec.
 
 require_relative '../../support/helpers'
 
 include BoardTest
 
 SERVICE_DOM_ID = 'work-clock'
-
-def frontmost_app_name
-  `osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true'`.strip
-end
-
-def activate_finder
-  system('osascript', '-e', 'tell application "Finder" to activate', out: File::NULL, err: File::NULL)
-end
 
 def run_test
   id = nil
@@ -73,26 +56,14 @@ def run_test
       get_text('clock-state-marker') == 'warning'
     end
 
-    # → on bascule Finder au premier plan pour pouvoir vérifier que Board
-    #   reprend bien la main tout seul au passage au seuil rouge
-    activate_finder
-    wait_until(5, desc: -> { "app au premier plan = #{frontmost_app_name.inspect}" }) do
-      frontmost_app_name == 'Finder'
-    end
-
     # → seuil rouge : atteint ~1 minute après Start (temps réel, pas de
     #   fast-forward possible)
     wait_until(70, desc: -> { "marqueur d'état = #{get_text('clock-state-marker').inspect}" }) do
       get_text('clock-state-marker') == 'danger'
-    end
-
-    # → Board doit être repassé au premier plan tout seul (ActivateApp)
-    wait_until(5, desc: -> { "app au premier plan = #{frontmost_app_name.inspect}" }) do
-      frontmost_app_name == 'Board'
     end
   end
 ensure
   remove_fixture_project(id) if id
 end
 
-board_test("service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan") { run_test }
+board_test("service commun 'horloge' : seuils d'alerte orange/rouge") { run_test }

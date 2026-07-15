@@ -34,6 +34,7 @@ class Panel {
     this.obj.classList.remove('hidden')
     this.onShow && this.onShow()
   }
+  open(){return this.show()}
   
   hide(){
     unlisten(window, 'keydown', this.onKeyDown.bind(this))
@@ -41,6 +42,7 @@ class Panel {
     // ça ne suffit plus, il faut détruire
     this.obj.remove()
   }
+  close(){return this.hide()}
 
   /**
    * === GESTIONNAIRE D'ÉVÈNEMENTS ===

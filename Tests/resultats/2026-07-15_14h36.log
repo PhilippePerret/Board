@@ -1,0 +1,19 @@
+Moteur : pont
+Arguments : e2e/service_commun_horloge_seuils.rb
+Date : 2026-07-15 14h36
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_seuils.rb ---
+✗ service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan
+    Timeout d'attente dépassé (5s) — app au premier plan = "Finder"
+  (osascript : 308 appels, 0.558s)
+  (durée totale de la spec : 66.452s)
+
+Échecs :
+1. service commun 'horloge' : seuils d'alerte orange/rouge + mise au premier plan
+    Timeout d'attente dépassé (5s) — app au premier plan = "Finder"
+  (osascript : 308 appels, 0.558s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 66.452s

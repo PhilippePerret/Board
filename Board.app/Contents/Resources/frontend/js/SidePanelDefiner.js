@@ -1,5 +1,9 @@
 class SidePanelDefiner extends SidePanel {
 
+  constructor() {
+    super()
+  }
+  
   currentValue(dParam){
     return this.project.get(dParam.id) ?? dParam.default ?? '(non défini)'
   }

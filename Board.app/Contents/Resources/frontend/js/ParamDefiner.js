@@ -165,7 +165,7 @@ class ParamDefiner {
       , message: this.message
       , defaultValue: defaultValue
       , toRealValue: (n) => parseInt(n)
-      , ouiBtn: {name: 'OK', onclick: this.onIntegerResponse.bind(this)}
+      , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
 
@@ -175,6 +175,20 @@ class ParamDefiner {
     this.waitForWindow(this.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
       this.getPathOfFinderSelection.bind(this)
     )
+  }
+  onPathInProject(){
+    const transformer = v => v.replace(Project.current.path + '/', '')
+    this.waitForWindow(this.q || "Sélectionner l'élément dans le dossier du projet et cliquer sur OK.",
+      this.getPathOfFinderSelection.bind(this, transformer)
+    )
+
+
+    // new ConfirmDialog({
+    //     title: this.name || "Sélection d'élément dans projet"
+    //   , message: this.message || "Sélectioner un élément dans le dossier du projet."
+    //   , ouiBtn: {name: 'Oui' , onclick: this.getPathOfFinderSelection.bind(this, transformer)}
+    //   , nonBtn: {name: 'Non' , onclick: this.setValue.bind(this, null)}
+    // }).show()
   }
 
   onUrl(){
@@ -250,6 +264,30 @@ class ParamDefiner {
     }).show()
   }
 
+  // Une image ou une couleur
+  onColorOrImage(){
+    new ConfirmDialog({
+        title: this.title || "Choisir une couleur ou une image"
+      , message: this.q || 'Que voulez-vous choisir comme fond ?'
+      , ouiBtn: {name: 'Couleur', onclick: this.onColor.bind(this)}
+      , nonBtn: {name: 'Image', onclick: this.onImage.bind(this)}
+    }).show()
+  }
+  onImage(){
+    this.onPath()
+  }
+  onColor(){
+    new ColorDialog({
+        title: "Définition d'une couleur"
+      , message: this.q || "Sélectionner une couleur avec le picker ci-dessous."
+      , ouiBtn: {name: 'Celle-là', onclick: this.setValue.bind(this)}
+      , nonBtn: {name: 'Aucune',  onclick: this.setValue.bind(this, null)}
+    }).show()
+  }
+  onIcone(){
+    this.onPath()
+  }
+
   /* 
    *************** FIN DES MÉTHODES on<Type>
    **/
@@ -288,11 +326,6 @@ class ParamDefiner {
    ******** MÉTHODES DE RÉCUPÉRATION DES INFORMATIONS ***********
    */
 
-  // Reçoit la réponse à une question demandant un entier (minutes, etc.)
-  onIntegerResponse(value){
-    this.setValue(value)
-  }
-
   // Va chercher les informations sur la fenêtre courante dans le Finder
   // Puis poursuit la définition
   /**
@@ -329,13 +362,19 @@ class ParamDefiner {
   }
 
 
-  // Va cherche le chemin d'accès de la sélection du finder
-  getPathOfFinderSelection(retour){
+  /**
+   *  Va cherche le chemin d'accès de la sélection du finder
+   *  
+   * @param transformer Function optionnelle de transformation du path
+   */
+  getPathOfFinderSelection(transformer = null, retour){
     if (undefined == retour) {
-      server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this))
+      server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, this.getPathOfFinderSelection.bind(this, transformer))
     } else {
       // console.log("retour", retour)
-      this.setValue(retour.data.filepath)
+      var finalvalue = retour.data.filepath
+      if (transformer) finalvalue = transformer(finalvalue)
+      this.setValue(finalvalue)
     }
   }
 

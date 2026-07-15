@@ -51,6 +51,54 @@ class TextFieldDialog extends Panel {
   }
 }
 
+// Pour faire une fenêtre présentant un picker de couleur, avec aperçus
+class ColorDialog extends Panel {
+  constructor(data){
+    super(data)
+    this.content = this.buildField()
+    this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
+  }
+
+  buildField(){
+    const div = DCreate('DIV', {style: 'padding: 1em;'})
+    const color = this.defaultValue || '#ff0000'
+
+    const input = DCreate('INPUT', {
+        type: 'color', id: '__' + this.id + '__', value: color
+      , style: 'display:block;margin:0 auto;width:120px;height:60px;border:none;padding:0;'
+    })
+    listen(input, 'input', this.onColorChange.bind(this))
+    div.appendChild(input)
+
+    const frame = DCreate('FIELDSET', {style: 'margin-top:1.5em;border:1px solid #999;border-radius:6px;padding:1em;'})
+    frame.appendChild(DCreate('LEGEND', {text: 'Échantillons', style: 'padding:0 0.5em;color:#999;'}))
+
+    const previews = DCreate('DIV', {style: 'display:flex;justify-content:space-around;align-items:center;'})
+
+    // 1) texte de cette couleur sur blanc
+    this.onWhite = DCreate('DIV', {text: 'Aa', style: `background:#fff;color:${color};padding:0.5em 1em;font-size:1.4em;`})
+    // 2) le même sur noir
+    this.onBlack = DCreate('DIV', {text: 'Aa', style: `background:#000;color:${color};padding:0.5em 1em;font-size:1.4em;`})
+    // 3) un rond plein de cette couleur
+    this.disc    = DCreate('DIV', {style: `width:64px;height:64px;border-radius:50%;background:${color};`})
+
+    previews.appendChild(this.onWhite)
+    previews.appendChild(this.onBlack)
+    previews.appendChild(this.disc)
+    frame.appendChild(previews)
+    div.appendChild(frame)
+
+    return div
+  }
+
+  onColorChange(ev){
+    const color = ev.target.value
+    this.onWhite.style.color      = color
+    this.onBlack.style.color      = color
+    this.disc.style.background    = color
+  }
+}
+
 // Pour faire une fenêtre présentant un menu de choix (et seulement ça)
 class SelectDialog extends Panel {
   constructor(data){

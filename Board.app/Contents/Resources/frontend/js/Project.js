@@ -71,7 +71,7 @@ class Project {
   // Définition des extra-data du projet courant
   static defineExtraData(){
     if (this.current) {
-      this.current.definExtraData.call(this.current)
+      this.current.defineExtraData.call(this.current)
     } else {
       erreur("Aucun projet courant.")
     }
@@ -198,6 +198,7 @@ class Project {
   constructor(data){
     console.log("data", data)
     this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
+    this.data = data
     if (!this.id ) this.id = Project.uniqId()
     if (!this.title) this.title = '-projet sans titre-'
     if (!this.path ) raise("Le path du projet est obligatoire.")
@@ -206,6 +207,8 @@ class Project {
     this.initServices()
     
   }
+
+  get(key){ return this[key] ?? this.data[key]}
 
   initServices(){
     this.services.startup = (this.services.startup ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'startup'})))
@@ -242,7 +245,7 @@ class Project {
     callback && callback()
   }
 
-  definExtraData(){
+  defineExtraData(){
     if (undefined == this._edatapanel){
       this._edatapanel = new ProjectExtraDataPanel(this)
     }
@@ -366,7 +369,11 @@ class Project {
     this.save()
   }
 
-
+  buildIcon(){
+    const iconPath = `file://${this.path}/${this.icon}`
+    const icon = DCreate('IMG', {src: iconPath, style: 'width:32px;float:left;margin-right:0.4em'})
+    return icon
+  }
 
   buildCard(){
     if (this.obj) this.obj.remove()
@@ -376,9 +383,7 @@ class Project {
     if (this.background) div.style.background = this.background
     this.obj = div
     if (this.icon){
-      const iconPath = `file://${this.path}/${this.icon}`
-      const icon = DCreate('IMG', {src: iconPath, style: 'width:32px;float:left;margin-right:0.4em'})
-      div.appendChild(icon)
+      div.appendChild(this.buildIcon())
     }
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
     this.divTitle = tit
