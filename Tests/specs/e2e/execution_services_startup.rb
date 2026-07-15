@@ -2,11 +2,12 @@
 # (pas juste attachement/apparition/retrait, testés ailleurs), avec 3
 # services différents, vérifiée deux fois : tout de suite après attachement,
 # puis à nouveau après rechargement de l'app (Project.js#startStartupServices
-# les exécute l'un après l'autre, dans l'ordre, avec 2s entre chaque).
+# les exécute l'un après l'autre, dès que chacun est achevé — sans délai fixe
+# entre eux).
 #
 # Demande explicite (2026-07-11) :
 #   - attacher open-folder-project + open-finder-window (dossier quelconque,
-#     pas celui du projet) + run-script (script simple, valeur testable)
+#     pas celui du projet) + run-script (script simple, effet vérifiable)
 #   - GO!
 #   - fermer toutes les fenêtres Finder
 #   - recharger l'app
@@ -16,13 +17,14 @@
 # Attachement fait via fixtures (pas glisser-déposer réel — déjà testé dans
 # attribution_service.rb/ajout_service_startup.rb, pas l'objet ici).
 #
-# run-script (backend/scripts/RunScript.rb) exécute réellement le script .rb
-# donné et capture sa sortie comme "message" affiché — un simple "puts"
-# suffit, rien n'est ouvert (ni Terminal, ni fichier à nettoyer). Le message
-# est remplacé (pas accumulé) à chaque étape : run-script étant le DERNIER
-# service de la liste (ordre confirmé par Project.js#startStartupServices),
-# son message reste affiché ~2s avant d'être remplacé par "Fin de
-# démarrage." — on le vérifie donc AVANT ce dernier message, pas après.
+# Ce qui est vérifié pour chaque service, c'est son EFFET réel, pas un
+# message affiché à l'écran (transitoire, plus de fenêtre de temps garantie
+# depuis que les services s'enchaînent sans délai) :
+#   - open-folder-project / open-finder-window -> fenêtre Finder ouverte
+#   - run-script (backend/scripts/RunScript.rb) -> écrit un fichier
+#     (create_fixture_run_script), on vérifie son contenu
+# Seul le message final "Fin de démarrage" (stable, pas transitoire) est
+# attendu à l'écran, comme confirmation de fin de traitement.
 
 require_relative '../../support/helpers'
 
@@ -43,6 +45,7 @@ def run_test
     Dir.mktmpdir('board-test-otherfolder-') do |other_dir|
       Dir.mktmpdir('board-test-script-') do |script_dir|
         script_path = create_fixture_run_script(script_dir, MARKER_VALUE)
+        output_path = fixture_run_script_output_path(script_path)
 
         service1 = fixture_open_folder_service(fixture_dir, name: 'Ouvrir projet', type: 'startup')
         service2 = fixture_open_finder_window_service(other_dir, name: 'Ouvrir dossier quelconque', type: 'startup')
@@ -59,16 +62,10 @@ def run_test
         wait_until(desc: -> { 'bouton GO! absent alors que 3 services au démarrage sont attachés' }) { exists?(btn_startup) }
 
         go_and_verify = lambda do
+          File.delete(output_path) if File.exist?(output_path)
           click(btn_startup)
 
-          # → run-script (dernier de la liste) a bien été exécuté et sa
-          #   sortie capturée — à vérifier AVANT que "Fin de démarrage" ne
-          #   remplace ce message
-          wait_until(10, desc: -> { "message = #{get_text('message').inspect}" }) do
-            get_text('message').include?(MARKER_VALUE)
-          end
-
-          # → les 3 services doivent s'exécuter jusqu'au bout
+          # → confirmation de fin de traitement (message stable, pas transitoire)
           wait_until(10, desc: -> { "message = #{get_text('message').inspect}" }) do
             get_text('message').include?('Fin de démarrage')
           end
@@ -77,6 +74,10 @@ def run_test
           #   leur propre fenêtre Finder (pas la même, dossiers différents)
           check_finder_window_open_on(fixture_dir)
           check_finder_window_open_on(other_dir)
+
+          # → run-script a bien été exécuté (effet persistant, pas un message à l'écran)
+          raise "#{output_path} pas créé par run-script" unless File.exist?(output_path)
+          raise "#{output_path} contenu inattendu : #{File.read(output_path).inspect}" unless File.read(output_path) == MARKER_VALUE
         end
 
         go_and_verify.call

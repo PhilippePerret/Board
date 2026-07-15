@@ -136,13 +136,6 @@ const CUSTOM_SERVICES_DATA = [
   },
 
   {
-      id: 'open-terminal'
-    , name: 'Ouvrir un Terminal au dossier du projet'
-    , scType: '.rb'
-    , params: []
-  },
-
-  {
       id: 'open-URL'
     , name: 'Ouvrir l’URL…'
     , params: [

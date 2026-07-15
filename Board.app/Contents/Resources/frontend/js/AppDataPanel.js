@@ -6,7 +6,7 @@
 class AppDataPanel extends SidePanelDefiner {
   get title(){ return 'Réglages de l’application' }
   get domId(){ return 'app-data-panel' }
-  get prefixDom() { return 'project-extradata'}
+  get prefixDom() { return 'app-data'}
   get PARAMS_DATA() { return APP_DATA }
   
   currentValue(dParam){
@@ -14,7 +14,7 @@ class AppDataPanel extends SidePanelDefiner {
   }
 
   updateValue(id, value){
-    App.data[id] = Value
+    App.data[id] = value
     App.saveData()
   }
 

@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : e2e/execution_services_startup.rb
+Date : 2026-07-15 17h05
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = "Fin de démarrage du projet."
+  (osascript : 49 appels, 2.876s)
+  (durée totale de la spec : 12.119s)
+
+Échecs :
+1. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = "Fin de démarrage du projet."
+  (osascript : 49 appels, 2.876s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 12.119s

@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/creation_nouveau_projet_selection_fichier.rb
+Date : 2026-07-15 18h01
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✓ création d'un nouveau projet, sélection Finder = un fichier
+  (osascript : 6 appels, 0.804s)
+  (durée totale de la spec : 0.935s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.935s

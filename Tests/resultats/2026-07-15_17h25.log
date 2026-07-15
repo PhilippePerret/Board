@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : e2e/service_commun_init_documentation.rb
+Date : 2026-07-15 17h25
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+✗ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784129131zi5g", "service_common_data" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-4589-y21vh6"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-4589-y21vh6", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.818s)
+  (durée totale de la spec : 7.395s)
+
+Échecs :
+1. service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784129131zi5g", "service_common_data" => {"init-documentation" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-4589-y21vh6"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-4589-y21vh6", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.818s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 7.395s

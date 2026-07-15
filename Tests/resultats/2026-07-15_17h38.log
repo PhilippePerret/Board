@@ -1,0 +1,21 @@
+Moteur : pont
+Arguments : e2e/app_data_panel.rb
+Date : 2026-07-15 17h38
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✗ panneau de réglages de l'application : édition string + app, persistance après rechargement
+    Error Domain=WKErrorDomain Code=4 "A JavaScript exception occurred" UserInfo={WKJavaScriptExceptionLineNumber=9, WKJavaScriptExceptionMessage=Error: introuvable: app-data-changelog-file, WKJavaScriptExceptionColumnNumber=69, WKJavaScriptExceptionSourceURL=file:///Users/philippeperret/Programmes/Board/Board.app/Contents/Resources/frontend/index.html, NSLocalizedDescription=A JavaScript exception occurred}
+  (osascript : 6 appels, 0.084s)
+  (durée totale de la spec : 1.264s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+1. panneau de réglages de l'application : édition string + app, persistance après rechargement
+    Error Domain=WKErrorDomain Code=4 "A JavaScript exception occurred" UserInfo={WKJavaScriptExceptionLineNumber=9, WKJavaScriptExceptionMessage=Error: introuvable: app-data-changelog-file, WKJavaScriptExceptionColumnNumber=69, WKJavaScriptExceptionSourceURL=file:///Users/philippeperret/Programmes/Board/Board.app/Contents/Resources/frontend/index.html, NSLocalizedDescription=A JavaScript exception occurred}
+  (osascript : 6 appels, 0.084s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.264s

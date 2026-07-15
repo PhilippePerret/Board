@@ -4,7 +4,8 @@
 # Param (frontend/js/ServiceData.js, groupe "Documentation") :
 #   - docu-main-file (type 'path', PAS absolute) : fichier .adoc principal
 #     sélectionné dans le Finder -> backend/scripts/UpdateDocumentation.rb
-#     reçoit [chemin_fichier, nom_fichier].
+#     reçoit [chemin_fichier] (chemin seul) ; le nom de fichier est déduit
+#     du chemin par le script lui-même (File.basename).
 #
 # UpdateDocumentation.rb fait `cd <dossier> && open . && asciidoctor <nom>` :
 # le `&&` place `open .` AVANT `asciidoctor`, donc la fenêtre Finder
@@ -50,10 +51,10 @@ def run_test
       end
     end
 
-    # → service_common_data enregistrée : [chemin_fichier, nom_fichier]
+    # → service_common_data enregistrée : [chemin_fichier] (chemin seul)
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       service_common_data = read_project_card(id).dig('service_common_data', 'update-documentation')
-      service_common_data.is_a?(Array) && service_common_data[1] == 'docu.adoc'
+      service_common_data.is_a?(Array) && File.realpath(service_common_data[0]) == File.realpath(main_file)
     end
 
     finder_close_all_windows

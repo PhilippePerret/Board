@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/app_data_panel.rb
+Date : 2026-07-15 17h52
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+✓ panneau de réglages de l'application : édition string + app, persistance après rechargement
+  (osascript : 21 appels, 0.230s)
+  (durée totale de la spec : 3.883s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 3.883s

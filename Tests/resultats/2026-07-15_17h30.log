@@ -1,0 +1,21 @@
+Moteur : pont
+Arguments : e2e/service_commun_open_documentation.rb
+Date : 2026-07-15 17h30
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784129411a9lb", "service_common_data" => {"open-a-file" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-6690-nv7ivl/manuel.txt"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-6690-nv7ivl", "title" => "Projet A", "docu-main-file-html" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-6690-nv7ivl/manuel.txt", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.796s)
+  (durée totale de la spec : 6.046s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784129411a9lb", "service_common_data" => {"open-a-file" => ["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-6690-nv7ivl/manuel.txt"]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-6690-nv7ivl", "title" => "Projet A", "docu-main-file-html" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260715-6690-nv7ivl/manuel.txt", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 10 appels, 0.796s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 6.046s

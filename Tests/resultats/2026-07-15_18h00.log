@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/creation_nouveau_projet_sans_selection_finder.rb
+Date : 2026-07-15 18h00
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_sans_selection_finder.rb ---
+✓ création d'un nouveau projet SANS SÉLECTION FINDER
+  (osascript : 6 appels, 0.666s)
+  (durée totale de la spec : 0.799s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.799s

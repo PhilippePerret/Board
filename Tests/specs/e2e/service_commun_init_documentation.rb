@@ -56,10 +56,10 @@ def run_test
     intro_content = File.read(first_adoc)
     raise "introduction.adoc sans titre '== Introduction ==' : #{intro_content.inspect}" unless intro_content.start_with?('== Introduction ==')
 
-    # → service_common_data enregistrée : [dossier_conteneur, nom_dossier_conteneur]
+    # → service_common_data enregistrée : [dossier_conteneur] (chemin seul)
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       service_common_data = read_project_card(id).dig('service_common_data', 'init-documentation')
-      service_common_data.is_a?(Array) && service_common_data[1] == File.basename(fixture_dir)
+      service_common_data.is_a?(Array) && File.realpath(service_common_data[0]) == File.realpath(fixture_dir)
     end
 
     # - recharger l'application : re-sélection, nouveau clic sur le service

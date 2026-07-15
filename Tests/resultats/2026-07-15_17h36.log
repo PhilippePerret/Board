@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/service_commun_update_documentation.rb
+Date : 2026-07-15 17h36
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+✓ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.685s)
+  (durée totale de la spec : 2.818s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 2.818s

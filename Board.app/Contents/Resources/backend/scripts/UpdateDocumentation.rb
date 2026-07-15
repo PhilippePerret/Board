@@ -3,7 +3,7 @@ begin
   table = {ok: true, message: nil, error: nil}
 
   MAIN_FILE_PATH = ARGV[0]
-  MAIN_FILE_NAME = ARGV[1]
+  MAIN_FILE_NAME = File.basename(MAIN_FILE_PATH)
   FOLDER_MAIN_FILE = File.dirname(MAIN_FILE_PATH)
   MACROS_FILE = File.join(FOLDER_MAIN_FILE, 'macros.rb')
   cmd = "cd '#{FOLDER_MAIN_FILE}' && open . && asciidoctor "
