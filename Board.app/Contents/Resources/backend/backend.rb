@@ -137,6 +137,18 @@ begin
     ok = returned_data["ok"] if returned_data.key?("ok")
     error = returned_data["error"] if returned_data.key?("error") && returned_data["error"]
     returned_message = returned_data["message"] if returned_data.key?("message") && returned_data["message"]  
+
+
+  # Pour récupérer un projet des archives
+  when 'retreive-project-from-archives'
+    ok = true
+    returned_data = move_project_out_to_projects_in(request["projectId"])
+    
+  # Pour obtenir la liste des projets en archives (comme une liste
+  # de [id, title] pour select
+  when 'get-options-for-projects-out'
+    ok = true
+    returned_data = options_for_archived_project
   # action inconnue => ERRREUR
   else 
     ok = false

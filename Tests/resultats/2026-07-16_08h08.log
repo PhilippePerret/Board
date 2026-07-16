@@ -1,0 +1,12 @@
+Moteur : pont
+Arguments : specs/e2e/creation_nouveau_projet_selection_fichier.rb
+Date : 2026-07-16 08h08
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✓ création d'un nouveau projet, sélection Finder = un fichier
+  (osascript : 6 appels, 0.864s)
+  (durée totale de la spec : 0.997s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.997s

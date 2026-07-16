@@ -29,6 +29,11 @@ class Dialog {
     // qu'un seul champ d'édition)
     this.FId  = `__${this.id}__`
     this.FDomId = `#${this.FId}`
+    // Si aucune valeur de renvoi n'est défini, on met la valeur par défaut
+    if (this.returnedIdValues === null){
+      this.returnedIdValues = [this.FId]
+    }
+    
     this.built = false
   }
 
@@ -56,23 +61,20 @@ class Dialog {
       if (this.returnedIdValues) {
         const onlyOne = this.returnedIdValues.length == 1
         this.returnedIdValues.forEach(idValue => {
-          console.log("[onOui] idValue = ", idValue)
           const el = DGet(this.FDomId, this.obj)
-          let value = el.value
-          if (el.TagName == 'SELECT') { value = el.options[el.selectedIndex].value }
-          returnedValues.push(value)
+          if (el) {
+            let value = el.value
+            if (el.TagName == 'SELECT') { value = el.options[el.selectedIndex].value }
+            returnedValues.push(value)
+          }
         })
         if (onlyOne && Array.isArray(returnedValues)) returnedValues = returnedValues[0]
-        console.log("[onOui] returnedValues", returnedValues)
-        console.log("[onOui] onclick", this.ouiData.onclick)
         const realValue = this.toRealValue(returnedValues)
-        console.log("[onOui] Valeur réelle retournée", realValue)
         this.ouiData.onclick(realValue)
       } else {
         this.ouiData.onclick()
       }
     } else {
-      console.error("this.ouiData.onclick", this.ouiData.onclick)
       error('this.ouiData.onclick n’est pas une fonction')
     }
     this.hide()
@@ -131,10 +133,13 @@ class Dialog {
     const footer = DCreate('DIV', {class:'footer'})
     this.nonBtn = DCreate('BUTTON', {id: 'btn-non', class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
     footer.appendChild(this.nonBtn)
+    this.nonBtn.disabled = (this.nonData?.enable === false)
     this.midBtn = DCreate('BUTTON', {id: 'btn-mid', class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
     footer.appendChild(this.midBtn)
+    this.midBtn.disabled = (this.midData?.enable === false)
     this.ouiBtn = DCreate('BUTTON', {id: 'btn-oui', class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
     footer.appendChild(this.ouiBtn)
+    this.ouiBtn.disabled = (this.ouiData?.enable === false)
 
     div.appendChild(footer)
     this.obj = scrim

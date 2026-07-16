@@ -58,6 +58,8 @@ div.services-panel .services-listing {
   margin-bottom: 8px;
   background-color: rgb(70, 69, 69);
 }
+.service:active { outline: auto; }
+
 #custom-services-panel .services-listing .service {
   cursor: move;
 }

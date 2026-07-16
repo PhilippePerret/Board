@@ -1,0 +1,11 @@
+
+===== Propriétés des boutons =====
+
+|====
+| **Property** | **Description** | **Values**
+
+| `name`        | Nom du bouton   | String
+| `onclick`     | Fonction appelée au click, qui reçoit la valeur | Function
+| `width`       | Largeur du bouton | String ('120px')
+| `enable`      | Accessibilité du bouton. Si faux, on ne peut pas le jouer, mais il est affiché | Boolean
+|====

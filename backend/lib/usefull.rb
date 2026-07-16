@@ -32,6 +32,38 @@ def project_path(project_id)
   File.join(PROJECT_CARD_FOLDER, "#{project_id}.yaml")
 end
 
+def options_for_archived_project
+  new_projects_out = []
+  options = APP_DATA['projects-out'].map do |pid|
+    card_path = File.join(PROJECT_CARD_FOLDER, "#{pid}.yaml")
+    if File.exist?(card_path)
+      new_projects_out << pid
+      dataproj = YAML.safe_load(IO.read card_path)
+      [pid, dataproj['title']]
+    end
+  end.compact
+  if new_projects_out != APP_DATA['projects-out']
+    APP_DATA['projects-out'] = new_projects_out
+    save_app_data
+  end
+  return options
+end
+
+def move_project_out_to_projects_in(pid)
+  card_path = File.join(PROJECT_CARD_FOLDER, "#{pid}.yaml")
+  if APP_DATA['projects-out'].delete(pid) && File.exist?(card_path)
+    APP_DATA['projects-in'] << pid
+    save_app_data
+    return {
+      project: YAML.safe_load(IO.read(card_path)),
+      newProjectsIn: APP_DATA['projects-in'],
+      newProjectsOut: APP_DATA['projects-out']
+    }
+  else
+    {error: "Projet #{pid} introuvable dans les archives."}
+  end
+end
+
   
   COMMAND_PER_EXT = {
   '.scpt' => 'osascript',

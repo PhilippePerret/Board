@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : specs/e2e/creation_nouveau_projet_selection_fichier.rb
+Date : 2026-07-16 07h14
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✗ création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — élément introuvable : btn-oui
+  (osascript : 41 appels, 0.043s)
+  (durée totale de la spec : 4.255s)
+
+Échecs :
+1. création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — élément introuvable : btn-oui
+  (osascript : 41 appels, 0.043s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 4.255s

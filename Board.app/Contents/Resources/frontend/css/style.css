@@ -22,7 +22,11 @@ button {
   padding: 4px 32px;
   white-space: nowrap;
   margin: 0 10px;
+  background-color: white;
+  border: 1px solid white;
 }
+button:active { outline: auto; }
+
 fieldset {
   border: 1px solid #CCC;
   border-radius: 5px;

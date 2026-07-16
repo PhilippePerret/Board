@@ -58,14 +58,14 @@ class Project {
    */
   static addProject(){
     reset()
-    const conf = new ConfirmDialog({
-      title: "Importation d'un nouveau projet", 
-      message: "Sélectionner le dossier du projet dans le Finder, puis cliquer “OK”.",
-      width: '580px',
-      ouiBtn: {title: 'OK', onclick: this.onProjectSelectedInFinder.bind(this), width: '160px'},
-      nonBtn: {title: "Renoncer", onclick: null, width: '160px'},
-    })
-    conf.show()
+    new ConfirmDialog({
+        title: "Importation d'un nouveau projet"
+      , message: "Sélectionner le dossier du projet dans le Finder, puis cliquer “OK”."
+      , width: '580px'
+      , ouiBtn: {name: 'OK', onclick: this.onProjectSelectedInFinder.bind(this), width: '160px'}
+      , midBtn: {name: 'Archives…', onclick: ProjectArchives.chooseArchivedProject.bind(ProjectArchives), enable: App.getData('projects-out').length > 0}
+      , nonBtn: {name: "Renoncer", onclick: null, width: '160px'}
+    }).show()
   }
 
   // Définition des extra-data du projet courant

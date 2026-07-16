@@ -21,6 +21,11 @@
 --   close-all-windows           (ferme toutes les fenêtres Finder actuelles —
 --     à utiliser seulement après un snapshot-windows, pour repartir propre
 --     en début de suite ; la restauration se fait via restore-windows)
+--   close-windows-except <ids>  (ferme toute fenêtre Finder dont l'id n'est
+--     PAS dans la liste <ids> séparée par virgules — ids obtenus via
+--     window-ids AVANT la suite ; ne touche jamais aux fenêtres déjà
+--     ouvertes avant la suite, contrairement à snapshot/restore qui les
+--     ferme puis les recrée)
 --   snapshot-windows            (dossier + position de TOUTES les fenêtres
 --     Finder ouvertes, une ligne par fenêtre, champs séparés par tabulation :
 --     targetPath, bounds "x1,y1,x2,y2", sélection (chemins séparés par
@@ -117,6 +122,37 @@ on run argv
 			close every window
 		end tell
 		return "ok"
+
+	else if theAction is "close-windows-except" then
+		set keepIdsText to ""
+		if (count of argv) > 1 then set keepIdsText to item 2 of argv
+		set keepIds to {}
+		if keepIdsText is not "" then
+			set AppleScript's text item delimiters to ","
+			set keepIds to text items of keepIdsText
+			set AppleScript's text item delimiters to ""
+		end if
+		set diag to ""
+		tell application "Finder"
+			set allIds to id of every window
+		end tell
+		repeat with wid in allIds
+			set widText to wid as string
+			if keepIds does not contain widText then
+				tell application "Finder"
+					try
+						close (first window whose id is wid)
+					on error errMsg
+						set diag to diag & "fenêtre " & widText & " : " & errMsg & linefeed
+					end try
+				end tell
+			end if
+		end repeat
+		if diag is "" then
+			return "ok"
+		else
+			return "ok (avec erreurs)" & linefeed & diag
+		end if
 
 	else if theAction is "snapshot-windows" then
 		-- Essai précédent (2026-07-11) : "set index of w to 1" seul ne change

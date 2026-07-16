@@ -26,6 +26,9 @@ class App {
   static getData(key){
     return this.data[key]
   }
+  static setData(key, value){
+    Object.assign(this.data, {[key]: value})
+  }
 
   static get saveData(){ return this._savedata || (this._savedata = debounce(this.execSaveData.bind(this), 1000))}
   static execSaveData(){

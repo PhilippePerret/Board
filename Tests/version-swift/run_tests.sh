@@ -36,11 +36,11 @@ MAIN_TESTS_DIR="$(dirname "$VTEST_DIR")"
 SPECS_DIR="$MAIN_TESTS_DIR/specs"
 APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 
-# Snapshot de toutes les fenêtres Finder ouvertes AVANT toute action de la
-# suite (dossier, position, sélection) : restauré à l'identique en teardown,
-# quel que soit ce que les tests ont ouvert/fermé entre-temps.
-FINDER_SNAPSHOT=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" snapshot-windows 2>/dev/null || true)
-osascript "$MAIN_TESTS_DIR/support/finder.applescript" close-all-windows >/dev/null 2>&1 || true
+# Ids des fenêtres Finder déjà ouvertes AVANT toute action de la suite — on
+# n'y touche JAMAIS ; en teardown, on ferme uniquement les fenêtres dont l'id
+# n'est pas dans cette liste (celles ouvertes par les tests, y compris celles
+# qu'un test en échec aurait laissées traîner).
+INITIAL_FINDER_WINDOW_IDS=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" window-ids 2>/dev/null | tr '\n' ',' | sed 's/,$//' || true)
 
 # Fenêtre plein écran, sans titre ni bouton, pendant toute la suite
 # (Tests/support/overlay.swift, compilé une fois) : pilotée par une FIFO,
@@ -97,7 +97,10 @@ quit_app() {
 teardown() {
   quit_app
   restore_board
-  osascript "$MAIN_TESTS_DIR/support/finder.applescript" restore-windows "$FINDER_SNAPSHOT" >/dev/null 2>&1 || true
+  finder_cleanup=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" close-windows-except "$INITIAL_FINDER_WINDOW_IDS" 2>&1) || true
+  if [ -n "$finder_cleanup" ] && [ "$finder_cleanup" != "ok" ]; then
+    echo "Nettoyage fenêtres Finder : $finder_cleanup"
+  fi
   echo "SET MERCI." >&3 2>/dev/null || true
   sleep 2
   echo "QUIT" >&3 2>/dev/null || true

@@ -1,17 +1,198 @@
 === fonctionnalités ===
 
+_TD = Todo, à faire_
+_Docu_ : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n'est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
+_Man_: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est décrite dans le manuel utilisateur, avec un lien pour s'y rendre.
+
 [cols="2,4,2,1,1"]
 |====
 | **Nom** | **Description** | **Test** | **Docu** | **Man**
 
+5+| Les projets
+
 | Ajout d'un projet
 | Le bouton ”+” qui permet d'ajouter un projet à Board.
 | Oui
-| -
-| -
+| TD
+| TD
 
+| Définition des extra-data d'un projet
+| par le bouton "Extra-data"
+| TD
+| TD
+| TD
+
+| Suppression d'un projet
+| Retire la carte du projet de Board (fichier de carte détruit)
+| Oui
+| TD
+| TD
+
+| Modification du titre d'un projet
+| Renommage du titre affiché sur la carte projet
+| Oui
+| TD
+| TD
+
+| Déplacement d'un projet
+| Réorganisation des cartes projet par glisser-déposer
+| Oui
+| TD
+| TD
+
+5+| Les services
+
+| Attribution d'un service à un projet
+| Glisser-déposer un service (commun ou personnalisé) depuis le panneau de services jusqu'à une carte projet
+| Oui
+| TD
+| TD
+
+| Retrait d'un service d'un projet
+| Glisser-déposer un service attribué hors de la carte projet pour le retirer
+| Oui
+| TD
+| TD
+
+| Ajout d'un service aux "services au démarrage"
+| Glisser-déposer un service jusqu'à la zone "Services au démarrage" d'un projet
+| Oui
+| TD
+| TD
+
+| Exécution des services au démarrage
+| Lancement automatique des services attribués à un projet lors de son ouverture/activation
+| Oui
+| TD
+| TD
+
+| Ouverture du dossier du projet
+| Service commun : ouvre une fenêtre Finder positionnée/dimensionnée sur le dossier du projet
+| Oui
+| TD
+| TD
+
+| Démarrage de l'horloge de travail
+| Service commun "work-clock" : minuteur de session/tranche de travail
+| Oui
+| TD
+| TD
+
+| Édition de la documentation
+| Service commun : ouvre le dossier de documentation du projet dans l'éditeur configuré
+| Oui
+| TD
+| TD
+
+| Ouverture de la documentation
+| Service commun "open-a-file" : ouvre le fichier principal du manuel (html/pdf) du projet
+| Oui
+| TD
+| TD
+
+| Initialisation de la documentation
+| Service commun "init-documentation" : crée la structure de documentation dans un dossier choisi
+| Oui
+| TD
+| TD
+
+| Actualisation de la documentation
+| Service commun "update-documentation" : régénère la documentation à partir du fichier .adoc principal
+| Oui
+| TD
+| TD
+
+| Ouverture d'un Terminal au dossier du projet
+| Service commun "open-terminal-at-folder"
+| Oui
+| TD
+| TD
+
+| Retrait des services au démarrage
+| Glisser un service hors de la zone "Services au démarrage" ; le bouton "GO!" disparaît quand il n'en reste plus
+| Oui
+| TD
+| TD
+
+| Exécution répétée d'un service attribué
+| Relancer un service déjà attribué à un projet plusieurs fois de suite
+| Oui
+| TD
+| TD
+
+| Panneau des réglages de l'application
+| Édition des données globales de l'app (champs string/app), persistantes après rechargement
+| Oui
+| TD
+| TD
+
+| Création d'un projet sans sélection Finder
+| Cas d'erreur : clic sur "OK" sans avoir sélectionné de dossier dans le Finder
+| Oui
+| TD
+| TD
+
+| Ouverture d'iTerm au dossier du projet
+| Service commun "open-iterm-at-folder"
+| TD
+| TD
+| TD
+
+| Ouverture du projet dans VSCode
+| Service commun "open-in-vscode"
+| TD
+| TD
+| TD
+
+| Création d'un projet, sélection Finder = un fichier
+| Cas d'erreur : la sélection Finder doit être un dossier, pas un fichier
+| Oui
+| TD
+| TD
+
+| Seuils de l'horloge de travail
+| Alertes/changement d'état de "work-clock" au franchissement des seuils de durée
+| Oui
+| TD
+| TD
+
+| Fin de séance d'horloge : changelog + todo
+| À l'arrêt de "work-clock", saisie d'une entrée de changelog puis d'une todo, écrites dans CHANGELOG.md/TODO.md du projet
+| Oui
+| TD
+| TD
+
+5+| Les services personnalisés
+
+| Ouverture d'une fenêtre dans le Finder
+| Service personnalisé "open-finder-window" : ouvre une fenêtre Finder aux position/taille/sidebar définis
+| Oui
+| TD
+| TD
+
+| Jouer un script
+| Service personnalisé "run-script" : exécute un script choisi
+| Oui
+| TD
+| TD
+
+| Versionner un fichier/dossier
+| Service personnalisé "file-versioning" : incrémente le numéro de version (patch/mineure/majeure), archive optionnelle
+| TD
+| TD
+| TD
+
+| Ouvrir une URL
+| Service personnalisé "open-URL"
+| TD
+| TD
+| TD
+
+| Chronomètre
+| Service personnalisé "run-chronometre" : mesure un temps, option d'enregistrement du temps de travail
+| TD
+| TD
+| TD
 
 |====
 
-_Docu_ : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n'est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
-_Man_: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est décrite dans le manuel utilisateur, avec un lien pour s'y rendre.

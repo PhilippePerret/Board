@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : specs/e2e/creation_nouveau_projet_selection_fichier.rb
+Date : 2026-07-16 07h58
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✗ création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — message affiché : "Le dossier du projet doit être sélectionné dans le Finder."
+  (osascript : 27 appels, 0.662s)
+  (durée totale de la spec : 4.891s)
+
+Échecs :
+1. création d'un nouveau projet, sélection Finder = un fichier
+    Timeout d'attente dépassé (4s) — message affiché : "Le dossier du projet doit être sélectionné dans le Finder."
+  (osascript : 27 appels, 0.662s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 4.891s
