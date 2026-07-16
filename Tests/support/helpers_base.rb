@@ -19,7 +19,7 @@ module BoardTest
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
   APP_DATA_FILE         = File.join(BOARD_SUPPORT_DIR, 'appdata.json')
-  LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'js', 'LOC_ERRORS.js')
+  LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'js', 'MES_ERRORS.js')
 
   GREEN  = "\e[32m"
   RED    = "\e[91m"
@@ -44,12 +44,12 @@ module BoardTest
     raise Pending, message
   end
 
-  # Lit le message d'erreur directement dans frontend/js/LOC_ERRORS.js
+  # Lit le message d'erreur directement dans frontend/js/MES_ERRORS.js
   # (ERRORS[key]) au lieu de le dupliquer en dur dans les tests.
   def loc_error(key)
     content = File.read(LOC_ERRORS_FILE)
     match = content.match(/'#{Regexp.escape(key)}'\s*:\s*'((?:\\.|[^'\\])*)'/)
-    raise "Clé introuvable dans LOC_ERRORS.js : #{key.inspect}" unless match
+    raise "Clé introuvable dans MES_ERRORS.js : #{key.inspect}" unless match
     match[1].gsub(/\\(.)/, '\1')
   end
 

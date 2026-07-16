@@ -6,22 +6,8 @@
 
 == Tout de suite
 
-- test d'attribution d'un service
-  setup : fixture avec au moins un projet
-  - sélection du projet
-  - clic sur "Gérer les services"
-  - faire glisser un service ("Ouvrir dossier du projet") depuis la fenêtre des services jusqu'au fieldset "Autres services" du projet
-  → Une fenêtre doit demander le nouveau nom
-  - écrire "Ouvrir projet A" + Enter
-  → le projet doit posséder ce service dans ses données
-    + le badge du service doit s'afficher
-    + le badge doit toujours s'afficher après rechargement
+(vide)
 
 == Plus tard
 
 (si le test commence par "[BUG]", on retire évidemment ce "[BUG]" du nom du test)
-- [BUG] On peut cliquer deux fois sur le même service
-  (pour le moment, le service fonctionner la première fois, mais pas la deuxième)
-- Ajout d'un service "autre"
-  setup : un projet
-- Ajout d'un service au startup

@@ -1,0 +1,1 @@
+[Tenir Tests/_tests_a_faire.adoc synchronisé](./) — dès qu'une entrée a une spec correspondante écrite dans Tests/specs/e2e/, retirer l'entrée du fichier sans attendre une demande. L'user considère cette synchro comme ma responsabilité, pas la sienne (cf. dossier .claude = à moi).

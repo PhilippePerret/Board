@@ -24,6 +24,14 @@ const COMMON_SERVICES_DATA = [
         , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'finder-window'}
         , {id: 'sidebar', name: "Réglage de la Sidebar", q: 'Quelle taille donner à la sidebar (mettre 0 pour la cacher) ?', default: 0, type: 'integer'}
       ]
+    , afterDefinedParams: (params) => {
+      // console.log("[afterDefinedParams] PARAMS AVANT : ", [...params])
+      params.splice(1, 1)
+      const sbarwidth = params.splice(7)[0]
+      params[5] = sbarwidth
+      // console.log("[afterDefinedParams] PARAMS APRÈS : ", [...params])
+      return params
+    }
   },
   
   {

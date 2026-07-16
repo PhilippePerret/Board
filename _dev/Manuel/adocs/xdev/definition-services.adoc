@@ -53,6 +53,7 @@ Les services sont définis précisément dans le fichier `frontend/js/ServiceDat
 | `params`    | Définition des <<fix-params, _paramètres fixes_>> |
 | `dynParams` | Définition des <<dyn-params, _paramètres dynamiques_>> |
 | `scType`    | Le type du <<script-backend, script backend>> si ça n'est pas un AppleScript | `.rb`, `.py`
+| `afterDefinedParams` | Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l'enregistrement.
 |====
 
 

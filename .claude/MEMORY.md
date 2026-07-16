@@ -16,3 +16,4 @@
 - [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
+- [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande

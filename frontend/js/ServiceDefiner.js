@@ -13,6 +13,7 @@ class ServiceDefiner {
     this.service  = service
     this.params   = [...service.params]
     this.callback = callback
+    this.afterDefinedParams = service.afterDefinedParams
 
     // Donnée qui remplacement params dans le service pour le projet
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
@@ -85,6 +86,9 @@ class ServiceDefiner {
             paramsValues.push(definer.value)
         }
       })
+      if (this.afterDefinedParams){
+        paramsValues = this.afterDefinedParams(paramsValues)
+      }
       this.service.params = paramsValues
 
       // Si des propriétés projet ont été modifiées, il 

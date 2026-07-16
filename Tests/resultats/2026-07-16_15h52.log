@@ -1,0 +1,21 @@
+Moteur : pont
+Arguments : e2e/service_commun_ouverture_dossier.rb
+Date : 2026-07-16 15h52
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✗ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Le service a échoué (#message = "unexpected character: 'scripts/OpenFolderProject.scpt:' at line 1 column 1")
+  (osascript : 17 appels, 2.317s)
+  (durée totale de la spec : 3.736s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+1. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Le service a échoué (#message = "unexpected character: 'scripts/OpenFolderProject.scpt:' at line 1 column 1")
+  (osascript : 17 appels, 2.317s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 3.736s

@@ -1,0 +1,158 @@
+Moteur : pont
+Arguments : (aucun — specs/e2e/*.rb)
+Date : 2026-07-16 17h20
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+✓ ajout d'un service au démarrage
+  (osascript : 25 appels, 4.259s)
+  (durée totale de la spec : 5.517s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✗ panneau de réglages de l'application : édition string + app, persistance après rechargement
+    Timeout d'attente dépassé (4s) — appdata.json = {"projects-in" => [], "changelog-file" => ["HISTORIQUE.md", "HISTORIQUE.md"], "projects-out" => [], "version" => "0.0.0"}
+  (osascript : 9 appels, 0.119s)
+  (durée totale de la spec : 5.407s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/archivage_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ archivage d'un projet
+  (osascript : 9 appels, 0.150s)
+  (durée totale de la spec : 1.327s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+✓ attribution d'un service puis exécution deux fois de suite
+  (osascript : 24 appels, 7.464s)
+  (durée totale de la spec : 10.271s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+✓ attribution d'un service à un projet
+  (osascript : 23 appels, 4.193s)
+  (durée totale de la spec : 5.471s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_sans_selection_finder.rb ---
+✗ création d'un nouveau projet SANS SÉLECTION FINDER
+    No such file or directory @ rb_sysopen - /Users/philippeperret/Programmes/Board/frontend/js/LOC_ERRORS.js
+  (osascript : 0 appels, 0.000s)
+  (durée totale de la spec : 0.129s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✗ création d'un nouveau projet, sélection Finder = un fichier
+    No such file or directory @ rb_sysopen - /Users/philippeperret/Programmes/Board/frontend/js/LOC_ERRORS.js
+  (osascript : 0 appels, 0.000s)
+  (durée totale de la spec : 0.106s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✗ création simple d'un nouveau projet
+    Titre attendu 'Tout premier projet', trouvé ["Tout premier projet", "Tout premier projet"]
+  (osascript : 10 appels, 0.923s)
+  (durée totale de la spec : 1.554s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/definition_genre_projet_valeur_libre.rb ---
+✗ définition du genre d'un projet par valeur libre
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784215271kmrx", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T", "title" => "Projet à genrer (libre)", "services" => {"startup" => [], "others" => []}, "genre" => ["Docu-fiction", "Docu-fiction"], "workTime" => 0}
+  (osascript : 14 appels, 0.180s)
+  (durée totale de la spec : 4.903s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/definition_genre_projet.rb ---
+✓ définition du genre d'un projet
+  (osascript : 12 appels, 0.149s)
+  (durée totale de la spec : 0.762s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/deplacement_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ déplacement du projet
+  (osascript : 12 appels, 0.219s)
+  (durée totale de la spec : 4.354s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_double_service.rb ---
+✓ exécuter un service attaché deux fois de suite (dossier fermé entre les deux)
+  (osascript : 9 appels, 3.473s)
+  (durée totale de la spec : 6.163s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = "unexpected character: 'scripts/OpenFolderProject.scpt:' at line 1 column 1"
+  (osascript : 56 appels, 1.622s)
+  (durée totale de la spec : 12.234s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/modification_titre_projet.rb ---
+✗ modification du titre d'un projet
+    Timeout d'attente dépassé (4s) — titre affiché : "Titre modifié par le test,Titre modifié par le test"
+  (osascript : 29 appels, 0.208s)
+  (durée totale de la spec : 4.930s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/recuperation_projet_archive.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ récupération d'un projet archivé
+  (osascript : 11 appels, 0.228s)
+  (durée totale de la spec : 1.413s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_service_glissement.rb ---
+✓ retrait d'un service par glissement hors de la carte projet
+  (osascript : 13 appels, 1.836s)
+  (durée totale de la spec : 3.612s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 20 appels, 7.921s)
+  (durée totale de la spec : 9.771s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✓ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.530s)
+  (durée totale de la spec : 2.674s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_seuils.rb ---
+✓ service commun 'horloge' : seuils d'alerte orange/rouge
+  (osascript : 310 appels, 0.574s)
+  (durée totale de la spec : 61.126s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.184s)
+  (durée totale de la spec : 11.790s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+✓ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+  (osascript : 16 appels, 1.691s)
+  (durée totale de la spec : 5.119s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 16 appels, 1.184s)
+  (durée totale de la spec : 3.894s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+  (osascript : 27 appels, 4.373s)
+  (durée totale de la spec : 6.255s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : exécution directe, sans dialogue
+  (osascript : 12 appels, 0.480s)
+  (durée totale de la spec : 3.224s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+✓ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.895s)
+  (durée totale de la spec : 3.024s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ suppression réelle d'un projet
+  (osascript : 9 appels, 0.168s)
+  (durée totale de la spec : 1.321s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+1. panneau de réglages de l'application : édition string + app, persistance après rechargement
+    Timeout d'attente dépassé (4s) — appdata.json = {"projects-in" => [], "changelog-file" => ["HISTORIQUE.md", "HISTORIQUE.md"], "projects-out" => [], "version" => "0.0.0"}
+  (osascript : 9 appels, 0.119s)
+2. création d'un nouveau projet SANS SÉLECTION FINDER
+    No such file or directory @ rb_sysopen - /Users/philippeperret/Programmes/Board/frontend/js/LOC_ERRORS.js
+  (osascript : 0 appels, 0.000s)
+3. création d'un nouveau projet, sélection Finder = un fichier
+    No such file or directory @ rb_sysopen - /Users/philippeperret/Programmes/Board/frontend/js/LOC_ERRORS.js
+  (osascript : 0 appels, 0.000s)
+4. création simple d'un nouveau projet
+    Titre attendu 'Tout premier projet', trouvé ["Tout premier projet", "Tout premier projet"]
+  (osascript : 10 appels, 0.923s)
+5. définition du genre d'un projet par valeur libre
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784215271kmrx", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T", "title" => "Projet à genrer (libre)", "services" => {"startup" => [], "others" => []}, "genre" => ["Docu-fiction", "Docu-fiction"], "workTime" => 0}
+  (osascript : 14 appels, 0.180s)
+6. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = "unexpected character: 'scripts/OpenFolderProject.scpt:' at line 1 column 1"
+  (osascript : 56 appels, 1.622s)
+7. modification du titre d'un projet
+    Timeout d'attente dépassé (4s) — titre affiché : "Titre modifié par le test,Titre modifié par le test"
+  (osascript : 29 appels, 0.208s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+8. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.184s)
+
+-------------------
+Success: 18  Failures: 8  Pendings: 0  Test count: 26
+Durée totale (moteur : pont) : 176.351s

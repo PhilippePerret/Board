@@ -1,0 +1,14 @@
+Moteur : pont
+Arguments : e2e/service_commun_ouverture_dossier.rb
+Date : 2026-07-16 16h38
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+  (osascript : 27 appels, 4.400s)
+  (durée totale de la spec : 6.318s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 6.318s

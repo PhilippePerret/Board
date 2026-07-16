@@ -9,13 +9,23 @@ function getMsg(msgId, params){
 
 function message(msg, params){
   msg = textSubstitute(msg, params)
-  document.querySelector('#message').innerHTML = '<span class="notice">' + msg + '</span>'
+  divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
+  nettoie_message()
   return true
 }
 
 function error(msg, params){
   msg = textSubstitute(msg, params)
-  document.querySelector('#message').innerHTML = '<span class="error">' + msg + '</span>'
+  divMessage().innerHTML = '<span class="error">' + msg + '</span>'
+  nettoie_message()
   return false
 }
 function erreur(msg){ return error(msg) }
+
+const nettoie_message = debounce( () => {
+  divMessage().innerHTML = ''
+}, 10 * 1000)
+
+function divMessage(){
+  return this._divmsg || (this._divmsg = DGet('#message'))
+}

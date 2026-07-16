@@ -64,7 +64,7 @@ class Service {
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
-
+    this.afterDefinedParams = data.afterDefinedParams ?? null
     this.isCommonService = this.stype === 'common'
   }
 
