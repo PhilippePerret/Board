@@ -5,20 +5,15 @@
 - quand on règle sidebar à 0 (ouverture fenêtre projet), la sidebar est quand même en place (elle devrait être fermée)
 - Quand on annule un service commun, les données s'enregsitrent quand même…
 
-- Un bug prévisible : avant, pour toutes les paramètres de type :path, il était retourné et enregistré le path ET le nom du fichier. Maintenant, ParamDefiner ne retourne que la path. Corriger tous les services (backend/scripts)
-
 == Todo list ==
 
 - utiliser des icônes SVG simples (pour l'interface)
-- archives 
-  - différence entre "retirer le projet" et "archiver le projet"
-  
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - pouvoir éditer le fichier d'un script perso
 
 == Idées de nouveaux services (2026-07-11) ==
 
-  - git init (tout le flux, juste en donnant le nom du repo sur Github)
+- git init (tout le flux, juste en donnant le nom du repo sur Github)
 - Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
 - Ouvrir le repo Git (statut, ou `git pull`/`push`)
 - Ouvrir l'URL locale du projet dans le navigateur

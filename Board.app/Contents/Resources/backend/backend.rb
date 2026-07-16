@@ -24,9 +24,10 @@ begin
 
   # === Destuction d'un projet ===
   when 'remove-project'
-    data_returned = remove_or_archive_project(request['projectId'], false)
+    returned_data = remove_or_archive_project(request['projectId'], false)
+    
   when 'archive-project'
-    data_returned = remove_or_archive_project(request['projectId'], true)
+    returned_data = remove_or_archive_project(request['projectId'], true)
 
   # === Sauvegarde d'un projet ===
 
