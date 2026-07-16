@@ -45,6 +45,7 @@ class ServiceDefiner {
    * paramètres.
    */
   onDefined(definers){
+    console.log('-> onDefined avec definers = ', definers)
     if (definers) {
       console.info("Définers retournés", definers)
 
@@ -68,9 +69,13 @@ class ServiceDefiner {
             paramsValues.push(definer.value)
             break
           case 'finder-window':
+            // console.log("'finder-window', definer = ", definer)
+            definer.value.position = definer.value.position.map(n => n - 20)
             paramsValues = [...paramsValues, definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType]
             break
           case 'bounds': {
+            // console.log("'bounds', define =", definer)
+            definer.value.position = definer.value.position.map(n => n - 20)
             const [boundsX, boundsY] = definer.value.position
             const [boundsW, boundsH] = definer.value.size
             paramsValues = [...paramsValues, boundsX, boundsY, boundsX + boundsW, boundsY + boundsH]

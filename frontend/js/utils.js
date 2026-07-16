@@ -58,7 +58,8 @@ function jsonize(data){
   return JSON.stringify(data)
 }
 
-function raise(msg){
+function raise(msg, params){
+  if (params) {console.error(msg, params)}
   throw new Error(msg)
 }
 

@@ -21,7 +21,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Outils'
     , params: [
           {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
-        , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'bounds'}
+        , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'finder-window'}
         , {id: 'sidebar', name: "Réglage de la Sidebar", q: 'Quelle taille donner à la sidebar (mettre 0 pour la cacher) ?', default: 0, type: 'integer'}
       ]
   },
