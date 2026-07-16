@@ -1,5 +1,9 @@
 == BUGS ==
 
+- application image au fond
+  1. le path n'est (peut-être) pas réduit
+  2. l'image ne s'applique pas (voir EventerX)
+
 - Mettre un timer sur les messages pour les faire disparaitre
 
 - quand on règle sidebar à 0 (ouverture fenêtre projet), la sidebar est quand même en place (elle devrait être fermée)

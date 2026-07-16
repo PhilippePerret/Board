@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : e2e/suppression_projet.rb e2e/archivage_projet.rb
+Date : 2026-07-16 11h52
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ suppression réelle d'un projet
+  (osascript : 9 appels, 0.176s)
+  (durée totale de la spec : 1.354s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/archivage_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ archivage d'un projet
+  (osascript : 9 appels, 0.141s)
+  (durée totale de la spec : 1.322s)
+
+-------------------
+Success: 2  Failures: 0  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 2.676s

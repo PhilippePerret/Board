@@ -386,7 +386,15 @@ class Project {
     const divId = `project-${this.id}`
     const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})
     div.dataset.projectId = this.id
-    if (this.background) div.style.background = this.background
+    if (this.background) {
+      var backgound
+      if (this.background[0] == '#') {
+        backgound = this.background
+      } else {
+         backgound = `no-repeat url("${this.background}")`
+      }
+      div.style.background = background
+    }
     this.obj = div
     if (this.icon){
       div.appendChild(this.buildIcon())
@@ -489,7 +497,6 @@ class Project {
 
   }
   afterRemove(retour){
-    console.log("[afterRemove] retour", retour)
     this.obj.remove()
     if (this.id == this.constructor.current.id) this.constructor.deselect(this)
     App.setData('projects-in', retour.data.newProjectsIn)
