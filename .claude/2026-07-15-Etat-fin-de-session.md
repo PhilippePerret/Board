@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-État au 2026-07-15, fin de session — longue session de correction des tests e2e un par un, en parallèle de refontes du code (certaines faites par l'user en cours de session : `Service.js` réécrit en getters lisant `this.data`/`absData`, `sdata` renommé `service_common_data`, `SidePanelDefiner` généralisé pour `AppDataPanel`/`ProjectExtraDataPanel`, délai fixe de 2s entre services au démarrage retiré, `Panel.js#onOui` doté d'un `toRealValue`).
+État au 2026-07-15, fin de session — longue session de correction des tests e2e un par un, en parallèle de refontes du code (certaines faites par l'user en cours de session : `Service.js` réécrit en getters lisant `this.data`/`absData`, `sdata` renommé `service_common_data`, `SidePanelDefiner` généralisé pour `AppDataPanel`/`ProjectExtraDataPanel`, délai fixe de 2s entre services au démarrage retiré, `Dialog.js#onOui` doté d'un `toRealValue`).
 
 ## État des tests e2e (moteur pont)
 
@@ -15,7 +15,7 @@ Suite complète : **21/22 passent**. Dernier échec connu :
 
 ## Bugs corrigés cette session (pour mémoire, tous dans le code app)
 
-- `Panel.js#onOui` : aplatissement de la valeur retournée pour un seul champ — callers (`Project.js`, `ParamDefiner.js`, `Clock.js`) qui faisaient encore `values[0]` dessus corrigés un par un (`onIntegerResponse`, `onChangelogEntered`, `onTodoEntered`, `buildCardNewProject`, `modifyTitle`).
+- `Dialog.js#onOui` : aplatissement de la valeur retournée pour un seul champ — callers (`Project.js`, `ParamDefiner.js`, `Clock.js`) qui faisaient encore `values[0]` dessus corrigés un par un (`onIntegerResponse`, `onChangelogEntered`, `onTodoEntered`, `buildCardNewProject`, `modifyTitle`).
 - `ServiceDefiner.js` : cas `'project'` ne poussait jamais sa valeur dans `paramsValues` ; cas `'bounds'`/`'finder-window'` incomplets (chemin, taille, sidebarWidth manquants) ; `this.service.name = ...` invalide depuis que `name` est un getter seul dans `Service.js` (remplacé par `this.service.data.name = ...`).
 - `ParamDefiner.js#onDefineProjectValue` : n'appelait jamais `setValue` sur le definer d'origine (valeur jamais transmise au param 'project' parent).
 - `ParamDefiner.js#onInteger` : ajout de `useLastAsDefault` (générique, regarde le definer précédent) + `default: 120` pour `session-duration`.

@@ -1,12 +1,45 @@
-class ConfirmDialog extends Panel {
+class ConfirmDialog extends Dialog {
 
   constructor(data){
     super(data)
   }
 }
 
+
+// Pour faire une fenêtre présentant un menu de choix (et seulement ça)
+class SelectDialog extends Dialog {
+  constructor(data){
+    super(data)
+    this.values = data.values
+    this.content = this.buildMenu()
+  }
+  buildMenu(){
+    const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
+    const select = DCreate('SELECT', {id: '__' + this.id + '__'} )
+    let firstValue = null
+    div.appendChild(select)
+    this.values.forEach(value => {
+      var tit, val
+      const opt = DCreate('OPTION')
+      if (Array.isArray(value)){
+        [val, tit] = value
+      } else {
+        [tit, val] = [value, value]
+      }
+      if ( firstValue == null ) firstValue = val
+      opt.value = val
+      opt.textContent = tit
+      select.appendChild(opt)
+    })
+
+    select.value = this.defaultValue || firstValue
+    select.selectedIndex = 0
+
+    return div
+  }
+}
 // Pour faire une fenêtre présentant un textarea 
-class TextareaDialog extends Panel {
+class TextareaDialog extends Dialog {
   constructor(data){
     super(data)
     this.content = this.buildField()
@@ -29,12 +62,16 @@ class TextareaDialog extends Panel {
 }
 
 // Pour faire une fenêtre présentant un champ de texte pour entrer une valeur
-class TextFieldDialog extends Panel {
+class TextFieldDialog extends Dialog {
   constructor(data){
     super(data)
     this.content = this.buildField()
     this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
-    this.onShow = ()=>{const tf = DGet(`#__${this.id}__`); tf.focus(); tf.select()}
+    this.onShow = () => {
+      const tf = DGet(`#__${this.id}__`)
+      console.log("tf = ", tf)
+      tf.focus(); tf.select()
+    }
   }
 
   buildField(){
@@ -52,7 +89,7 @@ class TextFieldDialog extends Panel {
 }
 
 // Pour faire une fenêtre présentant un picker de couleur, avec aperçus
-class ColorDialog extends Panel {
+class ColorDialog extends Dialog {
   constructor(data){
     super(data)
     this.content = this.buildField()
@@ -96,35 +133,5 @@ class ColorDialog extends Panel {
     this.onWhite.style.color      = color
     this.onBlack.style.color      = color
     this.disc.style.background    = color
-  }
-}
-
-// Pour faire une fenêtre présentant un menu de choix (et seulement ça)
-class SelectDialog extends Panel {
-  constructor(data){
-    super(data)
-    this.values = data.values
-    this.content = this.buildMenu()
-  }
-  buildMenu(){
-    const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
-    const select = DCreate('SELECT', {id: '__' + this.id + '__'} )
-    div.appendChild(select)
-    this.values.forEach(value => {
-      var tit, val
-      const opt = DCreate('OPTION')
-      if (Array.isArray(value)){
-        [val, tit] = value
-      } else {
-        [tit, val] = [value, value]
-      }
-      opt.value = val
-      opt.textContent = tit
-      select.appendChild(opt)
-    })
-
-    if (this.defaultValue != null) select.value = this.defaultValue
-
-    return div
   }
 }

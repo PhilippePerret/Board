@@ -1,22 +1,22 @@
 /**
  * La classe dont héritent tous les panneaux
  * 
- * Passer la données `idValues` pour faire savoir à Panel quelles valeurs
+ * Passer la données `idValues` pour faire savoir à Dialog quelles valeurs
  * doivent être retournées. Ça doit être obligatoirement l'id DOM d'un
  * élément qui répond à `value', comme un select par exemple.
  * 
  * Si onShow est défini, c'est une fonction qui est appelée après l'ouverture
  * du panneau.
  */
-class Panel {
+class Dialog {
   static panelIndex = 0
 
   constructor(data){
     this.returnedIdValues = data.idValues ?? null // Pour savoir quelles valeurs retourner avec oui
-    this.id    = data.id ?? `panel-${++Panel.panelIndex}`
+    this.id    = data.id ?? `panel-${++Dialog.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
     this.title = data.title ?? '- panneau sans titre (title) -'
-    this.message = data.message ?? '- Panneau sans messsage (message) -'
+    this.message = data.message ?? null
     this.content = data.content ?? null
     this.defaultValue = data.defaultValue ?? null
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
@@ -38,8 +38,6 @@ class Panel {
   
   hide(){
     unlisten(window, 'keydown', this.onKeyDown.bind(this))
-    this.obj.classList.add('hidden')
-    // ça ne suffit plus, il faut détruire
     this.obj.remove()
   }
   close(){return this.hide()}
@@ -106,7 +104,7 @@ class Panel {
   onKeyDown(ev) {
     var dev;
     // console.log("ev", ev)
-    if ( (dev = Panel.HANDLED_KEYS[ev.key]) ){
+    if ( (dev = Dialog.HANDLED_KEYS[ev.key]) ){
       const method = dev.nokey ;
       this[method]() 
     } else { return stopEvent(ev)}
@@ -122,10 +120,12 @@ class Panel {
     scrim.appendChild(div)
     const tit = DCreate('DIV', {class: 'title', text: this.title})
     div.appendChild(tit)
-    const msg = DCreate('DIV', {class: 'message', text: this.message})
-    // Du contenu HTML dans div.message
-    div.appendChild(msg)
-    if (this.content) msg.appendChild(this.content)
+    if (this.message || this.content) {
+      const msg = DCreate('DIV', {class: 'message', text: this.message ?? ''})
+      // Du contenu HTML dans div.message
+      if (this.content) msg.appendChild(this.content)
+      div.appendChild(msg)
+    }
     // Pied de page
     const footer = DCreate('DIV', {class:'footer'})
     this.nonBtn = DCreate('BUTTON', {id: 'btn-non', class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})

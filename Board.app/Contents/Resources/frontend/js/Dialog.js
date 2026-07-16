@@ -1,19 +1,19 @@
 /**
  * La classe dont héritent tous les panneaux
  * 
- * Passer la données `idValues` pour faire savoir à Panel quelles valeurs
+ * Passer la données `idValues` pour faire savoir à Dialog quelles valeurs
  * doivent être retournées. Ça doit être obligatoirement l'id DOM d'un
  * élément qui répond à `value', comme un select par exemple.
  * 
  * Si onShow est défini, c'est une fonction qui est appelée après l'ouverture
  * du panneau.
  */
-class Panel {
+class Dialog {
   static panelIndex = 0
 
   constructor(data){
     this.returnedIdValues = data.idValues ?? null // Pour savoir quelles valeurs retourner avec oui
-    this.id    = data.id ?? `panel-${++Panel.panelIndex}`
+    this.id    = data.id ?? `panel-${++Dialog.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? null
@@ -38,8 +38,6 @@ class Panel {
   
   hide(){
     unlisten(window, 'keydown', this.onKeyDown.bind(this))
-    this.obj.classList.add('hidden')
-    // ça ne suffit plus, il faut détruire
     this.obj.remove()
   }
   close(){return this.hide()}
@@ -106,7 +104,7 @@ class Panel {
   onKeyDown(ev) {
     var dev;
     // console.log("ev", ev)
-    if ( (dev = Panel.HANDLED_KEYS[ev.key]) ){
+    if ( (dev = Dialog.HANDLED_KEYS[ev.key]) ){
       const method = dev.nokey ;
       this[method]() 
     } else { return stopEvent(ev)}

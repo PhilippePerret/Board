@@ -42,7 +42,7 @@ Three layers, talking over a JSON message bridge:
    - `xbridge.js` — `window.bridge` (postMessage/receive plumbing keyed by generated request ids + per-call callbacks) and `window.server.send(data, callback)` as the app-facing API.
    - `Project.js` — project card model/rendering/CRUD.
    - `Service.js`, `ServiceData.js`, `ServiceDefiner.js`, `ServiceExecuter.js`, `ServicePanel.js`, `SidePanel.js`, `ServicesTools.js` — the services system (see below).
-   - `Panel.js`, `Dialogs.js`, `Dom.js`, `Dashboard.js`, `utils.js`, `app.js` — UI plumbing/dialogs/misc.
+   - `Dialog.js`, `Dialogs.js`, `Dom.js`, `Dashboard.js`, `utils.js`, `app.js` — UI plumbing/dialogs/misc.
    - Scripts are loaded via plain `<script>` tags in `index.html` (order matters — no module system).
 
 ### The services system

@@ -1,0 +1,17 @@
+=== fonctionnalités ===
+
+[cols="2,4,2,1,1"]
+|====
+| **Nom** | **Description** | **Test** | **Docu** | **Man**
+
+| Ajout d'un projet
+| Le bouton ”+” qui permet d'ajouter un projet à Board.
+| Oui
+| -
+| -
+
+
+|====
+
+_Docu_ : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n'est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
+_Man_: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est décrite dans le manuel utilisateur, avec un lien pour s'y rendre.

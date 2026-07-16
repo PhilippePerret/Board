@@ -3,7 +3,7 @@
  * services" (#common-services-panel/#custom-services-panel, services.css :
  * position fixed, slide via la classe .closed) — mais construits
  * dynamiquement (contrairement à ces deux-là, statiques dans index.html),
- * sur le modèle de Panel.js#build (jamais reconstruits une fois ouverts).
+ * sur le modèle de Dialog.js#build (jamais reconstruits une fois ouverts).
  *
  * Une sous-classe redéfinit `title`, `domId` et `buildContent()`.
  */

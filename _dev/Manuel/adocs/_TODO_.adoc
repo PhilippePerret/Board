@@ -1,11 +1,18 @@
 == BUGS ==
 
+- Claude a touché le l'ouverture d'une fenêtre et ça fait n'importe quoi maintenant : ça ajoute la largeur à la largeur et la hauteur à la hauteur
 - Quand on annule un service commun, les données s'enregsitrent quand même…
 
 - Un bug prévisible : avant, pour toutes les paramètres de type :path, il était retourné et enregistré le path ET le nom du fichier. Maintenant, ParamDefiner ne retourne que la path. Corriger tous les services (backend/scripts)
 
 == Todo list ==
 
+- utiliser des icônes SVG simples (pour l'interface)
+- archives 
+  - retirer le projet : on le supprime définitivement 
+  - archiver le projet : on le met dans projets-out
+  - "+" → bouton "Archive…" pour récupérer un dossier en archive (=> values de 'select' dynamique, une fonction qui récupère des valeurs)
+- demander à claude de faire une liste des fonctionnalités (table asiidoc) avec 4 colonnes : 
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - ajouter une propriété "Type" à projet (type métier : "Application", "Scénario", "Roman", "Script-doctoring", "Maison", etc. — la liste doit pouvoir être alimentée à la main = nouvelle fonctionnalité du ParamDefiner)
 - pouvoir éditer le fichier d'un script perso

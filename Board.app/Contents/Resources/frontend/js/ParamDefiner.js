@@ -208,12 +208,33 @@ class ParamDefiner {
     }).show()
   }
 
+  // Possibilité de donner une valeur fixe (d'un menu) ou 
+  // de proposer une valeur explicite
+  onSelectOrString(){
+    const funAutreValeur = () => {
+      this.close()
+      this.onString.call(this)
+    }
+    new SelectDialog({
+        title: this.name
+      , id: this.id
+      , message: this.message
+      , idValues: [this.id]
+      , values: this.values
+      , defaultValue: this.default
+      , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
+      , midBtn: {name: 'Autre valeur…', onclick: funAutreValeur.bind(this)}
+      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
+    }).show()
+  }
+
   onString(){
     new TextFieldDialog({
         title:    this.name
       , id:       this.id
       , message:  this.message
-      , defaultValue: this.default
+      , defaultValue: this.default || ''
+      , onShow: _ => {const tf = DGet(`#__${this.id}__`); tf.focus(); tf.select()}
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
