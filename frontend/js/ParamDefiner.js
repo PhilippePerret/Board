@@ -279,7 +279,8 @@ class ParamDefiner {
         title: this.title || "Choisir une couleur ou une image"
       , message: this.q || 'Que voulez-vous choisir comme fond ?'
       , ouiBtn: {name: 'Couleur', onclick: this.onColor.bind(this)}
-      , nonBtn: {name: 'Image', onclick: this.onImage.bind(this)}
+      , midBtn: {name: 'Image', onclick: this.onImage.bind(this)}
+      , nonBtn: {name: 'Rien', onclick: this.setValue.bind(this, 'none')}
     }).show()
   }
   onImage(){

@@ -93,7 +93,6 @@ class ColorDialog extends Dialog {
   constructor(data){
     super(data)
     this.content = this.buildField()
-    this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
   }
 
   buildField(){

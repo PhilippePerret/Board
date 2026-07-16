@@ -33,7 +33,7 @@ class ProjectExtraDataPanel extends SidePanelDefiner {
   apply(id, value) {
     switch(id){
       case 'background':
-        this.project.obj.style.background = value
+        this.project.setBackground(undefined, value)
         break
       case 'icon':
         const icon = this.project.buildIcon()

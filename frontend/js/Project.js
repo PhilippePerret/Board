@@ -384,22 +384,17 @@ class Project {
   buildCard(){
     if (this.obj) this.obj.remove()
     const divId = `project-${this.id}`
+    this.divId = divId
     const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})
     div.dataset.projectId = this.id
     if (this.background) {
-      var backgound
-      if (this.background[0] == '#') {
-        backgound = this.background
-      } else {
-         backgound = `no-repeat url("${this.background}")`
-      }
-      div.style.background = background
+      this.setBackground(div, this.background)
     }
     this.obj = div
     if (this.icon){
       div.appendChild(this.buildIcon())
     }
-    const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;'})
+    const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;z-index:1;'})
     this.divTitle = tit
     div.appendChild(tit)
     const path  = DCreate('DIV', {class:'path', text: this.path})
@@ -449,6 +444,34 @@ class Project {
     this.observe()
   }
 
+  // Détacché pour pouvoir être actualisé
+  setBackground(div, background){
+    const imgId       = `${this.divId}-bgimg`
+    const imgDomFond  = DGet(`#${imgId}`)
+    div = div ?? this.obj
+    console.log("background, DIV, imgDomFond", {background:background, div:div, imgFond:imgDomFond})
+    if (background == 'none')  {
+      div.style.background = ''
+      imgDomFond && imgDomFond.remove()
+      return 
+    } else if (background[0] == '#' || background.startsWith('rgb')) {
+      // Appliqué ci-dessous
+    } else {
+      // Puisqu'il n'y a pas de paramètre opacity pour l'image de fond,
+      // on utile un détour : on affiche vraiment une image
+      const imgFond     = DCreate('IMG', {id: imgId, src: this.background, style:'opacity:0.5;position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;'})
+      if ( imgDomFond ) {
+        // Update
+        imgDomFond.replaceWith(imgFond)
+      } else {
+        // Création
+        div.appendChild(imgFond)
+      }
+      background = ''
+    }
+    div.style.background = background
+
+  }
 
   observe(){
 

@@ -9,6 +9,7 @@ div#projects {
 }
 div.project {
   position: relative;
+  overflow: hidden;
   vertical-align: top;
   display: inline-block;
   border: 2px solid #CCC;
@@ -41,4 +42,12 @@ div.project fieldset.services {
 }
 .project .worktime {
   font-size: 14px;
+}
+
+.project-extradata-row {
+  container-type: inline-size;
+}
+.project-extradata-row .project-extradata-value {
+  white-space: nowrap;
+  overflow: hidden;
 }
