@@ -210,11 +210,7 @@ class ParamDefiner {
 
   // Possibilité de donner une valeur fixe (d'un menu) ou 
   // de proposer une valeur explicite
-  onSelectOrString(){
-    const funAutreValeur = () => {
-      this.close()
-      this.onString.call(this)
-    }
+  onSelectOrString(owner){
     new SelectDialog({
         title: this.name
       , id: this.id
@@ -223,7 +219,7 @@ class ParamDefiner {
       , values: this.values
       , defaultValue: this.default
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
-      , midBtn: {name: 'Autre valeur…', onclick: funAutreValeur.bind(this)}
+      , midBtn: {name: 'Autre valeur…', onclick: this.onString.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
   }

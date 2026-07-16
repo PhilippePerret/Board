@@ -16,4 +16,3 @@
 - [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
-- [PRIORITÉ — État fin de session (2026-07-15)](2026-07-15-Etat-fin-de-session.md) — 21/22 tests e2e passent, 1 échec restant (création projet/fichier), tests extradata à écrire, fonctionnalités restantes à implémenter

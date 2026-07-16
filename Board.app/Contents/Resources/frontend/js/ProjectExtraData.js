@@ -16,7 +16,7 @@ class ProjectExtraDataPanel extends SidePanelDefiner {
   }
 
   currentValue(dParam){
-    return this.project.get(dParam.id) ?? dParam.default ?? '(non défini)'
+    return this.project.get(dParam.id) ?? dParam.default ?? ''
   }
 
   updateValue(id, value){

@@ -10,7 +10,7 @@ class AppDataPanel extends SidePanelDefiner {
   get PARAMS_DATA() { return APP_DATA }
   
   currentValue(dParam){
-    return App.getData(dParam.id) ?? dParam.default ?? '(non défini)'
+    return App.getData(dParam.id) ?? dParam.default ?? ''
   }
 
   updateValue(id, value){

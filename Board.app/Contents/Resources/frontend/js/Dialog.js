@@ -25,6 +25,10 @@ class Dialog {
     this.unscrimmed = data.unscrimmed ?? false // pour ne pas mettre de flou
     // Une fonction qui peut tranformer la valeur avant de la retourner
     this.toRealValue = data.toRealValue ?? ((v) => v)
+    // Identifiant du champ de valeur (rappel : dans ces Dialog, il n'y a toujours
+    // qu'un seul champ d'édition)
+    this.FId  = `__${this.id}__`
+    this.FDomId = `#${this.FId}`
     this.built = false
   }
 
@@ -53,11 +57,9 @@ class Dialog {
         const onlyOne = this.returnedIdValues.length == 1
         this.returnedIdValues.forEach(idValue => {
           console.log("[onOui] idValue = ", idValue)
-          const el = DGet('#__' + idValue + '__', this.obj)
+          const el = DGet(this.FDomId, this.obj)
           let value = el.value
           if (el.TagName == 'SELECT') { value = el.options[el.selectedIndex].value }
-          console.log("[onOui] el = ", el)
-          console.log("[onOui] el.value = ", value)
           returnedValues.push(value)
         })
         if (onlyOne && Array.isArray(returnedValues)) returnedValues = returnedValues[0]
@@ -78,21 +80,20 @@ class Dialog {
   }
 
   onNon(ev){
+    this.hide()
     if ('function' == typeof this.nonData.onclick) {
       this.nonData.onclick()
     }
-    this.hide()
     return stopEvent(ev)
   }
   onMid(ev){
+    this.hide()
     if ('function' == typeof this.midData.onclick) {
       this.midData.onclick()
     } else {
       console.error("this.midData.onclick", this.midData.onclick)
       error('this.midData.onclick n’est pas une fonction')
     }
-
-    this.hide()
     return stopEvent(ev)
 
   }

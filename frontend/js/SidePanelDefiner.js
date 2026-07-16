@@ -5,7 +5,7 @@ class SidePanelDefiner extends SidePanel {
   }
   
   currentValue(dParam){
-    return this.project.get(dParam.id) ?? dParam.default ?? '(non défini)'
+    return this.project.get(dParam.id) ?? dParam.default ?? ''
   }
 
   buildContent(){

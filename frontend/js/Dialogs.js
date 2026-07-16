@@ -15,7 +15,7 @@ class SelectDialog extends Dialog {
   }
   buildMenu(){
     const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
-    const select = DCreate('SELECT', {id: '__' + this.id + '__'} )
+    const select = DCreate('SELECT', {id: this.FId} )
     let indexOfDefault = 0
     const defVal = this.defaultValue
     div.appendChild(select)
@@ -45,12 +45,12 @@ class TextareaDialog extends Dialog {
     super(data)
     this.content = this.buildField()
     this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
-    this.onShow = ()=>{const tf = DGet(`#__${this.id}__`); tf.focus(); tf.select()}
+    this.onShow = ()=>{const tf = DGet(this.FDomId); tf.focus(); tf.select()}
   }
 
   buildField(){
     const div = DCreate('DIV', {style: 'padding: 1em;'})
-    const input = DCreate('TEXTAREA', {id: '__' + this.id + '__', style: `width: 100%;height:${this.height ?? 200}px;`, value: this.defaultValue})
+    const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? 200}px;`, value: this.defaultValue})
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
     return div
@@ -69,15 +69,14 @@ class TextFieldDialog extends Dialog {
     this.content = this.buildField()
     this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
     this.onShow = () => {
-      const tf = DGet(`#__${this.id}__`)
-      console.log("tf = ", tf)
+      const tf = DGet(this.FDomId)
       tf.focus(); tf.select()
     }
   }
 
   buildField(){
     const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
-    const input = DCreate('INPUT', {type: 'text', id: '__' + this.id + '__', style: 'width: 100%', value: this.defaultValue})
+    const input = DCreate('INPUT', {type: 'text', id: this.FId, style: 'width: 100%', value: this.defaultValue})
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
     return div
@@ -102,7 +101,7 @@ class ColorDialog extends Dialog {
     const color = this.defaultValue || '#ff0000'
 
     const input = DCreate('INPUT', {
-        type: 'color', id: '__' + this.id + '__', value: color
+        type: 'color', id: this.FId, value: color
       , style: 'display:block;margin:0 auto;width:120px;height:60px;border:none;padding:0;'
     })
     listen(input, 'input', this.onColorChange.bind(this))
