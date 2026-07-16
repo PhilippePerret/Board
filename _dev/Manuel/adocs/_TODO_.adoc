@@ -1,6 +1,5 @@
 == BUGS ==
 
-- Claude a touché le l'ouverture d'une fenêtre et ça fait n'importe quoi maintenant : ça ajoute la largeur à la largeur et la hauteur à la hauteur
 - quand on règle sidebar à 0 (ouverture fenêtre projet), la sidebar est quand même en place (elle devrait être fermée)
 - Quand on annule un service commun, les données s'enregsitrent quand même…
 
@@ -10,9 +9,8 @@
 
 - utiliser des icônes SVG simples (pour l'interface)
 - archives 
-  - retirer le projet : on le supprime définitivement 
-  - archiver le projet : on le met dans projets-out
-  - "+" → bouton "Archive…" pour récupérer un dossier en archive (=> values de 'select' dynamique, une fonction qui récupère des valeurs)
+  - différence entre "retirer le projet" et "archiver le projet"
+  - remplacer le bouton "retirer" par "-"
 - demander à claude de faire une liste des fonctionnalités (table asiidoc) avec 4 colonnes : 
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - ajouter une propriété "Type" à projet (type métier : "Application", "Scénario", "Roman", "Script-doctoring", "Maison", etc. — la liste doit pouvoir être alimentée à la main = nouvelle fonctionnalité du ParamDefiner)

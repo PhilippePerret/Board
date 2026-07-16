@@ -107,16 +107,18 @@ span#project-buttons {
 }
 span#project-buttons button,
 button.btn-add-project {
-  all:unset;
+  all: unset;
+    font-family: -apple-system;
+
   background-color: #ebebeb;
   display: block;
   float: left;
-  padding: 15px;
-  border: 2px solid #CCC;
+  padding: 28px;
+  border-radius: 0!important;
+  font-size: 28px;
+  line-height: 0em;
+  border: 1px solid lightgrey;
 }
 div#tools button.btn-add-project {
   font-family: -apple-system;
-  font-size: 1.5em;
-  padding: 8px 32px;
-  border: 2px solid #AAA;
 }
