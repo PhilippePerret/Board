@@ -64,6 +64,25 @@ def move_project_out_to_projects_in(pid)
   end
 end
 
+def remove_or_archive_project(project_id, archive_it)
+
+  if File.exist?(card = project_path(project_id))
+    APP_DATA['projects-in'].delete(project_id)
+    if archive_it
+      APP_DATA['projects-out'] << project_id
+    else
+      File.delete(card)
+    end
+     save_app_data
+  else
+    return {error: "Projet introuvable : #{project_id} (dans #{PROJECT_CARD_FOLDER})"}
+  end
+  return {
+    newProjectsIn: APP_DATA['projects-in'],
+    newProjectsOut: APP_DATA['projects-out']
+  }
+end
+
   
   COMMAND_PER_EXT = {
   '.scpt' => 'osascript',

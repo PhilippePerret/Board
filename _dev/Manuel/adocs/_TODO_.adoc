@@ -1,5 +1,7 @@
 == BUGS ==
 
+- Mettre un timer sur les messages pour les faire disparaitre
+
 - quand on règle sidebar à 0 (ouverture fenêtre projet), la sidebar est quand même en place (elle devrait être fermée)
 - Quand on annule un service commun, les données s'enregsitrent quand même…
 

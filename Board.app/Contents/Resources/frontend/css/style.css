@@ -108,14 +108,13 @@ span#project-buttons {
 span#project-buttons button,
 button.btn-add-project {
   all: unset;
-    font-family: -apple-system;
-
+  font-family: -apple-system;
   background-color: #ebebeb;
   display: block;
   float: left;
   padding: 28px;
   border-radius: 0!important;
-  font-size: 28px;
+  font-size: 22px;
   line-height: 0em;
   border: 1px solid lightgrey;
 }

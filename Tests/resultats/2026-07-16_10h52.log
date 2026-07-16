@@ -1,0 +1,14 @@
+Moteur : pont
+Arguments : e2e/definition_genre_projet.rb
+Date : 2026-07-16 10h52
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/definition_genre_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ définition du genre d'un projet
+  (osascript : 12 appels, 0.178s)
+  (durée totale de la spec : 1.374s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.374s

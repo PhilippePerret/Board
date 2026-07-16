@@ -1,0 +1,20 @@
+Moteur : pont
+Arguments : e2e/definition_genre_projet.rb
+Date : 2026-07-16 10h59
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/definition_genre_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ définition du genre d'un projet
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-178419235446io
+  (osascript : 41 appels, 0.141s)
+  (durée totale de la spec : 5.302s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. définition du genre d'un projet
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-178419235446io
+  (osascript : 41 appels, 0.141s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 5.302s

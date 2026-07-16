@@ -43,7 +43,7 @@
   <button id="btn-add-project" class="btn-add-project" onclick="Project.addProject()">✚</button>
     <!-- ======= BOUTONS DES PROJETS ============ -->
     <span id="project-buttons" class="invisible">
-      <button id="btn-remove-project" class="btn-remove-project" onclick="Project.removeProject.call(Project, Project.current)">➖</button>
+      <button id="btn-remove-project" class="btn-remove-project" onclick="Project.removeCurrentProject.call(Project)">➖</button>
       <button id="btn-move-project-to-left" class="btn-move-project-to-left" onclick="Project.moveCurrentToLeft()">←</button>
       <button id="btn-move-project-to-right" class="btn-move-project-to-right" onclick="Project.moveCurrentToRight()">→</button>
       <button id="btn-deal-project-extradata" class="" onclick="Project.defineExtraData()">Extra Data</button>
@@ -52,7 +52,10 @@
 
 
 
+<script src="js/MES_ERRORS.js"></script>
+<script src="js/MES_MESSAGES.js"></script>
 <script src="js/utils.js"></script>
+<script src="js/Messagerie.js"></script>
 <script src="js/xbridge.js"></script>
 <script src="js/Dom.js"></script>
 <script src="js/Dialog.js"></script>

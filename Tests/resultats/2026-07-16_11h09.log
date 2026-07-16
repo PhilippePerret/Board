@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/recuperation_projet_archive.rb
+Date : 2026-07-16 11h09
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/recuperation_projet_archive.rb ---
+✓ récupération d'un projet archivé
+  (osascript : 11 appels, 0.192s)
+  (durée totale de la spec : 0.814s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.814s

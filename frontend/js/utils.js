@@ -12,6 +12,9 @@ function debounce(fn, delay) {
   };
 }
 
+/**
+ * Remplacer les $1…$X dans le template +msg+
+ */
 function textSubstitute(msg, params){
   if (params) {
     if (Array.isArray(params)) {

@@ -4,7 +4,7 @@ class Project {
   // service_common_data : données pour les services communs
   static PROPERTIES = [
     'id', 'title', 'path', 'service_common_data', 'workTime', 'createdAt', 'updatedAt',
-    'services', 'background', 'icon',
+    'services', 'background', 'icon', 'genre',
     // documentation
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html'
   ]
@@ -127,14 +127,20 @@ class Project {
   }
   static get divButtons(){return this._dbutons || (this._dbutons = DGet('span#project-buttons')) }
 
-  static removeProject(projet){
-    reset()
+  /**
+   * Méthode pour retirer le projet (appelé par le bouton moins)
+   * 
+   * Deux solutions : soit archiver le projet, soit le retirer complètement
+   */
+  static removeCurrentProject(projet){
+    projet = this.current
     if (!projet) return error("Il faut sélectionner le projet à retirer.")
     new ConfirmDialog({
-      title: "Confirmation du retrait du projet",
-      message: "Ce retrait ne touche pas du tout le dossier du projet lui-même. Il est juste retiré du tablau de bord",
-      ouiBtn: {name: "Retirer", onclick: projet.remove.bind(projet), w: '160px'},
-      nonBtn: {name: 'Renoncer', w: '160px'}
+        title: "Confirmation du retrait du projet"
+      , message: getMsg('expli-retrait-projet', projet.title)
+      , ouiBtn: {name: "Archiver", onclick: projet.archive.bind(projet)}
+      , midBtn: {name: 'Retirer', onclick: projet.remove.bind(projet)}
+      , nonBtn: {name: 'Renoncer'}
     }).show()
   }
 
@@ -477,9 +483,15 @@ class Project {
   remove(){
     server.send({action: 'remove-project', projectId: this.id}, this.afterRemove.bind(this))
   }
-  afterRemove(retour){
+  // Archivage du projet
+  archive(){
+    server.send({action: 'archive-project', projectId: this.id}, this.afterRemove.bind(this))
+
+  }
+  afterRemove(isArchived, retour){
     this.obj.remove()
     if (this.id == this.constructor.current.id) this.constructor.deselect(this)
-    message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
+    App.setData('projects-in', retour.data.newProjectsIn)
+    App.setData('projects-out', retour.data.newProjectsOut)
   }
 }
