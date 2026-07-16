@@ -456,6 +456,18 @@ module BoardTest
     id
   end
 
+  # Même chose que create_fixture_project, mais le projet est directement
+  # placé dans projects-out (archivé) plutôt que projects-in.
+  def create_fixture_archived_project(title:, path: Dir.tmpdir, **extra)
+    id = create_fixture_project(title: title, path: path, **extra)
+    app_data = read_app_data
+    app_data['projects-in']&.delete(id)
+    app_data['projects-out'] ||= []
+    app_data['projects-out'] << id unless app_data['projects-out'].include?(id)
+    write_app_data(app_data)
+    id
+  end
+
   # Retire complètement une carte projet fixture (fichier + entrée
   # appdata.json, in ou out) — nettoyage de fin de test.
   def remove_fixture_project(project_id)

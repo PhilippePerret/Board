@@ -10,18 +10,13 @@
 - utiliser des icônes SVG simples (pour l'interface)
 - archives 
   - différence entre "retirer le projet" et "archiver le projet"
-  - remplacer le bouton "retirer" par "-"
-- demander à claude de faire une liste des fonctionnalités (table asiidoc) avec 4 colonnes : 
+  
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
-- ajouter une propriété "Type" à projet (type métier : "Application", "Scénario", "Roman", "Script-doctoring", "Maison", etc. — la liste doit pouvoir être alimentée à la main = nouvelle fonctionnalité du ParamDefiner)
 - pouvoir éditer le fichier d'un script perso
-
-- Autres services : 
-  - git init (tout le flux, juste en donnant le nom du repo sur Github)
-  - installation documentation (regrouper tout ce qui concerne la documentation)
 
 == Idées de nouveaux services (2026-07-11) ==
 
+  - git init (tout le flux, juste en donnant le nom du repo sur Github)
 - Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
 - Ouvrir le repo Git (statut, ou `git pull`/`push`)
 - Ouvrir l'URL locale du projet dans le navigateur
