@@ -24,9 +24,8 @@ class ProjectExtraDataPanel extends SidePanelDefiner {
   }
 
   updateValue(id, value){
-    this.project[id] = value
+    this.project.set(id, value, true)
     this.apply(id, value)
-    this.project.save()
   }
 
   // Pour appliquer tout de suite le choix

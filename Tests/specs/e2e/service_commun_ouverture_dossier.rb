@@ -63,6 +63,13 @@ def run_test
       finder_front_window_name == expected_name
     end
 
+    # → le service doit avoir réussi côté backend, pas planté en silence
+    #   après avoir ouvert la fenêtre (cf. #message qui affiche "undefined"
+    #   quand exec-service échoue — xbridge.js#error appelé sans
+    #   response.error exploitable, run_script rescue Exception dans
+    #   backend/lib/usefull.rb)
+    assert_service_message_ok!
+
     finder_close_all_windows
 
     # - recharger l'application
@@ -73,6 +80,7 @@ def run_test
 
     # → cette fois le dossier doit s'ouvrir directement, sans redemander
     click_service_and_wait_folder(SERVICE_DOM_ID, fixture_dir)
+    assert_service_message_ok!
   end
 ensure
   remove_fixture_project(id) if id

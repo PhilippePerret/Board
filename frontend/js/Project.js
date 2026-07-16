@@ -215,19 +215,15 @@ class Project {
   }
 
   get(key){ return this[key] ?? this.data[key]}
+  set(key, val, saveIt = false){ 
+    this[key] = val
+    saveIt && this.save()
+  }
 
   initServices(){
     this.services.startup = (this.services.startup ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'startup'})))
     this.services.others  = (this.services.others  ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'others'})))
   }
-
-  // /**
-  //  * OBSOLÈTE
-  //  */
-  // addToAData(values){
-  //   this.adata = this.adata || {}
-  //   Object.assign(this.adata, values)
-  // }
 
   save(callback){
     const newData = {}

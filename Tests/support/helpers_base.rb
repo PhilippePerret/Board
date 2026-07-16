@@ -105,6 +105,19 @@ module BoardTest
   def get_text(dom_id)              = osascript(AX_SCRIPT, 'get-text', dom_id)
   def get_text_prefix(prefix)       = osascript(AX_SCRIPT, 'get-text-prefix', prefix)
 
+  # Vérifie positivement le contenu de #message après un exec-service, au
+  # lieu de deviner à quoi ressemble un texte d'échec (fragile : dépend de
+  # la forme exacte prise par l'erreur ce jour-là). Par défaut, exige la
+  # présence de "succès" (mot commun aux messages de succès des scripts
+  # backend/scripts/*.scpt) — passer `expect:` pour un autre motif.
+  def assert_service_message_ok!(timeout: 4, expect: /succès/i)
+    wait_until(timeout, desc: -> { "#message = #{(get_text('message') rescue '(erreur)').inspect}" }) do
+      (get_text('message') rescue '') != 'Message footer'
+    end
+    msg = get_text('message').to_s
+    raise "Le service a échoué (#message = #{msg.inspect})" unless msg =~ expect
+  end
+
   # Ordre réel (DOM/affichage) des domIds donnés, tel que rencontré par un
   # unique parcours de l'arbre AX. Ceux non trouvés sont omis du résultat
   # (donc order_of(*ids).size peut être < ids.size si un élément n'est plus

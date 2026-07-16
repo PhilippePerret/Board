@@ -131,18 +131,17 @@ def run_script(script_name, params = "")
   rescue Timeout::Error
     (Process.kill('TERM', pid) rescue nil) if pid
     {
-      ok: false,
-      warning: "### TIMEOUT SCRIPT (> #{SCRIPT_TIMEOUT}s) ###",
-      cmd: cmd,
-      params: params.inspect
+      "ok" => false,
+      "error" => "### TIMEOUT SCRIPT (> #{SCRIPT_TIMEOUT}s) ###",
+      "cmd" => cmd,
+      "params" => params.inspect
     }
   rescue Exception => e
     {
-      ok: false,
-      warning: "### ERREUR DE SCRIPT ###",
-      script_error: e.message,
-      cmd: cmd,
-      params: params.inspect
+      "ok" => false,
+      "error" => e.message,
+      "cmd" => cmd,
+      "params" => params.inspect
     }
   end
 end
