@@ -33,6 +33,7 @@ function textSubstitute(msg, params){
       msg = msg.replace(/\$1/g, String(params))
     }
   }
+  msg = msg.replace(/\n/g, '<br>')
   return msg
 }
 
@@ -55,14 +56,6 @@ function historize(msg, params) {
 
 function jsonize(data){
   return JSON.stringify(data)
-}
-function message(msg){
-  document.querySelector('#message').innerHTML = '<span class="notice">' + msg + '</span>'
-  return true
-}
-function error(msg){
-  document.querySelector('#message').innerHTML = '<span class="error">' + msg + '</span>'
-  return false
 }
 
 function raise(msg){

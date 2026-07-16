@@ -485,11 +485,13 @@ class Project {
   }
   // Archivage du projet
   archive(){
+    server.send({action: 'archive-project', projectId: this.id}, this.afterRemove.bind(this))
 
   }
-  afterRemove(retour){
+  afterRemove(isArchived, retour){
     this.obj.remove()
     if (this.id == this.constructor.current.id) this.constructor.deselect(this)
-    message("Le projet “" + this.title + "” a été retiré du tableau de bord.")
+    App.setData('projects-in', retour.data.newProjectsIn)
+    App.setData('projects-out', retour.data.newProjectsOut)
   }
 }

@@ -488,7 +488,7 @@ class Project {
     server.send({action: 'archive-project', projectId: this.id}, this.afterRemove.bind(this))
 
   }
-  afterRemove(isArchived, retour){
+  afterRemove(retour){
     this.obj.remove()
     if (this.id == this.constructor.current.id) this.constructor.deselect(this)
     App.setData('projects-in', retour.data.newProjectsIn)

@@ -24,15 +24,9 @@ begin
 
   # === Destuction d'un projet ===
   when 'remove-project'
-    id = request["id"]
-    project_id = request['projectId']
-    ok = File.exist?(project_path(project_id))
-    if ok
-      APP_DATA['projects-out'] << APP_DATA['projects-in'].delete(project_id)
-      save_app_data
-    else
-      error = "Le projet introuvable : #{project_id} (dans #{PROJECT_CARD_FOLDER})"
-    end
+    data_returned = remove_or_archive_project(request['projectId'], false)
+  when 'archive-project'
+    data_returned = remove_or_archive_project(request['projectId'], true)
 
   # === Sauvegarde d'un projet ===
 
