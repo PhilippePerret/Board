@@ -138,8 +138,8 @@ class Project {
     new ConfirmDialog({
         title: "Confirmation du retrait du projet"
       , message: getMsg('expli-retrait-projet', projet.title)
-      , ouiBtn: {name: "Archiver", onclick: projet.archive.bind(projet)}
-      , midBtn: {name: 'Retirer', onclick: projet.remove.bind(projet)}
+      , ouiBtn: {name: `${svg('archive', 'btn')}Archiver`, onclick: projet.archive.bind(projet)}
+      , midBtn: {name: `${svg('bagx','btn')}Retirer`, onclick: projet.remove.bind(projet)}
       , nonBtn: {name: 'Renoncer'}
     }).show()
   }

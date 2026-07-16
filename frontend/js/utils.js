@@ -78,8 +78,25 @@ function heureCourante(withSeconds = true){
   return heure
 }
 
-// À appeler avant toute opération
+
+
 function reset(){
   message("")
 }
 
+
+/**
+ * https://icons.getbootstrap.com
+ * Et mettre l'image dans frontend/images
+ */
+function svg(root, type){
+  var v = 32
+  switch(type){
+    case 'button': case 'btn':
+      w = 24
+      break
+    default:
+      w = 32
+  }
+  return `<img src="images/${root}.svg" style="width:${w}px;vertical-align:middle;margin-right:8px;"> `
+}

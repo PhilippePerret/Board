@@ -1,5 +1,6 @@
 # MEMORY
 
+- PRIORITÉ — [État fin de session 2026-07-16](2026-07-16-Etat-fin-de-session.md) — relancer la suite de tests e2e, repartir des échecs constatés
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X
@@ -17,3 +18,4 @@
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
 - [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande
+- [État fin de session, tous les jours](feedbacks/daily_etat_fin_session.md) — écrire systématiquement le fichier daté, sans attendre une demande

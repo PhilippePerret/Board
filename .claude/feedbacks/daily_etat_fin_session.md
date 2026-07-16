@@ -1,0 +1,1 @@
+[État fin de session, tous les jours](daily_etat_fin_session.md) — écrire systématiquement en fin de session un fichier `.claude/YYYY-MM-DD-Etat-fin-de-session.md` (frontmatter name/description/metadata:type project, entrée PRIORITÉ dans MEMORY.md), sans attendre que l'user le demande. Pas seulement quand quelque chose de notable a été fait.
