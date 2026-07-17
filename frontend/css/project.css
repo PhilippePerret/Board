@@ -19,6 +19,7 @@ div.project {
   margin: 0 10px;
   min-height: 30vh;
   opacity: 0.65;
+  background-color: white;
 }
 div.project.selected {
   opacity: 1;

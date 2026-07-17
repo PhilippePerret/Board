@@ -102,7 +102,8 @@ const COMMON_SERVICES_DATA = [
     , name: 'Terminal au dossier'
     , group: 'Consoles'
     , params: [
-        {id: 'path', type: 'project'}
+          {id: 'path', type: 'project'}
+        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture'}
       ]
   },
   {
