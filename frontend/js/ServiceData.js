@@ -92,7 +92,10 @@ const COMMON_SERVICES_DATA = [
       id: 'open-iterm-at-folder'
     , name: 'iTerm au dossier'
     , group: 'Consoles'
-    , params: [ {id: 'path', type: 'project'} ]
+    , params: [ 
+          {id: 'path', type: 'project'} 
+        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture'}
+      ]
   },
   {
       id: 'open-terminal-at-folder'
