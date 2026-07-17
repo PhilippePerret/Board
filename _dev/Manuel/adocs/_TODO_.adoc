@@ -4,8 +4,6 @@
   
 == Todo list ==
 
-- quand on glisse le service commun "ouvrir iterm ou ouvrir terminal", demander pour un code à jouer tout de suite
-
 - utiliser des icônes SVG simples (pour l'interface)
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - pouvoir éditer le fichier d'un script perso
