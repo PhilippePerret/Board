@@ -60,6 +60,7 @@ class ServiceDefiner {
       definers.forEach(definer => {
         switch(definer.type){
           case 'service-name':
+            console.log("define pour service-name", definer)
             this.service.data.name = definer.value
             break
           case 'project':
