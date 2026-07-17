@@ -8,6 +8,8 @@ include::xdev/fonctionnalites.adoc[]
 
 include::xdev/projets.adoc[]
 
+include::xdev/apple-script.adoc[]
+
 include::xdev/collect-information.adoc[]
 
 include::xdev/definition-services.adoc[]

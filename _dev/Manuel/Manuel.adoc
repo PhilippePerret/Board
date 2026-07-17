@@ -1,6 +1,9 @@
 = Board =
 :toc:
 
+
+// Noms généraux
+:app-name: Board
 // Nom des boutons
 :start-work: Démarrer le travail
 // Chemins d'accès

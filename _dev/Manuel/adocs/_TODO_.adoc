@@ -1,8 +1,12 @@
 == BUGS ==
+- demande de nom pour le service : array au lieu de nom
+
 - Quand le panel des extra-data d'un projet est affiché, si on change de projet, ça doit afficher les données de ce projet
   Mais le problème est plus complexe : quand on déselectionne le projet, le panneau doit se fermer. Mais comment alors, passer au panneau des extra data du nouveau projet sélectionné de façon fluide ?
   
 == Todo list ==
+
+- quand on glisse le service commun "ouvrir iterm ou ouvrir terminal", demander pour un code à jouer tout de suite
 
 - utiliser des icônes SVG simples (pour l'interface)
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service

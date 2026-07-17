@@ -24,6 +24,12 @@ APP_DATA_FILE = ensure_file(
   # Les données courantes de l'application
 APP_DATA = JSON.parse(IO.read(APP_DATA_FILE))
 
+# tag::scripts-with-lib[]
+OSASCRIPT_WITH_LIB = {
+  'OpenOrUpdateInBrowser.scpt' => true
+}
+# end::scripts-with-lib[]
+
 def save_app_data
   IO.write(APP_DATA_FILE, APP_DATA.to_json)
 end
@@ -91,9 +97,6 @@ end
 }
 SCRIPT_TIMEOUT = 8 # secondes
 
-OSASCRIPT_WITH_LIB = {
-  'OpenOrUpdateInBrowser.scpt' => true
-}
 
 ### === Jouer un script du dossier /scripts/ ===
 

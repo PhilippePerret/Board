@@ -464,6 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_fonctionnalités">fonctionnalités</a></li>
 <li><a href="#_les_projet">Les projet</a></li>
+<li><a href="#_applescript">AppleScript</a></li>
 <li><a href="#_collecte_informations">Collecte informations</a></li>
 <li><a href="#_définition_des_services_2">Définition des services</a></li>
 <li><a href="#_définition_des_services_3">Définition des services</a></li>
@@ -482,12 +483,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Quand le panel des extra-data d&#8217;un projet est affiché, si on change de projet, ça doit afficher les données de ce projet
 Mais le problème est plus complexe : quand on déselectionne le projet, le panneau doit se fermer. Mais comment alors, passer au panneau des extra data du nouveau projet sélectionné de façon fluide ?</p>
 </li>
-<li>
-<p>quand on règle sidebar à 0 (ouverture fenêtre projet), la sidebar est quand même en place (elle devrait être fermée)</p>
-</li>
-<li>
-<p>Quand on annule un service commun, les données s&#8217;enregsitrent quand même…</p>
-</li>
 </ul>
 </div>
 </div>
@@ -497,12 +492,6 @@ Mais le problème est plus complexe : quand on déselectionne le projet, le pann
 <div class="sectionbody">
 <div class="ulist">
 <ul>
-<li>
-<p>actualisation de la documentation dans le navigateur : avec AS, regarder le chemin du fichier (si le bon : recharger, si pas le bon, l&#8217;ouvrir)</p>
-</li>
-<li>
-<p>un rapport d&#8217;erreur, même pour l&#8217;utilisateur</p>
-</li>
 <li>
 <p>utiliser des icônes SVG simples (pour l&#8217;interface)</p>
 </li>
@@ -657,7 +646,7 @@ Mais le problème est plus complexe : quand on déselectionne le projet, le pann
 <h2 id="reglages-app">Réglages de l&#8217;application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>En cliquant sur le titre include::/../../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
+<p>En cliquant sur le titre include::/../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
 </div>
 </div>
 </div>
@@ -1349,6 +1338,68 @@ Cette propriété peut alors être partagée entre plusieurs services (typiqueme
 </div>
 </div>
 <div class="sect2">
+<h3 id="_applescript">AppleScript</h3>
+<div class="paragraph">
+<p><strong>include::../../../../frontend/js/App.js[tag=app-name]</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
+</div>
+<div class="paragraph">
+<p>Une librairie avec des méthodes utiles est implémentée dans backend/script/lib/Lib.scpt (c&#8217;est un exécutable qui ne peut pas être modifié, il faut modifier <code>Lib-editable.scpt</code>).</p>
+</div>
+<div class="paragraph">
+<p>Pour pouvoir utiliser cette librairie dans n&#8217;importe quel script, il faut :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ajouter le nom de ce script dans <code>OSASCRIPT_WITH_LIB</code> dans `backend/lib/userfull.rb</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>OSASCRIPT_WITH_LIB = {
+  'OpenOrUpdateInBrowser.scpt' &#8658; true
+}</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ajouter en haut de son fichier :</p>
+</li>
+</ul>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>on run argv
+  set libPath to item 1 of argv
+  set Lib to load script POSIX file libPath</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Ou la version complète pour développement :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>on run argv
+	try
+		set libPath to item 1 of argv
+		set Lib to load script POSIX file libPath
+	on error errMsg number errNum
+		return "{\"ok\": false, \"error\":\"ERREUR CHARGEMENT LIBRAIRIE : " &amp; errMsg &amp; " avec " &amp; libPath &amp; "\"}"
+	end try
+	&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_collecte_informations">Collecte informations</h3>
 <div class="paragraph">
 <p><em>Note : Ce fichier définit des processus qui seront en pratique plus tard. Pour le moment, l&#8217;utilisateur remplit des fiches projet qui le définissent explicitement.</em></p>
@@ -1725,7 +1776,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-17 05:59:49 +0200
+Last updated 2026-07-17 10:36:35 +0200
 </div>
 </div>
 </body>

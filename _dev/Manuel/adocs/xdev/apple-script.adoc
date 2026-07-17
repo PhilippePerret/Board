@@ -1,0 +1,39 @@
+=== AppleScript ===
+
+:backend-dir: ../../../../backend
+
+**{app-name}** fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.
+
+Une librairie avec des méthodes utiles est implémentée dans backend/script/lib/Lib.scpt (c'est un exécutable qui ne peut pas être modifié, il faut modifier `Lib-editable.scpt`).
+
+Pour pouvoir utiliser cette librairie dans n'importe quel script, il faut : 
+
+
+- ajouter le nom de ce script dans `OSASCRIPT_WITH_LIB` dans `backend/lib/userfull.rb
+
+====
+include::{backend-dir}/lib/usefull.rb[tag="scripts-with-lib"]
+====
+
+- ajouter en haut de son fichier : 
+
+====
+on run argv
+  set libPath to item 1 of argv
+  set Lib to load script POSIX file libPath
+
+	...
+====
+
+Ou la version complète pour développement :
+
+====
+on run argv
+	try
+		set libPath to item 1 of argv
+		set Lib to load script POSIX file libPath
+	on error errMsg number errNum
+		return "{\"ok\": false, \"error\":\"ERREUR CHARGEMENT LIBRAIRIE : " & errMsg & " avec " & libPath & "\"}"
+	end try
+	...
+====
