@@ -440,6 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_bugs">BUGS</a></li>
 <li><a href="#_todo_list">Todo list</a></li>
 <li><a href="#_idées_de_nouveaux_services_2026_07_11">Idées de nouveaux services (2026-07-11)</a></li>
 <li><a href="#_présentation">Présentation</a></li>
@@ -448,6 +449,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_panneau_de_nouveau_projet">Panneau de nouveau projet</a></li>
 </ul>
 </li>
+<li><a href="#reglages-app">Réglages de l&#8217;application</a></li>
 <li><a href="#services">Les services</a>
 <ul class="sectlevel2">
 <li><a href="#_définition_des_services">Définition des services</a></li>
@@ -460,6 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_développement">Développement</a>
 <ul class="sectlevel2">
+<li><a href="#_fonctionnalités">fonctionnalités</a></li>
 <li><a href="#_les_projet">Les projet</a></li>
 <li><a href="#_collecte_informations">Collecte informations</a></li>
 <li><a href="#_définition_des_services_2">Définition des services</a></li>
@@ -471,45 +474,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
+<h2 id="_bugs">BUGS</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Quand le panel des extra-data d&#8217;un projet est affiché, si on change de projet, ça doit afficher les données de ce projet
+Mais le problème est plus complexe : quand on déselectionne le projet, le panneau doit se fermer. Mais comment alors, passer au panneau des extra data du nouveau projet sélectionné de façon fluide ?</p>
+</li>
+<li>
+<p>quand on règle sidebar à 0 (ouverture fenêtre projet), la sidebar est quand même en place (elle devrait être fermée)</p>
+</li>
+<li>
+<p>Quand on annule un service commun, les données s&#8217;enregsitrent quand même…</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_todo_list">Todo list</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>BUG : Toujours le même service courant</p>
+<p>actualisation de la documentation dans le navigateur : avec AS, regarder le chemin du fichier (si le bon : recharger, si pas le bon, l&#8217;ouvrir)</p>
 </li>
 <li>
-<p>git init (tout le flux, juste en donnant le nom sur Github)</p>
+<p>un rapport d&#8217;erreur, même pour l&#8217;utilisateur</p>
 </li>
 <li>
-<p>iTerm</p>
+<p>utiliser des icônes SVG simples (pour l&#8217;interface)</p>
 </li>
 <li>
-<p>installation documentation (regrouper tout ce qui concerne la documentation)</p>
+<p>Test et implémentation de la redéfinition à l&#8217;aide de meta+click sur service</p>
 </li>
 <li>
-<p>meta + click = modification du service personnalisé (fait avec les commons)</p>
-</li>
-<li>
-<p>Maj+click sur service pour le sélectionner &#8658; boutons services ("↑", "↓", delete)</p>
-</li>
-<li>
-<p>Pouvoir déplacer les services, donc :</p>
-</li>
-<li>
-<p>click les sélectionne</p>
-</li>
-<li>
-<p>flèches les déplacent</p>
-</li>
-<li>
-<p>Delete les retire</p>
-</li>
-<li>
-<p>Reprendre le module horloge ici avec le calcul des temps</p>
-</li>
-<li>
-<p>pouvoir redéfinir la position/taille d&#8217;une fenêtre de service</p>
+<p>pouvoir éditer le fichier d&#8217;un script perso</p>
 </li>
 </ul>
 </div>
@@ -521,10 +522,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Terminal positionné sur le dossier du projet (juste <code>cd</code>, sans rien lancer) — en cours</p>
-</li>
-<li>
-<p>Ouvrir dans VSCode (déjà mentionné comme exemple dans <code>CLAUDE.md</code>, jamais implémenté)</p>
+<p>git init (tout le flux, juste en donnant le nom du repo sur Github)</p>
 </li>
 <li>
 <p>Lancer un serveur de dev (<code>npm run dev</code>, <code>rails server</code>&#8230;&#8203;) — terminal dédié, pas juste "jouer un script"</p>
@@ -534,18 +532,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>Ouvrir l&#8217;URL locale du projet dans le navigateur</p>
-</li>
-<li>
-<p>pouvoir définir :</p>
-</li>
-<li>
-<p>le navigateur par défaut</p>
-</li>
-<li>
-<p>l&#8217;éditeur de documentation (asciidoctor) par défaut  (CotEditor)</p>
-</li>
-<li>
-<p>le traitement de texte par défaut</p>
 </li>
 </ul>
 </div>
@@ -668,6 +654,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="reglages-app">Réglages de l&#8217;application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>En cliquant sur le titre include::/../../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="services">Les services</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -694,7 +688,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect3">
 <h4 id="common-services">Services communs</h4>
 <div class="paragraph">
-<p>Les services communs ne s&#8217;ajoutent pas aux projets, ils sont toujours accessibles par eux. Le premier service commun est par exemple “Ouvrir le dossier du projet”</p>
+<p>Les services communs peuvent s&#8217;ajouter aux projets, mais ils peuvent aussi être cliqués dans la liste. Ils s&#8217;appliquent alors au projet courant.</p>
 </div>
 <div class="paragraph">
 <p>On affiche les services communs simplement en cliquant sur la fiche d&#8217;un projet. En même temps qu&#8217;il se met en sélection, la liste des services communs s&#8217;affiche à droite de l&#8217;interface.</p>
@@ -743,6 +737,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Les <a href="#script-params">paramètres de script</a> (très importants, ils font l&#8217;objet d&#8217;un détail propre)</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dynParams</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optionnellement, il peut y avoir des paramètres à définir à l&#8217;utilisation du bouton.<br>
+Ils fonctionnent essentiellement commes les <a href="#script-params">paramètres de script</a>, mais les valeurs ne sont pas persistées.</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect3">
@@ -770,12 +769,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </colgroup>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Propriété</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du paramètres (peut être répété dans les paramètres qui est un Array)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Le type précis qui va définir exactement la valeur transmise. Voir les <a href="#params-types">types de paramètres</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quand le <code>type</code> est <code>select</code>, pour définir les valeurs à proposer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La valeur par défaut ou la valeur brute.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>absolute</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si true, la propriété est enregistrée ou relevée dans project.adata.<br>
+Cette propriété peut alors être partagée entre plusieurs services (typiquement : le dossier de documentation).<br>
+<strong>DOIT DEVENIR OBSOLÈTE</strong>
+<strong>Maintenant, il existe une façon plus simple de le faire, en mettant le type <em>`projet`</em> ou <em>`app`</em> et en identifiant (<code>ìd</code>) la propriété du projet ou de l&#8217;application à prendre.</strong></p></td>
 </tr>
 </tbody>
 </table>
@@ -792,8 +810,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </colgroup>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>raw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Donnée brute fournie dans <code>value</code></p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bounds</code></p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour obtenir les dimensions d&#8217;une fenêtre Finder</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>finder-window</code></p></td>
@@ -833,7 +859,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect3">
 <h4 id="exec-service-frontend">Exécution frontend d&#8217;un service</h4>
 <div class="paragraph">
-<p>La plupart des services appellent un script qui se trouve backend. Mais certains, comme l&#8217;horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu&#8217;à l&#8217;enregistrement du temps et des changelogs/todo).</p>
+<p>La plupart des services appellent un script qui se trouve backend (dont le nom est tiré de l'`id` du service ou définit explicitement par la propriété <code>script</code>). Mais certains services, comme l&#8217;horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu&#8217;à l&#8217;enregistrement du temps et des changelogs/todo).</p>
 </div>
 <div class="paragraph">
 <p>Pour caractériser ce genre de service, on définit dans leur <a href="#services-data">données</a> la propriété <code>front</code> qui sera la méthode (bindée) à appeler.</p>
@@ -850,6 +876,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>les données propres au service (<code>sdata[&lt;service-id&gt;]</code>) en second argument, comme une liste de valeurs.</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_redéfinition_du_service">Redéfinition du service</h4>
+<div class="paragraph">
+<p>On peut redéfinir les données d&#8217;un service quelconque en cliquant sur lui tout en tenant la touche combo:meta appuyée.</p>
 </div>
 <div class="paragraph">
 <p><em>Cette partie décrit tous les services qu&#8217;on peut utiliser pour un projet.</em></p>
@@ -1054,6 +1086,263 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Comme je n&#8217;aime pas vraiment les promesses (<code>Promise</code>), je suis revenu dans cette application à un traitement à l&#8217;ancienne avec les <em>callbacks</em>.</p>
 </div>
 <div class="sect2">
+<h3 id="_fonctionnalités">fonctionnalités</h3>
+<div class="paragraph">
+<p><em>TD = Todo, à faire</em>
+<em>Docu</em> : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n&#8217;est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
+<em>Man</em>: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est décrite dans le manuel utilisateur, avec un lien pour s&#8217;y rendre.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Nom</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Test</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Docu</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Man</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">L&#8217;Application</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Réglage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des données de l&#8217;application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#reglages-app">Manuel</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Les projets</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ajout d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le bouton ”+” qui permet d&#8217;ajouter un projet à Board.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des extra-data d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">par le bouton "Extra-data"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Suppression d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retire la carte du projet de Board (fichier de carte détruit)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Modification du titre d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renommage du titre affiché sur la carte projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Déplacement d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Réorganisation des cartes projet par glisser-déposer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Les services</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Attribution d&#8217;un service à un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser-déposer un service (commun ou personnalisé) depuis le panneau de services jusqu&#8217;à une carte projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrait d&#8217;un service d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser-déposer un service attribué hors de la carte projet pour le retirer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ajout d&#8217;un service aux "services au démarrage"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser-déposer un service jusqu&#8217;à la zone "Services au démarrage" d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exécution des services au démarrage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lancement automatique des services attribués à un projet lors de son ouverture/activation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture du dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun : ouvre une fenêtre Finder positionnée/dimensionnée sur le dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Démarrage de l&#8217;horloge de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "work-clock" : minuteur de session/tranche de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Édition de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun : ouvre le dossier de documentation du projet dans l&#8217;éditeur configuré</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-a-file" : ouvre le fichier principal du manuel (html/pdf) du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Initialisation de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "init-documentation" : crée la structure de documentation dans un dossier choisi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actualisation de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "update-documentation" : régénère la documentation à partir du fichier .adoc principal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture d&#8217;un Terminal au dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-terminal-at-folder"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrait des services au démarrage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser un service hors de la zone "Services au démarrage" ; le bouton "GO!" disparaît quand il n&#8217;en reste plus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exécution répétée d&#8217;un service attribué</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relancer un service déjà attribué à un projet plusieurs fois de suite</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau des réglages de l&#8217;application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Édition des données globales de l&#8217;app (champs string/app), persistantes après rechargement</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création d&#8217;un projet sans sélection Finder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cas d&#8217;erreur : clic sur "OK" sans avoir sélectionné de dossier dans le Finder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture d&#8217;iTerm au dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-iterm-at-folder"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture du projet dans VSCode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-in-vscode"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création d&#8217;un projet, sélection Finder = un fichier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cas d&#8217;erreur : la sélection Finder doit être un dossier, pas un fichier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Seuils de l&#8217;horloge de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alertes/changement d&#8217;état de "work-clock" au franchissement des seuils de durée</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fin de séance d&#8217;horloge : changelog + todo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">À l&#8217;arrêt de "work-clock", saisie d&#8217;une entrée de changelog puis d&#8217;une todo, écrites dans CHANGELOG.md/TODO.md du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Les services personnalisés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture d&#8217;une fenêtre dans le Finder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "open-finder-window" : ouvre une fenêtre Finder aux position/taille/sidebar définis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jouer un script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "run-script" : exécute un script choisi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Versionner un fichier/dossier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "file-versioning" : incrémente le numéro de version (patch/mineure/majeure), archive optionnelle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvrir une URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "open-URL"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chronomètre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "run-chronometre" : mesure un temps, option d&#8217;enregistrement du temps de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_les_projet">Les projet</h3>
 <div class="paragraph">
 <p>La persistance de l&#8217;ordre est définie dans <code>appdata.json</code>, dans la propriété <code>projects-in</code>. Cette donnée contient l&#8217;identifiant des projets, donc le root du fichier YAML de leurs données.</p>
@@ -1233,6 +1522,11 @@ des propriétés ne correspondent à rien.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>scType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Le type du <a href="#script-backend">script backend</a> si ça n&#8217;est pas un AppleScript</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>.rb</code>, <code>.py</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>afterDefinedParams</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l&#8217;enregistrement.</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -1431,7 +1725,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-08 05:33:48 +0200
+Last updated 2026-07-17 05:59:49 +0200
 </div>
 </div>
 </body>

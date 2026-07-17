@@ -60,18 +60,6 @@ begin
       projectsData: projects_data
     }
     
-    # === Chargement de :what ===
-  # when "load"
-  #   case request['what']
-
-  #   # === Chargement des projets ===
-  #   else
-  #     ok = false
-  #     returned_message = "Données inconnues : what = #{request['what']}"
-  #     returned_data     = {}
-  #   end
-
-
   # Lancement d'un script osascript
   when "run-osascript"
     returned_data = run_script("#{request['script-name']}.scpt")

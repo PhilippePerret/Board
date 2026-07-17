@@ -5,6 +5,8 @@ window.onload = function(ev){
 
 class App {
 
+  static NAME = /* tag=app-name[] */"Tableau de bord"/* end=app-name[] */
+
   // this.data = les données de appdata.json
 
   static init(retour){

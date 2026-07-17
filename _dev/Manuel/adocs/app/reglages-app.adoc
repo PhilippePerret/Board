@@ -1,0 +1,4 @@
+[[reglages-app, Réglages de l'application]]
+== Réglages de l'application ==
+
+En cliquant sur le titre include::/../{js-folder}App.js[tag=app-name] de l'application

@@ -137,6 +137,7 @@ class Project {
     if (!projet) return error("Il faut sélectionner le projet à retirer.")
     new ConfirmDialog({
         title: "Confirmation du retrait du projet"
+      , width: '660px'
       , message: getMsg('expli-retrait-projet', projet.title)
       , ouiBtn: {name: `${svg('archive', 'btn')}Archiver`, onclick: projet.archive.bind(projet)}
       , midBtn: {name: `${svg('bagx','btn')}Retirer`, onclick: projet.remove.bind(projet)}

@@ -90,6 +90,11 @@ end
   '.sh'   => 'zsh'
 }
 SCRIPT_TIMEOUT = 8 # secondes
+
+OSASCRIPT_WITH_LIB = {
+  'OpenOrUpdateInBrowser.scpt' => true
+}
+
 ### === Jouer un script du dossier /scripts/ ===
 
 def run_script(script_name, params = "")
@@ -98,7 +103,6 @@ def run_script(script_name, params = "")
   # scType oublié dans le service.
   # Mais comme je ne veux plus que ça soit indiqué, on fait un test 
   # ici pour trouver vraiment le script quand il n'existe pas.
-  params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
   cmd = nil
   extname = File.extname(script_name)
   if extname == '.scpt'
@@ -113,6 +117,21 @@ def run_script(script_name, params = "")
   end
   pid = nil
   begin
+    # Certains script AS ont besoin de la librairie (à l'avenir : tous)
+    if OSASCRIPT_WITH_LIB.key?(script_name)
+      params = case params
+      when String then [params]
+      when Array then params
+      else []
+      end
+      folder = File.expand_path(File.join(__dir__, '..', 'scripts'))
+      params.unshift File.join(folder, 'lib', 'Lib.scpt')
+      # return {params: params}
+    else
+      # return {non: "#{script_name} n'appartient pas à #{OSASCRIPT_WITH_LIB.inspect}"}
+    end
+    # On met les paramètres en string
+    params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
     cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
     # return  {script_command: "cmd = #{cmd}"}
     res = nil

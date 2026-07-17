@@ -4,14 +4,18 @@
 // Nom des boutons
 :start-work: Démarrer le travail
 // Chemins d'accès
+// Utiliser {id}
 :js-folder: ../../../../frontend/js
 
+:app-name: include::{js-folder}/App.js[tag=app-name]
 
 include::adocs/_TODO_.adoc[]
 
 include::adocs/presentation.adoc[]
 
 include::adocs/prise-en-main.adoc[]
+
+include::adocs/app/reglages-app.adoc[]
 
 include::adocs/services.adoc[]
 

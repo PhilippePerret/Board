@@ -24,7 +24,8 @@ window.bridge = {
     _callbacks: {},
 
     __send(payload) {
-        console.log("payload", payload)
+        this._payload = payload // pour erreurs
+        // console.log("payload", payload)
         window.webkit.messageHandlers.bridge.postMessage(payload);
     },
 
@@ -35,6 +36,7 @@ window.bridge = {
             data = JSON.parse(jsonString);
         } catch (e) {
             console.error("Invalid JSON from backend:", jsonString);
+            console.error("Erreur avec la requête : ", this._payload)
             return;
         }
         const id = data.id;

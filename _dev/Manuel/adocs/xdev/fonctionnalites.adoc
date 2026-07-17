@@ -8,6 +8,14 @@ _Man_: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est déc
 |====
 | **Nom** | **Description** | **Test** | **Docu** | **Man**
 
+5+| L'Application
+
+| Réglage 
+| Définition des données de l'application
+| Oui
+| TD
+| <<reglages-app, Manuel>>
+
 5+| Les projets
 
 | Ajout d'un projet

@@ -70,9 +70,14 @@ const COMMON_SERVICES_DATA = [
       id:   'open-a-file'
     , name: 'Ouvrir la documentation'
     , group: 'Documentation'
+    , script: 'OpenOrUpdateInBrowser.scpt'
     , params: [
         {id: 'docu-main-file-html', type: 'project', if_undefined: {q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}}
       ]
+    , afterDefined: (params) => { 
+        params[0] = `file://${params[0]}`
+        return params
+    }
   },
   {
       id:   'init-documentation'

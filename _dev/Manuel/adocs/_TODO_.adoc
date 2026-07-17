@@ -7,6 +7,9 @@
 
 == Todo list ==
 
+- actualisation de la documentation dans le navigateur : avec AS, regarder le chemin du fichier (si le bon : recharger, si pas le bon, l'ouvrir)
+- un rapport d'erreur, même pour l'utilisateur
+
 - utiliser des icônes SVG simples (pour l'interface)
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - pouvoir éditer le fichier d'un script perso
