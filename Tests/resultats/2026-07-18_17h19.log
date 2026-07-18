@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/attribution_service_nom_pas_en_cache.rb
+Date : 2026-07-18 17h19
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_nom_pas_en_cache.rb ---
+✓ le nom personnalisé d'un service commun glissé sur un projet ne reste pas en cache pour le glissé suivant sur un autre projet
+  (osascript : 21 appels, 7.202s)
+  (durée totale de la spec : 8.059s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 8.059s

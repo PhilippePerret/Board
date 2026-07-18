@@ -297,10 +297,10 @@ class Project {
   }
   preAddService(service, where){
     console.log("-> preAddService", service)
+    service = service.duplicateService()
     service.define(this, this.addService.bind(this, service, where))
   }
   addService(service, where /* others ou startup */){
-    service.uuid = uniqId()
     service.type = where
     this.services[where].push(service)
     const card = this.getServiceCard(service)
