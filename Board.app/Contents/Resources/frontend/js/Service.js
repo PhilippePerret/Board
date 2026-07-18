@@ -183,10 +183,7 @@ class Service {
   }
   
   duplicateService(){
-    const dataDupService = Object.assign({}, this.data, {
-      uuid: uniqId(), 
-      transient: true /* destruction après exécution */
-    })
+    const dataDupService = Object.assign({}, this.data, {uuid: uniqId()})
     return new Service(dataDupService)
   }
 
@@ -205,25 +202,12 @@ class Service {
    * Fonction qui s'assure que toutes les informations requises sont
    * bien définies pour le projet +projet+. Dans le cas contraire, on
    * les définis
-   * 
-   * TODO La fonction doit être plus complète maintenant : même si les
-   * paramètres ont été définis, certains peuvent avoir été marqués
-   * :transient:, qui doivent être définis chaque fois.
    */
   ensureServiceData(projet){
     historize("-> ensureServiceData", projet)
-    var redefineIt = false
-    if (projet.common_services_data && projet.common_services_data[this.id]){
-      // <= le projet a des common_services_data pour ce service
-      // => Il faut s'assurer qu'aucun paramètre ne doit être marqué à 
-      //    redéfinir
-      projet.common_services_data[this.id].forEach( pam => {
-        if (pam == ':transient:') redefineIt = true
-      })
-      if (redefineIt) { console.log("Paramètre(s) transient => à redéfinir", projet.common_services_data[this.id])}
-      else return true
-    }
-    return this.defineCommonServiceParameters(projet, redefineIt /* false = 1re définition */)
+    if (this.transient) return this.defineCommonServiceParameters(projet, true)
+    if (projet.common_services_data && projet.common_services_data[this.id]) return true
+    return this.defineCommonServiceParameters(projet, false /* 1re définition */)
   }
 
   defineCommonServiceParameters(projet, redefine = false){
@@ -250,7 +234,7 @@ class Service {
     console.log("Projet après définition des paramètres", projet, service)
     projet.save(() => {
       Object.assign(projet.common_services_data, {[service.id]: realParamsValues})
-      this.execCommonServiceOn.call(this, projet)
+      new ServiceExecuter(this).execOnProject(projet)
     })
   }
 

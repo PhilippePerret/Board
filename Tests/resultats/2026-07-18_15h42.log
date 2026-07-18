@@ -1,0 +1,29 @@
+Moteur : pont
+Arguments : e2e/service_commun_param_transient.rb e2e/attribution_service_nom_pas_en_cache.rb
+Date : 2026-07-18 15h42
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_param_transient.rb ---
+✗ paramètre :transient d'un service commun non persisté, redemandé à chaque clic
+    Timeout d'attente dépassé (5s) — élément introuvable : __code__
+  (osascript : 59 appels, 0.408s)
+  (durée totale de la spec : 6.678s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_nom_pas_en_cache.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ le nom personnalisé d'un service commun glissé sur un projet ne reste pas en cache pour le glissé suivant sur un autre projet
+    Timeout d'attente dépassé (4s) — carte projet A = {"id" => "fixture-1784382183u3ay", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-a-20260718-6062-m9fl1b", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 12 appels, 3.383s)
+  (durée totale de la spec : 8.746s)
+
+Échecs :
+1. paramètre :transient d'un service commun non persisté, redemandé à chaque clic
+    Timeout d'attente dépassé (5s) — élément introuvable : __code__
+  (osascript : 59 appels, 0.408s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+2. le nom personnalisé d'un service commun glissé sur un projet ne reste pas en cache pour le glissé suivant sur un autre projet
+    Timeout d'attente dépassé (4s) — carte projet A = {"id" => "fixture-1784382183u3ay", "title" => "Projet A", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-a-20260718-6062-m9fl1b", "workTime" => 0, "services" => {"startup" => [], "others" => []}}
+  (osascript : 12 appels, 3.383s)
+
+-------------------
+Success: 0  Failures: 2  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 15.424s

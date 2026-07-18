@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : e2e/service_commun_param_transient.rb
+Date : 2026-07-18 17h01
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_param_transient.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ paramètre :transient d'un service commun non persisté, redemandé à chaque clic
+  (osascript : 11 appels, 0.171s)
+  (durée totale de la spec : 1.984s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.984s

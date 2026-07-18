@@ -1,0 +1,159 @@
+Moteur : pont
+Arguments : e2e/service_commun_param_transient.rb e2e/attribution_service_nom_pas_en_cache.rb
+Date : 2026-07-18 16h40
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_param_transient.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ paramètre :transient d'un service commun non persisté, redemandé à chaque clic
+    Timeout d'attente dépassé (10s) — aucune nouvelle fenêtre Terminal (avant : [247, 2482]) -- DUMP:
+[window id=247 name=Board — prox2.command — osascript ◂ run-tests e2e/service_commun_param_transient.rb e2e/attribution_service_nom_pas_en_cache.rb — 82×30]
+  tab 1 history=<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_param_transient.rb ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>
+[window id=2482 name=philippeperret — test.command — Python ◂ test.command — 82×30]
+
+
+  (osascript : 9 appels, 0.169s)
+  (durée totale de la spec : 11.907s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_nom_pas_en_cache.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ le nom personnalisé d'un service commun glissé sur un projet ne reste pas en cache pour le glissé suivant sur un autre projet
+    Timeout d'attente dépassé (4s) — nom prérempli = "Terminal Claude"
+  (osascript : 40 appels, 7.270s)
+  (durée totale de la spec : 12.645s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. paramètre :transient d'un service commun non persisté, redemandé à chaque clic
+    Timeout d'attente dépassé (10s) — aucune nouvelle fenêtre Terminal (avant : [247, 2482]) -- DUMP:
+[window id=247 name=Board — prox2.command — osascript ◂ run-tests e2e/service_commun_param_transient.rb e2e/attribution_service_nom_pas_en_cache.rb — 82×30]
+  tab 1 history=<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_param_transient.rb ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>
+[window id=2482 name=philippeperret — test.command — Python ◂ test.command — 82×30]
+
+
+  (osascript : 9 appels, 0.169s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+2. le nom personnalisé d'un service commun glissé sur un projet ne reste pas en cache pour le glissé suivant sur un autre projet
+    Timeout d'attente dépassé (4s) — nom prérempli = "Terminal Claude"
+  (osascript : 40 appels, 7.270s)
+
+-------------------
+Success: 0  Failures: 2  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 24.552s

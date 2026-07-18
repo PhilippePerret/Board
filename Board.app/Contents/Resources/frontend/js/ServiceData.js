@@ -182,7 +182,13 @@ const CUSTOM_SERVICES_DATA = [
  // Table de lookup par id (O(1)), pour Service#absData
  // dans ALL_SERVICES_DATA à l'exécution.
  const SERVICES_DATA_TABLE = {}
- CUSTOM_SERVICES_DATA.forEach(d => SERVICES_DATA_TABLE[d.id] = Object.assign({stype: 'custom'}, d))
- COMMON_SERVICES_DATA.forEach(d => SERVICES_DATA_TABLE[d.id] = Object.assign({stype: 'common'}, d))
+
+ function defineSomeVolatileProps(s, stype) {
+  SERVICES_DATA_TABLE[s.id] = Object.assign({stype: stype}, s)
+  if (s.params.some(p => p.transient)) Object.assign(s, {transient: true})
+ }
+
+ CUSTOM_SERVICES_DATA.forEach(s => {defineSomeVolatileProps(s, 'custom')})
+ COMMON_SERVICES_DATA.forEach(s => {defineSomeVolatileProps(s, 'common')})
 
  const ALL_SERVICES_DATA = [...CUSTOM_SERVICES_DATA, ...COMMON_SERVICES_DATA]
