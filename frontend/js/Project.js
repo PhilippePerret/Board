@@ -9,10 +9,6 @@ class Project {
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html'
   ]
 
-  static uniqId(){
-    return Date.now() + Math.random().toString(16).slice(2);
-  }
-
   static get current(){ return this._current}
   static set current(p){
     this._current = p
@@ -88,9 +84,9 @@ class Project {
       else if (retour.data.error == 'No selection') return error(getErr('project-folder-not-selected'))
     }
     const projet = new Project(Object.assign(retour.data, {
-      id: Project.uniqId(),
-      title: retour.data.name,
-      workTime: 0
+        id: uniqId()
+      , title: retour.data.name
+      , workTime: 0
     }))
     new TextFieldDialog({
         title: "Nom du nouveau projet"
@@ -206,7 +202,7 @@ class Project {
     console.log("data", data)
     this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
     this.data = data
-    if (!this.id ) this.id = Project.uniqId()
+    if (!this.id ) this.id = uniqId()
     if (!this.title) this.title = '-projet sans titre-'
     if (!this.path ) raise("Le path du projet est obligatoire.")
     if (!this.services) this.services = {startup: [], others: []}
@@ -304,7 +300,7 @@ class Project {
     service.define(this, this.addService.bind(this, service, where))
   }
   addService(service, where /* others ou startup */){
-    service.uuid = Project.uniqId()
+    service.uuid = uniqId()
     service.type = where
     this.services[where].push(service)
     const card = this.getServiceCard(service)

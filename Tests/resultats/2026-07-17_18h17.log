@@ -1,0 +1,269 @@
+Moteur : pont
+Arguments : e2e/service_commun_ouverture_terminal.rb
+Date : 2026-07-17 18h17
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+✗ service commun 'terminal au dossier' : code d'un mot ('ls')
+    Timeout d'attente dépassé (10s) — tab introuvable dans la fenêtre id 3165 avec "board-test-project-20260717-33107-bbbgpj" dans son historique -- DUMP:
+[window id=3165 name=board-test-project-20260717-33107-bbbgpj — prox2.command — -zsh — 82×30]
+  tab 1 history=<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>
+[window id=2625 name=Board — prox2.command — osascript ◂ run-tests e2e/service_commun_ouverture_terminal.rb — 82×30]
+  tab 1 history=<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>
+
+
+  (osascript : 9 appels, 0.145s)
+  (durée totale de la spec : 11.747s)
+
+Échecs :
+1. service commun 'terminal au dossier' : code d'un mot ('ls')
+    Timeout d'attente dépassé (10s) — tab introuvable dans la fenêtre id 3165 avec "board-test-project-20260717-33107-bbbgpj" dans son historique -- DUMP:
+[window id=3165 name=board-test-project-20260717-33107-bbbgpj — prox2.command — -zsh — 82×30]
+  tab 1 history=<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>
+[window id=2625 name=Board — prox2.command — osascript ◂ run-tests e2e/service_commun_ouverture_terminal.rb — 82×30]
+  tab 1 history=<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>
+
+
+  (osascript : 9 appels, 0.145s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 11.747s

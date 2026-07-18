@@ -42,7 +42,7 @@ class Service {
   }
   static get(serviceId){return this.services && this.services[serviceId]}
 
-  // Retirer le service défini (ne sert à rien vraiment, mais bon…)
+  // Retirer le service défini
   static remove(serviceUUID){
     delete this.services[serviceUUID]
   }
@@ -59,9 +59,10 @@ class Service {
      * définir le service.
      */
     this.params     = data.params || raise("Il faut définir les :params du servive " + this.id)
-    this.uuid       = data.uuid ?? null // seulement les services de projets
+    this.uuid       = data.uuid ?? null
     this.type       = data.type ?? null // idem (others ou startup)
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
+    this.oneShot    = data.oneShot ?? false // service common depuis panneau
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.afterDefinedParams = data.afterDefinedParams ?? null
@@ -106,7 +107,7 @@ class Service {
 
     // Pour les services communs, on les rend sensibles au click
     if (this.isCommonService) {
-      listen(this.obj, 'click', this.execCommonServiceOn.bind(this, null))
+      listen(this.obj, 'click', this.duplicAndExecCommonServiceOn.bind(this, null))
     }
   } 
 
@@ -168,7 +169,23 @@ class Service {
    * paramètres requis.
    * Appelée depuis le panneau
    * 
+   * Cette fonction doit utiliser un duplicata du service, avec un 
+   * uuid unique, pour ne pas changer params
+   * 
    */
+  duplicAndExecCommonServiceOn(projet, ev){
+    const duplicat = this.duplicateService()
+    duplicat.execCommonServiceOn(projet, ev)
+  }
+  
+  duplicateService(){
+    const dataDupService = Object.assign({}, this.data, {
+      uuid: uniqId(), 
+      oneShot: true /* destruction après exécution */
+    })
+    return new Service(dataDupService)
+  }
+
   execCommonServiceOn(projet, ev){
     historize('-> execCommonServiceOn')
     projet = projet ?? Project.current
@@ -203,7 +220,7 @@ class Service {
   onReturnFromDefineProjetParams(projet, service){
     projet.service_common_data = projet.service_common_data ?? {}
     Object.assign(projet.service_common_data, {[service.id]: service.params})
-    console.log("Projet après définition des paramètres", projet)
+    console.log("Projet après définition des paramètres", projet, service)
     projet.save(this.execCommonServiceOn.bind(this, projet))
   }
 

@@ -54,6 +54,10 @@ function historize(msg, params) {
   }
 }
 
+function uniqId(){
+  return Date.now() + Math.random().toString(16).slice(2);
+}
+
 function jsonize(data){
   return JSON.stringify(data)
 }

@@ -55,8 +55,12 @@ class ServiceExecuter {
   // Appelée après avoir exécuté le service
   afterRunService(retour){
     console.log("retour du run de service", retour)
-    message(retour.message + ` <span class="tiny">(service ${this.id})</span>` || "Service " + this.name + " joué avec succès.")
+    message(retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
     console.log("ServiceExecuter # afterRunService termine normalement.")
+    if (this.service.oneShot /* common service joué depuis panneau */) {
+      Service.remove(this.service.uuid)
+      historize("- Service supprimé du cache")
+    }
     typeof this.callback == 'function' && this.callback() 
   }
 

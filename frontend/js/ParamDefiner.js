@@ -58,7 +58,7 @@ class ParamDefiner {
   constructor(paramLister, param){
     this.paramLister = paramLister
     console.log("param dans constructeur", param)
-    this.param = param
+    this.param    = param
     this.id       = param.id      ?? raise('Un identifiant est obligatoire.', param)
     this.name     = param.name    ?? param.id
     this.type     = param.type    ?? raise('Le type doit être défini.', param)

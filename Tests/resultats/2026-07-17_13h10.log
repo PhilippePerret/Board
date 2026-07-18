@@ -1,0 +1,45 @@
+Moteur : pont
+Arguments : e2e/creation_nouveau_projet_selection_fichier.rb e2e/creation_simple_nouveau_projet.rb e2e/execution_services_startup.rb e2e/service_commun_horloge.rb e2e/service_commun_ouverture_terminal.rb
+Date : 2026-07-17 13h10
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✓ création d'un nouveau projet, sélection Finder = un fichier
+  (osascript : 6 appels, 0.876s)
+  (durée totale de la spec : 0.995s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✓ création simple d'un nouveau projet
+  (osascript : 10 appels, 0.909s)
+  (durée totale de la spec : 1.541s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.605s)
+  (durée totale de la spec : 12.790s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.232s)
+  (durée totale de la spec : 10.892s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+✗ service commun 'terminal au dossier' : code d'un mot ('ls')
+    Timeout d'attente dépassé (4s) — historique Terminal ne contient pas "ls"
+  (osascript : 11 appels, 0.150s)
+  (durée totale de la spec : 5.341s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.605s)
+2. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.232s)
+3. service commun 'terminal au dossier' : code d'un mot ('ls')
+    Timeout d'attente dépassé (4s) — historique Terminal ne contient pas "ls"
+  (osascript : 11 appels, 0.150s)
+
+-------------------
+Success: 2  Failures: 3  Pendings: 0  Test count: 5
+Durée totale (moteur : pont) : 31.559s

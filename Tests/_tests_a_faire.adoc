@@ -6,7 +6,15 @@
 
 == Tout de suite
 
-(vide)
+- [BUG] 
+  setup: Deux projets A et B
+  - J'affecte le service commun "iTerm au dossier" au projet A
+  - Je choisis le nom "iTerm Claude"
+  — Je choisis une commande ('ls')
+  → le service est affecté au projet A
+  - je glisse le service commun "iTerm au dossier" sur le projet B
+  BUG C'est le nom "iTerm Claude" qui apparait (donc mis en cache avant.)
+
 
 == Plus tard
 

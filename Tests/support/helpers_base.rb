@@ -169,13 +169,81 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'front-window-name')
   end
 
-  # Pour le service "open-terminal" : le titre par défaut d'une fenêtre
-  # Terminal reflète le dossier courant du shell — pas de script dédié, une
-  # ligne d'AppleScript suffit (pas de fermeture/nettoyage à gérer ici, à
-  # la différence de Finder — cf. feedback finder_window_closing_safety).
-  def terminal_front_window_name
-    out = IO.popen(['osascript', '-e', 'tell application "Terminal" to get name of front window'], err: [:child, :out], &:read)
-    raise "lecture du nom de la fenêtre Terminal a échoué : #{out}" unless $?.success?
+  # Étape 1 (légère, répétée dans le polling) : id de fenêtre par NOM parmi
+  # TOUTES les fenêtres (pas "front window" — l'user a en général d'autres
+  # process/fenêtres Terminal ouverts en parallèle). Ne raise pas (polling
+  # via wait_until) : nil si aucune fenêtre ne correspond encore.
+  def terminal_window_id_named(name_substring)
+    out = IO.popen(['osascript', '-e', %Q(tell application "Terminal" to get id of (first window whose name contains "#{name_substring}"))], err: [:child, :out], &:read)
+    return nil unless $?.success?
+    id = out.strip.to_i
+    id.zero? ? nil : id
+  end
+
+  TERMINAL_FIND_TAB_INDEX_SCRIPT = <<~'APPLESCRIPT'
+    on run argv
+      set wid to (item 1 of argv) as integer
+      set theMarker to item 2 of argv
+      tell application "Terminal"
+        set foundIdx to 0
+        set i to 0
+        repeat with t in tabs of (first window whose id is wid)
+          set i to i + 1
+          if (history of t) contains theMarker then set foundIdx to i
+        end repeat
+        return foundIdx as string
+      end tell
+    end run
+  APPLESCRIPT
+
+  # Étape 2 (un seul appel, pas de polling) : une fois la fenêtre trouvée
+  # par nom, quel tab EXACT contient +marker+ dans son historique — scanne
+  # seulement les tabs de CETTE fenêtre (pas toutes les fenêtres, contrairement
+  # à une 1re version qui refaisait ce scan complet à chaque poll : requête
+  # Apple Event lourde et répétée ~50 fois/10s, qui pouvait retarder le
+  # traitement du "do script" en cours par Terminal au moment critique).
+  # "selected tab of window id X" (essayé avant) suit le tab *actif* de la
+  # fenêtre, qui peut ne pas être le bon si la fenêtre a plusieurs tabs —
+  # d'où un ciblage par contenu, mais fait une seule fois, pas en boucle.
+  def terminal_tab_index_matching(window_id, marker)
+    out = IO.popen(['osascript', '-e', TERMINAL_FIND_TAB_INDEX_SCRIPT, window_id.to_s, marker], err: [:child, :out], &:read)
+    return nil unless $?.success?
+    idx = out.strip.to_i
+    idx.zero? ? nil : idx
+  end
+
+  # Scrollback complet d'un tab Terminal ciblé par (window_id, tab_index).
+  def terminal_tab_history(window_id, tab_index)
+    out = IO.popen(['osascript', '-e', %Q(tell application "Terminal" to get history of (tab #{tab_index} of window id #{window_id}))], err: [:child, :out], &:read)
+    raise "lecture de l'historique du tab (window id #{window_id}, tab #{tab_index}) a échoué : #{out}" unless $?.success?
+    out
+  end
+
+  TERMINAL_DUMP_SCRIPT = <<~'APPLESCRIPT'
+    tell application "Terminal"
+      set out to ""
+      repeat with w in windows
+        set out to out & "[window id=" & (id of w) & " name=" & (name of w) & "]" & linefeed
+        set i to 0
+        repeat with t in tabs of w
+          set i to i + 1
+          set out to out & "  tab " & i & " history=<<<" & (history of t) & ">>>" & linefeed
+        end repeat
+      end repeat
+      return out
+    end tell
+  APPLESCRIPT
+
+  # État complet de toutes les fenêtres/tabs Terminal au moment de l'appel —
+  # à inclure dans un message d'échec (desc de wait_until) pour diagnostiquer
+  # en un seul run plutôt qu'en itérant des correctifs à l'aveugle.
+  def terminal_debug_dump
+    IO.popen(['osascript', '-e', TERMINAL_DUMP_SCRIPT], err: [:child, :out], &:read)
+  end
+
+  def terminal_close_window(window_id)
+    out = IO.popen(['osascript', '-e', %Q(tell application "Terminal" to close (every window whose id is #{window_id}))], err: [:child, :out], &:read)
+    raise "fermeture de la fenêtre Terminal (id #{window_id}) a échoué : #{out}" unless $?.success?
     out.strip
   end
 

@@ -1,0 +1,21 @@
+Moteur : pont
+Arguments : e2e/service_commun_ouverture_terminal.rb
+Date : 2026-07-17 13h42
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'terminal au dossier' : code d'un mot ('ls')
+    Timeout d'attente dépassé (10s) — historique Terminal (id 2677) ne contient pas "ls"
+  (osascript : 9 appels, 0.158s)
+  (durée totale de la spec : 11.907s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. service commun 'terminal au dossier' : code d'un mot ('ls')
+    Timeout d'attente dépassé (10s) — historique Terminal (id 2677) ne contient pas "ls"
+  (osascript : 9 appels, 0.158s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 11.907s

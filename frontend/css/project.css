@@ -12,7 +12,7 @@ div.project {
   overflow: hidden;
   vertical-align: top;
   display: inline-block;
-  border: 2px solid #CCC;
+  border: 6px solid transparent;
   border-radius: 1em;
   width:  300px;
   padding: 1em;
