@@ -8,7 +8,6 @@ class ServiceExecuter {
     this.params   = service.params
     this.script   = service.script
     this.callback = callback ?? null
-    this.escapeParamsIfRequired()
   }
   
   // Exécution du service
@@ -37,19 +36,20 @@ class ServiceExecuter {
    * 
    * La principale différence réside dans le fait que pour un service personnalisé,
    * les paramètres se trouvent dans son .params propre. Alors que dans le service
-   * commun, c'est dans le projet.service_common_data que ça se trouve.
+   * commun, c'est dans le projet.common_services_data que ça se trouve.
    */
   execOnProject(projet){
     if (this.front) {
-      this.front(projet, projet.service_common_data[this.id])
+      this.front(projet, projet.common_services_data[this.id])
     } else {
-      this.finalyExec(projet.service_common_data[this.id])
+      this.finalyExec(projet.common_services_data[this.id])
     }
   }
 
   finalyExec(params){
-    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
-    server.send({action: `exec-service`, script: this.script, params}, this.afterRunService.bind(this))
+    const flatParams = this.flattenParams()
+    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParams)
+    server.send({action: `exec-service`, script: this.script, flatParams}, this.afterRunService.bind(this))
   }
 
   // Appelée après avoir exécuté le service
@@ -57,11 +57,30 @@ class ServiceExecuter {
     console.log("retour du run de service", retour)
     message(retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
     console.log("ServiceExecuter # afterRunService termine normalement.")
-    if (this.service.oneShot /* common service joué depuis panneau */) {
+    if (this.service.transient /* common service joué depuis panneau */) {
       Service.remove(this.service.uuid)
       historize("- Service supprimé du cache")
     }
     typeof this.callback == 'function' && this.callback() 
+  }
+
+  /**
+   * Maintenant que les valeurs sont conservées groupées par 
+   * paramètres il faut "applatir" la liste avant de l'envoyer.
+   * 
+   * régression : pour que les anciens projets passent, on doit
+   * checker que les éléments sont bien des arrays.
+   */
+  flattenParams(){
+    var params = []
+    this.params.forEach(paramValues => {
+      if (Array.isArray(paramValues)) {
+        params = [...params, ...paramValues]
+      } else {
+        params.push(paramValues) // ancienne version
+      }
+    })
+    return this.escapeParamsIfRequired(params)
   }
 
   treateDynParams(){
@@ -103,16 +122,17 @@ class ServiceExecuter {
    * échapper les espaces pour que les arguments soient bien pris en 
    * compte par la commande.
    */
-  escapeParamsIfRequired(){
+  escapeParamsIfRequired(params){
     if (this.script != 'ExecCommand.sh') return
-    console.log("params non escapés : ", JSON.stringify(this.params))
-    this.params = this.params.map(param => {
+    console.log("params non escapés : ", JSON.stringify(params))
+    params = params.map(param => {
       if ('string' == typeof param) {
         param = param.replace(' ', '\ ')
       } 
       return param
     })
-    console.log("params escapés : ", this.params)
+    console.log("params escapés : ", params)
+    return params
   }
 
 

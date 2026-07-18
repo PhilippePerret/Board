@@ -51,10 +51,10 @@ def run_test
       end
     end
 
-    # → service_common_data enregistrée : [chemin_fichier] (chemin seul)
+    # → common_services_data enregistrée : [chemin_fichier] (chemin seul)
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      service_common_data = read_project_card(id).dig('service_common_data', 'update-documentation')
-      service_common_data.is_a?(Array) && File.realpath(service_common_data[0]) == File.realpath(main_file)
+      common_services_data = read_project_card(id).dig('common_services_data', 'update-documentation')
+      common_services_data.is_a?(Array) && File.realpath(common_services_data[0]) == File.realpath(main_file)
     end
 
     finder_close_all_windows

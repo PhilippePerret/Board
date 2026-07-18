@@ -15,6 +15,19 @@
   - je glisse le service commun "iTerm au dossier" sur le projet B
   BUG C'est le nom "iTerm Claude" qui apparait (donc mis en cache avant.)
 
+- Un paramètre :transient ne doit pas être persisté dans le projet
+  setup : un projet
+  - Je clique sur le projet
+  → le panneau des services communs s'ouvre
+  - Je clique sur "Terminal au dossier" dans le panneau des services communs
+  → un dialogue me demande un code à jouer
+  - j'écris "ls" + Enter
+  → l'app ouvre une fenêtre avec la liste des éléments du dossier du projet 
+  x l'app ne doit pas avoir enregistré "ls" dans les common_services_data dans la fiche du projet.
+  - je clique à nouveau sur "Terminal au dossier"
+  x l'app doit à nouveau présenter la dialog pour entrer un code à jouer
+
+
 
 == Plus tard
 

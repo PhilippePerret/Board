@@ -1,10 +1,12 @@
 == BUGS ==
-- Quand on affecte deux service, le 2e ne devrait pas prendre le même nom que le premier
-  Ça le fait avec iTerm au dossier
+- certains paramètres ne doivent pas être conserver (les laisser à null pour forcer leur définition) — par exemple le code à jouer dans la fenêtre Terminal quand c'est un service commum cliqué depuis le panneau
+
 - Quand le panel des extra-data d'un projet est affiché, si on change de projet, ça doit afficher les données de ce projet
   Mais le problème est plus complexe : quand on déselectionne le projet, le panneau doit se fermer. Mais comment alors, passer au panneau des extra data du nouveau projet sélectionné de façon fluide ?
   
 == Todo list ==
+
+- Service : Grouper les valeurs par paramètres, ne l'aplatir qu'avant de le transmettre au script.
 
 - utiliser des icônes SVG simples (pour l'interface)
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service

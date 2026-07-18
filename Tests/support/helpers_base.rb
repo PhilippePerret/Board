@@ -180,6 +180,16 @@ module BoardTest
     id.zero? ? nil : id
   end
 
+  # Tous les ids de fenêtres Terminal actuellement ouvertes — pour repérer
+  # la fenêtre créée par un "do script" par différence (avant/après) plutôt
+  # que par nom/contenu, qui peuvent être effacés par un "clear" du script
+  # lui-même.
+  def terminal_all_window_ids
+    out = IO.popen(['osascript', '-e', %Q(tell application "Terminal" to get id of every window)], err: [:child, :out], &:read)
+    return [] unless $?.success?
+    out.strip.split(', ').map(&:to_i)
+  end
+
   TERMINAL_FIND_TAB_INDEX_SCRIPT = <<~'APPLESCRIPT'
     on run argv
       set wid to (item 1 of argv) as integer

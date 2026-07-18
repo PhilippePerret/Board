@@ -105,7 +105,7 @@ class Clock {
 
   /**
    * @param projet Le projet courant
-   * @param data   [sessionDuration, workDuration] en minutes (projet.service_common_data['work-clock'])
+   * @param data   [sessionDuration, workDuration] en minutes (projet.common_services_data['work-clock'])
    */
   static get MIN_MINUTES(){ return 1 }
   static get FALLBACK_MINUTES(){ return 15 }
@@ -323,7 +323,7 @@ class Clock {
       , todo:       todo
     }, () => {
       // projet.workTime = temps de travail TOTAL cumulé sur le projet —
-      // distinct de service_common_data['work-clock'] (durée fixe d'une tranche, réglée
+      // distinct de common_services_data['work-clock'] (durée fixe d'une tranche, réglée
       // une fois)
       this.projet.workTime = (this.projet.workTime ?? 0) + this.pendingElapsedMinutes
       this.projet.save(() => {

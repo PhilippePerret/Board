@@ -1,9 +1,9 @@
 class Project {
 
   // Toutes les propriétés des projets doivent être définies ici
-  // service_common_data : données pour les services communs
+  // common_services_data : données pour les services communs
   static PROPERTIES = [
-    'id', 'title', 'path', 'service_common_data', 'workTime', 'createdAt', 'updatedAt',
+    'id', 'title', 'path', 'common_services_data', 'workTime', 'createdAt', 'updatedAt',
     'services', 'background', 'icon', 'genre',
     // documentation
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html'

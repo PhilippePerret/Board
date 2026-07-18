@@ -55,10 +55,8 @@ Principes :
 | `type`      | Le type précis qui va définir exactement la valeur transmise. Voir les <<params-types>>
 | `values`    | Quand le `type` est `select`, pour définir les valeurs à proposer.
 | `value`     | La valeur par défaut ou la valeur brute.
-| `absolute`  | Si true, la propriété est enregistrée ou relevée dans project.adata. +
-Cette propriété peut alors être partagée entre plusieurs services (typiquement : le dossier de documentation). +
-**DOIT DEVENIR OBSOLÈTE**
-**Maintenant, il existe une façon plus simple de le faire, en mettant le type _`projet`_ ou _`app`_ et en identifiant (`ìd`) la propriété du projet ou de l'application à prendre.**
+| `transient` | [Optionnel] Indique que la valeur du paramètre ne doit pas être enregistrée quand 1) c'est un service commun 2) qui est appelé depuis le panneau. +
+Typiquement, c'est le cas par exemple du code à jouer dans la fenêtre de Terminal quand le service commun “Ouvir un Terminal au dossier” est cliqué depuis le panneau : il faut alors demander le code, mais ne pas l'enregistrer dans les `common_services_data` du projet.
 |====
 
 [[params-types, types de paramètres]]

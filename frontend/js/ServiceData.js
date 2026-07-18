@@ -94,7 +94,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Consoles'
     , params: [ 
           {id: 'path', type: 'project'} 
-        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture'}
+        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture', transient: true}
       ]
   },
   {
@@ -103,7 +103,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Consoles'
     , params: [
           {id: 'path', type: 'project'}
-        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture'}
+        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture', transient: true}
       ]
   },
   {

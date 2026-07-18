@@ -14,7 +14,7 @@
 # défaut du système pour ce type de fichier (variable selon la machine),
 # donc pas de vérification fiable de LA fenêtre/app qui s'ouvre (pas de
 # helper générique pour ça dans l'infra de test, contrairement à Finder).
-# Vérifié à la place : la service_common_data est bien enregistrée (donc le clic a
+# Vérifié à la place : la common_services_data est bien enregistrée (donc le clic a
 # déclenché la définition + l'exécution), et Board ne plante pas suite à
 # l'appel backend. OpenAFile.rb ne renseigne d'ailleurs jamais
 # table[:message] (reste nil dans les 2 cas, succès ou échec) : le toast
@@ -49,10 +49,10 @@ def run_test
       click('btn-oui')
     end
 
-    # → service_common_data enregistrée : [chemin_fichier] (chemin seul)
+    # → common_services_data enregistrée : [chemin_fichier] (chemin seul)
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      service_common_data = read_project_card(id).dig('service_common_data', 'open-a-file')
-      service_common_data.is_a?(Array) && File.realpath(service_common_data[0]) == File.realpath(main_file)
+      common_services_data = read_project_card(id).dig('common_services_data', 'open-a-file')
+      common_services_data.is_a?(Array) && File.realpath(common_services_data[0]) == File.realpath(main_file)
     end
 
     raise "Board a quitté après exécution du service" unless board_running?
@@ -63,12 +63,12 @@ def run_test
     click(card)
     wait_for(SERVICE_DOM_ID)
 
-    # → cette fois, aucun dialogue : exécution directe, service_common_data inchangée
+    # → cette fois, aucun dialogue : exécution directe, common_services_data inchangée
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le 2e clic sur #{SERVICE_DOM_ID}" unless board_running?
     sleep 1
-    service_common_data = read_project_card(id).dig('service_common_data', 'open-a-file')
-    raise "service_common_data modifiée par le 2e clic (rechargement) : #{service_common_data.inspect}" unless File.realpath(service_common_data[0]) == File.realpath(main_file)
+    common_services_data = read_project_card(id).dig('common_services_data', 'open-a-file')
+    raise "common_services_data modifiée par le 2e clic (rechargement) : #{common_services_data.inspect}" unless File.realpath(common_services_data[0]) == File.realpath(main_file)
   end
 ensure
   remove_fixture_project(id) if id

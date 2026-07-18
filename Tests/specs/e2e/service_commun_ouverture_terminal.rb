@@ -3,20 +3,21 @@
 # l'ajout du param 'code' (type 'string', dialogue "Code à exécuter à
 # l'ouverture") dans frontend/js/ServiceData.js.
 #
-# Le param 'code' est stocké dans projet.service_common_data[id] au premier
+# Le param 'code' est stocké dans projet.common_services_data[id] au premier
 # clic sur le service (Service#ensureServiceData / #defineCommonServiceParameters,
 # frontend/js/Service.js) — le dialogue n'apparaît donc QU'UNE FOIS par
 # projet pour ce service, jamais aux clics suivants. D'où 3 fixtures
 # distinctes ci-dessous, une par scénario, plutôt que 3 clics sur le même
 # projet.
 #
-# backend/scripts/OpenTerminalAtFolder.scpt fait "do script" + "activate".
-# Repérage en 2 temps : la fenêtre par NOM (léger, répété dans le polling —
-# pas "front window", l'user a en général d'autres fenêtres Terminal
-# ouvertes en parallèle), puis le tab exact par CONTENU au sein de CETTE
-# fenêtre, une seule fois (pas "selected tab", qui pourrait ne pas être le
-# bon si la fenêtre a plusieurs tabs). Voir BoardTest#terminal_window_id_named
-# / #terminal_tab_index_matching / #terminal_tab_history.
+# backend/scripts/OpenTerminalAtFolder.scpt fait "do script" + "activate",
+# puis "cd <dossier>; clear;clear;<code>" — le "clear;clear;" efface
+# l'historique du tab (nom du dossier compris) juste après le "cd". Ni le
+# nom ni le contenu de la fenêtre ne sont donc fiables pour l'identifier :
+# repérage par DIFFÉRENCE (ids de toutes les fenêtres Terminal avant/après
+# le déclenchement, cf. BoardTest#terminal_all_window_ids), pas par nom ou
+# contenu. La vérification d'exécution ne porte que sur la SORTIE du code
+# (seule chose qui survit aux clear), cf. BoardTest#terminal_tab_history.
 
 require_relative '../../support/helpers'
 
@@ -24,14 +25,14 @@ include BoardTest
 
 SERVICE_DOM_ID = 'open-terminal-at-folder'
 
-def run_scenario(code_value)
+def run_scenario(code_value, expected_output: nil)
   id = nil
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
     id = create_fixture_project(title: 'Projet A', path: fixture_dir)
     launch_app
 
     card = "project-#{id}"
-    expected_name = File.basename(fixture_dir)
+    output = expected_output.respond_to?(:call) ? expected_output.call(fixture_dir) : expected_output
 
     wait_for(card)
     click(card)
@@ -43,31 +44,29 @@ def run_scenario(code_value)
     # → premier clic sur ce service pour ce projet : dialogue du param 'code'
     wait_for('__code__')
     set_value('__code__', code_value) unless code_value.empty?
+
+    # Fenêtres Terminal déjà ouvertes AVANT le déclenchement — la nôtre sera
+    # celle qui apparaît en plus. Ni le nom ni l'historique de la fenêtre ne
+    # sont fiables pour l'identifier : le script fait "clear;clear;<code>"
+    # juste après le "cd", qui efface l'historique (nom du dossier compris)
+    # avant qu'on ait pu le lire.
+    ids_before = terminal_all_window_ids
     click('btn-oui')
 
     window_id = nil
     # Timeout élargi (10s, comme execution_services_startup.rb et
     # service_commun_horloge.rb) : sous charge concurrente (autres
-    # process/fenêtres Terminal de l'user), le tab peut mettre plus que 4s
-    # à apparaître.
-    wait_until(10, desc: -> { "aucune fenêtre Terminal trouvée avec #{expected_name.inspect} dans son nom -- DUMP:\n#{terminal_debug_dump}" }) do
-      window_id = terminal_window_id_named(expected_name)
+    # process/fenêtres Terminal de l'user), la fenêtre peut mettre plus que
+    # 4s à apparaître.
+    wait_until(10, desc: -> { "aucune nouvelle fenêtre Terminal (avant : #{ids_before.inspect}) -- DUMP:\n#{terminal_debug_dump}" }) do
+      window_id = (terminal_all_window_ids - ids_before).first
       !window_id.nil?
     end
+    tab_index = 1 # fenêtre neuve d'un "do script" : un seul tab
 
-    # Le nom de la fenêtre (piloté par le "cd", quasi instantané) peut se
-    # mettre à jour AVANT que "clear;clear;<code>" ait fini de s'exécuter et
-    # d'apparaître dans l'historique — d'où un wait_until ici aussi (pas un
-    # essai unique), même si scopé à cette seule fenêtre donc peu coûteux.
-    tab_index = nil
-    wait_until(10, desc: -> { "tab introuvable dans la fenêtre id #{window_id} avec #{expected_name.inspect} dans son historique -- DUMP:\n#{terminal_debug_dump}" }) do
-      tab_index = terminal_tab_index_matching(window_id, expected_name)
-      !tab_index.nil?
-    end
-
-    unless code_value.empty?
-      wait_until(10, desc: -> { "historique Terminal (window id #{window_id}, tab #{tab_index}) ne contient pas #{code_value.inspect} -- DUMP:\n#{terminal_debug_dump}" }) do
-        terminal_tab_history(window_id, tab_index).include?(code_value)
+    if output
+      wait_until(10, desc: -> { "historique Terminal (window id #{window_id}, tab #{tab_index}) ne contient pas #{output.inspect} -- DUMP:\n#{terminal_debug_dump}" }) do
+        terminal_tab_history(window_id, tab_index).include?(output)
       end
     end
   ensure
@@ -77,6 +76,12 @@ ensure
   remove_fixture_project(id) if id
 end
 
-board_test("service commun 'terminal au dossier' : code d'un mot ('ls')") { run_scenario('ls') }
-board_test("service commun 'terminal au dossier' : code de plusieurs mots ('ls -la')") { run_scenario('ls -la') }
+# Le "clear;clear;" du script efface l'historique du tab juste après le
+# "cd" — on ne peut donc vérifier que la SORTIE du code (produite après les
+# clear), jamais le "cd" ni le code lui-même s'il n'affiche rien. D'où
+# "echo" pour avoir une sortie garantie ; le second scénario passe en plus
+# par des guillemets dans la chaîne (Ruby .inspect → shell → AppleScript →
+# Terminal).
+board_test("service commun 'terminal au dossier' : code d'un mot ('pwd')") { run_scenario('pwd', expected_output: ->(dir) { File.basename(dir) }) }
+board_test("service commun 'terminal au dossier' : code de plusieurs mots avec guillemets") { run_scenario('echo "je suis un test"', expected_output: 'je suis un test') }
 board_test("service commun 'terminal au dossier' : aucun code donné") { run_scenario('') }

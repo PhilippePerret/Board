@@ -15,8 +15,9 @@ class ServiceDefiner {
     this.callback = callback
     this.afterDefinedParams = service.afterDefinedParams
 
-    // Donnée qui remplacement params dans le service pour le projet
+    // Donnée qui remplaceront params dans le service pour le projet
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
+    // Maintenant, elles sont groupées par paramètre.
     this.paramsValues = []
 
     // Mis à true quand on redéfinition un service (juste pour le titre)
@@ -55,12 +56,12 @@ class ServiceDefiner {
       var projectHasNewValue = false
       // Boucle sur tous les paramètres.
       // On définit ceux qui sont des propriétés du projet
-      // et l'on rassemble tous les paramètres pour pour service
+      // et l'on rassemble tous les paramètres pour service
       let paramsValues = []
       definers.forEach(definer => {
         switch(definer.type){
           case 'service-name':
-            console.log("define pour service-name", definer)
+            // console.log("define pour service-name", definer)
             this.service.data.name = definer.value
             break
           case 'project':
@@ -68,23 +69,23 @@ class ServiceDefiner {
               projectHasNewValue = true
               Project.current[definer.id] = definer.value
             }
-            paramsValues.push(definer.value)
+            paramsValues.push([definer.value])
             break
           case 'finder-window':
             // console.log("'finder-window', definer = ", definer)
             definer.value.position = definer.value.position.map(n => n - 20)
-            paramsValues = [...paramsValues, definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType]
+            paramsValues.push([definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType])
             break
           case 'bounds': {
             // console.log("'bounds', define =", definer)
             definer.value.position = definer.value.position.map(n => n - 20)
             const [boundsX, boundsY] = definer.value.position
             const [boundsW, boundsH] = definer.value.size
-            paramsValues = [...paramsValues, boundsX, boundsY, boundsX + boundsW, boundsY + boundsH]
+            paramsValues.push([, boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
             break
           }
           default:
-            paramsValues.push(definer.value)
+            paramsValues.push([definer.value])
         }
       })
       if (this.afterDefinedParams){
@@ -95,18 +96,16 @@ class ServiceDefiner {
       // Si des propriétés projet ont été modifiées, il 
       // faut enregistrer le projet
       if (projectHasNewValue) {
-        Project.current.save(this.callback /* ajout ou jeu */)
+        Project.current.save(this.callback)
       } else {
-        this.callback.call(this) // Ajout ou jeu
+        this.callback.call(this)
       }
 
     } else {
       // <= Il n'y a pas de definers
       // => Procédure abandonnée
-
       message('Définition abandonnée.')
       console.log("Définition abandonnée.")
-
     }
   }
 }
