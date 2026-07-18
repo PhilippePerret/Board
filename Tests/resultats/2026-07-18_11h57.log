@@ -1,0 +1,28 @@
+Moteur : pont
+Arguments : e2e/execution_services_startup.rb e2e/service_commun_horloge.rb
+Date : 2026-07-18 11h57
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.674s)
+  (durée totale de la spec : 12.880s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.251s)
+  (durée totale de la spec : 10.915s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.674s)
+2. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.251s)
+
+-------------------
+Success: 0  Failures: 2  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 23.795s

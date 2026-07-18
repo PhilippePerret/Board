@@ -88,6 +88,7 @@ begin
     project_dir    = request['path']
     changelog_text = request['changelog']
     todo_text      = request['todo']
+    Debug.log("update-project-notes reçu, path=#{project_dir.inspect} changelog=#{changelog_text.inspect} todo=#{todo_text.inspect}")
 
     if changelog_text && !changelog_text.strip.empty?
       changelog_file = File.join(project_dir, 'CHANGELOG.md')

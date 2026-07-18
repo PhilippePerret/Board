@@ -330,7 +330,7 @@ class Project {
     const startupContainer = DCreate('DIV', {id:`${this.obj.id}-startup-container`, class:'startup-services', role: 'group', style:'position:relative;min-height:100px;'})
     const divSServices = DCreate('DIV', {id:`${this.obj.id}-startup-services`, class: 'startup-services-panel hidden', role: 'group'})
     const divBtnStartup = DCreate('DIV', {class:'service'})
-    this.btnStartup = DCreate('DIV', {id:`${this.obj.id}-btn-startup`, class:'name', text: 'GO !'})
+    this.btnStartup = DCreate('DIV', {text: 'GO !', id:`${this.obj.id}-btn-startup`, class:'name'})
     divBtnStartup.appendChild(this.btnStartup)
     startupContainer.appendChild(divBtnStartup)
     startupContainer.appendChild(divSServices)

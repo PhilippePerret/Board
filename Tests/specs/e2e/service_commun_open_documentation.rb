@@ -49,10 +49,10 @@ def run_test
       click('btn-oui')
     end
 
-    # → common_services_data enregistrée : [chemin_fichier] (chemin seul)
+    # → common_services_data enregistrée groupée par param : [[chemin_fichier]]
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       common_services_data = read_project_card(id).dig('common_services_data', 'open-a-file')
-      common_services_data.is_a?(Array) && File.realpath(common_services_data[0]) == File.realpath(main_file)
+      common_services_data.is_a?(Array) && File.realpath(common_services_data[0][0]) == File.realpath(main_file)
     end
 
     raise "Board a quitté après exécution du service" unless board_running?
@@ -68,7 +68,7 @@ def run_test
     raise "Board a quitté juste après le 2e clic sur #{SERVICE_DOM_ID}" unless board_running?
     sleep 1
     common_services_data = read_project_card(id).dig('common_services_data', 'open-a-file')
-    raise "common_services_data modifiée par le 2e clic (rechargement) : #{common_services_data.inspect}" unless File.realpath(common_services_data[0]) == File.realpath(main_file)
+    raise "common_services_data modifiée par le 2e clic (rechargement) : #{common_services_data.inspect}" unless File.realpath(common_services_data[0][0]) == File.realpath(main_file)
   end
 ensure
   remove_fixture_project(id) if id

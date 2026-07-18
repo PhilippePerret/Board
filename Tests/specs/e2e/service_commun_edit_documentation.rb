@@ -62,7 +62,7 @@ def run_test
     # → common_services_data enregistrée : [dossier, éditeur]
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       common_services_data = read_project_card(id).dig('common_services_data', 'edit-documentation')
-      common_services_data.is_a?(Array) && common_services_data[1] == 'Finder'
+      common_services_data.is_a?(Array) && common_services_data[1] == ['Finder']
     end
 
     finder_close_all_windows

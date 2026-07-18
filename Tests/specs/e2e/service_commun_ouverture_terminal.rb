@@ -79,9 +79,15 @@ end
 # Le "clear;clear;" du script efface l'historique du tab juste après le
 # "cd" — on ne peut donc vérifier que la SORTIE du code (produite après les
 # clear), jamais le "cd" ni le code lui-même s'il n'affiche rien. D'où
-# "echo" pour avoir une sortie garantie ; le second scénario passe en plus
-# par des guillemets dans la chaîne (Ruby .inspect → shell → AppleScript →
-# Terminal).
+# "echo" pour avoir une sortie garantie ; le second scénario (fichier
+# _guillemets.rb) passe en plus par des guillemets dans la chaîne (Ruby
+# .inspect → shell → AppleScript → Terminal).
+#
+# Scénarios splittés en 3 FICHIERS distincts (pas 3 board_test dans ce même
+# fichier) : le runner (Tests/version-pont/run_tests.sh) lance "ruby $spec"
+# une fois PAR FICHIER, et board_test (helpers_base.rb) fait exit() à la fin
+# de chaque appel — 3 board_test dans un seul fichier, seul le premier
+# s'exécuterait, les 2 suivants ne tourneraient jamais. Cf.
+# service_commun_ouverture_terminal_guillemets.rb et
+# service_commun_ouverture_terminal_sans_code.rb.
 board_test("service commun 'terminal au dossier' : code d'un mot ('pwd')") { run_scenario('pwd', expected_output: ->(dir) { File.basename(dir) }) }
-board_test("service commun 'terminal au dossier' : code de plusieurs mots avec guillemets") { run_scenario('echo "je suis un test"', expected_output: 'je suis un test') }
-board_test("service commun 'terminal au dossier' : aucun code donné") { run_scenario('') }

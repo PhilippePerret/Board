@@ -131,7 +131,11 @@ class Service {
    * Observation de la carte insérée dans le projet
    */
   observeServiceCard(projet, card){
-    listen(card, 'click', this.onClickOnProjectService.bind(this))
+    if (this.type == 'startup') {
+      console.log("Service startup => pas de click sur %s", this.id)
+    } else {
+      listen(card, 'click', this.onClickOnProjectService.bind(this))
+    }
     listen(card, 'dragstart', e => projet.draggedService = this)
     listen(card, 'dragend', e => {
       if (e.dataTransfer.dropEffect != "none") return
@@ -151,7 +155,7 @@ class Service {
   }
   // Exécution du service
   exec(ev, callback){
-    console.log("callback dans Service#exec", callback)
+    console.log("callback dans Service#exec", this, callback)
     new ServiceExecuter(this).exec(callback)
     console.log("Service#exec se termine bien")
   }

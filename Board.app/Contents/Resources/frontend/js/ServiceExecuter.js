@@ -77,17 +77,17 @@ class ServiceExecuter {
    */
   flattenParamsValues(paramsValues){
     var params = []
-    console.log("paramsValues au départ : ", JSON.parse(JSON.stringify(paramsValues)))
+    // console.log("paramsValues au départ : ", JSON.parse(JSON.stringify(paramsValues)))
     paramsValues.forEach(paramValues => {
       if (Array.isArray(paramValues)) {
-        console.log("Une liste : ", paramValues)
+        // console.log("Une liste : ", paramValues)
         params = [...params, ...paramValues]
       } else {
-        console.log("Pas une liste : ", paramValues)
+        // console.log("Pas une liste : ", paramValues)
         params.push(paramValues) // ancienne version
       }
     })
-    console.log("params À LA FIN : ", JSON.parse(JSON.stringify(params)))
+    // console.log("params À LA FIN : ", JSON.parse(JSON.stringify(params)))
     return this.escapeParamsIfRequired(params)
   }
 

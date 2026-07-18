@@ -44,7 +44,6 @@ class TextareaDialog extends Dialog {
   constructor(data){
     super(data)
     this.content = this.buildField()
-    this.returnedIdValues = [...(this.returnedIdValues ?? []), this.id]
     this.onShow = ()=>{const tf = DGet(this.FDomId); tf.focus(); tf.select()}
   }
 

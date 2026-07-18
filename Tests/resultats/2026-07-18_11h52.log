@@ -1,0 +1,23 @@
+Moteur : pont
+Arguments : e2e/service_commun_ouverture_terminal.rb e2e/service_commun_ouverture_terminal_guillemets.rb e2e/service_commun_ouverture_terminal_sans_code.rb
+Date : 2026-07-18 11h52
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : code d'un mot ('pwd')
+  (osascript : 9 appels, 0.180s)
+  (durée totale de la spec : 2.111s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal_guillemets.rb ---
+✓ service commun 'terminal au dossier' : code de plusieurs mots avec guillemets
+  (osascript : 9 appels, 0.182s)
+  (durée totale de la spec : 1.512s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal_sans_code.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : aucun code donné
+  (osascript : 8 appels, 0.183s)
+  (durée totale de la spec : 1.973s)
+
+-------------------
+Success: 3  Failures: 0  Pendings: 0  Test count: 3
+Durée totale (moteur : pont) : 5.596s

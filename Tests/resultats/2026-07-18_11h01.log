@@ -1,0 +1,46 @@
+Moteur : pont
+Arguments : e2e/execution_services_startup.rb e2e/service_commun_edit_documentation.rb e2e/service_commun_horloge.rb e2e/service_commun_init_documentation.rb e2e/service_commun_open_documentation.rb e2e/service_commun_ouverture_dossier.rb e2e/service_commun_update_documentation.rb
+Date : 2026-07-18 11h01
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.583s)
+  (durée totale de la spec : 12.236s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✓ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.453s)
+  (durée totale de la spec : 2.602s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.215s)
+  (durée totale de la spec : 10.840s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+✓ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+  (osascript : 16 appels, 1.873s)
+  (durée totale de la spec : 5.923s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+✓ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 16 appels, 1.174s)
+  (durée totale de la spec : 3.366s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+✓ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+  (osascript : 27 appels, 4.270s)
+  (durée totale de la spec : 5.618s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+✓ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.631s)
+  (durée totale de la spec : 2.754s)
+
+Échecs :
+1. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.583s)
+2. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 25 appels, 0.215s)
+
+-------------------
+Success: 5  Failures: 2  Pendings: 0  Test count: 7
+Durée totale (moteur : pont) : 43.339s

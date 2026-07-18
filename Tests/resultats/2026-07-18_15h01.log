@@ -1,0 +1,16 @@
+Moteur : pont
+Arguments : e2e/execution_services_startup.rb e2e/service_commun_horloge.rb
+Date : 2026-07-18 15h01
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+✓ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+  (osascript : 19 appels, 11.675s)
+  (durée totale de la spec : 13.218s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✓ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+  (osascript : 33 appels, 0.361s)
+  (durée totale de la spec : 1.497s)
+
+-------------------
+Success: 2  Failures: 0  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 14.715s

@@ -26,11 +26,11 @@ const COMMON_SERVICES_DATA = [
       ]
     , afterDefinedParams: (params) => {
       // console.log("[afterDefinedParams] PARAMS AVANT : ", [...params])
-      params.splice(1, 1)
-      const sbarwidth = params.splice(7)[0]
-      params[5] = sbarwidth
-      // console.log("[afterDefinedParams] PARAMS APRÈS : ", [...params])
-      return params
+      const [pathGroup, boundsGroup, sidebarGroup] = params
+      boundsGroup.splice(0, 1)         // retire le path dupliqué (1er élément du groupe finder-window)
+      boundsGroup[4] = sidebarGroup[0] // écrase sidebarWidth (index 4 après ce retrait) par la valeur configurée
+      // console.log("[afterDefinedParams] PARAMS APRÈS : ", [pathGroup, boundsGroup])
+      return [pathGroup, boundsGroup]
     }
   },
   

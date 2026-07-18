@@ -1,0 +1,12 @@
+Moteur : pont
+Arguments : e2e/service_commun_ouverture_terminal.rb
+Date : 2026-07-18 09h35
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+✓ service commun 'terminal au dossier' : code d'un mot ('pwd')
+  (osascript : 9 appels, 0.174s)
+  (durée totale de la spec : 1.522s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.522s

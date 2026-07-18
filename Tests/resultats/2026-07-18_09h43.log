@@ -1,0 +1,70 @@
+Moteur : pont
+Arguments : e2e/execution_services_startup.rb e2e/service_commun_edit_documentation.rb e2e/service_commun_horloge.rb e2e/service_commun_init_documentation.rb e2e/service_commun_open_documentation.rb e2e/service_commun_ouverture_dossier.rb e2e/service_commun_update_documentation.rb
+Date : 2026-07-18 09h43
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+✗ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.578s)
+  (durée totale de la spec : 12.239s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✗ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784360612jej8", "common_services_data" => {"edit-documentation" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T"], ["Finder"]]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260718-40551-jkd2vt", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "docu-folder" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T", "workTime" => 0}
+  (osascript : 12 appels, 1.043s)
+  (durée totale de la spec : 5.820s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-17843606184ie9", "common_services_data" => {"work-clock" => [[20], [15]]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260718-40616-xs29r7", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 13 appels, 0.131s)
+  (durée totale de la spec : 5.886s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    no implicit conversion of Array into String
+  (osascript : 10 appels, 0.942s)
+  (durée totale de la spec : 3.957s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    no implicit conversion of Array into String
+  (osascript : 10 appels, 1.024s)
+  (durée totale de la spec : 2.213s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+✗ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-project-20260718-40778-6bavef")
+  (osascript : 26 appels, 3.231s)
+  (durée totale de la spec : 6.088s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+✗ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    no implicit conversion of Array into String
+  (osascript : 12 appels, 1.136s)
+  (durée totale de la spec : 1.745s)
+
+Échecs :
+1. exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+    Timeout d'attente dépassé (10s) — message = ""
+  (osascript : 56 appels, 1.578s)
+2. service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784360612jej8", "common_services_data" => {"edit-documentation" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T"], ["Finder"]]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260718-40551-jkd2vt", "title" => "Projet A", "services" => {"others" => [], "startup" => []}, "docu-folder" => "/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T", "workTime" => 0}
+  (osascript : 12 appels, 1.043s)
+3. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (5s) — carte projet = {"id" => "fixture-17843606184ie9", "common_services_data" => {"work-clock" => [[20], [15]]}, "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260718-40616-xs29r7", "title" => "Projet A", "services" => {"startup" => [], "others" => []}, "workTime" => 0}
+  (osascript : 13 appels, 0.131s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+4. service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    no implicit conversion of Array into String
+  (osascript : 10 appels, 0.942s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+5. service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+    no implicit conversion of Array into String
+  (osascript : 10 appels, 1.024s)
+6. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-project-20260718-40778-6bavef")
+  (osascript : 26 appels, 3.231s)
+7. service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    no implicit conversion of Array into String
+  (osascript : 12 appels, 1.136s)
+
+-------------------
+Success: 0  Failures: 7  Pendings: 0  Test count: 7
+Durée totale (moteur : pont) : 37.948s

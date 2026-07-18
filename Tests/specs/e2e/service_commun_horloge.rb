@@ -45,9 +45,9 @@ def run_test
     set_value('__work-duration__', '15')
     click('btn-oui')
 
-    # → common_services_data enregistrée en tableau positionnel [session, work]
+    # → common_services_data enregistrée groupée par param : [[session], [work]]
     wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      read_project_card(id).dig('common_services_data', 'work-clock') == [20, 15]
+      read_project_card(id).dig('common_services_data', 'work-clock') == [[20], [15]]
     end
 
     # → l'horloge s'affiche, rond cliquable, bouton Stop pas encore visible
