@@ -207,11 +207,11 @@ class Service {
    * :transient:, qui doivent être définis chaque fois.
    */
   ensureServiceData(projet){
+    historize("-> ensureServiceData", projet)
     var redefineIt = false
-    console.log("-> ensureServiceData avec projet : ", projet, this)
     if (projet.common_services_data && projet.common_services_data[this.id]){
       // <= le projet a des common_services_data pour ce service
-      // => Il faut s'assurer que aucun paramètre ne doit être marqué à 
+      // => Il faut s'assurer qu'aucun paramètre ne doit être marqué à 
       //    redéfinir
       projet.common_services_data[this.id].forEach( pam => {
         if (pam == ':transient:') redefineIt = true
@@ -232,7 +232,7 @@ class Service {
   }
 
   onReturnFromDefineProjetParams(projet, service){
-    projet.common_services_data = projet.common_services_data ?? {}
+    const realParamsValues = [...service.params] // valeurs remises après enregistrement
     let paramValuesForProjet = [...service.params]
     if (service.transient) {
       // Si c'est un service transitoire (commun depuis panneau), il 
@@ -241,9 +241,13 @@ class Service {
         if (param.transient) { paramValuesForProjet[i] = ':transient:'}
       })
     }      
+    projet.common_services_data = projet.common_services_data ?? {}
     Object.assign(projet.common_services_data, {[service.id]: paramValuesForProjet})
     console.log("Projet après définition des paramètres", projet, service)
-    projet.save(this.execCommonServiceOn.bind(this, projet))
+    projet.save(() => {
+      Object.assign(projet.common_services_data, {[service.id]: realParamsValues})
+      this.execCommonServiceOn.call(this, projet)
+    })
   }
 
 }

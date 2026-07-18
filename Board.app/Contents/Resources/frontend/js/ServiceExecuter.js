@@ -39,17 +39,20 @@ class ServiceExecuter {
    * commun, c'est dans le projet.common_services_data que ça se trouve.
    */
   execOnProject(projet){
+    const flatParamsValues = this.flattenParamsValues(projet.common_services_data[this.id])
     if (this.front) {
-      this.front(projet, projet.common_services_data[this.id])
+      // Pas un script backend, mais un traitement frontend
+      // Typiquement : le minuteur
+      this.front(projet, flatParamsValues)
     } else {
-      this.finalyExec(projet.common_services_data[this.id])
+      // Un script backend
+      this.finalyExec(flatParamsValues)
     }
   }
 
-  finalyExec(params){
-    const flatParams = this.flattenParams()
-    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParams)
-    server.send({action: `exec-service`, script: this.script, flatParams}, this.afterRunService.bind(this))
+  finalyExec(flatParamsValues){
+    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParamsValues)
+    server.send({action: `exec-service`, script: this.script, params: flatParamsValues}, this.afterRunService.bind(this))
   }
 
   // Appelée après avoir exécuté le service
@@ -71,9 +74,9 @@ class ServiceExecuter {
    * régression : pour que les anciens projets passent, on doit
    * checker que les éléments sont bien des arrays.
    */
-  flattenParams(){
+  flattenParamsValues(paramsValues){
     var params = []
-    this.params.forEach(paramValues => {
+    paramsValues.forEach(paramValues => {
       if (Array.isArray(paramValues)) {
         params = [...params, ...paramValues]
       } else {
@@ -123,7 +126,7 @@ class ServiceExecuter {
    * compte par la commande.
    */
   escapeParamsIfRequired(params){
-    if (this.script != 'ExecCommand.sh') return
+    if (this.script != 'ExecCommand.sh') return params
     console.log("params non escapés : ", JSON.stringify(params))
     params = params.map(param => {
       if ('string' == typeof param) {

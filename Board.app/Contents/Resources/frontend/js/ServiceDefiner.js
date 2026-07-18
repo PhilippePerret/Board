@@ -81,7 +81,7 @@ class ServiceDefiner {
             definer.value.position = definer.value.position.map(n => n - 20)
             const [boundsX, boundsY] = definer.value.position
             const [boundsW, boundsH] = definer.value.size
-            paramsValues.push([, boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
+            paramsValues.push([boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
             break
           }
           default:
