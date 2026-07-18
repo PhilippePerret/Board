@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ — [État fin de session 2026-07-18](2026-07-18-Etat-fin-de-session.md) — session close sans échec connu restant, contexte utile (debug log, entrée run-tests) à lire avant de repartir sur les tests
+- PRIORITÉ — [État fin de session 2026-07-18](2026-07-18-Etat-fin-de-session.md) — EN COURS : specs e2e panneau extra-data (Partie 3), BLOQUÉ sur décision détection ouvert/fermé (3 options), aucun fichier de spec créé
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X

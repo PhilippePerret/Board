@@ -145,10 +145,20 @@ class Project {
    * Appelée quand on clique sur une carte de projet
    */
   static onSelect(projet){
-    const same = true && (projet.id === this.current?.id)
+    const same = (projet.id === this.current?.id)
     this.current && this.deselect(this.current)
-    if (same) return // simple désélection
-    this.select(projet)
+    same || this.select(projet)
+    this.updateOpenedPanel(same ? undefined : projet)
+  }
+
+  static get PROJECT_PANELS(){ return [ProjectExtraDataPanel] } // futurs panneaux : les ajouter ici
+
+  static updateOpenedPanel(projet){
+    this.PROJECT_PANELS.forEach(PanelClass => {
+      const panel = PanelClass.instance
+      if (!panel.built || panel.obj.classList.contains('closed')) return
+      projet ? panel.setProject(projet) : panel.close()
+    })
   }
   static select(projet){
     projet.obj.classList.add('selected')
@@ -245,10 +255,8 @@ class Project {
   }
 
   defineExtraData(){
-    if (undefined == this._edatapanel){
-      this._edatapanel = new ProjectExtraDataPanel(this)
-    }
-    this._edatapanel.open()
+    ProjectExtraDataPanel.instance.setProject(this)
+    ProjectExtraDataPanel.instance.open()
   }
 
   /**
