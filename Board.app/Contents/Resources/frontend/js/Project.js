@@ -523,6 +523,7 @@ class Project {
   afterRemove(retour){
     this.obj.remove()
     if (this.id == this.constructor.current.id) this.constructor.deselect(this)
+    this.constructor.updateOpenedPanel()
     App.setData('projects-in', retour.data.newProjectsIn)
     App.setData('projects-out', retour.data.newProjectsOut)
   }

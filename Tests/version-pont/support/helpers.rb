@@ -180,6 +180,18 @@ module BoardTest
     bridge_eval("!!document.getElementById(#{dom_id.to_json})") == 'true'
   end
 
+  # Surcharge de helpers_base.rb#panel_open? : lit directement la classe
+  # 'closed' (SidePanel.js) au lieu de comparer des positions AX — plus
+  # rapide, et évite un aller-retour osascript/System Events.
+  def panel_open?(dom_id)
+    bridge_eval(<<~JS) == 'true'
+      (function(){
+        var el=document.getElementById(#{dom_id.to_json});
+        return !!el && !el.classList.contains('closed');
+      })()
+    JS
+  end
+
   def exists_prefix?(prefix)
     bridge_eval(<<~JS) == 'true'
       (function(){

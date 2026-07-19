@@ -26,6 +26,12 @@
 --     effectivement trouvés, dans l'ordre où le parcours les rencontre —
 --     donc l'ordre réel d'affichage/DOM. Les ids absents de l'arbre sont
 --     simplement omis du résultat.)
+--   panel-open <domId>  ("true"/"false", pas d'attente. Un panneau
+--     SidePanel (frontend/css/services.css .closed) n'est jamais retiré de
+--     l'arbre AX quand il est fermé, juste décalé hors écran via `right` —
+--     absent de l'arbre : "false" (jamais construit). Présent : "false" si
+--     son bord droit dépasse le bord droit de la fenêtre (poussé hors
+--     champ), "true" sinon.)
 --   batch <payload>  (moteur "version-batch" — exécute plusieurs actions sans
 --     valeur de retour en un seul process osascript. <payload> : lignes
 --     séparées par des retours à la ligne, chaque ligne = action, needle et
@@ -69,6 +75,18 @@ on axValue(elem)
 		return value of elem
 	end tell
 end axValue
+
+on axPosition(elem)
+	tell application "System Events"
+		return position of elem
+	end tell
+end axPosition
+
+on axSize(elem)
+	tell application "System Events"
+		return size of elem
+	end tell
+end axSize
 
 -- Certains éléments structurels (ex. la div d'une carte projet) sont
 -- "aplatis" par WebKit et n'apparaissent jamais comme nœud AX distinct,
@@ -297,6 +315,26 @@ on run argv
 		set el to my waitForMatch("prefix", needle, defaultTimeout)
 		set parentEl to my axParent(el)
 		tell application "System Events" to perform action "AXPress" of parentEl
+
+	else if theAction is "panel-open" then
+		set found to missing value
+		try
+			set found to my findByDomId(my rootWindow(), needle)
+		end try
+		if found is missing value then return "false"
+		set panelPos to my axPosition(found)
+		set panelSize to my axSize(found)
+		set winPos to my axPosition(my rootWindow())
+		set winSize to my axSize(my rootWindow())
+		set panelRight to (item 1 of panelPos) + (item 1 of panelSize)
+		set winRight to (item 1 of winPos) + (item 1 of winSize)
+		-- tolérance de 5px : le panneau ouvert est collé au bord droit
+		-- (right:0), le fermé décalé d'au moins 100px de plus (services.css)
+		if panelRight > (winRight + 5) then
+			return "false"
+		else
+			return "true"
+		end if
 
 	else if theAction is "order-of" then
 		set AppleScript's text item delimiters to tab

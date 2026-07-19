@@ -68,6 +68,11 @@ begin
   when 'run-bashscript'
     returned_data = run_script("#{request['script-name']}.sh")
 
+  # Liste des logiciels installés (type de param 'logiciel', ParamDefiner.js)
+  when 'list-applications'
+    ok = true
+    returned_data = { apps: Dir.glob('/Applications/*.app').map { |p| File.basename(p, '.app') }.sort }
+
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
     ok = true

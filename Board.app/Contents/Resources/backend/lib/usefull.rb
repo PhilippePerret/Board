@@ -95,7 +95,7 @@ end
   '.rb'   => 'ruby',
   '.sh'   => 'zsh'
 }
-SCRIPT_TIMEOUT = 8 # secondes
+SCRIPT_TIMEOUT = 30 # secondes
 
 
 ### === Jouer un script du dossier /scripts/ ===

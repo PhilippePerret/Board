@@ -54,6 +54,9 @@ class ParamsDefiner {
  * DÉFINITION D'UN PARAMÈTRES
  */
 class ParamDefiner {
+  // Cache de la liste des logiciels (type 'logiciel'), lue une seule fois
+  // sur le disque (/Applications) pour toute la durée de vie de la page.
+  static APPS_LIST = undefined
 
   constructor(paramLister, param){
     this.paramLister = paramLister
@@ -220,6 +223,27 @@ class ParamDefiner {
       , defaultValue: this.default
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , midBtn: {name: 'Autre valeur…', onclick: this.onString.bind(this)}
+      , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
+    }).show()
+  }
+
+  // type 'logiciel' : choisir un logiciel installé (lu dans /Applications,
+  // mis en cache après le 1er appel) ou en taper le nom explicite (comme
+  // onSelectOrString, mais la liste vient du disque)
+  onLogiciel(retour){
+    if (this.constructor.APPS_LIST == undefined && retour == undefined) {
+      return server.send({action: 'list-applications'}, this.onLogiciel.bind(this))
+    }
+    if (retour != undefined) this.constructor.APPS_LIST = [['none', "(par défaut)"], ...retour.data.apps]
+    new SelectDialog({
+        title: this.name || "Choix d'une application"
+      , id: this.id
+      , message: this.message || 'Choisir l’application à utiliser'
+      , idValues: [this.id]
+      , values: this.constructor.APPS_LIST
+      , defaultValue: this.default
+      , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
+      , midBtn: {name: 'Autre application…', onclick: this.onString.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
   }

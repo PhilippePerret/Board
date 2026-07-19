@@ -105,6 +105,14 @@ module BoardTest
   def get_text(dom_id)              = osascript(AX_SCRIPT, 'get-text', dom_id)
   def get_text_prefix(prefix)       = osascript(AX_SCRIPT, 'get-text-prefix', prefix)
 
+  # true/false, jamais d'attente. Un SidePanel (frontend/js/SidePanel.js)
+  # n'est jamais retiré de l'arbre AX quand il est fermé (juste décalé hors
+  # écran, services.css .closed) : "false" si jamais construit (dom_id
+  # absent) ou décalé hors champ, "true" sinon. Même nom de méthode pour
+  # tous les moteurs (cf. version-pont/support/helpers.rb pour la variante
+  # qui lit classList directement, plus rapide sur ce moteur).
+  def panel_open?(dom_id)           = osascript(AX_SCRIPT, 'panel-open', dom_id) == 'true'
+
   # Vérifie positivement le contenu de #message après un exec-service, au
   # lieu de deviner à quoi ressemble un texte d'échec (fragile : dépend de
   # la forme exacte prise par l'erreur ce jour-là). Par défaut, exige la

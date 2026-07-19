@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ — [État fin de session 2026-07-18](2026-07-18-Etat-fin-de-session.md) — EN COURS : specs e2e panneau extra-data (Partie 3), BLOQUÉ sur décision détection ouvert/fermé (3 options), aucun fichier de spec créé
+- PRIORITÉ — [État fin de session 2026-07-19](2026-07-19-Etat-fin-de-session.md) — 8 specs e2e panneau extra-data écrites (10 cas), pas encore exécutées ; ancien fichier 2026-07-18 obsolète, sa suppression a été refusée (pattern d'autorisation), à supprimer manuellement
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X
@@ -18,6 +18,8 @@
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
 - [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande
-- [État fin de session, tous les jours](feedbacks/daily_etat_fin_session.md) — écrire systématiquement le fichier daté, sans attendre une demande
+- [État fin de session](feedbacks/daily_etat_fin_session.md) — seulement s'il reste du non résolu à reporter, sinon pas de fichier
 - [Refermer les fenêtres de debug](feedbacks/close_debug_windows.md) — refermer immédiatement après lecture, pas seulement en fin de tâche
 - [2 échecs → logs, pas 3e essai](feedbacks/two_failures_then_log.md) — instrumenter le vrai chemin d'exécution, pas une reproduction à côté
+- [Numéroter = garder le texte entier](feedbacks/numbering_keeps_full_text.md) — ajouter des numéros ne veut pas dire raccourcir
+- [Régler plutôt que virer un garde-fou](feedbacks/tune_dont_remove_safety_code.md) — une plainte sur un timeout/garde-fou peut vouloir dire "ajuste-le", pas "supprime-le"
