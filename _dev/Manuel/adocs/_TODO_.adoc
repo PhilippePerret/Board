@@ -4,6 +4,7 @@
 
 - Rédéfinition du service avec meta+clic sur service (uuid)
 
+- Bouton pour ouvrir l'aide (le Manuel du dossier Manuel)
 - utiliser des icônes SVG simples (pour l'interface)
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - pouvoir éditer le fichier d'un script perso

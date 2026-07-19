@@ -1,0 +1,10 @@
+On peut très facilement gérer les fichiers versionnés avec {app-name}. On peut même choisir son système préféré : 
+
+- Un nom de fichier portant son numéro de version dans son nom même.
+- Un nom unique et inchangeable, avec un numéro de version qu'on définit en archivant le fichier.
+
+Ces deux modes sont invisibles, {app-name} se charge de déterminer quel mode est utilisé pour le fichier choisi.
+
+Bien entendu, on peut choisir autant de fichiers versionné qu'on le désire, pour le même projet.
+
+Une fois qu'on a ajouté le service au projet en déterminant le fichier visé, dès qu'on clique dessus, {app-name} demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.

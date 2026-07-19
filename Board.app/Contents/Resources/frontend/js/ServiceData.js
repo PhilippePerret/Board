@@ -122,6 +122,16 @@ const COMMON_SERVICES_DATA = [
 /*******************************************************************/
 const CUSTOM_SERVICES_DATA = [
   {
+      id: 'open-file'
+    , name: 'Ouvrir le fichier…'
+    , scType: '.sh'
+    , params: [
+        {name: "Fichier à ouvrir", id: 'path', type: 'path', q: "Sélection le fichier à ouvrir dans le Finder, puis “Choisir”.", required: true},
+        {name: "Application à utiliser", id: 'app', type: 'logiciel', required: true}
+      ]
+  },
+
+  {
       id: 'open-finder-window'
     , name: 'Ouvrir une fenêtre dans le Finder'
     /* tag::exemple-fix-param[] */

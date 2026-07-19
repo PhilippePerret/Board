@@ -238,6 +238,7 @@ class ParamDefiner {
     new SelectDialog({
         title: this.name || "Choix d'une application"
       , id: this.id
+      , width: '560px'
       , message: this.message || 'Choisir l’application à utiliser'
       , idValues: [this.id]
       , values: this.constructor.APPS_LIST

@@ -68,6 +68,14 @@ begin
   when 'run-bashscript'
     returned_data = run_script("#{request['script-name']}.sh")
 
+  # Liste des logiciels installés (type de param 'logiciel', ParamDefiner.js)
+  # /System/Applications (+ Utilities) : apps système (Preview, Terminal…),
+  # pas dans /Applications depuis macOS Ventura.
+  when 'list-applications'
+    ok = true
+    app_dirs = ['/Applications/*.app', '/System/Applications/*.app', '/System/Applications/Utilities/*.app']
+    returned_data = { apps: app_dirs.flat_map { |g| Dir.glob(g) }.map { |p| File.basename(p, '.app') }.uniq.sort }
+
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
     ok = true

@@ -485,6 +485,22 @@ module BoardTest
     }
   end
 
+  # Service custom "open-file" (Ouvrir le fichier…, ServiceData.js) déjà
+  # attaché — params : [path, logiciel]. logiciel: 'none' -> pas
+  # d'application précisée (backend/scripts/OpenFile.sh fait juste "open
+  # path"), sinon "open -a logiciel path".
+  def fixture_open_file_service(path, logiciel, name: 'Ouvrir un fichier', type: 'others')
+    {
+      'id' => 'open-file',
+      'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",
+      'type' => type,
+      'scType' => '.sh',
+      'name' => name,
+      'params' => [path, logiciel],
+      'projectId' => nil
+    }
+  end
+
   # Même forme de params que open-folder-project (paramsOrder identique,
   # ServiceData.js) mais ouvre N'IMPORTE QUEL dossier, pas forcément celui du
   # projet — utile pour distinguer les deux dans un même test.
