@@ -148,7 +148,7 @@ def run_script(script_name, params = "")
         res = io.read
       end
     end
-    if res == "" then {ok: null, message: "Aucun retour de la commande."}
+    if res == "" then {ok: nil, message: "Aucun retour de la commande."}
     else JSON.parse(res) end
   rescue Timeout::Error
     (Process.kill('TERM', pid) rescue nil) if pid

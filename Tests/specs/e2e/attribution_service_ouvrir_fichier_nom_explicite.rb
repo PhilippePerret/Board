@@ -48,7 +48,8 @@ def run_test
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       list = read_project_card(id)['services']['others']
       found = list.is_a?(Array) && list.find { |s| s['id'] == 'open-file' }
-      found && found['params'].flatten == [file_path, APP_NAME]
+      next false unless found
+      File.realpath(found['params'][0][0]) == File.realpath(file_path) && found['params'][1] == [APP_NAME]
     end
   end
 ensure

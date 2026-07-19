@@ -11,7 +11,7 @@ body {
 }
 * {
   font-size: 16pt;
-  user-select: none !important;
+  user-select: none!important;
 }
 
 .hidden {display:none;}
@@ -82,6 +82,15 @@ footer {
   height:var(--hauteur-footer);
   color:black;
   background-color: #DDDDDD;
+}
+
+footer * {
+  user-select: all!important;
+  -webkit-user-select: all!important;
+}
+footer div.message > span {
+  user-select: all!important;
+  -webkit-user-select: all!important;
 }
 
 footer div#message {

@@ -88,6 +88,10 @@ footer * {
   user-select: all!important;
   -webkit-user-select: all!important;
 }
+footer div.message > span {
+  user-select: all!important;
+  -webkit-user-select: all!important;
+}
 
 footer div#message {
   padding: 8px 40px 8px 8px;

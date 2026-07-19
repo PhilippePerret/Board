@@ -23,3 +23,4 @@
 - [2 échecs → logs, pas 3e essai](feedbacks/two_failures_then_log.md) — instrumenter le vrai chemin d'exécution, pas une reproduction à côté
 - [Numéroter = garder le texte entier](feedbacks/numbering_keeps_full_text.md) — ajouter des numéros ne veut pas dire raccourcir
 - [Régler plutôt que virer un garde-fou](feedbacks/tune_dont_remove_safety_code.md) — une plainte sur un timeout/garde-fou peut vouloir dire "ajuste-le", pas "supprime-le"
+- [Ne pas répéter la note bundle](feedbacks/stop_repeating_bundle_sync_note.md) — la sync Board.app est son job, pas la peine de le rappeler à chaque fix

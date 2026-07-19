@@ -1,0 +1,43 @@
+Moteur : pont
+Arguments : *ouvrir_fichier*
+Date : 2026-07-19 09h21
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_choix_liste.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service 'Ouvrir le fichier…' : attribution avec un logiciel choisi dans la liste
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784445697aimg", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40517-pudn04", "title" => "Projet A", "services" => {"others" => [{"id" => "open-file", "name" => "Ouvrir le fichier…", "params" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40517-pudn04/note.txt"], [""]], "uuid" => "1784445702080a5f79791c898c"}], "startup" => []}, "workTime" => 0}
+  (osascript : 18 appels, 4.238s)
+  (durée totale de la spec : 9.653s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_nom_explicite.rb ---
+✗ service 'Ouvrir le fichier…' : attribution avec un nom de logiciel tapé explicitement
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784445707lqe9", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40558-yua3y7", "title" => "Projet A", "services" => {"startup" => [], "others" => [{"id" => "open-file", "params" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40558-yua3y7/note.txt"], ["LogicielInventePourLeTest"]], "name" => "Ouvrir le fichier…", "uuid" => "1784445711212b7edd8d1963388"}]}, "workTime" => 0}
+  (osascript : 20 appels, 4.236s)
+  (durée totale de la spec : 9.097s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_par_defaut.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service 'Ouvrir le fichier…' : attribution avec le choix « par défaut » (aucune application précisée)
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784445716hltn", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40594-46i2e4", "title" => "Projet A", "services" => {"others" => [{"id" => "open-file", "name" => "Ouvrir le fichier…", "params" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40594-46i2e4/note.txt"], ["none"]], "uuid" => "17844457208196153d01dead29"}], "startup" => []}, "workTime" => 0}
+  (osascript : 18 appels, 4.155s)
+  (durée totale de la spec : 9.550s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_service_ouvrir_fichier.rb ---
+✓ service 'Ouvrir le fichier…' : exécution réelle (logiciel = Finder)
+  (osascript : 6 appels, 0.538s)
+  (durée totale de la spec : 1.193s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. service 'Ouvrir le fichier…' : attribution avec un logiciel choisi dans la liste
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784445697aimg", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40517-pudn04", "title" => "Projet A", "services" => {"others" => [{"id" => "open-file", "name" => "Ouvrir le fichier…", "params" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40517-pudn04/note.txt"], [""]], "uuid" => "1784445702080a5f79791c898c"}], "startup" => []}, "workTime" => 0}
+  (osascript : 18 appels, 4.238s)
+2. service 'Ouvrir le fichier…' : attribution avec un nom de logiciel tapé explicitement
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784445707lqe9", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40558-yua3y7", "title" => "Projet A", "services" => {"startup" => [], "others" => [{"id" => "open-file", "params" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40558-yua3y7/note.txt"], ["LogicielInventePourLeTest"]], "name" => "Ouvrir le fichier…", "uuid" => "1784445711212b7edd8d1963388"}]}, "workTime" => 0}
+  (osascript : 20 appels, 4.236s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+3. service 'Ouvrir le fichier…' : attribution avec le choix « par défaut » (aucune application précisée)
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-1784445716hltn", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40594-46i2e4", "title" => "Projet A", "services" => {"others" => [{"id" => "open-file", "name" => "Ouvrir le fichier…", "params" => [["/private/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-project-20260719-40594-46i2e4/note.txt"], ["none"]], "uuid" => "17844457208196153d01dead29"}], "startup" => []}, "workTime" => 0}
+  (osascript : 18 appels, 4.155s)
+
+-------------------
+Success: 1  Failures: 3  Pendings: 0  Test count: 4
+Durée totale (moteur : pont) : 29.493s

@@ -1,0 +1,24 @@
+Moteur : pont
+Arguments : *ouvrir_fichier*
+Date : 2026-07-19 09h31
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_choix_liste.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec un logiciel choisi dans la liste
+  (osascript : 18 appels, 4.202s)
+  (durée totale de la spec : 4.938s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_nom_explicite.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec un nom de logiciel tapé explicitement
+  (osascript : 20 appels, 4.030s)
+  (durée totale de la spec : 4.756s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_par_defaut.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec le choix « par défaut » (aucune application précisée)
+  (osascript : 18 appels, 4.058s)
+  (durée totale de la spec : 4.781s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_service_ouvrir_fichier.rb ---
+✓ service 'Ouvrir le fichier…' : exécution réelle (logiciel = Finder)
+  (osascript : 6 appels, 0.551s)
+  (durée totale de la spec : 1.195s)
+
+-------------------
+Success: 4  Failures: 0  Pendings: 0  Test count: 4
+Durée totale (moteur : pont) : 15.670s

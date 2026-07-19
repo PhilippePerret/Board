@@ -42,16 +42,19 @@ def run_test
       click('btn-oui')
     end
 
-    # → param 'app' (type 'logiciel') : choix dans la liste (Finder est
-    #   forcément installé, pas besoin de dépendre d'une app tierce)
+    # → param 'app' (type 'logiciel') : choix dans la liste (Safari est
+    #   dans /Applications sur toute machine — Finder, lui, n'y est PAS :
+    #   /System/Library/CoreServices/Finder.app, hors du périmètre scanné
+    #   par l'action backend 'list-applications')
     wait_for('__app__')
-    set_value('__app__', 'Finder')
+    set_value('__app__', 'Safari')
     click('btn-oui')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       list = read_project_card(id)['services']['others']
       found = list.is_a?(Array) && list.find { |s| s['id'] == 'open-file' }
-      found && found['params'].flatten == [file_path, 'Finder']
+      next false unless found
+      File.realpath(found['params'][0][0]) == File.realpath(file_path) && found['params'][1] == ['Safari']
     end
   end
 ensure

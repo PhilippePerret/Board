@@ -2,7 +2,6 @@
   
 == Todo list ==
 
-- pouvoir copier le texte du footer (changer localement le user-selection ou autre)
 - Rédéfinition du service avec meta+clic sur service (uuid)
 
 - Bouton pour ouvrir l'aide (le Manuel du dossier Manuel)
