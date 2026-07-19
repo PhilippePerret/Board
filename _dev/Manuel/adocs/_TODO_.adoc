@@ -1,16 +1,18 @@
 == BUGS ==
-  
-== Todo list ==
 
+
+== Todo En cours  
 - Rédéfinition du service avec meta+clic sur service (uuid)
 
+== Todo list ==
+  
 - Bouton pour ouvrir l'aide (le Manuel du dossier Manuel)
 
 - utiliser des icônes SVG simples (pour l'interface)
 - Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - pouvoir éditer le fichier d'un script perso
 
-== Idées de nouveaux services (2026-07-11) ==
+== Idées d'autres services ==
 
 - git init (tout le flux, juste en donnant le nom du repo sur Github)
 - Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"

@@ -24,3 +24,4 @@
 - [Numéroter = garder le texte entier](feedbacks/numbering_keeps_full_text.md) — ajouter des numéros ne veut pas dire raccourcir
 - [Régler plutôt que virer un garde-fou](feedbacks/tune_dont_remove_safety_code.md) — une plainte sur un timeout/garde-fou peut vouloir dire "ajuste-le", pas "supprime-le"
 - [Ne pas répéter la note bundle](feedbacks/stop_repeating_bundle_sync_note.md) — la sync Board.app est son job, pas la peine de le rappeler à chaque fix
+- ["S'il te plaît" obligatoire](feedbacks/no_please_direct_ask.md) — toute demande d'action à Phil doit dire "s'il te plaît", sinon c'est un ordre

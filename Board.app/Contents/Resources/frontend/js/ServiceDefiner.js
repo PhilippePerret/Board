@@ -20,9 +20,6 @@ class ServiceDefiner {
     // Maintenant, elles sont groupées par paramètre.
     this.paramsValues = []
 
-    // Mis à true quand on redéfinition un service (juste pour le titre)
-    this.redefinition = false
-
     // Mis à false quand le service est renommé
     this.unnamed = service.unnamed ?? true
     // console.log("this.unamed (false attendu)", this.unnamed)

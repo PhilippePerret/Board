@@ -1,0 +1,79 @@
+Moteur : pont
+Arguments : *redefinition_service*
+Date : 2026-07-19 14h22
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_edit_documentation.rb ---
+✓ redéfinition d'un service 'edit-documentation' : project + app résolus sans dialogue
+  (osascript : 8 appels, 0.163s)
+  (durée totale de la spec : 0.773s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_horloge.rb ---
+✗ redéfinition d'un service 'work-clock' : integer préremplis (session-duration + useLastAsDefault)
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463731xdbx
+  (osascript : 42 appels, 0.111s)
+  (durée totale de la spec : 4.791s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_fenetre_finder.rb ---
+✗ redéfinition d'un service 'open-finder-window' : pas de Préserver pour finder-window, bouton par défaut pour boolean
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463736bmtg
+  (osascript : 41 appels, 0.118s)
+  (durée totale de la spec : 4.705s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_fichier.rb ---
+✗ redéfinition d'un service 'open-file' : nom + path (Préserver) + logiciel préremplis, pas d'exécution auto
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463741tzm1
+  (osascript : 42 appels, 0.116s)
+  (durée totale de la spec : 4.812s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_url.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ redéfinition d'un service 'open-URL' : url préremplie avec la valeur actuelle
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-17844637462a78
+  (osascript : 42 appels, 0.116s)
+  (durée totale de la spec : 5.359s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_run_script_format_ancien.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ redéfinition d'un service au format à plat (ancien projet) : Préserver fonctionne quand même
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463751wbwf
+  (osascript : 41 appels, 0.120s)
+  (durée totale de la spec : 5.263s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_terminal_code.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ redéfinition d'un service 'open-terminal-at-folder' : string (code) préremplie
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-17844637564q84
+  (osascript : 41 appels, 0.110s)
+  (durée totale de la spec : 5.263s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_versionnage_fichier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ redéfinition d'un service 'file-versioning' : path-or-null propose Préserver ET Aucun
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463762e1gk
+  (osascript : 41 appels, 0.134s)
+  (durée totale de la spec : 5.277s)
+
+Échecs :
+1. redéfinition d'un service 'work-clock' : integer préremplis (session-duration + useLastAsDefault)
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463731xdbx
+  (osascript : 42 appels, 0.111s)
+2. redéfinition d'un service 'open-finder-window' : pas de Préserver pour finder-window, bouton par défaut pour boolean
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463736bmtg
+  (osascript : 41 appels, 0.118s)
+3. redéfinition d'un service 'open-file' : nom + path (Préserver) + logiciel préremplis, pas d'exécution auto
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463741tzm1
+  (osascript : 42 appels, 0.116s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+4. redéfinition d'un service 'open-URL' : url préremplie avec la valeur actuelle
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-17844637462a78
+  (osascript : 42 appels, 0.116s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+5. redéfinition d'un service au format à plat (ancien projet) : Préserver fonctionne quand même
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463751wbwf
+  (osascript : 41 appels, 0.120s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+6. redéfinition d'un service 'open-terminal-at-folder' : string (code) préremplie
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-17844637564q84
+  (osascript : 41 appels, 0.110s)
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+7. redéfinition d'un service 'file-versioning' : path-or-null propose Préserver ET Aucun
+    Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463762e1gk
+  (osascript : 41 appels, 0.134s)
+
+-------------------
+Success: 1  Failures: 7  Pendings: 0  Test count: 8
+Durée totale (moteur : pont) : 36.243s

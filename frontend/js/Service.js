@@ -129,13 +129,14 @@ class Service {
 
   /**
    * Observation de la carte insérée dans le projet
+   *
+   * Un service "startup" reste individuellement cliquable (au même titre
+   * qu'un service "others") : lancés tous ensemble au démarrage, ils
+   * doivent quand même pouvoir être relancés un par un (ex. rouvrir une
+   * seconde fois une fenêtre du projet) ou redéfinis (cmd+clic).
    */
   observeServiceCard(projet, card){
-    if (this.type == 'startup') {
-      console.log("Service startup => pas de click sur %s", this.id)
-    } else {
-      listen(card, 'click', this.onClickOnProjectService.bind(this))
-    }
+    listen(card, 'click', this.onClickOnProjectService.bind(this, projet))
     listen(card, 'dragstart', e => projet.draggedService = this)
     listen(card, 'dragend', e => {
       if (e.dataTransfer.dropEffect != "none") return
@@ -143,15 +144,54 @@ class Service {
     })
   }
 
-  onClickOnProjectService(ev){
+  onClickOnProjectService(projet, ev){
     if (ev.shiftKey) {
       message("Apprendre à sélectionner le service")
     } else if (ev.metaKey) {
-      message("Je dois apprendre à redéfinir le service")
-      console.error("La redéfinition du service n'est pas encore implémentée.")
+      this.redefine(projet)
     } else {
       this.exec(ev)
     }
+  }
+
+  // Redéfinition de TOUS les paramètres fixes d'un service déjà attaché
+  // (cmd+clic sur sa carte), nom inclus. Valeurs actuelles proposées comme
+  // 'actual' (pas 'default', pas le même sens). Pas d'exécution auto : un
+  // cmd+clic veut dire "éditer", pas "lancer".
+  // schemaService (copie de absData, this.data copié aussi) plutôt que this
+  // directement : évite de muter SERVICES_DATA_TABLE[this.id] (partagé) et
+  // d'entériner un renommage avant confirmation (abandon en route sinon).
+  // this.params[i] à un seul élément = valeur simple réutilisable en
+  // 'actual' ; plus d'un élément = type composite (finder-window, bounds)
+  // ou afterDefinedParams déjà appliqué : pas de correspondance 1-pour-1
+  // avec absData.params, pas de préremplissage possible, schéma vierge.
+  redefine(projet){
+    historize('-> Service#redefine')
+    const schemaParams = this.absData.afterDefinedParams
+      ? this.absData.params
+      : this.absData.params.map((p, i) => {
+          const current = this.params[i]
+          if (Array.isArray(current)) {
+            return current.length === 1 ? Object.assign({}, p, {actual: current[0]}) : p
+          }
+          return current === undefined ? p : Object.assign({}, p, {actual: current})
+        })
+
+    const schemaService = Object.assign({}, this.absData, {
+        name: this.name
+      , data: Object.assign({}, this.data)
+      , params: schemaParams
+      , unnamed: true
+    })
+
+    const definer = new ServiceDefiner(schemaService, () => {
+      this.data.name = schemaService.data.name
+      this.params = schemaService.params
+      const nameEl = this.projectCard?.querySelector?.('.name')
+      if (nameEl) nameEl.textContent = this.name
+      projet.save()
+    })
+    definer.define()
   }
   // Exécution du service
   exec(ev, callback){
@@ -191,7 +231,7 @@ class Service {
     historize('-> execCommonServiceOn')
     projet = projet ?? Project.current
     if (ev?.metaKey) {
-      return this.defineCommonServiceParameters(projet, true)
+      return this.defineCommonServiceParameters(projet)
     } else if (!this.ensureServiceData(projet)) {
       return null
     }
@@ -205,18 +245,17 @@ class Service {
    */
   ensureServiceData(projet){
     historize("-> ensureServiceData", projet)
-    if (this.transient) return this.defineCommonServiceParameters(projet, true)
+    if (this.transient) return this.defineCommonServiceParameters(projet)
     if (projet.common_services_data && projet.common_services_data[this.id]) return true
-    return this.defineCommonServiceParameters(projet, false /* 1re définition */)
+    return this.defineCommonServiceParameters(projet)
   }
 
-  defineCommonServiceParameters(projet, redefine = false){
+  defineCommonServiceParameters(projet){
     historize('-> defineCommonServiceParameters')
     this.unnamed = false // Pour ne pas redemander le nomage
     const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet, this))
-    definer.redefinition = redefine
     definer.define()
-    return false    
+    return false
   }
 
   onReturnFromDefineProjetParams(projet, service){

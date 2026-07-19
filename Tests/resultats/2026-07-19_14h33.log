@@ -1,0 +1,49 @@
+Moteur : pont
+Arguments : *redefinition_service*
+Date : 2026-07-19 14h33
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_edit_documentation.rb ---
+✓ redéfinition d'un service 'edit-documentation' : project + app résolus sans dialogue
+  (osascript : 8 appels, 0.164s)
+  (durée totale de la spec : 0.786s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_horloge.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ redéfinition d'un service 'work-clock' : integer préremplis (session-duration + useLastAsDefault)
+  (osascript : 15 appels, 0.186s)
+  (durée totale de la spec : 1.354s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_fenetre_finder.rb ---
+✗ redéfinition d'un service 'open-finder-window' : pas de Préserver pour finder-window, bouton par défaut pour boolean
+    Timeout d'attente dépassé (4s) — élément introuvable : btn-oui
+  (osascript : 55 appels, 1.046s)
+  (durée totale de la spec : 5.724s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_fichier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ redéfinition d'un service 'open-file' : nom + path (Préserver) + logiciel préremplis, pas d'exécution auto
+  (osascript : 18 appels, 0.254s)
+  (durée totale de la spec : 2.452s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_url.rb ---
+✓ redéfinition d'un service 'open-URL' : url préremplie avec la valeur actuelle
+  (osascript : 12 appels, 0.148s)
+  (durée totale de la spec : 0.776s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_run_script_format_ancien.rb ---
+✓ redéfinition d'un service au format à plat (ancien projet) : Préserver fonctionne quand même
+  (osascript : 11 appels, 0.157s)
+  (durée totale de la spec : 0.790s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_terminal_code.rb ---
+✓ redéfinition d'un service 'open-terminal-at-folder' : string (code) préremplie
+  (osascript : 12 appels, 0.170s)
+  (durée totale de la spec : 0.786s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_versionnage_fichier.rb ---
+✓ redéfinition d'un service 'file-versioning' : path-or-null propose Préserver ET Aucun
+  (osascript : 14 appels, 0.154s)
+  (durée totale de la spec : 0.780s)
+
+Échecs :
+1. redéfinition d'un service 'open-finder-window' : pas de Préserver pour finder-window, bouton par défaut pour boolean
+    Timeout d'attente dépassé (4s) — élément introuvable : btn-oui
+  (osascript : 55 appels, 1.046s)
+
+-------------------
+Success: 7  Failures: 1  Pendings: 0  Test count: 8
+Durée totale (moteur : pont) : 13.448s

@@ -68,8 +68,11 @@ class ParamDefiner {
     this.q        = param.q       ?? null
     this.message  = param.message ?? this.q ?? null
     this.default  = param.default ?? null
+    this.actual   = param.actual  ?? null // valeur en vigueur, distincte de default
     this.values   = param.values  ?? null
   }
+
+  get currentOrDefault(){ return this.actual ?? this.default }
 
   define() {
    historize('-> ParamDefiner.define', this)
@@ -149,13 +152,14 @@ class ParamDefiner {
     new ConfirmDialog({
         title: this.name
       , message: this.message
+      , defaultKey: this.actual === false ? 'Non' : 'Oui'
       , ouiBtn: {name: 'Oui' , onclick: this.setValue.bind(this, true)}
       , nonBtn: {name: 'Non' , onclick: this.setValue.bind(this, false)}
     }).show()
   }
 
   onInteger(){
-    let defaultValue = this.default
+    let defaultValue = this.currentOrDefault
     if (this.param.useLastAsDefault) {
       // this.paramLister.definers contient déjà ce definer (poussé avant
       // define() par ParamsDefiner#define) : l'avant-dernier est le param précédent
@@ -191,7 +195,7 @@ class ParamDefiner {
         title:        'Définition d’URL'
       , id:           this.id
       , message:      this.message || "Quelle URL faut-il rejoindre ?"
-      , defaultValue: this.default || 'https://'
+      , defaultValue: this.currentOrDefault || 'https://'
       , ouiBtn:       {name: 'OK', onclick: this.setValue.bind(this)}
       , nonBtn:       {name: 'Annuler', onclick: this.onNonButton.bind(this, null /* valeur reçue par setValue */)}
     }).show()
@@ -205,13 +209,13 @@ class ParamDefiner {
       , message: this.message
       , idValues: [this.id]
       , values: this.values
-      , defaultValue: this.default
+      , defaultValue: this.currentOrDefault
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
     }).show()
   }
 
-  // Possibilité de donner une valeur fixe (d'un menu) ou 
+  // Possibilité de donner une valeur fixe (d'un menu) ou
   // de proposer une valeur explicite
   onSelectOrString(owner){
     new SelectDialog({
@@ -220,7 +224,7 @@ class ParamDefiner {
       , message: this.message
       , idValues: [this.id]
       , values: this.values
-      , defaultValue: this.default
+      , defaultValue: this.currentOrDefault
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , midBtn: {name: 'Autre valeur…', onclick: this.onString.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
@@ -242,7 +246,7 @@ class ParamDefiner {
       , message: this.message || 'Choisir l’application à utiliser'
       , idValues: [this.id]
       , values: this.constructor.APPS_LIST
-      , defaultValue: this.default
+      , defaultValue: this.currentOrDefault
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , midBtn: {name: 'Autre application…', onclick: this.onString.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
@@ -254,7 +258,7 @@ class ParamDefiner {
         title:    this.name
       , id:       this.id
       , message:  this.message
-      , defaultValue: this.default || ''
+      , defaultValue: this.currentOrDefault || ''
       , onShow: _ => {const tf = DGet(`#__${this.id}__`); tf.focus(); tf.select()}
       , ouiBtn: {name: 'OK', onclick: this.setValue.bind(this)}
       , nonBtn: {name: 'Annuler', onclick: this.onNonButton.bind(this, null)}
@@ -290,12 +294,14 @@ class ParamDefiner {
 
   // type 'path-or-null'
   onPathOrNull(){
-    new ConfirmDialog({
-      title: `${this.redefinition?'Red':'D'}éfinition de paramètre`,
+    const dialogData = {
+      title: 'Définition de paramètre',
       message: this.q || "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'.",
       ouiBtn: {name: 'OK'   , onclick: this.getPathOfFinderSelection.bind(this)},
       nonBtn: {name: 'Aucun', onclick: this.setValue.bind(this, null)}
-    }).show()
+    }
+    this.addPreserveOption(dialogData)
+    new ConfirmDialog(dialogData).show()
   }
 
   // Une image ou une couleur
@@ -335,17 +341,31 @@ class ParamDefiner {
    */
 
   waitForWindow(message, callback, fallback = null, options = null){
-    new ConfirmDialog({
-        title: `${this.redefinition?'Red':'D'}éfinition de paramètre`
+    const dialogData = {
+        title: 'Définition de paramètre'
       , message: message
+      , content: options?.content ?? null
       , ouiBtn: {name: options?.ouiBtn ?? 'OK'        , onclick: callback}
       , nonBtn: {name: options?.nonBtn ?? 'Annuler'   , onclick: fallback}
-    }).show()
+    }
+    this.addPreserveOption(dialogData)
+    new ConfirmDialog(dialogData).show()
+  }
+
+  // Ajoute, quand this.actual est défini, un contenu "Préserver : <valeur>"
+  // (juste au-dessus des boutons, après un content déjà présent) et le
+  // bouton midBtn correspondant.
+  addPreserveOption(dialogData){
+    if (this.actual == null) return
+    const preserve = DCreate('DIV', {class: 'preserve-value', text: `Préserver : ${this.actual}`})
+    if (dialogData.content) dialogData.content.appendChild(preserve)
+    else dialogData.content = preserve
+    dialogData.midBtn = {name: 'Préserver', onclick: this.setValue.bind(this, this.actual)}
   }
 
   waitForText(message, options = null){
     new TextFieldDialog({
-        title: `${this.redefinition?'Red':'D'}éfinition de l’URL`
+        title: 'Définition de l’URL'
       , message: message
       , ouiBtn: {name: options?.ouiBtn ?? 'OK'      , onclick: this.setValue.bind(this)}
       , nonBtn: {name: options?.nonBtn ?? 'Annuler' , onclick: this.onNonButton.bind(this, null)}

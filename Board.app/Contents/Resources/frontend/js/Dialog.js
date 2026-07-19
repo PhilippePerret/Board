@@ -22,6 +22,7 @@ class Dialog {
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
     this.midData = data.midBtn ?? null
     this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
+    this.defaultKey = data.defaultKey ?? 'Oui'
     this.unscrimmed = data.unscrimmed ?? false // pour ne pas mettre de flou
     // Une fonction qui peut tranformer la valeur avant de la retourner
     this.toRealValue = data.toRealValue ?? ((v) => v)
@@ -101,15 +102,15 @@ class Dialog {
   }
 
   static HANDLED_KEYS = {
-    Enter: {nokey: 'onOui'},
+    Enter: {nokey: null},
     Escape: {nokey: 'onNon'}
   }
   onKeyDown(ev) {
     var dev;
     // console.log("ev", ev)
     if ( (dev = Dialog.HANDLED_KEYS[ev.key]) ){
-      const method = dev.nokey ;
-      this[method]() 
+      const method = dev.nokey ?? `on${this.defaultKey}`
+      this[method]()
     } else { return stopEvent(ev)}
   }
 
@@ -131,15 +132,17 @@ class Dialog {
     }
     // Pied de page
     const footer = DCreate('DIV', {class:'footer'})
-    this.nonBtn = DCreate('BUTTON', {id: 'btn-non', class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
-    footer.appendChild(this.nonBtn)
-    this.nonBtn.disabled = (this.nonData?.enable === false)
-    this.midBtn = DCreate('BUTTON', {id: 'btn-mid', class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
-    footer.appendChild(this.midBtn)
-    this.midBtn.disabled = (this.midData?.enable === false)
-    this.ouiBtn = DCreate('BUTTON', {id: 'btn-oui', class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
-    footer.appendChild(this.ouiBtn)
-    this.ouiBtn.disabled = (this.ouiData?.enable === false)
+    this.btnNon = DCreate('BUTTON', {id: 'btn-non', class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
+    footer.appendChild(this.btnNon)
+    this.btnNon.disabled = (this.nonData?.enable === false)
+    this.btnMid = DCreate('BUTTON', {id: 'btn-mid', class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
+    footer.appendChild(this.btnMid)
+    this.btnMid.disabled = (this.midData?.enable === false)
+    this.btnOui = DCreate('BUTTON', {id: 'btn-oui', class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
+    footer.appendChild(this.btnOui)
+    this.btnOui.disabled = (this.ouiData?.enable === false)
+
+    this[`btn${this.defaultKey}`].classList.add('default-btn')
 
     div.appendChild(footer)
     this.obj = scrim
@@ -150,9 +153,9 @@ class Dialog {
   }
 
   observe(){
-    listen(this.ouiBtn, 'click', this.onOui.bind(this))
-    listen(this.nonBtn, 'click', this.onNon.bind(this))
-    listen(this.midBtn, 'click', this.onMid.bind(this))
+    listen(this.btnOui, 'click', this.onOui.bind(this))
+    listen(this.btnNon, 'click', this.onNon.bind(this))
+    listen(this.btnMid, 'click', this.onMid.bind(this))
     listen(window, 'keydown', this.onKeyDown.bind(this))
   }
 }

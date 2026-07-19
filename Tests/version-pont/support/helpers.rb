@@ -98,6 +98,21 @@ module BoardTest
     JS
   end
 
+  # cmd+clic (Service.js#onClickOnProjectService, ev.metaKey) — mêmes
+  # événements que click(), avec metaKey:true.
+  def meta_click(dom_id)
+    bridge_eval(<<~JS)
+      (function(){
+        var el=document.getElementById(#{dom_id.to_json});
+        if(!el) throw new Error('introuvable: '+#{dom_id.to_json});
+        ['mousedown','mouseup','click'].forEach(function(type){
+          el.dispatchEvent(new MouseEvent(type,{bubbles:true,cancelable:true,view:window,metaKey:true}));
+        });
+        return '';
+      })()
+    JS
+  end
+
   def click_prefix(prefix)
     bridge_eval(<<~JS)
       (function(){
@@ -188,6 +203,16 @@ module BoardTest
       (function(){
         var el=document.getElementById(#{dom_id.to_json});
         return !!el && !el.classList.contains('closed');
+      })()
+    JS
+  end
+
+  def has_class?(dom_id, class_name)
+    bridge_eval(<<~JS) == 'true'
+      (function(){
+        var el=document.getElementById(#{dom_id.to_json});
+        if(!el) throw new Error('introuvable: '+#{dom_id.to_json});
+        return el.classList.contains(#{class_name.to_json});
       })()
     JS
   end
