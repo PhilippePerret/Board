@@ -18,7 +18,7 @@ module BoardTest
   BOARD_APP             = File.join(ROOT, 'Board.app')
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
-  APP_DATA_FILE         = File.join(BOARD_SUPPORT_DIR, 'appdata.json')
+  APP_DATA_FILE         = File.join(BOARD_SUPPORT_DIR, 'appdata.yaml')
   LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'js', 'MES_ERRORS.js')
 
   GREEN  = "\e[32m"
@@ -468,11 +468,11 @@ module BoardTest
   end
 
   def read_app_data
-    JSON.parse(File.read(APP_DATA_FILE))
+    YAML.safe_load(File.read(APP_DATA_FILE))
   end
 
   def write_app_data(data)
-    File.write(APP_DATA_FILE, data.to_json)
+    File.write(APP_DATA_FILE, data.to_yaml)
   end
 
   def read_project_card(project_id)

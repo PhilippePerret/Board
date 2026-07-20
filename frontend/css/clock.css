@@ -120,16 +120,18 @@
 .clock-panel.clock-danger .clock-digits       { color: #ff2020; }
 .clock-panel.clock-danger .clock-ring-progress  { stroke: #ff2020; }
 
-/* Ligne de boutons toujours pleine largeur du panneau (fixe) : cacher un
-   bouton (display:none) ne fait donc jamais varier la taille du panneau,
-   seulement le nombre de boutons centrés dans cette largeur. */
+/* Ligne de boutons toujours pleine largeur du panneau (fixe) : Toggle
+   (start/pause/restart) toujours pile centré sous le cercle, Stop
+   positionné indépendamment près du bord gauche — ni l'un ni l'autre ne
+   doit bouger selon la visibilité de l'autre. */
 .clock-btn-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  position: relative;
   width: 100%;
+  height: calc(28px * var(--clock-scale, 1));
 }
 .clock-btn {
+  position: absolute;
+  top: 0;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid #8fb454;
   color: #d3ecA0;
@@ -140,6 +142,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.clock-btn-toggle {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.clock-btn-stop {
+  left: calc(20px * var(--clock-scale, 1));
 }
 .clock-btn:hover { border-color: #b8dd7a; background: rgba(255, 255, 255, 0.1); }
 .clock-btn:hover .clock-icon { color: #e8ffb8; }
@@ -159,17 +168,33 @@
 .clock-icon-start {
   width: 0;
   height: 0;
+  /* décalage optique : le centroïde d'un triangle est au 1/3 de sa base,
+     pas au milieu de sa boîte englobante — sans ça il rend au même endroit
+     que le picto pause (boîte symétrique) mais paraît décentré à gauche */
+  transform: translateX(calc(3px * var(--clock-scale, 1)));
   border-top: calc(7px * var(--clock-scale, 1)) solid transparent;
   border-bottom: calc(7px * var(--clock-scale, 1)) solid transparent;
   border-left: calc(11px * var(--clock-scale, 1)) solid currentColor;
 }
 
+/* Deux barres en ::before/::after (et non width+box-shadow) pour que la
+   largeur réelle du glyphe (les deux barres) soit prise en compte par le
+   centrage flex du bouton — sinon seule la 1re barre comptait. */
 .clock-icon-pause {
-  width: calc(4px * var(--clock-scale, 1));
+  width: calc(11px * var(--clock-scale, 1));
   height: calc(14px * var(--clock-scale, 1));
-  background: currentColor;
-  box-shadow: calc(7px * var(--clock-scale, 1)) 0 0 currentColor;
 }
+.clock-icon-pause::before,
+.clock-icon-pause::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: calc(4px * var(--clock-scale, 1));
+  height: 100%;
+  background: currentColor;
+}
+.clock-icon-pause::before { left: 0; }
+.clock-icon-pause::after  { right: 0; }
 
 .clock-icon-stop {
   width: calc(13px * var(--clock-scale, 1));

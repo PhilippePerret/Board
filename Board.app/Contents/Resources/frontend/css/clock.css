@@ -25,7 +25,7 @@
 /* Poignée de déplacement — bord droit, milieu vertical */
 .clock-handle-move {
   position: absolute;
-  right: calc(-8px * var(--clock-scale, 1));
+  right: calc(4px * var(--clock-scale, 1));
   top: 50%;
   transform: translateY(-50%);
   width: calc(10px * var(--clock-scale, 1));
@@ -43,7 +43,7 @@
    vertical seulement */
 .clock-handle-resize {
   position: absolute;
-  top: calc(-8px * var(--clock-scale, 1));
+  top: calc(4px * var(--clock-scale, 1));
   left: 50%;
   transform: translateX(-50%);
   width: calc(34px * var(--clock-scale, 1));
@@ -120,31 +120,109 @@
 .clock-panel.clock-danger .clock-digits       { color: #ff2020; }
 .clock-panel.clock-danger .clock-ring-progress  { stroke: #ff2020; }
 
-/* Ligne de boutons toujours pleine largeur du panneau (fixe) : cacher un
-   bouton (display:none) ne fait donc jamais varier la taille du panneau,
-   seulement le nombre de boutons centrés dans cette largeur. */
+/* Ligne de boutons toujours pleine largeur du panneau (fixe) : Toggle
+   (start/pause/restart) toujours pile centré sous le cercle, Stop
+   positionné indépendamment près du bord gauche — ni l'un ni l'autre ne
+   doit bouger selon la visibilité de l'autre. */
 .clock-btn-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  position: relative;
   width: 100%;
+  height: calc(28px * var(--clock-scale, 1));
 }
 .clock-btn {
+  position: absolute;
+  top: 0;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid #8fb454;
   color: #d3ecA0;
-  font-size: calc(11px * var(--clock-scale, 1));
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  width: calc(80px * var(--clock-scale, 1));
+  width: calc(50px * var(--clock-scale, 1));
   padding: calc(6px * var(--clock-scale, 1)) 0;
   border-radius: calc(4px * var(--clock-scale, 1));
   cursor: pointer;
-  text-align: center;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.clock-btn:hover { color: #e8ffb8; border-color: #b8dd7a; background: rgba(255, 255, 255, 0.1); }
+.clock-btn-toggle {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.clock-btn-stop {
+  left: calc(20px * var(--clock-scale, 1));
+}
+.clock-btn:hover { border-color: #b8dd7a; background: rgba(255, 255, 255, 0.1); }
+.clock-btn:hover .clock-icon { color: #e8ffb8; }
 .clock-btn-invisible { visibility: hidden; }
-.clock-btn-stop  { border-color: #d16a6a; color: #ffb3b3; }
-.clock-btn-stop:hover { border-color: #ff8a8a; color: #ffd0d0; }
+.clock-btn-stop  { border-color: #d16a6a; }
+.clock-btn-stop:hover { border-color: #ff8a8a; }
+.clock-btn-stop:hover .clock-icon { color: #ffd0d0; }
+
+/* Pictos des boutons — formes CSS pures (pas de fichier SVG) */
+.clock-icon {
+  display: inline-block;
+  color: #d3ecA0;
+  position: relative;
+}
+.clock-btn-stop .clock-icon { color: #ffb3b3; }
+
+.clock-icon-start {
+  width: 0;
+  height: 0;
+  /* décalage optique : le centroïde d'un triangle est au 1/3 de sa base,
+     pas au milieu de sa boîte englobante — sans ça il rend au même endroit
+     que le picto pause (boîte symétrique) mais paraît décentré à gauche */
+  transform: translateX(calc(3px * var(--clock-scale, 1)));
+  border-top: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-bottom: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-left: calc(11px * var(--clock-scale, 1)) solid currentColor;
+}
+
+/* Deux barres en ::before/::after (et non width+box-shadow) pour que la
+   largeur réelle du glyphe (les deux barres) soit prise en compte par le
+   centrage flex du bouton — sinon seule la 1re barre comptait. */
+.clock-icon-pause {
+  width: calc(11px * var(--clock-scale, 1));
+  height: calc(14px * var(--clock-scale, 1));
+}
+.clock-icon-pause::before,
+.clock-icon-pause::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: calc(4px * var(--clock-scale, 1));
+  height: 100%;
+  background: currentColor;
+}
+.clock-icon-pause::before { left: 0; }
+.clock-icon-pause::after  { right: 0; }
+
+.clock-icon-stop {
+  width: calc(13px * var(--clock-scale, 1));
+  height: calc(13px * var(--clock-scale, 1));
+  background: currentColor;
+}
+
+.clock-icon-restart {
+  width: calc(14px * var(--clock-scale, 1));
+  height: calc(14px * var(--clock-scale, 1));
+}
+.clock-icon-restart::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(3px * var(--clock-scale, 1));
+  height: 100%;
+  background: currentColor;
+}
+.clock-icon-restart::after {
+  content: '';
+  position: absolute;
+  left: calc(6px * var(--clock-scale, 1));
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-bottom: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-left: calc(8px * var(--clock-scale, 1)) solid currentColor;
+}

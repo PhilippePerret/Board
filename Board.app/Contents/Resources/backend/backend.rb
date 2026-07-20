@@ -44,7 +44,7 @@ begin
 
   when 'save-app-data'
     Debug.log("save-app-data reçu, projects-in=#{request['data']['projects-in'].inspect}")
-    IO.write(APP_DATA_FILE, request['data'].to_json)
+    IO.write(APP_DATA_FILE, request['data'].to_yaml)
     ok = true
     returned_message = "Données de l'application sauvées."
    
