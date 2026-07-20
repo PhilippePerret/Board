@@ -6,15 +6,25 @@ class Service {
     this.CommonPanel
   }
 
-  static get CustomPanel(){ return this._cuspanel || (this._cuspanel = new CustomPanel())}
-  static get CommonPanel(){ return this._companel || (this._companel = new CommonPanel())}
+  static get CustomPanel(){ return this._cuspanel || (this._cuspanel = this.defineAndBuildCustomPanel() )}
+  static get CommonPanel(){ return this._companel || (this._companel = this.defineAndBuildCommonPanel())}
+  static defineAndBuildCustomPanel(){
+    const pan = new CustomPanel()
+    pan.build()
+    return pan
+  }
+  static defineAndBuildCommonPanel(){
+    const pan = new CommonPanel()
+    pan.build()
+    return pan
+  }
   /**
    * Fonction appelée par le "bouton des services"
    * Il permet de basculer entre le panneau des services communs et
    * le panneau des services personnalisés
    */
   static togglePanel(){
-    this.activePanel = this.activePanel.toggle()
+    this.activePanel = this.activePanel.toggleOpposites()
   }
 
   // Parce qu'on commence toujours par celui-ci

@@ -1,5 +1,6 @@
 # Fonctions partagées par tous les fichiers de test (Tests/specs/**/*.rb).
-# Pilotage de Board.app via AppleScript/System Events (ciblage par AXDOMIdentifier).
+# Pilotage de Board.app via le moteur "pont" (Tests/version-pont/support/helpers.rb,
+# canal direct vers le JS de la WKWebView) — seul moteur restant.
 
 require 'yaml'
 require 'json'
@@ -8,10 +9,6 @@ require 'tmpdir'
 
 module BoardTest
   ROOT                  = File.expand_path('../..', __dir__)
-  # BOARD_TEST_AX_SCRIPT : permet à un moteur de pointer vers une variante
-  # du script (ex. version-compiled/support/ax.scpt, précompilée via
-  # osacompile) sans dupliquer ce fichier. Non défini → chemin historique.
-  AX_SCRIPT             = ENV['BOARD_TEST_AX_SCRIPT'] || File.join(ROOT, 'Tests', 'support', 'ax.applescript')
   FINDER_SCRIPT          = File.join(ROOT, 'Tests', 'support', 'finder.applescript')
   DRAG_SCRIPT            = File.join(ROOT, 'Tests', 'support', 'drag.js')
   HOVER_SCRIPT           = File.join(ROOT, 'Tests', 'support', 'hover.js')
@@ -93,25 +90,6 @@ module BoardTest
     out.strip
   end
 
-  def click(dom_id)                 = osascript(AX_SCRIPT, 'click', dom_id)
-  def click_prefix(prefix)          = osascript(AX_SCRIPT, 'click-prefix', prefix)
-  def set_value(dom_id, value)      = osascript(AX_SCRIPT, 'set-value', dom_id, value)
-  def set_value_prefix(prefix, value) = osascript(AX_SCRIPT, 'set-value-prefix', prefix, value)
-  def get_value(dom_id)             = osascript(AX_SCRIPT, 'get-value', dom_id)
-  def get_value_prefix(prefix)      = osascript(AX_SCRIPT, 'get-value-prefix', prefix)
-  def wait_for(dom_id, timeout = 4) = osascript(AX_SCRIPT, 'wait-for', dom_id, timeout)
-  def wait_for_prefix(prefix, timeout = 4) = osascript(AX_SCRIPT, 'wait-for-prefix', prefix, timeout)
-  def exists?(dom_id)               = osascript(AX_SCRIPT, 'exists', dom_id) == 'true'
-  def get_text(dom_id)              = osascript(AX_SCRIPT, 'get-text', dom_id)
-  def get_text_prefix(prefix)       = osascript(AX_SCRIPT, 'get-text-prefix', prefix)
-
-  # true/false, jamais d'attente. Un SidePanel (frontend/js/SidePanel.js)
-  # n'est jamais retiré de l'arbre AX quand il est fermé (juste décalé hors
-  # écran, services.css .closed) : "false" si jamais construit (dom_id
-  # absent) ou décalé hors champ, "true" sinon. Même nom de méthode pour
-  # tous les moteurs (cf. version-pont/support/helpers.rb pour la variante
-  # qui lit classList directement, plus rapide sur ce moteur).
-  def panel_open?(dom_id)           = osascript(AX_SCRIPT, 'panel-open', dom_id) == 'true'
 
   # Vérifie positivement le contenu de #message après un exec-service, au
   # lieu de deviner à quoi ressemble un texte d'échec (fragile : dépend de
@@ -126,17 +104,8 @@ module BoardTest
     raise "Le service a échoué (#message = #{msg.inspect})" unless msg =~ expect
   end
 
-  # Ordre réel (DOM/affichage) des domIds donnés, tel que rencontré par un
-  # unique parcours de l'arbre AX. Ceux non trouvés sont omis du résultat
-  # (donc order_of(*ids).size peut être < ids.size si un élément n'est plus
-  # affiché).
-  def order_of(*dom_ids)
-    out = osascript(AX_SCRIPT, 'order-of', dom_ids.join("\t"))
-    out.empty? ? [] : out.split("\n")
-  end
-
   # Glisser-déposer par coordonnées écran (mouse down/move/up réels) — pour
-  # le drag-and-drop HTML5 natif, qu'un simple click() (AXPress) ne peut pas
+  # le drag-and-drop HTML5 natif, qu'un simple click() ne peut pas
   # déclencher. Voir Tests/support/drag.js. Non vérifié en conditions
   # réelles (CoreGraphics/CGEvent jamais testé en live dans cette session).
   def drag(from_dom_id, to_dom_id)

@@ -15,11 +15,12 @@
 #     fixes dans une liste)                   -> SelectDialog (<select>)
 #
 # Point non garanti par un précédent dans cette suite : `set_value` sur un
-# <select> HTML (ax.applescript fait juste "set value of el to extraArg" —
-# jamais exercé sur un <select> ailleurs dans specs/e2e/, seulement sur des
-# <input type=text>/<textarea>). Si WebKit expose le <select> autrement
-# qu'en AXValue directement réglable, cette partie du test échouera au
-# set_value plutôt qu'à l'assertion — à surveiller au premier lancement.
+# <select> HTML (moteur "pont" : fait juste "el.value = X", cf.
+# version-pont/support/helpers.rb — jamais exercé sur un <select> ailleurs
+# dans specs/e2e/, seulement sur des <input type=text>/<textarea>). Si le
+# frontend attend un évènement 'change' pour réagir à ce <select>, cette
+# partie du test échouera au set_value plutôt qu'à l'assertion — à
+# surveiller au premier lancement.
 
 require_relative '../../support/helpers'
 

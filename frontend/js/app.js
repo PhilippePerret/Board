@@ -22,9 +22,13 @@ class App {
   }
 
   static observe(){
-    listen(DGet('#app-name'), 'click', () => AppDataPanel.open())
+    listen(DGet('#app-name'), 'click', () => this.appDataPanel.toggle())
+    listen(DGet('#tools-button'), 'click', () => this.toolsPanel.toggle())
     listen(DGet('#help-link'), 'click', () => window.webkit.messageHandlers.openHelp.postMessage({}))
   }
+
+  static get appDataPanel(){ return this._appdatapan || (this._appdatapan = new AppDataPanel()) }
+  static get toolsPanel(){ return this._toolspan || (this._toolspan = new ToolsPanel()) }
 
   static getData(key){
     return this.data[key]

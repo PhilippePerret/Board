@@ -64,11 +64,16 @@ class Project {
     }).show()
   }
 
-  // Définition des extra-data du projet courant
+  /**
+   * Fonction appelée par le bouton "Extra data"
+   * 
+   * Définition des extra-data du projet courant
+   */
   static defineExtraData(){
     if (this.current) {
       this.current.defineExtraData.call(this.current)
     } else {
+      // Ne devrait pas arriver
       erreur("Aucun projet courant.")
     }
   }
@@ -146,20 +151,32 @@ class Project {
    */
   static onSelect(projet){
     const same = (projet.id === this.current?.id)
+    const openedPanel = String(this._openedPanel)
     this.current && this.deselect(this.current)
     same || this.select(projet)
-    this.updateOpenedPanel(same ? undefined : projet)
+    if ( openedPanel && ! same) {
+      this.updateOpenedPanel(projet, openedPanel)
+    }
   }
 
-  static get PROJECT_PANELS(){ return [ProjectExtraDataPanel] } // futurs panneaux : les ajouter ici
-
-  static updateOpenedPanel(projet){
-    this.PROJECT_PANELS.forEach(PanelClass => {
-      const panel = PanelClass.instance
-      if (!panel.built || panel.obj.classList.contains('closed')) return
-      projet ? panel.setProject(projet) : panel.close()
-    })
+  static closeProjectOpenedPanel(projet, openedPanel) {
+    historize('Project::closeProjectOpenedPanel / projet, openedPanel', {projet, openedPanel})
+    switch(openedPanel) {
+      case 'extra-data':
+        projet.stopDefineData()
+        break
+    }
+    delete this._openedPanel
   }
+  static updateOpenedPanel(projet, openedPanel){
+    switch(openedPanel) {
+      case 'extra-data':
+        projet.defineExtraData()
+        break
+    }
+    this._openedPanel = openedPanel
+  }
+
   static select(projet){
     projet.obj.classList.add('selected')
     this.current = projet
@@ -167,6 +184,8 @@ class Project {
   }
   static deselect(projet){
     projet.obj.classList.remove('selected')
+    console.log("deselect / this._openedPanel = ", String(this._openedPanel))
+    if (this._openedPanel) this.closeProjectOpenedPanel(projet, this._openedPanel)
     this.current = null
     this.maskProjectButtons()
   }
@@ -254,9 +273,14 @@ class Project {
     callback && callback()
   }
 
+  get extraDataPanel(){ return this._extradatapan || (this._extradatapan = new ProjectExtraDataPanel(this) )}
+  
   defineExtraData(){
-    ProjectExtraDataPanel.instance.setProject(this)
-    ProjectExtraDataPanel.instance.open()
+    this.extraDataPanel.toggle()
+    this.constructor._openedPanel = 'extra-data'
+  }
+  stopDefineData(){
+    this.extraDataPanel.close()
   }
 
   /**

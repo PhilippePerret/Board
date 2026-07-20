@@ -21,6 +21,7 @@ class CommonPanel extends ServicePanel {
   constructor(){ 
     super()
     ServicePanel.commonPanel = this
+    this.opened = true
   }
   get title(){ return 'Services communs'}
   get serviceType(){return 'common'}

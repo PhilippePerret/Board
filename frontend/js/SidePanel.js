@@ -8,12 +8,14 @@
  * Une sous-classe redéfinit `title`, `domId` et `buildContent()`.
  */
 class SidePanel {
-  static get instance(){ return this._instance || (this._instance = new this()) }
-  static open(){ this.instance.open() }
-  static close(){ this.instance.close() }
+  // static get instance(){ return this._instance || (this._instance = new this()) }
+  // static open(){ this.instance.open() }
+  // static close(){ this.instance.close() }
+  // static toggle(){ this.instance.toggle() }
 
   constructor(){
     this.built = false
+    this.opened = false
   }
 
   get title(){ return '- panneau sans titre -' }
@@ -23,23 +25,30 @@ class SidePanel {
   // À redéfinir dans les sous-classes, pour remplir this.listingEl
   buildContent(){}
 
-  // Quand on bascule d'un panneau à l'autre (this.oppositePanel doit
-  // être défini.)
-  // Retourne l'instance du nouveau panneau actif
   toggle(){
+    this.built || this.build()
+    historize('-> SidePanel#toggle this.opened = ', this.opened)
+    this[this.opened ? 'close' : 'open']()
+  }
+  open(){
+    this.setState('opened')
+    this.setOppositeButton()
+  }
+  close(){
+    this.setState('closed')
+  }
+  setState(state){
+    this.opened = (state == 'opened')
+    this.obj.classList[this.opened?'remove':'add']('closed')
+  }
+
+  toggleOpposites(){
+    this.built || this.build()
     this.close()
     console.log("this", this)
     console.log("this.oppositePanel", this.oppositePanel)
     this.oppositePanel.open()
     return this.oppositePanel
-  }
-  open(){
-    this.built || this.build()
-    this.obj.classList.remove('closed')
-    this.setOppositeButton()
-  }
-  close(){
-    this.obj?.classList.add('closed')
   }
   setOppositeButton(){
     if (this.oppositeButton){

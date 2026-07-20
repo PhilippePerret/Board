@@ -10,7 +10,7 @@
   > pouvoir obtenir la taille d'une fenêtre d'application
     L'outil demande quelle application (en relevant les applications ouvertes) et prend la front window
     Elle met le résultat dans le presse-papier
-    
+  
 - faire passer tous les tests
   
 - utiliser des icônes SVG simples (pour l'interface)

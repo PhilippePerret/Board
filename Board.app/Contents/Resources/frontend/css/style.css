@@ -73,7 +73,8 @@ div#current-project-mark {
   color: rgb(249, 249, 21);
 }
 
-header div#help-link {
+header div#help-link,
+header div#tools-button {
   position: absolute;
   right: 1em;
   top: 50%;
@@ -83,7 +84,11 @@ header div#help-link {
   cursor: pointer;
   font-size: 16pt;
 }
-header div#help-link:hover {
+header div#tools-button {
+  right: 5em;
+}
+header div#help-link:hover,
+header div#tools-button:hover {
   color: white;
 }
 

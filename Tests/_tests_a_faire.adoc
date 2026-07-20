@@ -8,14 +8,6 @@
 
 - redimensionnement de l'horloge
   - taille par défaut plutôt petite (moyenne, on va dire)
-  - on peut la redimensionner + et ça se fait sans la mettre en route
-  - la dimension est persistée
-
-- fonctionnement de l'horloge
-  - test des nouveaux boutons
-  - test de click sur chiffres pour pause/restart
-  - le bouton service ouvre l'horloge, et la referme
-  - séquence : start, stop, annuler, le bouton pause doit être restart, quand on restarte => c'est le bon temps qui s'affiche
 
 == Plus tard
 

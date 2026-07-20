@@ -9,6 +9,12 @@ const PROJECT_EXTRA_DATA = [
 ]
 
 class ProjectExtraDataPanel extends SidePanelDefiner {
+
+  constructor(project){
+    super()
+    this.project = project
+  }
+
   get title() { return "Données supplémentaires du projet" }
   get domId() { return 'projet-extradata-panel'}
   get prefixDom() { return 'project-extradata'}
@@ -16,14 +22,6 @@ class ProjectExtraDataPanel extends SidePanelDefiner {
 
   currentValue(dParam){
     return this.project.get(dParam.id) ?? dParam.default ?? ''
-  }
-
-  // Rebind sur un autre projet — réaffiche les valeurs si le panneau est déjà bâti
-  setProject(projet){
-    this.project = projet
-    if (this.built) this.PARAMS_DATA.forEach(dParam => {
-      dParam.currentValue = dParam.valueDomEl.textContent = this.currentValue(dParam)
-    })
   }
 
   updateValue(id, value){

@@ -2,8 +2,9 @@
 
 # Suite de tests d'intégration de Board — moteur "pont" (canal direct vers
 # le JS de la WKWebView, Sources/Board/TestBridge.swift, via un socket Unix —
-# aucun passage par l'accessibilité/System Events, contrairement aux 4
-# autres moteurs).
+# aucun passage par l'accessibilité/System Events). Seul moteur restant
+# (les autres, basés sur l'accessibilité, ont été retirés — benchmarkés
+# plus lents).
 #
 # Particularité : contrairement aux autres moteurs, le binaire Board lui-même
 # (pas seulement frontend/backend) doit être recompilé si Sources/Board/*.swift
@@ -160,11 +161,6 @@ for i in 1 2 3; do
   sleep 0.5
 done
 [ "$opened" -eq 1 ] || { echo "open Board.app a échoué après 3 essais" >&2; exit 1; }
-
-# Attente initiale via l'AppleScript de base (pas le pont) : évite de
-# dépendre du délai de connexion au socket avant même d'avoir démarré la
-# mesure.
-osascript "$MAIN_TESTS_DIR/support/ax.applescript" wait-for btn-add-project 10 >/dev/null
 
 GREEN=$'\e[32m'
 RED=$'\e[91m'

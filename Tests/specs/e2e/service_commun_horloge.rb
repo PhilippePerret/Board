@@ -1,5 +1,6 @@
 # Test : service commun "work-clock" ("Démarrer l'horloge")
-# Source : demande explicite (2026-07-12), UI horloge revue (2026-07-13).
+# Source : demande explicite (2026-07-12), UI horloge revue (2026-07-13),
+# refonte poignées/boutons/listeners (2026-07-20).
 #
 # Déroulé : sélection projet -> clic "Démarrer l'horloge" -> 1re définition
 # (durée de session puis durée de tranche, préremplie avec la session,
@@ -11,7 +12,11 @@
 # la racine du projet -> workTime incrémenté.
 #
 # Second passage (après rechargement) : même service, sans redemander
-# session/work (déjà en common_services_data).
+# session/work (déjà en common_services_data) -> clic sur les chiffres (même
+# bascule que le rond) -> le bouton service referme l'horloge si elle est
+# déjà ouverte -> séquence Stop puis Annuler : l'horloge doit rester dans un
+# état cohérent (pas de saut de temps absurde à la reprise — bug corrigé :
+# onClickStop ne posait jamais pauseStart).
 
 require_relative '../../support/helpers'
 
@@ -50,8 +55,11 @@ def run_test
       read_project_card(id).dig('common_services_data', 'work-clock') == [[20], [15]]
     end
 
-    # → l'horloge s'affiche, rond cliquable, bouton Stop pas encore visible
+    # → l'horloge s'affiche, rond cliquable, bouton toggle déjà visible
+    #   (start/pause/restart), bouton Stop pas encore visible
     wait_for('clock-dial', 10)
+    wait_for('btn-clock-toggle', 5)
+    raise 'bouton Stop visible avant démarrage' if exists?('btn-clock-stop')
 
     # - Start (clic sur le rond)
     click('clock-dial')
@@ -102,6 +110,42 @@ def run_test
     # → cette fois, aucun dialogue de définition : l'horloge s'affiche direct
     wait_for('clock-dial', 10)
     raise 'dialogue de définition réapparu après rechargement' if exists?('__session-duration__')
+
+    # → clic sur les chiffres = même bascule que le rond (start)
+    click('clock-digits')
+    wait_for('btn-clock-stop', 5)
+
+    # → le bouton du service referme l'horloge si elle est déjà ouverte
+    click(SERVICE_DOM_ID)
+    wait_until(5, desc: -> { "clock-dial encore présent ? #{exists?('clock-dial')}" }) { !exists?('clock-dial') }
+
+    # → on la rouvre pour la suite (toujours pas de dialogue de définition)
+    click(SERVICE_DOM_ID)
+    wait_for('clock-dial', 10)
+
+    # → séquence Start, Stop, Annuler : le temps affiché avant Stop et après
+    #   reprise (clic sur le toggle) doit rester cohérent — pas de saut
+    #   massif dû à pauseStart jamais posé par onClickStop (bug corrigé)
+    click('clock-digits')
+    wait_for('btn-clock-stop', 5)
+    sleep 1.5
+    before_digits = get_text('clock-digits')
+    raise "format de temps inattendu avant Stop : #{before_digits.inspect}" unless before_digits =~ /\A\d{2}:\d{2}\z/
+
+    click('btn-clock-stop')
+    wait_for('__clock_changelog__', 10)
+    click('btn-non')
+    wait_until(5, desc: -> { '__clock_changelog__ encore présent après Annuler' }) { !exists?('__clock_changelog__') }
+
+    # → reprise : même bouton (toggle), doit reprendre là où c'était
+    click('btn-clock-toggle')
+    sleep 0.5
+    after_digits = get_text('clock-digits')
+    raise "temps absurde après reprise post-Annuler : #{after_digits.inspect}" unless after_digits =~ /\A\d{2}:\d{2}\z/
+
+    to_seconds = ->(txt) { m, s = txt.split(':').map(&:to_i); m * 60 + s }
+    delta = (to_seconds.call(before_digits) - to_seconds.call(after_digits)).abs
+    raise "le temps n'a pas repris correctement (avant=#{before_digits}, après=#{after_digits})" if delta > 8
   end
 ensure
   remove_fixture_project(id) if id

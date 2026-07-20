@@ -88,6 +88,18 @@ begin
   when 'getInfoFinderWindow'
     ok = true
     returned_data = run_script('getInfoFinderWindow.scpt')
+
+  # Panneau "Outils" (ToolsData.js/Tools.js) — applications visibles
+  # (Dock), pour choisir celle dont on veut la position/taille de fenêtre
+  when 'list-running-apps'
+    ok = true
+    returned_data = run_script('GetRunningApps.scpt')
+
+  # Panneau "Outils" : position + taille de la fenêtre de premier plan de
+  # request['appName'] — copiées dans le presse-papier par le script lui-même
+  when 'get-app-window-bounds'
+    ok = true
+    returned_data = run_script('GetAppWindowBounds.scpt', [request['appName']])
   
   # Écriture du changelog et de la todo-list du projet (fin de séance
   # d'horloge, service commun "work-clock") — ajout en tête de fichier, en
