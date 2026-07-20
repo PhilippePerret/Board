@@ -17,12 +17,12 @@ PROJECT_CARD_FOLDER = ensure_folder([DATA_SUPPORT_FOLDER, 'project-cards'])
 DEV_PROJECT_FOLDER   = File.join(APP_FOLDER, '_dev')
 
 APP_DATA_FILE = ensure_file(
-  [DATA_SUPPORT_FOLDER, 'appdata.json'], 
-  {version:"0.0.0", 'projects-in':[], 'projects-out':[]}.to_json
+  [DATA_SUPPORT_FOLDER, 'appdata.yaml'],
+  {'version' => "0.0.0", 'projects-in' => [], 'projects-out' => []}.to_yaml
   )
 
   # Les données courantes de l'application
-APP_DATA = JSON.parse(IO.read(APP_DATA_FILE))
+APP_DATA = YAML.safe_load(IO.read(APP_DATA_FILE))
 
 # tag::scripts-with-lib[]
 OSASCRIPT_WITH_LIB = {
@@ -31,7 +31,7 @@ OSASCRIPT_WITH_LIB = {
 # end::scripts-with-lib[]
 
 def save_app_data
-  IO.write(APP_DATA_FILE, APP_DATA.to_json)
+  IO.write(APP_DATA_FILE, APP_DATA.to_yaml)
 end
 #
 def project_path(project_id)

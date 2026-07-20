@@ -133,18 +133,71 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid #8fb454;
   color: #d3ecA0;
-  font-size: calc(11px * var(--clock-scale, 1));
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  width: calc(80px * var(--clock-scale, 1));
+  width: calc(50px * var(--clock-scale, 1));
   padding: calc(6px * var(--clock-scale, 1)) 0;
   border-radius: calc(4px * var(--clock-scale, 1));
   cursor: pointer;
-  text-align: center;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.clock-btn:hover { color: #e8ffb8; border-color: #b8dd7a; background: rgba(255, 255, 255, 0.1); }
+.clock-btn:hover { border-color: #b8dd7a; background: rgba(255, 255, 255, 0.1); }
+.clock-btn:hover .clock-icon { color: #e8ffb8; }
 .clock-btn-invisible { visibility: hidden; }
-.clock-btn-stop  { border-color: #d16a6a; color: #ffb3b3; }
-.clock-btn-stop:hover { border-color: #ff8a8a; color: #ffd0d0; }
+.clock-btn-stop  { border-color: #d16a6a; }
+.clock-btn-stop:hover { border-color: #ff8a8a; }
+.clock-btn-stop:hover .clock-icon { color: #ffd0d0; }
+
+/* Pictos des boutons — formes CSS pures (pas de fichier SVG) */
+.clock-icon {
+  display: inline-block;
+  color: #d3ecA0;
+  position: relative;
+}
+.clock-btn-stop .clock-icon { color: #ffb3b3; }
+
+.clock-icon-start {
+  width: 0;
+  height: 0;
+  border-top: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-bottom: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-left: calc(11px * var(--clock-scale, 1)) solid currentColor;
+}
+
+.clock-icon-pause {
+  width: calc(4px * var(--clock-scale, 1));
+  height: calc(14px * var(--clock-scale, 1));
+  background: currentColor;
+  box-shadow: calc(7px * var(--clock-scale, 1)) 0 0 currentColor;
+}
+
+.clock-icon-stop {
+  width: calc(13px * var(--clock-scale, 1));
+  height: calc(13px * var(--clock-scale, 1));
+  background: currentColor;
+}
+
+.clock-icon-restart {
+  width: calc(14px * var(--clock-scale, 1));
+  height: calc(14px * var(--clock-scale, 1));
+}
+.clock-icon-restart::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(3px * var(--clock-scale, 1));
+  height: 100%;
+  background: currentColor;
+}
+.clock-icon-restart::after {
+  content: '';
+  position: absolute;
+  left: calc(6px * var(--clock-scale, 1));
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-bottom: calc(7px * var(--clock-scale, 1)) solid transparent;
+  border-left: calc(8px * var(--clock-scale, 1)) solid currentColor;
+}

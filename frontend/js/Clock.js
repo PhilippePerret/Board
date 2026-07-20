@@ -53,7 +53,12 @@ class Clock {
     panel.appendChild(stateMarker)
 
     const btnRow = DCreate('DIV', {class: 'clock-btn-row'})
-    this.btnStop  = DCreate('BUTTON', {id: 'btn-clock-stop', class: 'clock-btn clock-btn-stop clock-btn-invisible', text: 'Stop'})
+    this.btnToggle  = DCreate('BUTTON', {id: 'btn-clock-toggle', class: 'clock-btn clock-btn-toggle'})
+    this.toggleIcon = DCreate('SPAN', {class: 'clock-icon clock-icon-start'})
+    this.btnToggle.appendChild(this.toggleIcon)
+    btnRow.appendChild(this.btnToggle)
+    this.btnStop  = DCreate('BUTTON', {id: 'btn-clock-stop', class: 'clock-btn clock-btn-stop clock-btn-invisible'})
+    this.btnStop.appendChild(DCreate('SPAN', {class: 'clock-icon clock-icon-stop'}))
     btnRow.appendChild(this.btnStop)
     panel.appendChild(btnRow)
 
@@ -65,13 +70,16 @@ class Clock {
     this._digits      = DGet('#clock-digits', panel)
     this._stateMarker = stateMarker
 
-    listen(this.btnStop,  'click', this.onClickStop.bind(this))
+    listen(this.btnStop,   'click', this.onClickStop.bind(this))
+    listen(this.btnToggle, 'click', this.onClickRing.bind(this))
 
     // Un clic sur le rond (#clock-dial) fait avancer l'horloge d'un état
     // (start -> pause -> restart -> …). Déplacement/redimensionnement se
     // font désormais via des poignées dédiées (jamais le rond) : plus
-    // d'ambiguïté clic/drag à gérer ici.
+    // d'ambiguïté clic/drag à gérer ici. Écouteur posé sur wrap ET digits
+    // pour que le clic sur les chiffres déclenche aussi le cycle.
     listen(this._wrap, 'click', this.onWrapClick.bind(this))
+    listen(this._digits, 'click', this.onWrapClick.bind(this))
 
     listen(this.handleMove,   'mousedown', this.onMoveHandleDown.bind(this))
     listen(this.handleResize, 'mousedown', this.onResizeHandleDown.bind(this))
@@ -183,6 +191,7 @@ class Clock {
     this._stateMarker.textContent = 'normal'
     this.updateDisplay()
     this.setState('prelaunch')
+    this.updateToggleIcon()
     this.panel.classList.remove('hidden')
   }
 
@@ -300,6 +309,15 @@ class Clock {
     }
   }
 
+  // Icône du bouton toggle : triangle (démarrer) / pause (en marche) /
+  // triangle+barre (reprendre après pause).
+  static updateToggleIcon(){
+    const iconClass = !this.startTime ? 'clock-icon-start'
+      : this.paused ? 'clock-icon-restart'
+      : 'clock-icon-pause'
+    this.toggleIcon.className = 'clock-icon ' + iconClass
+  }
+
   // Un clic (sans déplacement) sur le rond fait avancer l'horloge d'un
   // état : pas démarrée -> start ; en marche -> pause ; en pause -> restart.
   static onClickRing(){
@@ -323,6 +341,7 @@ class Clock {
       this.stopWorkCheck()
       this.startPauseCheck()
     }
+    this.updateToggleIcon()
   }
 
   static onClickStop(){

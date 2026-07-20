@@ -1,5 +1,5 @@
 /**
- * Données de réglage de l'application (appdata.json), éditables depuis le
+ * Données de réglage de l'application (appdata.yaml), éditables depuis le
  * panneau ouvert en cliquant sur "Tableau de bord" (AppDataPanel).
  *
  * Comportement volontairement plus simple que CUSTOM_SERVICES_DATA/
