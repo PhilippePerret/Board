@@ -23,6 +23,7 @@ class App {
 
   static observe(){
     listen(DGet('#app-name'), 'click', () => AppDataPanel.open())
+    listen(DGet('#help-link'), 'click', () => window.webkit.messageHandlers.openHelp.postMessage({}))
   }
 
   static getData(key){

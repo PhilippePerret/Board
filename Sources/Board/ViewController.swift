@@ -37,6 +37,7 @@ class ViewController: NSViewController {
         )
 
         controller.add(bridge, name: "bridge")
+        controller.add(HelpWindowController.shared, name: "openHelp")
         config.userContentController = controller
 
         webView = WKWebView(frame: .zero, configuration: config)

@@ -7,27 +7,77 @@
    de boutons visibles ni du texte affiché (Pause/Restart). */
 .clock-panel {
   position: fixed;
-  bottom: 0;
+  bottom: var(--hauteur-footer);
   left: 0;
   z-index: 500;
-  width: 220px;
+  width: calc(220px * var(--clock-scale, 1));
   background: #111118;
-  border-radius: 12px;
-  padding: 18px 0 16px;
+  border-radius: calc(12px * var(--clock-scale, 1));
+  padding: calc(18px * var(--clock-scale, 1)) 0 calc(16px * var(--clock-scale, 1));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: calc(12px * var(--clock-scale, 1));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  cursor: grab;
 }
 .clock-panel.hidden { display: none; }
-.clock-panel.dragging { cursor: grabbing; }
+
+/* Poignée de déplacement — bord droit, milieu vertical */
+.clock-handle-move {
+  position: absolute;
+  right: calc(-8px * var(--clock-scale, 1));
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(10px * var(--clock-scale, 1));
+  height: calc(34px * var(--clock-scale, 1));
+  border-radius: calc(5px * var(--clock-scale, 1));
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 2px, transparent 2px 4px),
+    rgba(255, 255, 255, 0.12);
+  border: 1px solid #8fb454;
+  cursor: grab;
+}
+.clock-panel.dragging .clock-handle-move { cursor: grabbing; }
+
+/* Poignée de redimensionnement — bord haut, milieu horizontal, glissé
+   vertical seulement */
+.clock-handle-resize {
+  position: absolute;
+  top: calc(-8px * var(--clock-scale, 1));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(34px * var(--clock-scale, 1));
+  height: calc(10px * var(--clock-scale, 1));
+  border-radius: calc(5px * var(--clock-scale, 1));
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 2px, transparent 2px 4px),
+    rgba(255, 255, 255, 0.12);
+  border: 1px solid #8fb454;
+  cursor: ns-resize;
+}
+
+/* Croix de fermeture — haut droite */
+.clock-close {
+  position: absolute;
+  top: calc(6px * var(--clock-scale, 1));
+  right: calc(6px * var(--clock-scale, 1));
+  width: calc(18px * var(--clock-scale, 1));
+  height: calc(18px * var(--clock-scale, 1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #d3ecA0;
+  font-size: calc(15px * var(--clock-scale, 1));
+  line-height: 1;
+  cursor: pointer;
+}
+.clock-close:hover { color: #ffd0d0; background: rgba(255, 255, 255, 0.08); }
 
 .clock-wrap {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: calc(160px * var(--clock-scale, 1));
+  height: calc(160px * var(--clock-scale, 1));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,7 +86,7 @@
 
 .clock-digits {
   font-family: 'Avenir Next', sans-serif;
-  font-size: 26px;
+  font-size: calc(26px * var(--clock-scale, 1));
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #a9c26a;
@@ -83,13 +133,13 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid #8fb454;
   color: #d3ecA0;
-  font-size: 11px;
+  font-size: calc(11px * var(--clock-scale, 1));
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  width: 80px;
-  padding: 6px 0;
-  border-radius: 4px;
+  width: calc(80px * var(--clock-scale, 1));
+  padding: calc(6px * var(--clock-scale, 1)) 0;
+  border-radius: calc(4px * var(--clock-scale, 1));
   cursor: pointer;
   text-align: center;
   white-space: nowrap;

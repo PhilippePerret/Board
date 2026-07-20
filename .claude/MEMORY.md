@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ — [État fin de session 2026-07-19](2026-07-19-Etat-fin-de-session.md) — 8 specs e2e panneau extra-data écrites (10 cas), pas encore exécutées ; ancien fichier 2026-07-18 obsolète, sa suppression a été refusée (pattern d'autorisation), à supprimer manuellement
+- PRIORITÉ — [État fin de session 2026-07-19](2026-07-19-Etat-fin-de-session.md) — redimensionnement horloge écrit mais pas compilé/testé ; petits trucs signalés par l'user, pas précisés
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X
@@ -25,3 +25,4 @@
 - [Régler plutôt que virer un garde-fou](feedbacks/tune_dont_remove_safety_code.md) — une plainte sur un timeout/garde-fou peut vouloir dire "ajuste-le", pas "supprime-le"
 - [Ne pas répéter la note bundle](feedbacks/stop_repeating_bundle_sync_note.md) — la sync Board.app est son job, pas la peine de le rappeler à chaque fix
 - ["S'il te plaît" obligatoire](feedbacks/no_please_direct_ask.md) — toute demande d'action à Phil doit dire "s'il te plaît", sinon c'est un ordre
+- [Pas de rappel "pas compilé/testé"](feedbacks/stop_repeating_not_compiled_tested.md) — ne pas répéter systématiquement après chaque edit

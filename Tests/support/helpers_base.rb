@@ -417,6 +417,22 @@ module BoardTest
     system('pgrep', '-x', 'Board', out: File::NULL, err: File::NULL)
   end
 
+  # Nombre de fenêtres natives de Board (fenêtre principale + fenêtres
+  # annexes type HelpWindowController) — indépendant du DOM/bridge, utile
+  # pour vérifier qu'une fenêtre Swift s'est bien ouverte/fermée.
+  def board_window_count
+    out = IO.popen(['osascript', '-e', 'tell application "System Events" to count windows of process "Board"'], err: [:child, :out], &:read)
+    out.strip.to_i
+  end
+
+  # Ferme une fenêtre native de Board par son titre exact (bouton de
+  # fermeture du titre, pas un raccourci clavier — évite de dépendre du
+  # focus courant).
+  def close_board_window_named(title)
+    IO.popen(['osascript', '-e', %Q(tell application "System Events" to click button 1 of window "#{title}" of process "Board")], err: [:child, :out], &:read)
+    $?.success?
+  end
+
   # Tue le process s'il tourne, attend sa mort effective, relance, puis
   # attend que l'interface soit réellement prête (plutôt que des sleep fixes
   # qui peuvent laisser un ancien et un nouveau process se chevaucher).

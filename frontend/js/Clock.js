@@ -31,6 +31,20 @@ class Clock {
     `
     panel.appendChild(wrap)
 
+    // Poignée de déplacement (bord droit, milieu vertical) — horizontal
+    // seulement, "bottom" n'est jamais touché (cf. onDragMove).
+    this.handleMove = DCreate('DIV', {class: 'clock-handle-move', id: 'clock-handle-move'})
+    panel.appendChild(this.handleMove)
+
+    // Poignée de redimensionnement (bord haut, milieu horizontal) —
+    // curseur contraint au déplacement vertical (cf. onResizeHandleDown).
+    this.handleResize = DCreate('DIV', {class: 'clock-handle-resize', id: 'clock-handle-resize'})
+    panel.appendChild(this.handleResize)
+
+    // Croix de fermeture (haut droite)
+    this.btnClose = DCreate('DIV', {class: 'clock-close', id: 'clock-close', text: '×'})
+    panel.appendChild(this.btnClose)
+
     // Marqueur texte, invisible mais présent dans l'arbre d'accessibilité
     // (contrairement à display:none) — sert uniquement aux tests e2e (AX
     // n'a pas accès aux classes CSS) à lire l'état d'alerte courant.
@@ -54,53 +68,91 @@ class Clock {
     listen(this.btnStop,  'click', this.onClickStop.bind(this))
 
     // Un clic sur le rond (#clock-dial) fait avancer l'horloge d'un état
-    // (start -> pause -> restart -> …). Un drag (mouvement au-delà d'un
-    // seuil) sur ce même rond déplace le panneau à la place — le clic
-    // "natif" qui suit le mouseup dans ce cas est alors ignoré (voir
-    // onDragEnd/_suppressWrapClick), pour pouvoir toujours déplacer
-    // l'horloge sans la faire démarrer/pauser par erreur.
+    // (start -> pause -> restart -> …). Déplacement/redimensionnement se
+    // font désormais via des poignées dédiées (jamais le rond) : plus
+    // d'ambiguïté clic/drag à gérer ici.
     listen(this._wrap, 'click', this.onWrapClick.bind(this))
 
-    // Déplacement HORIZONTAL du panneau (le "bottom" CSS n'est jamais touché)
-    listen(panel, 'mousedown', this.onDragStart.bind(this))
+    listen(this.handleMove,   'mousedown', this.onMoveHandleDown.bind(this))
+    listen(this.handleResize, 'mousedown', this.onResizeHandleDown.bind(this))
     listen(document, 'mousemove', this.onDragMove.bind(this))
     listen(document, 'mouseup', this.onDragEnd.bind(this))
+
+    listen(this.btnClose, 'click', this.close.bind(this))
+
+    this.setScale(App.getData('clock-scale') ?? 1)
   }
 
-  static get DRAG_THRESHOLD_PX(){ return 4 }
+  static get MIN_SCALE(){ return 0.6 }
+  // px de glissé vertical pour faire varier le scale de 1 unité
+  static get RESIZE_DIVISOR(){ return 150 }
+
+  // Limite haute du scale : le haut du panneau ne doit jamais dépasser le
+  // bas du header (le bas, lui, reste posé sur le haut du footer).
+  static getMaxScale(){
+    const headerH = document.querySelector('header').getBoundingClientRect().height
+    const footerH = document.querySelector('footer').getBoundingClientRect().height
+    const available  = window.innerHeight - headerH - footerH
+    // offsetHeight reflète déjà le scale courant (dimensions posées en
+    // calc() dans le CSS, plus de transform) — on en déduit la hauteur de
+    // base (scale 1) pour calculer combien d'unités de scale tiennent.
+    const baseHeight = this._panel.offsetHeight / (this._scale || 1)
+    return Math.max(this.MIN_SCALE, available / baseHeight)
+  }
+
+  static setScale(value){
+    this._scale = value
+    this._panel.style.setProperty('--clock-scale', value)
+  }
 
   static onWrapClick(){
-    if (this._suppressWrapClick) { this._suppressWrapClick = false; return }
     this.onClickRing()
   }
 
-  static onDragStart(ev){
-    if (ev.target.closest('.clock-btn')) return
-    this._dragging        = true
-    this._dragMoved       = false
-    this._dragStartX      = ev.clientX
-    this._dragStartY      = ev.clientY
-    this._panelStartLeft  = this._panel.getBoundingClientRect().left
+  // Déplacement HORIZONTAL du panneau (le "bottom" CSS n'est jamais touché)
+  static onMoveHandleDown(ev){
+    this._dragging       = true
+    this._dragStartX     = ev.clientX
+    this._panelStartLeft = this._panel.getBoundingClientRect().left
+    this._panel.classList.add('dragging')
     stopEvent(ev)
   }
+
+  // Redimensionnement : seul le déplacement VERTICAL de la souris compte
+  // (poignée en haut, ancrage du scale en bas-gauche — monter agrandit).
+  static onResizeHandleDown(ev){
+    this._resizing          = true
+    this._resizeStartY      = ev.clientY
+    this._resizeStartScale  = this._scale
+    this._panel.classList.add('resizing')
+    stopEvent(ev)
+  }
+
   static onDragMove(ev){
+    if (this._resizing) {
+      const dy = ev.clientY - this._resizeStartY
+      const newScale = this._resizeStartScale + (-dy) / this.RESIZE_DIVISOR
+      this.setScale(Math.max(this.MIN_SCALE, Math.min(this.getMaxScale(), newScale)))
+      return
+    }
     if (!this._dragging) return
     const dx = ev.clientX - this._dragStartX
-    const dy = ev.clientY - this._dragStartY
-    if (!this._dragMoved && Math.hypot(dx, dy) > this.DRAG_THRESHOLD_PX) {
-      this._dragMoved = true
-      this._panel.classList.add('dragging')
-    }
-    if (!this._dragMoved) return
-    const maxLeft = window.innerWidth - this._panel.offsetWidth
+    const maxLeft = window.innerWidth - this._panel.getBoundingClientRect().width
     const newLeft = Math.max(0, Math.min(maxLeft, this._panelStartLeft + dx))
     this._panel.style.left = newLeft + 'px'
   }
   static onDragEnd(){
-    if (this._dragMoved) this._suppressWrapClick = true
-    this._dragging  = false
-    this._dragMoved = false
-    this._panel.classList.remove('dragging')
+    if (this._resizing) {
+      this._resizing = false
+      this._panel.classList.remove('resizing')
+      App.setData('clock-scale', this._scale)
+      App.saveData()
+      return
+    }
+    if (this._dragging) {
+      this._dragging = false
+      this._panel.classList.remove('dragging')
+    }
   }
 
   /**

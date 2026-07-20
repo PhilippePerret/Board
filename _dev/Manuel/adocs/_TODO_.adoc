@@ -1,15 +1,15 @@
 == BUGS ==
 
+- un bouton "fermer" pour l'horloge
+- Quand on choisit une icône, elle devrait s'afficher tout de suite.
 
 == Todo En cours  
-- Rédéfinition du service avec meta+clic sur service (uuid)
 
 == Todo list ==
   
-- Bouton pour ouvrir l'aide (le Manuel du dossier Manuel)
+- Pouvoir agrandir la taille de l'horlog (par glisser de souris)
 
 - utiliser des icônes SVG simples (pour l'interface)
-- Test et implémentation de la redéfinition à l'aide de meta+click sur service
 - pouvoir éditer le fichier d'un script perso
 
 == Idées d'autres services ==

@@ -73,6 +73,20 @@ div#current-project-mark {
   color: rgb(249, 249, 21);
 }
 
+header div#help-link {
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 14px Avenir Next;
+  color: rgb(150, 150, 150);
+  cursor: pointer;
+  font-size: 16pt;
+}
+header div#help-link:hover {
+  color: white;
+}
+
 footer {
   display:block;
   position: fixed;
