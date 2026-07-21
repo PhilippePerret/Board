@@ -113,6 +113,18 @@ module BoardTest
     JS
   end
 
+  # Élément présent ET réellement affiché (pas de classe 'hidden', pas
+  # display:none hérité) — contrairement à exists?, qui ne teste que la
+  # présence dans le DOM.
+  def visible?(dom_id)
+    bridge_eval(<<~JS) == 'true'
+      (function(){
+        var el=document.getElementById(#{dom_id.to_json});
+        return !!(el && el.offsetParent !== null && !el.classList.contains('hidden'));
+      })()
+    JS
+  end
+
   def click_prefix(prefix)
     bridge_eval(<<~JS)
       (function(){

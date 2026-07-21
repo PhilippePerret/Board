@@ -1,0 +1,21 @@
+Moteur : pont
+Arguments : specs/e2e/retrait_services_startup.rb
+Date : 2026-07-21 11h45
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✗ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+    drag a échoué (service-fixture-service-1784627116936e → project-fixture-1784627116h23j-title) : /Users/philippeperret/Programmes/Board/Tests/support/drag.js: execution error: Error: Error: Timeout : élément introuvable (service-fixture-service-1784627116936e) après 5s (-2700)
+
+  (osascript : 7 appels, 8.833s)
+  (durée totale de la spec : 9.934s)
+
+Échecs :
+1. retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+    drag a échoué (service-fixture-service-1784627116936e → project-fixture-1784627116h23j-title) : /Users/philippeperret/Programmes/Board/Tests/support/drag.js: execution error: Error: Error: Timeout : élément introuvable (service-fixture-service-1784627116936e) après 5s (-2700)
+
+  (osascript : 7 appels, 8.833s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 9.934s

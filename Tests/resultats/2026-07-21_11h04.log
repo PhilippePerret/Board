@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : specs/e2e/retrait_services_startup.rb
+Date : 2026-07-21 11h04
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 19 appels, 4.511s)
+  (durée totale de la spec : 6.890s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 6.890s

@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : specs/e2e/retrait_services_startup.rb
+Date : 2026-07-21 11h20
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✗ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+    Timeout d'attente dépassé (4s) — message = "Projets courants affichés."
+  (osascript : 27 appels, 2.749s)
+  (durée totale de la spec : 7.978s)
+
+Échecs :
+1. retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+    Timeout d'attente dépassé (4s) — message = "Projets courants affichés."
+  (osascript : 27 appels, 2.749s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 7.978s

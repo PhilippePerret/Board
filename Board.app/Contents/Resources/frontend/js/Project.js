@@ -328,25 +328,32 @@ class Project {
     return service.projectCard(this)
   }
 
-  // Construit le bouton "GO !" + son conteneur masqué (révélé au survol),
-  // qui reçoit les cartes des services au démarrage — idempotent, pour être
-  // appelable aussi bien depuis buildCard() (chargement, services déjà
-  // présents) que depuis addService() (premier ajout en direct).
+  // Construit le bouton "GO !" + son conteneur masqué (révélé par
+  // meta+clic, cf. _dev/Manuel/adocs/_TODO_.adoc) — qui reçoit les cartes des
+  // services au démarrage. Idempotent, pour être appelable aussi bien depuis
+  // buildCard() (chargement, services déjà présents) que depuis addService()
+  // (premier ajout en direct).
   buildStartupContainer(){
     if (this.startupContainer) return this.startupContainer
-    const startupContainer = DCreate('DIV', {id:`${this.obj.id}-startup-container`, class:'startup-services', role: 'group', style:'position:relative;min-height:100px;'})
+    const startupContainer = DCreate('DIV', {id:`${this.obj.id}-startup-container`, class:'startup-services', role: 'group'})
     const divSServices = DCreate('DIV', {id:`${this.obj.id}-startup-services`, class: 'startup-services-panel hidden', role: 'group'})
     const divBtnStartup = DCreate('DIV', {class:'service'})
-    this.btnStartup = DCreate('DIV', {text: 'GO !', id:`${this.obj.id}-btn-startup`, class:'name'})
+    this.btnStartup = DCreate('DIV', {text: 'GO !', id:`${this.obj.id}-btn-startup`, class:'name'})
     divBtnStartup.appendChild(this.btnStartup)
     startupContainer.appendChild(divBtnStartup)
     startupContainer.appendChild(divSServices)
     this.startupField.appendChild(startupContainer)
-    listen(startupContainer, 'mouseenter', function(ev){
-      setTimeout(function(){divSServices.classList.remove('hidden')}, 1000)
+    // → survol : astuce dans le footer (message(), pas un div sous le bouton)
+    listen(startupContainer, 'mouseenter', ev => message('Meta+clic pour montrer les services'))
+    listen(startupContainer, 'click', ev => {
+      if (!ev.metaKey) return
+      divSServices.classList.toggle('hidden')
     })
-    listen(startupContainer, 'mouseleave', ev => {divSServices.classList.add('hidden')})
-    listen(this.btnStartup, 'click', this.startStartupServices.bind(this))
+    // → meta+clic sur GO lui-même : révèle seulement, ne lance rien
+    listen(this.btnStartup, 'click', ev => {
+      if (ev.metaKey) return
+      this.startStartupServices()
+    })
     this.startupContainer = startupContainer
     this.divSServices = divSServices
     return startupContainer

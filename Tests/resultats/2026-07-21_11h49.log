@@ -1,0 +1,16 @@
+Moteur : pont
+Arguments : specs/e2e/revelation_services_startup.rb specs/e2e/retrait_services_startup.rb
+Date : 2026-07-21 11h49
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/revelation_services_startup.rb ---
+✓ révélation du panneau des services au démarrage : message footer, visibilité, pas de lancement
+  (osascript : 10 appels, 3.455s)
+  (durée totale de la spec : 6.583s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 19 appels, 3.942s)
+  (durée totale de la spec : 5.785s)
+
+-------------------
+Success: 2  Failures: 0  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 12.368s

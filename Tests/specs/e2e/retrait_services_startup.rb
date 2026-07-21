@@ -6,19 +6,17 @@
 #
 # Particularité par rapport à Tests/specs/e2e/retrait_service_glissement.rb
 # (qui teste la même mécanique pour "Autres services") : les cartes des
-# services au démarrage vivent dans un conteneur "display:none" tant qu'on ne
-# survole pas (Project.js, classe "hidden" retirée par un mouseenter + 1s) —
-# un élément display:none n'a AUCUNE représentation dans l'arbre
-# d'accessibilité, donc il faut d'abord un vrai survol souris
-# (BoardTest#hover, Tests/support/hover.js) avant de pouvoir cibler la carte
-# par domId pour la glisser.
+# services au démarrage vivent dans un conteneur "display:none" tant qu'on n'a
+# pas meta+cliqué dessus (Project.js#buildStartupContainer) — un élément
+# display:none n'a AUCUNE représentation dans l'arbre d'accessibilité, donc il
+# faut d'abord un meta+clic (BoardTest#meta_click) avant de pouvoir cibler la
+# carte par domId pour la glisser. Le panneau reste révélé tant qu'on ne
+# re-meta+clique pas dessus (pas de fermeture automatique au survol suivant),
+# donc un seul meta+clic suffit pour toute la spec.
 #
-# AVERTISSEMENT : mécanique non vérifiée en conditions réelles — en
-# particulier, le survol du conteneur se termine (mouseleave → classe
-# "hidden" remise) PENDANT le trajet du glisser vers le titre du projet (hors
-# du conteneur) ; possible que ça interrompe le drag HTML5 en cours si le
-# navigateur réagit au display:none de l'élément survolé en plein glissement.
-# À corriger si le test échoue pour cette raison précise.
+# Le mécanisme de révélation lui-même (message d'astuce dans le footer,
+# visibilité réelle, pas de lancement accidentel des services) est testé à
+# part : Tests/specs/e2e/revelation_services_startup.rb.
 #
 # Setup : 2 services "open-folder-project" déjà attachés en "startup"
 # (BoardTest#fixture_open_folder_service, type: 'startup') — le
@@ -39,7 +37,6 @@ def run_test
     card1 = "service-#{service1['uuid']}"
     card2 = "service-#{service2['uuid']}"
     btn_startup = "project-#{id}-btn-startup"
-    startup_container = "project-#{id}-startup-container"
     title_target = "project-#{id}-title"
 
     wait_for("project-#{id}")
@@ -47,9 +44,9 @@ def run_test
     # → le bouton GO! doit exister (2 services au démarrage dès le chargement)
     wait_until(desc: -> { 'bouton GO! absent alors que 2 services au démarrage sont attachés' }) { exists?(btn_startup) }
 
-    # - survoler pour révéler les cartes (display:none tant qu'on ne survole pas)
-    hover(startup_container)
-    wait_until(desc: -> { 'carte du 1er service startup jamais révélée après survol' }) { exists?(card1) }
+    # - meta+clic (sur le bouton GO! lui-même) pour révéler les cartes
+    meta_click(btn_startup)
+    wait_until(desc: -> { 'carte du 1er service startup jamais révélée après meta+clic' }) { exists?(card1) }
 
     # - glisser le 1er service en dehors de la carte projet
     drag(card1, title_target)
@@ -62,10 +59,9 @@ def run_test
       startup.is_a?(Array) && startup.size == 1 && startup.first['uuid'] == service2['uuid']
     end
 
-    # - re-survoler (le conteneur a pu se re-masquer après le mouseleave du
-    #   glissement précédent)
-    hover(startup_container)
-    wait_until(desc: -> { '2e carte de service startup jamais révélée après nouveau survol' }) { exists?(card2) }
+    # → le panneau reste révélé (pas de fermeture auto au survol suivant),
+    #   pas besoin de re-meta+cliquer
+    wait_until(desc: -> { '2e carte de service startup pas visible' }) { exists?(card2) }
 
     # - glisser le 2e (dernier) service en dehors de la carte projet
     drag(card2, title_target)

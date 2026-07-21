@@ -37,10 +37,10 @@ div.services-panel fieldset.services {
 }
 
 /* Panneau qui contient les services au démarrage (caché) — id unique par
-   projet (project-<id>-startup-services), classe stable pour le style */
+   projet (project-<id>-startup-services), classe stable pour le style.
+   Pas de position:absolute : révélé (meta+clic), il ouvre un espace dans le
+   flux normal plutôt que de flotter par-dessus le reste de la carte. */
 div.startup-services-panel {
-  position: absolute;
-  top: 31px;
   background-color: #AAA;
   padding: 4px;
 }
