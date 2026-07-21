@@ -113,14 +113,18 @@ module BoardTest
     JS
   end
 
-  # Élément présent ET réellement affiché (pas de classe 'hidden', pas
-  # display:none hérité) — contrairement à exists?, qui ne teste que la
+  # Élément présent ET réellement affiché (ni display:none, ni
+  # visibility:hidden, quel que soit le mécanisme — classe 'hidden' ou autre,
+  # ex. clock-btn-invisible) — contrairement à exists?, qui ne teste que la
   # présence dans le DOM.
   def visible?(dom_id)
     bridge_eval(<<~JS) == 'true'
       (function(){
         var el=document.getElementById(#{dom_id.to_json});
-        return !!(el && el.offsetParent !== null && !el.classList.contains('hidden'));
+        if (!el) return false;
+        var style = window.getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+        return el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0;
       })()
     JS
   end

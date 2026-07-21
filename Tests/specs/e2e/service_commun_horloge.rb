@@ -59,7 +59,7 @@ def run_test
     #   (start/pause/restart), bouton Stop pas encore visible
     wait_for('clock-dial', 10)
     wait_for('btn-clock-toggle', 5)
-    raise 'bouton Stop visible avant démarrage' if exists?('btn-clock-stop')
+    raise 'bouton Stop visible avant démarrage' if visible?('btn-clock-stop')
 
     # - Start (clic sur le rond)
     click('clock-dial')
@@ -117,7 +117,7 @@ def run_test
 
     # → le bouton du service referme l'horloge si elle est déjà ouverte
     click(SERVICE_DOM_ID)
-    wait_until(5, desc: -> { "clock-dial encore présent ? #{exists?('clock-dial')}" }) { !exists?('clock-dial') }
+    wait_until(5, desc: -> { "clock-dial encore visible ? #{visible?('clock-dial')}" }) { !visible?('clock-dial') }
 
     # → on la rouvre pour la suite (toujours pas de dialogue de définition)
     click(SERVICE_DOM_ID)

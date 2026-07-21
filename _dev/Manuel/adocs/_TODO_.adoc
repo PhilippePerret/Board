@@ -1,16 +1,12 @@
 == BUGS ==
 
-- (pas vraiment un bug) Il faut trouver un autre moyen de faire apparaitre les services startup. Moyen à adopter : 
-  > au survol, on n'affiche plus la boite des services. On affiche un message "Maj+clic pour montrer les services"
-  > + nouvelle fonction on maj+click pour afficher les services startup
-  > peut-être : ne plus les mettre en position:absolute, que ça ouvre un espace avec les services bien visibles
-  > + on referme en refaisant maj+clic
-
 == Todo En cours  
 
 - faire passer tous les tests
 
 == Todo list ==
+
+- Pouvoir définir un nouveau service "plus que custom", ce serait un "script-service", c'est-à-dire une opération complexe définie en se servant des services mais de façon étendue (voir l'utilisation pour créer un envoi de manuscrit)
 
 - pouvoir récupérer les tâches de todoist
 - pouvoir ajouter des tâches à todoist

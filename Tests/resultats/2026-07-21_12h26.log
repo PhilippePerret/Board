@@ -1,0 +1,17 @@
+Moteur : pont
+Arguments : specs/e2e/service_commun_horloge.rb specs/e2e/service_commun_horloge_redimensionnement.rb
+Date : 2026-07-21 12h26
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✓ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+  (osascript : 50 appels, 0.296s)
+  (durée totale de la spec : 3.962s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_redimensionnement.rb ---
+✓ service commun 'horloge' : redimensionnement (poignée, pas de démarrage, persistance)
+  (osascript : 17 appels, 3.678s)
+  (durée totale de la spec : 6.069s)
+
+-------------------
+Success: 2  Failures: 0  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 10.031s

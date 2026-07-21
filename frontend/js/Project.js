@@ -345,6 +345,7 @@ class Project {
     this.startupField.appendChild(startupContainer)
     // → survol : astuce dans le footer (message(), pas un div sous le bouton)
     listen(startupContainer, 'mouseenter', ev => message('Meta+clic pour montrer les services'))
+    listen(startupContainer, 'mouseleave', ev => message(''))
     listen(startupContainer, 'click', ev => {
       if (!ev.metaKey) return
       divSServices.classList.toggle('hidden')

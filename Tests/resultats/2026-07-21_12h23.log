@@ -1,0 +1,25 @@
+Moteur : pont
+Arguments : specs/e2e/service_commun_horloge.rb specs/e2e/service_commun_horloge_redimensionnement.rb
+Date : 2026-07-21 12h23
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (5s) — clock-dial encore présent ? true
+  (osascript : 65 appels, 0.385s)
+  (durée totale de la spec : 8.103s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_redimensionnement.rb ---
+✓ service commun 'horloge' : redimensionnement (poignée, pas de démarrage, persistance)
+  (osascript : 17 appels, 3.972s)
+  (durée totale de la spec : 6.368s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (5s) — clock-dial encore présent ? true
+  (osascript : 65 appels, 0.385s)
+
+-------------------
+Success: 1  Failures: 1  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 14.471s

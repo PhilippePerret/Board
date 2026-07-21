@@ -41,7 +41,6 @@ div.services-panel fieldset.services {
    Pas de position:absolute : révélé (meta+clic), il ouvre un espace dans le
    flux normal plutôt que de flotter par-dessus le reste de la carte. */
 div.startup-services-panel {
-  background-color: #AAA;
   padding: 4px;
 }
 

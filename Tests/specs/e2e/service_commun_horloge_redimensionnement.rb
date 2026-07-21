@@ -42,7 +42,7 @@ def run_test
     #   nettement, sans jamais démarrer l'horloge au passage
     drag('clock-handle-resize', 'app-name')
 
-    raise "l'horloge a démarré pendant le redimensionnement" if exists?('btn-clock-stop')
+    raise "l'horloge a démarré pendant le redimensionnement" if visible?('btn-clock-stop')
 
     # → persisté (App.saveData debounced ~1s)
     wait_until(5, desc: -> { "appdata.yaml['clock-scale'] = #{read_app_data['clock-scale'].inspect}" }) do
