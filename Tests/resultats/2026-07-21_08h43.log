@@ -1,0 +1,12 @@
+Moteur : pont
+Arguments : specs/e2e/projet_extradata_icone_affichee_immediatement.rb
+Date : 2026-07-21 08h43
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_icone_affichee_immediatement.rb ---
+✓ panneau extra-data : icône choisie affichée tout de suite sur la carte
+  (osascript : 13 appels, 0.876s)
+  (durée totale de la spec : 1.979s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.979s

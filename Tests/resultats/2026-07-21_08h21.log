@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : specs/e2e/projet_extradata_background_color_picker_prefill.rb
+Date : 2026-07-21 08h21
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_background_color_picker_prefill.rb ---
+✗ panneau extra-data : picker de couleur pré-rempli avec la couleur de fond déjà définie
+    picker affiche "#ff0000" au lieu de la couleur déjà définie ("#336699")
+  (osascript : 12 appels, 0.101s)
+  (durée totale de la spec : 1.227s)
+
+Échecs :
+1. panneau extra-data : picker de couleur pré-rempli avec la couleur de fond déjà définie
+    picker affiche "#ff0000" au lieu de la couleur déjà définie ("#336699")
+  (osascript : 12 appels, 0.101s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.227s

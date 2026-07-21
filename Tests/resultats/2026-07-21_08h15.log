@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : specs/e2e/selection_projet_ferme_panneau_outils.rb
+Date : 2026-07-21 08h15
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/selection_projet_ferme_panneau_outils.rb ---
+✓ sélection d'un projet : ferme le panneau "Outils" s'il est ouvert
+  (osascript : 8 appels, 0.100s)
+  (durée totale de la spec : 1.250s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.250s

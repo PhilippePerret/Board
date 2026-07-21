@@ -437,6 +437,7 @@ module BoardTest
   end
 
   def read_app_data
+    wait_until(desc: -> { "#{APP_DATA_FILE} jamais apparu" }) { File.exist?(APP_DATA_FILE) }
     YAML.safe_load(File.read(APP_DATA_FILE))
   end
 

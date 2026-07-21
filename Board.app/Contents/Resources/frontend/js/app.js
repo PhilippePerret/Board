@@ -9,6 +9,16 @@ class App {
 
   // this.data = les données de appdata.json
 
+  // Le panneau courant
+  static get currentPanel()  { return this._currentPanel }
+  static set currentPanel(p) { this._currentPanel = p }
+  static closeCurrentPanel(){
+    if (this.currentPanel) {
+      this.currentPanel.close()
+      this.currentPanel = null
+    }
+  }
+
   static init(retour){
     historize("-> App#init")
     if (undefined == retour) {
@@ -21,9 +31,20 @@ class App {
     }
   }
 
+  static openAppDataPanel(ev) {
+    stopEvent(ev)
+    this.appDataPanel.toggle()
+    this.currentPanel = this.appDataPanel
+  }
+  static openToolsPanel(ev) {
+    stopEvent(ev)
+    this.toolsPanel.toggle()
+    this.currentPanel = this.toolsPanel
+  }
+
   static observe(){
-    listen(DGet('#app-name'), 'click', (ev) => {stopEvent(ev); this.appDataPanel.toggle()})
-    listen(DGet('#tools-button'), 'click', (ev) => {stopEvent(ev); this.toolsPanel.toggle()})
+    listen(DGet('#app-name'), 'click', this.openAppDataPanel.bind(this))
+    listen(DGet('#tools-button'), 'click', this.openToolsPanel.bind(this))
     listen(DGet('#help-link'), 'click', (ev) => {stopEvent(ev); window.webkit.messageHandlers.openHelp.postMessage({})})
   }
 

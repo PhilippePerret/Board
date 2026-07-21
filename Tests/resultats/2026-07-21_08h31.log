@@ -1,0 +1,12 @@
+Moteur : pont
+Arguments : specs/e2e/projet_extradata_background_color_picker_prefill.rb
+Date : 2026-07-21 08h31
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_background_color_picker_prefill.rb ---
+✓ panneau extra-data : picker de couleur pré-rempli avec la couleur de fond déjà définie
+  (osascript : 12 appels, 0.097s)
+  (durée totale de la spec : 1.221s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.221s

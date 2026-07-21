@@ -13,7 +13,7 @@ class Tools {
     new SelectDialog({
         title: 'Position et taille de fenêtre'
       , id: 'tools_app_window_bounds'
-      , message: 'Quelle application ?' + '<div class="small">La taille et la position de sa fenêtre au premier plan seront mises dans le presse-papier</div>'
+      , message: 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + '<div class="small">Sa taille et sa position seront mises dans le presse-papier</div>'
       , values: retour.data.apps
       , ouiBtn: {name: 'Valider', onclick: this.onAppChosen.bind(this)}
       , nonBtn: {name: 'Annuler'}

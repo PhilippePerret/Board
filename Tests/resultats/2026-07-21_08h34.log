@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : specs/e2e/projet_extradata_icone_affichee_immediatement.rb
+Date : 2026-07-21 08h34
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_icone_affichee_immediatement.rb ---
+✗ panneau extra-data : icône choisie affichée tout de suite sur la carte
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-17846156812342", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-icon-20260721-28098-zmb6u4", "title" => "Projet Icone", "icon" => "/privateicon.svg", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 12 appels, 1.090s)
+  (durée totale de la spec : 6.325s)
+
+Échecs :
+1. panneau extra-data : icône choisie affichée tout de suite sur la carte
+    Timeout d'attente dépassé (4s) — carte projet = {"id" => "fixture-17846156812342", "path" => "/var/folders/3h/g27j5r_57m147p6jfms6xb3m0000gn/T/board-test-icon-20260721-28098-zmb6u4", "title" => "Projet Icone", "icon" => "/privateicon.svg", "services" => {"others" => [], "startup" => []}, "workTime" => 0}
+  (osascript : 12 appels, 1.090s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 6.325s

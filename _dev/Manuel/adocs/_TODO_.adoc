@@ -1,19 +1,12 @@
 == BUGS ==
 
-- sélection projet doit fermer panneau outils
-- Le panneau des data de l'application ne s'ouvre plus (passage de Classe à instance)
-- Le panneau des outils ne s'ouvre pas encore
+- quand on choisit la couleur de fond, s'il y en a déjà une, on doit l'appliquer au picker de couleurs
 - Quand on choisit une icône, elle devrait s'afficher tout de suite.
 
 == Todo En cours  
 
 == Todo list ==
 
-- Un panneau "outils"
-  > pouvoir obtenir la taille d'une fenêtre d'application
-    L'outil demande quelle application (en relevant les applications ouvertes) et prend la front window
-    Elle met le résultat dans le presse-papier
-  
 - faire passer tous les tests
   
 - utiliser des icônes SVG simples (pour l'interface)

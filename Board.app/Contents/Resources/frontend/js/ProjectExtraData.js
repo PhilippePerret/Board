@@ -37,7 +37,7 @@ class ProjectExtraDataPanel extends SidePanelDefiner {
         break
       case 'icon':
         const icon = this.project.buildIcon()
-        this.project.obj.insertBefore(icon, this.divTitle)
+        this.project.obj.insertBefore(icon, this.project.divTitle)
         break
     }
   }

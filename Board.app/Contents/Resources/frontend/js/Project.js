@@ -120,6 +120,7 @@ class Project {
   // Pour afficher et masquer les boutons du projet sélectionné
   static affProjectButtons(){
     this.divButtons.classList.remove('invisible')
+    App.closeCurrentPanel()
     Service.showCommonPanel()
   }
   static maskProjectButtons(){

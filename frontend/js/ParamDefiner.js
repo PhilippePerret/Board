@@ -320,7 +320,9 @@ class ParamDefiner {
   onColor(){
     new ColorDialog({
         title: "Définition d'une couleur"
+      , id: this.id
       , message: this.q || "Sélectionner une couleur avec le picker ci-dessous."
+      , defaultValue: this.currentOrDefault
       , ouiBtn: {name: 'Celle-là', onclick: this.setValue.bind(this)}
       , nonBtn: {name: 'Aucune',  onclick: this.setValue.bind(this, null)}
     }).show()
