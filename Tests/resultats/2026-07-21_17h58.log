@@ -1,0 +1,263 @@
+Moteur : pont
+Arguments : (aucun — specs/e2e/*.rb)
+Date : 2026-07-21 17h58
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+✓ ajout d'un service au démarrage
+  (osascript : 25 appels, 3.639s)
+  (durée totale de la spec : 4.864s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ panneau de réglages de l'application : édition string + app, persistance après rechargement
+  (osascript : 21 appels, 0.192s)
+  (durée totale de la spec : 4.404s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/archivage_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ archivage d'un projet
+  (osascript : 9 appels, 0.149s)
+  (durée totale de la spec : 1.319s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+✓ attribution d'un service puis exécution deux fois de suite
+  (osascript : 24 appels, 6.886s)
+  (durée totale de la spec : 9.693s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_nom_pas_en_cache.rb ---
+✓ le nom personnalisé d'un service commun glissé sur un projet ne reste pas en cache pour le glissé suivant sur un autre projet
+  (osascript : 21 appels, 8.928s)
+  (durée totale de la spec : 9.752s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_choix_liste.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec un logiciel choisi dans la liste
+  (osascript : 18 appels, 3.273s)
+  (durée totale de la spec : 3.985s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_nom_explicite.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec un nom de logiciel tapé explicitement
+  (osascript : 20 appels, 3.472s)
+  (durée totale de la spec : 4.196s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_par_defaut.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec le choix « par défaut » (aucune application précisée)
+  (osascript : 18 appels, 3.461s)
+  (durée totale de la spec : 4.180s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+✓ attribution d'un service à un projet
+  (osascript : 23 appels, 3.525s)
+  (durée totale de la spec : 4.735s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_sans_selection_finder.rb ---
+✓ création d'un nouveau projet SANS SÉLECTION FINDER
+  (osascript : 6 appels, 0.679s)
+  (durée totale de la spec : 0.798s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✓ création d'un nouveau projet, sélection Finder = un fichier
+  (osascript : 6 appels, 0.784s)
+  (durée totale de la spec : 0.891s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✓ création simple d'un nouveau projet
+  (osascript : 10 appels, 0.909s)
+  (durée totale de la spec : 1.548s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/definition_genre_projet_valeur_libre.rb ---
+✓ définition du genre d'un projet par valeur libre
+  (osascript : 14 appels, 0.109s)
+  (durée totale de la spec : 0.758s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/definition_genre_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ définition du genre d'un projet
+  (osascript : 12 appels, 0.139s)
+  (durée totale de la spec : 1.309s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/deplacement_projet.rb ---
+✓ déplacement du projet
+  (osascript : 12 appels, 0.181s)
+  (durée totale de la spec : 3.766s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_double_service.rb ---
+✓ exécuter un service attaché deux fois de suite (dossier fermé entre les deux)
+  (osascript : 9 appels, 3.627s)
+  (durée totale de la spec : 6.343s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_service_ouvrir_fichier_introuvable.rb ---
+✓ service 'Ouvrir le fichier…' : fichier introuvable -> message d'erreur clair
+  (osascript : 5 appels, 0.137s)
+  (durée totale de la spec : 0.769s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_service_ouvrir_fichier.rb ---
+✓ service 'Ouvrir le fichier…' : exécution réelle (logiciel = Finder)
+  (osascript : 6 appels, 0.531s)
+  (durée totale de la spec : 1.174s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ exécution des services au démarrage (GO!, deux fois, avant/après rechargement)
+  (osascript : 19 appels, 10.878s)
+  (durée totale de la spec : 12.950s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/lien_aide.rb ---
+✓ lien "Aide" : ouverture, fermeture, réouverture sans planter
+  (osascript : 4 appels, 0.122s)
+  (durée totale de la spec : 1.458s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/modification_titre_projet.rb ---
+✓ modification du titre d'un projet
+  (osascript : 8 appels, 0.163s)
+  (durée totale de la spec : 0.772s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_background_color_picker_prefill.rb ---
+✓ panneau extra-data : picker de couleur pré-rempli avec la couleur de fond déjà définie
+  (osascript : 12 appels, 0.091s)
+  (durée totale de la spec : 0.730s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_icone_affichee_immediatement.rb ---
+✓ panneau extra-data : icône choisie affichée tout de suite sur la carte
+  (osascript : 13 appels, 0.986s)
+  (durée totale de la spec : 1.601s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_affiche_donnees.rb ---
+✓ panneau extra-data : ouverture affiche les données du projet sélectionné
+  (osascript : 9 appels, 0.082s)
+  (durée totale de la spec : 0.699s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_change_projet.rb ---
+✓ panneau extra-data : changement de projet sans le fermer, réadapté à chaque fois
+  (osascript : 17 appels, 0.135s)
+  (durée totale de la spec : 0.766s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_changements_successifs_ferme.rb ---
+✓ panneau extra-data : changements de projet successifs sans jamais ouvrir le panneau
+  (osascript : 11 appels, 0.073s)
+  (durée totale de la spec : 0.735s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_ferme_apres_reload.rb ---
+✓ panneau extra-data : fermé par défaut après un rechargement
+  (osascript : 12 appels, 0.149s)
+  (durée totale de la spec : 1.313s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_ferme_manuellement.rb ---
+✓ panneau extra-data : fermé manuellement, reste fermé au changement de projet
+  (osascript : 12 appels, 0.068s)
+  (durée totale de la spec : 0.740s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_fermeture_redeselection.rb ---
+✓ panneau extra-data : redésélection du même projet ferme le panneau
+  (osascript : 10 appels, 0.077s)
+  (durée totale de la spec : 0.699s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_jamais_ouvert.rb ---
+✓ panneau extra-data jamais ouvert : sélection/redésélection sans crash
+  (osascript : 7 appels, 0.079s)
+  (durée totale de la spec : 0.745s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_suppression_projet_affiche.rb ---
+✓ panneau extra-data : suppression du projet affiché ferme le panneau
+  (osascript : 13 appels, 0.140s)
+  (durée totale de la spec : 0.783s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/recuperation_projet_archive.rb ---
+✓ récupération d'un projet archivé
+  (osascript : 11 appels, 0.201s)
+  (durée totale de la spec : 0.820s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_edit_documentation.rb ---
+✓ redéfinition d'un service 'edit-documentation' : project + app résolus sans dialogue
+  (osascript : 8 appels, 0.146s)
+  (durée totale de la spec : 0.776s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_horloge.rb ---
+✓ redéfinition d'un service 'work-clock' : integer préremplis (session-duration + useLastAsDefault)
+  (osascript : 15 appels, 0.142s)
+  (durée totale de la spec : 0.785s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_fenetre_finder.rb ---
+✓ redéfinition d'un service 'open-finder-window' : pas de Préserver pour finder-window, bouton par défaut pour boolean
+  (osascript : 17 appels, 0.968s)
+  (durée totale de la spec : 1.605s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_fichier.rb ---
+✓ redéfinition d'un service 'open-file' : nom + path (Préserver) + logiciel préremplis, pas d'exécution auto
+  (osascript : 18 appels, 0.223s)
+  (durée totale de la spec : 1.860s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_ouvrir_url.rb ---
+✓ redéfinition d'un service 'open-URL' : url préremplie avec la valeur actuelle
+  (osascript : 12 appels, 0.144s)
+  (durée totale de la spec : 0.769s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_run_script_format_ancien.rb ---
+✓ redéfinition d'un service au format à plat (ancien projet) : Préserver fonctionne quand même
+  (osascript : 11 appels, 0.142s)
+  (durée totale de la spec : 0.772s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_terminal_code.rb ---
+✓ redéfinition d'un service 'open-terminal-at-folder' : string (code) préremplie
+  (osascript : 12 appels, 0.130s)
+  (durée totale de la spec : 0.760s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_versionnage_fichier.rb ---
+✓ redéfinition d'un service 'file-versioning' : path-or-null propose Préserver ET Aucun
+  (osascript : 14 appels, 0.148s)
+  (durée totale de la spec : 0.780s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_service_glissement.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ retrait d'un service par glissement hors de la carte projet
+  (osascript : 13 appels, 2.010s)
+  (durée totale de la spec : 4.322s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/retrait_services_startup.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ retrait des services au démarrage (GO! disparaît quand il n'en reste plus)
+  (osascript : 19 appels, 3.990s)
+  (durée totale de la spec : 6.402s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/revelation_services_startup.rb ---
+✓ révélation du panneau des services au démarrage : message footer, visibilité, pas de lancement
+  (osascript : 10 appels, 3.423s)
+  (durée totale de la spec : 6.102s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/script_service_create_folder.rb ---
+✓ script-service : étape create-folder crée le dossier relatif au projet
+  (osascript : 5 appels, 0.115s)
+  (durée totale de la spec : 0.970s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/selection_projet_ferme_panneau_outils.rb ---
+✓ sélection d'un projet : ferme le panneau "Outils" s'il est ouvert
+  (osascript : 8 appels, 0.080s)
+  (durée totale de la spec : 0.693s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_edit_documentation.rb ---
+✗ service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — fenêtres CotEditor = "T, scriptserv-envoi.yaml, Manuel – scripts-services.adoc" (attendu "board-test-project-20260721-67612-jtmaea")
+  (osascript : 10 appels, 0.515s)
+  (durée totale de la spec : 5.542s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_redimensionnement.rb ---
+✓ service commun 'horloge' : redimensionnement (poignée, pas de démarrage, persistance)
+  (osascript : 17 appels, 3.735s)
+  (durée totale de la spec : 6.113s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✓ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+  (osascript : 50 appels, 0.288s)
+  (durée totale de la spec : 3.426s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_init_documentation.rb ---
+✗ service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (4s) — docu.adoc existe ? false
+  (osascript : 10 appels, 0.597s)
+  (durée totale de la spec : 5.325s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+✓ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 16 appels, 1.190s)
+  (durée totale de la spec : 3.388s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+  (osascript : 27 appels, 4.026s)
+  (durée totale de la spec : 5.929s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal_guillemets.rb ---
+✓ service commun 'terminal au dossier' : code de plusieurs mots avec guillemets
+  (osascript : 9 appels, 0.134s)
+  (durée totale de la spec : 1.441s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal_sans_code.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : aucun code donné
+  (osascript : 8 appels, 0.145s)
+  (durée totale de la spec : 1.905s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_terminal.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'terminal au dossier' : code d'un mot ('pwd')
+  (osascript : 9 appels, 0.189s)
+  (durée totale de la spec : 2.098s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_param_transient.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✓ paramètre :transient d'un service commun non persisté, redemandé à chaque clic
+  (osascript : 11 appels, 0.180s)
+  (durée totale de la spec : 1.995s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 20 appels, 1.781s)
+  (durée totale de la spec : 3.464s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/suppression_projet.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ suppression réelle d'un projet
+  (osascript : 9 appels, 0.173s)
+  (durée totale de la spec : 1.309s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/tools_panel.rb ---
+✓ panneau 'Outils' : ouverture/fermeture, 1er outil (position/taille de fenêtre) activé
+  (osascript : 17 appels, 0.531s)
+  (durée totale de la spec : 1.154s)
+
+Échecs :
+1. service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — fenêtres CotEditor = "T, scriptserv-envoi.yaml, Manuel – scripts-services.adoc" (attendu "board-test-project-20260721-67612-jtmaea")
+  (osascript : 10 appels, 0.515s)
+2. service commun 'initier documentation' : crée l'arborescence, garde-fou au 2e clic
+    Timeout d'attente dépassé (4s) — docu.adoc existe ? false
+  (osascript : 10 appels, 0.597s)
+
+-------------------
+Success: 56  Failures: 2  Pendings: 0  Test count: 58
+Durée totale (moteur : pont) : 158.980s

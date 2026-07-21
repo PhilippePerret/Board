@@ -143,6 +143,30 @@ begin
     returned_message = returned_data["message"] if returned_data.key?("message") && returned_data["message"]  
 
 
+  when 'load-yaml-file'
+    path = request['path']
+    if !File.exist?(path)
+      ok = false
+      error = "Fichier introuvable : #{path}"
+    else
+      begin
+        returned_data = YAML.safe_load(File.read(path))
+        ok = true
+      rescue Psych::SyntaxError => e
+        ok = false
+        error = "YAML invalide (#{path}) : #{e.message}"
+      end
+    end
+
+  when 'create-folder'
+    begin
+      FileUtils.mkdir_p(request['data'])
+      ok = true
+    rescue => e
+      ok = false
+      error = e.message
+    end
+
   # Pour récupérer un projet des archives
   when 'retreive-project-from-archives'
     ok = true

@@ -1,3 +1,33 @@
 ==== Les scripts-services ====
 
 Les _scripts-services_ ouvrent définitivement la voie de l'infini pour définir les services d'un projet. Ils permettent de **composer soi-même un service** en exploitant toutes les ressources de l'application.
+
+Mais tout pouvoir puissant implique des responsabilités à ses propotions.
+
+===== Une suite d'étapes =====
+
+Un _script-service_ est un fichier YAML qui décrit les étapes du service.
+
+Pour illustrer l'explication, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d'envoi de manuscrits à des maisons d'édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l'on écrit un roman, voire plus, par an.
+
+En apparence, ce service doit être simple : 
+
+- création d'un dossier pour l'éditeur ou l'éditrice
+- copier du manuscrit à envoyer
+- création d'un fichier avec l'adresse et le téléphone de l'édition
+- enregistrement d'un historique des envois, pour se souvenir de quand le manuscrit a été envoyé.
+
+Notre fichier YAML comprendra donc ces étapes, assurément : 
+
+[code, yaml]
+====
+---
+- name: "Création du dossier de l'éditeur"
+
+- name: "Copie du manuscrit envoyé"
+
+- name: "Fichier information éditeur
+
+- name: "Enregistrement envoi dans l'historique"
+
+====
