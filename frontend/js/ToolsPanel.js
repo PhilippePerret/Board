@@ -14,7 +14,9 @@ class ToolsPanel extends SidePanel {
   }
 
   buildRow(tool){
-    const row = DCreate('DIV', {class: 'service tools-row', id: `tool-${tool.id}`, text: tool.name})
+    const row = DCreate('DIV', {class: 'service tools-row', id: `tool-${tool.id}`})
+    const name = DCreate('DIV', {text: tool.name})
+    row.appendChild(name)
     this.listingEl.appendChild(row)
     listen(row, 'click', tool.run)
   }

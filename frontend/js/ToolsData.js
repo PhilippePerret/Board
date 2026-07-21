@@ -7,7 +7,7 @@
 const TOOLS_DATA = [
     {
         id: 'app-window-bounds'
-      , name: 'Taille et position de la fenêtre d’une application'
-      , run: () => Tools.getAppWindowBounds()
+      , name: 'Taille et position de fenêtre…'
+      , run: () => Tools.toolGetWindowBounds()
     }
 ]

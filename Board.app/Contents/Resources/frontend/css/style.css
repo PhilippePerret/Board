@@ -76,7 +76,7 @@ div#current-project-mark {
 header div#help-link,
 header div#tools-button {
   position: absolute;
-  right: 1em;
+  left: 18.5em;
   top: 50%;
   transform: translateY(-50%);
   font: 14px Avenir Next;
@@ -85,7 +85,7 @@ header div#tools-button {
   font-size: 16pt;
 }
 header div#tools-button {
-  right: 5em;
+  left: 15em;
 }
 header div#help-link:hover,
 header div#tools-button:hover {

@@ -14,7 +14,8 @@ class SidePanel {
   // static toggle(){ this.instance.toggle() }
 
   constructor(){
-    this.built = false
+    console.log("constructor de %s", this.title)
+    this.built  = false
     this.opened = false
   }
 
@@ -26,13 +27,19 @@ class SidePanel {
   buildContent(){}
 
   toggle(){
+    historize("→ SidePanel#toggle Panneau %s", this.title)
+    /*
+    new Error().stack
+    console.trace()
+    //*/
     this.built || this.build()
-    historize('-> SidePanel#toggle this.opened = ', this.opened)
+    console.log("Avant open ou close, this.opened = ", this.opened)
     this[this.opened ? 'close' : 'open']()
+    historize("← SidePanel#toggle Panneau %s", this.title)
   }
   open(){
     this.setState('opened')
-    this.setOppositeButton()
+    this.setOppositeButton() // Si nécessaire
   }
   close(){
     this.setState('closed')
@@ -57,6 +64,7 @@ class SidePanel {
   }
 
   build(){
+    historize("-> SidePanel#build panneau %s", this.title)
     const panel = DCreate('DIV', {class: 'services-panel closed', id: this.domId})
     const fieldset = DCreate('FIELDSET', {class: 'services-listing'})
     fieldset.appendChild(DCreate('LEGEND', {text: this.title}))

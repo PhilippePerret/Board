@@ -11,20 +11,20 @@ class App {
 
   static init(retour){
     historize("-> App#init")
-    this.observe()
-    Service.init()
     if (undefined == retour) {
-      server.send({action: 'load-all'}, this.init.bind(this))
+      return server.send({action: 'load-all'}, this.init.bind(this))
     } else {
+      this.observe()
+      Service.init()
       this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
     }
   }
 
   static observe(){
-    listen(DGet('#app-name'), 'click', () => this.appDataPanel.toggle())
-    listen(DGet('#tools-button'), 'click', () => this.toolsPanel.toggle())
-    listen(DGet('#help-link'), 'click', () => window.webkit.messageHandlers.openHelp.postMessage({}))
+    listen(DGet('#app-name'), 'click', (ev) => {stopEvent(ev); this.appDataPanel.toggle()})
+    listen(DGet('#tools-button'), 'click', (ev) => {stopEvent(ev); this.toolsPanel.toggle()})
+    listen(DGet('#help-link'), 'click', (ev) => {stopEvent(ev); window.webkit.messageHandlers.openHelp.postMessage({})})
   }
 
   static get appDataPanel(){ return this._appdatapan || (this._appdatapan = new AppDataPanel()) }

@@ -6,20 +6,22 @@
  */
 class Tools {
 
-  static getAppWindowBounds(){
-    server.send({action: 'list-running-apps'}, this.onAppsListed.bind(this))
-  }
-
-  static onAppsListed(retour){
+  static toolGetWindowBounds(retour){
+    if (undefined == retour) {
+      server.send({action: 'list-running-apps'}, this.toolGetWindowBounds.bind(this))
+    } else {
     new SelectDialog({
         title: 'Position et taille de fenêtre'
       , id: 'tools_app_window_bounds'
-      , message: 'Quelle application ?'
+      , message: 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + '<div class="small">Sa taille et sa position seront mises dans le presse-papier</div>'
       , values: retour.data.apps
       , ouiBtn: {name: 'Valider', onclick: this.onAppChosen.bind(this)}
       , nonBtn: {name: 'Annuler'}
     }).show()
+
+    }
   }
+
 
   static onAppChosen(appName){
     server.send({action: 'get-app-window-bounds', appName: appName}, this.onWindowBounds.bind(this))

@@ -1,5 +1,8 @@
 == BUGS ==
 
+- sélection projet doit fermer panneau outils
+- Le panneau des data de l'application ne s'ouvre plus (passage de Classe à instance)
+- Le panneau des outils ne s'ouvre pas encore
 - Quand on choisit une icône, elle devrait s'afficher tout de suite.
 
 == Todo En cours  
