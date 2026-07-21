@@ -14,6 +14,8 @@ class ScriptService {
 
   run(){
     console.error("Je dois apprendre à jouer un script-service.")
+    // TODO : On fait la liste des étapes (instances ServStep), en testant 
+    // leur validité.
   }
 
 }

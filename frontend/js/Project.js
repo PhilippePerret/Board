@@ -267,7 +267,7 @@ class Project {
     const startupservice = this.startupservices.pop()
     if (startupservice) {
       message(`Lancement du service ${startupservice.name}…`)
-      startupservice.exec(null /* event */, this.startStartupServices.bind(this))
+      startupservice.exec(this, null /* event */, this.startStartupServices.bind(this))
     } else {
       message("Fin de démarrage du projet.")
     }

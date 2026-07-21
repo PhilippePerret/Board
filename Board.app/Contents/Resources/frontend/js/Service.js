@@ -153,7 +153,7 @@ class Service {
     } else if (ev.metaKey) {
       this.redefine(projet)
     } else {
-      this.exec(ev)
+      this.exec(projet, ev)
     }
   }
 
@@ -197,9 +197,9 @@ class Service {
     definer.define()
   }
   // Exécution du service
-  exec(ev, callback){
+  exec(projet, ev, callback){
     console.log("callback dans Service#exec", this, callback)
-    new ServiceExecuter(this).exec(callback)
+    new ServiceExecuter(this).exec(projet, callback)
     console.log("Service#exec se termine bien")
   }
 

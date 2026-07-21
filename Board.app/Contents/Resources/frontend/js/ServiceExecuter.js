@@ -11,7 +11,8 @@ class ServiceExecuter {
   }
   
   // Exécution du service
-  exec(callback){
+  exec(projet, callback){
+    this.projet = projet
     if (typeof callback == 'function') this.callback = callback
     const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
     // S'il existe des paramètres dynamiques, il faut les traiters
@@ -33,25 +34,27 @@ class ServiceExecuter {
 
   /**
    * Exécution d'un service commun
-   * 
+   *
    * La principale différence réside dans le fait que pour un service personnalisé,
    * les paramètres se trouvent dans son .params propre. Alors que dans le service
    * commun, c'est dans le projet.common_services_data que ça se trouve.
    */
   execOnProject(projet){
+    this.projet = projet
+    this.finalyExec(projet.common_services_data[this.id])
+  }
+
+  // Point unique de sortie, quel que soit le chemin (custom attaché, commun
+  // attaché, commun joué depuis le panneau) : this.front, s'il est défini,
+  // est TOUJOURS prioritaire sur l'envoi au backend.
+  finalyExec(paramsValues){
+    const flatParamsValues = this.flattenParamsValues(paramsValues)
     if (this.front) {
       // Pas un script backend, mais un traitement frontend
       // Typiquement : le minuteur
-      const flatParamsValues = this.flattenParamsValues(projet.common_services_data[this.id])
-      this.front(projet, flatParamsValues)
-    } else {
-      // Un script backend
-      this.finalyExec(projet.common_services_data[this.id])
+      this.front(this.projet, flatParamsValues)
+      return
     }
-  }
-
-  finalyExec(paramsValues){
-    const flatParamsValues = this.flattenParamsValues(paramsValues)
     console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParamsValues)
     server.send({action: `exec-service`, script: this.script, params: flatParamsValues}, this.afterRunService.bind(this))
   }
