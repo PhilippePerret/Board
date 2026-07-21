@@ -1,0 +1,3 @@
+==== Les scripts-services ====
+
+Les _scripts-services_ ouvrent définitivement la voie de l'infini pour définir les services d'un projet. Ils permettent de **composer soi-même un service** en exploitant toutes les ressources de l'application.

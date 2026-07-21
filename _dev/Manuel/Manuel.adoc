@@ -12,6 +12,7 @@
 
 :app-name: include::{js-folder}/App.js[tag=app-name]
 
+// ---- INCLUSIONS ----
 include::adocs/_TODO_.adoc[]
 
 include::adocs/presentation.adoc[]
@@ -19,6 +20,8 @@ include::adocs/presentation.adoc[]
 include::adocs/prise-en-main.adoc[]
 
 include::adocs/app/reglages-app.adoc[]
+
+include::adocs/services/scripts-services.adoc[]
 
 include::adocs/services.adoc[]
 

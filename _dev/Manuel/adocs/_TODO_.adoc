@@ -2,11 +2,11 @@
 
 == Todo En cours  
 
+- Pouvoir définir un nouveau service "plus que custom", ce serait un "script-service" ou "service-script" (oui, nom adopté), c'est-à-dire une opération complexe définie en se servant des services mais de façon étendue (voir l'utilisation pour créer un envoi de manuscrit)
 
 
 == Todo list ==
 
-- Pouvoir définir un nouveau service "plus que custom", ce serait un "script-service" ou "service-script" (oui, nom adopté), c'est-à-dire une opération complexe définie en se servant des services mais de façon étendue (voir l'utilisation pour créer un envoi de manuscrit)
 
 - pouvoir récupérer les tâches de todoist
 - pouvoir ajouter des tâches à todoist

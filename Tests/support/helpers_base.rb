@@ -532,6 +532,19 @@ module BoardTest
     }
   end
 
+  # Service custom "run-script-service" (ScriptService.js) — yaml_path :
+  # chemin du fichier YAML décrivant les étapes.
+  def fixture_script_service(yaml_path, name: 'Script-service', type: 'others')
+    {
+      'id' => 'run-script-service',
+      'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",
+      'type' => type,
+      'name' => name,
+      'params' => [yaml_path],
+      'projectId' => nil
+    }
+  end
+
   # Crée directement une carte projet sur disque + l'enregistre dans
   # appdata.json (projects-in), sans passer par l'UI. Ne rend PAS le projet
   # visible dans une app déjà lancée : appeler launch_app après, pour que

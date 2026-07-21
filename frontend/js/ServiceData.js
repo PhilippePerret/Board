@@ -163,6 +163,15 @@ const CUSTOM_SERVICES_DATA = [
   },
 
   {
+      id: 'run-script-service'
+    , name: 'Jouer un script-service'
+    , front: ScriptService.run
+    , params: [
+        {id: 'script-service-path', q: 'Sélectionner le script du service dans le Finder puis “OK”.', type: 'path'}
+      ]
+  },
+
+  {
       id: 'open-URL'
     , name: 'Ouvrir l’URL…'
     , params: [
