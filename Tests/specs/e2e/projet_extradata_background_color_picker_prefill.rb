@@ -19,14 +19,15 @@ def run_test
   launch_app
 
   card = "project-#{project_id}"
+  panel_id = "projet-extradata-panel-#{project_id}"
   wait_for(card)
   click(card)
 
   wait_for('btn-deal-project-extradata')
   click('btn-deal-project-extradata')
-  wait_for('projet-extradata-panel')
+  wait_for(panel_id)
 
-  click('project-extradata-background')
+  click("project-extradata-#{project_id}-background")
   wait_for('btn-oui')
   click('btn-oui') # "Couleur"
 

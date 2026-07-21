@@ -1,3 +1,5 @@
+# @long — ~1 minute d'attente réelle, exclu par défaut (cf. Tests/version-pont/run_tests.sh, flag --long)
+#
 # Test : service commun "work-clock" — seuils d'alerte (orange à 10 min de
 # l'échéance, rouge à l'échéance).
 # Source : demande explicite (2026-07-13), suite à la revue de l'UI horloge.

@@ -18,21 +18,14 @@ class Service {
     pan.build()
     return pan
   }
-  /**
-   * Fonction appelée par le "bouton des services"
-   * Il permet de basculer entre le panneau des services communs et
-   * le panneau des services personnalisés
-   */
-  static togglePanel(){
-    this.activePanel = this.activePanel.toggleOpposites()
-  }
-
   // Parce qu'on commence toujours par celui-ci
   static showCommonPanel(){
-    this.activePanel = this.CustomPanel
-    this.togglePanel()
+    this.CommonPanel.open()
   }
-  static maskCommonPanel(){this.activePanel.close()}
+  static maskCommonPanel(){
+    this.CommonPanel.close()
+    this.CustomPanel.close()
+  }
 
   /**
    * Ajout du service dans le dictionnaire

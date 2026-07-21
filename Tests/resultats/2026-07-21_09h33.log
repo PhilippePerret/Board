@@ -1,0 +1,85 @@
+Moteur : pont
+Arguments : specs/e2e/projet_extradata_panel_change_projet.rb specs/e2e/projet_extradata_panel_changements_successifs_ferme.rb specs/e2e/projet_extradata_panel_ferme_apres_reload.rb specs/e2e/projet_extradata_panel_ferme_manuellement.rb specs/e2e/projet_extradata_panel_fermeture_redeselection.rb specs/e2e/projet_extradata_panel_jamais_ouvert.rb specs/e2e/projet_extradata_panel_suppression_projet_affiche.rb specs/e2e/projet_extradata_panel_affiche_donnees.rb specs/e2e/selection_projet_ferme_panneau_outils.rb specs/e2e/tools_panel.rb specs/e2e/app_data_panel.rb specs/e2e/attribution_service.rb specs/e2e/ajout_service_startup.rb specs/e2e/attribution_puis_execution_double_service.rb specs/e2e/attribution_service_ouvrir_fichier_choix_liste.rb specs/e2e/attribution_service_ouvrir_fichier_nom_explicite.rb specs/e2e/attribution_service_ouvrir_fichier_par_defaut.rb
+Date : 2026-07-21 09h33
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_change_projet.rb ---
+✗ panneau extra-data : changement de projet sans le fermer, réadapté à chaque fois
+    panneau fermé après sélection de B
+  (osascript : 9 appels, 0.094s)
+  (durée totale de la spec : 1.177s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_changements_successifs_ferme.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✓ panneau extra-data : changements de projet successifs sans jamais ouvrir le panneau
+  (osascript : 9 appels, 0.111s)
+  (durée totale de la spec : 1.342s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_ferme_apres_reload.rb ---
+✓ panneau extra-data : fermé par défaut après un rechargement
+  (osascript : 12 appels, 0.143s)
+  (durée totale de la spec : 1.285s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_ferme_manuellement.rb ---
+✓ panneau extra-data : fermé manuellement, reste fermé au changement de projet
+  (osascript : 12 appels, 0.094s)
+  (durée totale de la spec : 0.762s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_fermeture_redeselection.rb ---
+✓ panneau extra-data : redésélection du même projet ferme le panneau
+  (osascript : 10 appels, 0.101s)
+  (durée totale de la spec : 0.710s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_jamais_ouvert.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ panneau extra-data jamais ouvert : sélection/redésélection sans crash
+  (osascript : 7 appels, 0.078s)
+  (durée totale de la spec : 1.298s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_suppression_projet_affiche.rb ---
+✓ panneau extra-data : suppression du projet affiché ferme le panneau
+  (osascript : 13 appels, 0.144s)
+  (durée totale de la spec : 0.794s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/projet_extradata_panel_affiche_donnees.rb ---
+✓ panneau extra-data : ouverture affiche les données du projet sélectionné
+  (osascript : 9 appels, 0.091s)
+  (durée totale de la spec : 0.704s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/selection_projet_ferme_panneau_outils.rb ---
+✓ sélection d'un projet : ferme le panneau "Outils" s'il est ouvert
+  (osascript : 8 appels, 0.069s)
+  (durée totale de la spec : 0.697s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/tools_panel.rb ---
+✓ panneau 'Outils' : ouverture/fermeture, 1er outil (position/taille de fenêtre) activé
+  (osascript : 17 appels, 0.539s)
+  (durée totale de la spec : 1.151s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/app_data_panel.rb ---
+✓ panneau de réglages de l'application : édition string + app, persistance après rechargement
+  (osascript : 21 appels, 0.158s)
+  (durée totale de la spec : 3.828s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✓ attribution d'un service à un projet
+  (osascript : 23 appels, 3.482s)
+  (durée totale de la spec : 5.256s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/ajout_service_startup.rb ---
+✓ ajout d'un service au démarrage
+  (osascript : 25 appels, 3.409s)
+  (durée totale de la spec : 4.645s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_puis_execution_double_service.rb ---
+✓ attribution d'un service puis exécution deux fois de suite
+  (osascript : 24 appels, 6.800s)
+  (durée totale de la spec : 9.635s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_choix_liste.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec un logiciel choisi dans la liste
+  (osascript : 18 appels, 3.478s)
+  (durée totale de la spec : 4.198s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_nom_explicite.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec un nom de logiciel tapé explicitement
+  (osascript : 20 appels, 3.425s)
+  (durée totale de la spec : 4.149s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/attribution_service_ouvrir_fichier_par_defaut.rb ---
+✓ service 'Ouvrir le fichier…' : attribution avec le choix « par défaut » (aucune application précisée)
+  (osascript : 18 appels, 3.445s)
+  (durée totale de la spec : 4.163s)
+
+Échecs :
+1. panneau extra-data : changement de projet sans le fermer, réadapté à chaque fois
+    panneau fermé après sélection de B
+  (osascript : 9 appels, 0.094s)
+
+-------------------
+Success: 16  Failures: 1  Pendings: 0  Test count: 17
+Durée totale (moteur : pont) : 45.794s

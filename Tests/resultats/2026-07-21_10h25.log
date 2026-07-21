@@ -1,0 +1,13 @@
+Moteur : pont
+Arguments : specs/e2e/execution_service_ouvrir_fichier_introuvable.rb
+Date : 2026-07-21 10h25
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_service_ouvrir_fichier_introuvable.rb ---
+✓ service 'Ouvrir le fichier…' : fichier introuvable -> message d'erreur clair
+  (osascript : 5 appels, 0.135s)
+  (durée totale de la spec : 1.296s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 1.296s

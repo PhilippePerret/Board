@@ -13,20 +13,21 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
+  panel_id = "projet-extradata-panel-#{project_id}"
 
   wait_for(card_id)
   click(card_id)
   wait_for('btn-deal-project-extradata')
   click('btn-deal-project-extradata')
-  wait_for('projet-extradata-panel')
-  raise 'panneau pas ouvert après le clic' unless panel_open?('projet-extradata-panel')
+  wait_for(panel_id)
+  raise 'panneau pas ouvert après le clic' unless panel_open?(panel_id)
 
   click('btn-remove-project')
   wait_for('btn-mid')
   click('btn-mid')
 
   wait_until(desc: -> { "#{card_id} toujours présent dans l'accessibilité" }) { !exists?(card_id) }
-  wait_until(desc: -> { 'panneau toujours ouvert après suppression du projet affiché' }) { !panel_open?('projet-extradata-panel') }
+  wait_until(desc: -> { 'panneau toujours ouvert après suppression du projet affiché' }) { !panel_open?(panel_id) }
   raise 'Board a quitté après suppression du projet affiché dans le panneau ouvert' unless board_running?
 ensure
   remove_fixture_project(project_id) if project_id

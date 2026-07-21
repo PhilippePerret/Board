@@ -38,11 +38,14 @@ class SidePanel {
     historize("← SidePanel#toggle Panneau %s", this.title)
   }
   open(){
+    App.closeCurrentPanel()
     this.setState('opened')
+    App.currentPanel = this
     this.setOppositeButton() // Si nécessaire
   }
   close(){
     this.setState('closed')
+    if (App.currentPanel === this) App.currentPanel = null
   }
   setState(state){
     this.opened = (state == 'opened')
@@ -72,7 +75,7 @@ class SidePanel {
 
     if (this.oppositePanel) {
       const toggleBtn = DCreate('BUTTON', {id: `${this.domId}-toggle`, class: 'btn-deal-with-services', text: this.toggleLabel})
-      listen(toggleBtn, 'click', this.toggle.bind(this, this.oppositePanel))
+      listen(toggleBtn, 'click', this.toggleOpposites.bind(this))
       panel.appendChild(toggleBtn)
       this.toggleBtn = toggleBtn
     }

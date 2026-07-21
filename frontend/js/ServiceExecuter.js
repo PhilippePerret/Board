@@ -59,6 +59,7 @@ class ServiceExecuter {
   // Appelée après avoir exécuté le service
   afterRunService(retour){
     console.log("retour du run de service", retour)
+    if (retour.ok === false) { message(retour.error); return }
     message(retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
     console.log("ServiceExecuter # afterRunService termine normalement.")
     if (this.service.transient /* common service joué depuis panneau */) {

@@ -1,0 +1,19 @@
+Moteur : pont
+Arguments : specs/e2e/execution_service_ouvrir_fichier_introuvable.rb
+Date : 2026-07-21 10h41
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/execution_service_ouvrir_fichier_introuvable.rb ---
+✗ service 'Ouvrir le fichier…' : fichier introuvable -> message d'erreur clair
+    Timeout d'attente dépassé (4s) — message affiché = "unexpected character: 'The' at line 1 column 1"
+  (osascript : 26 appels, 0.185s)
+  (durée totale de la spec : 5.394s)
+
+Échecs :
+1. service 'Ouvrir le fichier…' : fichier introuvable -> message d'erreur clair
+    Timeout d'attente dépassé (4s) — message affiché = "unexpected character: 'The' at line 1 column 1"
+  (osascript : 26 appels, 0.185s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 5.394s

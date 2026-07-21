@@ -23,8 +23,8 @@ def run_test
   click('btn-deal-project-extradata')
 
   # → la ligne "genre" est affichée dans le panneau
-  wait_for('project-extradata-genre')
-  click('project-extradata-genre')
+  wait_for("project-extradata-#{project_id}-genre")
+  click("project-extradata-#{project_id}-genre")
 
   # → une SelectDialog s'ouvre avec les valeurs de GENRES_PROJETS
   wait_for('__genre__')

@@ -120,7 +120,6 @@ class Project {
   // Pour afficher et masquer les boutons du projet sélectionné
   static affProjectButtons(){
     this.divButtons.classList.remove('invisible')
-    App.closeCurrentPanel()
     Service.showCommonPanel()
   }
   static maskProjectButtons(){
@@ -152,30 +151,10 @@ class Project {
    */
   static onSelect(projet){
     const same = (projet.id === this.current?.id)
-    const openedPanel = String(this._openedPanel)
+    const reopenExtraData = !same && App.currentPanel instanceof ProjectExtraDataPanel
     this.current && this.deselect(this.current)
     same || this.select(projet)
-    if ( openedPanel && ! same) {
-      this.updateOpenedPanel(projet, openedPanel)
-    }
-  }
-
-  static closeProjectOpenedPanel(projet, openedPanel) {
-    historize('Project::closeProjectOpenedPanel / projet, openedPanel', {projet, openedPanel})
-    switch(openedPanel) {
-      case 'extra-data':
-        projet.stopDefineData()
-        break
-    }
-    delete this._openedPanel
-  }
-  static updateOpenedPanel(projet, openedPanel){
-    switch(openedPanel) {
-      case 'extra-data':
-        projet.defineExtraData()
-        break
-    }
-    this._openedPanel = openedPanel
+    if (reopenExtraData) projet.defineExtraData()
   }
 
   static select(projet){
@@ -185,8 +164,7 @@ class Project {
   }
   static deselect(projet){
     projet.obj.classList.remove('selected')
-    console.log("deselect / this._openedPanel = ", String(this._openedPanel))
-    if (this._openedPanel) this.closeProjectOpenedPanel(projet, this._openedPanel)
+    if (App.currentPanel instanceof ProjectExtraDataPanel) App.currentPanel.close()
     this.current = null
     this.maskProjectButtons()
   }
@@ -278,10 +256,6 @@ class Project {
   
   defineExtraData(){
     this.extraDataPanel.toggle()
-    this.constructor._openedPanel = 'extra-data'
-  }
-  stopDefineData(){
-    this.extraDataPanel.close()
   }
 
   /**
@@ -548,7 +522,6 @@ class Project {
   afterRemove(retour){
     this.obj.remove()
     if (this.id == this.constructor.current.id) this.constructor.deselect(this)
-    this.constructor.updateOpenedPanel()
     App.setData('projects-in', retour.data.newProjectsIn)
     App.setData('projects-out', retour.data.newProjectsOut)
   }

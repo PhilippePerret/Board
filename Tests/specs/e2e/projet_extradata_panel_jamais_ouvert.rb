@@ -13,15 +13,16 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
+  panel_id = "projet-extradata-panel-#{project_id}"
 
   # → jamais construit avant le 1er clic sur "Extra Data"
-  raise 'projet-extradata-panel présent dans le DOM avant tout clic sur "Extra Data"' if exists?('projet-extradata-panel')
+  raise 'projet-extradata-panel présent dans le DOM avant tout clic sur "Extra Data"' if exists?(panel_id)
 
   wait_for(card_id)
   click(card_id)
   click(card_id) # redésélection, panneau toujours pas construit
 
-  raise 'projet-extradata-panel construit alors qu\'il n\'a jamais été ouvert' if exists?('projet-extradata-panel')
+  raise 'projet-extradata-panel construit alors qu\'il n\'a jamais été ouvert' if exists?(panel_id)
   raise 'Board a quitté après sélection/redésélection sans jamais ouvrir le panneau' unless board_running?
 ensure
   remove_fixture_project(project_id) if project_id

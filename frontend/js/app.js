@@ -34,12 +34,10 @@ class App {
   static openAppDataPanel(ev) {
     stopEvent(ev)
     this.appDataPanel.toggle()
-    this.currentPanel = this.appDataPanel
   }
   static openToolsPanel(ev) {
     stopEvent(ev)
     this.toolsPanel.toggle()
-    this.currentPanel = this.toolsPanel
   }
 
   static observe(){

@@ -23,7 +23,9 @@ def run_test
   click(card_a)
   click(card_c)
 
-  raise 'projet-extradata-panel construit alors qu\'il n\'a jamais été ouvert' if exists?('projet-extradata-panel')
+  [project_id_a, project_id_b, project_id_c].each do |id|
+    raise 'projet-extradata-panel construit alors qu\'il n\'a jamais été ouvert' if exists?("projet-extradata-panel-#{id}")
+  end
   raise 'Board a quitté après plusieurs changements de projet, panneau jamais ouvert' unless board_running?
 ensure
   remove_fixture_project(project_id_a) if project_id_a

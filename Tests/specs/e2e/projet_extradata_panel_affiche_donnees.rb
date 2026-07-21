@@ -11,6 +11,8 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
+  panel_id = "projet-extradata-panel-#{project_id}"
+  genre_id = "project-extradata-#{project_id}-genre"
 
   wait_for(card_id)
   click(card_id)
@@ -18,11 +20,11 @@ def run_test
   wait_for('btn-deal-project-extradata')
   click('btn-deal-project-extradata')
 
-  wait_for('projet-extradata-panel')
-  raise 'panneau construit mais marqué fermé après ouverture' unless panel_open?('projet-extradata-panel')
+  wait_for(panel_id)
+  raise 'panneau construit mais marqué fermé après ouverture' unless panel_open?(panel_id)
 
-  wait_until(desc: -> { "genre affiché = #{get_text('project-extradata-genre').inspect}" }) do
-    get_text('project-extradata-genre').include?('Roman')
+  wait_until(desc: -> { "genre affiché = #{get_text(genre_id).inspect}" }) do
+    get_text(genre_id).include?('Roman')
   end
 ensure
   remove_fixture_project(project_id) if project_id

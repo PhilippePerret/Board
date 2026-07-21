@@ -16,8 +16,8 @@ class ProjectExtraDataPanel extends SidePanelDefiner {
   }
 
   get title() { return "Données supplémentaires du projet" }
-  get domId() { return 'projet-extradata-panel'}
-  get prefixDom() { return 'project-extradata'}
+  get domId() { return `projet-extradata-panel-${this.project.id}` }
+  get prefixDom() { return `project-extradata-${this.project.id}` }
   get PARAMS_DATA() { return PROJECT_EXTRA_DATA }
 
   currentValue(dParam){

@@ -15,23 +15,27 @@ def run_test
 
   card_a = "project-#{project_id_a}"
   card_b = "project-#{project_id_b}"
+  panel_a = "projet-extradata-panel-#{project_id_a}"
+  panel_b = "projet-extradata-panel-#{project_id_b}"
+  genre_a = "project-extradata-#{project_id_a}-genre"
+  genre_b = "project-extradata-#{project_id_b}-genre"
 
   wait_for(card_a)
   click(card_a)
   wait_for('btn-deal-project-extradata')
   click('btn-deal-project-extradata')
-  wait_for('projet-extradata-panel')
+  wait_for(panel_a)
 
   # - cas 4 : sélection de B sans déselectionner A à la main
   click(card_b)
 
-  raise 'panneau fermé après sélection de B' unless panel_open?('projet-extradata-panel')
-  wait_until(desc: -> { "genre affiché = #{get_text('project-extradata-genre').inspect}" }) do
-    get_text('project-extradata-genre').include?('Jeu')
+  raise 'panneau fermé après sélection de B' unless panel_open?(panel_b)
+  wait_until(desc: -> { "genre affiché = #{get_text(genre_b).inspect}" }) do
+    get_text(genre_b).include?('Jeu')
   end
 
   # - cas 5 : modifier une valeur depuis B → s'applique à B, pas à A
-  click('project-extradata-genre')
+  click(genre_b)
   wait_for('__genre__')
   set_value('__genre__', 'Application')
   click('btn-oui')
@@ -45,9 +49,9 @@ def run_test
   # - cas 6 : resélectionner A → panneau réadapté à A
   click(card_a)
 
-  raise 'panneau fermé après retour sur A' unless panel_open?('projet-extradata-panel')
-  wait_until(desc: -> { "genre affiché = #{get_text('project-extradata-genre').inspect}" }) do
-    get_text('project-extradata-genre').include?('Roman')
+  raise 'panneau fermé après retour sur A' unless panel_open?(panel_a)
+  wait_until(desc: -> { "genre affiché = #{get_text(genre_a).inspect}" }) do
+    get_text(genre_a).include?('Roman')
   end
 ensure
   remove_fixture_project(project_id_a) if project_id_a

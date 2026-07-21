@@ -14,20 +14,21 @@ def run_test
 
   card_a = "project-#{project_id_a}"
   card_b = "project-#{project_id_b}"
+  panel_a = "projet-extradata-panel-#{project_id_a}"
 
   wait_for(card_a)
   click(card_a)
   wait_for('btn-deal-project-extradata')
   click('btn-deal-project-extradata')
-  wait_for('projet-extradata-panel')
-  raise 'panneau pas ouvert après le clic' unless panel_open?('projet-extradata-panel')
+  wait_for(panel_a)
+  raise 'panneau pas ouvert après le clic' unless panel_open?(panel_a)
 
-  click('projet-extradata-panel-close')
-  wait_until(desc: -> { 'panneau toujours ouvert après clic sur "Fermer"' }) { !panel_open?('projet-extradata-panel') }
+  click("#{panel_a}-close")
+  wait_until(desc: -> { 'panneau toujours ouvert après clic sur "Fermer"' }) { !panel_open?(panel_a) }
 
   click(card_b)
 
-  raise 'panneau rouvert après changement de projet alors qu\'il avait été fermé manuellement' if panel_open?('projet-extradata-panel')
+  raise 'panneau rouvert après changement de projet alors qu\'il avait été fermé manuellement' if panel_open?(panel_a)
   raise 'Board a quitté après changement de projet, panneau fermé' unless board_running?
 ensure
   remove_fixture_project(project_id_a) if project_id_a

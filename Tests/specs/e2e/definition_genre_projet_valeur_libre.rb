@@ -24,8 +24,8 @@ def run_test
   click('btn-deal-project-extradata')
 
   # → la ligne "genre" est affichée dans le panneau
-  wait_for('project-extradata-genre')
-  click('project-extradata-genre')
+  wait_for("project-extradata-#{project_id}-genre")
+  click("project-extradata-#{project_id}-genre")
 
   # → la SelectDialog s'ouvre, avec un bouton "Autre valeur…"
   wait_for('btn-mid')

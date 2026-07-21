@@ -181,9 +181,25 @@ RESET=$'\e[0m'
 #             les specs @only tournent (les autres, même passées en argument,
 #             sont ignorées).
 #   # @skip  → la spec est toujours exclue, sauf si elle porte aussi @only.
+#   # @long  → exclue par défaut (spec lente, ex. attente réelle > quelques
+#             secondes) ; incluse si l'option --long est passée, ou si la
+#             spec porte aussi @only.
+#
+# --long (n'importe où parmi les arguments) : inclut aussi les specs @long.
 
 # Motif shell (ex. "e2e/supp*") : à quoter en argument sinon le shell
 # tentera de l'expandre lui-même depuis le dossier courant.
+
+LONG_MODE=0
+ARGS=()
+for a in "$@"; do
+  if [ "$a" = "--long" ]; then
+    LONG_MODE=1
+  else
+    ARGS+=("$a")
+  fi
+done
+set -- "${ARGS[@]}"
 
 resolve_path() {
   if [ -e "$1" ]; then
@@ -234,7 +250,9 @@ if [ "${#ONLY_SPECS[@]}" -gt 0 ]; then
   SPECS=("${ONLY_SPECS[@]}")
 else
   for f in "${ALL_SPECS[@]}"; do
-    grep -q '@skip' "$f" || SPECS+=("$f")
+    grep -q '@skip' "$f" && continue
+    [ "$LONG_MODE" -eq 0 ] && grep -q '@long' "$f" && continue
+    SPECS+=("$f")
   done
 fi
 

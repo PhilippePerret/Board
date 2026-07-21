@@ -12,18 +12,19 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
+  panel_id = "projet-extradata-panel-#{project_id}"
 
   wait_for(card_id)
   click(card_id)
   wait_for('btn-deal-project-extradata')
   click('btn-deal-project-extradata')
-  wait_for('projet-extradata-panel')
-  raise 'panneau pas ouvert après le clic' unless panel_open?('projet-extradata-panel')
+  wait_for(panel_id)
+  raise 'panneau pas ouvert après le clic' unless panel_open?(panel_id)
 
   launch_app # relance Board (kill + reopen), pendant que le panneau était ouvert
 
   wait_for(card_id)
-  raise 'panneau extra-data déjà construit juste après le reload' if exists?('projet-extradata-panel')
+  raise 'panneau extra-data déjà construit juste après le reload' if exists?(panel_id)
 ensure
   remove_fixture_project(project_id) if project_id
 end

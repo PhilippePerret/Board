@@ -1,13 +1,20 @@
 == BUGS ==
 
-- quand on choisit la couleur de fond, s'il y en a déjà une, on doit l'appliquer au picker de couleurs
-- Quand on choisit une icône, elle devrait s'afficher tout de suite.
+- (pas vraiment un bug) Il faut trouver un autre moyen de faire apparaitre les services startup. Moyen à adopter : 
+  > au survol, on n'affiche plus la boite des services. On affiche un message "Maj+clic pour montrer les services"
+  > + nouvelle fonction on maj+click pour afficher les services startup
+  > peut-être : ne plus les mettre en position:absolute, que ça ouvre un espace avec les services bien visibles
+  > + on referme en refaisant maj+clic
 
 == Todo En cours  
 
+- faire passer tous les tests
+
 == Todo list ==
 
-- faire passer tous les tests
+- pouvoir récupérer les tâches de todoist
+- pouvoir ajouter des tâches à todoist
+
   
 - utiliser des icônes SVG simples (pour l'interface)
 - pouvoir éditer le fichier d'un script perso
