@@ -74,7 +74,7 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id: 'docu-main-file-html', type: 'project', if_undefined: {q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}}
       ]
-    , afterDefined: (params) => { 
+    , afterDefinedParams: (params) => { 
         params[0] = `file://${params[0]}`
         return params
     }

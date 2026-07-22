@@ -20,7 +20,7 @@ En apparence, ce service doit être simple :
 Notre fichier YAML comprendra donc ces étapes, assurément : 
 
 [code, yaml]
-====
+----
 ---
 - name: "Création du dossier de l'éditeur"
 
@@ -30,11 +30,14 @@ Notre fichier YAML comprendra donc ces étapes, assurément :
 
 - name: "Enregistrement envoi dans l'historique"
 
-====
+----
 
-Chaque étape doit avoir un identifiant ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l'identifiant contient des tirets, il doit obligatoirement être entre guillemets.
+Noter que le `name` des étapes est optionnel, mais pour la clarté, il vaut mieux le définir.
 
-====
+En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'est une valeur ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l'identifiant contient des tirets, il doit obligatoirement être entre guillemets.
+
+[code, yaml]
+----
 ---
 - name: "Création du dossier de l'éditeur"
   id: "creer-dossier-editeur"
@@ -48,4 +51,4 @@ Chaque étape doit avoir un identifiant ne comportant que des lettres minuscules
 - name: "Enregistrement envoi dans l'historique"
   id: historique
 
-====
+----
