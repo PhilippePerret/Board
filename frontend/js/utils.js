@@ -7,6 +7,9 @@ function aide(key) {
   return `[Lien vers aide '${key}']`
 }
 
+// Pour faire Object.isObject(obj)
+Object.isObject = obj => Object.getPrototypeOf(obj) === Object.prototype;
+
 /**
  * Utilisation 
  * const fonction = debounce( (arg) => {

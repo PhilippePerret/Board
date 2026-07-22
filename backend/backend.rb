@@ -174,6 +174,14 @@ begin
   # de [id, title] pour select
   when 'get-options-for-projects-out'
     RETOUR.data = options_for_archived_project
+
+  # Évaluation d'un fichier et retour du résultat.
+  # Par exemple, un fichier YAML, CSV, JSON, etc. ou un fichier
+  # exécutable
+  when 'evaluate-file'
+    require_relative 'lib/evaluate_file.rb'
+    FileHandy.evaluate(request['path'])
+
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"

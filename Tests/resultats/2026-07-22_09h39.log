@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : script_service_step_validate.rb --no-overlay
+Date : 2026-07-22 09h39
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/script_service_step_validate.rb ---
+✗ ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+    [étape valide (create-folder)] attendu aucune erreur, obtenu ["scserv-unknown-param"]
+  (osascript : 3 appels, 0.070s)
+  (durée totale de la spec : 0.736s)
+
+Échecs :
+1. ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+    [étape valide (create-folder)] attendu aucune erreur, obtenu ["scserv-unknown-param"]
+  (osascript : 3 appels, 0.070s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.736s

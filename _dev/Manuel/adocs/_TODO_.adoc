@@ -1,7 +1,5 @@
 == BUGS ==
 
-- quand on ouvre la documentation, ça ne fait rien (ça affiche bien le message de confirmation mais rien ne se passe)
-
 == Todo En cours
 
 - pouvoir éditer le script-service en meta-cliquant dessus

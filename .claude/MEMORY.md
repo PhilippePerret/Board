@@ -26,3 +26,4 @@
 - [Ne pas répéter la note bundle](feedbacks/stop_repeating_bundle_sync_note.md) — la sync Board.app est son job, pas la peine de le rappeler à chaque fix
 - ["S'il te plaît" obligatoire](feedbacks/no_please_direct_ask.md) — toute demande d'action à Phil doit dire "s'il te plaît", sinon c'est un ordre
 - [Pas de rappel "pas compilé/testé"](feedbacks/stop_repeating_not_compiled_tested.md) — ne pas répéter systématiquement après chaque edit
+- [Design tests validate()](feedbacks/step_validation_test_design.md) — unitaire direct (bridge_eval) + toujours un cas valide de contrôle, jamais que des invalidités

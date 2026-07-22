@@ -1,14 +1,28 @@
+[[scripts-services, les scripts-services]]
 ==== Les scripts-services ====
 
 Les _scripts-services_ ouvrent définitivement la voie de l'infini pour définir les services d'un projet. Ils permettent de **composer soi-même un service** en exploitant toutes les ressources de l'application.
 
 Mais tout pouvoir puissant implique des responsabilités à ses propotions.
 
+[[script-services-steps]]
 ===== Une suite d'étapes =====
 
-Un _script-service_ est un fichier YAML qui décrit les étapes du service.
+Un _script-service_ est un fichier YAML qui décrit les étapes du service. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.
 
-Pour illustrer l'explication, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d'envoi de manuscrits à des maisons d'édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l'on écrit un roman, voire plus, par an.
+[code, yaml]
+----
+---
+- name: Première étape
+
+- name: Deuxième étape
+
+- name: Troisième étape
+
+# etc.
+----
+
+Pour illustrer l'explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d'envoi de manuscrits à des maisons d'édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l'on écrit un roman, voire plus, par an.
 
 En apparence, ce service doit être simple : 
 
@@ -52,3 +66,9 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
   id: historique
 
 ----
+
+
+À PLACER
+Quand le type est '<type>-or-path', path peut contenir le type attendu.
+Si <path> est un fichier autre que .yaml, .json ou .csv, il doit être EXÉCUTABLE et retourner un données ÉVALUABLE PAR JSON (JSON.parse en ruby).
+Si le fichier n'est pas exécutable (`chmod +x fichier`) ou qu'il ne retourne pas une donnée au format JSON, une erreur sera produite.

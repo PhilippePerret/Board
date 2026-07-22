@@ -1,5 +1,8 @@
+const UNIV_KEYS = {id: true, type: true, name: true}
+
 class ScriptService {
 
+  /* -- Point d'entrée principal -- */
   static run(projet, data){
     const scriptPath = data[0]
     const service = new ScriptService(projet, scriptPath)
@@ -9,35 +12,44 @@ class ScriptService {
   constructor(projet, scriptPath){
     this.projet     = projet
     this.scriptPath = scriptPath
+    this.steps      = []
     this.values     = {}
   }
 
+  /* -- Point d'entrée secondaire -- */
   run(retour){
     if (undefined == retour) {
       server.send({action: 'load-yaml-file', path: this.scriptPath, no_raise: true}, this.run.bind(this))
     } else if (retour.error) {
       this.displayErrors([retour.error])
+    } else if (!Array.isArray(retour.data)) {
+        return this.displayErrors([msgErr('scserv-list-required',[aide('script-services-steps')])])
     } else {
-      if (!Array.isArray(retour.data)) {
-        return error(`Script-service invalide (${this.scriptPath}) : ce n’est pas une liste d’étapes.`)
+      this.steps = retour.data.map(stepData => new ServStep(this, stepData))
+      if ( this.serviceIsValid() ) { 
+        this.execNextStep() 
       } else {
-        this.execSteps(retour.data)
+
       }
     }
   }
 
-  execSteps(serviceData){
-    this.steps = serviceData.map(data => new ServStep(this, data))
-    if (this.serviceIsValid()) { this.execNextStep() }
-  }
-
-  // Pré-analyse : chaque étape est vérifiée AVANT de commencer à en exécuter
-  // une seule (un type inconnu ou une étape mal formée doit être vu tout de
-  // suite, pas en cours de route).
+  /**
+   * Analyse de la validité du script-service (ses data)
+   */
   serviceIsValid(){
-    const errors = this.steps.flatMap(step => step.validate())
-    if (errors.length > 0) { return this.displayErrors(errors) }
-    return true
+    let errors = []
+    // Définitions générales, par exemple les formats de date
+    // Todo
+    // Validité de chaque étape
+    errors = [...errors, ...this.steps.flatMap(step => step.validate())]
+    // Rapport final
+    if (errors.length > 0) { 
+      this.displayErrors(errors) 
+      return false
+    } else {
+      return true
+    }
   }
 
   /************************************************************/
@@ -48,7 +60,7 @@ class ScriptService {
     if ( step ) { 
       step.exec(this.execNextStep.bind(this))
     } else {
-      message('Script-service terminé.'); return 
+      message(getMsg('scserv-end')); return 
     }
   }
 
@@ -61,7 +73,7 @@ class ScriptService {
   /*                    USEFULL METHODS                             */
   /******************************************************************/
 
-  // Pour éditer le fichier de données
+  // Pour éditer le fichier YAML de données du script script-service
   openData(retour){
     if (undefined == retour) {
       server.send({action: 'open-file-yaml', path: this.scriptPath}, this.openData.bind(this))
@@ -70,6 +82,7 @@ class ScriptService {
     }
   }
 
+  // Affichage des erreurs rencontrées
   displayErrors(errors){
     const containerErrors = DCreate('DIV', {
       class: 'error break-all small', 
@@ -107,7 +120,7 @@ class ServStep {
   constructor(scriptService, data){
     this.scriptService = scriptService
     this.data           = data
-    this.id             = data.id ?? null
+    this.id             = data.id
     this.type           = data.type
     this.params         = data.params
   }
@@ -116,29 +129,79 @@ class ServStep {
   validate(){
     const errors = []
     try {
-      this.type ?? raise(`Le service '${this.id}' doit toujours avoir un type (${aide('scripts-services')}).`)
-      this.id ?? raise(`Un script-service doit absolument avoir un identifiant (${aide('scripts-services')}).`)
-      this.id.replace(/[0-9a-z]/gi, '') == '' || raise(`L’identifiant ${this.id} n'est pas valide (${aide('script-service-valid-id')})`)
-      const dataType = SCRIPT_SERVICE_KNOWN_TYPES.includes(this.type) || raise(`type d’étape inconnu : ${this.type} ${aide('script-service-types-valides')}`)
+      this.id ?? raise('scserv-id-required', aide('scripts-services'))
+      this.id.replace(/[0-9a-z]/gi, '') == '' || raise('scserv-id-invalid', [this.id, aide('script-service-valid-id')])
+      this.type ?? raise('scserv-type-required', [this.id, aide('scripts-services')])
+      const dataType = SCRIPT_SERVICES_KNOWN_TYPES[this.type] || raise('scserv-step-type-unknowned', [this.type, aide('script-service-types-valides')])
       const keyAide = `script-service-type-${this.type}`
-      const aideType = ` (${aide(keyAide)})`
+      const aideType = aide(keyAide)
       // Y a-t-il tous les paramètres requis
-      const ValidifierParams = SCRIPT_SERVICES_KNOWN_TYPES[this.type].params
-      for (var kparam in ValidifierParams){
-        if (! ValidifierParams[kparam].required === true) return
-        this.params[kparam] || raise(`Le paramètre '${kparam}' est requis, pour le type '${this.type}'${aideType}`)
+      const paramsValidator = SCRIPT_SERVICES_KNOWN_TYPES[this.type].params
+      for (var kparam in paramsValidator){
+        // Condition : le paramètre doit être défini
+        if (! paramsValidator[kparam].required === true) return
+        this.data[kparam] || raise('scserv-param-required', [kparam, this.type, aideType])
       }
-      // Les paramètres définis sont-ils valides
-      for (kparam in this.params) {
-        const dataParam = this.params[kparam]
-        const validifier = ValidifierParams[kparam]
-        validifier || raise(`Le paramètre '${kparam}' est inconnu du service de type '${this.type}'${aideType}`)
-        typeof dataParam == validifier.type || raise(`Le paramètre '${kparam}' n'a pas le bon type. Attendu: ${validifier.type}, actuel: ${typeof dataParam}.${aideType}`)
+      // À l'inverse, les paramètres définis sont-ils valides
+      for (kparam of Object.getOwnPropertyNames(this.data)) {
+        if (UNIV_KEYS[kparam]) continue
+        const dataParam = this.data[kparam]
+        const validator = paramsValidator[kparam]
+        validator || raise( 'scserv-unknown-param', [kparam, this.type, aideType])
+        // Test du type de la valeur du paramètre (et définition si c'est un fichier)
+        if (Array.isArray(validator.type)) {
+          const mainType = validator.type[0] // par exemple 'array-of-object
+          const altType  = validator.type[1] // On part du principe qu'il ne peut y avoir qu'un second type… (Hasardeux, quand même)
+          this.preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, aideType)
+        } else {
+          this.checkParamTypeAgainst(kparam, dataParam, validator.type, aideType)
+        }
       }
     } catch(err) {
       errors.push(err)
     }
     return errors
+  }
+
+  preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, aideType) {
+    // Pour le moment, on part du principe (hasardeux) que altType, s'il est défini,
+    // est toujours un path
+    if (altType == 'path' && typeof dataParam == 'string') {
+      // La valeur est un path définissant un fichier : on doit le 
+      // charger en l'évaluant pour obtenir une donnée de type mainType
+      server.send({action:'evaluate-file', path: dataParam}, this.beforeCheckParamTypeAgainst.bind(this, kparam, mainType, aideType))
+    } else {
+      this.checkParamTypeAgainst(kparam, dataParam, mainType, aideType)
+    }
+  }
+
+  // Retour de l'évaluation du fichier contenant les données
+  beforeCheckParamTypeAgainst(kparam, mainType, aideType, retour){
+    console.log("Retour dans beforeCheckParamTypeAgainst", retour)
+    this.checkParamTypeAgainst(kparam, retour.data, mainType, aideType)  
+    // On doit mettre les données dans le paramètre de l'étape
+    this.data[kparam] = retour.data
+  }
+
+  checkParamTypeAgainst(kparam, dataParam, mainType, aideType){
+    try {
+      let pType
+      switch(mainType){
+        // Un typeof qui n'existe pas
+        case 'array-of-object':
+          Array.isArray(dataParam) || raise(typeof dataParam)
+          for (var len = dataParam.length, i = 0; i < len; ++i) {
+            Object.isObject(dataParam[i]) || raise(typeof dataParam[i])
+          }
+          break
+        default:
+          pType = typeof dataParam
+      }
+      pType == mainType || raise(pType)
+    } catch (err) {
+      raise('scserv-param-bad-type', [kparam, mainType, getErr(err), aideType])
+    }
+
   }
 
   exec(callback){

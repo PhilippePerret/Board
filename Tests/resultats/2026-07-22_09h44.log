@@ -1,0 +1,12 @@
+Moteur : pont
+Arguments : script_service_step_validate.rb --no-overlay
+Date : 2026-07-22 09h44
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/script_service_step_validate.rb ---
+✓ ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+  (osascript : 7 appels, 0.087s)
+  (durée totale de la spec : 0.750s)
+
+-------------------
+Success: 1  Failures: 0  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.750s

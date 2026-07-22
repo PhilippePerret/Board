@@ -31,6 +31,13 @@ BOARD_DIR="$HOME/Library/Application Support/Board"
 BOARD_WAS_RUNNING=0
 pgrep -x Board >/dev/null 2>&1 && BOARD_WAS_RUNNING=1
 
+# --no-overlay : saute la fenêtre plein écran "SET TESTS BOARD EN COURS…"
+# (utile pour observer/piloter Board pendant qu'une spec tourne).
+NO_OVERLAY=0
+for a in "$@"; do
+  [ "$a" = "--no-overlay" ] && NO_OVERLAY=1
+done
+
 # VTEST_DIR = Dossier de la version de test (base, améliorée, etc.)
 VTEST_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Dossier principal des tests de l'application
@@ -59,21 +66,24 @@ exec > >(tee >(sed -E $'s/\x1b\\[[0-9;]*m//g' >> "$RESULT_FILE")) 2>&1
 # qu'un test en échec aurait laissées traîner).
 INITIAL_FINDER_WINDOW_IDS=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" window-ids 2>/dev/null | tr '\n' ',' | sed 's/,$//' || true)
 
-# Fenêtre plein écran, sans titre ni bouton, pendant toute la suite
-# (Tests/support/overlay.swift, compilé une fois) : pilotée par une FIFO,
-# jamais de focus clavier/souris volé.
-OVERLAY_SWIFT_SOURCE="$MAIN_TESTS_DIR/support/overlay.swift"
-OVERLAY_BIN="$MAIN_TESTS_DIR/support/overlay"
-if [ ! -e "$OVERLAY_BIN" ] || [ "$OVERLAY_SWIFT_SOURCE" -nt "$OVERLAY_BIN" ]; then
-  swiftc "$OVERLAY_SWIFT_SOURCE" -framework Cocoa -o "$OVERLAY_BIN"
-fi
 mkdir -p "$MAIN_TESTS_DIR/.board-backups"
-OVERLAY_FIFO=$(mktemp -u "$MAIN_TESTS_DIR/.board-backups/overlay-fifo.XXXXXX")
-mkfifo "$OVERLAY_FIFO"
-"$OVERLAY_BIN" < "$OVERLAY_FIFO" &
-OVERLAY_PID=$!
-exec 3>"$OVERLAY_FIFO"
-echo "SET TESTS BOARD EN COURS…" >&3
+
+if [ "$NO_OVERLAY" -eq 0 ]; then
+  # Fenêtre plein écran, sans titre ni bouton, pendant toute la suite
+  # (Tests/support/overlay.swift, compilé une fois) : pilotée par une FIFO,
+  # jamais de focus clavier/souris volé.
+  OVERLAY_SWIFT_SOURCE="$MAIN_TESTS_DIR/support/overlay.swift"
+  OVERLAY_BIN="$MAIN_TESTS_DIR/support/overlay"
+  if [ ! -e "$OVERLAY_BIN" ] || [ "$OVERLAY_SWIFT_SOURCE" -nt "$OVERLAY_BIN" ]; then
+    swiftc "$OVERLAY_SWIFT_SOURCE" -framework Cocoa -o "$OVERLAY_BIN"
+  fi
+  OVERLAY_FIFO=$(mktemp -u "$MAIN_TESTS_DIR/.board-backups/overlay-fifo.XXXXXX")
+  mkfifo "$OVERLAY_FIFO"
+  "$OVERLAY_BIN" < "$OVERLAY_FIFO" &
+  OVERLAY_PID=$!
+  exec 3>"$OVERLAY_FIFO"
+  echo "SET TESTS BOARD EN COURS…" >&3
+fi
 
 BACKUPS_ROOT="$MAIN_TESTS_DIR/.board-backups"
 mkdir -p "$BACKUPS_ROOT"
@@ -131,12 +141,14 @@ teardown() {
   if [ "$BOARD_WAS_RUNNING" -eq 1 ]; then
     open "$APP_DIR/Board.app"
   fi
-  echo "SET MERCI." >&3 2>/dev/null || true
-  sleep 2
-  echo "QUIT" >&3 2>/dev/null || true
-  exec 3>&- 2>/dev/null || true
-  kill "$OVERLAY_PID" 2>/dev/null || true
-  rm -f "$OVERLAY_FIFO" 2>/dev/null || true
+  if [ "$NO_OVERLAY" -eq 0 ]; then
+    echo "SET MERCI." >&3 2>/dev/null || true
+    sleep 2
+    echo "QUIT" >&3 2>/dev/null || true
+    exec 3>&- 2>/dev/null || true
+    kill "$OVERLAY_PID" 2>/dev/null || true
+    rm -f "$OVERLAY_FIFO" 2>/dev/null || true
+  fi
   rm -f "$BOARD_TEST_BRIDGE_SOCKET" 2>/dev/null || true
 }
 
@@ -195,6 +207,8 @@ ARGS=()
 for a in "$@"; do
   if [ "$a" = "--long" ]; then
     LONG_MODE=1
+  elif [ "$a" = "--no-overlay" ]; then
+    :
   else
     ARGS+=("$a")
   fi
