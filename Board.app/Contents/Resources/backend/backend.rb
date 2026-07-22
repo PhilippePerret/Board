@@ -3,18 +3,47 @@ require './lib/debug.rb'
   
 begin
 
-  returned_error  = nil
-  ok = true
-  error = nil
-  returned_data   = nil
-  
+  # Pour le retour
+  class Retour
+    attr_accessor :ok
+    attr_accessor :returned_message, :returned_data, :returned_error
+    attr_accessor :no_raise, :request_id, :request
+    def init(request)
+      self.request = request
+      self.ok = true
+      self.request_id = request['id']
+      self.returned_message = nil
+      self.returned_data = nil
+      self.returned_error = nil
+      self.no_raise = request['no_raise'] === true
+    end
+    def output
+      {
+        ok:       self.ok,
+        id:       self.request_id,
+        message:  self.returned_message,
+        error:    self.returned_error,
+        data:     self.returned_data,
+        request:  self.request
+      }
+    end
+  end
+
   # La requête frontend se trouve dans cette requête qui est une
   # table JSON
   input = STDIN.read.strip
   request = JSON.parse(input)
 
-  # ID de la requête (pour suivi)
-  request_id = request["id"]
+  RETOUR = Retour.new
+  RETOUR.init(request)
+
+  def ok=(value) RETOUR.ok = value end
+  def error=(value) RETOUR.returned_error = value end
+  def returned_message=(value) RETOUR.returned_message = value end
+  def returned_error=(value) RETOUR.returned_error = value end
+  def returned_data=(value) RETOUR.returned_data = value end
+
+  no_raise = RETOUR.no_raise
 
   #######################################
   ###       Analyse de l'ACTION       ###
@@ -55,7 +84,7 @@ begin
       APP_DATA['projects-in'].map do |project_id|
         YAML.safe_load(IO.read(project_path(project_id)))
       end
-    returned_data = {
+    RETOUR.returned_data = {
       appData: APP_DATA,
       projectsData: projects_data
     }
@@ -72,13 +101,11 @@ begin
   # /System/Applications (+ Utilities) : apps système (Preview, Terminal…),
   # pas dans /Applications depuis macOS Ventura.
   when 'list-applications'
-    ok = true
     app_dirs = ['/Applications/*.app', '/System/Applications/*.app', '/System/Applications/Utilities/*.app']
     returned_data = { apps: app_dirs.flat_map { |g| Dir.glob(g) }.map { |p| File.basename(p, '.app') }.uniq.sort }
 
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
-    ok = true
     returned_data = run_script('getInfoFinderSelection.scpt')
     if returned_data["ok"] != false
       returned_data['createdAt'] = human_date_to_aaammjj(returned_data['createdAt'])
@@ -86,56 +113,26 @@ begin
     end
   # Pour récupérer les informations de la fenêtre courante du Finder
   when 'getInfoFinderWindow'
-    ok = true
     returned_data = run_script('getInfoFinderWindow.scpt')
 
   # Panneau "Outils" (ToolsData.js/Tools.js) — applications visibles
   # (Dock), pour choisir celle dont on veut la position/taille de fenêtre
   when 'list-running-apps'
-    ok = true
     returned_data = run_script('GetRunningApps.scpt')
 
   # Panneau "Outils" : position + taille de la fenêtre de premier plan de
   # request['appName'] — copiées dans le presse-papier par le script lui-même
   when 'get-app-window-bounds'
-    ok = true
     returned_data = run_script('GetAppWindowBounds.scpt', [request['appName']])
   
-  # Écriture du changelog et de la todo-list du projet (fin de séance
-  # d'horloge, service commun "work-clock") — ajout en tête de fichier, en
-  # gardant le contenu déjà là. Crée le fichier s'il n'existe pas.
+  # Écriture du changelog et de la todo-list après minuteur
   when 'update-project-notes'
-    project_dir    = request['path']
-    changelog_text = request['changelog']
-    todo_text      = request['todo']
-    Debug.log("update-project-notes reçu, path=#{project_dir.inspect} changelog=#{changelog_text.inspect} todo=#{todo_text.inspect}")
-
-    if changelog_text && !changelog_text.strip.empty?
-      changelog_file = File.join(project_dir, 'CHANGELOG.md')
-      existed  = File.exist?(changelog_file)
-      existing = existed ? IO.read(changelog_file) : ''
-      header   = existed ? '' : "# Changelog\n\n"
-      date     = Time.now.strftime('%Y/%m/%d')
-      entry    = "## #{date}\n\n#{changelog_text.strip}\n\n"
-      IO.write(changelog_file, header + entry + existing)
-    end
-
-    if todo_text && !todo_text.strip.empty?
-      todo_file = File.join(project_dir, 'TODO.md')
-      existed  = File.exist?(todo_file)
-      existing = existed ? IO.read(todo_file) : ''
-      header   = existed ? '' : "# Todo list\n\n"
-      lines    = todo_text.strip.split("\n").map(&:strip).reject(&:empty?)
-      entry    = lines.map { |l| "- [ ] #{l}" }.join("\n") + "\n\n"
-      IO.write(todo_file, header + entry + existing)
-    end
-
-    ok = true
+    require_relative 'lib/project_files.rb'
 
   # ========== EXÉCUTIONS DES SERVICES =================
+
   when 'exec-service'
     Debug.log("exec-service reçu, script=#{request['script']} params=#{request['params'].inspect}")
-    ok = true
     returned_data = run_script(request["script"], request["params"])
     Debug.log("exec-service résultat = #{returned_data.inspect}")
     ok = returned_data["ok"] if returned_data.key?("ok")
@@ -146,14 +143,13 @@ begin
   when 'load-yaml-file'
     path = request['path']
     if !File.exist?(path)
-      ok = false
+      ok = !! no_raise
       error = "Fichier introuvable : #{path}"
     else
       begin
         returned_data = YAML.safe_load(File.read(path))
-        ok = true
       rescue Psych::SyntaxError => e
-        ok = false
+        ok = !! no_raise
         error = "YAML invalide (#{path}) : #{e.message}"
       end
     end
@@ -161,43 +157,32 @@ begin
   when 'create-folder'
     begin
       FileUtils.mkdir_p(request['data'])
-      ok = true
     rescue => e
-      ok = false
+      ok = !! no_raise
       error = e.message
     end
 
   # Pour récupérer un projet des archives
   when 'retreive-project-from-archives'
-    ok = true
     returned_data = move_project_out_to_projects_in(request["projectId"])
     
   # Pour obtenir la liste des projets en archives (comme une liste
   # de [id, title] pour select
   when 'get-options-for-projects-out'
-    ok = true
     returned_data = options_for_archived_project
   # action inconnue => ERRREUR
   else 
-    ok = false
+    ok = !! no_raise
     returned_error = "unknown action: #{request["action"]}"
-
   end
   
-  ###########################################
-  ###   La table JSON retournée au front  ###
-  ###########################################
-  puts ({
-    ok:       ok,
-    id:       request_id,
-    message:  returned_message,
-    error:    error || returned_error,
-    data:     returned_data,
-    received_request:  request
-  }.to_json)
-
 rescue => e
-  puts({ ok: false, id: (defined?(request_id) ? request_id : nil), error: e.message }.to_json)
-
+  RETOUR.ok = false
+  RETOUR.error = e.message
 end
+
+###########################################
+###   La table JSON retournée au front  ###
+###########################################
+puts (RETOUR.output.to_json)
 

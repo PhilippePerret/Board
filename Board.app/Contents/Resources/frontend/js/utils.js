@@ -1,4 +1,13 @@
 /**
+ * Retourne un lien vers l'aide
+ * 
+ * TODO à implémenter
+ */
+function aide(key) {
+  return `[Lien vers aide '${key}']`
+}
+
+/**
  * Utilisation 
  * const fonction = debounce( (arg) => {
  *  // opération

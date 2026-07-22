@@ -14,7 +14,9 @@ class ScriptService {
 
   run(retour){
     if (undefined == retour) {
-      server.send({action: 'load-yaml-file', path: this.scriptPath}, this.run.bind(this))
+      server.send({action: 'load-yaml-file', path: this.scriptPath, no_raise: true}, this.run.bind(this))
+    } else if (retour.error) {
+      this.displayErrors([retour.error])
     } else {
       if (!Array.isArray(retour.data)) {
         return error(`Script-service invalide (${this.scriptPath}) : ce n’est pas une liste d’étapes.`)
@@ -34,11 +36,7 @@ class ScriptService {
   // suite, pas en cours de route).
   serviceIsValid(){
     const errors = this.steps.flatMap(step => step.validate())
-    if (errors.length > 0) {
-      // TODO Il faudra un panneau pour afficher ça, avec de vraies explications.
-      error(`Script-service invalide (${this.scriptPath}) :\n${errors.join('\n')}`)
-      return false
-    }
+    if (errors.length > 0) { return this.displayErrors(errors) }
     return true
   }
 
@@ -58,7 +56,46 @@ class ScriptService {
     return `${this.projet.path}/${relativePath.replace(/^\.\//, '')}`
   }
 
-}
+
+  /******************************************************************/
+  /*                    USEFULL METHODS                             */
+  /******************************************************************/
+
+  // Pour éditer le fichier de données
+  openData(){
+    console.error("Je dois apprendre à ouvrir le fichier de données.")
+  }
+
+  displayErrors(errors){
+    const containerErrors = DCreate('DIV', {
+      class: 'error break-all small', 
+      text: errors.map(error => `<div class="error">${error}</div>`).join('')
+    })
+    const data = {
+        title: 'Erreur de définition de Script-service'
+      , message: 'Le fichier de définition du script-service contient des erreurs.'
+      , content: containerErrors
+      , ouiBtn: {name: 'Modifier…', onclick: this.openData.bind(this)}
+      , nonBtn: {name: 'Renoncer'}
+    }
+    new ConfirmDialog(data).show()
+  }
+} // ScriptService
+
+
+
+
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+  /******************************************************************/
+
+
 
 class ServStep {
 
@@ -112,4 +149,5 @@ class ServStep {
     server.send({action: 'create-folder', data: path}, () => callback())
   }
 
-}
+
+} // ServStep

@@ -2,6 +2,8 @@
 
 == Todo En cours  
 
+- pouvoir éditer le script-service en meta-cliquant dessus
+- un container spécial pour afficher les erreurs de script-service. Mais en fait, il faut juste un dialog de confirmation avec un long texte, avec un bouton pour éditer le fichier
 - Pouvoir définir un nouveau service "plus que custom", ce serait un "script-service" ou "service-script" (oui, nom adopté), c'est-à-dire une opération complexe définie en se servant des services mais de façon étendue (voir l'utilisation pour créer un envoi de manuscrit)
 
 
