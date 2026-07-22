@@ -19,13 +19,21 @@ begin
     end
     def output
       {
-        ok:       self.ok,
+        ok:       evaluated_ok,
+        no_raise: no_raise,
         id:       self.request_id,
         data:     self.data,
         message:  self.message,
         error:    self.error,
         request:  self.request
       }
+    end
+    def evaluated_ok
+      if no_raise
+        return true
+      else
+        error.nil?
+      end
     end
   end
 
@@ -37,7 +45,6 @@ begin
   RETOUR = Retour.new
   RETOUR.init(request)
 
-  no_raise = RETOUR.no_raise
 
   #######################################
   ###       Analyse de l'ACTION       ###
@@ -137,14 +144,12 @@ begin
   when 'load-yaml-file'
     path = request['path']
     if !File.exist?(path)
-      RETOUR.ok = !! no_raise
       RETOUR.error = "Fichier introuvable : #{path}"
     else
       begin
         RETOUR.data = YAML.safe_load(File.read(path))
       rescue Psych::SyntaxError => e
-        RETOUR.ok = !! no_raise
-        RETOUR.error = "YAML invalide (#{path}) : #{e.message}"
+        RETOUR.error = "Code YAML invalide (#{path}) : #{e.message}"
       end
     end
 
@@ -152,7 +157,6 @@ begin
     begin
       FileUtils.mkdir_p(request['data'])
     rescue => e
-      RETOUR.ok = !! no_raise
       RETOUR.error = e.message
     end
 
@@ -166,7 +170,6 @@ begin
     RETOUR.data = options_for_archived_project
   # action inconnue => ERRREUR
   else 
-    RETOUR.ok = !! no_raise
     RETOUR.error = "unknown action: #{request["action"]}"
   end
   

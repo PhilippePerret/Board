@@ -6,26 +6,34 @@ begin
   # Pour le retour
   class Retour
     attr_accessor :ok
-    attr_accessor :returned_message, :returned_data, :returned_error
+    attr_accessor :message, :data, :error
     attr_accessor :no_raise, :request_id, :request
     def init(request)
       self.request = request
       self.ok = true
       self.request_id = request['id']
-      self.returned_message = nil
-      self.returned_data = nil
-      self.returned_error = nil
+      self.message = nil
+      self.data = nil
+      self.error = nil
       self.no_raise = request['no_raise'] === true
     end
     def output
       {
-        ok:       self.ok,
+        ok:       evaluated_ok,
+        no_raise: no_raise,
         id:       self.request_id,
-        message:  self.returned_message,
-        error:    self.returned_error,
-        data:     self.returned_data,
+        data:     self.data,
+        message:  self.message,
+        error:    self.error,
         request:  self.request
       }
+    end
+    def evaluated_ok
+      if no_raise
+        return true
+      else
+        error.nil?
+      end
     end
   end
 
@@ -37,13 +45,6 @@ begin
   RETOUR = Retour.new
   RETOUR.init(request)
 
-  def ok=(value) RETOUR.ok = value end
-  def error=(value) RETOUR.returned_error = value end
-  def returned_message=(value) RETOUR.returned_message = value end
-  def returned_error=(value) RETOUR.returned_error = value end
-  def returned_data=(value) RETOUR.returned_data = value end
-
-  no_raise = RETOUR.no_raise
 
   #######################################
   ###       Analyse de l'ACTION       ###
@@ -53,10 +54,10 @@ begin
 
   # === Destuction d'un projet ===
   when 'remove-project'
-    returned_data = remove_or_archive_project(request['projectId'], false)
+    RETOUR.data = remove_or_archive_project(request['projectId'], false)
     
   when 'archive-project'
-    returned_data = remove_or_archive_project(request['projectId'], true)
+    RETOUR.data = remove_or_archive_project(request['projectId'], true)
 
   # === Sauvegarde d'un projet ===
 
@@ -74,8 +75,8 @@ begin
   when 'save-app-data'
     Debug.log("save-app-data reçu, projects-in=#{request['data']['projects-in'].inspect}")
     IO.write(APP_DATA_FILE, request['data'].to_yaml)
-    ok = true
-    returned_message = "Données de l'application sauvées."
+    RETOUR.ok = true
+    RETOUR.message = "Données de l'application sauvées."
    
   # à l'initialisation (App.init)
   when 'load-all'
@@ -84,46 +85,46 @@ begin
       APP_DATA['projects-in'].map do |project_id|
         YAML.safe_load(IO.read(project_path(project_id)))
       end
-    RETOUR.returned_data = {
+    RETOUR.data = {
       appData: APP_DATA,
       projectsData: projects_data
     }
     
   # Lancement d'un script osascript
   when "run-osascript"
-    returned_data = run_script("#{request['script-name']}.scpt")
+    RETOUR.data = run_script("#{request['script-name']}.scpt")
 
 
   when 'run-bashscript'
-    returned_data = run_script("#{request['script-name']}.sh")
+    RETOUR.data = run_script("#{request['script-name']}.sh")
 
   # Liste des logiciels installés (type de param 'logiciel', ParamDefiner.js)
   # /System/Applications (+ Utilities) : apps système (Preview, Terminal…),
   # pas dans /Applications depuis macOS Ventura.
   when 'list-applications'
     app_dirs = ['/Applications/*.app', '/System/Applications/*.app', '/System/Applications/Utilities/*.app']
-    returned_data = { apps: app_dirs.flat_map { |g| Dir.glob(g) }.map { |p| File.basename(p, '.app') }.uniq.sort }
+    RETOUR.data = { apps: app_dirs.flat_map { |g| Dir.glob(g) }.map { |p| File.basename(p, '.app') }.uniq.sort }
 
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
-    returned_data = run_script('getInfoFinderSelection.scpt')
-    if returned_data["ok"] != false
-      returned_data['createdAt'] = human_date_to_aaammjj(returned_data['createdAt'])
-      returned_data['updatedAt'] = human_date_to_aaammjj(returned_data['updatedAt'])
+    RETOUR.data = run_script('getInfoFinderSelection.scpt')
+    if RETOUR.data["ok"] != false
+      RETOUR.data['createdAt'] = human_date_to_aaammjj(RETOUR.data['createdAt'])
+      RETOUR.data['updatedAt'] = human_date_to_aaammjj(RETOUR.data['updatedAt'])
     end
   # Pour récupérer les informations de la fenêtre courante du Finder
   when 'getInfoFinderWindow'
-    returned_data = run_script('getInfoFinderWindow.scpt')
+    RETOUR.data = run_script('getInfoFinderWindow.scpt')
 
   # Panneau "Outils" (ToolsData.js/Tools.js) — applications visibles
   # (Dock), pour choisir celle dont on veut la position/taille de fenêtre
   when 'list-running-apps'
-    returned_data = run_script('GetRunningApps.scpt')
+    RETOUR.data = run_script('GetRunningApps.scpt')
 
   # Panneau "Outils" : position + taille de la fenêtre de premier plan de
   # request['appName'] — copiées dans le presse-papier par le script lui-même
   when 'get-app-window-bounds'
-    returned_data = run_script('GetAppWindowBounds.scpt', [request['appName']])
+    RETOUR.data = run_script('GetAppWindowBounds.scpt', [request['appName']])
   
   # Écriture du changelog et de la todo-list après minuteur
   when 'update-project-notes'
@@ -133,24 +134,22 @@ begin
 
   when 'exec-service'
     Debug.log("exec-service reçu, script=#{request['script']} params=#{request['params'].inspect}")
-    returned_data = run_script(request["script"], request["params"])
-    Debug.log("exec-service résultat = #{returned_data.inspect}")
-    ok = returned_data["ok"] if returned_data.key?("ok")
-    error = returned_data["error"] if returned_data.key?("error") && returned_data["error"]
-    returned_message = returned_data["message"] if returned_data.key?("message") && returned_data["message"]  
+    RETOUR.data = run_script(request["script"], request["params"])
+    Debug.log("exec-service résultat = #{RETOUR.data.inspect}")
+    RETOUR.ok = RETOUR.data["ok"] if RETOUR.data.key?("ok")
+    RETOUR.error = RETOUR.data["error"] if RETOUR.data.key?("error") && RETOUR.data["error"]
+    RETOUR.message = RETOUR.data["message"] if RETOUR.data.key?("message") && RETOUR.data["message"]  
 
 
   when 'load-yaml-file'
     path = request['path']
     if !File.exist?(path)
-      ok = !! no_raise
-      error = "Fichier introuvable : #{path}"
+      RETOUR.error = "Fichier introuvable : #{path}"
     else
       begin
-        returned_data = YAML.safe_load(File.read(path))
+        RETOUR.data = YAML.safe_load(File.read(path))
       rescue Psych::SyntaxError => e
-        ok = !! no_raise
-        error = "YAML invalide (#{path}) : #{e.message}"
+        RETOUR.error = "Code YAML invalide (#{path}) : #{e.message}"
       end
     end
 
@@ -158,22 +157,20 @@ begin
     begin
       FileUtils.mkdir_p(request['data'])
     rescue => e
-      ok = !! no_raise
-      error = e.message
+      RETOUR.error = e.message
     end
 
   # Pour récupérer un projet des archives
   when 'retreive-project-from-archives'
-    returned_data = move_project_out_to_projects_in(request["projectId"])
+    RETOUR.data = move_project_out_to_projects_in(request["projectId"])
     
   # Pour obtenir la liste des projets en archives (comme une liste
   # de [id, title] pour select
   when 'get-options-for-projects-out'
-    returned_data = options_for_archived_project
+    RETOUR.data = options_for_archived_project
   # action inconnue => ERRREUR
   else 
-    ok = !! no_raise
-    returned_error = "unknown action: #{request["action"]}"
+    RETOUR.error = "unknown action: #{request["action"]}"
   end
   
 rescue => e
