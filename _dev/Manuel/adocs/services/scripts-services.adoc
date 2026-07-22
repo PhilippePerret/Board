@@ -31,3 +31,21 @@ Notre fichier YAML comprendra donc ces étapes, assurément :
 - name: "Enregistrement envoi dans l'historique"
 
 ====
+
+Chaque étape doit avoir un identifiant ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l'identifiant contient des tirets, il doit obligatoirement être entre guillemets.
+
+====
+---
+- name: "Création du dossier de l'éditeur"
+  id: "creer-dossier-editeur"
+
+- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+
+- name: "Fichier information éditeur
+  id: informations_editeur
+
+- name: "Enregistrement envoi dans l'historique"
+  id: historique
+
+====

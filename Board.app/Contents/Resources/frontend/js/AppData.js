@@ -22,6 +22,11 @@ const CODE_EDITORS = [
   , 'IntelliJ IDEA'
   , 'WebStorm'
 ]
+const YAML_EDITORS = [
+    'YAML Editor'
+  , 'CotEditor'
+  , 'Typora'
+] 
 const TEXT_EDITORS = [
     'CotEditor'
   , 'Typora'
@@ -44,8 +49,9 @@ const BROWSERS = [
 const APP_DATA = [
     {id: 'documentation-editor'       , name: 'Éditeur pour la documentation'     , type: 'select'    , values: TEXT_EDITORS}
   , {id: 'default-browser'            , name: 'Navigateur par défaut'             , type: 'select'    , values : BROWSERS }
-  , {id: 'code-editor'                , name: 'Éditeur pour le code'              , type: 'select'    , values: CODE_EDITORS    , default: 'Visual Studio Code'}
-  , {id: 'text-editor'                , name: 'Éditeur pour les textes simples'   , type: 'select'    , values: TEXT_EDITORS    , default: 'Typora'}
+  , {id: 'code-editor'                , name: 'Éditeur pour le code'              , type: 'select'    , values: CODE_EDITORS}
+  , {id: 'text-editor'                , name: 'Éditeur pour les textes simples'   , type: 'select'    , values: TEXT_EDITORS}
+  , {id: 'yaml-editor'                , name: 'Éditeur pour fichiers YAML'        , type: 'select'    , values: [...YAML_EDITORS, ...CODE_EDITORS]}
   , {id: 'documentation-folder-name'  , name: 'Nom du dossier de documentation'   , type: 'string'    , default: 'Documentation'  }
   , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md' }
   , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}

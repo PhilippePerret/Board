@@ -62,8 +62,12 @@ class ScriptService {
   /******************************************************************/
 
   // Pour éditer le fichier de données
-  openData(){
-    console.error("Je dois apprendre à ouvrir le fichier de données.")
+  openData(retour){
+    if (undefined == retour) {
+      server.send({action: 'open-file-yaml', path: this.scriptPath}, this.openData.bind(this))
+    } else {
+      message(getMsg('file-opened', this.scriptPath.split('/').pop()))
+    }
   }
 
   displayErrors(errors){

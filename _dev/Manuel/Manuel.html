@@ -441,21 +441,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_bugs">BUGS</a></li>
+<li><a href="#_todo_en_cours">Todo En cours</a></li>
 <li><a href="#_todo_list">Todo list</a></li>
-<li><a href="#_idées_de_nouveaux_services_2026_07_11">Idées de nouveaux services (2026-07-11)</a></li>
+<li><a href="#_idées_dautres_services">Idées d&#8217;autres services</a></li>
 <li><a href="#_présentation">Présentation</a></li>
 <li><a href="#_prise_en_main">Prise en main</a>
 <ul class="sectlevel2">
 <li><a href="#_panneau_de_nouveau_projet">Panneau de nouveau projet</a></li>
 </ul>
 </li>
-<li><a href="#reglages-app">Réglages de l&#8217;application</a></li>
+<li><a href="#reglages-app">Réglages de l&#8217;application</a>
+<ul class="sectlevel3">
+<li><a href="#_les_scripts_services">Les scripts-services</a></li>
+</ul>
+</li>
 <li><a href="#services">Les services</a>
 <ul class="sectlevel2">
 <li><a href="#_définition_des_services">Définition des services</a></li>
 <li><a href="#services-data">Données des services</a></li>
 <li><a href="#_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</a></li>
-<li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
+<li><a href="#_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
 <li><a href="#_lancer_un_script_quelconque">Lancer un script quelconque</a></li>
 </ul>
@@ -477,11 +482,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_bugs">BUGS</h2>
 <div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todo_en_cours">Todo En cours</h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Quand le panel des extra-data d&#8217;un projet est affiché, si on change de projet, ça doit afficher les données de ce projet
-Mais le problème est plus complexe : quand on déselectionne le projet, le panneau doit se fermer. Mais comment alors, passer au panneau des extra data du nouveau projet sélectionné de façon fluide ?</p>
+<p>pouvoir éditer le script-service en meta-cliquant dessus</p>
+</li>
+<li>
+<p>un container spécial pour afficher les erreurs de script-service. Mais en fait, il faut juste un dialog de confirmation avec un long texte, avec un bouton pour éditer le fichier</p>
+</li>
+<li>
+<p>Pouvoir définir un nouveau service "plus que custom", ce serait un "script-service" ou "service-script" (oui, nom adopté), c&#8217;est-à-dire une opération complexe définie en se servant des services mais de façon étendue (voir l&#8217;utilisation pour créer un envoi de manuscrit)</p>
 </li>
 </ul>
 </div>
@@ -493,10 +509,13 @@ Mais le problème est plus complexe : quand on déselectionne le projet, le pann
 <div class="ulist">
 <ul>
 <li>
-<p>utiliser des icônes SVG simples (pour l&#8217;interface)</p>
+<p>pouvoir récupérer les tâches de todoist</p>
 </li>
 <li>
-<p>Test et implémentation de la redéfinition à l&#8217;aide de meta+click sur service</p>
+<p>pouvoir ajouter des tâches à todoist</p>
+</li>
+<li>
+<p>utiliser des icônes SVG simples (pour l&#8217;interface)</p>
 </li>
 <li>
 <p>pouvoir éditer le fichier d&#8217;un script perso</p>
@@ -506,7 +525,7 @@ Mais le problème est plus complexe : quand on déselectionne le projet, le pann
 </div>
 </div>
 <div class="sect1">
-<h2 id="_idées_de_nouveaux_services_2026_07_11">Idées de nouveaux services (2026-07-11)</h2>
+<h2 id="_idées_dautres_services">Idées d&#8217;autres services</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -648,6 +667,95 @@ Mais le problème est plus complexe : quand on déselectionne le projet, le pann
 <div class="paragraph">
 <p>En cliquant sur le titre include::/../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
 </div>
+<div class="sect3">
+<h4 id="_les_scripts_services">Les scripts-services</h4>
+<div class="paragraph">
+<p>Les <em>scripts-services</em> ouvrent définitivement la voie de l&#8217;infini pour définir les services d&#8217;un projet. Ils permettent de <strong>composer soi-même un service</strong> en exploitant toutes les ressources de l&#8217;application.</p>
+</div>
+<div class="paragraph">
+<p>Mais tout pouvoir puissant implique des responsabilités à ses propotions.</p>
+</div>
+<div class="sect4">
+<h5 id="_une_suite_détapes">Une suite d&#8217;étapes</h5>
+<div class="paragraph">
+<p>Un <em>script-service</em> est un fichier YAML qui décrit les étapes du service.</p>
+</div>
+<div class="paragraph">
+<p>Pour illustrer l&#8217;explication, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d&#8217;envoi de manuscrits à des maisons d&#8217;édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l&#8217;on écrit un roman, voire plus, par an.</p>
+</div>
+<div class="paragraph">
+<p>En apparence, ce service doit être simple :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>création d&#8217;un dossier pour l&#8217;éditeur ou l&#8217;éditrice</p>
+</li>
+<li>
+<p>copier du manuscrit à envoyer</p>
+</li>
+<li>
+<p>création d&#8217;un fichier avec l&#8217;adresse et le téléphone de l&#8217;édition</p>
+</li>
+<li>
+<p>enregistrement d&#8217;un historique des envois, pour se souvenir de quand le manuscrit a été envoyé.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Notre fichier YAML comprendra donc ces étapes, assurément :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<hr>
+<div class="ulist">
+<ul>
+<li>
+<p>name: "Création du dossier de l&#8217;éditeur"</p>
+</li>
+<li>
+<p>name: "Copie du manuscrit envoyé"</p>
+</li>
+<li>
+<p>name: "Fichier information éditeur</p>
+</li>
+<li>
+<p>name: "Enregistrement envoi dans l&#8217;historique"</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Chaque étape doit avoir un identifiant ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l&#8217;identifiant contient des tirets, il doit obligatoirement être entre guillemets.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<hr>
+<div class="ulist">
+<ul>
+<li>
+<p>name: "Création du dossier de l&#8217;éditeur"
+id: "creer-dossier-editeur"</p>
+</li>
+<li>
+<p>name: "Copie du manuscrit envoyé"
+id: copier_manuscrit</p>
+</li>
+<li>
+<p>name: "Fichier information éditeur
+id: informations_editeur</p>
+</li>
+<li>
+<p>name: "Enregistrement envoi dans l&#8217;historique"
+id: historique</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -778,11 +886,9 @@ Ils fonctionnent essentiellement commes les <a href="#script-params">paramètres
 <td class="tableblock halign-left valign-top"><p class="tableblock">La valeur par défaut ou la valeur brute.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>absolute</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Si true, la propriété est enregistrée ou relevée dans project.adata.<br>
-Cette propriété peut alors être partagée entre plusieurs services (typiquement : le dossier de documentation).<br>
-<strong>DOIT DEVENIR OBSOLÈTE</strong>
-<strong>Maintenant, il existe une façon plus simple de le faire, en mettant le type <em>`projet`</em> ou <em>`app`</em> et en identifiant (<code>ìd</code>) la propriété du projet ou de l&#8217;application à prendre.</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>transient</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[Optionnel] Indique que la valeur du paramètre ne doit pas être enregistrée quand 1) c&#8217;est un service commun 2) qui est appelé depuis le panneau.<br>
+Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de Terminal quand le service commun “Ouvir un Terminal au dossier” est cliqué depuis le panneau : il faut alors demander le code, mais ne pas l&#8217;enregistrer dans les <code>common_services_data</code> du projet.</p></td>
 </tr>
 </tbody>
 </table>
@@ -944,7 +1050,30 @@ Cette propriété peut alors être partagée entre plusieurs services (typiqueme
 </table>
 </div>
 <div class="sect2">
-<h3 id="_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</h3>
+<h3 id="_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</h3>
+<div class="paragraph">
+<p>On peut très facilement gérer les fichiers versionnés avec include::../../../../frontend/js/App.js[tag=app-name]. On peut même choisir son système préféré :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Un nom de fichier portant son numéro de version dans son nom même.</p>
+</li>
+<li>
+<p>Un nom unique et inchangeable, avec un numéro de version qu&#8217;on définit en archivant le fichier.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ces deux modes sont invisibles, include::../../../../frontend/js/App.js[tag=app-name] se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
+</div>
+<div class="paragraph">
+<p>Bien entendu, on peut choisir autant de fichiers versionné qu&#8217;on le désire, pour le même projet.</p>
+</div>
+<div class="paragraph">
+<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, include::../../../../frontend/js/App.js[tag=app-name] demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.
+=== Actualiser la version majeur d&#8217;un fichier ===</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1355,10 +1484,14 @@ Cette propriété peut alors être partagée entre plusieurs services (typiqueme
 </li>
 </ul>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="paragraph">
 <p>OSASCRIPT_WITH_LIB = {
   'OpenOrUpdateInBrowser.scpt' &#8658; true
 }</p>
+</div>
+</div>
 </div>
 <div class="ulist">
 <ul>
@@ -1776,7 +1909,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-17 10:36:35 +0200
+Last updated 2026-07-21 17:15:25 +0200
 </div>
 </div>
 </body>

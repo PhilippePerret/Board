@@ -153,6 +153,12 @@ begin
       end
     end
 
+  when 'open-file-yaml'
+    `open -a "#{APP_DATA['yaml-editor'] || APP_DATA['text-editor']}" "#{request['path']}"`
+  when 'open-file-text'
+    `open -a "#{APP_DATA['text-editor']}" "#{request['path']}"`
+  when 'open-file-code'
+    `open -a "#{APP_DATA['code-editor']}" "#{request['path']}"`
   when 'create-folder'
     begin
       FileUtils.mkdir_p(request['data'])
