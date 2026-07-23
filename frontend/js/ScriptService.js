@@ -146,16 +146,17 @@ class ServStep {
    * @param errors Array Container pour les erreurs
    */
   exec(errors, callback){
+    this.callback = callback
     this.errors = errors
     switch(this.type){
       case 'select':
-        this.value = this.execSelect(callback)
+        this.value = this.execSelect()
         break
       case 'string':
         this.errors.push("Je ne sais pas traiter le type 'string'.")
         break
       case 'create-folder':
-        return this.execCreateFolder(callback)
+        return this.execCreateFolder()
         break
     }
   }
@@ -166,7 +167,7 @@ class ServStep {
    * 
    * this.values définit le type de valeurs proposées
    */
-  execSelect(callback, retour) {
+  execSelect(retour) {
     try {
       if (retour) {
         if (retour.error) raise(retour.error)
@@ -175,31 +176,11 @@ class ServStep {
       console.log("exectSelect, this.values = ", this.values)
       if ( 'string' == typeof this.values ) {
         // this.values est un string => c'est un fichier contenant les données ou les renvoyant
-        this.getFileValues(this.values, this.execSelect.bind(this, callback))
-      } else if ( Array.isArray(this.values) ) {
-        // On va transformer this.values en le type parfait pour un 
-        // select : [[value, title], ...]
-        var keyAndTitleChecked = false
-        this.values = this.values.map(value => {
-          if (typeof value == 'string') {
-            return [value, value]
-          } else if (Object.isObject(value)){
-            if (!keyAndTitleChecked) {
-              this.key_values ?? raise('scserv-select-with-object-requires-key-values', [this.id, this.aideByType])
-              this.title_values ?? raise('scserv-select-with-object-requires-title-values', [this.id, this.aideByType])
-              keyAndTitleChecked = true
-            }
-            value[this.key_values]    ?? raise('scserv-select-with-object-unknown-key', [this.id, JSON.stringify(value), this.key_values, this.aideByType])
-            value[this.title_values]  ?? raise('scserv-select-with-object-unknown-title', [this.id, JSON.stringify(value), this.title_values, this.aideByType])
-            return [value[this.key_values], value[this.title_values]]
-          } else if (Array.isArray(value) && value.length == 2) {
-            return value
-          } else {
-            raise('scserv-param-bad-type', ['values', '[value, title]', typeof value])
-          }
-        })
-      } else {
-        raise('scserv-param-bad-type', ['values', 'array of object', typeof this.values])
+        this.getFileValues(this.values, this.execSelect.bind(this))
+      } else if ( this.selectValuesAreValid() ) {
+        // <= This.values validées et mises en forme
+        // => On peut procéder au choix
+        new SelectDialog(this.selectDialogData()).show()
       }
     } catch(err) {
       if (err.params) {
@@ -207,11 +188,63 @@ class ServStep {
       } else {
         this.errors.push(err.message)
       }
-      callback()
+      this.callback()
     }
-
   }
 
+  onChooseSelect(choix){
+    console.log("choix = ", choix)
+    this.value = choix
+    this.callback()
+  }
+
+  // Vérifie que les données values pour le select sont valides et
+  // les met en bonne forme
+  selectValuesAreValid(){
+    if ( Array.isArray(this.values) ) {
+      // On va transformer this.values en le type parfait pour un 
+      // select : [[value, title], ...]
+      var keyAndTitleChecked = false
+      this.values = this.values.map(value => {
+        if (typeof value == 'string') {
+          return [value, value]
+        } else if (Object.isObject(value)){
+          if (!keyAndTitleChecked) {
+            this.key_values ?? raise('scserv-select-with-object-requires-key-values', [this.id, this.aideByType])
+            this.title_values ?? raise('scserv-select-with-object-requires-title-values', [this.id, this.aideByType])
+            keyAndTitleChecked = true
+          }
+          value[this.key_values]    ?? raise('scserv-select-with-object-unknown-key', [this.id, JSON.stringify(value), this.key_values, this.aideByType])
+          value[this.title_values]  ?? raise('scserv-select-with-object-unknown-title', [this.id, JSON.stringify(value), this.title_values, this.aideByType])
+          return [value[this.key_values], value[this.title_values]]
+        } else if (Array.isArray(value) && value.length == 2) {
+          return value
+        } else {
+          raise('scserv-param-bad-type', ['values', '[value, title]', typeof value])
+        }
+      })
+    } else {
+      raise('scserv-param-bad-type', ['values', 'array of object', typeof this.values])
+    }
+    return true
+  }
+  
+  selectDialogData(){
+    const data ={
+        title: this.title
+      , q: this.q
+      , widht: '620px'
+      , values: this.values
+      , ouiBtn: {name: 'Choisir', onclick: this.onChooseSelect.bind(this)}
+      , nonBtn: {name: 'Renoncer', onclick: this.onChooseSelect.bind(this, null)}
+    }
+    if (this.create === true) {
+      Object.assign(data, {
+        midBtn: {name: 'Nouveau…', onclick: this.onChooseSelect.bind(this, '--other--')}
+      })
+    }
+    return data
+  }
 
 
 
@@ -229,7 +262,7 @@ class ServStep {
     } else if (retour.error) {
       callback({error: getErr('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])})
     } else {
-      callback(retour.data)
+      callback(retour)
     }
   }
 
@@ -309,9 +342,9 @@ class ServStep {
 
   }
 
-  execCreateFolder(callback){
+  execCreateFolder(){
     const path = this.scriptService.resolvePath(this.data.path)
-    server.send({action: 'create-folder', data: path}, () => callback())
+    server.send({action: 'create-folder', data: path}, () => this.callback())
   }
 
 

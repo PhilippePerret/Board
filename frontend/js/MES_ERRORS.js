@@ -24,6 +24,6 @@ const ERRORS = {
   , 'scserv-on-get-file-values': "Une erreur s'est produite en essayant de relever les données du fichier '$1' : $2 ($3)."
   , 'scserv-select-with-object-requires-key-values': "Le select de l'étape $1 dont les données sont des tables nécessite le paramètre key_values définissant la valeur du menu ($2)"
   , 'scserv-select-with-object-requires-title-values': "Le select de l'étape $1 dont les données sont des tables nécessite le paramètre title_values définissant le titre du menu ($2)"
-  , 'scserv-select-with-object-unknown-key': "Pour le select de l'étape $1, l'objet $2 ne définit pas la clé $3 pour la valeur ($4)."
-  , 'scserv-select-with-object-unknown-title': "Pour le select de l'étape $1, l'objet $2 ne définit pas la clé $3 pour le titre ($4)."
+  , 'scserv-select-with-object-unknown-key': "Pour le select de l'étape $1, l'objet $2 ne définit pas la clé '$3' pour la valeur ($4)."
+  , 'scserv-select-with-object-unknown-title': "Pour le select de l'étape $1, l'objet $2 ne définit pas la clé '$3' pour le titre ($4)."
 }
