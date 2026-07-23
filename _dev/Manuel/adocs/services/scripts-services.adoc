@@ -67,6 +67,48 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 
 ----
 
+==== Commun à tous les types ====
+
+[col="1,3"]
+|====
+| `if`        | Pour une <<conditional-step>>.
+| `id`        | Une étape toi toujours avec un identifiant, unique, contenant seulement des minuscule, des chiffres et des tirets.
+| `type`      | Une étape doit toujours définir <<script-service-types, un type>>
+| `q`         | Le message dans une boite de dialogue, en fonction du type attendu.
+| `title`     | Le titre de la boite de dialogue, en fonction du type attendu.
+|====
+
+[[conditional-step, étape conditionelle]]
+===== Étape conditionnelle =====
+
+On utile le paramètre `if` pour définir une étape conditionnelle.
+
+La valeur de `if` doit alors être composée de 3 expressions séparées par une espace, la première étant la valeur a comparée, la 3^e^ la valeur de comparaison et la 2^e^ l'opérateur.
+
+----
+if: "expression operateur expected"
+----
+
+`expression` est le plus souvent un identifiant d'étape exprimé par `${<id etape>}`. On prendra alors la valeur de cette étape pour la comparer à `expected`.
+
+`Expected` peut-être n'importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués. +
+Quand le type est `select` et que `create` est à true, autorisant la création d'une nouvelle valeur, `expected` doit alors être '--other--'. Par exemple : 
+
+----
+- id: 'value-selected-or-created'
+  name: 'valeur à sélectionner ou créer'
+  type: 'select'
+  create: true
+  
+- if: "${value-selected-or-created} == '--other--'
+  type: 'string'
+  title: "Nouvelle valeur
+  q: "Donnez la nouvelle valeur.
+  
+----
+
+
+[[script-service-types, les types de données]]
 ==== Les types de données ====
 
 [[script-service-type-save-data]]
@@ -115,10 +157,12 @@ Permet de définir explicitement le `step.value` d'une étape. Cela arrive par e
 
 [cols="1,1,2"]
 |====
-| `id`        2+| Identifiant obligatoire
 | `type`      2+| `set`
+| `id`        2+| Identifiant obligatoire
 | `var_step   2+| Identifiant de l'étape dont il faut définir la valeur
 | `var_value  2+| Valeur à donner à `value` de l'étape
+>|          soit| Valeur explicite | Donnée telle quelle 
+>|          soit| Valeur d'étape   | ${<id etape>}
 |====
 
 [[script-service-type-select]]
@@ -153,3 +197,49 @@ create: true -- permet de dire qu'une donnée select peut être créée
 On peut tirer des données d'un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).
 
 Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).
+
+===== Set Project Data =====
+
+Type d'étape qui permet de définir une donnée de projet.
+
+[cols="1,3"]
+|====
+| `type` | `get-project-data`
+| `id` | Identifiant.
+| `project_key` | La clé dans les extra-données du projet.
+| `value`       | La valeur à donner à cette clé. Elle vient, normalement, d'une autre étape ayant permis de la définir. Voir la <<sequence-project-data>>.
+|====
+
+===== Get Project Data =====
+
+Type d'étape qui permet de récupérer une donnée de projet.
+
+[cols="1,3"]
+|====
+| `type` | `get-project-data`
+| `id` | Identifiant. Mais pour ce type d'étape, il est particulier : il doit porter le nom de la donnée du projet, impérativement, pour pouvoir être redéfini si la donnée manque.
+| `project_key` | La clé dans les extra-données du projet.
+|====
+
+Voir la <<sequence-project-data>>.
+
+[[sequence-project-data]]
+**Exemple de séquence de définition de donnée de projet**
+
+----
+---
+- id: 'manuscrit-path'
+  type: 'get-project-data'
+
+- if: "${manuscript-path} == null"
+  id: "definition-manuscrit"
+  type: 'select-file'
+  
+- if: "${manuscript-path} == null"
+  id: "set-project-manuscrit"
+  type: 'set-project-data'
+  project_key: 'manuscrit-path'  # la clé
+  value: ${definition-manuscrit} # pour récupérer le path
+  
+- type: 'copy-file'
+  source: "${manuscrit-path}"  # Aura été renseigné

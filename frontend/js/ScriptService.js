@@ -77,10 +77,14 @@ class ScriptService {
   }
 
   // Retourne la valeur (value) d'une étape évaluée précédemment
-  valueOf(stepId){
-    // console.log("this.stepById et stepId", stepId, this.stepById)
-    console.log("this.stepById[%s]", stepId, this.stepById[stepId])
-    return this.stepById[stepId]?.value
+  getValue(stepId){
+    this.stepById[stepId] || raise('scserv-unknown-step', [stepId])
+    return this.stepById[stepId].value
+  }
+  // Pour définir la valeur d'une étape
+  setValue(stepId, stepValue){
+    this.stepById[stepId] || raise('scserv-unknown-step', [stepId])
+    this.stepById[stepId].value = stepValue
   }
 
   // Résoud un chemin d'accès relatif
@@ -149,6 +153,7 @@ class ServStep {
   // Pour définir la valeur finale et passer à l'étape suivante
   setValue(value) {
     // console.log("value finale = ", value)
+    message(`Valeur pour étape '${this.id} = ${typeof value == 'object' ? JSON.stringify(value) : value}`)
     this.value = value
     this.callback()
   }
@@ -188,6 +193,69 @@ class ServStep {
     }
   }
 
+  // Étape pour choisir un fichier
+  execSelectFile(retour){
+    historize('-> execSelectFile', retour)
+    if (retour){
+      const path = retour[0].value
+      this.setValue(path)
+    } else {
+      const definer = new ParamsDefiner([{
+          id: 'source'
+        , type: 'path'
+        , title: this.title || "Choix d'un élément de Finder"
+        , q: this.q || "Choisir l'élément dans le Finder et cliquer sur “OK”."
+      }], this.execSelectFile.bind(this))
+      definer.define()
+    }
+  }
+
+  // Copie d'un fichier
+  execCopyFile(retour){
+    if (retour) {
+      if (retour.error) raise(retour.error)
+      else this.setValue(true)
+    } else {
+      const src = this.evaluateProp('source')
+      const dst = this.evaluateProp('dest')
+      console.log("source et dest", {src, dst})
+      server.send({action:'copy-file', source: src, dest: dst}, this.execCopyFile.bind(this))
+    }
+  }
+
+  // Etape d'affectation d'une valeur au projet
+  execSetProjectData(retour){
+    if (retour) {
+      if (retour.error) raise(retour.error) // Ne peut pas encore passer par là
+    } else {
+
+    }
+    const value = this.evaluateProp('value')
+    this.projet.set(this.project_key, value, this.execSetProjectData.bind(this))
+    // On met la valeur dans l'étape de projet
+    console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
+    this.scriptService.setValue(this.project_key, value)
+  }
+
+  // Pour récupérer une valeur projet
+  execGetProjectData(){
+    historize('-> execGetProjectData')
+    this.setValue(this.projet.get(this.id) || null) // la clé dans les extradata du projet doit être l'id
+  }
+
+  /**
+   * Fonction qui se contente de fixer la valeur d'une étape précédente
+   * mais qui servira plus tard.
+   */
+  execSet(){
+    var finalValue
+    if (this.var_value.match(/\$\{.*\}/)) {
+      finalValue = this.evaluateProp('var_value')
+    } else {
+      finalValue = this.var_value
+    }
+    this.scriptService.setValue(this.var_step, finalValue)
+  }
 
   execString(retour){
     console.log("retour :", retour)
@@ -221,6 +289,11 @@ class ServStep {
       }
       new TextareaDialog(ddata).show()
     }
+  }
+
+  execCreateFolder(){
+    const path = this.scriptService.resolvePath(this.evaluateProp('path'))
+    server.send({action: 'create-folder', data: path}, this.callback.bind(this))
   }
 
   execPhone(retour) {
@@ -289,7 +362,7 @@ class ServStep {
       if (this.prefix) {
         const obj = {}
         this.values.forEach(id => {
-          Object.assign(obj, { [id]: this.scriptService.valueOf(`${this.prefix}-${id}`) })
+          Object.assign(obj, { [id]: this.scriptService.getValue(`${this.prefix}-${id}`) })
         })
         console.info("Objet à enregistrer dans %s", this.path, obj)
         const path = this.scriptService.resolvePath(this.path);
@@ -376,20 +449,33 @@ class ServStep {
     }
   }
 
+
   constructor(scriptService, data){
     this.scriptService = scriptService
+    this.projet = this.scriptService.projet
     this.data = data
     for (var prop of Object.getOwnPropertyNames(data)) {
       this[prop] = data[prop]
+
       console.log("this[%s] = %s", prop, this[prop])
     }
-
     this.isConditional = this.if
   }
 
+  evaluateProp(prop){
+    if (this.getAbsoluteData(prop).evaluate) {
+      const val = this[prop].replace(/\$\{(.*)\}/g, (match, stepId) => {return this.scriptService.getValue(stepId)})
+      console.log("Valeur transformée de '%s'/ initial: %s, nouvelle: %s", prop, this[prop], val)
+      return val
+    } else {
+      return this.prop
+    }
+  }
   get dataType(){ return this._dtype || (this.dtype = SCRIPT_SERVICES_KNOWN_TYPES[this.type] )}
   get aideByType(){ return this._aidtype || (this._aidtype = aide(`script-service-type-${this.type}`) )}
   get paramsSpecs(){return this._pmsvalid || (this._pmsvalid = this.dataType.params)}
+  // Retourne les données absolues de la propriété +prop+
+  getAbsoluteData(prop) { return this.paramsSpecs[prop]}
 
 
   /**
@@ -400,10 +486,19 @@ class ServStep {
    * evaluator : '=', '>' etc.
    */ 
   conditionNotSatisfied(){
+    function toRealValue(value){
+      switch(value) {
+        case 'null':      return null
+        case 'undefined': return undefined
+        case 'empty':     return []
+        default: return value
+      }
+    }
     var [expression, evaluator, expected] = this.if.split(' ')
     // console.log("évaluation terms", {expression, expected, evaluator})
-    expression = expression.replace(/^\$\{(.*)\}$/, (match, idStep) => { return this.scriptService.valueOf.call(this.scriptService, idStep) })
-    expected = expected.replace(/^(['"])(.*)\1$/, '$2')
+    expression = expression.replace(/^\$\{(.*)\}$/, (match, idStep) => { return this.scriptService.getValue.call(this.scriptService, idStep) })
+    expression = toRealValue(expression)
+    expected = toRealValue(expected.replace(/^(['"])(.*)\1$/, '$2'))
     console.log("évaluation terms", {expression, expected, evaluator})
     switch(evaluator){
       case '==': case '=':
@@ -481,11 +576,4 @@ class ServStep {
     }
 
   }
-
-  execCreateFolder(){
-    const path = this.scriptService.resolvePath(this.data.path)
-    server.send({action: 'create-folder', data: path}, () => this.callback())
-  }
-
-
 } // ServStep

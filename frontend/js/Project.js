@@ -6,7 +6,10 @@ class Project {
     'id', 'title', 'path', 'common_services_data', 'workTime', 'createdAt', 'updatedAt',
     'services', 'background', 'icon', 'genre',
     // documentation
-    'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html'
+    'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html',
+    // Pour les services (notamment les script-services)
+    'service_data'
+
   ]
 
   static get current(){ return this._current}
@@ -219,10 +222,15 @@ class Project {
     
   }
 
-  get(key){ return this[key] ?? this.data[key]}
-  set(key, val, saveIt = false){ 
-    this[key] = val
-    saveIt && this.save()
+  get(key){ return this[key] ?? this.data[key] ?? (this.service_data && this.service_data[key])}
+  set(key, val, callback = false){ // ça part du principe que s'il faut enregistrer, il faut un callback
+    if (this.constructor.PROPERTIES.indexOf(key) > -1) {
+      this[key] = val
+    } else {// une donnée service
+      this.service_data = this.service_data ?? {}
+      Object.assign(this.service_data, {[key]: val})
+    }
+    callback && this.save(callback)
   }
 
   initServices(){

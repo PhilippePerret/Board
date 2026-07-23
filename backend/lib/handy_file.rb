@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'yaml'
 require 'json'
 require 'csv'
@@ -5,6 +6,17 @@ require 'csv'
 class FileHandy
 class << self
     
+  def copy(source, dest)
+    FileUtils.copy(source, dest)
+    dest = File.join(dest, File.basename(source)) if File.isDirectory?(dest)
+    if File.exist?(dest)
+      RETOUR.message = "Le fichier #{dest} a été créé."
+    else
+      RETOUR.error = "Le fichier #{dest} n'a pas pu être créé."
+    end
+  end
+  # Ajoute un objet à une liste d'objet ou l'enregistre
+  # dans un fichier
   def add_objet(path, objet)
     
     if File.exist?(path)

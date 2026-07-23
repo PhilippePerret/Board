@@ -1,10 +1,20 @@
 const UNIV_KEYS = {id: true, type: true, name: true, if: true, title: true, q: true}
 
+
+/**
+ * DÉFINITION DES TYPES DE DONNÉES
+ * 
+ * @params Les paramètres
+ *  :required     Si true, le paramètres est requis
+ *  :required_if  Condition pour que le paramètres soit requis
+ *  :type         Le type du paramètres
+ *  :evaluate     Si true, les ${<id étape>} seront remplacés par le value de l'étape
+ */
 const SCRIPT_SERVICES_KNOWN_TYPES = {
   'set': {
     params: {
         var_step:   { required: true, type: 'string'}
-      , var_value:  { required: true, type: ['string', 'integer', 'boolean'] }
+      , var_value:  { required: true, evaluate: true, type: ['string', 'integer', 'boolean'] }
     }
   },
 
@@ -46,7 +56,35 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   
   'create-folder' : {
     params: {
-      path: {required: true, type: 'string'}
+      path: {required: true, type: 'string', evaluate: true}
     }
+  },
+
+  'copy-file': {
+    params: {
+        source: {required: true, type: 'string', evaluate: true}
+      , dest:   {name: 'Destination (folder or file)', required: true, type: 'string', evaluate: true}
+    }
+  },
+
+  'select-file': {
+    params: {
+
+    }
+  },
+
+  /* Pour récupérer une propriété du projet */
+  'get-project-data': {
+    params: {
+    }
+  },
+
+  /* Pour définir une propriété du projet */
+  'set-project-data': {
+    params: {
+        project_key: {required: true, type: 'string'}
+      , value: {required: true, type: 'string', evaluate: true}
+    }
+
   }
 }

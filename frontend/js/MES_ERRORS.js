@@ -15,6 +15,8 @@ const ERRORS = {
   , 'folder-required': 'Il faut impérativement choisir un dossier.'
 
     // Scripts services
+  , 'scserv-abort': "Abandon du service"
+  , 'scserv-unknown-step': "L'étape d'identifiant '$1' est inconnue."
   , 'scserv-list-required': "Le fichier YAML devrait définir une liste d’étapes ($1)."
   , 'scserv-type-required': "Une étape de script-service ($1) doit toujours avoir un type ($2)."
   , 'scserv-id-required': "Une étape de script-service doit absolument avoir un identifiant ($1)."

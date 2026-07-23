@@ -179,18 +179,26 @@ begin
   # Par exemple, un fichier YAML, CSV, JSON, etc. ou un fichier
   # exécutable
   when 'evaluate-file'
-    require_relative 'lib/evaluate_file.rb'
+    require_relative 'lib/handy_file.rb'
     FileHandy.evaluate(request['path'])
 
   # Fonctionne de paire avec 'evaluate-file' pour enregistrer
   # un nouvel objet ou autre valeur dans un fichier quelconque
   when 'save-in-file'
-    require_relative 'lib/evaluate_file.rb'
+    require_relative 'lib/handy_file.rb'
     FileHandy.add_objet(request['path'], request['obj'])
+    
+  when 'copy-file'
+    require_relative 'lib/handy_file.rb'
+    FileHandy.copy(request['source'], request['dest'])
+
+
+
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"
   end
+
   
 rescue => e
   RETOUR.ok = false
