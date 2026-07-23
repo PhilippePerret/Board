@@ -78,7 +78,7 @@ function raise(msg, params){
   if (params) {console.error(msg, params)}
   const err = new Error(msg)
   if (params) {
-    throw Object.assign(err, {params: params})
+    Object.assign(err, {params: params})
   }
   throw err
 }

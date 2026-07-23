@@ -4,9 +4,9 @@ require 'csv'
 
 class FileHandy
 class << self
-    def slef.evaluate path
+    def evaluate path
       if !File.exist?(path)
-        RETOUR.error = "Fichier inexistant : #{path}"
+        RETOUR.error = "Fichier inexistant"
         return
       end
 

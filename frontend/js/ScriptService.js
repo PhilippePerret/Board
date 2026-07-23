@@ -101,7 +101,7 @@ class ScriptService {
           }
           return `<div class="error">${error}</div>`
         }).join('')
-      , style: 'margin-top:2em;'
+      , style: 'margin:2em 0;'
     })
     const data = {
         title:    'Erreur de définition du Script-service'
@@ -146,29 +146,99 @@ class ServStep {
    * @param errors Array Container pour les erreurs
    */
   exec(errors, callback){
+    this.errors = errors
     switch(this.type){
       case 'select':
-        errors.push("Je ne sais pas traiter le type 'select'.")
+        this.value = this.execSelect(callback)
         break
       case 'string':
-        errors.push("Je ne sais pas traiter le type 'string'.")
+        this.errors.push("Je ne sais pas traiter le type 'string'.")
         break
       case 'create-folder':
         return this.execCreateFolder(callback)
         break
     }
-    // Si on arrive ici quand même, il faut jouer l'étape suivante
-    callback()
+  }
+
+
+  /**
+   * @return La valeur sélectionnée ('autre' pour création)
+   * 
+   * this.values définit le type de valeurs proposées
+   */
+  execSelect(callback, retour) {
+    try {
+      if (retour) {
+        if (retour.error) raise(retour.error)
+        this.values = retour.data
+      }
+      console.log("exectSelect, this.values = ", this.values)
+      if ( 'string' == typeof this.values ) {
+        // this.values est un string => c'est un fichier contenant les données ou les renvoyant
+        this.getFileValues(this.values, this.execSelect.bind(this, callback))
+      } else if ( Array.isArray(this.values) ) {
+        // On va transformer this.values en le type parfait pour un 
+        // select : [[value, title], ...]
+        var keyAndTitleChecked = false
+        this.values = this.values.map(value => {
+          if (typeof value == 'string') {
+            return [value, value]
+          } else if (Object.isObject(value)){
+            if (!keyAndTitleChecked) {
+              this.key_values ?? raise('scserv-select-with-object-requires-key-values', [this.id, this.aideByType])
+              this.title_values ?? raise('scserv-select-with-object-requires-title-values', [this.id, this.aideByType])
+              keyAndTitleChecked = true
+            }
+            value[this.key_values]    ?? raise('scserv-select-with-object-unknown-key', [this.id, JSON.stringify(value), this.key_values, this.aideByType])
+            value[this.title_values]  ?? raise('scserv-select-with-object-unknown-title', [this.id, JSON.stringify(value), this.title_values, this.aideByType])
+            return [value[this.key_values], value[this.title_values]]
+          } else if (Array.isArray(value) && value.length == 2) {
+            return value
+          } else {
+            raise('scserv-param-bad-type', ['values', '[value, title]', typeof value])
+          }
+        })
+      } else {
+        raise('scserv-param-bad-type', ['values', 'array of object', typeof this.values])
+      }
+    } catch(err) {
+      if (err.params) {
+        this.errors.push(getErr(err.message, err.params))
+      } else {
+        this.errors.push(err.message)
+      }
+      callback()
+    }
+
   }
 
 
 
+
+  /**
+   * Fonction chargeant les valeurs d'un fichier quelconque.
+   * La donnée remontée peut être de tout type, mais en général, 
+   * ce sera un <array-of-object> pour pouvoir choisir une
+   * valeur
+   */
+  getFileValues(path, callback, retour) {
+    console.log("-> getFileValues, retour = ", retour)
+    if (undefined == retour) {
+      path = this.scriptService.resolvePath(path)
+      server.send({action:'evaluate-file', path: path, no_raise: true}, this.getFileValues.bind(this, path, callback))
+    } else if (retour.error) {
+      callback({error: getErr('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])})
+    } else {
+      callback(retour.data)
+    }
+  }
+
   constructor(scriptService, data){
     this.scriptService = scriptService
     this.data           = data
-    this.id             = data.id
-    this.type           = data.type
-    this.params         = data.params
+    for (var prop of Object.getOwnPropertyNames(data)) {
+      this[prop] = data[prop]
+    }
   }
   get dataType(){ return this._dtype || (this.dtype = SCRIPT_SERVICES_KNOWN_TYPES[this.type] )}
   get aideByType(){ return this._aidtype || (this._aidtype = aide(`script-service-type-${this.type}`) )}
@@ -237,22 +307,6 @@ class ServStep {
       // }
     }
 
-  }
-
-  /**
-   * Fonction chargeant les valeurs d'un fichier quelconque.
-   * La donnée remontée peut être de tout type, mais en général, 
-   * ce sera un <array-of-object> pour pouvoir choisir une
-   * valeur
-   */
-  getFileValues(path, callback, retour) {
-    if (undefined == retour) {
-      server.send({action:'evaluate-file', path: path}, this.getFileValues.bind(this, path, callback))
-    } else if (retour.error) {
-      raise('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])
-    } else {
-      callback(retour.data)
-    }
   }
 
   execCreateFolder(callback){
