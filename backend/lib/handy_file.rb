@@ -8,7 +8,7 @@ class << self
     
   def copy(source, dest)
     FileUtils.copy(source, dest)
-    dest = File.join(dest, File.basename(source)) if File.isDirectory?(dest)
+    dest = File.join(dest, File.basename(source)) if File.directory?(dest)
     if File.exist?(dest)
       RETOUR.message = "Le fichier #{dest} a été créé."
     else

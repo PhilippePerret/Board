@@ -216,8 +216,8 @@ class ServStep {
       if (retour.error) raise(retour.error)
       else this.setValue(true)
     } else {
-      const src = this.evaluateProp('source')
-      const dst = this.evaluateProp('dest')
+      const src = this.expandPath(this.evaluateProp('source'))
+      const dst = this.expandPath(this.evaluateProp('dest'))
       console.log("source et dest", {src, dst})
       server.send({action:'copy-file', source: src, dest: dst}, this.execCopyFile.bind(this))
     }
@@ -227,14 +227,14 @@ class ServStep {
   execSetProjectData(retour){
     if (retour) {
       if (retour.error) raise(retour.error) // Ne peut pas encore passer par là
+      this.setValue(true)
     } else {
-
+      const value = this.evaluateProp('value')
+      this.projet.set(this.project_key, value, this.execSetProjectData.bind(this))
+      // On met la valeur dans l'étape de projet
+      console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
+      this.scriptService.setValue(this.project_key, value)
     }
-    const value = this.evaluateProp('value')
-    this.projet.set(this.project_key, value, this.execSetProjectData.bind(this))
-    // On met la valeur dans l'étape de projet
-    console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
-    this.scriptService.setValue(this.project_key, value)
   }
 
   // Pour récupérer une valeur projet
@@ -292,7 +292,7 @@ class ServStep {
   }
 
   execCreateFolder(){
-    const path = this.scriptService.resolvePath(this.evaluateProp('path'))
+    const path = this.expandPath(this.evaluateProp('path'))
     server.send({action: 'create-folder', data: path}, this.callback.bind(this))
   }
 
@@ -365,7 +365,7 @@ class ServStep {
           Object.assign(obj, { [id]: this.scriptService.getValue(`${this.prefix}-${id}`) })
         })
         console.info("Objet à enregistrer dans %s", this.path, obj)
-        const path = this.scriptService.resolvePath(this.path);
+        const path = this.expandPath(this.path);
         server.send({action:'save-in-file', path, obj, no_raise: true}, this.execSaveData.bind(this))
       }
     }
@@ -440,7 +440,7 @@ class ServStep {
   getFileValues(path, callback, retour) {
     // console.log("-> getFileValues, retour = ", retour)
     if (undefined == retour) {
-      path = this.scriptService.resolvePath(path)
+      path = this.expandPath(path)
       server.send({action:'evaluate-file', path: path, no_raise: true}, this.getFileValues.bind(this, path, callback))
     } else if (retour.error) {
       callback({error: getErr('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])})
@@ -478,6 +478,13 @@ class ServStep {
   getAbsoluteData(prop) { return this.paramsSpecs[prop]}
 
 
+  expandPath(path){
+    if (path[0] == '/') {
+      return path
+    } else {
+      return this.scriptService.resolvePath(path)
+    }
+  }
   /**
    * Retourne true si la condition de l'étape n'est pas satisfaite,
    * true otherwise
