@@ -17,8 +17,10 @@ class Dialog {
     this.width = data.width ?? data.w ?? '520px'
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? null
+    this.errorMessage = data.errorMessage // en cas d'erreur
     this.content = data.content ?? null
-    this.defaultValue = data.defaultValue ?? null
+    this.default      = data.default
+    this.defaultValue = data.defaultValue
     this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
     this.midData = data.midBtn ?? null
     this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
@@ -128,6 +130,10 @@ class Dialog {
       const msg = DCreate('DIV', {class: 'message', text: this.message ?? ''})
       // Du contenu HTML dans div.message
       if (this.content) msg.appendChild(this.content)
+      if ( this.errorMessage ) {
+        const errMsg = DCreate('DIV', {class:'error', text: this.errorMessage})
+        msg.appendChild(errMsg)
+      }
       div.appendChild(msg)
     }
     // Pied de page

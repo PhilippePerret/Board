@@ -69,6 +69,58 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 
 ==== Les types de données ====
 
+[[script-service-type-save-data]]
+===== Save-data =====
+
+Permet d'enregistrer une donnée à la volée.
+
+[cols="1,1,2"]
+|====
+| `type`    2+| `save-data`
+| `id`      2+| Identifiant de l'étape.
+| `values`  2+| Les valeurs à enregistrer ou les identifiants
+|             | valeurs brutes | Sans `prefix` les valeurs sont des valeurs brutes
+|             | avec `prefix`  | Les clés d'un objet à reconstituer qui serviront aussi à obtenir les valeurs depuis les étapes d'identifiant `<prefix>-<clé>`
+| `prefix`  2+| Préfixe à utiliser pour rassembler
+|====
+
+Par exemple, si l'on doit reconstituer un objet "Livre" qui possède les clés `titre`, `auteur` et `annee`, on créera les étapes id = `livre-titre`, id= `livre-auteur` et id = `livre-annee` et l'on définir les données de l'étape par :
+
+----
+---
+- id: "livre-titre"
+  type: "string"
+  q: "Titre du livre"
+
+- id: "livre-auteur"
+  type: "string"
+  q: "Auteur du livre
+  
+- id: "livre-annee"
+  type: "integer"
+  q: "Année de publication
+
+- id: 'save-the-book'
+  type: 'save-data'
+  values: ['titre', 'auteur', 'annee']
+  prefix: 'livre
+----
+
+
+
+[[script-service-type-set]]
+===== Set =====
+
+Permet de définir explicitement le `step.value` d'une étape. Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
+
+[cols="1,1,2"]
+|====
+| `id`        2+| Identifiant obligatoire
+| `type`      2+| `set`
+| `var_step   2+| Identifiant de l'étape dont il faut définir la valeur
+| `var_value  2+| Valeur à donner à `value` de l'étape
+|====
+
 [[script-service-type-select]]
 ===== Select =====
 
@@ -87,7 +139,7 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 Si _`create`_ est true, on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :
 
 ----
-- if: "${<identifiant étape>} = autre"
+- if: "${<identifiant étape>} = --other--"
 ----
 
 Plusieurs étapes de ce type vont s'enchainer pour obtenir toutes les valeurs pour le type de données fournie.

@@ -74,7 +74,7 @@ class TextFieldDialog extends Dialog {
 
   buildField(){
     const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
-    const input = DCreate('INPUT', {type: 'text', id: this.FId, style: 'width: 100%', value: this.defaultValue})
+    const input = DCreate('INPUT', {type: 'text', id: this.FId, style: 'width: 100%', value: this.default || this.defaultValue || ""})
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
     return div

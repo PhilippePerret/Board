@@ -182,6 +182,11 @@ begin
     require_relative 'lib/evaluate_file.rb'
     FileHandy.evaluate(request['path'])
 
+  # Fonctionne de paire avec 'evaluate-file' pour enregistrer
+  # un nouvel objet ou autre valeur dans un fichier quelconque
+  when 'save-in-file'
+    require_relative 'lib/evaluate_file.rb'
+    FileHandy.add_objet(request['path'], request['obj'])
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"

@@ -24,9 +24,15 @@ class ScriptService {
     } else if (!Array.isArray(retour.data)) {
         return this.displayErrors([msgErr('scserv-list-required',[aide('script-services-steps')])])
     } else {
-      this.steps = retour.data.map(stepData => new ServStep(this, stepData))
+      // ok
+      this.stepById = {}
+      this.steps = retour.data.map(stepData => {
+        const step = new ServStep(this, stepData)
+        if (step.id) { Object.assign(this.stepById, {[step.id]: step}) }
+        return step
+      })
+      this.errors = []
       if ( this.serviceSeemsValid() /* Premier contrôle rapide */) {
-        this.errors = []
         this.execNextStep() 
       } else {
 
@@ -70,6 +76,14 @@ class ScriptService {
     }
   }
 
+  // Retourne la valeur (value) d'une étape évaluée précédemment
+  valueOf(stepId){
+    // console.log("this.stepById et stepId", stepId, this.stepById)
+    console.log("this.stepById[%s]", stepId, this.stepById[stepId])
+    return this.stepById[stepId]?.value
+  }
+
+  // Résoud un chemin d'accès relatif
   resolvePath(relativePath){
     return `${this.projet.path}/${relativePath.replace(/^\.\//, '')}`
   }
@@ -132,6 +146,13 @@ class ScriptService {
 
 class ServStep {
 
+  // Pour définir la valeur finale et passer à l'étape suivante
+  setValue(value) {
+    // console.log("value finale = ", value)
+    this.value = value
+    this.callback()
+  }
+
   /**
    ***************************************************************
    *              EXÉCUTION DE L'ÉTAPE
@@ -148,19 +169,83 @@ class ServStep {
   exec(errors, callback){
     this.callback = callback
     this.errors = errors
-    switch(this.type){
-      case 'select':
-        this.value = this.execSelect()
-        break
-      case 'string':
-        this.errors.push("Je ne sais pas traiter le type 'string'.")
-        break
-      case 'create-folder':
-        return this.execCreateFolder()
-        break
+    // Pour une étape conditionnelle
+    if (this.isConditional && this.conditionNotSatisfied()){ 
+      console.info("La condition n'est pas satisfaite, je passe à la suite.")
+      return callback()
+    } else if (this.isConditional) {
+      console.info("La condition est satisfaite, j'exécute l'étape.")
+    } else {
+      console.info("Étape inconditionnelle")
+    }
+
+    const method = `exec${kebabToPascalCase(this.type)}`
+    if ('function' == typeof this[method]) {
+      this[method].call(this)
+    } else {
+      this.errors.push(`Fonction à définir : ${method}`) // normalement détecté avant
+      callback()
     }
   }
 
+
+  execString(retour){
+    console.log("retour :", retour)
+    if (retour) {
+      if (this.required && retour == ':none:') {
+        //=> une erreur
+      }
+      this.setValue(retour)
+    } else {
+      const ddata = {
+          title: this.title
+        , message: this.q
+        , default: this.default || ""
+        , ouiBtn: {name:'OK', onclick: this.execString.bind(this)}
+        , nonBtn: {name:'Renoncer', onclick: this.execString.bind(this, ':none:')}
+      }
+      new TextFieldDialog(ddata).show()
+    }
+  }
+
+  execText(retour){
+    if (retour) {
+      this.setValue(retour)
+    } else {
+      const ddata = {
+          title: this.title
+        , message: this.q
+        , errorMessage: this.errorMessage
+        , ouiBtn: {name:'OK', onclick:this.execText.bind(this)}
+        , nonBtn: {name:'Abandonner', onclick:this.execText.bind(this, ':none:')}
+      }
+      new TextareaDialog(ddata).show()
+    }
+  }
+
+  execPhone(retour) {
+    if (retour) {
+      // phone valide
+      retour = retour.replace(/\./, ' ')
+      if (retour.match(/[0-9]{8}/)) retour = retour.match(/\d\d/g).join(" ")
+      if (retour.match(/[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}/)) {
+        this.setValue(retour)
+      } else {
+        this.errorMessage = getErr('invalid-phone-number', retour)
+        this.execPhone(undefined)
+      }
+    } else {
+      const ddata = {
+          title: this.title || 'Numéro de téléphone'
+        , message: this.q || 'Merci de bien vouloir fournir un numéro de téléphone valide.'
+        , default: this.default || ""
+        , errorMessage: this.errorMessage
+        , ouiBtn: {name:'OK', onclick: this.execPhone.bind(this)}
+        , nonBtn: {name:'Renoncer', onclick: this.execPhone.bind(this, ':none:')}
+      }
+      new TextFieldDialog(ddata).show()
+    }
+  }
 
   /**
    * @return La valeur sélectionnée ('autre' pour création)
@@ -173,7 +258,6 @@ class ServStep {
         if (retour.error) raise(retour.error)
         this.values = retour.data
       }
-      console.log("exectSelect, this.values = ", this.values)
       if ( 'string' == typeof this.values ) {
         // this.values est un string => c'est un fichier contenant les données ou les renvoyant
         this.getFileValues(this.values, this.execSelect.bind(this))
@@ -192,10 +276,36 @@ class ServStep {
     }
   }
 
+  /**
+   * Méthode complexe permettant d'enregistrer une valeur dans un fichier
+   * this.prefix : si défini
+   * this.values : les données à enregistrer, à reconstituer
+   */
+  execSaveData(retour){
+    if (retour) {
+      if (retour.error) { this.errors.push(retour.error) } 
+      this.setValue(!retour.error)
+    } else {
+      if (this.prefix) {
+        const obj = {}
+        this.values.forEach(id => {
+          Object.assign(obj, { [id]: this.scriptService.valueOf(`${this.prefix}-${id}`) })
+        })
+        console.info("Objet à enregistrer dans %s", this.path, obj)
+        const path = this.scriptService.resolvePath(this.path);
+        server.send({action:'save-in-file', path, obj, no_raise: true}, this.execSaveData.bind(this))
+      }
+    }
+  }
+
+  // Appelé avec le résultat du choix
+  // On le met dans le this.value de cette étape
+  /**
+   * TODO: Il faudrait un garde-fou quand la valeur '--other--' : les
+   * étapes suivantes doivent comporter if: ${<this id>} = '--other--'
+   */
   onChooseSelect(choix){
-    console.log("choix = ", choix)
-    this.value = choix
-    this.callback()
+    this.setValue(choix)
   }
 
   // Vérifie que les données values pour le select sont valides et
@@ -233,7 +343,7 @@ class ServStep {
     const data ={
         title: this.title
       , q: this.q
-      , widht: '620px'
+      , width: '620px'
       , values: this.values
       , ouiBtn: {name: 'Choisir', onclick: this.onChooseSelect.bind(this)}
       , nonBtn: {name: 'Renoncer', onclick: this.onChooseSelect.bind(this, null)}
@@ -255,7 +365,7 @@ class ServStep {
    * valeur
    */
   getFileValues(path, callback, retour) {
-    console.log("-> getFileValues, retour = ", retour)
+    // console.log("-> getFileValues, retour = ", retour)
     if (undefined == retour) {
       path = this.scriptService.resolvePath(path)
       server.send({action:'evaluate-file', path: path, no_raise: true}, this.getFileValues.bind(this, path, callback))
@@ -268,15 +378,44 @@ class ServStep {
 
   constructor(scriptService, data){
     this.scriptService = scriptService
-    this.data           = data
+    this.data = data
     for (var prop of Object.getOwnPropertyNames(data)) {
       this[prop] = data[prop]
+      console.log("this[%s] = %s", prop, this[prop])
     }
+
+    this.isConditional = this.if
   }
+
   get dataType(){ return this._dtype || (this.dtype = SCRIPT_SERVICES_KNOWN_TYPES[this.type] )}
   get aideByType(){ return this._aidtype || (this._aidtype = aide(`script-service-type-${this.type}`) )}
   get paramsSpecs(){return this._pmsvalid || (this._pmsvalid = this.dataType.params)}
 
+
+  /**
+   * Retourne true si la condition de l'étape n'est pas satisfaite,
+   * true otherwise
+   * 
+   * Pour le moment une condition est toujours formée par 'expression evaluateur resultat'
+   * evaluator : '=', '>' etc.
+   */ 
+  conditionNotSatisfied(){
+    var [expression, evaluator, expected] = this.if.split(' ')
+    // console.log("évaluation terms", {expression, expected, evaluator})
+    expression = expression.replace(/^\$\{(.*)\}$/, (match, idStep) => { return this.scriptService.valueOf.call(this.scriptService, idStep) })
+    expected = expected.replace(/^(['"])(.*)\1$/, '$2')
+    console.log("évaluation terms", {expression, expected, evaluator})
+    switch(evaluator){
+      case '==': case '=':
+        return !(expression == expected)
+      case '>':
+        return !(expression > expected)
+      case '<':
+        return !(expression < expected)
+      default:
+        raise('scserv-unknown-evaluator', [this.id, evaluator, this.aideByType])
+    }
+  }
 
   // Retourne la liste des erreurs trouvées pour cette étape (vide = ok)
   validate(){
@@ -306,7 +445,8 @@ class ServStep {
       // Condition : le paramètre doit être défini
       if (! this.paramsSpecs[kparam].required === true) return
       Object.assign(this.required_params, {[kparam]: true})
-      this.data[kparam] || raise('scserv-param-required', [kparam, this.type, this.aideType])
+      console.log("this.data[%s] = ", kparam, this.data[kparam])
+      this[kparam] || raise('scserv-param-required', [kparam, this.type, this.aideByType])
     }
   }
   other_params_are_valid(){
@@ -324,7 +464,7 @@ class ServStep {
       // Si on rencontre dans les données le paramètre 'defaut', 
       // c'est un paramètre qui n'existe pas (un select n'a pas de 
       // paramètre 'defaut') et c'est donc une erreur
-      paramSpec || raise( 'scserv-unknown-param', [kparam, this.type, this.aideType])
+      paramSpec || raise( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
       // --- On va s'arrêter là pour la pré-validation ---
       return true
 
@@ -334,9 +474,9 @@ class ServStep {
       //   for( var i = 0; i < paramSpec.type.length; ++i) {
 
       //   }
-      //   this.preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, this.aideType)
+      //   this.preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, this.aideByType)
       // } else {
-      //   this.checkParamTypeAgainst(kparam, dataParam, paramSpec.type, this.aideType)
+      //   this.checkParamTypeAgainst(kparam, dataParam, paramSpec.type, this.aideByType)
       // }
     }
 
