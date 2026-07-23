@@ -11,7 +11,11 @@ const MESSAGES = {
   , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder'
   , 'folder-required': 'Il faut impérativement choisir un dossier.'
 
-  , 'test-raw': 'remplace $1'
+  // -- Script services --
+  , 'scserv-end': 'Script-service terminé.'
+  
+  // -- test --
+  , 'test-raw':   'remplace $1'
   , 'test-array': 'remplace $1 et $2'
   , 'test-objet': 'remplace $ceci et ${cela}'
 }

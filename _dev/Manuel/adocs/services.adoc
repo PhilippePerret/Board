@@ -13,6 +13,7 @@ include::services/window-in-finder.adoc[]
 
 === Gérer les versions d'un fichier ===
 include::services/versionned-file.adoc[]
+
 === Actualiser la version majeur d'un fichier ===
 include::services/update-major-version.adoc[]
 

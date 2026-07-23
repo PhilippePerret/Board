@@ -1,12 +1,12 @@
 [[scripts-services, les scripts-services]]
-==== Les scripts-services ====
+=== Les scripts-services ===
 
 Les _scripts-services_ ouvrent définitivement la voie de l'infini pour définir les services d'un projet. Ils permettent de **composer soi-même un service** en exploitant toutes les ressources de l'application.
 
 Mais tout pouvoir puissant implique des responsabilités à ses propotions.
 
 [[script-services-steps]]
-===== Une suite d'étapes =====
+==== Une suite d'étapes ====
 
 Un _script-service_ est un fichier YAML qui décrit les étapes du service. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.
 
@@ -67,8 +67,37 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 
 ----
 
+==== Les types de données ====
 
-À PLACER
-Quand le type est '<type>-or-path', path peut contenir le type attendu.
-Si <path> est un fichier autre que .yaml, .json ou .csv, il doit être EXÉCUTABLE et retourner un données ÉVALUABLE PAR JSON (JSON.parse en ruby).
-Si le fichier n'est pas exécutable (`chmod +x fichier`) ou qu'il ne retourne pas une donnée au format JSON, une erreur sera produite.
+[[script-service-type-select]]
+===== Select =====
+
+[cols="1,1,2"]
+|====
+| `id`      2+| Identifiant obligatoire
+| `type`    2+| **`select`**
+| `create`  2+| `true` si on doit pouvoir créer une nouvelle valeur +
+                Ça donne la valeur 'autre' à cette étape (cf. la suite).
+| `values`  2+| Les valeurs parmi lesquelles ont peut choisir
+|             | string          | le chemin à un fichier contenant les valeurs
+>|        ou  | array of string | Liste de valeurs simples (['poire', 'melon'])
+>|        ou  | array of array  | Liste de doubles valeurs [[value, title], ...] 
+|====
+
+Si _`create`_ est true, on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :
+
+----
+- if: "${<identifiant étape>} = autre"
+----
+
+Plusieurs étapes de ce type vont s'enchainer pour obtenir toutes les valeurs pour le type de données fournie.
+
+
+create: true -- permet de dire qu'une donnée select peut être créée
+
+[[script-service-file-values]]
+==== Données dans un fichier ====
+
+On peut tirer des données d'un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).
+
+Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).

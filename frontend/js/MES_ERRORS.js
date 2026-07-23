@@ -21,4 +21,5 @@ const ERRORS = {
   , 'scserv-param-required': "Le paramètre '$1' est requis, pour le type '$2' ($3)."
   , 'scserv-unknown-param': "Le paramètre '$1' est inconnu du service de type '$2' ($3)."
   , 'scserv-param-bad-type': "Le paramètre '$1' n'a pas le bon type. Attendu: $2, actuel: $3 ($4)."
+  , 'scserv-on-get-file-values': "Une erreur s'est produite en relevant les données du fichier '$1' : $2 ($3)."
 }

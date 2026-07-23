@@ -76,7 +76,11 @@ function jsonize(data){
 
 function raise(msg, params){
   if (params) {console.error(msg, params)}
-  throw new Error(msg)
+  const err = new Error(msg)
+  if (params) {
+    throw Object.assign(err, {params: params})
+  }
+  throw err
 }
 
 // 'mon-change-on' => MonChangeOn

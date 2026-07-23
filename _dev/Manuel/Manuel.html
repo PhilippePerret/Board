@@ -451,8 +451,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#reglages-app">Réglages de l&#8217;application</a>
-<ul class="sectlevel3">
-<li><a href="#_les_scripts_services">Les scripts-services</a></li>
+<ul class="sectlevel2">
+<li><a href="#scripts-services">Les scripts-services</a></li>
 </ul>
 </li>
 <li><a href="#services">Les services</a>
@@ -461,6 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#services-data">Données des services</a></li>
 <li><a href="#_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</a></li>
 <li><a href="#_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</a></li>
+<li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
 <li><a href="#_lancer_un_script_quelconque">Lancer un script quelconque</a></li>
 </ul>
@@ -482,13 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_bugs">BUGS</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>quand on ouvre la documentation, ça ne fait rien (ça affiche bien le message de confirmation mais rien ne se passe)</p>
-</li>
-</ul>
-</div>
+
 </div>
 </div>
 <div class="sect1">
@@ -673,21 +668,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>En cliquant sur le titre include::/../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
 </div>
-<div class="sect3">
-<h4 id="_les_scripts_services">Les scripts-services</h4>
+<div class="sect2">
+<h3 id="scripts-services">Les scripts-services</h3>
 <div class="paragraph">
 <p>Les <em>scripts-services</em> ouvrent définitivement la voie de l&#8217;infini pour définir les services d&#8217;un projet. Ils permettent de <strong>composer soi-même un service</strong> en exploitant toutes les ressources de l&#8217;application.</p>
 </div>
 <div class="paragraph">
 <p>Mais tout pouvoir puissant implique des responsabilités à ses propotions.</p>
 </div>
-<div class="sect4">
-<h5 id="_une_suite_détapes">Une suite d&#8217;étapes</h5>
+<div class="sect3">
+<h4 id="script-services-steps">Une suite d&#8217;étapes</h4>
 <div class="paragraph">
-<p>Un <em>script-service</em> est un fichier YAML qui décrit les étapes du service.</p>
+<p>Un <em>script-service</em> est un fichier YAML qui décrit les étapes du service. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- name: Première étape
+
+- name: Deuxième étape
+
+- name: Troisième étape
+
+# etc.</pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Pour illustrer l&#8217;explication, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d&#8217;envoi de manuscrits à des maisons d&#8217;édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l&#8217;on écrit un roman, voire plus, par an.</p>
+<p>Pour illustrer l&#8217;explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d&#8217;envoi de manuscrits à des maisons d&#8217;édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l&#8217;on écrit un roman, voire plus, par an.</p>
 </div>
 <div class="paragraph">
 <p>En apparence, ce service doit être simple :</p>
@@ -724,7 +731,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>Chaque étape doit avoir un identifiant ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l&#8217;identifiant contient des tirets, il doit obligatoirement être entre guillemets.</p>
+<p>Noter que le <code>name</code> des étapes est optionnel, mais pour la clarté, il vaut mieux le définir.</p>
+</div>
+<div class="paragraph">
+<p>En revanche, chaque étape doit impérativement avoir un identifiant (<code>ìd</code>). C&#8217;est une valeur ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l&#8217;identifiant contient des tirets, il doit obligatoirement être entre guillemets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -740,6 +750,73 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 - name: "Enregistrement envoi dans l'historique"
   id: historique</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_les_types_de_données">Les types de données</h4>
+<div class="sect4">
+<h5 id="script-service-type-select">Select</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant obligatoire</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><strong><code>select</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>create</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>true</code> si on doit pouvoir créer une nouvelle valeur<br>
+                Ça donne la valeur 'autre' à cette étape (cf. la suite).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Les valeurs parmi lesquelles ont peut choisir</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">le chemin à un fichier contenant les valeurs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">ou</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array of string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste de valeurs simples (['poire', 'melon'])</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">ou</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array of array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste de doubles valeurs [[value, title], &#8230;&#8203;]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Si <em>`create`</em> est true, on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${&lt;identifiant étape&gt;} = autre"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Plusieurs étapes de ce type vont s&#8217;enchainer pour obtenir toutes les valeurs pour le type de données fournie.</p>
+</div>
+<div class="paragraph">
+<p>À PLACER
+Quand le type est '&lt;type&gt;-or-path', path peut contenir le type attendu.
+Si &lt;path&gt; est un fichier autre que .yaml, .json ou .csv, il doit être EXÉCUTABLE et retourner un données ÉVALUABLE PAR JSON (JSON.parse en ruby).
+Si le fichier n&#8217;est pas exécutable (<code>chmod +x fichier</code>) ou qu&#8217;il ne retourne pas une donnée au format JSON, une erreur sera produite.</p>
+</div>
+<div class="paragraph">
+<p>create: true&#8201;&#8212;&#8201;permet de dire qu&#8217;une donnée select peut être créée</p>
 </div>
 </div>
 </div>
@@ -1059,9 +1136,11 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <p>Bien entendu, on peut choisir autant de fichiers versionné qu&#8217;on le désire, pour le même projet.</p>
 </div>
 <div class="paragraph">
-<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, include::../../../../frontend/js/App.js[tag=app-name] demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.
-=== Actualiser la version majeur d&#8217;un fichier ===</p>
+<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, include::../../../../frontend/js/App.js[tag=app-name] demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">

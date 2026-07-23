@@ -1,4 +1,3 @@
-const UNIV_KEYS = {id: true, type: true, name: true}
 
 class ScriptService {
 
@@ -26,7 +25,8 @@ class ScriptService {
         return this.displayErrors([msgErr('scserv-list-required',[aide('script-services-steps')])])
     } else {
       this.steps = retour.data.map(stepData => new ServStep(this, stepData))
-      if ( this.serviceIsValid() ) { 
+      if ( this.serviceSeemsValid() /* Premier contrôle rapide */) {
+        this.errors = []
         this.execNextStep() 
       } else {
 
@@ -35,9 +35,9 @@ class ScriptService {
   }
 
   /**
-   * Analyse de la validité du script-service (ses data)
+   * Analyse grossière de la validité du script-service (ses data)
    */
-  serviceIsValid(){
+  serviceSeemsValid(){
     let errors = []
     // Définitions générales, par exemple les formats de date
     // Todo
@@ -56,11 +56,17 @@ class ScriptService {
   /*              BOUCLE SUR CHAQUE ÉTAPE                     */
   /************************************************************/
   execNextStep(){
+    console.log("this.errors au retour de step.exec", this.errors)
     const step = this.steps.shift()
     if ( step ) { 
-      step.exec(this.execNextStep.bind(this))
+      /* ============  EXÉCUTION DE L'ÉTAPE  =============*/
+      step.exec(this.errors, this.execNextStep.bind(this))
     } else {
-      message(getMsg('scserv-end')); return 
+      if (this.errors.length) {
+        this.displayErrors(this.errors)
+      } else {
+        message(getMsg('scserv-end')); return 
+      }
     }
   }
 
@@ -84,16 +90,26 @@ class ScriptService {
 
   // Affichage des erreurs rencontrées
   displayErrors(errors){
+    console.log('-> displayErrors avec', errors)
     const containerErrors = DCreate('DIV', {
-      class: 'error break-all small', 
-      text: errors.map(error => `<div class="error">${error}</div>`).join('')
+        class: 'error break-all small'
+      , text: errors.map(error => {
+          if (typeof error == 'string') {
+            error = error
+          } else {
+            error = `Erreur de type ${typeof error}`
+          }
+          return `<div class="error">${error}</div>`
+        }).join('')
+      , style: 'margin-top:2em;'
     })
     const data = {
-        title: 'Erreur de définition de Script-service'
-      , message: 'Le fichier de définition du script-service contient des erreurs.'
-      , content: containerErrors
-      , ouiBtn: {name: 'Modifier…', onclick: this.openData.bind(this)}
-      , nonBtn: {name: 'Renoncer'}
+        title:    'Erreur de définition du Script-service'
+      , width:    '960px'
+      , message:  'Le fichier de définition du script-service contient des erreurs.'+"\n\n"
+      , content:  containerErrors
+      , ouiBtn:   {name: 'Modifier…', onclick: this.openData.bind(this)}
+      , nonBtn:   {name: 'Renoncer'}
     }
     new ConfirmDialog(data).show()
   }
@@ -116,6 +132,36 @@ class ScriptService {
 
 class ServStep {
 
+  /**
+   ***************************************************************
+   *              EXÉCUTION DE L'ÉTAPE
+   * (Fonction principale)
+   * 
+   * Pour le moment, on essaie de l'évaluer en même temps qu'on 
+   * l'exécute, c'est-à-dire qu'on fait une première passe pour
+   * essayer autant qu'on peut et ensuite on lance vraiment.
+   * 
+   * Note : L'étape a déjà été validée dans ses grandes largeurs.
+   * 
+   * @param errors Array Container pour les erreurs
+   */
+  exec(errors, callback){
+    switch(this.type){
+      case 'select':
+        errors.push("Je ne sais pas traiter le type 'select'.")
+        break
+      case 'string':
+        errors.push("Je ne sais pas traiter le type 'string'.")
+        break
+      case 'create-folder':
+        return this.execCreateFolder(callback)
+        break
+    }
+    // Si on arrive ici quand même, il faut jouer l'étape suivante
+    callback()
+  }
+
+
 
   constructor(scriptService, data){
     this.scriptService = scriptService
@@ -124,90 +170,88 @@ class ServStep {
     this.type           = data.type
     this.params         = data.params
   }
+  get dataType(){ return this._dtype || (this.dtype = SCRIPT_SERVICES_KNOWN_TYPES[this.type] )}
+  get aideByType(){ return this._aidtype || (this._aidtype = aide(`script-service-type-${this.type}`) )}
+  get paramsSpecs(){return this._pmsvalid || (this._pmsvalid = this.dataType.params)}
+
 
   // Retourne la liste des erreurs trouvées pour cette étape (vide = ok)
   validate(){
     const errors = []
     try {
-      this.id ?? raise('scserv-id-required', aide('scripts-services'))
-      this.id.replace(/[0-9a-z]/gi, '') == '' || raise('scserv-id-invalid', [this.id, aide('script-service-valid-id')])
-      this.type ?? raise('scserv-type-required', [this.id, aide('scripts-services')])
-      const dataType = SCRIPT_SERVICES_KNOWN_TYPES[this.type] || raise('scserv-step-type-unknowned', [this.type, aide('script-service-types-valides')])
-      const keyAide = `script-service-type-${this.type}`
-      const aideType = aide(keyAide)
-      // Y a-t-il tous les paramètres requis
-      const paramsValidator = SCRIPT_SERVICES_KNOWN_TYPES[this.type].params
-      for (var kparam in paramsValidator){
-        // Condition : le paramètre doit être défini
-        if (! paramsValidator[kparam].required === true) return
-        this.data[kparam] || raise('scserv-param-required', [kparam, this.type, aideType])
-      }
-      // À l'inverse, les paramètres définis sont-ils valides
-      for (kparam of Object.getOwnPropertyNames(this.data)) {
-        if (UNIV_KEYS[kparam]) continue
-        const dataParam = this.data[kparam]
-        const validator = paramsValidator[kparam]
-        validator || raise( 'scserv-unknown-param', [kparam, this.type, aideType])
-        // Test du type de la valeur du paramètre (et définition si c'est un fichier)
-        if (Array.isArray(validator.type)) {
-          const mainType = validator.type[0] // par exemple 'array-of-object
-          const altType  = validator.type[1] // On part du principe qu'il ne peut y avoir qu'un second type… (Hasardeux, quand même)
-          this.preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, aideType)
-        } else {
-          this.checkParamTypeAgainst(kparam, dataParam, validator.type, aideType)
-        }
-      }
+      this.id_is_required()
+      this.id_is_valid()
+      this.type_is_required()
+      this.type_is_known()
+      this.has_all_required_params()
+      this.other_params_are_valid()
     } catch(err) {
-      errors.push(err)
+      console.log("err", err)
+      errors.push(getErr(err.message, err.params))
     }
     return errors
   }
 
-  preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, aideType) {
-    // Pour le moment, on part du principe (hasardeux) que altType, s'il est défini,
-    // est toujours un path
-    if (altType == 'path' && typeof dataParam == 'string') {
-      // La valeur est un path définissant un fichier : on doit le 
-      // charger en l'évaluant pour obtenir une donnée de type mainType
-      server.send({action:'evaluate-file', path: dataParam}, this.beforeCheckParamTypeAgainst.bind(this, kparam, mainType, aideType))
+
+  id_is_required(){ this.id ?? raise('scserv-id-required', aide('scripts-services')) }
+  id_is_valid() { this.id.replace(/[0-9a-z_\-]/gi, '') == '' || raise('scserv-id-invalid', [this.id, aide('script-service-valid-id')]) }
+  type_is_required() { this.type ?? raise('scserv-type-required', [this.id, aide('scripts-services')]) }
+  type_is_known() { SCRIPT_SERVICES_KNOWN_TYPES[this.type] || raise('scserv-step-type-unknowned', [this.type, aide('script-service-types-valides')]) }
+  has_all_required_params() {
+    this.required_params = {}
+    for (var kparam in this.paramsSpecs){
+      // Condition : le paramètre doit être défini
+      if (! this.paramsSpecs[kparam].required === true) return
+      Object.assign(this.required_params, {[kparam]: true})
+      this.data[kparam] || raise('scserv-param-required', [kparam, this.type, this.aideType])
+    }
+  }
+  other_params_are_valid(){
+    // On passe en revue tous les paramètres 
+    for (var kparam of Object.getOwnPropertyNames(this.data)) {
+      // On passe les paramètres universels (id, type…) et les 
+      // paramètres de l'étape définis comme requis
+      if (UNIV_KEYS[kparam] || this.required_params[kparam]) continue
+      // On prend la donnée du param dans l'étape
+      const dataParam = this.data[kparam]
+      const paramSpec = this.paramsSpecs[kparam]
+      // Le paramètre doit être connu (hum… de quoi je parle, là ?)
+      // Par exemple du paramètre 'values' ou 'default' pour un type
+      //  'select'
+      // Si on rencontre dans les données le paramètre 'defaut', 
+      // c'est un paramètre qui n'existe pas (un select n'a pas de 
+      // paramètre 'defaut') et c'est donc une erreur
+      paramSpec || raise( 'scserv-unknown-param', [kparam, this.type, this.aideType])
+      // --- On va s'arrêter là pour la pré-validation ---
+      return true
+
+      // // Test du type de la valeur du paramètre (et définition si c'est un fichier)
+      // if (Array.isArray(paramSpec.type)) {
+      //   // La valeur doit être un de ces types
+      //   for( var i = 0; i < paramSpec.type.length; ++i) {
+
+      //   }
+      //   this.preCheckParamTypeAgainst(kparam, dataParam, mainType, altType, this.aideType)
+      // } else {
+      //   this.checkParamTypeAgainst(kparam, dataParam, paramSpec.type, this.aideType)
+      // }
+    }
+
+  }
+
+  /**
+   * Fonction chargeant les valeurs d'un fichier quelconque.
+   * La donnée remontée peut être de tout type, mais en général, 
+   * ce sera un <array-of-object> pour pouvoir choisir une
+   * valeur
+   */
+  getFileValues(path, callback, retour) {
+    if (undefined == retour) {
+      server.send({action:'evaluate-file', path: path}, this.getFileValues.bind(this, path, callback))
+    } else if (retour.error) {
+      raise('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])
     } else {
-      this.checkParamTypeAgainst(kparam, dataParam, mainType, aideType)
-    }
-  }
-
-  // Retour de l'évaluation du fichier contenant les données
-  beforeCheckParamTypeAgainst(kparam, mainType, aideType, retour){
-    console.log("Retour dans beforeCheckParamTypeAgainst", retour)
-    this.checkParamTypeAgainst(kparam, retour.data, mainType, aideType)  
-    // On doit mettre les données dans le paramètre de l'étape
-    this.data[kparam] = retour.data
-  }
-
-  checkParamTypeAgainst(kparam, dataParam, mainType, aideType){
-    try {
-      let pType
-      switch(mainType){
-        // Un typeof qui n'existe pas
-        case 'array-of-object':
-          Array.isArray(dataParam) || raise(typeof dataParam)
-          for (var len = dataParam.length, i = 0; i < len; ++i) {
-            Object.isObject(dataParam[i]) || raise(typeof dataParam[i])
-          }
-          break
-        default:
-          pType = typeof dataParam
-      }
-      pType == mainType || raise(pType)
-    } catch (err) {
-      raise('scserv-param-bad-type', [kparam, mainType, getErr(err), aideType])
-    }
-
-  }
-
-  exec(callback){
-    switch(this.type){
-      case 'create-folder':
-        return this.execCreateFolder(callback)
+      callback(retour.data)
     }
   }
 
