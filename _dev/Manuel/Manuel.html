@@ -492,10 +492,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>pouvoir éditer le script-service en meta-cliquant dessus</p>
-</li>
-<li>
-<p>Données extra de projet : les prendre toutes, même les custom (venant d&#8217;autres service, par exemple 'manuscript-path' pour le copie pour envoi)</p>
+<p>Panneau de confirmation de fin de servide plus visible que message
+→ OKDialog (sans bouton non ou mid)</p>
 </li>
 </ul>
 </div>
@@ -815,8 +813,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><code>expression</code> est le plus souvent un identifiant d&#8217;étape exprimé par <code>${&lt;id etape&gt;}</code>. On prendra alors la valeur de cette étape pour la comparer à <code>expected</code>.</p>
 </div>
 <div class="paragraph">
+<p><code>operateur</code> peut être <code>==</code> ou <code>=</code>, <code>!=</code> ou <code>≠</code>, <code>&gt;</code>, <code>&lt;</code>.</p>
+</div>
+<div class="paragraph">
 <p><code>Expected</code> peut-être n&#8217;importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués.<br>
-Quand le type est <code>select</code> et que <code>create</code> est à true, autorisant la création d&#8217;une nouvelle valeur, <code>expected</code> doit alors être ''. Par exemple :</p>
+Quand le type est <code>select</code> et que <code>create</code> est à true (ou nom du bouton "Autre…"), autorisant la création d&#8217;une nouvelle valeur, <code>expected</code> doit alors être ''. Par exemple :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1063,6 +1064,68 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </table>
 </div>
 <div class="sect4">
+<h5 id="script-service-type-translate">Tranlate</h5>
+<div class="paragraph">
+<p>Permet de transposer une valeur <em>par marqueur</em> en vrai marqueur. L&#8217;exemple type de ces marques est la date <code>today</code> ou <code>tomorrow</code> qui sont automatiquement transposé en leur valeur réelle.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: "id-de-step"
+  type: translate
+  value: "&lt;valeur&gt;"   # le marqueur
+  step: "&lt;id step&gt;"   # pour la prendre et la remettre dans l'étape
+  format: "&lt;format résultat optionnel&gt;"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Si <code>step</code> est utilisé, c&#8217;est sa valeur qui est prise et remplacée.</p>
+</div>
+<div class="paragraph">
+<p><strong>Liste des marqueurs existants</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 71.4286%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Marque</strong></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><strong>Valeur résulat</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>today</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date d&#8217;aujourd&#8217;hui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permet de définir le format (%Y: année 4 chiffres, %YY: années 2 chiffre, %M: mois 2 chiffres, %_M: nom du mois, %J: jour, %JJ: jour sur deux chiffres, %H: heure, %m: minutes, %S: secondes)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tomorrow</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date de demain</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date+&lt;x&gt;</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date dans le futur, <code>&lt;x&gt;</code> jours après aujourd&#8217;hui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
 <h5 id="script-service-type-select">Select</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1081,7 +1144,7 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>create</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>true</code> si on doit pouvoir créer une nouvelle valeur<br>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>true</code> ou le nom du bouton "Nouveau…" si on doit pouvoir créer une nouvelle valeur<br>
                 Ça donne la valeur 'autre' à cette étape (cf. la suite).</p></td>
 </tr>
 <tr>
@@ -1107,7 +1170,7 @@ La valeur sera évaluée, donc peut-être définie par "${&lt;id étape&gt;}"</p
 </tbody>
 </table>
 <div class="paragraph">
-<p>Si <em>`create`</em> est true, on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :</p>
+<p>Si <em>`create`</em> est true (ou nom du bouton "Autre…"), on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1136,19 +1199,24 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
   type: select
   values: [1, 2, 3]
   q: "Choisissez un chiffre
-  create: true # pour permettre de choisir un autre chiffre
+  create: "Autre chiffre…" # pour permettre de choisir un autre chiffre
 
+# Comme le choix "Autre…" a été choisi, on propose
+# un dialogue pour entrer une autre valeur
 - if: "${le-choix} == ''"
   id: 'autre-chiffre'
   type: string
   q: "Quel autre chiffre ?"
 
+# Maintenant qu'on a la valeur, on la place dans l'étape
+# 'le-choix' car c'est elle qui sera référencée dans la suite
 - if "${le-choix} == ''"
   type:   set
   step:   "le-choix"            # -- l'étape qu'il faut redéfinir
   value:  "${autre-chiffre}"    # -- la valeur qu'il faut lui affecter
 
-# À partir d'ici, l'étape ${le-choix} contient la valeur voulue</pre>
+# À partir d'ici, l'étape ${le-choix} contient la valeur voulue,
+# qu'elle est été prise dans le menu ou définie explicitement.</pre>
 </div>
 </div>
 </div>
@@ -1258,12 +1326,17 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 <div class="listingblock">
 <div class="content">
 <pre>---
+# On essaie de prendre le chemin au manuscrit
+# dans les données du projet.
 - id: 'manuscrit-path'
   type: 'get-project-data'
 
+# Comme la donnée est nulle au départ, on va demande
+# de choisir le manuscrit.
 - if: "${manuscript-path} == null"
   id: "definition-manuscrit"
   type: 'select-file'
+  q: "Choisissez le manuscrit dans le Finder puis “OK”."
 
 - if: "${manuscript-path} == null"
   id: "set-project-manuscrit"

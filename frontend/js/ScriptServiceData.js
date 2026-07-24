@@ -18,6 +18,15 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
     }
   },
 
+  'translate': {
+      valid_if: (data) => { return data.step || data.value }
+    , params: {
+        step:   {required: false}
+      , value:  {required: false}
+      , format: {required: false}
+    }
+  },
+
   'string': {
     params: {
       default: {type: 'string'}

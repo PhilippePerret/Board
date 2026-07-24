@@ -245,6 +245,38 @@ Si non défini, c'est l'étape elle-même dont on définira la valeur
 >|          soit| Valeur d'étape   | ${<id etape>}
 |====
 
+[[script-service-type-translate]]
+===== Tranlate =====
+
+Permet de transposer une valeur _par marqueur_ en vrai marqueur. L'exemple type de ces marques est la date `today` ou `tomorrow` qui sont automatiquement transposé en leur valeur réelle.
+
+----
+---
+- id: "id-de-step"
+  type: translate
+  value: "<valeur>"   # le marqueur
+  step: "<id step>"   # pour la prendre et la remettre dans l'étape
+  format: "<format résultat optionnel>"
+----
+
+Si `step` est utilisé, c'est sa valeur qui est prise et remplacée.
+
+**Liste des marqueurs existants**
+
+[cols="1,1,5"]
+|====
+| **Marque** 2+| **Valeur résulat**
+| `today`     2+| Date d'aujourd'hui
+|               | `format` | Permet de définir le format (%Y: année 4 chiffres, %YY: années 2 chiffre, %M: mois 2 chiffres, %_M: nom du mois, %J: jour, %JJ: jour sur deux chiffres, %H: heure, %m: minutes, %S: secondes)
+| `tomorrow`  2+| Date de demain
+|               | `format`  | Même chose que pour `today`
+| `date+<x>`  2+| Date dans le futur, `<x>` jours après aujourd'hui
+|               | `format`  | Même chose que pour `today`
+| `date-<x>`  2+| Date dans le passé, `<x>` jours avant aujourd'hui
+|               | `format`  | Même chose que pour `today`
+
+|====
+
 [[script-service-type-select]]
 ===== Select =====
 

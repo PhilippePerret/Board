@@ -12,7 +12,7 @@ const MESSAGES = {
   , 'folder-required': 'Il faut impérativement choisir un dossier.'
 
   // -- Script services --
-  , 'scserv-end': 'Script-service terminé.'
+  , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
   
   // -- test --
   , 'test-raw':   'remplace $1'

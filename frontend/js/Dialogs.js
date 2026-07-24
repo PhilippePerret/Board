@@ -8,6 +8,7 @@ class ConfirmDialog extends Dialog {
 class OKDialog extends Dialog {
   constructor(data) {
     super(data)
+    this.ouiData = {name: 'OK', onclick: () => {} }
     this.nonData = null
     this.midData = null
   }
