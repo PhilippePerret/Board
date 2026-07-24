@@ -17,6 +17,7 @@ class ScriptService {
 
   /* -- Point d'entrée secondaire -- */
   run(retour){
+    D.start()
     if (undefined == retour) {
       server.send({action: 'load-yaml-file', path: this.scriptPath, no_raise: true}, this.run.bind(this))
     } else if (retour.error) {
@@ -66,6 +67,7 @@ class ScriptService {
     const step = this.steps.shift()
     if ( step ) { 
       /* ============  EXÉCUTION DE L'ÉTAPE  =============*/
+      D.add(`--- ÉTAPE $1`, [step.id])
       step.exec(this.errors, this.execNextStep.bind(this))
     } else {
       if (this.errors.length) {
@@ -244,17 +246,18 @@ class ServStep {
   }
 
   /**
-   * Fonction qui se contente de fixer la valeur d'une étape précédente
-   * mais qui servira plus tard.
+   * Fonction qui se contente de fixer la valeur d'une étape précédente ou
+   * de l'étape courante.
+   * Cette donnée servira plus tard car elle sera accessible avec 
+   * "${<step id>}".
    */
   execSet(){
-    var finalValue
-    if (this.var_value.match(/\$\{.*\}/)) {
-      finalValue = this.evaluateProp('var_value')
+    var finalValue = this.evaluateProp('var_value')
+    if (this.var_step) {
+      this.scriptService.setValue(this.var_step, finalValue)
     } else {
-      finalValue = this.var_value
+      this.setValue(finalValue)
     }
-    this.scriptService.setValue(this.var_step, finalValue)
   }
 
   execString(retour){
@@ -296,6 +299,18 @@ class ServStep {
     server.send({action: 'create-folder', data: path}, this.callback.bind(this))
   }
 
+  execCreateFile(retour){
+    if (retour) {
+      if (retour.error) raise(retour.error)
+      else this.setValue(true)
+    } else {
+      const path    = this.expandPath(this.evaluateProp('path'))
+      const content = this.evaluateProp('content')
+      server.send({action: 'create-file', path, content}, this.execCreateFile.bind(this))
+    }
+
+  }
+
   execPhone(retour) {
     if (retour) {
       // phone valide
@@ -333,6 +348,7 @@ class ServStep {
       }
       if ( 'string' == typeof this.values ) {
         // this.values est un string => c'est un fichier contenant les données ou les renvoyant
+        this.values = this.evaluateProp('values')
         this.getFileValues(this.values, this.execSelect.bind(this))
       } else if ( this.selectValuesAreValid() ) {
         // <= This.values validées et mises en forme
@@ -361,13 +377,49 @@ class ServStep {
     } else {
       if (this.prefix) {
         const obj = {}
+        if (typeof this.values == 'string') {
+          this.values = this.evaluateProp('values')
+        }
         this.values.forEach(id => {
           Object.assign(obj, { [id]: this.scriptService.getValue(`${this.prefix}-${id}`) })
         })
+        const path = this.expandPath(this.evaluateProp('path'))
         console.info("Objet à enregistrer dans %s", this.path, obj)
-        const path = this.expandPath(this.path);
         server.send({action:'save-in-file', path, obj, no_raise: true}, this.execSaveData.bind(this))
       }
+    }
+  }
+
+  execGetData(retour){
+    if(retour){
+      const data = retour.data
+      let value
+      if (retour.error) raise(retour.error)
+      else if (this.key){
+        console.log("this.key = ", String(this.key))
+        console.log("valeur de l'étape choix-editeur", this.scriptService.getValue('choix-editeur'))
+        const key = this.evaluateProp('key')
+        if (Object.isObject(data)) {
+          value = data[key]
+          console.log("[execGetData] avec objet[%s]", key, data, value)
+        } else if (Array.isArray(data)) {
+          value = data.find(c => { 
+            console.log({c, key})
+            return c.id == key 
+          })
+          console.log("[execGetData] avec array [%s]", key, data, value)
+        } else {
+          value = data
+          console.log("[execGetData] ni object ni array", data)
+        }
+      } else {
+        value = data
+      }
+      console.log("Donnée finale", value)
+      this.setValue(value)
+    } else {
+      this.base = this.expandPath(this.evaluateProp('base'))
+      server.send({action: 'get-data', path: this.base, no_raise: true}, this.execGetData.bind(this))
     }
   }
 
@@ -464,13 +516,17 @@ class ServStep {
 
   evaluateProp(prop){
     if (this.getAbsoluteData(prop).evaluate) {
-      const val = this[prop].replace(/\$\{(.*)\}/g, (match, stepId) => {return this.scriptService.getValue(stepId)})
+      var val = this[prop]
+      val = val.replace(/\$\{(.+?)\}\.([a-z_]+)/g, (match, stepId, property) => {this.serviceValue(stepId)[property]})
+      val = val.replace(/\$\{(.+?)\}/g, (match, stepId) => {return this.serviceValue(stepId)})
       console.log("Valeur transformée de '%s'/ initial: %s, nouvelle: %s", prop, this[prop], val)
       return val
     } else {
       return this.prop
     }
   }
+  serviceValue(stepId) {return this.scriptService.getValue(stepId)}
+
   get dataType(){ return this._dtype || (this.dtype = SCRIPT_SERVICES_KNOWN_TYPES[this.type] )}
   get aideByType(){ return this._aidtype || (this._aidtype = aide(`script-service-type-${this.type}`) )}
   get paramsSpecs(){return this._pmsvalid || (this._pmsvalid = this.dataType.params)}
@@ -485,6 +541,8 @@ class ServStep {
       return this.scriptService.resolvePath(path)
     }
   }
+  resolvePath(path){return this.expandPath(path)}
+
   /**
    * Retourne true si la condition de l'étape n'est pas satisfaite,
    * true otherwise

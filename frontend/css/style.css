@@ -75,6 +75,7 @@ div#current-project-mark {
 }
 
 header div#help-link,
+header div#debug-button,
 header div#tools-button {
   position: absolute;
   left: 18.5em;
@@ -87,6 +88,10 @@ header div#tools-button {
 }
 header div#tools-button {
   left: 15em;
+}
+header div#debug-button {
+  left: 28em;
+  font-size: 13pt;
 }
 header div#help-link:hover,
 header div#tools-button:hover {

@@ -13,7 +13,7 @@ Object.isObject = obj => Object.getPrototypeOf(obj) === Object.prototype;
 /**
  * Utilisation 
  * const fonction = debounce( (arg) => {
- *  // opération
+ *  // ... opération ...
  * }, delai_mms)
  */
 function debounce(fn, delay) {
@@ -45,7 +45,13 @@ function textSubstitute(msg, params){
       msg = msg.replace(/\$1/g, String(params))
     }
   }
-  msg = msg.replace(/\n/g, '<br>')
+  try {
+    msg = msg.replace(/\n/g, '<br>')
+  } catch(err) {
+    const errMsg = `[textSubstitute] Problème avec msg (${msg}) : ${err.message}`
+    console.error(errMsg)
+    return errMsg
+  }
   return msg
 }
 

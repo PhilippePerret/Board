@@ -178,10 +178,10 @@ begin
   # Évaluation d'un fichier et retour du résultat.
   # Par exemple, un fichier YAML, CSV, JSON, etc. ou un fichier
   # exécutable
-  when 'evaluate-file'
+  when 'evaluate-file', 'get-data'
     require_relative 'lib/handy_file.rb'
     FileHandy.evaluate(request['path'])
-
+    
   # Fonctionne de paire avec 'evaluate-file' pour enregistrer
   # un nouvel objet ou autre valeur dans un fichier quelconque
   when 'save-in-file'

@@ -1,0 +1,26 @@
+div#debug-panel {
+  position:fixed;
+  bottom: 0;
+  right: 0;
+  height: calc(100%);
+  width: 1000px;
+  padding: 1em;
+  background-color: #EEEEEE;
+  border:1px solid black;
+}
+div#debug-panel, div#debug-panel * {
+  font-family: "Courier New";
+  font-size: 12.5pt;
+}
+
+div#debug-panel div.log {
+  display:block;
+}
+div#debug-panel div.log span.time {
+  display:inline-block;
+  width: 190px;
+}
+div#debug-panel div.log span.msg {
+  display:inline-block;
+  width: auto;
+}

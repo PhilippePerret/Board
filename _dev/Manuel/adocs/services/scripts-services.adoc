@@ -153,13 +153,14 @@ Par exemple, si l'on doit reconstituer un objet "Livre" qui possède les clés `
 [[script-service-type-set]]
 ===== Set =====
 
-Permet de définir explicitement le `step.value` d'une étape. Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
+Permet de définir explicitement le `step.value` d'une étape ou de l'étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
 
 [cols="1,1,2"]
 |====
 | `type`      2+| `set`
 | `id`        2+| Identifiant obligatoire
-| `var_step   2+| Identifiant de l'étape dont il faut définir la valeur
+| `var_step   2+| Identifiant de l'étape dont il faut définir la valeur +
+Si non défini, c'est l'étape elle-même dont on définira la valeur
 | `var_value  2+| Valeur à donner à `value` de l'étape
 >|          soit| Valeur explicite | Donnée telle quelle 
 >|          soit| Valeur d'étape   | ${<id etape>}
@@ -175,7 +176,8 @@ Permet de définir explicitement le `step.value` d'une étape. Cela arrive par e
 | `create`  2+| `true` si on doit pouvoir créer une nouvelle valeur +
                 Ça donne la valeur 'autre' à cette étape (cf. la suite).
 | `values`  2+| Les valeurs parmi lesquelles ont peut choisir
-|             | string          | le chemin à un fichier contenant les valeurs
+|             | string          | le chemin à un fichier contenant les valeurs +
+La valeur sera évaluée, donc peut-être définie par "${<id étape>}"
 >|        ou  | array of string | Liste de valeurs simples (['poire', 'melon'])
 >|        ou  | array of array  | Liste de doubles valeurs [[value, title], ...] 
 |====
@@ -197,6 +199,19 @@ create: true -- permet de dire qu'une donnée select peut être créée
 On peut tirer des données d'un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).
 
 Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).
+
+
+[cols="1,3"]
+|====
+| `type` | `get-data`
+| `base` | Chemin d'accès au fichier contenant les données (évaluable)
+| `key`  | Si précisé, c'est la clé à prendre
+|====
+
+Deux sortes de données peuvent être remontées :
+
+- une table (dict) dont une clé correspondra à `key`,
+- une liste d'objet (array) qui devra contenir un élément répondant à `id = key`.
 
 ===== Set Project Data =====
 

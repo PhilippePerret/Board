@@ -13,7 +13,7 @@ const UNIV_KEYS = {id: true, type: true, name: true, if: true, title: true, q: t
 const SCRIPT_SERVICES_KNOWN_TYPES = {
   'set': {
     params: {
-        var_step:   { required: true, type: 'string'}
+        var_step:   { required: false, type: 'string'}
       , var_value:  { required: true, evaluate: true, type: ['string', 'integer', 'boolean'] }
     }
   },
@@ -38,7 +38,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'select': {
     params: { // les paramètres possible
-        values:       {required: true, type: ['array-of-string', 'array-of-paire', 'array-of-object', 'path']}
+        values:       {required: true, evaluate: true, type: ['array-of-string', 'array-of-paire', 'array-of-object', 'path']}
       , key_values:   {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété valeur dans la liste (le value de <option>)'}
       , title_values: {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété titre pour les options'}
       , create:       {type: 'boolean'}
@@ -48,15 +48,29 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'save-data': {
     params: {
-        path:   {required: true, type: 'string'}
-      , values: {required: true, type: 'any'}
+        path:   {required: true, evaluate: true, type: 'string'}
+      , values: {required: true, evaluate: true, type: 'any'}
       , prefix: {required: false, type: 'string'}
+    }
+  },
+
+  'get-data': {
+    params: {
+        base:   {required: true, evaluate: true, type: 'string', name: "Chemin d'accès aux données"}
+      , key:    {required: false, type: 'string', name: 'clé dans les données (au besoin)'}
     }
   },
   
   'create-folder' : {
     params: {
       path: {required: true, type: 'string', evaluate: true}
+    }
+  },
+
+  'create-file': {
+    params: {
+        content:  {required: true, evaluate: true, type: 'string'}
+      , path:     {required: true, evaluate: true, type: 'string'}
     }
   },
 
