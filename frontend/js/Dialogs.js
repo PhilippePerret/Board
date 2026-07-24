@@ -5,6 +5,15 @@ class ConfirmDialog extends Dialog {
   }
 }
 
+class OKDialog extends Dialog {
+  constructor(data) {
+    super(data)
+    this.nonData = null
+    this.midData = null
+  }
+
+}
+
 
 // Pour faire une fenêtre présentant un menu de choix (et seulement ça)
 class SelectDialog extends Dialog {

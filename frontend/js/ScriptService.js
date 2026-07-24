@@ -73,7 +73,10 @@ class ScriptService {
       if (this.errors.length) {
         this.displayErrors(this.errors)
       } else {
-        message(getMsg('scserv-end')); return 
+        // Fin des opérations
+        message(getMsg('scserv-end'))
+        new OKDialog({title: "Script service", message: getMsg('scserv-end')}).show()
+        return 
       }
     }
   }
@@ -250,7 +253,7 @@ class ServStep {
       else this.setValue(true)
     } else {
       const path    = this.expandPath(this.evaluateProp('path'))
-      const cont    = this.evaluateProp('content')
+      const content = this.evaluateProp('content')
       const after   = this.evaluateProp('after')
       const before  = this.evaluateProp('before')
       const where   = this.evaluateProp('where')

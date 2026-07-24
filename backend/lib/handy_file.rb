@@ -3,6 +3,8 @@ require 'yaml'
 require 'json'
 require 'csv'
 
+SELF_LOAD = __FILE__ == $0
+
 class FileHandy
 class << self
     
@@ -35,7 +37,13 @@ class << self
   # Ajouter le contenu +content+ au fichier +path+ en le
   # plaçant avant +before+ ou après +after+
   # Plus tard, pour definir quelque chose comme [{after: "ça"}, {before: "ça"}, etc.]
-  def add_to_file(path:, content:, after:, before:, where:)
+  def add_to_file(request)
+    path    = request['path']
+    content = request['content']
+    after   = request['after']
+    before  = request['before']
+    where   = request['where']
+
     if File.exist?(path)
       code = IO.read(path)
       if where
@@ -76,7 +84,7 @@ class << self
         content = code + content
       end
     end
-    puts "content: #{content.inspect}"
+    puts "content: #{content.inspect}" if SELF_LOAD
     IO.write(path, content)
   end
 
@@ -135,7 +143,7 @@ end #/<< self
 end #/FileHandy
 
 
-if __FILE__ == $0 
+if SELF_LOAD # tests
 
 
   puts "Je vais faire les tests"
