@@ -46,7 +46,13 @@ function textSubstitute(msg, params){
     }
   }
   try {
-    msg = msg.replace(/\n/g, '<br>')
+    if (msg) {
+      msg = msg.replace(/\n/g, '<br>')
+    } else {
+      console.error("msg non défini dans textSubstitute")
+      new Error().stack
+      console.trace()
+    }
   } catch(err) {
     const errMsg = `[textSubstitute] Problème avec msg (${msg}) : ${err.message}`
     console.error(errMsg)

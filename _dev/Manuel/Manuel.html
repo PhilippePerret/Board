@@ -495,10 +495,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>pouvoir éditer le script-service en meta-cliquant dessus</p>
 </li>
 <li>
-<p>un container spécial pour afficher les erreurs de script-service. Mais en fait, il faut juste un dialog de confirmation avec un long texte, avec un bouton pour éditer le fichier</p>
-</li>
-<li>
-<p>Pouvoir définir un nouveau service "plus que custom", ce serait un "script-service" ou "service-script" (oui, nom adopté), c&#8217;est-à-dire une opération complexe définie en se servant des services mais de façon étendue (voir l&#8217;utilisation pour créer un envoi de manuscrit)</p>
+<p>Données extra de projet : les prendre toutes, même les custom (venant d&#8217;autres service, par exemple 'manuscript-path' pour le copie pour envoi)</p>
 </li>
 </ul>
 </div>
@@ -754,14 +751,324 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect3">
-<h4 id="_les_types_de_données">Les types de données</h4>
+<h4 id="_erreurs_classiques">Erreurs classiques</h4>
+<div class="paragraph">
+<p>Vous trouverez dans cette partie une liste des erreurs classique lorsqu&#8217;on établit ses étapes.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Manifestation</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Erreur</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_commun_à_tous_les_types">Commun à tous les types</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>if</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour une <a href="#conditional-step">étape conditionelle</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une étape toi toujours avec un identifiant, unique, contenant seulement des minuscule, des chiffres et des tirets.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une étape doit toujours définir <a href="#script-service-types">un type</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>q</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le message dans une boite de dialogue, en fonction du type attendu.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le titre de la boite de dialogue, en fonction du type attendu.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="conditional-step">Étape conditionnelle</h5>
+<div class="paragraph">
+<p>On utile le paramètre <code>if</code> pour définir une étape conditionnelle.</p>
+</div>
+<div class="paragraph">
+<p>La valeur de <code>if</code> doit alors être composée de 3 expressions séparées par une espace, la première étant la valeur a comparée, la 3<sup>e</sup> la valeur de comparaison et la 2<sup>e</sup> l&#8217;opérateur.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>if: "expression operateur expected"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>expression</code> est le plus souvent un identifiant d&#8217;étape exprimé par <code>${&lt;id etape&gt;}</code>. On prendra alors la valeur de cette étape pour la comparer à <code>expected</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>Expected</code> peut-être n&#8217;importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués.<br>
+Quand le type est <code>select</code> et que <code>create</code> est à true, autorisant la création d&#8217;une nouvelle valeur, <code>expected</code> doit alors être ''. Par exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'value-selected-or-created'
+  name: 'valeur à sélectionner ou créer'
+  type: 'select'
+  create: true
+
+- if: "${value-selected-or-created} == ''
+  type: 'string'
+  title: "Nouvelle valeur
+  q: "Donnez la nouvelle valeur.</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="evaluate">Contenu évaluable</h4>
+<div class="paragraph">
+<p>Dans les étapes, un contenu <em>évaluable</em> est un contenu qui se sert de la valeur d&#8217;une autre étape pour être défini.</p>
+</div>
+<div class="paragraph">
+<p>Ce contenu s&#8217;indique par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>${step-id}          # Valeur de l'étape d'id +step-id+
+${step-id}[prop]    # Si la valeur de l'étape *step-id+ est un objet, on
+                    # prend la propriété +prop+ de cet objet.
+${step-id}.prop     # Idem, sous une autre forme</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Par exemple, on récupère un dossier et on s&#8217;en sert ensuite dans les étapes suivantes :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+# On demande à l'utilisateur de choisir un dossier
+- id: 'dossier'
+  type: 'choose-folder'
+  q: "Choisissez le dossier puis “OK”."
+
+# On crée un fichier dans ce dossier.
+- id: 'un-fichier-dans-le-dossier'
+  type: 'add-to-file'
+  # Le fichier estimé dans le dossier
+  path: "${dossier}/mon_fichier.md"
+  # Le contenu aussi peut s'en servir
+  content: "Le contenu de mon fichier dans le dossier ${dossier}.</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="script-service-types">Les types d&#8217;étapes (step)</h4>
+<div class="sect4">
+<h5 id="script-service-type-add-to-file">Ajouter du contenu à  un fichier</h5>
+<div class="paragraph">
+<p>Ce type d&#8217;étape permet d&#8217;ajouter du contenu à un fichier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: 'id-etape'
+  type: 'add-to-file'
+  path: "/chemin/vers/fichier
+  content: ""
+  after: "..."
+  before: "..."
+  where: [{after:...}, {before:...}, ...]</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Chemin d&#8217;accès au fichier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin absolu</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Aucune substitution nécessaire</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin relatif</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Doit se trouver dans le dossier du projet et commencer par "./"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin évaluable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se sert de la valeur d&#8217;autres étapes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Le contenu à écrire dans le fichier. Il peut être brut ou <a href="#evaluate">évaluable</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>after</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Indique après quoi il faut mettre le contenu.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ça peut être l&#8217;expression en chaine, p.e. "ce mot"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exp. reg.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ou une expression régulière. P.e. "(?!un ) voisin", pour mettre après "le voisin" mais pas "un voisin). Ces expressions demande de l&#8217;expérience.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>before</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Indique avant quoi il faut mettre le contenu. Mêmes formats que pour <code>after</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>where</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Alors que <code>after</code> et <code>before</code> ne permettent qu&#8217;une localisation à un paramètre, <code>where</code> permet de définir très précisément où mettre le contenu. Mais cette définition est très sensible.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Voilà un exemple (absurde mais simple) : nous voulons ajouter ", cuisine" dans le contenu d&#8217;un fichier qui est pour le moment : "Je dois mettre au grenier un mot entre chambre et grenier."<br>
+Nous utilisons pour ce faire : `where = [{after: "chambre"}, {before: " et grenier"}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">De façon plus réaliste, sur cette base, on peut imaginer que le fichier contient des balises comme par exemple "/*&#8201;&#8212;&#8201;debut data&#8201;&#8212;&#8201;<strong>/" et "/</strong>&#8201;&#8212;&#8201;fin data&#8201;&#8212;&#8201;<strong>/". Pour ajouter une donnée, on peut donc faire :<br>
+`where = [{after: "/</strong>&#8201;&#8212;&#8201;debut data&#8201;&#8212;&#8201;<strong>/\n"}, {before: "\n/</strong>&#8201;&#8212;&#8201;fin data&#8201;&#8212;&#8201;*/"}]<br>
+Noter les retours de chariot marqués par "\n".</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="script-service-type-save-data">Save-data</h5>
+<div class="paragraph">
+<p>Permet d&#8217;enregistrer une donnée à la volée.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>save-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant de l&#8217;étape.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Les valeurs à enregistrer ou les identifiants</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">valeurs brutes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sans <code>prefix</code> les valeurs sont des valeurs brutes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">avec <code>prefix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les clés d&#8217;un objet à reconstituer qui serviront aussi à obtenir les valeurs depuis les étapes d&#8217;identifiant <code>&lt;prefix&gt;-&lt;clé&gt;</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>prefix</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Préfixe à utiliser pour rassembler</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Par exemple, si l&#8217;on doit reconstituer un objet "Livre" qui possède les clés <code>titre</code>, <code>auteur</code> et <code>annee</code>, on créera les étapes id = <code>livre-titre</code>, id= <code>livre-auteur</code> et id = <code>livre-annee</code> et l&#8217;on définir les données de l&#8217;étape par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: "livre-titre"
+  type: "string"
+  q: "Titre du livre"
+
+- id: "livre-auteur"
+  type: "string"
+  q: "Auteur du livre
+
+- id: "livre-annee"
+  type: "integer"
+  q: "Année de publication
+
+- id: 'save-the-book'
+  type: 'save-data'
+  values: ['titre', 'auteur', 'annee']
+  prefix: 'livre</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="script-service-type-set">Set</h5>
+<div class="paragraph">
+<p>Permet de <strong>définir explicitement le <code>step.value</code> d&#8217;une étape</strong> ou de l&#8217;étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un <code>select</code> on peut créer une nouvelle valeur.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>set</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant obligatoire</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>step</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant de l&#8217;étape dont il faut définir la valeur<br>
+Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeur</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Valeur à donner à <code>value</code> de l&#8217;étape</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valeur explicite</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Donnée telle quelle</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valeur d&#8217;étape</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">${&lt;id etape&gt;}</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="sect4">
 <h5 id="script-service-type-select">Select</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 40%;">
-<col style="width: 20%;">
-<col style="width: 40%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
 </colgroup>
 <tbody>
 <tr>
@@ -784,7 +1091,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">le chemin à un fichier contenant les valeurs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">le chemin à un fichier contenant les valeurs<br>
+La valeur sera évaluée, donc peut-être définie par "${&lt;id étape&gt;}"</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock">ou</p></td>
@@ -803,20 +1111,169 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>- if: "${&lt;identifiant étape&gt;} = autre"</pre>
+<pre>- if: "${&lt;identifiant étape&gt;} = ''"</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Plusieurs étapes de ce type vont s&#8217;enchainer pour obtenir toutes les valeurs pour le type de données fournie.</p>
+<p>Plusieurs étapes de ce type peuvent s&#8217;enchainer pour obtenir toutes les valeurs pour le type de données fournie.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâce à un type <code>set</code>. Voilà la séquence classique :
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: 'le-choix'
+  type: select
+  values: [1, 2, 3]
+  q: "Choisissez un chiffre
+  create: true # pour permettre de choisir un autre chiffre
+
+- if: "${le-choix} == ''"
+  id: 'autre-chiffre'
+  type: string
+  q: "Quel autre chiffre ?"
+
+- if "${le-choix} == ''"
+  type:   set
+  step:   "le-choix"            # -- l'étape qu'il faut redéfinir
+  value:  "${autre-chiffre}"    # -- la valeur qu'il faut lui affecter
+
+# À partir d'ici, l'étape ${le-choix} contient la valeur voulue</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="script-service-file-values">Données dans un fichier</h4>
+<div class="paragraph">
+<p>On peut tirer des données d&#8217;un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).</p>
 </div>
 <div class="paragraph">
-<p>À PLACER
-Quand le type est '&lt;type&gt;-or-path', path peut contenir le type attendu.
-Si &lt;path&gt; est un fichier autre que .yaml, .json ou .csv, il doit être EXÉCUTABLE et retourner un données ÉVALUABLE PAR JSON (JSON.parse en ruby).
-Si le fichier n&#8217;est pas exécutable (<code>chmod +x fichier</code>) ou qu&#8217;il ne retourne pas une donnée au format JSON, une erreur sera produite.</p>
+<p>Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (<code>chmod +x fichier</code>) et qu&#8217;il retourne un données ÉVALUABLE PAR JSON, sauf si c&#8217;est une valeur scalaire (string, integer…).</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au fichier contenant les données (évaluable)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si précisé, c&#8217;est la clé à prendre</p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p>create: true&#8201;&#8212;&#8201;permet de dire qu&#8217;une donnée select peut être créée</p>
+<p>Deux sortes de données peuvent être remontées :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>une table (dict) dont une clé correspondra à <code>key</code>,</p>
+</li>
+<li>
+<p>une liste d&#8217;objet (array) qui devra contenir un élément répondant à <code>id = key</code>.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_set_project_data">Set Project Data</h5>
+<div class="paragraph">
+<p>Type d&#8217;étape qui permet de définir une donnée de projet.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-project-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les extra-données du projet.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La valeur à donner à cette clé. Elle vient, normalement, d&#8217;une autre étape ayant permis de la définir. Voir la <a href="#sequence-project-data">[sequence-project-data]</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_get_project_data">Get Project Data</h5>
+<div class="paragraph">
+<p>Type d&#8217;étape qui permet de récupérer une donnée de projet.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-project-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant. Mais pour ce type d&#8217;étape, il est particulier : il doit porter le nom de la donnée du projet, impérativement, pour pouvoir être redéfini si la donnée manque.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les extra-données du projet.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Voir la <a href="#sequence-project-data">[sequence-project-data]</a>.</p>
+</div>
+<div id="sequence-project-data" class="paragraph">
+<p><strong>Exemple de séquence de définition de donnée de projet</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: 'manuscrit-path'
+  type: 'get-project-data'
+
+- if: "${manuscript-path} == null"
+  id: "definition-manuscrit"
+  type: 'select-file'
+
+- if: "${manuscript-path} == null"
+  id: "set-project-manuscrit"
+  type: 'set-project-data'
+  project_key: 'manuscrit-path'  # la clé
+  value: ${definition-manuscrit} # pour récupérer le path
+
+- type: 'copy-file'
+  source: "${manuscrit-path}"  # Aura été renseigné</pre>
+</div>
 </div>
 </div>
 </div>
@@ -1550,15 +2007,6 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <p>ajouter le nom de ce script dans <code>OSASCRIPT_WITH_LIB</code> dans `backend/lib/userfull.rb</p>
 </li>
 </ul>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="paragraph">
-<p>OSASCRIPT_WITH_LIB = {
-  'OpenOrUpdateInBrowser.scpt' &#8658; true
-}</p>
-</div>
-</div>
 </div>
 <div class="ulist">
 <ul>

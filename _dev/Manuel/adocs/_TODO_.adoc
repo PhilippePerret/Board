@@ -2,9 +2,8 @@
 
 == Todo En cours
 
-- pouvoir éditer le script-service en meta-cliquant dessus
-- Données extra de projet : les prendre toutes, même les custom (venant d'autres service, par exemple 'manuscript-path' pour le copie pour envoi)
-
+- Panneau de confirmation de fin de servide plus visible que message
+  → OKDialog (sans bouton non ou mid)
 
 == Todo list ==
 

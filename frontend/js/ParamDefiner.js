@@ -183,6 +183,13 @@ class ParamDefiner {
       this.getPathOfFinderSelection.bind(this)
     )
   }
+
+  // Trouver le moyen de ne prendre qu'un dossier 
+  onFolder(){
+    this.waitForWindow(this.q || "Sélectionner le dossier dans le Finder et cliquer sur OK.",
+      this.getPathOfFinderSelection.bind(this)
+    )
+  }
   onPathInProject(){
     const transformer = v => v.replace(Project.current.path + '/', '')
     this.waitForWindow(this.q || "Sélectionner l'élément dans le dossier du projet et cliquer sur OK.",

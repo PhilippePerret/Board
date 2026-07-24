@@ -11,9 +11,9 @@ Pour pouvoir utiliser cette librairie dans n'importe quel script, il faut :
 
 - ajouter le nom de ce script dans `OSASCRIPT_WITH_LIB` dans `backend/lib/userfull.rb
 
-====
-include::{backend-dir}/lib/usefull.rb[tag="scripts-with-lib"]
-====
+// ====
+// include::{backend-dir}/lib/usefull.rb[tag="scripts-with-lib"]
+// ====
 
 - ajouter en haut de son fichier : 
 

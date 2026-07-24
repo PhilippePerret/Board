@@ -16,7 +16,7 @@ class Dialog {
     this.id    = data.id ?? `panel-${++Dialog.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
     this.title = data.title ?? '- panneau sans titre (title) -'
-    this.message = data.message ?? null
+    this.message = data.message ?? data.q ?? null
     this.errorMessage = data.errorMessage // en cas d'erreur
     this.content = data.content ?? null
     this.default      = data.default
@@ -127,7 +127,7 @@ class Dialog {
     const tit = DCreate('DIV', {class: 'title', text: this.title})
     div.appendChild(tit)
     if (this.message || this.content) {
-      const msg = DCreate('DIV', {class: 'message', text: this.message ?? ''})
+      const msg = DCreate('DIV', {class: 'message', text: this.message ?? '', style: "max-height:500px;overflow: auto;"})
       // Du contenu HTML dans div.message
       if (this.content) msg.appendChild(this.content)
       if ( this.errorMessage ) {

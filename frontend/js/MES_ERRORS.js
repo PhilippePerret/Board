@@ -19,7 +19,7 @@ const ERRORS = {
   , 'scserv-unknown-step': "L'étape d'identifiant '$1' est inconnue."
   , 'scserv-list-required': "Le fichier YAML devrait définir une liste d’étapes ($1)."
   , 'scserv-type-required': "Une étape de script-service ($1) doit toujours avoir un type ($2)."
-  , 'scserv-id-required': "Une étape de script-service doit absolument avoir un identifiant ($1)."
+  , 'scserv-id-required': "Une étape de script-service doit absolument avoir un identifiant ($1) ($2)."
   , 'scserv-id-invalid': "L’identifiant de l'étape $1 n'est pas valide ($2)."
   , 'scserv-step-type-unknowned': "type d’étape inconnu : $1 ($2)."
   , 'scserv-param-required': "Le paramètre '$1' est requis, pour le type '$2' ($3)."

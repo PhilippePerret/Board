@@ -31,6 +31,55 @@ class << self
       RETOUR.error = "Le fichier #{dest} n'a pas pu être créé."
     end
   end
+
+  # Ajouter le contenu +content+ au fichier +path+ en le
+  # plaçant avant +before+ ou après +after+
+  # Plus tard, pour definir quelque chose comme [{after: "ça"}, {before: "ça"}, etc.]
+  def add_to_file(path:, content:, after:, before:, where:)
+    if File.exist?(path)
+      code = IO.read(path)
+      if where
+        apres = code
+        avant = ""
+        where = JSON.parse(where) unless where.is_a?(Array)
+        # => [{after: "mot"}, {before: "autre"}] 
+        # P.e. phrase = "Je dois mettre au grenier un mot entre chambre et grenier."
+        # where = [{after: "chambre"}, {before: "grenier"}]
+        where.each do |cond|
+          # puts "cond: #{cond.inspect} (#{cond.keys[0].inspect} / #{cond.values[0].inspect})"
+          reg = Regexp.new(cond.values[0])
+          dec = apres =~ reg
+          deb = $~.begin(0)
+          fin = $~.end(0)
+          case cond.keys[0]
+          when "after", :after
+            avant += apres[0..fin-1]
+            apres = apres[fin...]
+          when "before", :before
+            if deb > 0
+              avant += apres[0..deb]
+              apres = apres[deb...]
+            end
+          end
+          # puts "---"
+          # puts "avant = #{avant.inspect}"
+          # puts "apres = #{apres.inspect}"
+        end
+        content = avant + content + apres
+      elsif after
+        dec = code.index(after) + after.length
+        content = code[0..dec] + content + code[(dec+1)..]
+      elsif before
+        dec = code.index(before)
+        content = code[0..dec] + content + code[(dec+1)...]
+      else 
+        content = code + content
+      end
+    end
+    puts "content: #{content.inspect}"
+    IO.write(path, content)
+  end
+
   # Ajoute un objet à une liste d'objet ou l'enregistre
   # dans un fichier
   def add_objet(path, objet)
@@ -84,3 +133,17 @@ class << self
   end
 end #/<< self
 end #/FileHandy
+
+
+if __FILE__ == $0 
+
+
+  puts "Je vais faire les tests"
+
+  # Créer le fichier
+  File.delete("./essai.txt") if File.exist?("./essai.txt")
+  FileHandy.add_to_file(path: "./essai.txt", after:nil, before: nil, where: nil, content: "Je dois mettre au grenier un mot entre chambre et grenier.")
+  res = FileHandy.add_to_file(path: "./essai.txt", content: ", cuisine", after: nil, before: nil, where: [{after: "chambre"}, {before:" et grenier"}])
+  puts res
+  File.delete("./essai.txt") if File.exist?("./essai.txt")
+end

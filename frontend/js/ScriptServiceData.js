@@ -1,4 +1,4 @@
-const UNIV_KEYS = {id: true, type: true, name: true, if: true, title: true, q: true}
+const UNIV_KEYS = {id: true, type: true, name: true, if: true, title: true, q: true, message: true}
 
 
 /**
@@ -13,8 +13,8 @@ const UNIV_KEYS = {id: true, type: true, name: true, if: true, title: true, q: t
 const SCRIPT_SERVICES_KNOWN_TYPES = {
   'set': {
     params: {
-        var_step:   { required: false, type: 'string'}
-      , var_value:  { required: true, evaluate: true, type: ['string', 'integer', 'boolean'] }
+        step:   { required: false, type: 'string'}
+      , value:  { required: true, evaluate: true, type: ['string', 'integer', 'boolean'] }
     }
   },
 
@@ -81,9 +81,28 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
     }
   },
 
+  'add-to-file': {
+      description: "Ajout à un fichier, à un endroit quelconque"
+    , params: {
+          path:     {required: true, evaluate: true, type: 'string'}
+        , content:  {required: true, evaluate: true, type: 'string'}
+        , after:    {required: false, evaluate: true, type: 'string'}
+        , before:   {required: false, evaluate: true, type: 'string'}
+        , where:    {required: false, evaluate: true, type: 'string'}
+    }
+  },
+
   'select-file': {
     params: {
+        q: {required: false, type: 'string'}
+      , in: {required: false, type: 'string'}
+    }
+  },
 
+  'choose-folder': {
+    params: {
+        q: {required: false, type: 'string'}
+      , in: {required: false, type: 'string'}
     }
   },
 

@@ -211,6 +211,23 @@ class ServStep {
       definer.define()
     }
   }
+  execChooseFolder(retour){
+    historize('-> execChooseFolder', retour)
+    if (retour){
+      if (retour.error) raise(retour.error) // is no_raise, mais non définissable, encore
+      const path = retour[0].value
+      this.setValue(path)
+    } else {
+      const definer = new ParamsDefiner([{
+          id: 'source'
+        , type: 'folder'
+        , title: this.title || "Choix d'un dossier"
+        , q: this.q || "Choisir le dossier dans le Finder et cliquer sur “OK”."
+      }], this.execChooseFolder.bind(this))
+      definer.define()
+    }
+    
+  }
 
   // Copie d'un fichier
   execCopyFile(retour){
@@ -222,6 +239,22 @@ class ServStep {
       const dst = this.expandPath(this.evaluateProp('dest'))
       console.log("source et dest", {src, dst})
       server.send({action:'copy-file', source: src, dest: dst}, this.execCopyFile.bind(this))
+    }
+  }
+
+  // Pour ajouter le contenu +content+ au fichier +path+
+  execAddToFile(retour){
+    historize('-> execAddToFile', retour)
+    if (retour) {
+      if (retour.error) raise(retour.error)
+      else this.setValue(true)
+    } else {
+      const path    = this.expandPath(this.evaluateProp('path'))
+      const cont    = this.evaluateProp('content')
+      const after   = this.evaluateProp('after')
+      const before  = this.evaluateProp('before')
+      const where   = this.evaluateProp('where')
+      server.send({action: 'add-to-file', path, content, after, before, where}, this.execAddToFile.bind(this))
     }
   }
 
@@ -252,16 +285,17 @@ class ServStep {
    * "${<step id>}".
    */
   execSet(){
-    var finalValue = this.evaluateProp('var_value')
-    if (this.var_step) {
-      this.scriptService.setValue(this.var_step, finalValue)
+    var finalValue = this.evaluateProp('value')
+    if (this.step) {
+      this.scriptService.setValue(this.step, finalValue)
+      // this.callback() ?…
     } else {
       this.setValue(finalValue)
     }
   }
 
   execString(retour){
-    console.log("retour :", retour)
+    historize('-> execString', retour)
     if (retour) {
       if (this.required && retour == ':none:') {
         //=> une erreur
@@ -270,7 +304,7 @@ class ServStep {
     } else {
       const ddata = {
           title: this.title
-        , message: this.q
+        , message: this.q || "Entrez la valeur dans le champ ci-dessous."
         , default: this.default || ""
         , ouiBtn: {name:'OK', onclick: this.execString.bind(this)}
         , nonBtn: {name:'Renoncer', onclick: this.execString.bind(this, ':none:')}
@@ -426,8 +460,8 @@ class ServStep {
   // Appelé avec le résultat du choix
   // On le met dans le this.value de cette étape
   /**
-   * TODO: Il faudrait un garde-fou quand la valeur '--other--' : les
-   * étapes suivantes doivent comporter if: ${<this id>} = '--other--'
+   * TODO: Il faudrait un garde-fou quand la valeur '' : les
+   * étapes suivantes doivent comporter "if: ${<this id>} = ''"
    */
   onChooseSelect(choix){
     this.setValue(choix)
@@ -467,15 +501,16 @@ class ServStep {
   selectDialogData(){
     const data ={
         title: this.title
-      , q: this.q
+      , message: this.q
       , width: '620px'
       , values: this.values
       , ouiBtn: {name: 'Choisir', onclick: this.onChooseSelect.bind(this)}
       , nonBtn: {name: 'Renoncer', onclick: this.onChooseSelect.bind(this, null)}
     }
-    if (this.create === true) {
+    if (this.create) {
+      const btnName = this.create === true ? "Nouveau…" : this.create
       Object.assign(data, {
-        midBtn: {name: 'Nouveau…', onclick: this.onChooseSelect.bind(this, '--other--')}
+        midBtn: {name: btnName, onclick: this.onChooseSelect.bind(this, "")}
       })
     }
     return data
@@ -530,7 +565,7 @@ class ServStep {
    * 
    */
   evaluateProp(prop){
-    if (this.getAbsoluteData(prop).evaluate) {
+    if (this.getAbsoluteData(prop).evaluate && this[prop]) {
       var val = this[prop]
       val = val.replace(/\$\{([^}]+)\}\[([a-z_]+)\]/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{([^}]+)\}\.([a-z_]+)/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
@@ -538,7 +573,7 @@ class ServStep {
       console.log("Valeur transformée de '%s'/ initial: %s, nouvelle: %s", prop, this[prop], val)
       return val
     } else {
-      return this.prop
+      return this[prop]
     }
   }
   getPropertyInStepValue(stepId, property){
@@ -591,6 +626,8 @@ class ServStep {
     switch(evaluator){
       case '==': case '=':
         return !(expression == expected)
+      case '!=': case '≠':
+        return (expression == expected)
       case '>':
         return !(expression > expected)
       case '<':
@@ -618,7 +655,7 @@ class ServStep {
   }
 
 
-  id_is_required(){ this.id ?? raise('scserv-id-required', aide('scripts-services')) }
+  id_is_required(){ this.id ?? raise('scserv-id-required', [JSON.stringify(this.data), aide('scripts-services')]) }
   id_is_valid() { this.id.replace(/[0-9a-z_\-]/gi, '') == '' || raise('scserv-id-invalid', [this.id, aide('script-service-valid-id')]) }
   type_is_required() { this.type ?? raise('scserv-type-required', [this.id, aide('scripts-services')]) }
   type_is_known() { SCRIPT_SERVICES_KNOWN_TYPES[this.type] || raise('scserv-step-type-unknowned', [this.type, aide('script-service-types-valides')]) }

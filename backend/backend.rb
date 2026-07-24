@@ -196,6 +196,10 @@ begin
   when 'copy-file'
     require_relative 'lib/handy_file.rb'
     FileHandy.copy(request['source'], request['dest'])
+
+  when 'add-to-file'
+    require_relative 'lib/handy_file.rb'
+    FileHandy.add_to_file(path: request['path'], content: request['content'], after: request['after'], before: request['before'], where: request['where'])
     
   when 'open-file'
     require_relative 'lib/handy_file.rb'

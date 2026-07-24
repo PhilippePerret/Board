@@ -99,8 +99,10 @@ if: "expression operateur expected"
 
 `expression` est le plus souvent un identifiant d'étape exprimé par `${<id etape>}`. On prendra alors la valeur de cette étape pour la comparer à `expected`.
 
+`operateur` peut être `==` ou `=`, `!=` ou `≠`, `>`, `<`.
+
 `Expected` peut-être n'importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués. +
-Quand le type est `select` et que `create` est à true, autorisant la création d'une nouvelle valeur, `expected` doit alors être '--other--'. Par exemple : 
+Quand le type est `select` et que `create` est à true (ou nom du bouton "Autre…"), autorisant la création d'une nouvelle valeur, `expected` doit alors être ''. Par exemple : 
 
 ----
 - id: 'value-selected-or-created'
@@ -108,7 +110,7 @@ Quand le type est `select` et que `create` est à true, autorisant la création 
   type: 'select'
   create: true
   
-- if: "${value-selected-or-created} == '--other--'
+- if: "${value-selected-or-created} == ''
   type: 'string'
   title: "Nouvelle valeur
   q: "Donnez la nouvelle valeur.
@@ -116,8 +118,77 @@ Quand le type est `select` et que `create` est à true, autorisant la création 
 ----
 
 
-[[script-service-types, les types de données]]
-==== Les types de données ====
+[[evaluate, évaluation]]
+==== Contenu évaluable ====
+
+Dans les étapes, un contenu _évaluable_ est un contenu qui se sert de la valeur d'une autre étape pour être défini.
+
+Ce contenu s'indique par :
+
+----
+${step-id}          # Valeur de l'étape d'id +step-id+
+${step-id}[prop]    # Si la valeur de l'étape *step-id+ est un objet, on
+                    # prend la propriété +prop+ de cet objet.
+${step-id}.prop     # Idem, sous une autre forme
+----
+
+Par exemple, on récupère un dossier et on s'en sert ensuite dans les étapes suivantes :
+
+----
+---
+# On demande à l'utilisateur de choisir un dossier
+- id: 'dossier'
+  type: 'choose-folder'
+  q: "Choisissez le dossier puis “OK”."
+
+# On crée un fichier dans ce dossier.
+- id: 'un-fichier-dans-le-dossier'
+  type: 'add-to-file'
+  # Le fichier estimé dans le dossier
+  path: "${dossier}/mon_fichier.md"
+  # Le contenu aussi peut s'en servir
+  content: "Le contenu de mon fichier dans le dossier ${dossier}.
+
+----
+
+[[script-service-types, les types d'étape]]
+==== Les types d'étapes (step) ====
+
+[[script-service-type-add-to-file]]
+===== Ajouter du contenu à  un fichier =====
+
+Ce type d'étape permet d'ajouter du contenu à un fichier.
+
+----
+---
+- id: 'id-etape'
+  type: 'add-to-file'
+  path: "/chemin/vers/fichier
+  content: ""
+  after: "..."
+  before: "..."
+  where: [{after:...}, {before:...}, ...]
+----
+
+[col="1,1, 3"]
+|====
+| `path`    2+| Chemin d'accès au fichier
+|             | Chemin absolu     | Aucune substitution nécessaire
+|             | Chemin relatif    | Doit se trouver dans le dossier du projet et commencer par "./"
+|             | Chemin évaluable  | Se sert de la valeur d'autres étapes
+| `content` 2+| Le contenu à écrire dans le fichier. Il peut être brut ou <<evaluate, évaluable>>
+| `after`   2+| Indique après quoi il faut mettre le contenu.
+|             | String    | Ça peut être l'expression en chaine, p.e. "ce mot"
+|             | Exp. reg. | Ou une expression régulière. P.e. "(?!un ) voisin", pour mettre après "le voisin" mais pas "un voisin). Ces expressions demande de l'expérience.
+| `before`  2+| Indique avant quoi il faut mettre le contenu. Mêmes formats que pour `after`.
+| `where`   2+| Alors que `after` et `before` ne permettent qu'une localisation à un paramètre, `where` permet de définir très précisément où mettre le contenu. Mais cette définition est très sensible.
+|           2+| Voilà un exemple (absurde mais simple) : nous voulons ajouter ", cuisine" dans le contenu d'un fichier qui est pour le moment : "Je dois mettre au grenier un mot entre chambre et grenier." +
+Nous utilisons pour ce faire : `where = [{after: "chambre"}, {before: " et grenier"}]
+|           2+| De façon plus réaliste, sur cette base, on peut imaginer que le fichier contient des balises comme par exemple "/* -- debut data -- */" et "/* -- fin data -- */". Pour ajouter une donnée, on peut donc faire : +
+`where = [{after: "/* -- debut data -- */\n"}, {before: "\n/* -- fin data -- */"}] +
+Noter les retours de chariot marqués par "\n".
+|====
+
 
 [[script-service-type-save-data]]
 ===== Save-data =====
@@ -161,15 +232,15 @@ Par exemple, si l'on doit reconstituer un objet "Livre" qui possède les clés `
 [[script-service-type-set]]
 ===== Set =====
 
-Permet de définir explicitement le `step.value` d'une étape ou de l'étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
+Permet de **définir explicitement le `step.value` d'une étape** ou de l'étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
 
 [cols="1,1,2"]
 |====
 | `type`      2+| `set`
 | `id`        2+| Identifiant obligatoire
-| `var_step   2+| Identifiant de l'étape dont il faut définir la valeur +
+| `step`      2+| Identifiant de l'étape dont il faut définir la valeur +
 Si non défini, c'est l'étape elle-même dont on définira la valeur
-| `var_value  2+| Valeur à donner à `value` de l'étape
+| `value`     2+| Valeur à donner à `value` de l'étape
 >|          soit| Valeur explicite | Donnée telle quelle 
 >|          soit| Valeur d'étape   | ${<id etape>}
 |====
@@ -181,7 +252,7 @@ Si non défini, c'est l'étape elle-même dont on définira la valeur
 |====
 | `id`      2+| Identifiant obligatoire
 | `type`    2+| **`select`**
-| `create`  2+| `true` si on doit pouvoir créer une nouvelle valeur +
+| `create`  2+| `true` ou le nom du bouton "Nouveau…" si on doit pouvoir créer une nouvelle valeur +
                 Ça donne la valeur 'autre' à cette étape (cf. la suite).
 | `values`  2+| Les valeurs parmi lesquelles ont peut choisir
 |             | string          | le chemin à un fichier contenant les valeurs +
@@ -190,16 +261,42 @@ La valeur sera évaluée, donc peut-être définie par "${<id étape>}"
 >|        ou  | array of array  | Liste de doubles valeurs [[value, title], ...] 
 |====
 
-Si _`create`_ est true, on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :
+Si _`create`_ est true (ou nom du bouton "Autre…"), on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :
 
 ----
-- if: "${<identifiant étape>} = --other--"
+- if: "${<identifiant étape>} = ''"
 ----
 
-Plusieurs étapes de ce type vont s'enchainer pour obtenir toutes les valeurs pour le type de données fournie.
+Plusieurs étapes de ce type peuvent s'enchainer pour obtenir toutes les valeurs pour le type de données fournie.
 
+TIP: Cette valeur est souvent réaffectée à l'étape `select` grâce à un type `set`. Voilà la séquence classique :
 
-create: true -- permet de dire qu'une donnée select peut être créée
+----
+---
+- id: 'le-choix'
+  type: select
+  values: [1, 2, 3]
+  q: "Choisissez un chiffre
+  create: "Autre chiffre…" # pour permettre de choisir un autre chiffre
+
+# Comme le choix "Autre…" a été choisi, on propose
+# un dialogue pour entrer une autre valeur
+- if: "${le-choix} == ''"
+  id: 'autre-chiffre'
+  type: string
+  q: "Quel autre chiffre ?"
+  
+# Maintenant qu'on a la valeur, on la place dans l'étape
+# 'le-choix' car c'est elle qui sera référencée dans la suite
+- if "${le-choix} == ''"
+  type:   set
+  step:   "le-choix"            # -- l'étape qu'il faut redéfinir
+  value:  "${autre-chiffre}"    # -- la valeur qu'il faut lui affecter
+
+# À partir d'ici, l'étape ${le-choix} contient la valeur voulue,
+# qu'elle est été prise dans le menu ou définie explicitement.
+
+----
 
 [[script-service-file-values]]
 ==== Données dans un fichier ====
@@ -251,12 +348,17 @@ Voir la <<sequence-project-data>>.
 
 ----
 ---
+# On essaie de prendre le chemin au manuscrit
+# dans les données du projet.
 - id: 'manuscrit-path'
   type: 'get-project-data'
 
+# Comme la donnée est nulle au départ, on va demande
+# de choisir le manuscrit.
 - if: "${manuscript-path} == null"
   id: "definition-manuscrit"
   type: 'select-file'
+  q: "Choisissez le manuscrit dans le Finder puis “OK”."
   
 - if: "${manuscript-path} == null"
   id: "set-project-manuscrit"
@@ -266,3 +368,4 @@ Voir la <<sequence-project-data>>.
   
 - type: 'copy-file'
   source: "${manuscrit-path}"  # Aura été renseigné
+----
