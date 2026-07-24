@@ -67,7 +67,7 @@ class ScriptService {
     const step = this.steps.shift()
     if ( step ) { 
       /* ============  EXÉCUTION DE L'ÉTAPE  =============*/
-      D.add(`--- ÉTAPE $1`, [step.id])
+      D.add(`--- ÉTAPE $1 ---`, [step.id])
       step.exec(this.errors, this.execNextStep.bind(this))
     } else {
       if (this.errors.length) {

@@ -11,6 +11,7 @@ class Debug {
   constructor() {
     this.logs = []
     this.debugging = false
+    this.closed = true
   }
   add(msg, params) {
     if (this.debugging) {
@@ -24,12 +25,17 @@ class Debug {
   }
   stop()  { this.debugging = false}
 
+  toggle(){
+    this[this.closed?'show':'hide']()
+  }
   show(){
     this.build()
     this.panel.classList.remove('hidden')
+    this.closed = false
   }
   hide() {
     this.panel.classList.add('hidden')
+    this.closed = true
   }
 
   build(){

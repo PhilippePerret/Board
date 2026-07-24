@@ -43,7 +43,7 @@ class App {
   static observe(){
     listen(DGet('#app-name'), 'click', this.openAppDataPanel.bind(this))
     listen(DGet('#tools-button'), 'click', this.openToolsPanel.bind(this))
-    listen(DGet('#debug-button'), 'click', D.show.bind(D))
+    listen(DGet('#debug-button'), 'click', D.toggle.bind(D))
     listen(DGet('#help-link'), 'click', (ev) => {stopEvent(ev); window.webkit.messageHandlers.openHelp.postMessage({})})
   }
 
