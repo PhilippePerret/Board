@@ -31,5 +31,5 @@ const ERRORS = {
   , 'scserv-select-with-object-unknown-key': "Pour le select de l'étape $1, l'objet $2 ne définit pas la clé '$3' pour la valeur ($4)."
   , 'scserv-select-with-object-unknown-title': "Pour le select de l'étape $1, l'objet $2 ne définit pas la clé '$3' pour le titre ($4)."
   , 'scserv-unknown-evaluator': "L'évaluator de l'étape '$1' est inconnu : $2 ($3)."
-  , 'scserv-unknown-marker-translate': "La marqueur translate $1 de l'étape $2 est inconnu ($3)."
+  , 'scserv-unknown-marker-translate': "Le marqueur de translation '$1' de l'étape '$2' est inconnu. Les marqueurs possibles sont : $3 ($4)."
 }

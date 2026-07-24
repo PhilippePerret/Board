@@ -147,7 +147,7 @@ begin
       RETOUR.error = "Fichier introuvable : #{path}"
     else
       begin
-        RETOUR.data = YAML.safe_load(File.read(path))
+        RETOUR.data = YAML.safe_load(File.read(path).gsub(/\n\s+\n/,"\n\n"))
       rescue Psych::SyntaxError => e
         RETOUR.error = "Code YAML invalide (#{path}) : #{e.message}"
       end

@@ -1,5 +1,12 @@
 == BUGS ==
 
+- l'étape 'duplication-manuscrit' de type 'copy-file' tourne en rond lorsque le manuscrit vient d'être défini
+  peut-être comme si "${manuscrit-path}" était mal défini. 
+  Recommencer maintenant que j'ai mis l'identifiant entre guillemets qui ne doivent pourtant pas jouer…
+  LE BUG : EN fait, ça doit venir du fait que l'id n'était pas défini… Mais alors, il faut voir POURQUOI l'erreur de  l'id manquant n'est pas signalé
+  IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux étapes sont "compilées"
+  ==> FAIRE VRAIMENT DES LIGNES VIDES 
+
 == Todo En cours
 
 - Panneau de confirmation de fin de servide plus visible que message

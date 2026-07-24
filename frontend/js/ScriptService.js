@@ -32,6 +32,7 @@ class ScriptService {
         if (step.id) { Object.assign(this.stepById, {[step.id]: step}) }
         return step
       })
+      console.info("Nombre d'étapes : %i", this.steps.length)
       this.errors = []
       if ( this.serviceSeemsValid() /* Premier contrôle rapide */) {
         this.execNextStep() 
@@ -91,12 +92,12 @@ class ScriptService {
 
   // Retourne la valeur (value) d'une étape évaluée précédemment
   getValue(stepId){
-    this.stepById[stepId] || raise('scserv-unknown-step', [stepId])
+    this.stepById[stepId] || this.errors.push(getErr('scserv-unknown-step', [stepId]))
     return this.stepById[stepId].value
   }
   // Pour définir la valeur d'une étape
   setValue(stepId, stepValue){
-    this.stepById[stepId] || raise('scserv-unknown-step', [stepId])
+    this.stepById[stepId] || this.errors.push(getErr('scserv-unknown-step', [stepId]))
     this.stepById[stepId].value = stepValue
   }
 
@@ -175,6 +176,15 @@ class ServStep {
     }
   }
 
+  // Dans l'exécution des étapes, il ne faut pas utiliser raise mais retourner 
+  // cette fonction.
+  addFatalError(msg, params){
+    this.setValue(':abort:')
+    this.errors.push(getErr(msg, params))
+    return false
+  }
+
+
   /**
    ***************************************************************
    *              EXÉCUTION DE L'ÉTAPE
@@ -229,7 +239,7 @@ class ServStep {
   execChooseFolder(retour){
     historize('-> execChooseFolder', retour)
     if (retour){
-      if (retour.error) raise(retour.error) // is no_raise, mais non définissable, encore
+      if (retour.error) return this.addFatalError(retour.error) // is no_raise, mais non définissable, encore
       const path = retour[0].value
       this.setValue(path)
     } else {
@@ -247,12 +257,12 @@ class ServStep {
   // Copie d'un fichier
   execCopyFile(retour){
     if (retour) {
-      if (retour.error) raise(retour.error)
+      if (retour.error) return this.addFatalError(retour.error)
       else this.setValue(true)
     } else {
       const src = this.expandPath(this.evaluateProp('source'))
       const dst = this.expandPath(this.evaluateProp('dest'))
-      console.log("source et dest", {src, dst})
+      // console.log("source et dest", {src, dst})
       server.send({action:'copy-file', source: src, dest: dst}, this.execCopyFile.bind(this))
     }
   }
@@ -261,7 +271,7 @@ class ServStep {
   execAddToFile(retour){
     historize('-> execAddToFile', retour)
     if (retour) {
-      if (retour.error) raise(retour.error)
+      if (retour.error) return this.addFatalError(retour.error)
       else this.setValue(true)
     } else {
       const path    = this.expandPath(this.evaluateProp('path'))
@@ -276,13 +286,13 @@ class ServStep {
   // Etape d'affectation d'une valeur au projet
   execSetProjectData(retour){
     if (retour) {
-      if (retour.error) raise(retour.error) // Ne peut pas encore passer par là
-      this.setValue(true)
+      if (retour.error) return this.addFatalError(retour.error) // Ne peut pas encore passer par là
+      else this.setValue(true)
     } else {
       const value = this.evaluateProp('value')
-      this.projet.set(this.project_key, value, this.execSetProjectData.bind(this))
+      this.projet.set(this.project_key, value, this.execSetProjectData.bind(this, {error: undefined}))
       // On met la valeur dans l'étape de projet
-      console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
+      // console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
       this.scriptService.setValue(this.project_key, value)
     }
   }
@@ -321,15 +331,29 @@ class ServStep {
     if (this.step) { mark = this.scriptService.getValue(this.step)}
     else mark = this.value
 
+    // Pour l'aide de l'erreur
+    const marker_list = ['today', 'tomorrow', 'demain', 'date+x', 'date-x']
+
     // Transformation de la valeur
     var value, m
     switch(true) {
-      case /^today$/.test(mark): value = translateDateLaps(0, this.format); break
-      case /^tomorrow$/.test(mark): value = translateDateLaps(1, this.format); break
-      case !!(m = mark.match(/^date\+([0-9]+)$/)): value = translateDateLaps(parseInt(m[1]), this.format); break
-      case !!(m = mark.match(/^date\-([0-9]+)$/)): value = translateDateLaps(-1 * parseInt(m[1]), this.format); break
-      default: 
-        raise('scserv-unknown-marker-translate', [mark, this.id, this.aideByType])
+    case /^today$/.test(mark): 
+      value = translateDateLaps(0, this.format)
+      break
+    case /^tomorrow$/.test(mark):
+      value = translateDateLaps(1, this.format)
+      break
+    case /^demain$/.test(mark):
+      value = translateDateLaps(1, this.format)
+      break
+    case !!(m = mark.match(/^date\+([0-9]+)$/)):
+      value = translateDateLaps(parseInt(m[1]), this.format)
+      break
+    case !!(m = mark.match(/^date\-([0-9]+)$/)):
+      value = translateDateLaps(-1 * parseInt(m[1]), this.format)
+      break
+    default: 
+      return this.addFatalError('scserv-unknown-marker-translate', [mark, this.id, marker_list.join(', '), this.aideByType])
     }
     // /Fin de transformation de la valeur
 
@@ -385,7 +409,7 @@ class ServStep {
 
   execCreateFile(retour){
     if (retour) {
-      if (retour.error) raise(retour.error)
+      if (retour.error) return this.addFatalError(getErr(retour.error))
       else this.setValue(true)
     } else {
       const path    = this.expandPath(this.evaluateProp('path'))
@@ -427,7 +451,7 @@ class ServStep {
   execSelect(retour) {
     try {
       if (retour) {
-        if (retour.error) raise(retour.error)
+        if (retour.error) { return this.addFatalError(retour.error) }
         this.values = retour.data
       }
       if ( 'string' == typeof this.values ) {
@@ -440,12 +464,7 @@ class ServStep {
         new SelectDialog(this.selectDialogData()).show()
       }
     } catch(err) {
-      if (err.params) {
-        this.errors.push(getErr(err.message, err.params))
-      } else {
-        this.errors.push(err.message)
-      }
-      this.callback()
+      return this.addFatalError(err.message, err.params)
     }
   }
 
@@ -456,7 +475,7 @@ class ServStep {
    */
   execSaveData(retour){
     if (retour) {
-      if (retour.error) { this.errors.push(retour.error) } 
+      if (retour.error) { return this.addFatalError(retour.error) } 
       this.setValue(!retour.error)
     } else {
       if (this.prefix) {
@@ -478,7 +497,7 @@ class ServStep {
     if(retour){
       const data = retour.data
       let value
-      if (retour.error) raise(retour.error)
+      if (retour.error) { return this.addFatalError(retour.error) }
       else if (this.key){
         console.log("this.key = ", String(this.key))
         console.log("valeur de l'étape choix-editeur", this.scriptService.getValue('choix-editeur'))
@@ -512,7 +531,7 @@ class ServStep {
 
   afterCreateFolder(retour){
     console.log("[afterCreateFolder] RETOUR", retour)
-    if (retour.error) raise(retour.error)
+    if (retour.error) return this.addFatalError(retour.error)
     this.setValue(true)
   }
 
@@ -548,11 +567,11 @@ class ServStep {
         } else if (Array.isArray(value) && value.length == 2) {
           return value
         } else {
-          raise('scserv-param-bad-type', ['values', '[value, title]', typeof value])
+          return this.addFatalError('scserv-param-bad-type', ['values', '[value, title]', typeof value])
         }
       })
     } else {
-      raise('scserv-param-bad-type', ['values', 'array of object', typeof this.values])
+      return this.addFatalError('scserv-param-bad-type', ['values', 'array of object', typeof this.values])
     }
     return true
   }
@@ -589,7 +608,7 @@ class ServStep {
       path = this.expandPath(path)
       server.send({action:'evaluate-file', path: path, no_raise: true}, this.getFileValues.bind(this, path, callback))
     } else if (retour.error) {
-      callback({error: getErr('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])})
+      return this.addFatalError('scserv-on-get-file-values', [retour.error, path, aide('script-service-file-values')])
     } else {
       callback(retour)
     }
@@ -691,7 +710,7 @@ class ServStep {
       case '<':
         return !(expression < expected)
       default:
-        raise('scserv-unknown-evaluator', [this.id, evaluator, this.aideByType])
+        return this.addFatalError('scserv-unknown-evaluator', [this.id, evaluator, this.aideByType])
     }
   }
 
