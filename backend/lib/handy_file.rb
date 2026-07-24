@@ -6,6 +6,22 @@ require 'csv'
 class FileHandy
 class << self
     
+  def open(path)
+    if File.exist?(path)
+      `open "#{path}"`
+    else
+      RETOUR.error "Fichier introuvable : #{path}"
+    end
+  end
+
+  def create(path, content)
+    if File.exist?(File.dirname(path))
+      IO.write(path, content)
+    else
+      RETOUR.error = "Le dossier '#{File.dirname(path)}' est introuvable. Impossible de créer le fichier en toute confiance."
+    end
+  end
+
   def copy(source, dest)
     FileUtils.copy(source, dest)
     dest = File.join(dest, File.basename(source)) if File.directory?(dest)

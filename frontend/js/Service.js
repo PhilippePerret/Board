@@ -69,7 +69,9 @@ class Service {
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.afterDefinedParams = data.afterDefinedParams ?? null
-    this.isCommonService = this.stype === 'common'
+    this.isCommonService = (this.stype === 'common')
+    this.isCustomService = (this.stype === 'custom')
+    this.isScriptService = (this.id == 'run-script-service')
   }
 
   get(key, defValue = null) {return this.data[key] ?? this.absData[key] ?? defValue}
@@ -157,19 +159,33 @@ class Service {
     }
   }
 
-  // Redéfinition de TOUS les paramètres fixes d'un service déjà attaché
-  // (cmd+clic sur sa carte), nom inclus. Valeurs actuelles proposées comme
-  // 'actual' (pas 'default', pas le même sens). Pas d'exécution auto : un
-  // cmd+clic veut dire "éditer", pas "lancer".
-  // schemaService (copie de absData, this.data copié aussi) plutôt que this
-  // directement : évite de muter SERVICES_DATA_TABLE[this.id] (partagé) et
-  // d'entériner un renommage avant confirmation (abandon en route sinon).
-  // this.params[i] à un seul élément = valeur simple réutilisable en
-  // 'actual' ; plus d'un élément = type composite (finder-window, bounds)
-  // ou afterDefinedParams déjà appliqué : pas de correspondance 1-pour-1
-  // avec absData.params, pas de préremplissage possible, schéma vierge.
-  redefine(projet){
+  /**
+   * RE-DÉFINITION D'UN SERVICE (après affection déjà opérée)
+   * (répond à cmd+clic sur service dans le projet)
+   * 
+   * Note : si c'est un *script-service*, on demande d'abord s'il ne
+   * faut pas tout simplement l'ouvrir.
+   */
+  redefine(projet, retour){
     historize('-> Service#redefine')
+    // Si c'est un script-service, on demande d'abord s'il faut
+    // ouvrir le script
+    if ( this.isScriptService ) {
+      if (retour === true) {
+        server.send({action:'open-file', path: this.params[0][0]}, null)
+        return
+      } else if (retour === false) {
+        // On poursuit pour définir les autres paramètres
+      } else {
+        new ConfirmDialog({
+            title: 'Ouverture du fichier script' 
+          , message: 'Voulez-vous modifier le fichier du script (définissant les étapes) ?'
+          , ouiBtn: {name: 'Oui', onclick: this.redefine.bind(this, projet, true)}
+          , nonBtn: {name: 'Non', onclick: this.redefine.bind(this, projet, false)}
+        }).show()
+        return
+      }
+    }
     const schemaParams = this.absData.afterDefinedParams
       ? this.absData.params
       : this.absData.params.map((p, i) => {
@@ -198,9 +214,9 @@ class Service {
   }
   // Exécution du service
   exec(projet, ev, callback){
-    console.log("callback dans Service#exec", this, callback)
+    // console.log("callback dans Service#exec", this, callback)
     new ServiceExecuter(this).exec(projet, callback)
-    console.log("Service#exec se termine bien")
+    // console.log("Service#exec se termine bien")
   }
 
 

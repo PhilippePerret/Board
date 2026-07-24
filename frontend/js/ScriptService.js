@@ -23,7 +23,7 @@ class ScriptService {
     } else if (retour.error) {
       this.displayErrors([retour.error])
     } else if (!Array.isArray(retour.data)) {
-        return this.displayErrors([msgErr('scserv-list-required',[aide('script-services-steps')])])
+        return this.displayErrors([getErr('scserv-list-required',[aide('script-services-steps')])])
     } else {
       // ok
       this.stepById = {}
@@ -514,16 +514,39 @@ class ServStep {
     this.isConditional = this.if
   }
 
+  /**
+   * "${<id etape>}" → value de l'étape
+   * 
+   * ATTENTION : Pour que la propriété +prop+ soit évaluée, il est 
+   * impératif que dans ses données (ScriptServiceData.js) on trouve
+   * 'evaluate: true'
+   * 
+   * Les formes évaluées
+   * 
+   *  ${<stepid>}       Remplacé par le .value de l'étape (qui peut être définit par le type 'set')
+   *  ${stepid}.prop    Remplacé par la propriété +prop+ de la valeur de la value de l'étape stepid
+   *                    Dans ce cas, le .value doit être une table (dict) et +prop+ sa propriété
+   *  ${stepid}[prop]   Même que précédente, mais peut-être plus clair sur le fonctionnement.
+   * 
+   */
   evaluateProp(prop){
     if (this.getAbsoluteData(prop).evaluate) {
       var val = this[prop]
-      val = val.replace(/\$\{(.+?)\}\.([a-z_]+)/g, (match, stepId, property) => {this.serviceValue(stepId)[property]})
+      val = val.replace(/\$\{([^}]+)\}\[([a-z_]+)\]/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
+      val = val.replace(/\$\{([^}]+)\}\.([a-z_]+)/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{(.+?)\}/g, (match, stepId) => {return this.serviceValue(stepId)})
       console.log("Valeur transformée de '%s'/ initial: %s, nouvelle: %s", prop, this[prop], val)
       return val
     } else {
       return this.prop
     }
+  }
+  getPropertyInStepValue(stepId, property){
+    const servValue = this.serviceValue(stepId)
+    D.add( "Valeur du service $1 : $2", [stepId, JSON.stringify(servValue)])
+    const value = servValue[property]
+    D.add( "Valeur de la propriété $1 : $2", [property, value])
+    return value
   }
   serviceValue(stepId) {return this.scriptService.getValue(stepId)}
 

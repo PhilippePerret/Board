@@ -67,6 +67,14 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 
 ----
 
+==== Erreurs classiques ====
+
+Vous trouverez dans cette partie une liste des erreurs classique lorsqu'on établit ses étapes.
+
+|====
+| **Manifestation** | **Erreur** 
+|====
+
 ==== Commun à tous les types ====
 
 [col="1,3"]

@@ -47,7 +47,7 @@ begin
 
 
   #######################################
-  ###       Analyse de l'ACTION       ###
+  ###       DISPATCH de l'ACTION      ###
   #######################################
   
   case request["action"]
@@ -182,6 +182,11 @@ begin
     require_relative 'lib/handy_file.rb'
     FileHandy.evaluate(request['path'])
     
+  # Créer un fichier avec le content fourni
+  when 'create-file'
+    require_relative 'lib/handy_file.rb'
+    FileHandy.create(request['path'], request['content'])
+
   # Fonctionne de paire avec 'evaluate-file' pour enregistrer
   # un nouvel objet ou autre valeur dans un fichier quelconque
   when 'save-in-file'
@@ -191,9 +196,11 @@ begin
   when 'copy-file'
     require_relative 'lib/handy_file.rb'
     FileHandy.copy(request['source'], request['dest'])
-
-
-
+    
+  when 'open-file'
+    require_relative 'lib/handy_file.rb'
+    FileHandy.open(request['path'])
+    
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"

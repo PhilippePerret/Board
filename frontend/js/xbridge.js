@@ -10,7 +10,7 @@ window.server = {
       (response) => {
         console.log("response", response)
         if (response.ok) {
-            callback(response)
+            callback && callback(response)
         } else {
             error(response.error)
         }
@@ -21,7 +21,7 @@ window.server = {
 }
 
 window.bridge = {
-    _callbacks: {},
+    callbacks: {},
 
     __send(payload) {
         this._payload = payload // pour erreurs
@@ -41,9 +41,9 @@ window.bridge = {
         }
         const id = data.id;
 
-        if (id && this._callbacks[id]) {
-            this._callbacks[id](data);
-            delete this._callbacks[id];
+        if (id && this.callbacks[id]) {
+            this.callbacks[id](data);
+            delete this.callbacks[id];
         }
 
         // fallback global handler
@@ -55,7 +55,7 @@ window.bridge = {
     call(payload, callback) {
         const id = Date.now() + Math.random().toString(16).slice(2);
         payload.id = id;
-        this._callbacks[id] = callback;
+        if (callback) { this.callbacks[id] = callback }
         this.__send(payload);
     }
 };
