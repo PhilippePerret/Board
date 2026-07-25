@@ -1,6 +1,6 @@
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'décembre']
 
-function formateDate(date, format){
+function formateDate(date, format = '%J %M %Y'){
   const fyear = String(date.getFullYear())
   return format
     .replace(/\%YY/, fyear[2] + fyear[3])
@@ -10,6 +10,33 @@ function formateDate(date, format){
     .replace(/\%JJ/, String(date.getDate()).padStart(2, '0'))
     .replace(/\%J/, date.getDate())
 }
+
+/**
+ * Reçoit un string du type "12 12 2026" et retourne la date
+ * correspondante.
+ */
+function parseDate(dateStr) {
+  const res = dateStr.split(/[ \/:.-]/).filter(e => e != '')
+  if (res.length != 3 && res.length != 6) return `${dateStr} [date mal formatée]`
+  var [jour, mois, annee, heure, minute, seconde] = res.map(e => parseInt(e))
+  // console.log("Arguments", [jour, mois, annee, heure, minute, seconde])
+  if (String(jour).length == 4) { [jour, annee] = [annee, jour]}
+  // console.log("date", jour, mois, annee)
+  var args = [annee, mois - 1, jour]
+  heure   == undefined || args.push(heure)
+  minute  == undefined || args.push(minute)
+  seconde == undefined || args.push(seconde)
+  // console.log("args", args)
+  try {
+    return new Date(...args)
+  } catch(err) {
+    raise("Date invalide : $1 : $2", [dateStr, err.message])
+  }
+}
+/*
+console.log("Date : ", parseDate("2000/12/23 20:12:13"))
+//*/
+
 
 /**
  * Retourne un lien vers l'aide
@@ -124,6 +151,9 @@ function heureCourante(withSeconds = true){
 }
 
 
+function slugify(str){
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/['’]/g, "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
 
 function reset(){
   message("")

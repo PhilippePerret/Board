@@ -34,7 +34,7 @@ _Utiliser la table ci-dessous pour un accès rapide aux différents type de serv
 |====
 
 [[scserv-use-variable, utilisation des variables]]
-=== Utilisation des variables ===
+=== Utilisation des variables (valeur d’étape) ===
 
 Dans un script-service, il est souvent utile de définir des variables et d'y faire référence.
 
@@ -43,6 +43,8 @@ Une variable, dans un script-service, est **une valeur d'étape**, on y fait ré
 ----
 ${<id d'étape>}
 ----
+
+TIP: Dans la suite, dès que nous parlerons de _**valeur d’étape**_ il faudra donc comprendre qu'il s'agit de la valeur que prend l'étape au cours de son exécution ou la valeur qu'on lui définit explicitement.
 
 Certaines variables se définissent en une seule fois, par exemple avec le type <<scserv-type-select>> :
 
@@ -92,9 +94,102 @@ Je peux alors simplifier l'écriture des messages :
   values: [1,2,3]
 ----
 
-==== Affection plus complexe de variables ====
+[[scserv-vars-affectation-complexe]]
+==== Affectation plus complexe de variables ====
 
-TODO: Récupération d'une variable de projet (exemple avec lettre, dans des scripts-services réutilisables)
+Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l'utilisation de _constantes_ que de véritables _variables_ dont la valeur dépend en réalité du contexte.
+
+Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c'est-à-dire leur utilisation dans n'importe quel projet similaire (i.e. définissant les mêmes données).
+
+----
+- id: project-name
+  type: get-project-data
+  key: title
+----
+
+Grâce au type de service <<scserv-type-get-project-data>>, nous pouvons obtenir la propriété `title` (titre) du projet et la stocker en valeur de l'étape. On peut ensuite l'utiliser avec `${project-name}` :
+
+----
+- id: pour-voir
+  q: "Que voulez-vous faire de “${project-name}” ?"
+  ...
+----
+
+> À titre de rappel, les propriétés de base de tout projet sont `title`, `id` et `path`, mais on peut en ajouter autant que l'on veut notamment grâce au type <<scserv-type-set-project-data>>.
+
+Nous pouvons aller encore plus loin dans l'affectation des variables et c'est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l'on veut que l'utilisateur puisse donner une valeur propre, c'est-à-dire autres que celles proposées. Vous vous souvenir de l'affectation d'un nombre, tout à l'heure, à la valeur d'une variable (la valeur de l'étape). Pour que l'user puisse utiliser sa propre valeur, il suffit de définir le paramètre `create` :
+
+----
+- id: le-nombre
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+  create: "Autre valeur…"
+----
+
+Cette fois, l'user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu'il a cliqué sur le bouton car la valeur de `${le-nombre}` sera vide. Nous la testons et lui proposons alors d'entrer sa valeur :
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+----
+
+Grâce à cette étape, l'user va pouvoir donner sa valeur.
+
+Le problème, c'est qu'elle sera consignée dans `${autre-valeur}` alors que plus tard, nous en aurons besoin dans `${le-nombre}`. Pour ce faire, il nous suffit de définir le paramètre `set` avec le nom de l'autre étape : 
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+  set: le-nombre
+----
+
+Attention de ne pas affecter la valeur trop vite ! Prenons l'exemple d'une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire : 
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+  set: le-nombre
+
+- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${le-nombre}"
+----
+
+Ça ne fonctionnerait pas parce qu'au moment de la ligne : 
+
+----
+- if: "${le-nombre} = ''"
+----
+
+`${le-nombre}` ne sera plus vide puisqu'il aura été défini juste au-dessus (`set: le-nombre` qui signifie "définir la valeur de l'étape `le-nombre` avec la valeur de cette étape).
+
+Il faut donc faire : 
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+
+- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${autre-valeur}"
+  set: le-nombre
+----
+
 
 [[script-services-steps]]
 === Une suite d'étapes ===
@@ -180,6 +275,29 @@ Vous trouverez dans cette partie une liste des erreurs classique lorsqu'on étab
 | `q`         | Le message dans une boite de dialogue, en fonction du type attendu.
 | `title`     | Le titre de la boite de dialogue, en fonction du type attendu.
 | `name`      | Le nom de l'étape, mais ne sert pas beaucoup.
+| `set`       | L'identifiant de l'étape à laquelle on doit donner la valeur de cette étape. 
+                Voir par exemple l'utilisation dans <<scserv-vars-affectation-complexe>>.
+| `transform` | Pour transformer la valeur en nombre, flottan, booléen, etc. +
+                Les valeurs actuelles sont `valid-id`, `date`, `integer`, `float` ou `boolean`. +
+                Les types `date` ont besoin de `format` pour définir leur format.
+| `format`    | Format de transformation pour les valeurs qui en ont besoin. 
+|====
+
+[[scserv-param-transform, transformation des valeurs]]
+==== `Transform`, transformation des valeurs ====
+
+Le paramètre `transform` permet de transformer les valeurs affectées aux étapes. Il peut avoir ces valeurs :
+
+[cols="1,3,1"]
+|====
+| **Valeur transform** | **Effet**                            | **Exemples 
+| `integer`, `entier`   | Transforme en entier.               | "12" → 12
+| `float`, `flottant`   | Transforme en nombre à virgule.     | "1,23" → 1.23
+| `boolean`             | Transforme en booléen.              | "true" → true
+| `valid-id`            | Transforme en un identifiant valide.| "Ça c'est l'été → "ca-cest-lete"
+| `date`                | Prend une date "aaaa/mm/jj" et la 
+                          met en forme 
+                          (cf. <<scserv-data-formats>>).      | "25/07/2026" → "25 juillet"
 |====
 
 [[conditional-step, étape conditionelle]]
@@ -190,14 +308,14 @@ On utile le paramètre `if` pour définir une étape conditionnelle.
 La valeur de `if` doit alors être composée de 3 expressions séparées par une espace, la première étant la valeur a comparée, la 3^e^ la valeur de comparaison et la 2^e^ l'opérateur.
 
 ----
-if: "expression operateur expected"
+if: "expression operateur attendu"
 ----
 
 `expression` est le plus souvent un identifiant d'étape exprimé par `${<id etape>}`. On prendra alors la valeur de cette étape pour la comparer à `expected`.
 
 `operateur` peut être `==` ou `=`, `!=` ou `≠`, `>`, `<`.
 
-`Expected` peut-être n'importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués. +
+`attendu` peut-être n'importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués. +
 Quand le type est `select` et que `create` est à true (ou nom du bouton "Autre…"), autorisant la création d'une nouvelle valeur, `expected` doit alors être ''. Par exemple : 
 
 ----
@@ -252,7 +370,9 @@ Par exemple, on récupère un dossier et on s'en sert ensuite dans les étapes s
 [[script-service-types, les types d'étape]]
 === Les types d'étapes (step) ===
 
-[[script-service-type-add-to-file]]
+_Dans cette longue partie nous allons voir et étudier tous les types d'étapes, donc les types de services utilisables dans les scripts-services._
+
+[[scserv-type-add-to-file, `add-to-file`]]
 ==== Add-to-file ====
 
 Ce type d'étape permet d'ajouter du contenu à un fichier.
@@ -268,7 +388,7 @@ Ce type d'étape permet d'ajouter du contenu à un fichier.
   where: [{after:...}, {before:...}, ...]
 ----
 
-[col="1,1, 3"]
+[cols="1,1,4"]
 |====
 | `path`    2+| Chemin d'accès au fichier
 |             | Chemin absolu     | Aucune substitution nécessaire
@@ -289,11 +409,11 @@ Noter les retours de chariot marqués par "\n".
 
 
 [[scserv-type-save-data, `save-data`]]
-==== Enregistrement de données ====
+==== save-data ====
 
-Permet d'enregistrer une donnée à la volée.
+Enregistrement de données. Permet d'enregistrer une donnée à la volée.
 
-[cols="1,1,2"]
+[cols="1,1,4"]
 |====
 | `type`    2+| `save-data`
 | `id`      2+| Identifiant de l'étape.
@@ -303,28 +423,7 @@ Permet d'enregistrer une donnée à la volée.
 | `prefix`  2+| Préfixe à utiliser pour rassembler
 |====
 
-Par exemple, si l'on doit reconstituer un objet "Livre" qui possède les clés `titre`, `auteur` et `annee`, on créera les étapes id = `livre-titre`, id= `livre-auteur` et id = `livre-annee` et l'on définir les données de l'étape par :
-
-----
----
-- id: "livre-titre"
-  type: "string"
-  q: "Titre du livre"
-
-- id: "livre-auteur"
-  type: "string"
-  q: "Auteur du livre
-  
-- id: "livre-annee"
-  type: "integer"
-  q: "Année de publication
-
-- id: 'save-the-book'
-  type: 'save-data'
-  values: ['titre', 'auteur', 'annee']
-  prefix: 'livre
-----
-
+Voir l'<<scserv-exemple-save-book>>.
 
 
 [[scserv-type-set, `set`]]
@@ -332,7 +431,7 @@ Par exemple, si l'on doit reconstituer un objet "Livre" qui possède les clés `
 
 Permet de **définir explicitement le `step.value` d'une étape** ou de l'étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
 
-[cols="1,1,3"]
+[cols="1,1,4"]
 |====
 | `type`      2+| `set`
 | `id`        2+| Identifiant obligatoire
@@ -346,7 +445,7 @@ Si non défini, c'est l'étape elle-même dont on définira la valeur
 [[scserv-type-select-file, `select-file`]]
 ==== Sélection d'un fichier ====
 
-[cols="1,4"]
+[cols="1,5"]
 |====
 | `type`    | `select-file`
 |====
@@ -355,18 +454,9 @@ Si non défini, c'est l'étape elle-même dont on définira la valeur
 [[scserv-type-create-file, `create-file`]]
 ==== Création d'un fichier ====
 
-[cols="1,4"]
+[cols="1,5"]
 |====
 | `type`    | `create-file`
-|====
-
-
-[[scserv-type-add-to-file, `add-to-file`]]
-==== Ajout d'un contenu à un fichier ====
-
-[cols="1,4"]
-|====
-| `type`    | `add-to-file`
 |====
 
 
@@ -376,7 +466,7 @@ Si non défini, c'est l'étape elle-même dont on définira la valeur
 
 Permet de transposer une valeur _par marqueur_ en vrai marqueur. L'exemple type de ces marques est la date `today` ou `tomorrow` qui sont automatiquement transposé en leur valeur réelle.
 
-[cols="1,4"]
+[cols="1,5"]
 |====
 | `type`    | `translate`
 |====
@@ -385,12 +475,30 @@ Permet de transposer une valeur _par marqueur_ en vrai marqueur. L'exemple type 
 ---
 - id: "id-de-step"
   type: translate
-  value: "<valeur>"   # le marqueur
+  value: "<valeur>"   # le marqueur (p.e. 'today', 'date+4'…)
   step: "<id step>"   # pour la prendre et la remettre dans l'étape
   format: "<format résultat optionnel>"
 ----
 
-Si `step` est utilisé, c'est sa valeur qui est prise et remplacée.
+Si `step` est utilisé, c'est sa valeur qui est prise et remplacée. Noter qu'alors ce `step` remplace en même temps le paramètres `valeur` et `set`. La formule : 
+
+----
+- id: transformation
+  type: translate
+  step: la-date
+  format: '%J %_M
+----
+
+… est équivalent à :
+
+----
+- id: transformation
+  type: translate
+  value: "${la-date}"
+  set: la-date
+  format: '%J %_M
+----
+
 
 **Liste des marqueurs existants**
 
@@ -398,7 +506,7 @@ Si `step` est utilisé, c'est sa valeur qui est prise et remplacée.
 |====
 | **Marque** 2+| **Valeur résulat**
 | `today`     2+| Date d'aujourd'hui
-|               | `format` | Permet de définir le format (%Y: année 4 chiffres, %YY: années 2 chiffre, %M: mois 2 chiffres, %_M: nom du mois, %J: jour, %JJ: jour sur deux chiffres, %H: heure, %m: minutes, %S: secondes)
+|               | `format` | Permet de définir le format (cf. <<scserv-data-formats>>)
 | `tomorrow`  2+| Date de demain
 |               | `format`  | Même chose que pour `today`
 | `date+<x>`  2+| Date dans le futur, `<x>` jours après aujourd'hui
@@ -406,7 +514,45 @@ Si `step` est utilisé, c'est sa valeur qui est prise et remplacée.
 | `date-<x>`  2+| Date dans le passé, `<x>` jours avant aujourd'hui
 |               | `format`  | Même chose que pour `today`
 
+
+[[scserv-data-formats, les formats de date]]
+===== Les Formats de date =====
+
+Les formats de date, utilisés pour <<scserv-param-transform>> ou le type <<scserv-type-translate>>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine `"%J %_M"`, `%J` est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et `%_M` est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).
+
+**Liste des marqueurs**
+
+[cols="1,4,1"]
 |====
+| **Marqueur** | **Explication** | **Exemples**
+| %J            | Le jour de la date                    | "1" ou "12"
+| %JJ           | Le jour mais toujours sur 2 chiffres  | "01" ou "12"
+| %M            | Le mois de la date                    | "02" ou "11"
+| %_M           | Le nom du mois de la date             | "février"
+| %Y            | L'année en 4 chiffres                 | "2026
+| %YY           | L'année en 2 chiffres                 | "26"
+| %H            | L'heure, en 1 ou 2 chiffres           | "5"
+| %m            | Les minutes, en 2 chiffres            | "03"
+| %S            | Les secondes en 2 chiffres            | "06
+|====
+
+Si nous sommes le 25 juillet 2026 et que l'utilisateur choisit "Demain" pour l'étape suivante : 
+
+----
+---
+- id: date-chosen
+  type: select
+  values:[['today', "Aujourd'hui"],['demain', "Demain"]]
+  q: "Quelle date choisissez-vous ?"
+
+- id: la-date
+  type: translate
+  value: "${date-chosen}"
+  transform: date
+  format: "%_M, %Y le %J"
+----
+
+… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"
 
 [[scserv-type-select, `select`]]
 ==== Select ====
@@ -444,17 +590,13 @@ TIP: Cette valeur est souvent réaffectée à l'étape `select` grâce à un typ
 
 # Comme le choix "Autre…" a été choisi, on propose
 # un dialogue pour entrer une autre valeur
+# et, grâce à `set`, la donner à l'autre étape
 - if: "${le-choix} == ''"
   id: 'autre-chiffre'
   type: string
   q: "Quel autre chiffre ?"
-  
-# Maintenant qu'on a la valeur, on la place dans l'étape
-# 'le-choix' car c'est elle qui sera référencée dans la suite
-- if "${le-choix} == ''"
-  type:   set
-  step:   "le-choix"            # -- l'étape qu'il faut redéfinir
-  value:  "${autre-chiffre}"    # -- la valeur qu'il faut lui affecter
+  set: le-choix
+  transform: integer # tranformé en nombre
 
 # À partir d'ici, l'étape ${le-choix} contient la valeur voulue,
 # qu'elle est été prise dans le menu ou définie explicitement.
@@ -470,7 +612,8 @@ On peut tirer des données d'un grand nombre de fichiers. La seule exigence est 
 |====
 | `type` | `get-data`
 | `base` | Chemin d'accès au fichier contenant les données (évaluable)
-| `key`  | Si précisé, c'est la clé à prendre
+| `key`  | Si précisé, c'est la clé à prendre, qui deviendra la valeur de l'étape. +
+          Si non précisé, c'est la liste des objets qui deviendra la valeur de l'étape.
 |====
 
 Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).
@@ -480,6 +623,87 @@ Deux sortes de données peuvent être remontées :
 
 - une table (dict) dont une clé primaire correspondra à `key`,
 - une liste d'objet (array) qui devra contenir un élément répondant à `id = key`.
+
+_En réalité, je pense qu'on peut imaginer tout autre type de valeur aussi, puisque `key` peut ne pas être défini._
+
+[[scserv-data-create-complex]]
+==== Création d'un objet complexe ====
+
+La force des scripts-services est de pouvoir construire des objets complexes (avec plusieurs paramètres) à l'aide d'étapes successives pour pouvoir les enregistrer ensuite dans un fichier. 
+
+[[scserv-exemple-save-book, exemple d’enregistrement d'un livre]]
+Nous présentons ci-dessous l'enregistrement d'un livre dans un fichier qui les liste.
+
+----
+# Définition préalable du chemin d'accès aux données du livre,
+# pour ne pas avoir à les répéter (et pouvoir les modifier 
+# facilement)
+- id: books-file
+  type: set
+  value: "./data/livres.yaml"
+  
+# Demande du livre qui appartient peut-être à la liste existante
+- id: livre-id
+  q: "Sélectionnez le livre à imprimer"
+  select: "${books-file}"
+  create: "Nouveau livre…" # pour en créer un nouveau
+
+- if: "${livre-id} = ''"  # <= l'user a cliqué sur "Nouveau livre…"
+  id: newlivre-titre   # id choisi avec soin (prefix-key)
+  type: string
+  q: "Titre du nouveau livre"
+
+# Étape qui va tranformer le titre en identifiant valide
+- if: "${livre-id} = ''"
+  id: newlivre-id
+  value: "${newlivre-titre}"
+  transform: valid-id
+
+- if: "${livre-id} = ''"
+  id: newlivre-auteur
+  q: "Auteur du livre :"
+  type: string
+
+- if: "${livre-id} = ''"
+  id: newlivre-annee
+  q: "Année de publication du livre :"
+  type: string
+  transform: integer
+
+- if: "${livre-id} = ''"
+  id: newlivre-resume
+  q: "Résumé du livre :"
+  type: text
+
+# ... On pourrait ajouter encore des propriétés
+    
+# Cette étape va mettre dans ${new-book} l'objet du nouveau
+# livre, qui pourra ensuite être enregistré
+- if: "${livre-id} = ''"
+  id: new-book
+  type: save-data
+  prefix: newlivre      # préfixe des étapes de définition
+  values: ['titre', 'id', 'resume', 'auteur', 'annee']
+  path: "${books-file}"  # L'objet sera placé dans ce fichier
+  
+# Il reste enfin à définir ${livre-id} qui sera utilisé par
+# la suite
+- if: "${livre-id} = ''"
+  id: define-livre-id
+  type: set
+  step: livre-id
+  value: "${newlivre-id}"
+  
+  
+# À partir d'ici, on peut utiliser ${livre-id} pour obtenir
+# l'identifiant du livre.
+
+# On charge les données du livre
+- id: book-data
+  type: get-data
+  base: "${books-file}"
+  key:  "${livre-id}" 
+----
 
 
 [[scserv-type-set-project-data, `set-project-data`]]

@@ -170,9 +170,42 @@ class ServStep {
       // Normalement, rien à faire puisque le callback n'est pas appelé
       this.aborted = true
     } else {
+      value = this.transform(value)
       message(`Valeur pour étape '${this.id} = ${typeof value == 'object' ? JSON.stringify(value) : value}`)
       this.value = value
+      // Pour définir une autre valeur d'étape
+      this.ifSet()
+      // Puis on joue la suite
       this.callback()
+    }
+  }
+
+  /**
+   * S'il faut transformer la valeur
+   */
+  transform(value){
+    if (! this.transform ) return value
+    switch(this.transform) {
+      case 'date':      return formateDate(value, this.format)
+      case 'valid-id':  return slugify(value)
+      case 'integer': 
+      case 'entier':    return parseInt(value, 10)
+      case 'float': 
+      case 'flottant':  return parseFloat(value)
+      case 'boolean':
+        switch(value){
+          case 'true':  return true
+          case 'false': return false
+        }
+    }
+  }
+  /**
+   * Pour définir de façon simple une autre valeur d'étape, sans 
+   * passer par une étate 'set'
+   */
+  ifSet(){
+    if (this.set) {
+      this.scriptService.setValue(this.set, value)
     }
   }
 
@@ -214,6 +247,7 @@ class ServStep {
     // Remplacements communs dans les paramètres
     ['q', 'path', 'value', 'content'].forEach( param => {if (this[param]) { this[param] = this.evaluateProp(param)}})
     if (this.path) this.path = this.expandPath(this.path)
+    if (this.value) this.ifSet() // pourra être modifié
 
     const method = `exec${kebabToPascalCase(this.type)}`
     if ('function' == typeof this[method]) {
@@ -298,13 +332,14 @@ class ServStep {
       // On met la valeur dans l'étape de projet
       // console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
       this.scriptService.setValue(this.project_key, value)
+      this.ifSet()
     }
   }
 
   // Pour récupérer une valeur projet
   execGetProjectData(){
     historize('-> execGetProjectData')
-    this.setValue(this.projet.get(this.id) || null) // la clé dans les extradata du projet doit être l'id
+    this.setValue(this.projet.get(this.key || this.id) || null) // la clé peut être l'id
   }
 
   /**
@@ -517,7 +552,7 @@ class ServStep {
       } else {
         value = data
       }
-      console.log("Donnée finale", value)
+      // console.log("Donnée finale", value)
       this.setValue(value)
     } else {
       this.base = this.expandPath(this.evaluateProp('base'))

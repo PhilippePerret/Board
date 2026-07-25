@@ -11,8 +11,12 @@
 
 - Panneau de confirmation de fin de servide plus visible que message
   → OKDialog (sans bouton non ou mid)
+- pouvoir filtrer une liste de valeurs dans `select`
 
 == Todo list ==
+
+- En cas d'erreur (tout le temps) : utiliser la fenêtre des script-services
+- fenêtre des erreurs : ne pas utiliser le break:n'importe où qui coupe les mots, mais faire un test sur les longues parties sans espace/coupures possible
 
 
 - pouvoir récupérer les tâches de todoist

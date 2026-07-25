@@ -450,9 +450,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_panneau_de_nouveau_projet">Panneau de nouveau projet</a></li>
 </ul>
 </li>
-<li><a href="#reglages-app">Réglages de l&#8217;application</a>
+<li><a href="#reglages-app">Réglages de l&#8217;application</a></li>
+<li><a href="#scripts-services">Les scripts-services</a>
 <ul class="sectlevel2">
-<li><a href="#scripts-services">Les scripts-services</a></li>
+<li><a href="#_liste_complète_des_types_assemblables">Liste complète des types assemblables</a></li>
+<li><a href="#scserv-use-variable">Utilisation des variables (valeur d’étape)</a></li>
+<li><a href="#script-services-steps">Une suite d&#8217;étapes</a></li>
+<li><a href="#_erreurs_classiques">Erreurs classiques</a></li>
+<li><a href="#scserv-common-params">Paramètres communs à tous les types</a></li>
+<li><a href="#conditional-step">Étape conditionnelle</a></li>
+<li><a href="#evaluate">Contenu évaluable</a></li>
+<li><a href="#script-service-types">Les types d&#8217;étapes (step)</a></li>
 </ul>
 </li>
 <li><a href="#services">Les services</a>
@@ -506,6 +514,9 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <p>Panneau de confirmation de fin de servide plus visible que message
 → OKDialog (sans bouton non ou mid)</p>
 </li>
+<li>
+<p>pouvoir filtrer une liste de valeurs dans <code>select</code></p>
+</li>
 </ul>
 </div>
 </div>
@@ -515,6 +526,12 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <div class="sectionbody">
 <div class="ulist">
 <ul>
+<li>
+<p>En cas d&#8217;erreur (tout le temps) : utiliser la fenêtre des script-services</p>
+</li>
+<li>
+<p>fenêtre des erreurs : ne pas utiliser le break:n&#8217;importe où qui coupe les mots, mais faire un test sur les longues parties sans espace/coupures possible</p>
+</li>
 <li>
 <p>pouvoir récupérer les tâches de todoist</p>
 </li>
@@ -674,14 +691,19 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <div class="paragraph">
 <p>En cliquant sur le titre include::/../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
 </div>
-<div class="sect2">
-<h3 id="scripts-services">Les scripts-services</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scripts-services">Les scripts-services</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Les <em>scripts-services</em> ouvrent définitivement la voie de l&#8217;infini pour définir les services d&#8217;un projet. Ils permettent de <strong>composer soi-même un service</strong> en exploitant toutes les ressources de l&#8217;application.</p>
 </div>
 <div class="paragraph">
 <p>Mais tout pouvoir puissant implique des responsabilités à ses proportions, comme nous le verrons.</p>
 </div>
+<div class="sect2">
+<h3 id="_liste_complète_des_types_assemblables">Liste complète des types assemblables</h3>
 <div class="paragraph">
 <p><em>Utiliser la table ci-dessous pour un accès rapide aux différents type de service</em></p>
 </div>
@@ -705,7 +727,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-select"><code>select</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sélection une valeur parmi un ensemble de
-                          valeur ou en créer une nouvelle.</p></td>
+                                      valeur ou en créer une nouvelle.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code>, <code>create</code></p></td>
 </tr>
 <tr>
@@ -721,13 +743,12 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-add-to-file"><code>add-to-file</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Ajout s&#8217;un contenu à un fichier.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>after</code>, <code>before</code><br>
-                                                                      <code>where</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>after</code>, <code>before</code> + <code>where</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-data"><code>get-data</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Obtention de données complexes
-                                  (array d&#8217;objets) depuis un fichier.</p></td>
+                                      (array d&#8217;objets) depuis un fichier.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code>, <code>key</code></p></td>
 </tr>
 <tr>
@@ -783,8 +804,215 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="scserv-use-variable">Utilisation des variables (valeur d’étape)</h3>
+<div class="paragraph">
+<p>Dans un script-service, il est souvent utile de définir des variables et d&#8217;y faire référence.</p>
+</div>
+<div class="paragraph">
+<p>Une variable, dans un script-service, est <strong>une valeur d&#8217;étape</strong>, on y fait référence par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>${&lt;id d'étape&gt;}</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong></em> il faudra donc comprendre qu&#8217;il s&#8217;agit de la valeur que prend l&#8217;étape au cours de son exécution ou la valeur qu&#8217;on lui définit explicitement.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Certaines variables se définissent en une seule fois, par exemple avec le type <a href="#scserv-type-select"><code>select</code></a> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'le-nombre'
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Avec cette étape, l&#8217;user choisira un nombre de 1 à 5 et ce nombre deviendra la <em>valeur de l&#8217;étape <code>le-nombre`</em> et pourra donc être utilisé avec `${le-nombre}</code>.</p>
+</div>
+<div class="paragraph">
+<p>Par exemple pour une condition :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Étape conditionnelle qui n'est jouée que le
+# le nombre choisi est supérieur à 4
+- if: "${le-nombre} &gt; 4"
+  id: etape-si-cinq
+  ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On peut également définir une variable explicitement grâce au type d&#8217;étape <a href="#scserv-type-set"><code>set</code></a>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à <em>définir la valeur d&#8217;une étape</em>. Si je joue :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: le-nombre
+  type: set
+  value: 3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… alors je mets explicitement la valeur de l&#8217;étape <code>le-nombre</code> à 3.</p>
+</div>
+<div class="paragraph">
+<p>Utilisé de cette manière l&#8217;usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j&#8217;ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: nom
+  type: set
+  value: "la Bhagavad-Gītā"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Je peux alors simplifier l&#8217;écriture des messages :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: version
+  type: select
+  q: "Quelle version de ${nom} dois-je prendre en référence ?
+  values: [1,2,3]</pre>
+</div>
+</div>
 <div class="sect3">
-<h4 id="script-services-steps">Une suite d&#8217;étapes</h4>
+<h4 id="scserv-vars-affectation-complexe">Affectation plus complexe de variables</h4>
+<div class="paragraph">
+<p>Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l&#8217;utilisation de <em>constantes</em> que de véritables <em>variables</em> dont la valeur dépend en réalité du contexte.</p>
+</div>
+<div class="paragraph">
+<p>Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c&#8217;est-à-dire leur utilisation dans n&#8217;importe quel projet similaire (i.e. définissant les mêmes données).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: project-name
+  type: get-project-data
+  key: title</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Grâce au type de service <a href="#scserv-type-get-project-data"><code>get-project-data</code></a>, nous pouvons obtenir la propriété <code>title</code> (titre) du projet et la stocker en valeur de l&#8217;étape. On peut ensuite l&#8217;utiliser avec <code>${project-name}</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: pour-voir
+  q: "Que voulez-vous faire de “${project-name}” ?"
+  ...</pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>À titre de rappel, les propriétés de base de tout projet sont <code>title</code>, <code>id</code> et <code>path</code>, mais on peut en ajouter autant que l&#8217;on veut notamment grâce au type <a href="#scserv-type-set-project-data"><code>set-project-data</code></a>.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Nous pouvons aller encore plus loin dans l&#8217;affectation des variables et c&#8217;est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l&#8217;on veut que l&#8217;utilisateur puisse donner une valeur propre, c&#8217;est-à-dire autres que celles proposées. Vous vous souvenir de l&#8217;affectation d&#8217;un nombre, tout à l&#8217;heure, à la valeur d&#8217;une variable (la valeur de l&#8217;étape). Pour que l&#8217;user puisse utiliser sa propre valeur, il suffit de définir le paramètre <code>create</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: le-nombre
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+  create: "Autre valeur…"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette fois, l&#8217;user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu&#8217;il a cliqué sur le bouton car la valeur de <code>${le-nombre}</code> sera vide. Nous la testons et lui proposons alors d&#8217;entrer sa valeur :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Grâce à cette étape, l&#8217;user va pouvoir donner sa valeur.</p>
+</div>
+<div class="paragraph">
+<p>Le problème, c&#8217;est qu&#8217;elle sera consignée dans <code>${autre-valeur}</code> alors que plus tard, nous en aurons besoin dans <code>${le-nombre}</code>. Pour ce faire, il nous suffit de définir le paramètre <code>set</code> avec le nom de l&#8217;autre étape :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+  set: le-nombre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Attention de ne pas affecter la valeur trop vite ! Prenons l&#8217;exemple d&#8217;une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+  set: le-nombre
+
+- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${le-nombre}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ça ne fonctionnerait pas parce qu&#8217;au moment de la ligne :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>${le-nombre}</code> ne sera plus vide puisqu&#8217;il aura été défini juste au-dessus (<code>set: le-nombre</code> qui signifie "définir la valeur de l&#8217;étape <code>le-nombre</code> avec la valeur de cette étape).</p>
+</div>
+<div class="paragraph">
+<p>Il faut donc faire :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+
+- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${autre-valeur}"
+  set: le-nombre</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="script-services-steps">Une suite d&#8217;étapes</h3>
 <div class="paragraph">
 <p><strong>Un <em>script-service</em> est un fichier YAML qui décrit la suite procédurale des étapes du service</strong>. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.</p>
 </div>
@@ -863,8 +1091,8 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_erreurs_classiques">Erreurs classiques</h4>
+<div class="sect2">
+<h3 id="_erreurs_classiques">Erreurs classiques</h3>
 <div class="paragraph">
 <p>Vous trouverez dans cette partie une liste des erreurs classique lorsqu&#8217;on établit ses étapes.</p>
 </div>
@@ -881,8 +1109,8 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_commun_à_tous_les_types">Commun à tous les types</h4>
+<div class="sect2">
+<h3 id="scserv-common-params">Paramètres communs à tous les types</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -909,10 +1137,76 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Le titre de la boite de dialogue, en fonction du type attendu.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le nom de l&#8217;étape, mais ne sert pas beaucoup.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>set</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;identifiant de l&#8217;étape à laquelle on doit donner la valeur de cette étape.
+                Voir par exemple l&#8217;utilisation dans <a href="#scserv-vars-affectation-complexe">Affectation plus complexe de variables</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>transform</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour transformer la valeur en nombre, flottan, booléen, etc.<br>
+                Les valeurs actuelles sont <code>valid-id</code>, <code>date</code>, <code>integer</code>, <code>float</code> ou <code>boolean</code>.<br>
+                Les types <code>date</code> ont besoin de <code>format</code> pour définir leur format.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Format de transformation pour les valeurs qui en ont besoin.</p></td>
+</tr>
 </tbody>
 </table>
-<div class="sect4">
-<h5 id="conditional-step">Étape conditionnelle</h5>
+<div class="sect3">
+<h4 id="transformations-values"><code>Transform</code>, transformation des valeurs</h4>
+<div class="paragraph">
+<p>Le paramètre <code>transform</code> permet de transformer les valeurs affectées aux étapes. Il peut avoir ces valeurs :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Valeur transform</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Effet</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**Exemples</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>integer</code>, <code>entier</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en entier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"12" → 12</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>float</code>, <code>flottant</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en nombre à virgule</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1,23" → 1.23</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en booléen</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"true" → true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>valid-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en un identifiant valide</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Ça c&#8217;est l&#8217;été → "ca-cest-lete"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prend une date "JJ/MM/AAAA" et la
+                          met en forme.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"25/07/2026" → "25 juillet"</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="conditional-step">Étape conditionnelle</h3>
 <div class="paragraph">
 <p>On utile le paramètre <code>if</code> pour définir une étape conditionnelle.</p>
 </div>
@@ -921,7 +1215,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>if: "expression operateur expected"</pre>
+<pre>if: "expression operateur attendu"</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -931,7 +1225,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <p><code>operateur</code> peut être <code>==</code> ou <code>=</code>, <code>!=</code> ou <code>≠</code>, <code>&gt;</code>, <code>&lt;</code>.</p>
 </div>
 <div class="paragraph">
-<p><code>Expected</code> peut-être n&#8217;importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués.<br>
+<p><code>attendu</code> peut-être n&#8217;importe quelle valeur, en sachant que "null", "undefined", "empty" seront évalués.<br>
 Quand le type est <code>select</code> et que <code>create</code> est à true (ou nom du bouton "Autre…"), autorisant la création d&#8217;une nouvelle valeur, <code>expected</code> doit alors être ''. Par exemple :</p>
 </div>
 <div class="listingblock">
@@ -948,9 +1242,8 @@ Quand le type est <code>select</code> et que <code>create</code> est à true (ou
 </div>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="evaluate">Contenu évaluable</h4>
+<div class="sect2">
+<h3 id="evaluate">Contenu évaluable</h3>
 <div class="paragraph">
 <p>Dans les étapes, un contenu <em>évaluable</em> est un contenu qui se sert de la valeur d&#8217;une autre étape pour être défini.</p>
 </div>
@@ -987,10 +1280,13 @@ ${step-id}.prop     # Idem, sous une autre forme</pre>
 </div>
 <hr>
 </div>
+<div class="sect2">
+<h3 id="script-service-types">Les types d&#8217;étapes (step)</h3>
+<div class="paragraph">
+<p><em>Dans cette longue partie nous allons voir et étudier tous les types d&#8217;étapes, donc les types de services utilisables dans les scripts-services.</em></p>
+</div>
 <div class="sect3">
-<h4 id="script-service-types">Les types d&#8217;étapes (step)</h4>
-<div class="sect4">
-<h5 id="script-service-type-add-to-file">Ajouter du contenu à  un fichier</h5>
+<h4 id="scserv-type-add-to-file">Add-to-file</h4>
 <div class="paragraph">
 <p>Ce type d&#8217;étape permet d&#8217;ajouter du contenu à un fichier.</p>
 </div>
@@ -1008,9 +1304,9 @@ ${step-id}.prop     # Idem, sous une autre forme</pre>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1072,16 +1368,16 @@ Noter les retours de chariot marqués par "\n".</p></td>
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-save-data">Enregistrement de données</h5>
+<div class="sect3">
+<h4 id="scserv-type-save-data">save-data</h4>
 <div class="paragraph">
-<p>Permet d&#8217;enregistrer une donnée à la volée.</p>
+<p>Enregistrement de données. Permet d&#8217;enregistrer une donnée à la volée.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1113,40 +1409,19 @@ Noter les retours de chariot marqués par "\n".</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Par exemple, si l&#8217;on doit reconstituer un objet "Livre" qui possède les clés <code>titre</code>, <code>auteur</code> et <code>annee</code>, on créera les étapes id = <code>livre-titre</code>, id= <code>livre-auteur</code> et id = <code>livre-annee</code> et l&#8217;on définir les données de l&#8217;étape par :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>---
-- id: "livre-titre"
-  type: "string"
-  q: "Titre du livre"
-
-- id: "livre-auteur"
-  type: "string"
-  q: "Auteur du livre
-
-- id: "livre-annee"
-  type: "integer"
-  q: "Année de publication
-
-- id: 'save-the-book'
-  type: 'save-data'
-  values: ['titre', 'auteur', 'annee']
-  prefix: 'livre</pre>
+<p>Voir l'<a href="#scserv-exemple-save-book">exemple d’enregistrement d&#8217;un livre</a>.</p>
 </div>
 </div>
-</div>
-<div class="sect4">
-<h5 id="scserv-type-set">Set</h5>
+<div class="sect3">
+<h4 id="scserv-type-set">Set</h4>
 <div class="paragraph">
 <p>Permet de <strong>définir explicitement le <code>step.value</code> d&#8217;une étape</strong> ou de l&#8217;étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un <code>select</code> on peut créer une nouvelle valeur.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 60%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1179,12 +1454,12 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-select-file">Sélection d&#8217;un fichier</h5>
+<div class="sect3">
+<h4 id="scserv-type-select-file">Sélection d&#8217;un fichier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 80%;">
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1194,12 +1469,12 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-create-file">Création d&#8217;un fichier</h5>
+<div class="sect3">
+<h4 id="scserv-type-create-file">Création d&#8217;un fichier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 80%;">
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1209,30 +1484,15 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-add-to-file">Ajout d&#8217;un contenu à un fichier</h5>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 80%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>add-to-file</code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="scserv-type-translate">Translate</h5>
+<div class="sect3">
+<h4 id="scserv-type-translate">Translate</h4>
 <div class="paragraph">
 <p>Permet de transposer une valeur <em>par marqueur</em> en vrai marqueur. L&#8217;exemple type de ces marques est la date <code>today</code> ou <code>tomorrow</code> qui sont automatiquement transposé en leur valeur réelle.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 80%;">
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1246,13 +1506,33 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 <pre>---
 - id: "id-de-step"
   type: translate
-  value: "&lt;valeur&gt;"   # le marqueur
+  value: "&lt;valeur&gt;"   # le marqueur (p.e. 'today', 'date+4'…)
   step: "&lt;id step&gt;"   # pour la prendre et la remettre dans l'étape
   format: "&lt;format résultat optionnel&gt;"</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Si <code>step</code> est utilisé, c&#8217;est sa valeur qui est prise et remplacée.</p>
+<p>Si <code>step</code> est utilisé, c&#8217;est sa valeur qui est prise et remplacée. Noter qu&#8217;alors ce <code>step</code> remplace en même temps le paramètres <code>valeur</code> et <code>set</code>. La formule :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: transformation
+  type: translate
+  step: la-date
+  format: '%J %_M</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… est équivalent à :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: transformation
+  type: translate
+  value: "${la-date}"
+  set: la-date
+  format: '%J %_M</pre>
+</div>
 </div>
 <div class="paragraph">
 <p><strong>Liste des marqueurs existants</strong></p>
@@ -1307,8 +1587,8 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-select">Select</h5>
+<div class="sect3">
+<h4 id="scserv-type-select">Select</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1385,21 +1665,16 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 
 # Comme le choix "Autre…" a été choisi, on propose
 # un dialogue pour entrer une autre valeur
+# et, grâce à `set`, la donner à l'autre étape
 - if: "${le-choix} == ''"
   id: 'autre-chiffre'
   type: string
   q: "Quel autre chiffre ?"
-
-# Maintenant qu'on a la valeur, on la place dans l'étape
-# 'le-choix' car c'est elle qui sera référencée dans la suite
-- if "${le-choix} == ''"
-  type:   set
-  step:   "le-choix"            # -- l'étape qu'il faut redéfinir
-  value:  "${autre-chiffre}"    # -- la valeur qu'il faut lui affecter
+  set: le-choix
+  transform: integer # tranformé en nombre
 
 # À partir d'ici, l'étape ${le-choix} contient la valeur voulue,
 # qu'elle est été prise dans le menu ou définie explicitement.</pre>
-</div>
 </div>
 </div>
 </div>
@@ -1424,7 +1699,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>key</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Si précisé, c&#8217;est la clé à prendre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si précisé, c&#8217;est la clé à prendre, qui deviendra la valeur de l&#8217;étape.<br>
+          Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#8217;étape.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1444,8 +1720,93 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </li>
 </ul>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-set-project-data">Set Project Data</h5>
+<div class="paragraph">
+<p><em>En réalité, je pense qu&#8217;on peut imaginer tout autre type de valeur aussi, puisque <code>key</code> peut ne pas être défini.</em></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-data-create-complex">Création d&#8217;un objet complexe</h4>
+<div class="paragraph">
+<p>La force des scripts-services est de pouvoir construire des objets complexes (avec plusieurs paramètres) à l&#8217;aide d&#8217;étapes successives pour pouvoir les enregistrer ensuite dans un fichier.</p>
+</div>
+<div id="scserv-exemple-save-book" class="paragraph">
+<p>Nous présentons ci-dessous l&#8217;enregistrement d&#8217;un livre dans un fichier qui les liste.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Définition préalable du chemin d'accès aux données du livre,
+# pour ne pas avoir à les répéter (et pouvoir les modifier
+# facilement)
+- id: books-file
+  type: set
+  value: "./data/livres.yaml"
+
+# Demande du livre qui appartient peut-être à la liste existante
+- id: livre-id
+  q: "Sélectionnez le livre à imprimer"
+  select: "${books-file}"
+  create: "Nouveau livre…" # pour en créer un nouveau
+
+- if: "${livre-id} = ''"  # &lt;= l'user a cliqué sur "Nouveau livre…"
+  id: newlivre-titre   # id choisi avec soin (prefix-key)
+  type: string
+  q: "Titre du nouveau livre"
+
+# Étape qui va tranformer le titre en identifiant valide
+- if: "${livre-id} = ''"
+  id: newlivre-id
+  value: "${newlivre-titre}"
+  transform: valid-id
+
+- if: "${livre-id} = ''"
+  id: newlivre-auteur
+  q: "Auteur du livre :"
+  type: string
+
+- if: "${livre-id} = ''"
+  id: newlivre-annee
+  q: "Année de publication du livre :"
+  type: string
+  transform: integer
+
+- if: "${livre-id} = ''"
+  id: newlivre-resume
+  q: "Résumé du livre :"
+  type: text
+
+# ... On pourrait ajouter encore des propriétés
+
+# Cette étape va mettre dans ${new-book} l'objet du nouveau
+# livre, qui pourra ensuite être enregistré
+- if: "${livre-id} = ''"
+  id: new-book
+  type: save-data
+  prefix: newlivre      # préfixe des étapes de définition
+  values: ['titre', 'id', 'resume', 'auteur', 'annee']
+  path: "${books-file}"  # L'objet sera placé dans ce fichier
+
+# Il reste enfin à définir ${livre-id} qui sera utilisé par
+# la suite
+- if: "${livre-id} = ''"
+  id: define-livre-id
+  type: set
+  step: livre-id
+  value: "${newlivre-id}"
+
+
+# À partir d'ici, on peut utiliser ${livre-id} pour obtenir
+# l'identifiant du livre.
+
+# On charge les données du livre
+- id: book-data
+  type: get-data
+  base: "${books-file}"
+  key:  "${livre-id}"</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-set-project-data">Set Project Data</h4>
 <div class="paragraph">
 <p>Type d&#8217;étape qui permet de définir une donnée de projet.</p>
 </div>
@@ -1474,8 +1835,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-get-project-data">Get Project Data</h5>
+<div class="sect3">
+<h4 id="scserv-type-get-project-data">Get Project Data</h4>
 <div class="paragraph">
 <p>Type d&#8217;étape qui permet de récupérer une donnée de projet.</p>
 </div>
@@ -1531,8 +1892,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-choose-folder">Choisir un dossier</h5>
+<div class="sect3">
+<h4 id="scserv-type-choose-folder">Choisir un dossier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1546,8 +1907,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-create-folder">Création d&#8217;un dossier</h5>
+<div class="sect3">
+<h4 id="scserv-type-create-folder">Création d&#8217;un dossier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1561,8 +1922,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-copy-file">Copier d&#8217;un fichier</h5>
+<div class="sect3">
+<h4 id="scserv-type-copy-file">Copier d&#8217;un fichier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1576,8 +1937,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-string">Obtenir une chaine</h5>
+<div class="sect3">
+<h4 id="scserv-type-string">Obtenir une chaine</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -1591,8 +1952,8 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-text">Obtenir un texte</h5>
+<div class="sect3">
+<h4 id="scserv-type-text">Obtenir un texte</h4>
 <div class="paragraph">
 <p><em>Texte</em>, ci-dessus, signifie un texte multi-lignes.</p>
 </div>
@@ -1609,11 +1970,10 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="scserv-type-phone">Obtenir un numéro de téléphone</h5>
+<div class="sect3">
+<h4 id="scserv-type-phone">Obtenir un numéro de téléphone</h4>
 <div class="paragraph">
 <p>Typiquement, ces méthodes permettent surtout d&#8217;ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l&#8217;implémentation de ce type, il servait à ajouter des fichers de maisons d&#8217;édition pour l&#8217;envoi d&#8217;un manuscrit.</p>
-</div>
 </div>
 </div>
 </div>
