@@ -170,8 +170,9 @@ class ServStep {
       // Normalement, rien à faire puisque le callback n'est pas appelé
       this.aborted = true
     } else {
-      value = this.transform(value)
-      message(`Valeur pour étape '${this.id} = ${typeof value == 'object' ? JSON.stringify(value) : value}`)
+      value = this.transformValue(value)
+      console
+      message(`Valeur pour étape '${this.id} = ${(typeof value == 'object') ? JSON.stringify(value) : value}`)
       this.value = value
       // Pour définir une autre valeur d'étape
       this.ifSet()
@@ -183,7 +184,7 @@ class ServStep {
   /**
    * S'il faut transformer la valeur
    */
-  transform(value){
+  transformValue(value){
     if (! this.transform ) return value
     switch(this.transform) {
       case 'date':      return formateDate(value, this.format)
@@ -197,6 +198,8 @@ class ServStep {
           case 'true':  return true
           case 'false': return false
         }
+      default:
+        return value
     }
   }
   /**
@@ -682,7 +685,9 @@ class ServStep {
       val = val.replace(/\$\{([^}]+)\}\[([a-z_]+)\]/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{([^}]+)\}\.([a-z_]+)/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{(.+?)\}/g, (match, stepId) => {return this.serviceValue(stepId)})
-      console.log("Valeur de '%s' transformée. Initiale: '%s'. Finale: '%s'", prop, this[prop], val)
+      if ( val != this[prop]) {
+        console.log("Valeur de '%s' transformée. Initiale: '%s'. Finale: '%s'", prop, this[prop], val)
+      }
       return val
     } else {
       return this[prop]

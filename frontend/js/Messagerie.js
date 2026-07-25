@@ -8,10 +8,15 @@ function getMsg(msgId, params){
 }
 
 function message(msg, params){
-  msg = textSubstitute(msg, params)
-  divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
-  nettoie_message()
-  return true
+  try {
+    msg = textSubstitute(msg, params)
+    divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
+    nettoie_message()
+    return true
+  } catch(err){
+    traceError()
+    console.error("Erreur avec le message '%s' :", msg, params, err.message)
+  }
 }
 
 function error(msg, params){

@@ -1,3 +1,8 @@
+function traceError(){
+  new Error().stack()
+  console.trace()
+}
+
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'décembre']
 const Mois = MOIS.map(m => {return m[0].toUpperCase() + m.slice(1)})
 
@@ -70,34 +75,35 @@ function debounce(fn, delay) {
  * Remplacer les $1…$X dans le template +msg+
  */
 function textSubstitute(msg, params){
-  if (params) {
-    if (Array.isArray(params)) {
-      var i = 0
-      params.forEach( param => {
-        i++
-        const regexp = new RegExp(`\\$\\{?${i}\\}?`, 'g')
-        msg = msg.replace(regexp, param)
-      })
-    } else if ('object' == typeof params) {
-      for(var key in params){
-        const regexp = new RegExp(`\\$\\{?${key}\\}?`, 'g')
-        msg = msg.replace(regexp, params[key])
-      }
-    } else {
-      msg = msg.replace(/\$1/g, String(params))
-    }
-  }
   try {
-    if (msg) {
-      msg = msg.replace(/\n/g, '<br>')
+    if (! msg) {
+      raise("msg non défini dans textSubstitute")
+    } else if (typeof msg != 'string') {
+      raise("Must be a string")
     } else {
-      console.error("msg non défini dans textSubstitute")
-      new Error().stack
-      console.trace()
+      if (params) {
+        if (Array.isArray(params)) {
+          var i = 0
+          params.forEach( param => {
+            i++
+            const regexp = new RegExp(`\\$\\{?${i}\\}?`, 'g')
+            msg = msg.replace(regexp, param)
+          })
+        } else if ('object' == typeof params) {
+          for(var key in params){
+            const regexp = new RegExp(`\\$\\{?${key}\\}?`, 'g')
+            msg = msg.replace(regexp, params[key])
+          }
+        } else {
+          msg = msg.replace(/\$1/g, String(params))
+        }
+      }
+      if (!msg) raise("msg indéfini après traitement des params")
+      msg = msg.replace(/\n/g, '<br>')
     }
   } catch(err) {
+    traceError()
     const errMsg = `[textSubstitute] Problème avec msg (${msg}) : ${err.message}`
-    console.error(errMsg)
     return errMsg
   }
   return msg
