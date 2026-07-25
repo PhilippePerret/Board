@@ -63,12 +63,13 @@ def exec_script(script_name, params = "")
       ###       Un bon retour de script             ###
       #################################################
       retour_script = JSON.parse(res)
-      if retour_script["ok"]
-        RETOUR.ok       = true
-        RETOUR.message  = retour_script["message"]
-      else
+      if retour_script["ok"] == false
         RETOUR.ok     = false
         RETOUR.error  = retour_script["error"]
+      else
+        RETOUR.ok       = true
+        RETOUR.message  = retour_script["message"]
+        RETOUR.data     = retour_script
       end
     else 
       RETOUR.ok     = false

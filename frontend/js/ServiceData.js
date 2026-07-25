@@ -111,6 +111,14 @@ const COMMON_SERVICES_DATA = [
       ]
   },
   {
+      id: 'edit-projet'
+    , name: "Éditer les données du projet"  
+    , group: 'Prudence'
+    , params: [
+          {id: 'card-path', type: 'project'}
+      ]
+  },
+  {
       id: 'open-in-vscode'
     , name: 'Ouvrir dans VSCode'
     , group: 'Consoles'

@@ -94,12 +94,12 @@ begin
     
   # Lancement d'un script osascript
   when "run-osascript"
-    require_relative 'lib/exec_script_rb'
+    require_relative 'lib/exec_script.rb'
     exec_script("#{request['script-name']}.scpt")
 
 
   when 'run-bashscript'
-    require_relative 'lib/exec_script_rb'
+    require_relative 'lib/exec_script.rb'
     exec_script("#{request['script-name']}.sh")
 
   # Liste des logiciels installés (type de param 'logiciel', ParamDefiner.js)
@@ -111,7 +111,7 @@ begin
 
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
-    require_relative 'lib/exec_script_rb'
+    require_relative 'lib/exec_script.rb'
     RETOUR.data = exec_script('getInfoFinderSelection.scpt')
     if RETOUR.ok
       RETOUR.data['createdAt'] = human_date_to_aaammjj(RETOUR.data['createdAt'])
@@ -119,19 +119,19 @@ begin
     end
   # Pour récupérer les informations de la fenêtre courante du Finder
   when 'getInfoFinderWindow'
-    require_relative 'lib/exec_script_rb'
+    require_relative 'lib/exec_script.rb'
     exec_script('getInfoFinderWindow.scpt')
 
   # Panneau "Outils" (ToolsData.js/Tools.js) — applications visibles
   # (Dock), pour choisir celle dont on veut la position/taille de fenêtre
   when 'list-running-apps'
-    require_relative 'lib/exec_script_rb'
+    require_relative 'lib/exec_script.rb'
     exec_script('GetRunningApps.scpt')
 
   # Panneau "Outils" : position + taille de la fenêtre de premier plan de
   # request['appName'] — copiées dans le presse-papier par le script lui-même
   when 'get-app-window-bounds'
-    require_relative 'lib/exec_script_rb'
+    require_relative 'lib/exec_script.rb'
     exec_script('GetAppWindowBounds.scpt', [request['appName']])
   
   # Écriture du changelog et de la todo-list après minuteur
