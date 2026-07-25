@@ -63,7 +63,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Documentation'
     , scType: '.rb'
     , onError: (errors) => {
-        const data = {title: "Erreur en cours d'actualisation", errors: errors}
+        const data = {title: "Erreur en cours d'actualisation", errors: errors, ouiBtn: this.Service.runService('edit-documentation')}
         new ErrorsDialog(data).show()
       }
     , params: [

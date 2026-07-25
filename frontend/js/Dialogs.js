@@ -22,6 +22,7 @@ const MAX_LEN_STRING = 90
 class ErrorsDialog extends Dialog {
   constructor(data){
     super(data)
+    this.width  = '1400px'
     this.errors = data.errors ?? ''
     console.log("errors au départ", this.errors)
     this.content = this.buildContainerErrors()
@@ -68,7 +69,7 @@ class ErrorsDialog extends Dialog {
           return seg.replace(/.{1,MAX_LEN_STRING}/g, "$& ")
         } else return seg
       }).join(' ')
-
+      if (error.match(/\n/)) error = error.split("\n") 
       return error
     })
   }

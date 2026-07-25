@@ -49,21 +49,30 @@ def exec_script(script_name, params = "")
     # "tell application Board to activate" pendant que le thread principal
     # de Board attend justement CE process) peut bloquer indéfiniment sinon,
     # gelant toute l'app (le bridge est synchrone côté Swift).
+    status = nil
     Timeout.timeout(SCRIPT_TIMEOUT) do
       IO.popen("#{cmd} 2>&1") do |io|
         pid = io.pid
         res = io.read
       end
+      status = $?
     end
-    if res == "" then
-      RETOUR.ok = nil
-      RETOUR.message = "Aucun retour de commande."
-    else 
+    RETOUR.ok = status.success?
+    if status.success?
       #################################################
       ###       Un bon retour de script             ###
       #################################################
-      RETOUR.ok   = true
-      RETOUR.data = JSON.parse(res)
+      retour_script = JSON.parse(res)
+      if retour_script["ok"]
+        RETOUR.ok       = true
+        RETOUR.message  = retour_script["message"]
+      else
+        RETOUR.ok     = false
+        RETOUR.error  = retour_script["error"]
+      end
+    else 
+      RETOUR.ok     = false
+      RETOUR.error  = JSON.parse(res)
     end
   rescue Timeout::Error
     (Process.kill('TERM', pid) rescue nil) if pid

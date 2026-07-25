@@ -61,7 +61,7 @@ class SidePanel {
     return this.oppositePanel
   }
   setOppositeButton(){
-    if (this.oppositeButton){
+    if (this.oppositePanel){
       this.toggleBtn.textContent = this.oppositeButton
     }
   }

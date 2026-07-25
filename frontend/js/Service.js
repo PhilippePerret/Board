@@ -1,9 +1,13 @@
 class Service {
 
   static init(){
-    // juste pour les instancier
-    this.CustomPanel
-    this.CommonPanel
+    // Construire les deux panneaux avant de les build : chacun a besoin de
+    // l'autre déjà construit (this.oppositePanel) au moment de son build()
+    // pour savoir s'il doit créer son bouton de bascule.
+    const custom = this._cuspanel = new CustomPanel()
+    const common = this._companel = new CommonPanel()
+    custom.build()
+    common.build()
   }
 
   static get CustomPanel(){ return this._cuspanel || (this._cuspanel = this.defineAndBuildCustomPanel() )}
@@ -52,7 +56,7 @@ class Service {
 
 
 
-  constructor(data){
+  constructor(data){ D.on && D.trace(data)
     // console.log("data Service", data)
     this.id     = data.id || raise("Il faut fournir un identifiant au service.")
     this.data   = data
@@ -214,7 +218,7 @@ class Service {
     definer.define()
   }
   // Exécution du service
-  exec(projet, ev, callback){
+  exec(projet, ev, callback){ D.on && D.trace([projet, ev, callback], 'Service.')
     // console.log("callback dans Service#exec", this, callback)
     new ServiceExecuter(this).exec(projet, callback)
     // console.log("Service#exec se termine bien")

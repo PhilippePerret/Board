@@ -292,7 +292,7 @@ Le paramètre `transform` permet de transformer les valeurs affectées aux étap
 
 [cols="1,3,1"]
 |====
-| **Valeur transform** | **Effet**                            | **Exemples 
+| **Valeur transform** | **Effet**                            | **Exemples    |
 | `integer`, `entier`   | Transforme en entier.               | "12" → 12
 | `float`, `flottant`   | Transforme en nombre à virgule.     | "1,23" → 1.23
 | `boolean`             | Transforme en booléen.              | "true" → true

@@ -11,7 +11,7 @@ class ServiceExecuter {
   }
   
   // Exécution du service
-  exec(projet, callback){
+  exec(projet, callback){ D.on && D.trace([projet, callback], 'ServiceExecuter.')
     this.projet = projet
     if (typeof callback == 'function') this.callback = callback
     const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
@@ -28,7 +28,7 @@ class ServiceExecuter {
   /**
    * Exécution d'un service custom
    */
-  execReally(){
+  execReally(){ D.on && D.trace(null, 'ServiceExecuter.')
     this.finalyExec(this.params)
   }
 
@@ -39,7 +39,7 @@ class ServiceExecuter {
    * les paramètres se trouvent dans son .params propre. Alors que dans le service
    * commun, c'est dans le projet.common_services_data que ça se trouve.
    */
-  execOnProject(projet){
+  execOnProject(projet){  D.on && D.trace(projet, 'ServiceExecuter.')
     this.projet = projet
     this.finalyExec(projet.common_services_data[this.id])
   }
@@ -47,7 +47,7 @@ class ServiceExecuter {
   // Point unique de sortie, quel que soit le chemin (custom attaché, commun
   // attaché, commun joué depuis le panneau) : this.front, s'il est défini,
   // est TOUJOURS prioritaire sur l'envoi au backend.
-  finalyExec(paramsValues){
+  finalyExec(paramsValues){ D.on && D.trace(paramsValues, 'ServiceExecuter.')
     const flatParamsValues = this.flattenParamsValues(paramsValues)
     if (this.front) {
       // Pas un script backend, mais un traitement frontend
@@ -59,8 +59,8 @@ class ServiceExecuter {
     server.send({action: `exec-service`, script: this.script, params: flatParamsValues, no_raise: true}, this.afterRunService.bind(this))
   }
 
-  // Appelée après avoir exécuté le service
-  afterRunService(retour){
+  // -- Appelée après avoir exécuté le service --
+  afterRunService(retour){ D.on && D.trace(retour, 'ServiceExecuter.')
     console.log("retour du run de service", retour)
     if (retour.error) { 
       if (this.service.onError) {
@@ -77,7 +77,8 @@ class ServiceExecuter {
       Service.remove(this.service.uuid)
       historize("- Service supprimé du cache")
     }
-    typeof this.callback == 'function' && this.callback() 
+    typeof this.callback == 'function' && this.callback()
+    D.outputTrace()
   }
 
   /**

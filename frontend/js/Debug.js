@@ -26,11 +26,13 @@ class Debug {
   trace(args, classe){
     const plainLine = new Error().stack.split("\n")[1]
     const [method, lieu, line, col] = plainLine.replace(relativePath, '').split(/[@:]/)
-    this.tracer.push([`${classe ? classe : ''}${method}`, args, `${method} in ${lieu}:${line}`, plainLine])
+    this.tracer.push([`${classe ? classe : ''}${method}`, args, `${method} in ${lieu}:${line}`])
   }
   outputTrace(){
     console.info("TRACER")
     console.info(this.tracer)
+    delete this.tracer
+    this.tracer = []
   }
 
   start() {
