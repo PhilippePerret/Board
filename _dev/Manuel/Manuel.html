@@ -483,7 +483,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_bugs">BUGS</h2>
 <div class="sectionbody">
-
+<div class="ulist">
+<ul>
+<li>
+<p>l&#8217;étape 'duplication-manuscrit' de type 'copy-file' tourne en rond lorsque le manuscrit vient d&#8217;être défini
+peut-être comme si "${manuscrit-path}" était mal défini.
+Recommencer maintenant que j&#8217;ai mis l&#8217;identifiant entre guillemets qui ne doivent pourtant pas jouer…
+LE BUG : EN fait, ça doit venir du fait que l&#8217;id n&#8217;était pas défini… Mais alors, il faut voir POURQUOI l&#8217;erreur de  l&#8217;id manquant n&#8217;est pas signalé
+IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux étapes sont "compilées"
+=&#8658; FAIRE VRAIMENT DES LIGNES VIDES</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -669,21 +680,125 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Les <em>scripts-services</em> ouvrent définitivement la voie de l&#8217;infini pour définir les services d&#8217;un projet. Ils permettent de <strong>composer soi-même un service</strong> en exploitant toutes les ressources de l&#8217;application.</p>
 </div>
 <div class="paragraph">
-<p>Mais tout pouvoir puissant implique des responsabilités à ses propotions.</p>
+<p>Mais tout pouvoir puissant implique des responsabilités à ses proportions, comme nous le verrons.</p>
 </div>
+<div class="paragraph">
+<p><em>Utiliser la table ci-dessous pour un accès rapide aux différents type de service</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type de service</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Objet</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Paramètres propres</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-set"><code>set</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour définir la valeur d&#8217;une étape.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>step</code> + <code>value</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-select"><code>select</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélection une valeur parmi un ensemble de
+                          valeur ou en créer une nouvelle.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code>, <code>create</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-select-file"><code>select-file</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélection d&#8217;un fichier (dans le Finder).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-create-file"><code>create-file</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création d&#8217;un fichier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code> + <code>content</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-add-to-file"><code>add-to-file</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ajout s&#8217;un contenu à un fichier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>after</code>, <code>before</code><br>
+                                                                      <code>where</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-data"><code>get-data</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Obtention de données complexes
+                                  (array d&#8217;objets) depuis un fichier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code>, <code>key</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-save-data"><code>save-data</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enregistrement de données complexes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>prefix</code>, <code>values</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-choose-folder"><code>choose-folder</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélection d&#8217;un dossier (dans le Finder).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-create-folder"><code>create-folder</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création d&#8217;un dossier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-copy-file"><code>copy-file</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Copie d&#8217;un fichier.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-set-project-data"><code>set-project-data</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour définir une propriété pour le projet.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>step</code> + <code>value</code> + <code>project_key</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-project-data"><code>get-project-data</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour obtenir une propriété du projet.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code> = prop extradata</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-translate"><code>translate</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour transformer une marqueur selon un
+                              certain format.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code> + <code>format</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-string"><code>string</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Obtenir une valeur string.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-text"><code>text</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Obtenir une valeur texte (multi lignes).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-phone"><code>phone</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Obtenir un numéro de téléphone.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 <div class="sect3">
 <h4 id="script-services-steps">Une suite d&#8217;étapes</h4>
 <div class="paragraph">
-<p>Un <em>script-service</em> est un fichier YAML qui décrit les étapes du service. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.</p>
+<p><strong>Un <em>script-service</em> est un fichier YAML qui décrit la suite procédurale des étapes du service</strong>. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>---
 - name: Première étape
+  id: 'etape-1
 
 - name: Deuxième étape
+  id: 'etape-2
 
 - name: Troisième étape
+  id: 'etape-3
 
 # etc.</pre>
 </div>
@@ -770,8 +885,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_commun_à_tous_les_types">Commun à tous les types</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
@@ -870,6 +985,7 @@ ${step-id}.prop     # Idem, sous une autre forme</pre>
   content: "Le contenu de mon fichier dans le dossier ${dossier}.</pre>
 </div>
 </div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="script-service-types">Les types d&#8217;étapes (step)</h4>
@@ -957,7 +1073,7 @@ Noter les retours de chariot marqués par "\n".</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="script-service-type-save-data">Save-data</h5>
+<h5 id="scserv-type-save-data">Enregistrement de données</h5>
 <div class="paragraph">
 <p>Permet d&#8217;enregistrer une donnée à la volée.</p>
 </div>
@@ -1022,15 +1138,15 @@ Noter les retours de chariot marqués par "\n".</p></td>
 </div>
 </div>
 <div class="sect4">
-<h5 id="script-service-type-set">Set</h5>
+<h5 id="scserv-type-set">Set</h5>
 <div class="paragraph">
 <p>Permet de <strong>définir explicitement le <code>step.value</code> d&#8217;une étape</strong> ou de l&#8217;étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un <code>select</code> on peut créer une nouvelle valeur.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1064,10 +1180,67 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </table>
 </div>
 <div class="sect4">
-<h5 id="script-service-type-translate">Tranlate</h5>
+<h5 id="scserv-type-select-file">Sélection d&#8217;un fichier</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>select-file</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-create-file">Création d&#8217;un fichier</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>create-file</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-add-to-file">Ajout d&#8217;un contenu à un fichier</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>add-to-file</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-translate">Translate</h5>
 <div class="paragraph">
 <p>Permet de transposer une valeur <em>par marqueur</em> en vrai marqueur. L&#8217;exemple type de ces marques est la date <code>today</code> ou <code>tomorrow</code> qui sont automatiquement transposé en leur valeur réelle.</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>translate</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
 <div class="content">
 <pre>---
@@ -1122,11 +1295,20 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date-&lt;x&gt;</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date dans le passé, <code>&lt;x&gt;</code> jours avant aujourd&#8217;hui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="sect4">
-<h5 id="script-service-type-select">Select</h5>
+<h5 id="scserv-type-select">Select</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1222,17 +1404,14 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </div>
 </div>
 <div class="sect3">
-<h4 id="script-service-file-values">Données dans un fichier</h4>
+<h4 id="scserv-type-get-data">Données dans un fichier</h4>
 <div class="paragraph">
 <p>On peut tirer des données d&#8217;un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).</p>
 </div>
-<div class="paragraph">
-<p>Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (<code>chmod +x fichier</code>) et qu&#8217;il retourne un données ÉVALUABLE PAR JSON, sauf si c&#8217;est une valeur scalaire (string, integer…).</p>
-</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1250,12 +1429,15 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </tbody>
 </table>
 <div class="paragraph">
+<p>Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (<code>chmod +x fichier</code>) et qu&#8217;il retourne un données ÉVALUABLE PAR JSON, sauf si c&#8217;est une valeur scalaire (string, integer…).</p>
+</div>
+<div class="paragraph">
 <p>Deux sortes de données peuvent être remontées :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>une table (dict) dont une clé correspondra à <code>key</code>,</p>
+<p>une table (dict) dont une clé primaire correspondra à <code>key</code>,</p>
 </li>
 <li>
 <p>une liste d&#8217;objet (array) qui devra contenir un élément répondant à <code>id = key</code>.</p>
@@ -1263,14 +1445,14 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_set_project_data">Set Project Data</h5>
+<h5 id="scserv-type-set-project-data">Set Project Data</h5>
 <div class="paragraph">
 <p>Type d&#8217;étape qui permet de définir une donnée de projet.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1293,14 +1475,14 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 </table>
 </div>
 <div class="sect4">
-<h5 id="_get_project_data">Get Project Data</h5>
+<h5 id="scserv-type-get-project-data">Get Project Data</h5>
 <div class="paragraph">
 <p>Type d&#8217;étape qui permet de récupérer une donnée de projet.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1347,6 +1529,90 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 - type: 'copy-file'
   source: "${manuscrit-path}"  # Aura été renseigné</pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-choose-folder">Choisir un dossier</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>choose-folder</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-create-folder">Création d&#8217;un dossier</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>create-folder</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-copy-file">Copier d&#8217;un fichier</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>copy-file</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-string">Obtenir une chaine</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-text">Obtenir un texte</h5>
+<div class="paragraph">
+<p><em>Texte</em>, ci-dessus, signifie un texte multi-lignes.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>text</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="scserv-type-phone">Obtenir un numéro de téléphone</h5>
+<div class="paragraph">
+<p>Typiquement, ces méthodes permettent surtout d&#8217;ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l&#8217;implémentation de ce type, il servait à ajouter des fichers de maisons d&#8217;édition pour l&#8217;envoi d&#8217;un manuscrit.</p>
 </div>
 </div>
 </div>

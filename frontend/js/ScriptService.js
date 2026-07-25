@@ -211,6 +211,10 @@ class ServStep {
       console.info("Étape inconditionnelle")
     }
 
+    // Remplacements communs dans les paramètres
+    ['q', 'path', 'value', 'content'].forEach( param => {if (this[param]) { this[param] = this.evaluateProp(param)}})
+    if (this.path) this.path = this.expandPath(this.path)
+
     const method = `exec${kebabToPascalCase(this.type)}`
     if ('function' == typeof this[method]) {
       this[method].call(this)
@@ -274,8 +278,8 @@ class ServStep {
       if (retour.error) return this.addFatalError(retour.error)
       else this.setValue(true)
     } else {
-      const path    = this.expandPath(this.evaluateProp('path'))
-      const content = this.evaluateProp('content')
+      const path    = this.path
+      const content = this.content
       const after   = this.evaluateProp('after')
       const before  = this.evaluateProp('before')
       const where   = this.evaluateProp('where')
@@ -289,7 +293,7 @@ class ServStep {
       if (retour.error) return this.addFatalError(retour.error) // Ne peut pas encore passer par là
       else this.setValue(true)
     } else {
-      const value = this.evaluateProp('value')
+      const value = this.value
       this.projet.set(this.project_key, value, this.execSetProjectData.bind(this, {error: undefined}))
       // On met la valeur dans l'étape de projet
       // console.info("L'étape %s doit prendre la valeur %s", this.project_key, value)
@@ -310,7 +314,7 @@ class ServStep {
    * "${<step id>}".
    */
   execSet(){
-    var finalValue = this.evaluateProp('value')
+    var finalValue = this.value
     if (this.step) {
       this.scriptService.setValue(this.step, finalValue)
       this.setValue(true)
@@ -403,8 +407,7 @@ class ServStep {
   }
 
   execCreateFolder(){
-    const path = this.expandPath(this.evaluateProp('path'))
-    server.send({action: 'create-folder', data: path, no_raise: true}, this.afterCreateFolder.bind(this))
+    server.send({action: 'create-folder', data: this.path, no_raise: true}, this.afterCreateFolder.bind(this))
   }
 
   execCreateFile(retour){
@@ -412,9 +415,7 @@ class ServStep {
       if (retour.error) return this.addFatalError(getErr(retour.error))
       else this.setValue(true)
     } else {
-      const path    = this.expandPath(this.evaluateProp('path'))
-      const content = this.evaluateProp('content')
-      server.send({action: 'create-file', path, content}, this.execCreateFile.bind(this))
+      server.send({action: 'create-file', path: this.path, content: this.content}, this.execCreateFile.bind(this))
     }
 
   }
@@ -486,8 +487,8 @@ class ServStep {
         this.values.forEach(id => {
           Object.assign(obj, { [id]: this.scriptService.getValue(`${this.prefix}-${id}`) })
         })
-        const path = this.expandPath(this.evaluateProp('path'))
-        console.info("Objet à enregistrer dans %s", this.path, obj)
+        const path = this.path
+        // console.info("Objet à enregistrer dans %s", this.path, obj)
         server.send({action:'save-in-file', path, obj, no_raise: true}, this.execSaveData.bind(this))
       }
     }
@@ -499,8 +500,6 @@ class ServStep {
       let value
       if (retour.error) { return this.addFatalError(retour.error) }
       else if (this.key){
-        console.log("this.key = ", String(this.key))
-        console.log("valeur de l'étape choix-editeur", this.scriptService.getValue('choix-editeur'))
         const key = this.evaluateProp('key')
         if (Object.isObject(data)) {
           value = data[key]
@@ -647,7 +646,7 @@ class ServStep {
       val = val.replace(/\$\{([^}]+)\}\[([a-z_]+)\]/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{([^}]+)\}\.([a-z_]+)/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{(.+?)\}/g, (match, stepId) => {return this.serviceValue(stepId)})
-      console.log("Valeur transformée de '%s'/ initial: %s, nouvelle: %s", prop, this[prop], val)
+      console.log("Valeur de '%s' transformée. Initiale: '%s'. Finale: '%s'", prop, this[prop], val)
       return val
     } else {
       return this[prop]

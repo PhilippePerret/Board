@@ -1,23 +1,117 @@
 [[scripts-services, les scripts-services]]
-=== Les scripts-services ===
+== Les scripts-services ==
 
 Les _scripts-services_ ouvrent définitivement la voie de l'infini pour définir les services d'un projet. Ils permettent de **composer soi-même un service** en exploitant toutes les ressources de l'application.
 
-Mais tout pouvoir puissant implique des responsabilités à ses propotions.
+Mais tout pouvoir puissant implique des responsabilités à ses proportions, comme nous le verrons.
+
+=== Liste complète des types assemblables ===
+
+_Utiliser la table ci-dessous pour un accès rapide aux différents type de service_
+
+[cols="1,3, 1"]
+|====
+| **Type de service**               | **Objet**                                 | **Paramètres propres**
+| <<scserv-type-set>>               | Pour définir la valeur d'une étape.       | `step` + `value`
+| <<scserv-type-select>>            | Sélection une valeur parmi un ensemble de
+                                      valeur ou en créer une nouvelle.          | `values`, `create`
+| <<scserv-type-select-file>>       | Sélection d'un fichier (dans le Finder).  | 
+| <<scserv-type-create-file>>       | Création d'un fichier.                    | `path` + `content`
+| <<scserv-type-add-to-file>>       | Ajout s'un contenu à un fichier.          | `after`, `before` + `where`
+| <<scserv-type-get-data>>          | Obtention de données complexes 
+                                      (array d'objets) depuis un fichier.       | `base`, `key`
+| <<scserv-type-save-data>>         | Enregistrement de données complexes.      | `prefix`, `values`
+| <<scserv-type-choose-folder>>     | Sélection d'un dossier (dans le Finder).  |
+| <<scserv-type-create-folder>>     | Création d'un dossier.                    | `path`
+| <<scserv-type-copy-file>>         | Copie d'un fichier.                       |
+| <<scserv-type-set-project-data>>  | Pour définir une propriété pour le projet.| `step` + `value` + `project_key`
+| <<scserv-type-get-project-data>>  | Pour obtenir une propriété du projet.     | `id` = prop extradata
+| <<scserv-type-translate>> | Pour transformer une marqueur selon un
+                              certain format.                           | `value` + `format`
+| <<scserv-type-string>>            | Obtenir une valeur string.                | 
+| <<scserv-type-text>>              | Obtenir une valeur texte (multi lignes).  |
+| <<scserv-type-phone>>             | Obtenir un numéro de téléphone.           |
+|====
+
+[[scserv-use-variable, utilisation des variables]]
+=== Utilisation des variables ===
+
+Dans un script-service, il est souvent utile de définir des variables et d'y faire référence.
+
+Une variable, dans un script-service, est **une valeur d'étape**, on y fait référence par : 
+
+----
+${<id d'étape>}
+----
+
+Certaines variables se définissent en une seule fois, par exemple avec le type <<scserv-type-select>> :
+
+----
+- id: 'le-nombre'
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+----
+
+Avec cette étape, l'user choisira un nombre de 1 à 5 et ce nombre deviendra la _valeur de l'étape `le-nombre`_ et pourra donc être utilisé avec `${le-nombre}`.
+
+Par exemple pour une condition :
+
+----
+# Étape conditionnelle qui n'est jouée que le
+# le nombre choisi est supérieur à 4
+- if: "${le-nombre} > 4"
+  id: etape-si-cinq
+  ...
+----
+
+On peut également définir une variable explicitement grâce au type d'étape <<scserv-type-set>>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à _définir la valeur d'une étape_. Si je joue :
+
+----
+- id: le-nombre
+  type: set
+  value: 3
+----
+
+… alors je mets explicitement la valeur de l'étape `le-nombre` à 3.
+
+Utilisé de cette manière l'usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j'ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :
+
+----
+- id: nom
+  type: set
+  value: "la Bhagavad-Gītā"
+----
+
+Je peux alors simplifier l'écriture des messages :
+
+----
+- id: version
+  type: select
+  q: "Quelle version de ${nom} dois-je prendre en référence ?
+  values: [1,2,3]
+----
+
+==== Affection plus complexe de variables ====
+
+TODO: Récupération d'une variable de projet (exemple avec lettre, dans des scripts-services réutilisables)
 
 [[script-services-steps]]
-==== Une suite d'étapes ====
+=== Une suite d'étapes ===
 
-Un _script-service_ est un fichier YAML qui décrit les étapes du service. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.
+**Un _script-service_ est un fichier YAML qui décrit la suite procédurale des étapes du service**. Concrètement, cela signifie que le fichier comporte des tirets pour délimiter chaque étape.
 
 [code, yaml]
 ----
 ---
 - name: Première étape
+  id: 'etape-1
 
 - name: Deuxième étape
+  id: 'etape-2
 
 - name: Troisième étape
+  id: 'etape-3
 
 # etc.
 ----
@@ -67,7 +161,7 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 
 ----
 
-==== Erreurs classiques ====
+=== Erreurs classiques ===
 
 Vous trouverez dans cette partie une liste des erreurs classique lorsqu'on établit ses étapes.
 
@@ -75,19 +169,21 @@ Vous trouverez dans cette partie une liste des erreurs classique lorsqu'on étab
 | **Manifestation** | **Erreur** 
 |====
 
-==== Commun à tous les types ====
+[[scserv-common-params, paramètres communs]]
+=== Paramètres communs à tous les types ===
 
-[col="1,3"]
+[cols="1,4"]
 |====
 | `if`        | Pour une <<conditional-step>>.
 | `id`        | Une étape toi toujours avec un identifiant, unique, contenant seulement des minuscule, des chiffres et des tirets.
 | `type`      | Une étape doit toujours définir <<script-service-types, un type>>
 | `q`         | Le message dans une boite de dialogue, en fonction du type attendu.
 | `title`     | Le titre de la boite de dialogue, en fonction du type attendu.
+| `name`      | Le nom de l'étape, mais ne sert pas beaucoup.
 |====
 
 [[conditional-step, étape conditionelle]]
-===== Étape conditionnelle =====
+=== Étape conditionnelle ===
 
 On utile le paramètre `if` pour définir une étape conditionnelle.
 
@@ -119,7 +215,7 @@ Quand le type est `select` et que `create` est à true (ou nom du bouton "Autre�
 
 
 [[evaluate, évaluation]]
-==== Contenu évaluable ====
+=== Contenu évaluable ===
 
 Dans les étapes, un contenu _évaluable_ est un contenu qui se sert de la valeur d'une autre étape pour être défini.
 
@@ -151,11 +247,13 @@ Par exemple, on récupère un dossier et on s'en sert ensuite dans les étapes s
 
 ----
 
+---
+
 [[script-service-types, les types d'étape]]
-==== Les types d'étapes (step) ====
+=== Les types d'étapes (step) ===
 
 [[script-service-type-add-to-file]]
-===== Ajouter du contenu à  un fichier =====
+==== Add-to-file ====
 
 Ce type d'étape permet d'ajouter du contenu à un fichier.
 
@@ -190,8 +288,8 @@ Noter les retours de chariot marqués par "\n".
 |====
 
 
-[[script-service-type-save-data]]
-===== Save-data =====
+[[scserv-type-save-data, `save-data`]]
+==== Enregistrement de données ====
 
 Permet d'enregistrer une donnée à la volée.
 
@@ -229,12 +327,12 @@ Par exemple, si l'on doit reconstituer un objet "Livre" qui possède les clés `
 
 
 
-[[script-service-type-set]]
-===== Set =====
+[[scserv-type-set, `set`]]
+==== Set ====
 
 Permet de **définir explicitement le `step.value` d'une étape** ou de l'étape courante (pour définir une variable utile sur tout le service). Cela arrive par exemple lorsque pour un `select` on peut créer une nouvelle valeur.
 
-[cols="1,1,2"]
+[cols="1,1,3"]
 |====
 | `type`      2+| `set`
 | `id`        2+| Identifiant obligatoire
@@ -245,10 +343,43 @@ Si non défini, c'est l'étape elle-même dont on définira la valeur
 >|          soit| Valeur d'étape   | ${<id etape>}
 |====
 
-[[script-service-type-translate]]
-===== Tranlate =====
+[[scserv-type-select-file, `select-file`]]
+==== Sélection d'un fichier ====
+
+[cols="1,4"]
+|====
+| `type`    | `select-file`
+|====
+
+
+[[scserv-type-create-file, `create-file`]]
+==== Création d'un fichier ====
+
+[cols="1,4"]
+|====
+| `type`    | `create-file`
+|====
+
+
+[[scserv-type-add-to-file, `add-to-file`]]
+==== Ajout d'un contenu à un fichier ====
+
+[cols="1,4"]
+|====
+| `type`    | `add-to-file`
+|====
+
+
+[[scserv-type-translate, `translate`]]
+==== Translate ====
+
 
 Permet de transposer une valeur _par marqueur_ en vrai marqueur. L'exemple type de ces marques est la date `today` ou `tomorrow` qui sont automatiquement transposé en leur valeur réelle.
+
+[cols="1,4"]
+|====
+| `type`    | `translate`
+|====
 
 ----
 ---
@@ -277,8 +408,8 @@ Si `step` est utilisé, c'est sa valeur qui est prise et remplacée.
 
 |====
 
-[[script-service-type-select]]
-===== Select =====
+[[scserv-type-select, `select`]]
+==== Select ====
 
 [cols="1,1,2"]
 |====
@@ -330,31 +461,33 @@ TIP: Cette valeur est souvent réaffectée à l'étape `select` grâce à un typ
 
 ----
 
-[[script-service-file-values]]
+[[scserv-type-get-data, `get-data`]]
 ==== Données dans un fichier ====
 
 On peut tirer des données d'un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).
 
-Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).
-
-
-[cols="1,3"]
+[cols="1,4"]
 |====
 | `type` | `get-data`
 | `base` | Chemin d'accès au fichier contenant les données (évaluable)
 | `key`  | Si précisé, c'est la clé à prendre
 |====
 
+Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).
+
+
 Deux sortes de données peuvent être remontées :
 
-- une table (dict) dont une clé correspondra à `key`,
+- une table (dict) dont une clé primaire correspondra à `key`,
 - une liste d'objet (array) qui devra contenir un élément répondant à `id = key`.
 
-===== Set Project Data =====
+
+[[scserv-type-set-project-data, `set-project-data`]]
+==== Set Project Data ====
 
 Type d'étape qui permet de définir une donnée de projet.
 
-[cols="1,3"]
+[cols="1,4"]
 |====
 | `type` | `get-project-data`
 | `id` | Identifiant.
@@ -362,11 +495,12 @@ Type d'étape qui permet de définir une donnée de projet.
 | `value`       | La valeur à donner à cette clé. Elle vient, normalement, d'une autre étape ayant permis de la définir. Voir la <<sequence-project-data>>.
 |====
 
-===== Get Project Data =====
+[[scserv-type-get-project-data, `get-project-data`]]
+==== Get Project Data ====
 
 Type d'étape qui permet de récupérer une donnée de projet.
 
-[cols="1,3"]
+[cols="1,4"]
 |====
 | `type` | `get-project-data`
 | `id` | Identifiant. Mais pour ce type d'étape, il est particulier : il doit porter le nom de la donnée du projet, impérativement, pour pouvoir être redéfini si la donnée manque.
@@ -401,3 +535,51 @@ Voir la <<sequence-project-data>>.
 - type: 'copy-file'
   source: "${manuscrit-path}"  # Aura été renseigné
 ----
+
+[[scserv-type-choose-folder, `choose-folder`]]
+==== Choisir un dossier ====
+
+[cols="1,4"]
+|====
+| `type`    | `choose-folder`
+|====
+
+[[scserv-type-create-folder, `create-folder`]]
+==== Création d'un dossier ====
+
+[cols="1,4"]
+|====
+| `type`    | `create-folder`
+|====
+
+
+[[scserv-type-copy-file, `copy-file`]]
+==== Copier d'un fichier ====
+
+[cols="1,4"]
+|====
+| `type`    | `copy-file`
+|====
+
+[[scserv-type-string, `string`]]
+==== Obtenir une chaine ====
+
+[cols="1,4"]
+|====
+| `type`    | `string`
+|====
+
+[[scserv-type-text, `text`]]
+==== Obtenir un texte ====
+
+_Texte_, ci-dessus, signifie un texte multi-lignes.
+
+[cols="1,4"]
+|====
+| `type`    | `text`
+|====
+
+[[scserv-type-phone, `phone`]]
+==== Obtenir un numéro de téléphone ====
+
+Typiquement, ces méthodes permettent surtout d'ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l'implémentation de ce type, il servait à ajouter des fichers de maisons d'édition pour l'envoi d'un manuscrit.
