@@ -1,6 +1,8 @@
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'décembre']
+const Mois = MOIS.map(m => {return n[0].toUpperCase() + n.slice(1)})
 
 function formateDate(date, format = '%J %M %Y'){
+  if ('string' == typeof date) date = parseDate(date)
   const fyear = String(date.getFullYear())
   return format
     .replace(/\%YY/, fyear[2] + fyear[3])
