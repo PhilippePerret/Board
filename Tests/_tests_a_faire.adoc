@@ -12,3 +12,152 @@
 == Plus tard
 
 (si le test commence par "[BUG]", on retire évidemment ce "[BUG]" du nom du test)
+
+== Scripts-services : plan de tests (à commenter)
+
+Numérotation reprise telle quelle de la discussion avec Claude, pour référence stable. Les points marqués [SUPPRIMÉ] concernent le type `select`, qui n'est plus du tout un type de script-service (confirmé). `Tests/specs/e2e/script_service_step_validate.rb` contient encore des cas de test pour `select` et `select-or-string` (`selectvalide`, `selectsansvalues`, `selectbadtype`, `selectpath`, `sovalide`, `sosansvalues`) : à nettoyer, mais pas touché tant que non confirmé ici.
+
+=== A. Validation statique
+
+- 1. `set` sans `value` → erreur param requis
+- 2. `set` avec `step`+`value` → valide
+- 3. `translate` ni `step` ni `value` → erreur (`valid_if`)
+- 4. `translate` avec `value` seul → valide
+- 5. `save-data` sans `path` → erreur
+- 6. `save-data` sans `values` → erreur
+- 7. `save-data` avec `path`+`values` (sans `prefix`) → valide
+- 8. `get-data` sans `base` → erreur
+- 9. `get-data` avec `base` seul → valide
+- 10. `create-file` sans `content` → erreur
+- 11. `create-file` sans `path` → erreur
+- 12. `create-file` avec `content`+`path` → valide
+- 13. `copy-file` sans `source` → erreur
+- 14. `copy-file` sans `dest` → erreur
+- 15. `copy-file` avec `source`+`dest` → valide
+- 16. `add-to-file` sans `path` → erreur
+- 17. `add-to-file` sans `content` → erreur
+- 18. `add-to-file` avec `path`+`content` seuls → valide
+- 19. `select-file` avec `id`+`type` seuls → valide
+- 20. `choose-folder` avec `id`+`type` seuls → valide
+- 21. `get-project-data` avec `id`+`type` seuls → valide (+ écart doc/code : la doc parle de `project_key` requis, le code ne le déclare pas)
+- 22. `set-project-data` sans `project_key` → erreur
+- 23. `set-project-data` sans `value` → erreur
+- 24. `set-project-data` avec `project_key`+`value` → valide
+- 25. `string` avec `id`+`type` seuls → valide
+- 26. `phone` avec `id`+`type` seuls → valide
+- 27. `text` avec `id`+`type` seuls → valide
+- 28. paramètre inconnu générique (ex. `create-folder` avec `foo: 'bar'`) → erreur `scserv-unknown-param`
+
+=== B. Substitution de variables
+
+- 29. `${step-id}` dans un paramètre → remplacé par la `.value` de l'étape référencée
+- 30. `${step-id}.prop` → remplacé par la propriété
+- 31. `${step-id}[prop]` → remplacé par la propriété (forme alternative)
+- 32. référence à une étape inconnue → erreur `scserv-unknown-step`
+
+=== C. Transformation de valeur (`transform`)
+
+- 33. `transform: integer` sur `"3"` → `3`
+- 34. `transform: float` sur `"3.5"` → `3.5`
+- 35. `transform: boolean` sur `"true"`/`"false"` → `true`/`false`
+- 36. `transform: date` — à préciser avec Phil : pas encore géré dans `ScriptService.js#transform()` (seuls `integer`/`float`/`boolean` y sont câblés). Comportement attendu (format entrée/sortie) à définir avant d'écrire ce test.
+- 37. sans `transform` → valeur inchangée
+
+=== D. Mécanisme `set` / `ifSet`
+
+- 38. étape avec `set: <autre-id>` → la valeur est reportée sur l'autre étape
+- 39. sans `set` → seule l'étape courante reçoit sa valeur
+
+=== E. Étapes conditionnelles (`if`)
+
+- 40. `=`/`==` vrai → étape jouée
+- 41. `=`/`==` faux → étape sautée
+- 42. `!=`/`≠` vrai → étape jouée
+- 43. `!=`/`≠` faux → étape sautée
+- 44. `>` vrai/faux
+- 45. `<` vrai/faux
+- 46. valeur attendue `null`
+- 47. valeur attendue `undefined`
+- 48. valeur attendue `empty`
+- 49. [SUPPRIMÉ] `if` référençant un `select` avec `create` et valeur `''`
+- 50. opérateur inconnu dans `if` → erreur `scserv-unknown-evaluator`
+
+=== F. Abandon et enchaînement (`execNextStep`)
+
+- 51. clic "Renoncer" sur étape interactive → abandon, étapes suivantes non jouées
+- 52. erreur fatale sur une étape → arrêt boucle, erreurs affichées
+- 53. toutes étapes valides jouées → message de fin + dialogue OK
+- 54. étape conditionnelle sautée → n'interrompt pas l'enchaînement, suite normale
+
+=== G. Exécution réelle par type (e2e)
+
+- 55. `set` valeur explicite → affectée à l'étape ciblée
+- 56. `set` valeur `${autre-step}` → affectée à l'étape ciblée
+- 57. `create-file` chemin relatif projet → fichier créé, bon contenu
+- 58. `create-file` chemin absolu → fichier créé, bon contenu
+- 59. `copy-file` copie simple → réussie
+- 60. `copy-file` dest = dossier existant → nom du fichier source conservé
+- 61. `copy-file` source introuvable → erreur
+- 62. `add-to-file` avec `after`
+- 63. `add-to-file` avec `before`
+- 64. `add-to-file` avec `where` (balises début/fin, cf. doc)
+- 65. [SUPPRIMÉ] `select` values en `array-of-string`
+- 66. [SUPPRIMÉ] `select` values en `array-of-paire`
+- 67. [SUPPRIMÉ] `select` values en `array-of-object`
+- 68. [SUPPRIMÉ] `select` values en `path` vers fichier
+- 69. [SUPPRIMÉ] `select` choix simple
+- 70. [SUPPRIMÉ] `select` choix "créer"
+- 71. `save-data` avec `prefix`, écriture yaml → objet reconstitué correctement
+- 72. `save-data` écriture json
+- 73. `save-data` écriture csv
+- 74. `get-data` fichier objet, clé directe
+- 75. `get-data` fichier array d'objets, recherche `id == key`
+- 76. `get-data` sans `key` → retourne tout
+- 77. `select-file` sélection Finder → valeur = chemin choisi
+- 78. `choose-folder` sélection Finder → valeur = chemin choisi
+- 79. `set-project-data` — valeur enregistrée dans les extra-données du projet, relisible ensuite
+- 80. `get-project-data` donnée absente → `null`
+- 81. `get-project-data` donnée présente → valeur récupérée
+- 82. `translate` `today`
+- 83. `translate` `tomorrow`
+- 84. `translate` `date+x`
+- 85. `translate` `date-x`
+- 86. `translate` avec `format`
+- 87. `translate` avec `step` (réaffectation en place) vs `value` simple
+- 88. `translate` marqueur inconnu → erreur `scserv-unknown-marker-translate`
+- 89. `string` saisie valide → valeur enregistrée
+- 90. `text` saisie valide → valeur enregistrée
+- 91. `phone` numéro mal formé → redemande (`errorMessage`) jusqu'à format valide
+- 92. `phone` numéro valide → accepté directement
+
+=== H. Actions backend non testées directement
+
+- 93. `create-file` backend — succès
+- 94. `create-file` backend — dossier parent inexistant → erreur
+- 95. `copy-file` backend — succès
+- 96. `copy-file` backend — dest = dossier → copié dedans
+- 97. `copy-file` backend — échec → erreur
+- 98. `add-to-file` backend — `after`
+- 99. `add-to-file` backend — `before`
+- 100. `add-to-file` backend — `where` (1 condition)
+- 101. `add-to-file` backend — `where` (2 conditions combinées)
+- 102. `save-in-file` backend — fichier neuf → création
+- 103. `save-in-file` backend — fichier existant → append à la liste
+- 104. `save-in-file` backend — formats yaml/json/csv
+
+=== I. Intégration bout-en-bout (1 test)
+
+- 105. scénario complet doc (dossier éditeur → copie manuscrit → fichier infos → historique) ou séquence `get-project-data`/`set-project-data` avec `select-file`
+
+=== J. Séquences complexes (à développer — pas assez couvert par I seul)
+
+- 107. Séquence complète "envoi manuscrit" de la doc : `choose-folder` → `create-file` (infos éditeur) → `copy-file` (manuscrit) → `save-data` (historique) → vérifie sur disque le dossier, le fichier copié, le fichier infos et l'entrée d'historique, tous cohérents entre eux (même dossier, mêmes noms).
+- 108. Séquence `get-project-data`/`set-project-data` (exemple `sequence-project-data` de la doc) sur deux lancements successifs : 1er lancement (donnée absente) → demande via `select-file` → enregistre dans le projet → utilise la valeur pour `copy-file`. 2e lancement (donnée déjà présente) → ne redemande pas, réutilise directement.
+- 109. Séquence avec variable créée par `set` puis réutilisée dans un `if`, puis dans un `translate`, puis dans un `add-to-file` final : vérifie que la même valeur circule correctement à travers 3 types différents.
+- 110. Séquence avec `if` qui saute une étape : vérifie que les étapes après l'étape sautée continuent d'accéder correctement aux valeurs des étapes antérieures (le saut ne casse pas l'accès aux steps précédents).
+- 111. Séquence avec erreur fatale au milieu (ex. `copy-file` source introuvable en étape 2 sur 4) : vérifie que les étapes 3 et 4 ne sont jamais exécutées (aucun fichier créé) et que l'erreur affichée correspond à l'étape fautive.
+- 112. Séquence avec abandon (clic "Renoncer") au milieu : vérifie qu'aucune étape après le clic n'est exécutée et qu'aucun effet de bord (fichier, donnée projet) n'est produit par les étapes non jouées.
+- 113. Séquence `save-data`+`prefix` sur plusieurs champs (3-4 étapes `string`/`text` distinctes) suivie d'un `get-data` qui relit ce même fichier : vérifie l'aller-retour écriture/lecture complet.
+- 114. Séquence combinant `transform` et `if` : une valeur saisie en `string` est transformée (`integer`) puis comparée dans un `if` (`>`) — vérifie que la comparaison se fait sur la valeur transformée, pas sur la chaîne brute.
+- 115. Séquence longue (6-8 étapes) mélangeant Finder, fichier, projet, condition, transformation en une fois : vérifie l'absence d'effet de bord entre étapes indépendantes (une étape ne doit pas modifier la valeur d'une autre qu'elle ne cible pas).
+- 116. Rejouer un même script-service deux fois de suite sur le même projet : comportement attendu en cas de ré-exécution (écrasement, doublon dans l'historique…) à définir avec Phil avant d'écrire le test.

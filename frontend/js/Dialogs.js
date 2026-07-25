@@ -5,6 +5,70 @@ class ConfirmDialog extends Dialog {
   }
 }
 
+const MAX_LEN_STRING = 90
+/**
+ * Pour l'affichage des erreurs
+ * 
+ * On peut transmettre les erreurs avec errors sous plusieurs
+ * formats ;
+ *  - un string
+ *  - une liste de string
+ *  - une liste de [error, params]
+ *  - un mélange de tout ça
+ * 
+ * Les textes trop longs (comme les paths) sont découpé pour
+ * s'afficher correctement.
+ */
+class ErrorsDialog extends Dialog {
+  constructor(data){
+    super(data)
+    this.errors = data.errors ?? ''
+    console.log("errors au départ", this.errors)
+    this.content = this.buildContainerErrors()
+  }
+  buildContainerErrors() {
+    this.normalizeErrors()
+    console.log("erreurs après normalisation", this.errors)
+    return DCreate('DIV', {
+        class: 'error small'
+      , text: this.errors.map(error => {
+          return `<div class="error">${error}</div>`
+        }).join('')
+      , style: 'margin:2em 0;padding: 0.5em 1em;'
+    })
+  }
+
+  /**
+   * Cette fonction vise surtout à tranformer la propriété `errors`
+   * en une liste de strings qui ne poseront pas de problèmes.
+   * @return un Array des erreurs
+   */
+  normalizeErrors(){
+    if (typeof this.errors == 'string') this.errors = [this.errors]
+    this.errors = this.errors.flatMap(error => {
+      // error peut être :
+      //    un string (mais sans assez d'espace)
+      //    une paire [msg, params]
+      if (Array.isArray(error)) {
+        if (error.length == 2) {
+          error = textSubstitute(...error)
+        } else {
+          error = error.join("\n")
+        }
+      }
+      // On normalise tous les textes
+      error = error.split(' ').flatMap( seg => {
+        if (seg.length > MAX_LEN_STRING) {
+          return seg.replace(/.{1,MAX_LEN_STRING}/g, "$& ")
+        } else return seg
+      }).join(' ')
+
+      return error
+    })
+  }
+
+}
+
 class OKDialog extends Dialog {
   constructor(data) {
     super(data)

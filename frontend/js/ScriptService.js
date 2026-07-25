@@ -122,29 +122,16 @@ class ScriptService {
 
   // Affichage des erreurs rencontrées
   displayErrors(errors){
-    console.log('-> displayErrors avec', errors)
-    const containerErrors = DCreate('DIV', {
-        class: 'error break-all small'
-      , text: errors.map(error => {
-          if (typeof error == 'string') {
-            error = error
-          } else {
-            error = `Erreur de type ${typeof error}`
-          }
-          return `<div class="error">${error}</div>`
-        }).join('')
-      , style: 'margin:2em 0;'
-    })
     const data = {
         title:    'Erreur de définition du Script-service'
       , width:    '960px'
       , message:  'Le fichier de définition du script-service contient des erreurs.'+"\n\n"
-      , content:  containerErrors
-      , ouiBtn:   {name: 'Modifier…', onclick: this.openData.bind(this)}
-      , nonBtn:   {name: 'Renoncer'}
+      , errors:   errors
+      , ouiBtn:   {name: 'Le modifier', onclick: this.openData.bind(this)}
     }
-    new ConfirmDialog(data).show()
+    new ErrorsDialog(data).show()
   }
+
 } // ScriptService
 
 

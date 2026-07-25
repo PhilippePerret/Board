@@ -9,11 +9,11 @@
 
 == Todo En cours
 
-- Panneau de confirmation de fin de servide plus visible que message
-  → OKDialog (sans bouton non ou mid)
-- pouvoir filtrer une liste de valeurs dans `select`
+- En cas d'erreur, utiliser le panneau des erreurs (essayer avec l'update de la documentation)
 
 == Todo list ==
+
+- pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
 
 - En cas d'erreur (tout le temps) : utiliser la fenêtre des script-services
 - fenêtre des erreurs : ne pas utiliser le break:n'importe où qui coupe les mots, mais faire un test sur les longues parties sans espace/coupures possible
