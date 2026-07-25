@@ -9,6 +9,7 @@ function getMsg(msgId, params){
 
 function message(msg, params){
   try {
+    msg || raise("Aucun message envoyé.")
     msg = textSubstitute(msg, params)
     divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
     nettoie_message()

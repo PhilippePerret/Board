@@ -1,5 +1,4 @@
 function traceError(){
-  // new Error().stack
   console.trace()
 }
 
@@ -104,6 +103,7 @@ function textSubstitute(msg, params){
   } catch(err) {
     traceError()
     const errMsg = `[textSubstitute] Problème avec msg (${msg}) : ${err.message}`
+    console.error(errMsg)
     return errMsg
   }
   return msg

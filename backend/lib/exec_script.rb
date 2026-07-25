@@ -44,7 +44,6 @@ def exec_script(script_name, params = "")
     params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
     cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
     RETOUR.command = cmd
-    # return  {script_command: "cmd = #{cmd}"}
     res = nil
     # Timeout dur : un script (ou une commande qu'il lance, ex. osascript
     # "tell application Board to activate" pendant que le thread principal

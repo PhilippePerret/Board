@@ -27,14 +27,14 @@ class Project {
    * On remonte les données de tous les projets + leur ordre, 
    * défini dans appdata['projects-in']
    */
-  static initAllProjects(projectsData){
-    historize("-> Project#initAllProjects")
+  static initAllProjects(projectsData){ D.on && D.trace(projectsData)
     // Note : les projest sont remontés classés
     this.sortedProjects = projectsData
     this.sortedProjects.map(dataProjet => {
       new Project(dataProjet).buildCard()
     })
     message("Projets courants affichés.")
+    D.outputTrace()
   } 
 
   // Boucler une méthode sur tous les projets
@@ -55,7 +55,7 @@ class Project {
    * La fonction affiche un panneau indiquant qu'il faut choisir le projet
    * dans le Finder puis cliquer "OK" pour le prendre en compte.
    */
-  static addProject(){
+  static addProject(){ D.on && D.trace()
     reset()
     new ConfirmDialog({
         title: "Importation d'un nouveau projet"
@@ -209,7 +209,7 @@ class Project {
   }
 
 
-  constructor(data){
+  constructor(data){ D.on && D.trace(data)
     console.log("data", data)
     this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
     this.data = data
@@ -465,7 +465,7 @@ class Project {
     const imgId       = `${this.divId}-bgimg`
     const imgDomFond  = DGet(`#${imgId}`)
     div = div ?? this.obj
-    console.log("background, DIV, imgDomFond", {background:background, div:div, imgFond:imgDomFond})
+    // console.log("background, DIV, imgDomFond", {background:background, div:div, imgFond:imgDomFond})
     if (background == 'none')  {
       div.style.background = ''
       imgDomFond && imgDomFond.remove()

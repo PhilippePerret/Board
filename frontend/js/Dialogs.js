@@ -28,6 +28,7 @@ class ErrorsDialog extends Dialog {
     if (data.ouiBtn && 'function' == data.ouiBtn.onclick) {
       this.nonData = {name: 'Finir'}
     } else {
+      this.ouiData = {name: 'OK'}
       this.nonData = null // pas de bouton "Non"
     }
   }

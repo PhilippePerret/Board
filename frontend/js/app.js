@@ -1,5 +1,6 @@
 window.onload = function(ev){
   historize("Application chargée.")
+  D.start()
   App.init()
 }
 
@@ -13,14 +14,14 @@ class App {
   static get currentPanel()  { return this._currentPanel }
   static set currentPanel(p) { this._currentPanel = p }
   static closeCurrentPanel(){
+    D.on && D.trace('App::closeCurrentPanel')
     if (this.currentPanel) {
       this.currentPanel.close()
       this.currentPanel = null
     }
   }
 
-  static init(retour){
-    historize("-> App#init")
+  static init(retour){ D.on && D.trace(retour, 'App::')
     if (undefined == retour) {
       return server.send({action: 'load-all'}, this.init.bind(this))
     } else {

@@ -6,24 +6,42 @@
  *    D.start()       # pour commencer à débuggerr
  *    D.stop()        # pour arrêter de débugger
  *    D.show/hide() pour afficher
+ * 
+ *    D.on && D.trace(fonction, params)   et D.outputTrace() pour suivre
  */
+const relativePath = 'file:///Users/philippeperret/Programmes/Board/Board.app/Contents/Resources/frontend/js'
 class Debug {
+
   constructor() {
     this.logs = []
     this.debugging = false
     this.closed = true
+    this.tracer = []
   }
   add(msg, params) {
     if (this.debugging) {
       this.logs.push(new Log(msg, params))
     }
   }
+  trace(args, classe){
+    const plainLine = new Error().stack.split("\n")[1]
+    const [method, lieu, line, col] = plainLine.replace(relativePath, '').split(/[@:]/)
+    this.tracer.push([`${classe ? classe : ''}${method}`, args, `${method} in ${lieu}:${line}`, plainLine])
+  }
+  outputTrace(){
+    console.info("TRACER")
+    console.info(this.tracer)
+  }
 
-  start() { 
+  start() {
+    this.on = true
     this.debugging = true 
     this.time = new Date()
   }
-  stop()  { this.debugging = false}
+  stop()  {
+    this.on = false
+    this.debugging = false
+  }
 
   toggle(){
     this[this.closed?'show':'hide']()
