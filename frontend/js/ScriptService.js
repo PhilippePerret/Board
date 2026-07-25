@@ -17,7 +17,6 @@ class ScriptService {
 
   /* -- Point d'entrée secondaire -- */
   run(retour){
-    D.start()
     if (undefined == retour) {
       server.send({action: 'load-yaml-file', path: this.scriptPath, no_raise: true}, this.run.bind(this))
     } else if (retour.error) {
@@ -62,6 +61,7 @@ class ScriptService {
   /*              BOUCLE SUR CHAQUE ÉTAPE                     */
   /************************************************************/
   execNextStep(){
+    D.start()
     if (this.errors.length) {
       console.log("this.errors au retour de step.exec", this.errors)
     } else if (this.currentStep) {
@@ -69,7 +69,7 @@ class ScriptService {
     }
     const step = this.steps.shift()
     this.currentStep = step
-    if ( step ) { 
+    if ( step ) {
       /* ============  EXÉCUTION DE L'ÉTAPE  =============*/
       D.add(`--- ÉTAPE $1 ---`, [step.id])
       step.exec(this.errors, this.execNextStep.bind(this))
@@ -354,6 +354,7 @@ class ServStep {
       this.scriptService.setValue(this.step, finalValue)
       this.setValue(true)
     } else {
+      console.log("Mise de la valeur de '%s' à '%s'", this.id, finalValue)
       this.setValue(finalValue)
     }
   }
@@ -676,7 +677,7 @@ class ServStep {
    * 
    */
   evaluateProp(prop){
-    if (this.getAbsoluteData(prop).evaluate && this[prop]) {
+    if ('string' == typeof this[prop]) {
       var val = this[prop]
       val = val.replace(/\$\{([^}]+)\}\[([a-z_]+)\]/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
       val = val.replace(/\$\{([^}]+)\}\.([a-z_]+)/g, (match, stepId, property) => this.getPropertyInStepValue(stepId,property))
@@ -776,7 +777,6 @@ class ServStep {
       // Condition : le paramètre doit être défini
       if (! this.paramsSpecs[kparam].required === true) return
       Object.assign(this.required_params, {[kparam]: true})
-      console.log("this.data[%s] = ", kparam, this.data[kparam])
       this[kparam] || raise('scserv-param-required', [kparam, this.type, this.aideByType])
     }
   }
@@ -795,7 +795,7 @@ class ServStep {
       // Si on rencontre dans les données le paramètre 'defaut', 
       // c'est un paramètre qui n'existe pas (un select n'a pas de 
       // paramètre 'defaut') et c'est donc une erreur
-      paramSpec || raise( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
+      paramSpec || addFatalError( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
       // --- On va s'arrêter là pour la pré-validation ---
       return true
     }
