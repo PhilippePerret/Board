@@ -283,6 +283,8 @@ Vous trouverez dans cette partie une liste des erreurs classique lorsqu'on étab
 | `format`    | Format de transformation pour les valeurs qui en ont besoin. 
 |====
 
+include:badfile/to/seee[]
+
 [[scserv-param-transform, transformation des valeurs]]
 ==== `Transform`, transformation des valeurs ====
 

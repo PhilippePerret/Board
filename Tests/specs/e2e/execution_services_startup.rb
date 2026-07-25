@@ -22,7 +22,7 @@
 # depuis que les services s'enchaînent sans délai) :
 #   - open-folder-project / open-finder-window -> fenêtre Finder ouverte
 #   - run-script (backend/scripts/RunScript.rb) -> écrit un fichier
-#     (create_fixture_run_script), on vérifie son contenu
+#     (create_fixture_exec_script), on vérifie son contenu
 # Seul le message final "Fin de démarrage" (stable, pas transitoire) est
 # attendu à l'écran, comme confirmation de fin de traitement.
 
@@ -44,12 +44,12 @@ def run_test
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
     Dir.mktmpdir('board-test-otherfolder-') do |other_dir|
       Dir.mktmpdir('board-test-script-') do |script_dir|
-        script_path = create_fixture_run_script(script_dir, MARKER_VALUE)
-        output_path = fixture_run_script_output_path(script_path)
+        script_path = create_fixture_exec_script(script_dir, MARKER_VALUE)
+        output_path = fixture_exec_script_output_path(script_path)
 
         service1 = fixture_open_folder_service(fixture_dir, name: 'Ouvrir projet', type: 'startup')
         service2 = fixture_open_finder_window_service(other_dir, name: 'Ouvrir dossier quelconque', type: 'startup')
-        service3 = fixture_run_script_service(script_path, name: 'Jouer script', type: 'startup')
+        service3 = fixture_exec_script_service(script_path, name: 'Jouer script', type: 'startup')
 
         id = create_fixture_project(
           title: 'Projet A', path: fixture_dir,

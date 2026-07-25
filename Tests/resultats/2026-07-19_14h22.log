@@ -28,7 +28,7 @@ _LSOpenURLsWithCompletionHandler() failed with error -600.
     Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-17844637462a78
   (osascript : 42 appels, 0.116s)
   (durée totale de la spec : 5.359s)
---- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_run_script_format_ancien.rb ---
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_exec_script_format_ancien.rb ---
 _LSOpenURLsWithCompletionHandler() failed with error -600.
 ✗ redéfinition d'un service au format à plat (ancien projet) : Préserver fonctionne quand même
     Timeout d'attente dépassé (4s) — élément introuvable : project-fixture-1784463751wbwf

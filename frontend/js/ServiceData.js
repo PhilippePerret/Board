@@ -62,6 +62,10 @@ const COMMON_SERVICES_DATA = [
     , name: 'Actualiser la documentation'
     , group: 'Documentation'
     , scType: '.rb'
+    , onError: (errors) => {
+        const data = {title: "Erreur en cours d'actualisation", errors: errors}
+        new ErrorsDialog(data).show()
+      }
     , params: [
         {id: 'docu-main-file-adoc', type: 'project', if_undefined: {q: 'Sélectionner le fichier principal de documentation (.adoc)', type: 'path'}}
       ]

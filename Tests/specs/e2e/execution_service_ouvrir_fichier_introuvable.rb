@@ -4,7 +4,7 @@
 # Bug signalé : clic sur "Settings de l'application…" (projet Proximity,
 # service pointant sur un fichier renommé entretemps) → crash
 # "unexpected character: 'The' at line 1 column 1" (`open` écrit un message
-# d'erreur en anglais sur stderr, `usefull.rb#run_script` fait
+# d'erreur en anglais sur stderr, `usefull.rb#exec_script` fait
 # `JSON.parse(res)` dessus sans vérifier que c'est du JSON).
 
 require_relative '../../support/helpers'

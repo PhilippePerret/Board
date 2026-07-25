@@ -6,9 +6,9 @@
 #     le Finder -> backend/scripts/OpenAFile.rb fait juste `open "#{PATH}"`.
 #
 # Pas de scType déclaré -> Service.js#scType défaut '.scpt', absent du
-# dossier scripts/ : backend/lib/usefull.rb#run_script retrouve le vrai
+# dossier scripts/ : backend/lib/usefull.rb#exec_script retrouve le vrai
 # script par nom de base (search_real_scriptname) -> OpenAFile.rb. Pas un
-# bug, comportement voulu (cf. commentaire de run_script).
+# bug, comportement voulu (cf. commentaire de exec_script).
 #
 # Limite assumée de cette spec : `open <fichier>` délègue à l'app par
 # défaut du système pour ce type de fichier (variable selon la machine),

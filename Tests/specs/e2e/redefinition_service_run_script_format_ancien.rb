@@ -1,5 +1,5 @@
 # Test : redéfinition d'un service "run-script" dont les params sont
-# stockés À PLAT (BoardTest#fixture_run_script_service : ['params' =>
+# stockés À PLAT (BoardTest#fixture_exec_script_service : ['params' =>
 # [script_path, basename]], pas groupés [[script_path]]) — régression pour
 # la compatibilité ancien format de Service.js#redefine (this.params[i] pas
 # forcément un tableau à 1 élément).
@@ -12,8 +12,8 @@ include BoardTest
 def run_test
   id = nil
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
-    script_path = create_fixture_run_script(fixture_dir)
-    service = fixture_run_script_service(script_path, name: 'Nom initial')
+    script_path = create_fixture_exec_script(fixture_dir)
+    service = fixture_exec_script_service(script_path, name: 'Nom initial')
     id = create_fixture_project(title: 'Projet A', path: fixture_dir, services: { 'startup' => [], 'others' => [service] })
     launch_app
 

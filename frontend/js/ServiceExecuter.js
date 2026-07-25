@@ -56,13 +56,21 @@ class ServiceExecuter {
       return
     }
     console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParamsValues)
-    server.send({action: `exec-service`, script: this.script, params: flatParamsValues}, this.afterRunService.bind(this))
+    server.send({action: `exec-service`, script: this.script, params: flatParamsValues, no_raise: true}, this.afterRunService.bind(this))
   }
 
   // Appelée après avoir exécuté le service
   afterRunService(retour){
     console.log("retour du run de service", retour)
-    if (retour.ok === false) { message(retour.error); return }
+    if (retour.error) { 
+      if (this.service.onError) {
+        this.service.onError(retour.error)
+      } else {
+        // Juste un message d'erreur
+        message(retour.error)
+      }
+      return
+    }
     message(retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
     console.log("ServiceExecuter # afterRunService termine normalement.")
     if (this.service.transient /* common service joué depuis panneau */) {

@@ -154,7 +154,7 @@ _LSOpenURLsWithCompletionHandler() failed with error -600.
 ✓ redéfinition d'un service 'open-URL' : url préremplie avec la valeur actuelle
   (osascript : 12 appels, 0.115s)
   (durée totale de la spec : 0.751s)
---- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_run_script_format_ancien.rb ---
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/redefinition_service_exec_script_format_ancien.rb ---
 ✓ redéfinition d'un service au format à plat (ancien projet) : Préserver fonctionne quand même
   (osascript : 11 appels, 0.129s)
   (durée totale de la spec : 0.759s)

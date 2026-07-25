@@ -13,7 +13,7 @@ begin
   cmd += "#{MAIN_FILE_NAME}"
   table[:command] = cmd
 
-  res = `#{cmd} 2>&1`
+  res = `#{cmd}`
   table[:message] = res
 
 rescue Exception => e

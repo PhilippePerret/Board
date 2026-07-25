@@ -8,6 +8,7 @@ begin
     attr_accessor :ok
     attr_accessor :message, :data, :error
     attr_accessor :no_raise, :request_id, :request
+    attr_accessor :command
     def init(request)
       self.request = request
       self.ok = true
@@ -25,7 +26,8 @@ begin
         data:     self.data,
         message:  self.message,
         error:    self.error,
-        request:  self.request
+        request:  self.request,
+        command:  self.command
       }
     end
     def evaluated_ok
@@ -92,11 +94,13 @@ begin
     
   # Lancement d'un script osascript
   when "run-osascript"
-    RETOUR.data = run_script("#{request['script-name']}.scpt")
+    require_relative 'lib/exec_script_rb'
+    exec_script("#{request['script-name']}.scpt")
 
 
   when 'run-bashscript'
-    RETOUR.data = run_script("#{request['script-name']}.sh")
+    require_relative 'lib/exec_script_rb'
+    exec_script("#{request['script-name']}.sh")
 
   # Liste des logiciels installés (type de param 'logiciel', ParamDefiner.js)
   # /System/Applications (+ Utilities) : apps système (Preview, Terminal…),
@@ -107,24 +111,28 @@ begin
 
   # Pour récupérer les informations de la sélection du Finder
   when "getInfoFinderSelection"
-    RETOUR.data = run_script('getInfoFinderSelection.scpt')
-    if RETOUR.data["ok"] != false
+    require_relative 'lib/exec_script_rb'
+    RETOUR.data = exec_script('getInfoFinderSelection.scpt')
+    if RETOUR.ok
       RETOUR.data['createdAt'] = human_date_to_aaammjj(RETOUR.data['createdAt'])
       RETOUR.data['updatedAt'] = human_date_to_aaammjj(RETOUR.data['updatedAt'])
     end
   # Pour récupérer les informations de la fenêtre courante du Finder
   when 'getInfoFinderWindow'
-    RETOUR.data = run_script('getInfoFinderWindow.scpt')
+    require_relative 'lib/exec_script_rb'
+    exec_script('getInfoFinderWindow.scpt')
 
   # Panneau "Outils" (ToolsData.js/Tools.js) — applications visibles
   # (Dock), pour choisir celle dont on veut la position/taille de fenêtre
   when 'list-running-apps'
-    RETOUR.data = run_script('GetRunningApps.scpt')
+    require_relative 'lib/exec_script_rb'
+    exec_script('GetRunningApps.scpt')
 
   # Panneau "Outils" : position + taille de la fenêtre de premier plan de
   # request['appName'] — copiées dans le presse-papier par le script lui-même
   when 'get-app-window-bounds'
-    RETOUR.data = run_script('GetAppWindowBounds.scpt', [request['appName']])
+    require_relative 'lib/exec_script_rb'
+    exec_script('GetAppWindowBounds.scpt', [request['appName']])
   
   # Écriture du changelog et de la todo-list après minuteur
   when 'update-project-notes'
@@ -134,11 +142,14 @@ begin
 
   when 'exec-service'
     Debug.log("exec-service reçu, script=#{request['script']} params=#{request['params'].inspect}")
-    RETOUR.data = run_script(request["script"], request["params"])
+    
+    require_relative 'lib/exec_script.rb'
+    exec_script(request["script"], request["params"])
+
     Debug.log("exec-service résultat = #{RETOUR.data.inspect}")
-    RETOUR.ok = RETOUR.data["ok"] if RETOUR.data.key?("ok")
-    RETOUR.error = RETOUR.data["error"] if RETOUR.data.key?("error") && RETOUR.data["error"]
-    RETOUR.message = RETOUR.data["message"] if RETOUR.data.key?("message") && RETOUR.data["message"]  
+    # RETOUR.ok = RETOUR.data["ok"] if RETOUR.data.key?("ok")
+    # RETOUR.error = RETOUR.data["error"] if RETOUR.data.key?("error") && RETOUR.data["error"]
+    # RETOUR.message = RETOUR.data["message"] if RETOUR.data.key?("message") && RETOUR.data["message"]  
 
 
   when 'load-yaml-file'

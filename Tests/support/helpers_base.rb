@@ -507,8 +507,8 @@ module BoardTest
   # marker_value dans un fichier (effet persistant et vérifiable), plutôt que
   # de compter sur le message affiché à l'écran (transitoire, pas fiable à
   # attraper au vol) — cf. Tests/specs/e2e/execution_services_startup.rb.
-  def create_fixture_run_script(dir, marker_value = 'run-script-executed')
-    script_path = File.join(dir, 'test_run_script.rb')
+  def create_fixture_exec_script(dir, marker_value = 'run-script-executed')
+    script_path = File.join(dir, 'test_exec_script.rb')
     output_path = File.join(dir, 'output.txt')
     File.write(script_path, <<~RUBY)
       File.write(#{output_path.inspect}, #{marker_value.inspect})
@@ -516,11 +516,11 @@ module BoardTest
     script_path
   end
 
-  def fixture_run_script_output_path(script_path)
+  def fixture_exec_script_output_path(script_path)
     File.join(File.dirname(script_path), 'output.txt')
   end
 
-  def fixture_run_script_service(script_path, name: 'Jouer un script', type: 'others')
+  def fixture_exec_script_service(script_path, name: 'Jouer un script', type: 'others')
     {
       'id' => 'run-script',
       'uuid' => "fixture-service-#{Time.now.to_i}#{rand(36**4).to_s(36)}",

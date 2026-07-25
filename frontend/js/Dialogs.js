@@ -25,6 +25,11 @@ class ErrorsDialog extends Dialog {
     this.errors = data.errors ?? ''
     console.log("errors au départ", this.errors)
     this.content = this.buildContainerErrors()
+    if (data.ouiBtn && 'function' == data.ouiBtn.onclick) {
+      this.nonData = {name: 'Finir'}
+    } else {
+      this.nonData = null // pas de bouton "Non"
+    }
   }
   buildContainerErrors() {
     this.normalizeErrors()

@@ -59,13 +59,14 @@ class Service {
     /**
      * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
      * sont différentes des données abstraites qui définissent ce qu'il faut pour
-     * définir le service.
+     * définir le service. (??? qu'est-ce que ça signifie ???)
      */
     this.params     = data.params || raise("Il faut définir les :params du servive " + this.id)
     this.uuid       = data.uuid ?? null
     this.type       = data.type ?? null // idem (others ou startup)
+    this.onError    = data.onError
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
-    this.transient    = data.transient ?? false // service common depuis panneau
+    this.transient  = data.transient ?? false // service common depuis panneau
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.afterDefinedParams = data.afterDefinedParams ?? null

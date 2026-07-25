@@ -1,6 +1,6 @@
 # Test : redéfinition (cmd+clic) d'un service "open-file" déjà attaché —
 # couvre les types 'path' et 'logiciel'. Format de stockage NORMAL (groupé,
-# this.params = [[valeur],[valeur]] — cf. redefinition_service_run_script_
+# this.params = [[valeur],[valeur]] — cf. redefinition_service_exec_script_
 # format_ancien.rb pour le format à plat des anciens projets).
 # Source : demande explicite (2026-07-19).
 

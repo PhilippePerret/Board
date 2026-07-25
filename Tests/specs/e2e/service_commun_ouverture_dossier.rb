@@ -66,7 +66,7 @@ def run_test
     # → le service doit avoir réussi côté backend, pas planté en silence
     #   après avoir ouvert la fenêtre (cf. #message qui affiche "undefined"
     #   quand exec-service échoue — xbridge.js#error appelé sans
-    #   response.error exploitable, run_script rescue Exception dans
+    #   response.error exploitable, exec_script rescue Exception dans
     #   backend/lib/usefull.rb)
     assert_service_message_ok!
 

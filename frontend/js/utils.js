@@ -1,5 +1,5 @@
 function traceError(){
-  new Error().stack()
+  // new Error().stack
   console.trace()
 }
 
