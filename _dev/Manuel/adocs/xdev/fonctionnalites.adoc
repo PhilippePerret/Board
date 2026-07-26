@@ -14,7 +14,7 @@ Pour avoir une meilleure visualisation des erreurs, on doit utiliser le dialog `
 
 
 
-==== Liste complète ====
+==== Liste complète des fonctionnalités ====
 
 _TD = Todo, à faire_
 _Docu_ : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n'est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.

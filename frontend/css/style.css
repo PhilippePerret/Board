@@ -26,6 +26,10 @@ header div#tools-button {
   -webkit-user-select: none!important;
 }
 
+.discret { opacity: 0.3;}
+.discret:hover { opacity: 1;}
+.fright {float: right;}
+.fleft  {float: left;}
 .hidden {display:none;}
 .invisible {visibility: hidden;}
 .error {color: red; background-color: rgb(255, 230, 230);}

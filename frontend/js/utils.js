@@ -131,7 +131,7 @@ function raise(msg, params){
   if (params) {
     Object.assign(err, {params: params})
   }
-  console.error(Debug.getTraceList()) // Liste des fonctions traversées
+  console.error(D.getTraceList()) // Liste des fonctions traversées
   throw err
 }
 

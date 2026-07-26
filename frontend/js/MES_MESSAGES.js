@@ -6,6 +6,7 @@ const MESSAGES = {
     'premier': "sans virgule"
 
     // --- GÉNÉRAUX ---
+    , 'Find': "Chercher"
     , 'scripts': "Scripts"
     , 'file-opened': "Le fichier '$1' est ouvert."
 
@@ -26,6 +27,10 @@ const MESSAGES = {
     // -- Script services --
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
   
+    // -- Todoist --
+    , 'todoist-project-title': "Titre du projet dans Todoist"
+    , 'todoist-tasks': "Tâches Todoist" // par exemple title du bouton de la carte
+    , 'msg-ask-for-todoist-project-title': "Merci d'indiquer ci-dessous le titre du projet $1 dans l'application Todoist."
     // -- test --
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'

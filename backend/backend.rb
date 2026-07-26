@@ -208,7 +208,24 @@ begin
   when 'open-file'
     require_relative 'lib/handy_file.rb'
     FileHandy.open(request['path'])
-    
+
+  # ========== TODOIST (Todoist.js) =====================
+
+  when 'todoist-find-project'
+    require_relative 'lib/todoist.rb'
+    id = Todoist.find_project_id(request['todoist-title'])
+    if id
+      RETOUR.data = {id: id}
+    else
+      RETOUR.error = "Projet « #{request['todoist-title']} » introuvable dans Todoist."
+    end
+
+  when 'todoist-today-tasks'
+    require_relative 'lib/todoist.rb'
+    RETOUR.data = {tasks: Todoist.today_tasks(request['todoist_id'])}
+
+
+
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"

@@ -8,7 +8,9 @@ class Project {
     // documentation
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html',
     // Pour les services (notamment les script-services)
-    'service_data'
+    'service_data',
+    // Todoist (Todoist.js)
+    'todoist_id'
 
   ]
 
@@ -413,6 +415,9 @@ class Project {
     if (this.icon){
       div.appendChild(this.buildIcon())
     }
+    // this.todoistBtn = DCreate('BUTTON', {text: '_T_', class: 'fright'})
+    this.todoistBtn = DCreate('IMG', {src: `images/battery${this.todoistBadgeByTasks()}.svg`, class: 'fright discret', style:'width:32px;', title: getMsg('todoist-tasks')})
+    div.appendChild(this.todoistBtn)
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;z-index:1;'})
     this.divTitle = tit
     div.appendChild(tit)
@@ -498,6 +503,9 @@ class Project {
     listen(this.divTitle, 'click', this.modifyTitle.bind(this))
     this.obj.addEventListener('dblclick', this.onDblClick.bind(this))
     this.obj.addEventListener('mousedown', this.onMouseDown.bind(this))
+
+    // Pour pouvoir voir les tâches du projet
+    listen(this.todoistBtn, 'click', this.onClickTodoist.bind(this))
     
     let dragged = null
 
@@ -527,6 +535,28 @@ class Project {
       return stopEvent(ev)
     } else {
       return true
+    }
+  }
+
+  /**
+   * TODOIST
+   */
+
+  // return 'none', '', 'full', 'empty'
+  todoistBadgeByTasks(){
+    if (this.todoist_id) {
+      return ''
+    } else {
+      return '-none'
+    }
+  }
+  onClickTodoist(ev, retour){
+    ev &&stopEvent(ev)
+    if (retour) {
+      if (retour.error) raise(retour.error)
+      console.log("Voir quoi faire de", retour)
+    } else {
+      Todoist.todayTasksFor(this, this.onClickTodoist.bind(this, null))
     }
   }
 
