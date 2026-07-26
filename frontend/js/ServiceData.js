@@ -154,7 +154,6 @@ const COMMON_SERVICES_DATA = [
     , beforeExec: (callback) => {
         message(true, getMsg('alert-before-edit-projet'))
         const timerbeforeexec = setTimeout(() => {
-          console.log("-> appel du callback", callback)
           clearTimeout(timerbeforeexec)
           callback()
         }, 3000)
