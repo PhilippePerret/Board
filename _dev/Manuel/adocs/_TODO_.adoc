@@ -9,8 +9,6 @@
 
 == Todo En cours
 
-- Dans raise, utiliser le traceur pour avoir un meilleur message
-
 == Todo list ==
 
 - bouton commun pour ouvrir les données du projet (en indiquant "prudence")

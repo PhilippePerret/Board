@@ -35,6 +35,13 @@ class Debug {
     this.tracer = []
   }
 
+  /**
+   * Retourne la liste actuelle des fonctions traversées
+   */
+  getTraceList(){
+    return this.tracer.map(trace => trace[2])
+  }
+
   start() {
     this.on = true
     this.debugging = true 
