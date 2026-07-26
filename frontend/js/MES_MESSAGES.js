@@ -6,6 +6,8 @@ const MESSAGES = {
     'premier': "sans virgule"
 
     // --- GÉNÉRAUX ---
+    , 'Cancel': "Renoncer"
+    , 'Confirm': 'Confirmer'
     , 'Find': "Chercher"
     , 'scripts': "Scripts"
     , 'file-opened': "Le fichier '$1' est ouvert."
@@ -31,6 +33,10 @@ const MESSAGES = {
     , 'todoist-project-title': "Titre du projet dans Todoist"
     , 'todoist-tasks': "Tâches Todoist" // par exemple title du bouton de la carte
     , 'msg-ask-for-todoist-project-title': "Merci d'indiquer ci-dessous le titre du projet $1 dans l'application Todoist."
+    , 'todoist-message-today-project-task': "Liste des tâches du jour pour le projet “$1”."
+    , 'confirm-tasks-checks': "Confirmation des tâches"
+    , 'ask-for-confirm-tasks-checks': "Merci de confirmer opérations sur les tâches du projet “$1”.$2"
+    , 'mark-task-checked': "La tâche “$1” est à marquée achevée."
     // -- test --
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'

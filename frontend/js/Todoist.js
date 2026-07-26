@@ -1,8 +1,10 @@
 class Todoist {
 
-  static todayTasksFor(project, callback) {
+  static todayTasksFor(project, callback, mode = 'interractif') {
     if (project.todoist_id) {
       this._fetchToday(project, callback)
+    } else if (mode != 'interractif') {
+      return null
     } else {
       this._resolveId(project, () => this._fetchToday(project, callback))
     }

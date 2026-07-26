@@ -27,3 +27,4 @@
 - ["S'il te plaît" obligatoire](feedbacks/no_please_direct_ask.md) — toute demande d'action à Phil doit dire "s'il te plaît", sinon c'est un ordre
 - [Pas de rappel "pas compilé/testé"](feedbacks/stop_repeating_not_compiled_tested.md) — ne pas répéter systématiquement après chaque edit
 - [Design tests validate()](feedbacks/step_validation_test_design.md) — unitaire direct (bridge_eval) + toujours un cas valide de contrôle, jamais que des invalidités
+- [Commande run-tests](feedbacks/run_tests_command.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement

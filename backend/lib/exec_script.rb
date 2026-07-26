@@ -66,6 +66,7 @@ def exec_script(script_name, params = "")
       if retour_script["ok"] == false
         RETOUR.ok     = false
         RETOUR.error  = retour_script["error"]
+        RETOUR.data   = retour_script
       else
         RETOUR.ok       = true
         RETOUR.message  = retour_script["message"]

@@ -9,7 +9,7 @@ class Project {
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html',
     // Pour les services (notamment les script-services)
     'service_data',
-    // Todoist (Todoist.js)
+    // Todoist project id (Todoist.js)
     'todoist_id'
 
   ]
@@ -36,8 +36,23 @@ class Project {
       new Project(dataProjet).buildCard()
     })
     message("Projets courants affichés.")
-    D.outputTrace()
+    // Maintenant que les projets sont affichés, on peut chercher les
+    // tâches qu'ils peuvent avoir
+    this.getTachesProjects()
   } 
+  
+  static getTachesProjects(){
+    Object.values(this.ensureProjects)
+      .filter(projet => {
+        if (projet.todoist_id) { return true }
+        else projet.setTodoistBadge(0)
+      })
+      .forEach(projet => {
+        // Tous ces projets ont un identifiant todoist défini
+        projet.getTachesAndSetBadges()
+      })
+    D.outputTrace()
+  }
 
   // Boucler une méthode sur tous les projets
   static mapAll(method) {
@@ -85,7 +100,7 @@ class Project {
 
   // Sélection du projet dans le Finder
   static onProjectSelectedInFinder(){
-    server.send({action: 'getInfoFinderSelection', type: 'folder'}, this.onRetourInfoFinderProjet.bind(this))
+    server.send({action: 'getInfoFinderSelection', type: 'folder', no_raise: true}, this.onRetourInfoFinderProjet.bind(this))
   }
   static onRetourInfoFinderProjet(retour){
     // console.info("Retour : ", retour)
@@ -220,9 +235,11 @@ class Project {
     if (!this.path ) raise("Le path du projet est obligatoire.")
     if (!this.services) this.services = {startup: [], others: []}
     this.constructor.add(this)
-    this.card_path = [App.getData('support_folder'), 'project-cards', `${this.id}.yaml`].join('/')
-    this.data.card_path = this.card_path
-    console.info("card_path = ", this.card_path)
+    if (undefined == this.card_path) {
+      this.card_path = [App.getData('support_folder'), 'project-cards', `${this.id}.yaml`].join('/')
+      this.data.card_path = this.card_path
+      console.info("card_path mise à %s", this.card_path)
+    }
     this.initServices()
     
   }
@@ -415,9 +432,15 @@ class Project {
     if (this.icon){
       div.appendChild(this.buildIcon())
     }
-    // this.todoistBtn = DCreate('BUTTON', {text: '_T_', class: 'fright'})
-    this.todoistBtn = DCreate('IMG', {src: `images/battery${this.todoistBadgeByTasks()}.svg`, class: 'fright discret', style:'width:32px;', title: getMsg('todoist-tasks')})
-    div.appendChild(this.todoistBtn)
+
+    // ${this.todoistBadgeByTasks()}.svg
+    this.todoistCont = DCreate('DIV', {style:'width:32px;', class:'todoist fright discret'})
+    this.tasksBadge = DCreate('DIV', {class: 'badge fright'})
+    this.todoistCont.appendChild(this.tasksBadge)
+    this.todoistImg = DCreate('IMG', {src: 'images/todoist.png', class:'picto', title: getMsg('todoist-tasks')})
+    this.todoistCont.appendChild(this.todoistImg)
+    div.appendChild(this.todoistCont)
+
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;z-index:1;'})
     this.divTitle = tit
     div.appendChild(tit)
@@ -505,7 +528,7 @@ class Project {
     this.obj.addEventListener('mousedown', this.onMouseDown.bind(this))
 
     // Pour pouvoir voir les tâches du projet
-    listen(this.todoistBtn, 'click', this.onClickTodoist.bind(this))
+    listen(this.todoistCont, 'click', this.onClickTodoist.bind(this))
     
     let dragged = null
 
@@ -550,14 +573,86 @@ class Project {
       return '-none'
     }
   }
-  onClickTodoist(ev, retour){
-    ev &&stopEvent(ev)
-    if (retour) {
-      if (retour.error) raise(retour.error)
-      console.log("Voir quoi faire de", retour)
+
+  // Quand on clique sur le badge ou l'image todoist
+  onClickTodoist(ev, tasks){
+    ev && stopEvent(ev)
+    if (tasks) {
+      if (tasks.error){ 
+        raise(tasks.error)
+      } else {
+        this.tasks = tasks
+        new TasksDialog({
+            title: 'Tâches Todoist'
+          , q: getMsg('todoist-message-today-project-task', [this.title])
+          , tasks: tasks
+          , onCheck: this.onCheckTaskTodoist.bind(this)
+          , onValidate: this.onValidateTodoist.bind(this)
+          }).show()
+      }      
     } else {
       Todoist.todayTasksFor(this, this.onClickTodoist.bind(this, null))
     }
+  }
+
+  // Fonction appelée quand on clique une tâche Todoist
+  onCheckTaskTodoist(task, ev){
+    // ev && stopEvent(ev)
+    // console.log("TÂCHE À marquer achevée ", task)
+    // console.log("ev", ev)
+    task.checked = ev.target.checked
+    return true
+  }
+
+  // Fonction appelée quand on fait ok pour valider les checks de tâche
+  onValidateTodoist(retour){
+    if (retour) {
+      console.log("[onValidateTodoist] retour= ", retour)
+    } else {
+      var operations = []
+      this.tasks.forEach(task => {
+        if (task.checked) {
+          operations.push(getMsg('mark-task-checked', task.content))
+        }
+      })
+      if (operations.length == 0) {
+        return true
+      }
+      operations = "\n\n" + operations.join("\n") + "\n\n"
+      new ConfirmDialog({
+          title: getMsg('confirm-tasks-checks')
+        , width: '800px'
+        , q: getMsg('ask-for-confirm-tasks-checks', [this.title, operations])
+        , ouiBtn: {name: getMsg('Confirm'), onclick: this.onMarkTaskTodoist.bind(this)} 
+        , nonBtn: {name: getMsg('Cancel')}
+      }).show()
+    }
+
+  }
+  onMarkTaskTodoist(retour){
+    if (retour){
+      console.log("Retour des opérations todoist")
+    } else {
+      console.log("On doit demander les opérations todoist")
+    }
+  }
+
+  // Au démarrage, cette fonction est appelée seulement sur les 
+  // projets ayant un todoist_id pour charger les tâches courantes 
+  // et afficher leur nombre dans un badge.
+  getTachesAndSetBadges(tasks){
+    console.log("Je dois apprendre à charger les tâches et afficher leur nombre.", this)
+    if (tasks) {
+      console.log("RETOUR DE todayTasksFor:", tasks)
+      this.setTodoistBadge(tasks.length)
+    } else {
+      Todoist.todayTasksFor(this, this.getTachesAndSetBadges.bind(this), 'not-interractif')
+    }
+  }
+  // Régler le badge en fonction du nombre de tâches (chargement)
+  setTodoistBadge(nombre){
+    this.tasksBadge.textContent = nombre
+    this.tasksBadge.classList[nombre?'remove':'add']('hidden')
   }
 
   remove(){

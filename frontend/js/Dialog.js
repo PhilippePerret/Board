@@ -18,16 +18,16 @@ class Dialog {
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? data.q ?? null
     this.errorMessage = data.errorMessage // en cas d'erreur
-    this.content = data.content ?? null
+    this.content      = data.content ?? null
     this.default      = data.default
     this.defaultValue = data.defaultValue
-    this.ouiData = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
-    this.midData = data.midBtn ?? null
-    this.nonData = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
-    this.defaultKey = data.defaultKey ?? 'Oui'
-    this.unscrimmed = data.unscrimmed ?? false // pour ne pas mettre de flou
+    this.ouiData      = data.ouiBtn ?? {name: 'OUI', onclick: () => message("Bouton oui à définir")}
+    this.midData      = data.midBtn ?? null
+    this.nonData      = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
+    this.defaultKey   = data.defaultKey ?? 'Oui'
+    this.unscrimmed   = data.unscrimmed ?? false // pour ne pas mettre de flou
     // Une fonction qui peut tranformer la valeur avant de la retourner
-    this.toRealValue = data.toRealValue ?? ((v) => v)
+    this.toRealValue  = data.toRealValue ?? ((v) => v)
     // Identifiant du champ de valeur (rappel : dans ces Dialog, il n'y a toujours
     // qu'un seul champ d'édition)
     this.FId  = `__${this.id}__`

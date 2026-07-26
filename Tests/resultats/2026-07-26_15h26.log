@@ -1,0 +1,23 @@
+Moteur : pont
+Arguments : *step_validate* *open_documentation*
+Date : 2026-07-26 15h26
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/script_service_step_validate.rb ---
+✗ ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+    ['select', 'values' type multiple : ni tableau d'objets ni path (nombre)] nombre d'erreurs inattendu, attendu 1, obtenu []
+  (osascript : 10 appels, 0.064s)
+  (durée totale de la spec : 0.771s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_open_documentation.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -609.
+✓ service commun 'ouvrir la documentation' : définition au premier clic, exécution directe ensuite
+  (osascript : 16 appels, 1.452s)
+  (durée totale de la spec : 4.244s)
+
+Échecs :
+1. ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+    ['select', 'values' type multiple : ni tableau d'objets ni path (nombre)] nombre d'erreurs inattendu, attendu 1, obtenu []
+  (osascript : 10 appels, 0.064s)
+
+-------------------
+Success: 1  Failures: 1  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 5.015s

@@ -86,6 +86,33 @@ class OKDialog extends Dialog {
 
 }
 
+class TasksDialog extends Dialog {
+  constructor(data){
+    super(data)
+    this.width    = '800px'
+    this.tasks    = data.tasks
+    this.onCheck  = data.onCheck
+    this.content  = this.buildTaskList()
+    this.ouiData  = {name: 'OK', onclick: data.onValidate}
+    this.nonData  = null
+  }
+
+  buildTaskList(){
+    const list = DCreate('DIV', {class: 'task-list'})
+    this.tasks.forEach(task => {
+      const liId  = `todoist-task-${task.id}`
+      const li    = DCreate('DIV', {id: liId, class: 'task-li'})
+      const cbId  = `${liId}-cb`
+      const cb    = DCreate('INPUT', {id: cbId, type:'checkbox'})
+      listen(cb, 'click', this.onCheck.bind(this, task))
+      const span  = DCreate('LABEL', {for: cbId, text: task.content})
+      li.appendChild(cb)
+      li.appendChild(span)
+      list.appendChild(li)
+    })
+    return list
+  }
+}
 
 // Pour faire une fenêtre présentant un menu de choix (et seulement ça)
 class SelectDialog extends Dialog {

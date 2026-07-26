@@ -1,0 +1,10 @@
+Moteur : pont
+Arguments : creation_nouveau_projet|evaluate_file|step_validate|init_documentation|open_documentation
+Date : 2026-07-26 14h57
+
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+Aucun test ne correspond à : creation_nouveau_projet|evaluate_file|step_validate|init_documentation|open_documentation
+
+-------------------
+Success: 0  Failures: 0  Pendings: 0  Test count: 0
+Durée totale (moteur : pont) : 0s

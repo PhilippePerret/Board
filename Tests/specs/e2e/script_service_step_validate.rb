@@ -68,9 +68,9 @@ CASES = [
 def validate_errors(step_data)
   bridge_eval(<<~JS)
     (function(){
-      var step = new ServStep(null, #{step_data.to_json});
+      var step = new ServStep({projet: null}, #{step_data.to_json});
       var errs = step.validate();
-      return JSON.stringify(errs.map(function(e){ return e && e.message ? e.message : String(e) }));
+      return JSON.stringify(errs.map(function(e){ return e && e.key ? e.key : String(e) }));
     })()
   JS
 end

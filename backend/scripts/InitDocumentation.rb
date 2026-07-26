@@ -17,11 +17,6 @@ begin
   
   CONTAINER = ARGV[0].strip
 
-  # Nouvel essai pour ce script : trouver le macros.rb le plus récent
-  HOME = File.expand_path('~/Programmes')
-  cmd = %Q(find "#{HOME}" -type f -name 'macros.rb' -exec stat -f '%m %N' {} \\; | sort -nr | head -n1 | cut -d' ' -f2-)
-  last_macro_file = `#{cmd}`
-
   if File.exist?(File.join(CONTAINER, 'Documentation'))
     raise "Le dossier existe déjà, je ne peux pas créer la documentation ici."
   end

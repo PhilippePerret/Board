@@ -753,7 +753,13 @@ class ServStep {
       this.other_params_are_valid()
     } catch(err) {
       console.log("err", err)
-      errors.push(getErr(err.message, err.params))
+      // Object String (pas primitif) : se comporte comme une string partout
+      // (affichage, template literals) mais peut porter la clé d'erreur brute
+      // (err.message, non traduite) en propriété, pour l'identifier de façon
+      // stable indépendamment du texte traduit (cf. tests unitaires).
+      const message = new String(getErr(err.message, err.params))
+      message.key = err.message
+      errors.push(message)
     }
     return errors
   }

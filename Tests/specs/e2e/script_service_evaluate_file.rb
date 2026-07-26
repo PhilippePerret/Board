@@ -19,7 +19,7 @@ def evaluate_file(path)
   bridge_eval(<<~JS)
     (function(){
       window.__evalFileResult = undefined
-      server.send({action: 'evaluate-file', path: #{path.to_json}}, function(retour){ window.__evalFileResult = retour })
+      server.send({action: 'evaluate-file', path: #{path.to_json}, no_raise: true}, function(retour){ window.__evalFileResult = retour })
       return ''
     })()
   JS
