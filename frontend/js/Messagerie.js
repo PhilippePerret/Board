@@ -7,12 +7,25 @@ function getMsg(msgId, params){
   return textSubstitute(MESSAGES[msgId], params)
 }
 
-function message(msg, params){
+function message(arg1, arg2, arg3){
+  var msg, params;
+  const inExergueWindow = (arg1 === true)
+  if (inExergueWindow) {
+    [msg, params] = [arg2, arg3]
+  } else {
+    [msg, params] = [arg1, arg2]
+  }
   try {
     msg || raise("Aucun message envoyé.")
     msg = textSubstitute(msg, params)
-    divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
-    nettoie_message()
+    if ( inExergueWindow ) {
+      const divMsg = DCreate('DIV', {class:'exergue-message', text: msg})
+      var timer = setTimeout(() => {clearTimeout(timer); divMsg.remove()}, 6000)
+      document.body.appendChild(divMsg)
+    } else {
+      divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
+      nettoie_message()
+    }
     return true
   } catch(err){
     traceError()

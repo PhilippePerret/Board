@@ -9,8 +9,7 @@
 
 == Todo En cours
 
-- message plus visible au centre de l'application, pour des messages
-  courts, par exemple la fin d'une opération.
+- Dans raise, utiliser le traceur pour avoir un meilleur message
 
 == Todo list ==
 

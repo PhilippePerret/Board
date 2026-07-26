@@ -41,6 +41,7 @@ class Service {
    */
   static runService(serviceId) {
     console.error("Je dois apprendre à jouer un service", serviceId)
+    const serv = this.get(serviceId)
   }
 
   /**
@@ -90,6 +91,17 @@ class Service {
     this.isCustomService = (this.stype === 'custom')
     this.isScriptService = (this.id == 'run-script-service')
   }
+
+
+  /************************************************************/
+  /*            EXÉCUTION DU SERVICE                          */
+  /************************************************************/
+  exec(projet, ev, callback){ D.on && D.trace([projet, ev, callback], 'Service.')
+    // console.log("callback dans Service#exec", this, callback)
+    new ServiceExecuter(this).exec(projet, callback)
+    // console.log("Service#exec se termine bien")
+  }
+
 
   get(key, defValue = null) {return this.data[key] ?? this.absData[key] ?? defValue}
 
@@ -229,12 +241,7 @@ class Service {
     })
     definer.define()
   }
-  // Exécution du service
-  exec(projet, ev, callback){ D.on && D.trace([projet, ev, callback], 'Service.')
-    // console.log("callback dans Service#exec", this, callback)
-    new ServiceExecuter(this).exec(projet, callback)
-    // console.log("Service#exec se termine bien")
-  }
+
 
 
 

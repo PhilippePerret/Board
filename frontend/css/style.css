@@ -30,6 +30,7 @@ button {
 }
 button:active { outline: auto; }
 
+
 fieldset {
   border: 1px solid #CCC;
   border-radius: 5px;
@@ -123,11 +124,34 @@ footer div#message {
 }
 footer div#message > span {
   padding: 0.1em 1em;
+}
+footer div#message > span, 
+.exergue-message {
   font: 20px Arial, Helvetica;
 }
+
 footer div#message > span.notice {
   color: rgb(13, 164, 13);
 } 
+
+/* Message en exergue au milieu de la page */
+.exergue-message { 
+  width: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: 50%, 50%;
+  padding: 1.5em 3em;
+  background-color: green;
+  border: 2px solid green;
+  color: rgb(194, 244, 188);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  animation: fadeOut 3s 3s forwards 
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
 
 /* 
     --- Outils --- 

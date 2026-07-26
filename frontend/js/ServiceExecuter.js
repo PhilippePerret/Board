@@ -61,7 +61,7 @@ class ServiceExecuter {
 
   // -- Appelée après avoir exécuté le service --
   afterRunService(retour){ D.on && D.trace(retour, 'ServiceExecuter.')
-    console.log("retour du run de service", retour)
+    console.log("Retour du run de service", retour)
     if (retour.error) { 
       if (this.service.onError) {
         this.service.onError(retour.error)
@@ -71,8 +71,8 @@ class ServiceExecuter {
       }
       return
     }
-    message(retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
-    console.log("ServiceExecuter # afterRunService termine normalement.")
+    message(true, retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
+    // console.log("ServiceExecuter # afterRunService termine normalement.")
     if (this.service.transient /* common service joué depuis panneau */) {
       Service.remove(this.service.uuid)
       historize("- Service supprimé du cache")
