@@ -82,15 +82,8 @@ begin
    
   # à l'initialisation (App.init)
   when 'load-all'
-    # Chargement de toutes les données de projets, classés
-    projects_data =
-      APP_DATA['projects-in'].map do |project_id|
-        YAML.safe_load(IO.read(project_path(project_id)))
-      end
-    RETOUR.data = {
-      appData: APP_DATA,
-      projectsData: projects_data
-    }
+    require_relative 'lib/app.rb'
+    RETOUR.data = App.load_all
     
   # Lancement d'un script osascript
   when "run-osascript"

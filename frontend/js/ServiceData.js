@@ -8,6 +8,14 @@
  *  COMMON_SERVICES_DATA
  *    Services commun à tous les projets (par exemple l'ouverture du dossier
  *    du projet)
+ * 
+ * Quand on crée un nouveau projet :
+ * 
+ *  id    Doit correspondre au nom du script dans backend/scripts. Si
+ *        l'extension doit être autre chose que .scpt, il faut indiquer
+ *        la bonne extension dans :scType.
+ *        Si l'on veut utiliser un script tout à fait différent, il faut
+ *        l'indiquer dans :script (p.e. 'script: OpenAFile.rb')
  */
 
 
@@ -17,7 +25,7 @@
 const COMMON_SERVICES_DATA = [
   {
       id: 'open-folder-project'
-    , name: 'Ouvrir dossier du projet'
+    , name: getMsg('open-folder-project')
     , group: 'Outils'
     , params: [
           {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
@@ -111,20 +119,21 @@ const COMMON_SERVICES_DATA = [
       ]
   },
   {
-      id: 'edit-projet'
-    , name: "Éditer les données du projet"  
-    , group: 'Prudence'
-    , params: [
-          {id: 'card-path', type: 'project'}
-      ]
-  },
-  {
       id: 'open-in-vscode'
     , name: 'Ouvrir dans VSCode'
     , group: 'Consoles'
     , scType: '.sh'
     , params: [
         {id: 'path', type: 'project'}
+      ]
+  },
+  {
+      id: 'edit-projet'
+    , name: "Éditer les données du projet"  
+    , group: 'Prudence'
+    , script: 'OpenAFile.rb'
+    , params: [
+        {id: 'card_path', type: 'project'}
       ]
   }
 ]
@@ -136,6 +145,7 @@ const CUSTOM_SERVICES_DATA = [
   {
       id: 'open-file'
     , name: 'Ouvrir le fichier…'
+    , group: getMsg('opening')
     , scType: '.sh'
     , params: [
         {name: "Fichier à ouvrir", id: 'path', type: 'path', q: "Sélection le fichier à ouvrir dans le Finder, puis “Choisir”.", required: true},
@@ -146,6 +156,7 @@ const CUSTOM_SERVICES_DATA = [
   {
       id: 'open-finder-window'
     , name: 'Ouvrir une fenêtre dans le Finder'
+    , group: getMsg('opening')
     /* tag::exemple-fix-param[] */
     , params: [
         {id: 'window', q: null, value: null, type: 'finder-window', required: true},
@@ -159,8 +170,18 @@ const CUSTOM_SERVICES_DATA = [
   },
 
   {
+      id: 'open-URL'
+    , name: 'Ouvrir l’URL…'
+    , group: getMsg('opening')
+    , params: [
+      {id: 'url', q:'Quel URL faut-il rejoindre ?', type: 'url', required: true}
+    ]
+  },
+
+  {
       id: 'file-versioning'
     , name: 'Versionner un fichier/dossier'
+    , group: getMsg('lifecycle')
     , scType: '.rb'
     , params: [
         {id: 'path', value: null, type: 'path', required: true},
@@ -175,33 +196,30 @@ const CUSTOM_SERVICES_DATA = [
   },
 
   {
-      id: 'run-script-service'
-    , name: 'Jouer un script-service'
-    , front: ScriptService.run
-    , params: [
-        {id: 'script-service-path', q: 'Sélectionner le script du service dans le Finder puis “OK”.', type: 'path'}
-      ]
-  },
-
-  {
-      id: 'open-URL'
-    , name: 'Ouvrir l’URL…'
-    , params: [
-      {id: 'url', q:'Quel URL faut-il rejoindre ?', type: 'url', required: true}
-    ]
-  },
-
-  {
       id: 'run-chronometre'
-    , name: "Chronomètre"
+    , name: getMsg('countdown-timer')
+    , group: getMsg('lifecycle')
     , params: [
         {id: 'save-time', q: 'Faut-il enregistrer le temps de travail ?', type: 'boolean', required: true}     
       ]
   },
 
   {
+      id: 'run-script-service'
+    , name: getMsg('run-a-script-service') + aide('scripts-services')
+    , group: getMsg('scripts')
+    , front: ScriptService.run
+    , params: [
+        {id: 'script-service-path', q: 'Sélectionner le script du service dans le Finder puis “OK”.', type: 'path'}
+      ]
+  },
+
+
+
+  {
       id: 'run-script'
-    , name: 'Jouer un script'
+    , name: getMsg('run-a-script')
+    , group: getMsg('scripts')
     , scType: '.rb'
     , params: [
         {id: 'path', value: null, type: 'path', required: true}

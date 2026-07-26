@@ -7,6 +7,7 @@ class Backend {
         let process = Process()
         let pipeIn = Pipe()
         let pipeOut = Pipe()
+        let pipeErr = Pipe()
 
         let scriptPath = Bundle.main.resourcePath! + "/backend/backend.rb"
         process.executableURL = URL(fileURLWithPath: NSHomeDirectory() + "/.rbenv/versions/3.4.7/bin/ruby")
@@ -18,7 +19,7 @@ class Backend {
         ) { _, new in new }
         process.standardInput = pipeIn
         process.standardOutput = pipeOut
-        process.standardError = Pipe()
+        process.standardError = pipeErr
 
         do {
             try process.run()
@@ -36,11 +37,38 @@ class Backend {
         }
 
         // read output
-        let data = pipeOut.fileHandleForReading.readDataToEndOfFile()
+        let outData = pipeOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = pipeErr.fileHandleForReading.readDataToEndOfFile()
 
-        let output = String(data: data, encoding: .utf8) ?? """
-        {"ok": false, "error": "invalid output"}
-        """
+        let output = String(data: outData, encoding: .utf8) ?? ""
+
+        if output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            // Le process Ruby a planté avant d'écrire son retour JSON (ex.
+            // exception non rattrapée par le rescue générique de backend.rb,
+            // comme une LoadError/SyntaxError/Psych::DisallowedClass). Sans
+            // ça, le JS ne recevait qu'une chaîne vide et un message muet.
+            let errOutput = String(data: errData, encoding: .utf8) ?? "(pas de détail disponible)"
+            var requestId = ""
+            if let reqData = json.data(using: .utf8),
+               let obj = try? JSONSerialization.jsonObject(with: reqData) as? [String: Any],
+               let id = obj["id"] as? String {
+                requestId = id
+            }
+            let errorPayload: [String: Any] = [
+                "ok": false,
+                "id": requestId,
+                "error": "Le process Ruby a planté avant de répondre :\n\(errOutput)"
+            ]
+            if let data = try? JSONSerialization.data(withJSONObject: errorPayload),
+               let str = String(data: data, encoding: .utf8) {
+                completion(str)
+            } else {
+                completion("""
+                {"ok": false, "error": "Le process Ruby a planté (détail illisible)."}
+                """)
+            }
+            return
+        }
 
         completion(output)
     }

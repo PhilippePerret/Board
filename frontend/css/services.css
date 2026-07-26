@@ -45,9 +45,17 @@ div.startup-services-panel {
 }
 
 
-div.services-panel .services-listing {
+div.services-panel {
   padding:0.5em;
   margin-bottom: 1em;
+}
+div.services-listing {
+  margin-bottom: 1em;
+  max-height: calc(88%);
+  overflow:auto;
+  border: none;
+  border-bottom: 1px solid white;
+  padding: 0;
 }
 .service {
   cursor: pointer;

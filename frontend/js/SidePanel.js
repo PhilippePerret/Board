@@ -69,8 +69,8 @@ class SidePanel {
   build(){
     historize("-> SidePanel#build panneau %s", this.title)
     const panel = DCreate('DIV', {class: 'services-panel closed', id: this.domId})
-    const fieldset = DCreate('FIELDSET', {class: 'services-listing'})
-    fieldset.appendChild(DCreate('LEGEND', {text: this.title}))
+    const fieldset = DCreate('DIV', {class: 'services-listing'})
+    fieldset.appendChild(DCreate('DIV', {class: 'legend', text: this.title}))
     panel.appendChild(fieldset)
 
     if (this.oppositePanel) {
