@@ -9,7 +9,8 @@
 
 == Todo En cours
 
-- En cas d'erreur, utiliser le panneau des erreurs (essayer avec l'update de la documentation)
+- message plus visible au centre de l'application, pour des messages
+  courts, par exemple la fin d'une opération.
 
 == Todo list ==
 

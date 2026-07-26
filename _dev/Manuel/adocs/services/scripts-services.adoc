@@ -145,14 +145,16 @@ Le paramètre `transform` permet de transformer les valeurs affectées aux étap
 
 [cols="1,3,1"]
 |====
-| **Valeur transform** | **Effet**                            | **Exemples    |
-| `integer`, `entier`   | Transforme en entier.               | "12" → 12
-| `float`, `flottant`   | Transforme en nombre à virgule.     | "1,23" → 1.23
-| `boolean`             | Transforme en booléen.              | "true" → true
-| `valid-id`            | Transforme en un identifiant valide.| "Ça c'est l'été → "ca-cest-lete"
-| `date`                | Prend une date "aaaa/mm/jj" et la 
-                          met en forme 
-                          (cf. <<scserv-data-formats>>).      | "25/07/2026" → "25 juillet"
+| **Valeur transform**  | **Effet**                             | **Exemples
+| `integer`, `entier`   | Transforme en entier.                 | "12" → 12
+| `float`, `flottant`   | Transforme en nombre à virgule.       | "1,23" → 1.23
+| `boolean`             | Transforme en booléen.                | "true" → true
+| `valid-id`            | Transforme en un identifiant valide.  | "Ça c'est l'été → "ca-cest-lete"
+
+| `date`                
+| Prend une date "aaaa/mm/jj" et la met en forme (cf. <<scserv-data-formats>>).      
+| "25/07/2026" → "25 juillet"
+
 |====
 
 [[conditional-step, étape conditionelle]]
@@ -293,8 +295,8 @@ Permet de **définir explicitement le `step.value` d'une étape** ou de l'étape
 | `step`      2+| Identifiant de l'étape dont il faut définir la valeur +
 Si non défini, c'est l'étape elle-même dont on définira la valeur
 | `value`     2+| Valeur à donner à `value` de l'étape
->|          soit| Valeur explicite | Donnée telle quelle 
->|          soit| Valeur d'étape   | ${<id etape>}
+|>          soit| Valeur explicite | Donnée telle quelle 
+|>          soit| Valeur d'étape   | ${<id etape>}
 |====
 
 [[scserv-type-select-file, `select-file`]]
@@ -368,7 +370,7 @@ Si `step` est utilisé, c'est sa valeur qui est prise et remplacée. Noter qu'al
 |               | `format`  | Même chose que pour `today`
 | `date-<x>`  2+| Date dans le passé, `<x>` jours avant aujourd'hui
 |               | `format`  | Même chose que pour `today`
-
+|====
 
 [[scserv-data-formats, les formats de date]]
 ===== Les Formats de date =====
@@ -379,16 +381,16 @@ Les formats de date, utilisés pour <<scserv-param-transform>> ou le type <<scse
 
 [cols="1,4,1"]
 |====
-| **Marqueur** | **Explication** | **Exemples**
-| %J            | Le jour de la date                    | "1" ou "12"
-| %JJ           | Le jour mais toujours sur 2 chiffres  | "01" ou "12"
-| %M            | Le mois de la date                    | "02" ou "11"
-| %_M           | Le nom du mois de la date             | "février"
-| %Y            | L'année en 4 chiffres                 | "2026
-| %YY           | L'année en 2 chiffres                 | "26"
-| %H            | L'heure, en 1 ou 2 chiffres           | "5"
-| %m            | Les minutes, en 2 chiffres            | "03"
-| %S            | Les secondes en 2 chiffres            | "06
+| **Marqueur**    | **Explication**                       | **Exemples**
+| `%J`            | Le jour de la date                    | "1" ou "12"
+| `%JJ`           | Le jour mais toujours sur 2 chiffres  | "01" ou "12"
+| `%M`            | Le mois de la date                    | "02" ou "11"
+| `%_M`           | Le nom du mois de la date             | "février"
+| `%Y`            | L'année en 4 chiffres                 | "2026
+| `%YY`           | L'année en 2 chiffres                 | "26"
+| `%H`            | L'heure, en 1 ou 2 chiffres           | "5"
+| `%m`            | Les minutes, en 2 chiffres            | "03"
+| `%S`            | Les secondes en 2 chiffres            | "06"
 |====
 
 Si nous sommes le 25 juillet 2026 et que l'utilisateur choisit "Demain" pour l'étape suivante : 
@@ -419,10 +421,10 @@ Si nous sommes le 25 juillet 2026 et que l'utilisateur choisit "Demain" pour l'�
 | `create`  2+| `true` ou le nom du bouton "Nouveau…" si on doit pouvoir créer une nouvelle valeur +
                 Ça donne la valeur 'autre' à cette étape (cf. la suite).
 | `values`  2+| Les valeurs parmi lesquelles ont peut choisir
-|             | string          | le chemin à un fichier contenant les valeurs +
+|       soit  | string          | le chemin à un fichier contenant les valeurs +
 La valeur sera évaluée, donc peut-être définie par "${<id étape>}"
->|        ou  | array of string | Liste de valeurs simples (['poire', 'melon'])
->|        ou  | array of array  | Liste de doubles valeurs [[value, title], ...] 
+|>      soit  | array of string | Liste de valeurs simples (['poire', 'melon'])
+|>      soit  | array of array  | Liste de doubles valeurs [[value, title], ...] 
 |====
 
 Si _`create`_ est true (ou nom du bouton "Autre…"), on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :
@@ -468,7 +470,7 @@ On peut tirer des données d'un grand nombre de fichiers. La seule exigence est 
 | `type` | `get-data`
 | `base` | Chemin d'accès au fichier contenant les données (évaluable)
 | `key`  | Si précisé, c'est la clé à prendre, qui deviendra la valeur de l'étape. +
-          Si non précisé, c'est la liste des objets qui deviendra la valeur de l'étape.
+Si non précisé, c'est la liste des objets qui deviendra la valeur de l'étape.
 |====
 
 Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (`chmod +x fichier`) et qu'il retourne un données ÉVALUABLE PAR JSON, sauf si c'est une valeur scalaire (string, integer…).

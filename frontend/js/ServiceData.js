@@ -16,6 +16,12 @@
  *        la bonne extension dans :scType.
  *        Si l'on veut utiliser un script tout à fait différent, il faut
  *        l'indiquer dans :script (p.e. 'script: OpenAFile.rb')
+ * 
+ *  onError
+ *    Pour définir ce qui doit se passer en cas d'erreur. C'est une 
+ *    fonction à interpréter.
+ *    Souvent, elle doit utiliser un ErrorsDialog pour afficher la
+ *    liste des erreurs survenues.
  */
 
 
@@ -71,7 +77,11 @@ const COMMON_SERVICES_DATA = [
     , group: 'Documentation'
     , scType: '.rb'
     , onError: (errors) => {
-        const data = {title: "Erreur en cours d'actualisation", errors: errors, ouiBtn: this.Service.runService('edit-documentation')}
+        const data = {
+          title: "Erreur en cours d'actualisation", 
+          errors: errors, 
+          ouiBtn: {name: 'Corriger', onclick: Service.runService.bind(Service, 'edit-documentation')}
+        }
         new ErrorsDialog(data).show()
       }
     , params: [

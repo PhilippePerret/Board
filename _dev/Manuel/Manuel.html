@@ -460,6 +460,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#conditional-step">Étape conditionnelle</a></li>
 <li><a href="#evaluate">Contenu évaluable</a></li>
 <li><a href="#script-service-types">Les types d&#8217;étapes (step)</a></li>
+<li><a href="#scserv-use-variable">Utilisation des variables (valeur d’étape)</a></li>
+</ul>
+</li>
+<li><a href="#services">Les services</a>
+<ul class="sectlevel2">
+<li><a href="#_définition_des_services">Définition des services</a></li>
+<li><a href="#services-data">Données des services</a></li>
+<li><a href="#_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</a></li>
+<li><a href="#_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</a></li>
+<li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
+<li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
+<li><a href="#_lancer_un_script_quelconque">Lancer un script quelconque</a></li>
+</ul>
+</li>
+<li><a href="#_développement">Développement</a>
+<ul class="sectlevel2">
+<li><a href="#_fonctionnalités">fonctionnalités</a></li>
+<li><a href="#_les_projet">Les projet</a></li>
+<li><a href="#_applescript">AppleScript</a></li>
+<li><a href="#_collecte_informations">Collecte informations</a></li>
+<li><a href="#_définition_des_services_2">Définition des services</a></li>
+<li><a href="#_définition_des_services_3">Définition des services</a></li>
 </ul>
 </li>
 </ul>
@@ -592,14 +614,14 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <h2 id="_prise_en_main">Prise en main</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Après avoir lancé l&#8217;application, on se retrouve devant un tableau de bord qui permet d&#8217;ajouter ses projets en définissant pour chacun d&#8217;eux les <a href="#services">[services]</a> dont on a besoin.</p>
+<p>Après avoir lancé l&#8217;application, on se retrouve devant un tableau de bord qui permet d&#8217;ajouter ses projets en définissant pour chacun d&#8217;eux les <a href="#services">Les services</a> dont on a besoin.</p>
 </div>
 <div class="paragraph">
 <p>Chaque projet se présente sous forme d&#8217;une carte (un peu comme dans Trello) qui possède en titre le nom du projet et contient la liste des différents services qui lui ont été affectés.</p>
 </div>
 <div class="paragraph">
 <p><sub>~</sub>
-“Affecter des services” est l&#8217;expression consacrée pour dire qu&#8217;on utilise des <a href="#services">[services]</a> pour un projet.
+“Affecter des services” est l&#8217;expression consacrée pour dire qu&#8217;on utilise des <a href="#services">Les services</a> pour un projet.
 <sub>~</sub></p>
 </div>
 <div class="paragraph">
@@ -657,7 +679,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 </ul>
 </div>
 <div class="paragraph">
-<p>La partie inférieure permet de choisir les <a href="#services">[services]</a> par simple glisser-déposer.</p>
+<p>La partie inférieure permet de choisir les <a href="#services">Les services</a> par simple glisser-déposer.</p>
 </div>
 <div class="paragraph">
 <p>Exemple : pour le service “Ouvrir dans le Finder”, une fois qu&#8217;on l&#8217;a glissé sur le projet, une fenêtre s&#8217;ouvre, demandant d&#8217;ouvrir la fenêtre dans le Finder, de la positionner et de la mettre ans la vue désirée (colonnes, lignes, etc.). Une fois que c&#8217;est fait, on clique sur “OK” et l&#8217;application va automatiquement prendre les informations sur la fenêtre au premier plan dans le finder.</p>
@@ -733,7 +755,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>step</code> + <code>value</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-select">[scserv-type-select]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-select"><code>select</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sélection une valeur parmi un ensemble de
                                       valeur ou en créer une nouvelle.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code>, <code>create</code></p></td>
@@ -754,7 +776,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>after</code>, <code>before</code> + <code>where</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-data">[scserv-type-get-data]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-data"><code>get-data</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Obtention de données complexes
                                       (array d&#8217;objets) depuis un fichier.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code>, <code>key</code></p></td>
@@ -765,7 +787,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>prefix</code>, <code>values</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-choose-folder">[scserv-type-choose-folder]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-choose-folder"><code>choose-folder</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sélection d&#8217;un dossier (dans le Finder).</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -780,7 +802,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-set-project-data">[scserv-type-set-project-data]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-set-project-data"><code>set-project-data</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Pour définir une propriété pour le projet.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>step</code> + <code>value</code> + <code>project_key</code></p></td>
 </tr>
@@ -946,7 +968,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>set</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;identifiant de l&#8217;étape à laquelle on doit donner la valeur de cette étape.
-                Voir par exemple l&#8217;utilisation dans <a href="#scserv-vars-affectation-complexe">[scserv-vars-affectation-complexe]</a>.</p></td>
+                Voir par exemple l&#8217;utilisation dans <a href="#scserv-vars-affectation-complexe">Affectation plus complexe de variables</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>transform</code></p></td>
@@ -981,31 +1003,29 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <td class="tableblock halign-left valign-top"><p class="tableblock">**Exemples</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>integer</code>, <code>entier</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en entier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"12" → 12</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"12" → 12</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>float</code>, <code>flottant</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en nombre à virgule.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1,23" → 1.23</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"1,23" → 1.23</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en booléen.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"true" → true</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"true" → true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>valid-id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transforme en un identifiant valide.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Ça c&#8217;est l&#8217;été → "ca-cest-lete"</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"Ça c&#8217;est l&#8217;été → "ca-cest-lete"</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>date</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Prend une date "aaaa/mm/jj" et la
-                          met en forme
-                          (cf. <a href="#scserv-data-formats">[scserv-data-formats]</a>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prend une date "aaaa/mm/jj" et la met en forme (cf. <a href="#scserv-data-formats">les formats de date</a>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"25/07/2026" → "25 juillet"</p></td>
 </tr>
 </tbody>
 </table>
@@ -1215,7 +1235,7 @@ Noter les retours de chariot marqués par "\n".</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Voir l'<a href="#scserv-exemple-save-book">[scserv-exemple-save-book]</a>.</p>
+<p>Voir l'<a href="#scserv-exemple-save-book">exemple d’enregistrement d&#8217;un livre</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1248,12 +1268,12 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Valeur à donner à <code>value</code> de l&#8217;étape</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;          soit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Valeur explicite</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Donnée telle quelle</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;          soit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Valeur d&#8217;étape</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">${&lt;id etape&gt;}</p></td>
 </tr>
@@ -1361,7 +1381,7 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Permet de définir le format (cf. <a href="#scserv-data-formats">[scserv-data-formats]</a>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permet de définir le format (cf. <a href="#scserv-data-formats">les formats de date</a>)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tomorrow</code></p></td>
@@ -1388,1102 +1408,1835 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p>
-<p class="tableblock"><a id="scserv-data-formats"></a>
-===== Les Formats de date =====</p>
-<p class="tableblock">Les formats de date, utilisés pour <a href="#scserv-param-transform">transformation des valeurs</a> ou le type <a href="#scserv-type-translate"><code>translate</code></a>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine <code>"%J %_M"</code>, <code>%J</code> est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et <code>%_M</code> est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).</p>
-<p class="tableblock"><strong>Liste des marqueurs</strong></p>
-<p class="tableblock">[cols="1,4,1"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="scserv-data-formats">Les Formats de date</h5>
+<div class="paragraph">
+<p>Les formats de date, utilisés pour <a href="#scserv-param-transform">transformation des valeurs</a> ou le type <a href="#scserv-type-translate"><code>translate</code></a>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine <code>"%J %_M"</code>, <code>%J</code> est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et <code>%_M</code> est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).</p>
+</div>
+<div class="paragraph">
+<p><strong>Liste des marqueurs</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 66.6666%;">
+<col style="width: 16.6668%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Marqueur</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Explication</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Exemples</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%J</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le jour de la date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1" ou "12"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%JJ</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le jour mais toujours sur 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"01" ou "12"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%M</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le mois de la date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"02" ou "11"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%_M</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le nom du mois de la date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"février"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%Y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;année en 4 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2026</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%YY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;année en 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"26"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%H</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;heure, en 1 ou 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"5"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%m</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les minutes, en 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"03"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%S</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les secondes en 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"06"</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <strong>Marqueur</strong> | <strong>Explication</strong> | <strong>Exemples</strong>
-| %J            | Le jour de la date                    | "1" ou "12"
-| %JJ           | Le jour mais toujours sur 2 chiffres  | "01" ou "12"
-| %M            | Le mois de la date                    | "02" ou "11"
-| %_M           | Le nom du mois de la date             | "février"
-| %Y            | L&#8217;année en 4 chiffres                 | "2026
-| %YY           | L&#8217;année en 2 chiffres                 | "26"
-| %H            | L&#8217;heure, en 1 ou 2 chiffres           | "5"
-| %m            | Les minutes, en 2 chiffres            | "03"
-| %S            | Les secondes en 2 chiffres            | "06</p>
+<p>Si nous sommes le 25 juillet 2026 et que l&#8217;utilisateur choisit "Demain" pour l&#8217;étape suivante :</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Si nous sommes le 25 juillet 2026 et que l&#8217;utilisateur choisit "Demain" pour l&#8217;étape suivante :</p>
-<p class="tableblock">----
----
+<div class="listingblock">
+<div class="content">
+<pre>---
 - id: date-chosen
   type: select
-  values:[['today', "Aujourd&#8217;hui"],['demain', "Demain"]]
-  q: "Quelle date choisissez-vous ?"</p>
-<p class="tableblock">- id: la-date
+  values:[['today', "Aujourd'hui"],['demain', "Demain"]]
+  q: "Quelle date choisissez-vous ?"
+
+- id: la-date
   type: translate
   value: "${date-chosen}"
   transform: date
-  format: "%_M, %Y le %J"
-----</p>
-<p class="tableblock">… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"</p>
-<p class="tableblock"><a id="scserv-type-select"></a>
-==== Select ====</p>
-<p class="tableblock">[cols="1,1,2"]</p></td>
+  format: "%_M, %Y le %J"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-select">Select</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant obligatoire</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><strong><code>select</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>create</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>true</code> ou le nom du bouton "Nouveau…" si on doit pouvoir créer une nouvelle valeur<br>
+                Ça donne la valeur 'autre' à cette étape (cf. la suite).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Les valeurs parmi lesquelles ont peut choisir</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">le chemin à un fichier contenant les valeurs<br>
+La valeur sera évaluée, donc peut-être définie par "${&lt;id étape&gt;}"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;      soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array of string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste de valeurs simples (['poire', 'melon'])</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;      soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array of array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste de doubles valeurs [[value, title], &#8230;&#8203;]</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <code>id</code>      2+| Identifiant obligatoire
-| <code>type</code>    2+| <strong><code>select</code></strong>
-| <code>create</code>  2+| <code>true</code> ou le nom du bouton "Nouveau…" si on doit pouvoir créer une nouvelle valeur<br>
-                Ça donne la valeur 'autre' à cette étape (cf. la suite).
-| <code>values</code>  2+| Les valeurs parmi lesquelles ont peut choisir
-|             | string          | le chemin à un fichier contenant les valeurs<br>
-La valeur sera évaluée, donc peut-être définie par "${&lt;id étape&gt;}"
-&gt;|        ou  | array of string | Liste de valeurs simples (['poire', 'melon'])
-&gt;|        ou  | array of array  | Liste de doubles valeurs [[value, title], &#8230;&#8203;]</p>
+<p>Si <em>`create`</em> est true (ou nom du bouton "Autre…"), on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${&lt;identifiant étape&gt;} = ''"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Plusieurs étapes de ce type peuvent s&#8217;enchainer pour obtenir toutes les valeurs pour le type de données fournie.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Si <em>`create`</em> est true (ou nom du bouton "Autre…"), on peut créer une valeur de toute pièce. Cette création se fait, en toute logique, au cours des étapes suivante. Ces étapes de définition vont toutes commencer par :</p>
-<p class="tableblock">----
-- if: "${&lt;identifiant étape&gt;} = ''"
-----</p>
-<p class="tableblock">Plusieurs étapes de ce type peuvent s&#8217;enchainer pour obtenir toutes les valeurs pour le type de données fournie.</p>
-<p class="tableblock">TIP: Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâce à un type <code>set</code>. Voilà la séquence classique :</p>
-<p class="tableblock">----
----
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâce à un type <code>set</code>. Voilà la séquence classique :
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
 - id: 'le-choix'
   type: select
   values: [1, 2, 3]
   q: "Choisissez un chiffre
-  create: "Autre chiffre…" # pour permettre de choisir un autre chiffre</p>
-<p class="tableblock"># Comme le choix "Autre…" a été choisi, on propose
+  create: "Autre chiffre…" # pour permettre de choisir un autre chiffre
+
+# Comme le choix "Autre…" a été choisi, on propose
 # un dialogue pour entrer une autre valeur
-# et, grâce à <code>set</code>, la donner à l&#8217;autre étape
+# et, grâce à `set`, la donner à l'autre étape
 - if: "${le-choix} == ''"
   id: 'autre-chiffre'
   type: string
   q: "Quel autre chiffre ?"
   set: le-choix
-  transform: integer # tranformé en nombre</p>
-<p class="tableblock"># À partir d&#8217;ici, l&#8217;étape ${le-choix} contient la valeur voulue,
-# qu&#8217;elle est été prise dans le menu ou définie explicitement.</p>
-<p class="tableblock">----</p>
-<p class="tableblock"><a id="scserv-type-get-data"></a>
-==== Données dans un fichier ====</p>
-<p class="tableblock">On peut tirer des données d&#8217;un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+  transform: integer # tranformé en nombre
+
+# À partir d'ici, l'étape ${le-choix} contient la valeur voulue,
+# qu'elle est été prise dans le menu ou définie explicitement.</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-get-data">Données dans un fichier</h4>
+<div class="paragraph">
+<p>On peut tirer des données d&#8217;un grand nombre de fichiers. La seule exigence est que la donnée remontée ait le même type que la donnée attendue (string, array, array de strings, etc.).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au fichier contenant les données (évaluable)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si précisé, c&#8217;est la clé à prendre, qui deviendra la valeur de l&#8217;étape.<br>
+Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#8217;étape.</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <code>type</code> | <code>get-data</code>
-| <code>base</code> | Chemin d&#8217;accès au fichier contenant les données (évaluable)
-| <code>key</code>  | Si précisé, c&#8217;est la clé à prendre, qui deviendra la valeur de l&#8217;étape.<br>
-          Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#8217;étape.</p>
+<p>Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (<code>chmod +x fichier</code>) et qu&#8217;il retourne un données ÉVALUABLE PAR JSON, sauf si c&#8217;est une valeur scalaire (string, integer…).</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cela concerne donc en tout premier lieu les fichiers YAML, JSON et CSV, mais on peut également trouver tout fichier éditable (ruby, bash, python…) qui pourra retourner une donnée de ce type. Mais dans ce cas, il est impératif que ce fichier soit EXÉCUTABLE (<code>chmod +x fichier</code>) et qu&#8217;il retourne un données ÉVALUABLE PAR JSON, sauf si c&#8217;est une valeur scalaire (string, integer…).</p>
-<p class="tableblock">Deux sortes de données peuvent être remontées :</p>
-<p class="tableblock">- une table (dict) dont une clé primaire correspondra à <code>key</code>,
-- une liste d&#8217;objet (array) qui devra contenir un élément répondant à <code>id = key</code>.</p>
-<p class="tableblock"><em>En réalité, je pense qu&#8217;on peut imaginer tout autre type de valeur aussi, puisque <code>key</code> peut ne pas être défini.</em></p>
-<p class="tableblock"><a id="scserv-data-create-complex"></a>
-==== Création d&#8217;un objet complexe ====</p>
-<p class="tableblock">La force des scripts-services est de pouvoir construire des objets complexes (avec plusieurs paramètres) à l&#8217;aide d&#8217;étapes successives pour pouvoir les enregistrer ensuite dans un fichier.</p>
-<p class="tableblock"><a id="scserv-exemple-save-book"></a>
-Nous présentons ci-dessous l&#8217;enregistrement d&#8217;un livre dans un fichier qui les liste.</p>
-<p class="tableblock">----
-# Définition préalable du chemin d&#8217;accès aux données du livre,
+<div class="paragraph">
+<p>Deux sortes de données peuvent être remontées :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>une table (dict) dont une clé primaire correspondra à <code>key</code>,</p>
+</li>
+<li>
+<p>une liste d&#8217;objet (array) qui devra contenir un élément répondant à <code>id = key</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><em>En réalité, je pense qu&#8217;on peut imaginer tout autre type de valeur aussi, puisque <code>key</code> peut ne pas être défini.</em></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-data-create-complex">Création d&#8217;un objet complexe</h4>
+<div class="paragraph">
+<p>La force des scripts-services est de pouvoir construire des objets complexes (avec plusieurs paramètres) à l&#8217;aide d&#8217;étapes successives pour pouvoir les enregistrer ensuite dans un fichier.</p>
+</div>
+<div id="scserv-exemple-save-book" class="paragraph">
+<p>Nous présentons ci-dessous l&#8217;enregistrement d&#8217;un livre dans un fichier qui les liste.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Définition préalable du chemin d'accès aux données du livre,
 # pour ne pas avoir à les répéter (et pouvoir les modifier
 # facilement)
 - id: books-file
   type: set
-  value: "./data/livres.yaml"</p>
-<p class="tableblock"># Demande du livre qui appartient peut-être à la liste existante
+  value: "./data/livres.yaml"
+
+# Demande du livre qui appartient peut-être à la liste existante
 - id: livre-id
   q: "Sélectionnez le livre à imprimer"
   select: "${books-file}"
-  create: "Nouveau livre…" # pour en créer un nouveau</p>
-<p class="tableblock">- if: "${livre-id} = ''"  # &#8656; l&#8217;user a cliqué sur "Nouveau livre…"
+  create: "Nouveau livre…" # pour en créer un nouveau
+
+- if: "${livre-id} = ''"  # &lt;= l'user a cliqué sur "Nouveau livre…"
   id: newlivre-titre   # id choisi avec soin (prefix-key)
   type: string
-  q: "Titre du nouveau livre"</p>
-<p class="tableblock"># Étape qui va tranformer le titre en identifiant valide
+  q: "Titre du nouveau livre"
+
+# Étape qui va tranformer le titre en identifiant valide
 - if: "${livre-id} = ''"
   id: newlivre-id
   value: "${newlivre-titre}"
-  transform: valid-id</p>
-<p class="tableblock">- if: "${livre-id} = ''"
+  transform: valid-id
+
+- if: "${livre-id} = ''"
   id: newlivre-auteur
   q: "Auteur du livre :"
-  type: string</p>
-<p class="tableblock">- if: "${livre-id} = ''"
+  type: string
+
+- if: "${livre-id} = ''"
   id: newlivre-annee
   q: "Année de publication du livre :"
   type: string
-  transform: integer</p>
-<p class="tableblock">- if: "${livre-id} = ''"
+  transform: integer
+
+- if: "${livre-id} = ''"
   id: newlivre-resume
   q: "Résumé du livre :"
-  type: text</p>
-<p class="tableblock"># &#8230;&#8203; On pourrait ajouter encore des propriétés</p>
-<p class="tableblock"># Cette étape va mettre dans ${new-book} l&#8217;objet du nouveau
+  type: text
+
+# ... On pourrait ajouter encore des propriétés
+
+# Cette étape va mettre dans ${new-book} l'objet du nouveau
 # livre, qui pourra ensuite être enregistré
 - if: "${livre-id} = ''"
   id: new-book
   type: save-data
   prefix: newlivre      # préfixe des étapes de définition
   values: ['titre', 'id', 'resume', 'auteur', 'annee']
-  path: "${books-file}"  # L&#8217;objet sera placé dans ce fichier</p>
-<p class="tableblock"># Il reste enfin à définir ${livre-id} qui sera utilisé par
+  path: "${books-file}"  # L'objet sera placé dans ce fichier
+
+# Il reste enfin à définir ${livre-id} qui sera utilisé par
 # la suite
 - if: "${livre-id} = ''"
   id: define-livre-id
   type: set
   step: livre-id
-  value: "${newlivre-id}"</p>
-<p class="tableblock"># À partir d&#8217;ici, on peut utiliser ${livre-id} pour obtenir
-# l&#8217;identifiant du livre.</p>
-<p class="tableblock"># On charge les données du livre
+  value: "${newlivre-id}"
+
+
+# À partir d'ici, on peut utiliser ${livre-id} pour obtenir
+# l'identifiant du livre.
+
+# On charge les données du livre
 - id: book-data
   type: get-data
   base: "${books-file}"
-  key:  "${livre-id}"
-----</p>
-<p class="tableblock"><a id="scserv-type-set-project-data"></a>
-==== Set Project Data ====</p>
-<p class="tableblock">Type d&#8217;étape qui permet de définir une donnée de projet.</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+  key:  "${livre-id}"</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-set-project-data">Set Project Data</h4>
+<div class="paragraph">
+<p>Type d&#8217;étape qui permet de définir une donnée de projet.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-project-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les extra-données du projet.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La valeur à donner à cette clé. Elle vient, normalement, d&#8217;une autre étape ayant permis de la définir. Voir la <a href="#sequence-project-data">[sequence-project-data]</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-get-project-data">Get Project Data</h4>
+<div class="paragraph">
+<p>Type d&#8217;étape qui permet de récupérer une donnée de projet.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-project-data</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant. Mais pour ce type d&#8217;étape, il est particulier : il doit porter le nom de la donnée du projet, impérativement, pour pouvoir être redéfini si la donnée manque.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les extra-données du projet.</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <code>type</code> | <code>get-project-data</code>
-| <code>id</code> | Identifiant.
-| <code>project_key</code> | La clé dans les extra-données du projet.
-| <code>value</code>       | La valeur à donner à cette clé. Elle vient, normalement, d&#8217;une autre étape ayant permis de la définir. Voir la <a href="#sequence-project-data">[sequence-project-data]</a>.</p>
+<p>Voir la <a href="#sequence-project-data">[sequence-project-data]</a>.</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-get-project-data"></a>
-==== Get Project Data ====</p>
-<p class="tableblock">Type d&#8217;étape qui permet de récupérer une donnée de projet.</p>
-<p class="tableblock">[cols="1,4"]</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| <code>type</code> | <code>get-project-data</code>
-| <code>id</code> | Identifiant. Mais pour ce type d&#8217;étape, il est particulier : il doit porter le nom de la donnée du projet, impérativement, pour pouvoir être redéfini si la donnée manque.
-| <code>project_key</code> | La clé dans les extra-données du projet.</p>
+<div id="sequence-project-data" class="paragraph">
+<p><strong>Exemple de séquence de définition de donnée de projet</strong></p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Voir la <a href="#sequence-project-data">[sequence-project-data]</a>.</p>
-<p class="tableblock"><a id="sequence-project-data"></a>
-<strong>Exemple de séquence de définition de donnée de projet</strong></p>
-<p class="tableblock">----
----
+<div class="listingblock">
+<div class="content">
+<pre>---
 # On essaie de prendre le chemin au manuscrit
 # dans les données du projet.
 - id: 'manuscrit-path'
-  type: 'get-project-data'</p>
-<p class="tableblock"># Comme la donnée est nulle au départ, on va demande
+  type: 'get-project-data'
+
+# Comme la donnée est nulle au départ, on va demande
 # de choisir le manuscrit.
 - if: "${manuscript-path} == null"
   id: "definition-manuscrit"
   type: 'select-file'
-  q: "Choisissez le manuscrit dans le Finder puis “OK”."</p>
-<p class="tableblock">- if: "${manuscript-path} == null"
+  q: "Choisissez le manuscrit dans le Finder puis “OK”."
+
+- if: "${manuscript-path} == null"
   id: "set-project-manuscrit"
   type: 'set-project-data'
   project_key: 'manuscrit-path'  # la clé
-  value: ${definition-manuscrit} # pour récupérer le path</p>
-<p class="tableblock">- type: 'copy-file'
-  source: "${manuscrit-path}"  # Aura été renseigné
-----</p>
-<p class="tableblock"><a id="scserv-type-choose-folder"></a>
-==== Choisir un dossier ====</p>
-<p class="tableblock">[cols="1,4"]</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| <code>type</code>    | <code>choose-folder</code></p>
+  value: ${definition-manuscrit} # pour récupérer le path
+
+- type: 'copy-file'
+  source: "${manuscrit-path}"  # Aura été renseigné</pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-choose-folder">Choisir un dossier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-create-folder"></a>
-==== Création d&#8217;un dossier ====</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>choose-folder</code></p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>| <code>type</code>    | <code>create-folder</code></p>
 </div>
+<div class="sect3">
+<h4 id="scserv-type-create-folder">Création d&#8217;un dossier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-copy-file"></a>
-==== Copier d&#8217;un fichier ====</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>create-folder</code></p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>| <code>type</code>    | <code>copy-file</code></p>
 </div>
+<div class="sect3">
+<h4 id="scserv-type-copy-file">Copier d&#8217;un fichier</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-string"></a>
-==== Obtenir une chaine ====</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>copy-file</code></p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>| <code>type</code>    | <code>string</code></p>
 </div>
+<div class="sect3">
+<h4 id="scserv-type-string">Obtenir une chaine</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-text"></a>
-==== Obtenir un texte ====</p>
-<p class="tableblock"><em>Texte</em>, ci-dessus, signifie un texte multi-lignes.</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-text">Obtenir un texte</h4>
 <div class="paragraph">
-<p>| <code>type</code>    | <code>text</code></p>
+<p><em>Texte</em>, ci-dessus, signifie un texte multi-lignes.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-phone"></a>
-==== Obtenir un numéro de téléphone ====</p>
-<p class="tableblock">Typiquement, ces méthodes permettent surtout d&#8217;ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l&#8217;implémentation de ce type, il servait à ajouter des fichers de maisons d&#8217;édition pour l&#8217;envoi d&#8217;un manuscrit.</p>
-<p class="tableblock"><a id="scserv-use-variable"></a>
-=== Utilisation des variables (valeur d’étape) ===</p>
-<p class="tableblock">Dans un script-service, il est souvent utile de définir des variables et d&#8217;y faire référence.</p>
-<p class="tableblock">Une variable, dans un script-service, est <strong>une valeur d&#8217;étape</strong>, on y fait référence par :</p>
-<p class="tableblock">----
-${&lt;id d&#8217;étape&gt;}
-----</p>
-<p class="tableblock">TIP: Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong></em> il faudra donc comprendre qu&#8217;il s&#8217;agit de la valeur que prend l&#8217;étape au cours de son exécution ou la valeur qu&#8217;on lui définit explicitement.</p>
-<p class="tableblock">Certaines variables se définissent en une seule fois, par exemple avec le type <a href="#scserv-type-select">[scserv-type-select]</a> :</p>
-<p class="tableblock">----
-- id: 'le-nombre'
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>text</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-phone">Obtenir un numéro de téléphone</h4>
+<div class="paragraph">
+<p>Typiquement, ces méthodes permettent surtout d&#8217;ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l&#8217;implémentation de ce type, il servait à ajouter des fichers de maisons d&#8217;édition pour l&#8217;envoi d&#8217;un manuscrit.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="scserv-use-variable">Utilisation des variables (valeur d’étape)</h3>
+<div class="paragraph">
+<p>Dans un script-service, il est souvent utile de définir des variables et d&#8217;y faire référence.</p>
+</div>
+<div class="paragraph">
+<p>Une variable, dans un script-service, est <strong>une valeur d&#8217;étape</strong>, on y fait référence par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>${&lt;id d'étape&gt;}</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong></em> il faudra donc comprendre qu&#8217;il s&#8217;agit de la valeur que prend l&#8217;étape au cours de son exécution ou la valeur qu&#8217;on lui définit explicitement.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Certaines variables se définissent en une seule fois, par exemple avec le type <a href="#scserv-type-select"><code>select</code></a> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'le-nombre'
   type: select
   values: [1,2,3,4,5]
-  q: "Choisissez un nombre"
-----</p>
-<p class="tableblock">Avec cette étape, l&#8217;user choisira un nombre de 1 à 5 et ce nombre deviendra la <em>valeur de l&#8217;étape <code>le-nombre`</em> et pourra donc être utilisé avec `${le-nombre}</code>.</p>
-<p class="tableblock">Par exemple pour une condition :</p>
-<p class="tableblock">----
-# Étape conditionnelle qui n&#8217;est jouée que le
+  q: "Choisissez un nombre"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Avec cette étape, l&#8217;user choisira un nombre de 1 à 5 et ce nombre deviendra la <em>valeur de l&#8217;étape <code>le-nombre`</em> et pourra donc être utilisé avec `${le-nombre}</code>.</p>
+</div>
+<div class="paragraph">
+<p>Par exemple pour une condition :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Étape conditionnelle qui n'est jouée que le
 # le nombre choisi est supérieur à 4
 - if: "${le-nombre} &gt; 4"
   id: etape-si-cinq
-  &#8230;&#8203;
-----</p>
-<p class="tableblock">On peut également définir une variable explicitement grâce au type d&#8217;étape <a href="#scserv-type-set"><code>set</code></a>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à <em>définir la valeur d&#8217;une étape</em>. Si je joue :</p>
-<p class="tableblock">----
-- id: le-nombre
+  ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On peut également définir une variable explicitement grâce au type d&#8217;étape <a href="#scserv-type-set"><code>set</code></a>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à <em>définir la valeur d&#8217;une étape</em>. Si je joue :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: le-nombre
   type: set
-  value: 3
-----</p>
-<p class="tableblock">… alors je mets explicitement la valeur de l&#8217;étape <code>le-nombre</code> à 3.</p>
-<p class="tableblock">Utilisé de cette manière l&#8217;usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j&#8217;ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :</p>
-<p class="tableblock">----
-- id: nom
+  value: 3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… alors je mets explicitement la valeur de l&#8217;étape <code>le-nombre</code> à 3.</p>
+</div>
+<div class="paragraph">
+<p>Utilisé de cette manière l&#8217;usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j&#8217;ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: nom
   type: set
-  value: "la Bhagavad-Gītā"
-----</p>
-<p class="tableblock">Je peux alors simplifier l&#8217;écriture des messages :</p>
-<p class="tableblock">----
-- id: version
+  value: "la Bhagavad-Gītā"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Je peux alors simplifier l&#8217;écriture des messages :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: version
   type: select
   q: "Quelle version de ${nom} dois-je prendre en référence ?
-  values: [1,2,3]
-----</p>
-<p class="tableblock"><a id="scserv-vars-affectation-complexe"></a>
-==== Affectation plus complexe de variables ====</p>
-<p class="tableblock">Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l&#8217;utilisation de <em>constantes</em> que de véritables <em>variables</em> dont la valeur dépend en réalité du contexte.</p>
-<p class="tableblock">Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c&#8217;est-à-dire leur utilisation dans n&#8217;importe quel projet similaire (i.e. définissant les mêmes données).</p>
-<p class="tableblock">----
-- id: project-name
+  values: [1,2,3]</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scserv-vars-affectation-complexe">Affectation plus complexe de variables</h4>
+<div class="paragraph">
+<p>Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l&#8217;utilisation de <em>constantes</em> que de véritables <em>variables</em> dont la valeur dépend en réalité du contexte.</p>
+</div>
+<div class="paragraph">
+<p>Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c&#8217;est-à-dire leur utilisation dans n&#8217;importe quel projet similaire (i.e. définissant les mêmes données).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: project-name
   type: get-project-data
-  key: title
-----</p>
-<p class="tableblock">Grâce au type de service <a href="#scserv-type-get-project-data"><code>get-project-data</code></a>, nous pouvons obtenir la propriété <code>title</code> (titre) du projet et la stocker en valeur de l&#8217;étape. On peut ensuite l&#8217;utiliser avec <code>${project-name}</code> :</p>
-<p class="tableblock">----
-- id: pour-voir
+  key: title</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Grâce au type de service <a href="#scserv-type-get-project-data"><code>get-project-data</code></a>, nous pouvons obtenir la propriété <code>title</code> (titre) du projet et la stocker en valeur de l&#8217;étape. On peut ensuite l&#8217;utiliser avec <code>${project-name}</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: pour-voir
   q: "Que voulez-vous faire de “${project-name}” ?"
-  &#8230;&#8203;
-----</p>
-<p class="tableblock">&gt; À titre de rappel, les propriétés de base de tout projet sont <code>title</code>, <code>id</code> et <code>path</code>, mais on peut en ajouter autant que l&#8217;on veut notamment grâce au type <a href="#scserv-type-set-project-data">[scserv-type-set-project-data]</a>.</p>
-<p class="tableblock">Nous pouvons aller encore plus loin dans l&#8217;affectation des variables et c&#8217;est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l&#8217;on veut que l&#8217;utilisateur puisse donner une valeur propre, c&#8217;est-à-dire autres que celles proposées. Vous vous souvenir de l&#8217;affectation d&#8217;un nombre, tout à l&#8217;heure, à la valeur d&#8217;une variable (la valeur de l&#8217;étape). Pour que l&#8217;user puisse utiliser sa propre valeur, il suffit de définir le paramètre <code>create</code> :</p>
-<p class="tableblock">----
-- id: le-nombre
+  ...</pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>À titre de rappel, les propriétés de base de tout projet sont <code>title</code>, <code>id</code> et <code>path</code>, mais on peut en ajouter autant que l&#8217;on veut notamment grâce au type <a href="#scserv-type-set-project-data"><code>set-project-data</code></a>.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Nous pouvons aller encore plus loin dans l&#8217;affectation des variables et c&#8217;est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l&#8217;on veut que l&#8217;utilisateur puisse donner une valeur propre, c&#8217;est-à-dire autres que celles proposées. Vous vous souvenir de l&#8217;affectation d&#8217;un nombre, tout à l&#8217;heure, à la valeur d&#8217;une variable (la valeur de l&#8217;étape). Pour que l&#8217;user puisse utiliser sa propre valeur, il suffit de définir le paramètre <code>create</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: le-nombre
   type: select
   values: [1,2,3,4,5]
   q: "Choisissez un nombre"
-  create: "Autre valeur…"
-----</p>
-<p class="tableblock">Cette fois, l&#8217;user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu&#8217;il a cliqué sur le bouton car la valeur de <code>${le-nombre}</code> sera vide. Nous la testons et lui proposons alors d&#8217;entrer sa valeur :</p>
-<p class="tableblock">----
-- if: "${le-nombre} = ''"
+  create: "Autre valeur…"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette fois, l&#8217;user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu&#8217;il a cliqué sur le bouton car la valeur de <code>${le-nombre}</code> sera vide. Nous la testons et lui proposons alors d&#8217;entrer sa valeur :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Grâce à cette étape, l&#8217;user va pouvoir donner sa valeur.</p>
+</div>
+<div class="paragraph">
+<p>Le problème, c&#8217;est qu&#8217;elle sera consignée dans <code>${autre-valeur}</code> alors que plus tard, nous en aurons besoin dans <code>${le-nombre}</code>. Pour ce faire, il nous suffit de définir le paramètre <code>set</code> avec le nom de l&#8217;autre étape :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
   id: autre-valeur
   type: string
   q: "Donnez votre propre valeur"
   translate: integer # pour transformer la chaine en nombre
-----</p>
-<p class="tableblock">Grâce à cette étape, l&#8217;user va pouvoir donner sa valeur.</p>
-<p class="tableblock">Le problème, c&#8217;est qu&#8217;elle sera consignée dans <code>${autre-valeur}</code> alors que plus tard, nous en aurons besoin dans <code>${le-nombre}</code>. Pour ce faire, il nous suffit de définir le paramètre <code>set</code> avec le nom de l&#8217;autre étape :</p>
-<p class="tableblock">----
-- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  translate: integer # pour transformer la chaine en nombre
-  set: le-nombre
-----</p>
-<p class="tableblock">Attention de ne pas affecter la valeur trop vite ! Prenons l&#8217;exemple d&#8217;une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire :</p>
-<p class="tableblock">----
-- if: "${le-nombre} = ''"
+  set: le-nombre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Attention de ne pas affecter la valeur trop vite ! Prenons l&#8217;exemple d&#8217;une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
   id: autre-valeur
   type: string
   q: "Donnez votre propre valeur"
   transform: integer # pour transformer la chaine en nombre
-  set: le-nombre</p>
-<p class="tableblock">- if: "${le-nombre} = ''"
+  set: le-nombre
+
+- if: "${le-nombre} = ''"
   id: save-nombre-in-project
   type: set-project-data
-  value: "${le-nombre}"
-----</p>
-<p class="tableblock">Ça ne fonctionnerait pas parce qu&#8217;au moment de la ligne :</p>
-<p class="tableblock">----
-- if: "${le-nombre} = ''"
-----</p>
-<p class="tableblock"><code>${le-nombre}</code> ne sera plus vide puisqu&#8217;il aura été défini juste au-dessus (<code>set: le-nombre</code> qui signifie "définir la valeur de l&#8217;étape <code>le-nombre</code> avec la valeur de cette étape).</p>
-<p class="tableblock">Il faut donc faire :</p>
-<p class="tableblock">----
-- if: "${le-nombre} = ''"
+  value: "${le-nombre}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ça ne fonctionnerait pas parce qu&#8217;au moment de la ligne :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>${le-nombre}</code> ne sera plus vide puisqu&#8217;il aura été défini juste au-dessus (<code>set: le-nombre</code> qui signifie "définir la valeur de l&#8217;étape <code>le-nombre</code> avec la valeur de cette étape).</p>
+</div>
+<div class="paragraph">
+<p>Il faut donc faire :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${le-nombre} = ''"
   id: autre-valeur
   type: string
   q: "Donnez votre propre valeur"
-  transform: integer # pour transformer la chaine en nombre</p>
-<p class="tableblock">- if: "${le-nombre} = ''"
+  transform: integer # pour transformer la chaine en nombre
+
+- if: "${le-nombre} = ''"
   id: save-nombre-in-project
   type: set-project-data
   value: "${autre-valeur}"
-  set: le-nombre
-----</p>
-<p class="tableblock"><a id="services"></a>
-== Les services ==</p>
-<p class="tableblock">=== Définition des services ===</p>
-<p class="tableblock">Il existe deux grandes catégories de services :</p>
-<p class="tableblock">- les <a href="#custom-services">services personnalisés</a>
-- les <a href="#common-services">services communs</a></p>
-<p class="tableblock"><a id="custom-services"></a>
-==== Services personnalisés</p>
-<p class="tableblock">On peut basculer des <a href="#services communs">[services communs]</a> aux custom-services grâce au bouton “Services communs”.</p>
-<p class="tableblock"><a id="common-services"></a>
-==== Services communs ====</p>
-<p class="tableblock">Les services communs peuvent s&#8217;ajouter aux projets, mais ils peuvent aussi être cliqués dans la liste. Ils s&#8217;appliquent alors au projet courant.</p>
-<p class="tableblock">On affiche les services communs simplement en cliquant sur la fiche d&#8217;un projet. En même temps qu&#8217;il se met en sélection, la liste des services communs s&#8217;affiche à droite de l&#8217;interface.</p>
-<p class="tableblock">On peut basculer des <a href="#custom-services">[custom-services]</a> aux services communs grâce au bouton “Services personnalisés”.</p>
-<p class="tableblock"><a id="services-data"></a>
-=== Données des services ===</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+  set: le-nombre</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="services">Les services</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_définition_des_services">Définition des services</h3>
+<div class="paragraph">
+<p>Il existe deux grandes catégories de services :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>les <a href="#custom-services">services personnalisés</a></p>
+</li>
+<li>
+<p>les <a href="#common-services">services communs</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="custom-services">Services personnalisés</h4>
+<div class="paragraph">
+<p>On peut basculer des <a href="#common-services">services communs</a> aux custom-services grâce au bouton “Services communs”.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="common-services">Services communs</h4>
+<div class="paragraph">
+<p>Les services communs peuvent s&#8217;ajouter aux projets, mais ils peuvent aussi être cliqués dans la liste. Ils s&#8217;appliquent alors au projet courant.</p>
+</div>
+<div class="paragraph">
+<p>On affiche les services communs simplement en cliquant sur la fiche d&#8217;un projet. En même temps qu&#8217;il se met en sélection, la liste des services communs s&#8217;affiche à droite de l&#8217;interface.</p>
+</div>
+<div class="paragraph">
+<p>On peut basculer des <a href="#custom-services">services personnalisés</a> aux services communs grâce au bouton “Services personnalisés”.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="services-data">Données des services</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cet identifiant sert aussi à définir le nom du script à jouer (<code>mon-id-script</code> → <code>MonIdScript.scpt</code>)<br>
+(les scripts sont définis dans <code>backend/scripts/</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>script</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si le script ne doit pas être déduit de l&#8217;identifiant</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Extension du script à jouer quand ça n&#8217;est pas <code>.scpt</code><br>
+(mais de toutes façons, il y a une recherche automatique du bon script en cas d&#8217;introuvabilité).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>front</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Propriété très importante qui définit <strong>une méthode</strong> frontend qui sera utilisée pour exécuter le service. Cf. <a href="#exec-service-frontend">Exécution frontend d&#8217;un service</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le nom affiché du service<br>
+(pour les <a href="#custom-services">services personnalisés</a>, ce nom est modifiable dès l&#8217;attribution.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les <a href="#script-params">paramètres de script</a> (très importants, ils font l&#8217;objet d&#8217;un détail propre)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dynParams</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optionnellement, il peut y avoir des paramètres à définir à l&#8217;utilisation du bouton.<br>
+Ils fonctionnent essentiellement commes les <a href="#script-params">paramètres de script</a>, mais les valeurs ne sont pas persistées.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="script-params">Paramètres des script</h4>
+<div class="paragraph">
+<p>Ils sont très important car ils définissent les paramètres exacts qui seront transmis aux scripts.</p>
+</div>
+<div class="paragraph">
+<p>Principes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Les valeurs paramètres sont transmis dans l&#8217;ordre exact où ils sont définis,</p>
+</li>
+<li>
+<p>chaque <em>paramètre</em> peut définir plusieurs valeurs.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Propriété</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du paramètres (peut être répété dans les paramètres qui est un Array)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le type précis qui va définir exactement la valeur transmise. Voir les <a href="#params-types">types de paramètres</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quand le <code>type</code> est <code>select</code>, pour définir les valeurs à proposer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La valeur par défaut ou la valeur brute.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>transient</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[Optionnel] Indique que la valeur du paramètre ne doit pas être enregistrée quand 1) c&#8217;est un service commun 2) qui est appelé depuis le panneau.<br>
+Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de Terminal quand le service commun “Ouvir un Terminal au dossier” est cliqué depuis le panneau : il faut alors demander le code, mais ne pas l&#8217;enregistrer dans les <code>common_services_data</code> du projet.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="params-types">Types de paramètres</h4>
+<div class="paragraph">
+<p>Ils s&#8217;agit de la propriété <code>type</code> des <a href="#script-params">paramètres de script</a>. <em>Ces types sont utiles dans le fichier `frontend/js/ServiceDefiner.js`</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>raw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Donnée brute fournie dans <code>value</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bounds</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour obtenir les dimensions d&#8217;une fenêtre Finder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>finder-window</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour obtenir toutes les informations sur la fenêtre courante</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un chemin d&#8217;accès à n&#8217;importe quoi, fichier, dossier, script…</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path-or-null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès optionnel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une URL existante.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Soit false soit true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un entier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une donnée projet déjà définie. L&#8217;identifiant est le nom de la propriété. Par exemple <code>path</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>app</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une donnée application déjà définie. L&#8217;identifiant est le nom de la propriété. Par exemple <code>documentation-editor</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="exec-service-frontend">Exécution frontend d&#8217;un service</h4>
+<div class="paragraph">
+<p>La plupart des services appellent un script qui se trouve backend (dont le nom est tiré de l'`id` du service ou définit explicitement par la propriété <code>script</code>). Mais certains services, comme l&#8217;horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu&#8217;à l&#8217;enregistrement du temps et des changelogs/todo).</p>
+</div>
+<div class="paragraph">
+<p>Pour caractériser ce genre de service, on définit dans leur <a href="#services-data">données</a> la propriété <code>front</code> qui sera la méthode (bindée) à appeler.</p>
+</div>
+<div class="paragraph">
+<p>Cette méthode doit recevoir :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le projet en premier argument,</p>
+</li>
+<li>
+<p>les données propres au service (<code>sdata[&lt;service-id&gt;]</code>) en second argument, comme une liste de valeurs.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_redéfinition_du_service">Redéfinition du service</h4>
+<div class="paragraph">
+<p>On peut redéfinir les données d&#8217;un service quelconque en cliquant sur lui tout en tenant la touche combo:meta appuyée.</p>
+</div>
+<div class="paragraph">
+<p><em>Cette partie décrit tous les services qu&#8217;on peut utiliser pour un projet.</em></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ouvrir_une_fenêtre_dans_le_finder">Ouvrir une fenêtre dans le Finder</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvrir fenêtre dans le finder</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-finder-window</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">get-finder-window-info.scpt</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre par défaut</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvrir le projet dans le Finder</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>|<code>id</code>       | Identifiant du service
-|           | Cet identifiant sert aussi à définir le nom du script à jouer (<code>mon-id-script</code> → <code>MonIdScript.scpt</code>)<br>
-(les scripts sont définis dans <code>backend/scripts/</code>)
-| <code>script</code>  | Si le script ne doit pas être déduit de l&#8217;identifiant
-| <code>scType</code>  | Extension du script à jouer quand ça n&#8217;est pas <code>.scpt</code><br>
-(mais de toutes façons, il y a une recherche automatique du bon script en cas d&#8217;introuvabilité).
-| <code>front</code>   | Propriété très importante qui définit <strong>une méthode</strong> frontend qui sera utilisée pour exécuter le service. Cf. <a href="#exec-service-frontend">[exec-service-frontend]</a>.
-|<code>name</code>     | Le nom affiché du service<br>
-(pour les <a href="#custom-services">[custom-services]</a>, ce nom est modifiable dès l&#8217;attribution.)
-| <code>params</code>    | Les <a href="#script-params">paramètres de script</a> (très importants, ils font l&#8217;objet d&#8217;un détail propre)
-| <code>dynParams</code> | Optionnellement, il peut y avoir des paramètres à définir à l&#8217;utilisation du bouton.<br>
-Ils fonctionnent essentiellement commes les <a href="#script-params">paramètres de script</a>, mais les valeurs ne sont pas persistées.</p>
+<p>Définition dans la fiche projet :</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="script-params"></a>
-==== Paramètres des script ====</p>
-<p class="tableblock">Ils sont très important car ils définissent les paramètres exacts qui seront transmis aux scripts.</p>
-<p class="tableblock">Principes :</p>
-<p class="tableblock">- Les valeurs paramètres sont transmis dans l&#8217;ordre exact où ils sont définis,
-- chaque <em>paramètre</em> peut définir plusieurs valeurs.</p>
-<p class="tableblock">[cols="1,4"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-finder-window</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Propriétés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au dossier (absolu ou relatif au projet)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">position</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[top, left], position vertical et horizontal de la fenêtre</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">taille</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[width, height], largeur et hauteur de la fenêtre</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type vue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column|list</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</h3>
+<div class="paragraph">
+<p>On peut très facilement gérer les fichiers versionnés avec include::../../../../frontend/js/App.js[tag=app-name]. On peut même choisir son système préféré :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Un nom de fichier portant son numéro de version dans son nom même.</p>
+</li>
+<li>
+<p>Un nom unique et inchangeable, avec un numéro de version qu&#8217;on définit en archivant le fichier.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ces deux modes sont invisibles, include::../../../../frontend/js/App.js[tag=app-name] se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
+</div>
+<div class="paragraph">
+<p>Bien entendu, on peut choisir autant de fichiers versionné qu&#8217;on le désire, pour le même projet.</p>
+</div>
+<div class="paragraph">
+<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, include::../../../../frontend/js/App.js[tag=app-name] demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actualiser la version majeure</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-major-version</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-major-version.rb</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Updater version majeure</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actualiser la version mineure</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-minor-version</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">update-minor-version.rb</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Updater version mineur</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_lancer_un_script_quelconque">Lancer un script quelconque</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lancer un script personnel</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">custom-script</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">run-custom-script.rb</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jouer le script</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <strong>Propriété</strong>   | <strong>Description</strong>
-| <code>id</code>        | Identifiant du paramètres (peut être répété dans les paramètres qui est un Array)
-| <code>type</code>      | Le type précis qui va définir exactement la valeur transmise. Voir les <a href="#params-types">types de paramètres</a>
-| <code>values</code>    | Quand le <code>type</code> est <code>select</code>, pour définir les valeurs à proposer.
-| <code>value</code>     | La valeur par défaut ou la valeur brute.
-| <code>transient</code> | [Optionnel] Indique que la valeur du paramètre ne doit pas être enregistrée quand 1) c&#8217;est un service commun 2) qui est appelé depuis le panneau.<br>
-Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de Terminal quand le service commun “Ouvir un Terminal au dossier” est cliqué depuis le panneau : il faut alors demander le code, mais ne pas l&#8217;enregistrer dans les <code>common_services_data</code> du projet.</p>
+<p>Dans la fichier projet :</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="params-types"></a>
-==== Types de paramètres ====</p>
-<p class="tableblock">Ils s&#8217;agit de la propriété <code>type</code> des <a href="#script-params">paramètres de script</a>. <em>Ces types sont utiles dans le fichier `frontend/js/ServiceDefiner.js`</em></p>
-<p class="tableblock">[cols="1,4"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">service : <code>custom-script</code>
+2+</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Propriétés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au script (absolu ou relatif au dossier du projet)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vars</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Variables éventuelles (sous forme d&#8217;une table JSON ?)</p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>| <strong>Type</strong>        | <strong>Description</strong>
-| <code>raw</code>           | Donnée brute fournie dans <code>value</code>
-| <code>bounds</code>        | Pour obtenir les dimensions d&#8217;une fenêtre Finder
-| <code>finder-window</code> |  Pour obtenir toutes les informations sur la fenêtre courante
-| <code>path</code>          | Un chemin d&#8217;accès à n&#8217;importe quoi, fichier, dossier, script…
-| <code>path-or-null</code>  | Chemin d&#8217;accès optionnel.
-| <code>url</code>           | Une URL existante.
-| <code>boolean</code>       | Soit false soit true
-| <code>integer</code>       | Un entier
-| <code>project</code>       | Une donnée projet déjà définie. L&#8217;identifiant est le nom de la propriété. Par exemple <code>path</code>
-| <code>app</code>           | Une donnée application déjà définie. L&#8217;identifiant est le nom de la propriété. Par exemple <code>documentation-editor</code></p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="exec-service-frontend"></a>
-==== Exécution frontend d&#8217;un service ====</p>
-<p class="tableblock">La plupart des services appellent un script qui se trouve backend (dont le nom est tiré de l'`id` du service ou définit explicitement par la propriété <code>script</code>). Mais certains services, comme l&#8217;horloge, font appel à une exécution essentiellement frontend (en tout cas jusqu&#8217;à l&#8217;enregistrement du temps et des changelogs/todo).</p>
-<p class="tableblock">Pour caractériser ce genre de service, on définit dans leur <a href="#services-data">données</a> la propriété <code>front</code> qui sera la méthode (bindée) à appeler.</p>
-<p class="tableblock">Cette méthode doit recevoir :</p>
-<p class="tableblock">- le projet en premier argument,
-- les données propres au service (<code>sdata[&lt;service-id&gt;]</code>) en second argument, comme une liste de valeurs.</p>
-<p class="tableblock">==== Redéfinition du service ====</p>
-<p class="tableblock">On peut redéfinir les données d&#8217;un service quelconque en cliquant sur lui tout en tenant la touche combo:meta appuyée.</p>
-<p class="tableblock"><em>Cette partie décrit tous les services qu&#8217;on peut utiliser pour un projet.</em></p>
-<p class="tableblock">=== Ouvrir une fenêtre dans le Finder ===</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| Nom     | Ouvrir fenêtre dans le finder |
-| Id      | open-finder-window            |
-| Script  | get-finder-window-info.scpt   |
-| Titre par défaut  | Ouvrir le projet dans le Finder |</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Définition dans la fiche projet :</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| service   | open-finder-window
-2+| Propriétés
-| path      | Chemin d&#8217;accès au dossier (absolu ou relatif au projet)
-| position  | [top, left], position vertical et horizontal de la fenêtre
-| taille    | [width, height], largeur et hauteur de la fenêtre
-| Type vue  | column\|list</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">=== Gérer les versions d&#8217;un fichier ===
-On peut très facilement gérer les fichiers versionnés avec include::../../../../frontend/js/App.js[tag=app-name]. On peut même choisir son système préféré :</p>
-<p class="tableblock">- Un nom de fichier portant son numéro de version dans son nom même.
-- Un nom unique et inchangeable, avec un numéro de version qu&#8217;on définit en archivant le fichier.</p>
-<p class="tableblock">Ces deux modes sont invisibles, include::../../../../frontend/js/App.js[tag=app-name] se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
-<p class="tableblock">Bien entendu, on peut choisir autant de fichiers versionné qu&#8217;on le désire, pour le même projet.</p>
-<p class="tableblock">Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, include::../../../../frontend/js/App.js[tag=app-name] demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
-<p class="tableblock">=== Actualiser la version majeur d&#8217;un fichier ===</p></td>
-</tr>
-</tbody>
-</table>
+<div class="sect1">
+<h2 id="_développement">Développement</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>| Nom       | Actualiser la version majeure |
-| Id        | update-major-version          |
-| Script    | update-major-version.rb       |
-| Titre     | Updater version majeure       |</p>
+<p><strong>Pas de Promise</strong></p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">=== Actualiser la verion mineure d&#8217;un fichier ===</p></td>
-</tr>
-</tbody>
-</table>
 <div class="paragraph">
-<p>| Nom       | Actualiser la version mineure |
-| Id        | update-minor-version          |
-| Script    | update-minor-version.rb       |
-| Titre     | Updater version mineur        |</p>
+<p>Comme je n&#8217;aime pas vraiment les promesses (<code>Promise</code>), je suis revenu dans cette application à un traitement à l&#8217;ancienne avec les <em>callbacks</em>.</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">=== Lancer un script quelconque ===</p></td>
-</tr>
-</tbody>
-</table>
+<div class="sect2">
+<h3 id="_fonctionnalités">fonctionnalités</h3>
 <div class="paragraph">
-<p>| Nom       | Lancer un script personnel    |
-| Id        | custom-script                 |
-| Script    | run-custom-script.rb          |
-| Titre     | Jouer le script               |</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dans la fichier projet :</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| service : <code>custom-script</code>
-2+ | Propriétés
-| path  | Chemin d&#8217;accès au script (absolu ou relatif au dossier du projet)
-| vars  | Variables éventuelles (sous forme d&#8217;une table JSON ?)</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">== Développement ==</p>
-<p class="tableblock"><strong>Pas de Promise</strong></p>
-<p class="tableblock">Comme je n&#8217;aime pas vraiment les promesses (<code>Promise</code>), je suis revenu dans cette application à un traitement à l&#8217;ancienne avec les <em>callbacks</em>.</p>
-<p class="tableblock">=== fonctionnalités ===</p>
-<p class="tableblock"><em>TD = Todo, à faire</em>
+<p><em>TD = Todo, à faire</em>
 <em>Docu</em> : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n&#8217;est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
 <em>Man</em>: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est décrite dans le manuel utilisateur, avec un lien pour s&#8217;y rendre.</p>
-<p class="tableblock">[cols="2,4,2,1,1"]</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| <strong>Nom</strong> | <strong>Description</strong> | <strong>Test</strong> | <strong>Docu</strong> | <strong>Man</strong></p>
-</div>
-<div class="paragraph">
-<p>5+| L&#8217;Application</p>
-</div>
-<div class="paragraph">
-<p>| Réglage
-| Définition des données de l&#8217;application
-| Oui
-| TD
-| <a href="#reglages-app">Manuel</a></p>
-</div>
-<div class="paragraph">
-<p>5+| Les projets</p>
-</div>
-<div class="paragraph">
-<p>| Ajout d&#8217;un projet
-| Le bouton ”+” qui permet d&#8217;ajouter un projet à Board.
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Définition des extra-data d&#8217;un projet
-| par le bouton "Extra-data"
-| TD
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Suppression d&#8217;un projet
-| Retire la carte du projet de Board (fichier de carte détruit)
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Modification du titre d&#8217;un projet
-| Renommage du titre affiché sur la carte projet
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Déplacement d&#8217;un projet
-| Réorganisation des cartes projet par glisser-déposer
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>5+| Les services</p>
-</div>
-<div class="paragraph">
-<p>| Attribution d&#8217;un service à un projet
-| Glisser-déposer un service (commun ou personnalisé) depuis le panneau de services jusqu&#8217;à une carte projet
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Retrait d&#8217;un service d&#8217;un projet
-| Glisser-déposer un service attribué hors de la carte projet pour le retirer
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ajout d&#8217;un service aux "services au démarrage"
-| Glisser-déposer un service jusqu&#8217;à la zone "Services au démarrage" d&#8217;un projet
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Exécution des services au démarrage
-| Lancement automatique des services attribués à un projet lors de son ouverture/activation
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ouverture du dossier du projet
-| Service commun : ouvre une fenêtre Finder positionnée/dimensionnée sur le dossier du projet
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Démarrage de l&#8217;horloge de travail
-| Service commun "work-clock" : minuteur de session/tranche de travail
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Édition de la documentation
-| Service commun : ouvre le dossier de documentation du projet dans l&#8217;éditeur configuré
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ouverture de la documentation
-| Service commun "open-a-file" : ouvre le fichier principal du manuel (html/pdf) du projet
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Initialisation de la documentation
-| Service commun "init-documentation" : crée la structure de documentation dans un dossier choisi
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Actualisation de la documentation
-| Service commun "update-documentation" : régénère la documentation à partir du fichier .adoc principal
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ouverture d&#8217;un Terminal au dossier du projet
-| Service commun "open-terminal-at-folder"
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Retrait des services au démarrage
-| Glisser un service hors de la zone "Services au démarrage" ; le bouton "GO!" disparaît quand il n&#8217;en reste plus
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Exécution répétée d&#8217;un service attribué
-| Relancer un service déjà attribué à un projet plusieurs fois de suite
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Panneau des réglages de l&#8217;application
-| Édition des données globales de l&#8217;app (champs string/app), persistantes après rechargement
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Création d&#8217;un projet sans sélection Finder
-| Cas d&#8217;erreur : clic sur "OK" sans avoir sélectionné de dossier dans le Finder
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ouverture d&#8217;iTerm au dossier du projet
-| Service commun "open-iterm-at-folder"
-| TD
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ouverture du projet dans VSCode
-| Service commun "open-in-vscode"
-| TD
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Création d&#8217;un projet, sélection Finder = un fichier
-| Cas d&#8217;erreur : la sélection Finder doit être un dossier, pas un fichier
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Seuils de l&#8217;horloge de travail
-| Alertes/changement d&#8217;état de "work-clock" au franchissement des seuils de durée
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Fin de séance d&#8217;horloge : changelog + todo
-| À l&#8217;arrêt de "work-clock", saisie d&#8217;une entrée de changelog puis d&#8217;une todo, écrites dans CHANGELOG.md/TODO.md du projet
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>5+| Les services personnalisés</p>
-</div>
-<div class="paragraph">
-<p>| Ouverture d&#8217;une fenêtre dans le Finder
-| Service personnalisé "open-finder-window" : ouvre une fenêtre Finder aux position/taille/sidebar définis
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Jouer un script
-| Service personnalisé "run-script" : exécute un script choisi
-| Oui
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Versionner un fichier/dossier
-| Service personnalisé "file-versioning" : incrémente le numéro de version (patch/mineure/majeure), archive optionnelle
-| TD
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Ouvrir une URL
-| Service personnalisé "open-URL"
-| TD
-| TD
-| TD</p>
-</div>
-<div class="paragraph">
-<p>| Chronomètre
-| Service personnalisé "run-chronometre" : mesure un temps, option d&#8217;enregistrement du temps de travail
-| TD
-| TD
-| TD</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Nom</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Test</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Docu</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Man</strong></th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">=== Les projet ===</p>
-<p class="tableblock">La persistance de l&#8217;ordre est définie dans <code>appdata.json</code>, dans la propriété <code>projects-in</code>. Cette donnée contient l&#8217;identifiant des projets, donc le root du fichier YAML de leurs données.</p>
-<p class="tableblock">=== AppleScript ===</p>
-<p class="tableblock">:backend-dir: ../../../../backend</p>
-<p class="tableblock"><strong>include::../../../../frontend/js/App.js[tag=app-name]</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
-<p class="tableblock">Une librairie avec des méthodes utiles est implémentée dans backend/script/lib/Lib.scpt (c&#8217;est un exécutable qui ne peut pas être modifié, il faut modifier <code>Lib-editable.scpt</code>).</p>
-<p class="tableblock">Pour pouvoir utiliser cette librairie dans n&#8217;importe quel script, il faut :</p>
-<p class="tableblock">- ajouter le nom de ce script dans <code>OSASCRIPT_WITH_LIB</code> dans <code>backend/lib/userfull.rb</p>
-<p class="tableblock">- ajouter en haut de son fichier :</p>
-<p class="tableblock">====
-on run argv
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">L&#8217;Application</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Réglage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des données de l&#8217;application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#reglages-app">Manuel</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Les projets</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ajout d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le bouton ”+” qui permet d&#8217;ajouter un projet à Board.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des extra-data d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">par le bouton "Extra-data"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Suppression d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retire la carte du projet de Board (fichier de carte détruit)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Modification du titre d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renommage du titre affiché sur la carte projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Déplacement d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Réorganisation des cartes projet par glisser-déposer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Les services</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Attribution d&#8217;un service à un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser-déposer un service (commun ou personnalisé) depuis le panneau de services jusqu&#8217;à une carte projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrait d&#8217;un service d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser-déposer un service attribué hors de la carte projet pour le retirer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ajout d&#8217;un service aux "services au démarrage"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser-déposer un service jusqu&#8217;à la zone "Services au démarrage" d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exécution des services au démarrage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lancement automatique des services attribués à un projet lors de son ouverture/activation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture du dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun : ouvre une fenêtre Finder positionnée/dimensionnée sur le dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Démarrage de l&#8217;horloge de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "work-clock" : minuteur de session/tranche de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Édition de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun : ouvre le dossier de documentation du projet dans l&#8217;éditeur configuré</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-a-file" : ouvre le fichier principal du manuel (html/pdf) du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Initialisation de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "init-documentation" : crée la structure de documentation dans un dossier choisi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actualisation de la documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "update-documentation" : régénère la documentation à partir du fichier .adoc principal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture d&#8217;un Terminal au dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-terminal-at-folder"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrait des services au démarrage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Glisser un service hors de la zone "Services au démarrage" ; le bouton "GO!" disparaît quand il n&#8217;en reste plus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exécution répétée d&#8217;un service attribué</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relancer un service déjà attribué à un projet plusieurs fois de suite</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau des réglages de l&#8217;application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Édition des données globales de l&#8217;app (champs string/app), persistantes après rechargement</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création d&#8217;un projet sans sélection Finder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cas d&#8217;erreur : clic sur "OK" sans avoir sélectionné de dossier dans le Finder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture d&#8217;iTerm au dossier du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-iterm-at-folder"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture du projet dans VSCode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service commun "open-in-vscode"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création d&#8217;un projet, sélection Finder = un fichier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cas d&#8217;erreur : la sélection Finder doit être un dossier, pas un fichier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Seuils de l&#8217;horloge de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alertes/changement d&#8217;état de "work-clock" au franchissement des seuils de durée</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fin de séance d&#8217;horloge : changelog + todo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">À l&#8217;arrêt de "work-clock", saisie d&#8217;une entrée de changelog puis d&#8217;une todo, écrites dans CHANGELOG.md/TODO.md du projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Les services personnalisés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouverture d&#8217;une fenêtre dans le Finder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "open-finder-window" : ouvre une fenêtre Finder aux position/taille/sidebar définis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jouer un script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "run-script" : exécute un script choisi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Versionner un fichier/dossier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "file-versioning" : incrémente le numéro de version (patch/mineure/majeure), archive optionnelle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvrir une URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "open-URL"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chronomètre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service personnalisé "run-chronometre" : mesure un temps, option d&#8217;enregistrement du temps de travail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_les_projet">Les projet</h3>
+<div class="paragraph">
+<p>La persistance de l&#8217;ordre est définie dans <code>appdata.json</code>, dans la propriété <code>projects-in</code>. Cette donnée contient l&#8217;identifiant des projets, donc le root du fichier YAML de leurs données.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_applescript">AppleScript</h3>
+<div class="paragraph">
+<p><strong>include::../../../../frontend/js/App.js[tag=app-name]</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
+</div>
+<div class="paragraph">
+<p>Une librairie avec des méthodes utiles est implémentée dans backend/script/lib/Lib.scpt (c&#8217;est un exécutable qui ne peut pas être modifié, il faut modifier <code>Lib-editable.scpt</code>).</p>
+</div>
+<div class="paragraph">
+<p>Pour pouvoir utiliser cette librairie dans n&#8217;importe quel script, il faut :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ajouter le nom de ce script dans <code>OSASCRIPT_WITH_LIB</code> dans `backend/lib/userfull.rb</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ajouter en haut de son fichier :</p>
+</li>
+</ul>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>on run argv
   set libPath to item 1 of argv
   set Lib to load script POSIX file libPath</p>
-<p class="tableblock">	&#8230;&#8203;
-====</p>
-<p class="tableblock">Ou la version complète pour développement :</p>
-<p class="tableblock">====
-on run argv
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Ou la version complète pour développement :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>on run argv
 	try
 		set libPath to item 1 of argv
 		set Lib to load script POSIX file libPath
 	on error errMsg number errNum
 		return "{\"ok\": false, \"error\":\"ERREUR CHARGEMENT LIBRAIRIE : " &amp; errMsg &amp; " avec " &amp; libPath &amp; "\"}"
 	end try
-	&#8230;&#8203;
-====</p>
-<p class="tableblock">=== Collecte informations ===</p>
-<p class="tableblock"><em>Note : Ce fichier définit des processus qui seront en pratique plus tard. Pour le moment, l&#8217;utilisateur remplit des fiches projet qui le définissent explicitement.</em></p>
-<p class="tableblock">Chaque <a href="#services">service</a> a besoin de collecter des informations. Pour ce faire, il y a :</p>
-<p class="tableblock">- les informations directement demandées à l&#8217;utilisateur (p.e. : titre à donner à un service)
-- les informations récupérées automatiquement par script (p.e. : information sur la fenêtre dans le Finder)</p>
-<p class="tableblock">----
-- un service est déplacé sur la carte du projet
-- le service demande ses informations, c&#8217;est une suite d&#8217;opérations
+	&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_collecte_informations">Collecte informations</h3>
+<div class="paragraph">
+<p><em>Note : Ce fichier définit des processus qui seront en pratique plus tard. Pour le moment, l&#8217;utilisateur remplit des fiches projet qui le définissent explicitement.</em></p>
+</div>
+<div class="paragraph">
+<p>Chaque <a href="#services">service</a> a besoin de collecter des informations. Pour ce faire, il y a :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>les informations directement demandées à l&#8217;utilisateur (p.e. : titre à donner à un service)</p>
+</li>
+<li>
+<p>les informations récupérées automatiquement par script (p.e. : information sur la fenêtre dans le Finder)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- un service est déplacé sur la carte du projet
+- le service demande ses informations, c'est une suite d'opérations
   simples comme :
     - demander le titre à donner
-    - lancer le script de collecte d&#8217;information fenêtre
+    - lancer le script de collecte d'information fenêtre
     - demander confirmation
-    - créer le service
-----</p>
-<p class="tableblock">Le service définit les informations dont il a besoin. Par exemple, pour l&#8217;ouverture d&#8217;une fenêtre Finder :</p>
-<p class="tableblock">- le path au dossier
-- la position et la taille
-- le type de vue</p>
-<p class="tableblock">=== Définition des services ===</p>
-<p class="tableblock">L&#8217;intégralité des services est définie dans le fichier `frontend/js/ServicesData.js</code></p>
-<p class="tableblock">Les <a href="#services">[services]</a> connaissent toujours deux états :</p>
-<p class="tableblock">- l&#8217;état en tant que service absolu, qui peut être incorporé à un projet
-- l&#8217;éta dans un projet, donc le service concret.</p>
-<p class="tableblock">Par exemple, on peut avoir :</p>
-<p class="tableblock">- le service abstrait <code>open-finder-window</code> qui peut ouvrir une fenêtre de Finder,
-- une ouverture de fenêtre précise dans un projet précis.</p>
-<p class="tableblock">Les différences se trouvent ici :</p></td>
+    - créer le service</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le service définit les informations dont il a besoin. Par exemple, pour l&#8217;ouverture d&#8217;une fenêtre Finder :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le path au dossier</p>
+</li>
+<li>
+<p>la position et la taille</p>
+</li>
+<li>
+<p>le type de vue</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_définition_des_services_2">Définition des services</h3>
+<div class="paragraph">
+<p>L&#8217;intégralité des services est définie dans le fichier <code>frontend/js/ServicesData.js</code></p>
+</div>
+<div class="paragraph">
+<p>Les <a href="#services">Les services</a> connaissent toujours deux états :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>l&#8217;état en tant que service absolu, qui peut être incorporé à un projet</p>
+</li>
+<li>
+<p>l&#8217;éta dans un projet, donc le service concret.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Par exemple, on peut avoir :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le service abstrait <code>open-finder-window</code> qui peut ouvrir une fenêtre de Finder,</p>
+</li>
+<li>
+<p>une ouverture de fenêtre précise dans un projet précis.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Les différences se trouvent ici :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Service abstrait</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Service concret</strong></p></td>
 </tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>| <strong>Service abstrait</strong>    | <strong>Service concret</strong>
-| reconnu par <code>id</code>        | même id, mais pas utilisé
-| pas d'`uuid`            | reconnu par <code>uuid</code></p>
-</div>
-<div class="paragraph">
-<p>| <code>id</code> correspond au script qui sera joué : <code>mot-dans-un</code> → <code>scripts/MotDansUn.script</code>
-| <code>uuid</code> ne correspond à l&#8217;identifiant (utiliser pour suppression, déplacement, etc.)</p>
-</div>
-<div class="paragraph">
-<p>| <code>params</code> est une table qui définit précisément chaque paramètre utile.
-| <code>params</code> est une <strong>liste</strong> de valeurs qui seront ajoutées en argument du script.
-| <code>params</code> est une table
-| <code>params</code> est une liste de valeurs sans indication.<br>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reconnu par <code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">même id, mais pas utilisé</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pas d'`uuid`</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reconnu par <code>uuid</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code> correspond au script qui sera joué : <code>mot-dans-un</code> → <code>scripts/MotDansUn.script</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code> ne correspond à l&#8217;identifiant (utiliser pour suppression, déplacement, etc.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une table qui définit précisément chaque paramètre utile.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une <strong>liste</strong> de valeurs qui seront ajoutées en argument du script.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une table</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code> est une liste de valeurs sans indication.<br>
 L&#8217;ordre est défini dans <code>paramsOrder</code> mais purement à titre indicatif car les nom
-des propriétés ne correspondent à rien.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Noter surtout la différence importante au niveau de la propriété <code>params</code>.</p>
-<p class="tableblock">==== Backend ====</p>
-<p class="tableblock">Tout comme le reste, le backend (<code>backend.rb</code>) est réduit à l&#8217;essentiel.</p>
-<p class="tableblock">Pour l&#8217;exécution du service, rien n&#8217;est besoin d&#8217;être ajouté.</p>
-<p class="tableblock">Pour la définition, il peut être nécessaire d&#8217;ajouter des scripts, mais beaucoup de choses peuvent être faite en utilisant l&#8217;action <code>run-osascript</code> ou <code>run-bashscript</code> pour jouer un script du dossier <code>backend/scripts/</code></p>
-<p class="tableblock">=== Définition des services ===</p>
-<p class="tableblock">Les services sont définis précisément dans le fichier <code>frontend/js/ServiceData.js</code>.</p>
-<p class="tableblock">[cols="1,3,1"]</p></td>
+des propriétés ne correspondent à rien.</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <strong>Propriété</strong> | <strong>Description</strong> | <strong>Note</strong>
-| <code>id</code>        | Identifiant du service |
-|           2+| Cet identifiant permet de produire le nom du <a href="#script-backend">script backend</a>.
-| <code>name</code>    2+| Nom du service, qui sera personnalisé par l&#8217;user dès l&#8217;affectation.
-| <code>params</code>    | Définition des <a href="#fix-params"><em>paramètres fixes</em></a> |
-| <code>dynParams</code> | Définition des <a href="#dyn-params"><em>paramètres dynamiques</em></a> |
-| <code>scType</code>    | Le type du <a href="#script-backend">script backend</a> si ça n&#8217;est pas un AppleScript | <code>.rb</code>, <code>.py</code>
-| <code>afterDefinedParams</code> | Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l&#8217;enregistrement. |</p>
+<p>Noter surtout la différence importante au niveau de la propriété <code>params</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_backend">Backend</h4>
+<div class="paragraph">
+<p>Tout comme le reste, le backend (<code>backend.rb</code>) est réduit à l&#8217;essentiel.</p>
+</div>
+<div class="paragraph">
+<p>Pour l&#8217;exécution du service, rien n&#8217;est besoin d&#8217;être ajouté.</p>
+</div>
+<div class="paragraph">
+<p>Pour la définition, il peut être nécessaire d&#8217;ajouter des scripts, mais beaucoup de choses peuvent être faite en utilisant l&#8217;action <code>run-osascript</code> ou <code>run-bashscript</code> pour jouer un script du dossier <code>backend/scripts/</code></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_définition_des_services_3">Définition des services</h3>
+<div class="paragraph">
+<p>Les services sont définis précisément dans le fichier <code>frontend/js/ServiceData.js</code>.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">==== Paramètres fixes et paramètres dynamiques ====</p>
-<p class="tableblock">Tous les services fonctionnent avec des <strong>paramètres fixes</strong> défines au moment de l&#8217;affectation d&#8217;un service à un projet. La première de ces paramètres fixes est le nom propre au projet du service. Par exemple, si le nom (<code>name</code>) du service est “Versionner un fichier”, le nom défini pour le projet par l&#8217;utilisateur au moment de l&#8217;affectation du service peut devenir “Versionner le manuscrit”.</p>
-<p class="tableblock">Certains services nécessitent aussi des <em>paramètres dynamique</em> qui, elles, sont définies à la volée au moment de l&#8217;utilisation du service. Par exemple, au moment de versionner le manuscrit, <em>Board</em> va demander s&#8217;il faut incrémenter le numéro de path, de version mineur ou de version majeure.</p>
-<p class="tableblock">[#fix-params]
-===== Définition des paramètres fixes =====</p>
-<p class="tableblock">Ces paramètres sont définis dans le fichier <code>frontend/js/ServiceData.js</code>. Si ces données sont modifiées, il faut lancer le script <code>update.command</code> à la racine de l&#8217;application.</p>
-<p class="tableblock">Une définition ressemble à :</p>
-<p class="tableblock">====
-    , params: [
-        {id: 'window', q: null, value: null, type: 'finder-window', required: true},
-        {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
-      ]
-====</p>
-<p class="tableblock">[cols="1,3"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Propriété</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Note</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifiant du service</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Cet identifiant permet de produire le nom du <a href="#script-backend">script backend</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Nom du service, qui sera personnalisé par l&#8217;user dès l&#8217;affectation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des <a href="#fix-params"><em>paramètres fixes</em></a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dynParams</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des <a href="#dyn-params"><em>paramètres dynamiques</em></a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le type du <a href="#script-backend">script backend</a> si ça n&#8217;est pas un AppleScript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.rb</code>, <code>.py</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>afterDefinedParams</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l&#8217;enregistrement.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_paramètres_fixes_et_paramètres_dynamiques">Paramètres fixes et paramètres dynamiques</h4>
+<div class="paragraph">
+<p>Tous les services fonctionnent avec des <strong>paramètres fixes</strong> défines au moment de l&#8217;affectation d&#8217;un service à un projet. La première de ces paramètres fixes est le nom propre au projet du service. Par exemple, si le nom (<code>name</code>) du service est “Versionner un fichier”, le nom défini pour le projet par l&#8217;utilisateur au moment de l&#8217;affectation du service peut devenir “Versionner le manuscrit”.</p>
+</div>
+<div class="paragraph">
+<p>Certains services nécessitent aussi des <em>paramètres dynamique</em> qui, elles, sont définies à la volée au moment de l&#8217;utilisation du service. Par exemple, au moment de versionner le manuscrit, <em>Board</em> va demander s&#8217;il faut incrémenter le numéro de path, de version mineur ou de version majeure.</p>
+</div>
+<div class="sect4">
+<h5 id="fix-params">Définition des paramètres fixes</h5>
+<div class="paragraph">
+<p>Ces paramètres sont définis dans le fichier <code>frontend/js/ServiceData.js</code>. Si ces données sont modifiées, il faut lancer le script <code>update.command</code> à la racine de l&#8217;application.</p>
+</div>
+<div class="paragraph">
+<p>Une définition ressemble à :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>, params: [
+    {id: 'window', q: null, value: null, type: 'finder-window', required: true},
+    {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
+  ]</pre>
+</div>
+</div>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fournit l&#8217;identifiant de l&#8217;élément DOM qui va contenir la valeur (<code>#<em>&lt;id&gt;</em>.value</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>q</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit la question qui sera posée à l&#8217;utilisateur pour définir le paramètre.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit le type du champ d&#8217;édition(select, text-field, etc.). Voir tous les <a href="#types-champ-param">types de champ d&#8217;édition</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Autres valeurs qui peuvent être définies en fonction du <code>type`</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <code>id</code>    | fournit l&#8217;identifiant de l&#8217;élément DOM qui va contenir la valeur (<code>#<em>&lt;id&gt;</em>.value</code>)
-| <code>q</code>     | définit la question qui sera posée à l&#8217;utilisateur pour définir le paramètre.
-| <code>type</code>  | définit le type du champ d&#8217;édition(select, text-field, etc.). Voir tous les <a href="#types-champ-param">types de champ d&#8217;édition</a>
-2+| Autres valeurs qui peuvent être définies en fonction du <code>type`</code>
-| <code>values</code>  | définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]</p>
+<p>Ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
+</div>
+<div class="paragraph">
+<p>Pour mémoire seulement, on peut les définir dans <code>paramsOrder</code> :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>, paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p><a id="types-champ-param"></a> <strong>Types de champs d&#8217;édition des paramètres</strong></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+<col style="width: 25%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
-<p class="tableblock">Pour mémoire seulement, on peut les définir dans <code>paramsOrder</code> :</p>
-<p class="tableblock">====
-    , paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']
-====</p>
-<p class="tableblock"><a id="types-champ-param"></a> <strong>Types de champs d&#8217;édition des paramètres</strong></p>
-<p class="tableblock">[cols="1,2,1"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong> Type</strong>*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Valeurs</strong> (if any)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True ou False</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">---</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>select</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un menu classique</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[x, y, &#8230;&#8203;]</code> ou <code>[[x, "nom x"], [y, "nom y"], …]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un chemin d&#8217;accès</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">---</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>finder-window</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Une fenêtre de Finder (position, taille, type de vue, sidebar, etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="dyn-params">Défintion des paramètres dynamiques</h5>
+<div class="paragraph">
+<p>Ils se définissent dans la propriété <code>dynParams</code>. Par exemple :</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>, dynParams: [
+    {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
+  ] </pre>
+</div>
+</div>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fournit l&#8217;identifiant de l&#8217;élément DOM qui va contenir la valeur (<code>#__&lt;id&gt;</code>.value)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>q</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit la question qui sera posée à l&#8217;utilisateur.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit le type d&#8217;interface (select, text-field, etc.).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Autres valeurs qui peuvent être définies en fonction du <code>type`</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <strong> Type</strong>*      | <strong>Description</strong> | <strong>Valeurs</strong> (if any)
-| <code>boolean</code>       | True ou False   | ---
-| <code>select</code>        | Un menu classique | <code>[x, y, &#8230;&#8203;]</code> ou <code>[[x, "nom x"], [y, "nom y"], …]</code>
-| <code>path</code>          | Un chemin d&#8217;accès | ---
-| <code>finder-window</code> 2+| Une fenêtre de Finder (position, taille, type de vue, sidebar, etc.)</p>
+<p>Comme pour les <em>paramètres fixes</em>, ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="script-backend">Script Backend</h4>
+<div class="paragraph">
+<p>On appelle <em>Script Backend</em> le script placé dans le dossier <code>backend/scripts/</code> qui va procéder à l&#8217;opération propre au service. Le script, par exemple, qui va changer la version du fichier.</p>
+</div>
+<div class="paragraph">
+<p>Le <strong>nom</strong> du script ne peut pas être choisi au hasard, il correspond à l'`id` du service (par exemple "versionner-fichier") camelisé ("VersionnerFichier"). Son extension correspond bien entendu à son langage.</p>
+</div>
+<div class="paragraph">
+<p>Dans ce script, qui peut être un script AppleScript, un script ruby, bash ou autre langage, les paramètres sont reçus <em>à l&#8217;aveugle</em> et en string.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">[#dyn-params]
-===== Défintion des paramètres dynamiques =====</p>
-<p class="tableblock">Ils se définissent dans la propriété <code>dynParams</code>. Par exemple :</p>
-<p class="tableblock">====
-    , dynParams: [
-        {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
-      ] 
-====</p>
-<p class="tableblock">[cols="1,3"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>À l&#8217;aveugle</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ils sont connus par leur ordre, sans aucune indication de ce qu&#8217;ils sont</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>En string</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Toutes les valeurs sont des chaines de caractères, mais "true" ou "12".</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>| <code>id</code>    | fournit l&#8217;identifiant de l&#8217;élément DOM qui va contenir la valeur (<code>#__&lt;id&gt;</code>.value)
-| <code>q</code>     | définit la question qui sera posée à l&#8217;utilisateur.
-| <code>type</code>  | définit le type d&#8217;interface (select, text-field, etc.).
-2+| Autres valeurs qui peuvent être définies en fonction du <code>type`</code>
-| <code>values</code>  | définit les valeurs pour un menu select. Peut être [x, y, …] ou [[x, "nom x"], [y, "nom y"], …]</p>
+<p><strong>Ordre des paramètres dans le script</strong></p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Comme pour les <em>paramètres fixes</em>, ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
-<p class="tableblock">[#script-backend]
-==== Script Backend ====</p>
-<p class="tableblock">On appelle <em>Script Backend</em> le script placé dans le dossier <code>backend/scripts/</code> qui va procéder à l&#8217;opération propre au service. Le script, par exemple, qui va changer la version du fichier.</p>
-<p class="tableblock">Le <strong>nom</strong> du script ne peut pas être choisi au hasard, il correspond à l'`id` du service (par exemple "versionner-fichier") camelisé ("VersionnerFichier"). Son extension correspond bien entendu à son langage.</p>
-<p class="tableblock">Dans ce script, qui peut être un script AppleScript, un script ruby, bash ou autre langage, les paramètres sont reçus <em>à l&#8217;aveugle</em> et en string.</p>
-<p class="tableblock">[cols="1,3", width="auto"]</p></td>
-</tr>
-</tbody>
-</table>
 <div class="paragraph">
-<p>| <em>À l&#8217;aveugle</em> | Ils sont connus par leur ordre, sans aucune indication de ce qu&#8217;ils sont
-| <em>En string</em>     | Toutes les valeurs sont des chaines de caractères, mais "true" ou "12".</p>
+<p>L&#8217;ordre de réception des paramètres est celui défini par l&#8217;ordre des définitions des paramètres dans le fichier <code>ServiceData.js</code>. Le problème est que certains type de champ retourne plusieurs valeurs. C&#8217;est le cas typique, par exemple, pour le type <code>finder-window</code> qui retourne la position (2 valeurs), la taille (2 valeurs), le type de vue, etc. pour le seul paramètre <code>window</code>. Pour parlier ce problème, on peut renseigner la propriété d&#8217;aide <code>paramsOrder</code> avec l&#8217;ordre des paramètres.</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Ordre des paramètres dans le script</strong></p>
-<p class="tableblock">L&#8217;ordre de réception des paramètres est celui défini par l&#8217;ordre des définitions des paramètres dans le fichier <code>ServiceData.js</code>. Le problème est que certains type de champ retourne plusieurs valeurs. C&#8217;est le cas typique, par exemple, pour le type <code>finder-window</code> qui retourne la position (2 valeurs), la taille (2 valeurs), le type de vue, etc. pour le seul paramètre <code>window</code>. Pour parlier ce problème, on peut renseigner la propriété d&#8217;aide <code>paramsOrder</code> avec l&#8217;ordre des paramètres.</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </div>

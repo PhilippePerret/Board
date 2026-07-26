@@ -23,7 +23,7 @@ begin
     table[:ok] = false
     # On va épurer le message avant de l'envoyer
     res = res.gsub(/asciidoctor:/, '')
-      .gsub(/(ERROR|WARNING)/, "\n$1")
+      .gsub(/(ERROR|WARNING)/, "\n\\1")
     table[:error] = res
   end
 

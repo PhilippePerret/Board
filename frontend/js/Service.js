@@ -32,6 +32,18 @@ class Service {
   }
 
   /**
+   * Jouer un service hors d'un click
+   * 
+   * Inauguré par exemple pour le panneau d'erreur, quand le bouton
+   * "OK" permet une action. Lors de l'actualisation de la docu, si
+   * une erreur survient, on peut demander l'édition de cette docu
+   * par ce biai en jouant le service 'edit-documentation'
+   */
+  static runService(serviceId) {
+    console.error("Je dois apprendre à jouer un service", serviceId)
+  }
+
+  /**
    * Ajout du service dans le dictionnaire
    * 
    * ATTENTION
