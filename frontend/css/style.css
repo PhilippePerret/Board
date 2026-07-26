@@ -11,7 +11,19 @@ body {
 }
 * {
   font-size: 16pt;
+}
+
+button,
+label,
+a,
+fieldset > legend,
+h1, h2, h3, h4, h5, h6,
+header div#app-name,
+header div#help-link,
+header div#debug-button,
+header div#tools-button {
   user-select: none!important;
+  -webkit-user-select: none!important;
 }
 
 .hidden {display:none;}
