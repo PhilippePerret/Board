@@ -157,3 +157,17 @@ button.btn-add-project {
 div#tools button.btn-add-project {
   font-family: -apple-system;
 }
+
+button.aide {
+  all: unset;
+  font-family: "Arial Rounded MT Bold";
+  font-size: 0.8em;
+  display: inline-block;
+  margin-left: 1em;
+  border: 1px solid;
+  border-radius: 1em;
+  width: 1.5em;
+  cursor: pointer;
+  background-color: cadetblue;
+  color: white;
+}

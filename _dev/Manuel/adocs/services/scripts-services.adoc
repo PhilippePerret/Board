@@ -1,13 +1,23 @@
 [[scripts-services, les scripts-services]]
 == Les scripts-services ==
 
-Les _scripts-services_ ouvrent définitivement la voie de l'infini pour définir les services d'un projet. Ils permettent de **composer soi-même un service** en exploitant toutes les ressources de l'application.
+Les _scripts-services_ offrent des possibilités infinies pour gérer ses projets. Ils permettent de **composer soi-même un service complexe** en exploitant toutes les ressources de l'application. Le tout premier script-service composé au moment de l'implémentation de cette application a permis de produire, avec un simple clic sur un bouton : 
 
-Mais tout pouvoir puissant implique des responsabilités à ses proportions, comme nous le verrons.
+- choisir une maison d'édition (ME),
+- ou en créer une nouvelle,
+- faire un dossier d'envoi pour cette ME, dans le dossier `envois` du projet,
+- choisir le manuscript courant s'il n'était pas déjà défini
+- dupliquer dans le dossier de la ME le manuscript courant à envoyer,
+- créer un fichier avec l'adresse et le téléphone de la ME,
+- incrémenter l'historique des envois en y ajoutant cet envoi, avec la date (différée ou non).
+
+Tout cela, nous le redisons : par un simple clique sur un bouton.
+
+ATTENTION: Tout pouvoir puissant, cependant, implique des responsabilités proportionnelles, comme nous le verrons. Il est donc conseillé d'avancer doucement dans la conception de ces _scripts-services_ jusqu'à se sentir suffisamment à l'aise pour en composer des compliqués.
 
 === Liste complète des types assemblables ===
 
-_Utiliser la table ci-dessous pour un accès rapide aux différents type de service_
+_Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la table ci-dessous pour un accès rapide aux différents types de service_
 
 [cols="1,3, 1"]
 |====
@@ -32,163 +42,6 @@ _Utiliser la table ci-dessous pour un accès rapide aux différents type de serv
 | <<scserv-type-text>>              | Obtenir une valeur texte (multi lignes).  |
 | <<scserv-type-phone>>             | Obtenir un numéro de téléphone.           |
 |====
-
-[[scserv-use-variable, utilisation des variables]]
-=== Utilisation des variables (valeur d’étape) ===
-
-Dans un script-service, il est souvent utile de définir des variables et d'y faire référence.
-
-Une variable, dans un script-service, est **une valeur d'étape**, on y fait référence par : 
-
-----
-${<id d'étape>}
-----
-
-TIP: Dans la suite, dès que nous parlerons de _**valeur d’étape**_ il faudra donc comprendre qu'il s'agit de la valeur que prend l'étape au cours de son exécution ou la valeur qu'on lui définit explicitement.
-
-Certaines variables se définissent en une seule fois, par exemple avec le type <<scserv-type-select>> :
-
-----
-- id: 'le-nombre'
-  type: select
-  values: [1,2,3,4,5]
-  q: "Choisissez un nombre"
-----
-
-Avec cette étape, l'user choisira un nombre de 1 à 5 et ce nombre deviendra la _valeur de l'étape `le-nombre`_ et pourra donc être utilisé avec `${le-nombre}`.
-
-Par exemple pour une condition :
-
-----
-# Étape conditionnelle qui n'est jouée que le
-# le nombre choisi est supérieur à 4
-- if: "${le-nombre} > 4"
-  id: etape-si-cinq
-  ...
-----
-
-On peut également définir une variable explicitement grâce au type d'étape <<scserv-type-set>>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à _définir la valeur d'une étape_. Si je joue :
-
-----
-- id: le-nombre
-  type: set
-  value: 3
-----
-
-… alors je mets explicitement la valeur de l'étape `le-nombre` à 3.
-
-Utilisé de cette manière l'usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j'ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :
-
-----
-- id: nom
-  type: set
-  value: "la Bhagavad-Gītā"
-----
-
-Je peux alors simplifier l'écriture des messages :
-
-----
-- id: version
-  type: select
-  q: "Quelle version de ${nom} dois-je prendre en référence ?
-  values: [1,2,3]
-----
-
-[[scserv-vars-affectation-complexe]]
-==== Affectation plus complexe de variables ====
-
-Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l'utilisation de _constantes_ que de véritables _variables_ dont la valeur dépend en réalité du contexte.
-
-Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c'est-à-dire leur utilisation dans n'importe quel projet similaire (i.e. définissant les mêmes données).
-
-----
-- id: project-name
-  type: get-project-data
-  key: title
-----
-
-Grâce au type de service <<scserv-type-get-project-data>>, nous pouvons obtenir la propriété `title` (titre) du projet et la stocker en valeur de l'étape. On peut ensuite l'utiliser avec `${project-name}` :
-
-----
-- id: pour-voir
-  q: "Que voulez-vous faire de “${project-name}” ?"
-  ...
-----
-
-> À titre de rappel, les propriétés de base de tout projet sont `title`, `id` et `path`, mais on peut en ajouter autant que l'on veut notamment grâce au type <<scserv-type-set-project-data>>.
-
-Nous pouvons aller encore plus loin dans l'affectation des variables et c'est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l'on veut que l'utilisateur puisse donner une valeur propre, c'est-à-dire autres que celles proposées. Vous vous souvenir de l'affectation d'un nombre, tout à l'heure, à la valeur d'une variable (la valeur de l'étape). Pour que l'user puisse utiliser sa propre valeur, il suffit de définir le paramètre `create` :
-
-----
-- id: le-nombre
-  type: select
-  values: [1,2,3,4,5]
-  q: "Choisissez un nombre"
-  create: "Autre valeur…"
-----
-
-Cette fois, l'user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu'il a cliqué sur le bouton car la valeur de `${le-nombre}` sera vide. Nous la testons et lui proposons alors d'entrer sa valeur :
-
-----
-- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  translate: integer # pour transformer la chaine en nombre
-----
-
-Grâce à cette étape, l'user va pouvoir donner sa valeur.
-
-Le problème, c'est qu'elle sera consignée dans `${autre-valeur}` alors que plus tard, nous en aurons besoin dans `${le-nombre}`. Pour ce faire, il nous suffit de définir le paramètre `set` avec le nom de l'autre étape : 
-
-----
-- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  translate: integer # pour transformer la chaine en nombre
-  set: le-nombre
-----
-
-Attention de ne pas affecter la valeur trop vite ! Prenons l'exemple d'une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire : 
-
-----
-- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  transform: integer # pour transformer la chaine en nombre
-  set: le-nombre
-
-- if: "${le-nombre} = ''"
-  id: save-nombre-in-project
-  type: set-project-data
-  value: "${le-nombre}"
-----
-
-Ça ne fonctionnerait pas parce qu'au moment de la ligne : 
-
-----
-- if: "${le-nombre} = ''"
-----
-
-`${le-nombre}` ne sera plus vide puisqu'il aura été défini juste au-dessus (`set: le-nombre` qui signifie "définir la valeur de l'étape `le-nombre` avec la valeur de cette étape).
-
-Il faut donc faire : 
-
-----
-- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  transform: integer # pour transformer la chaine en nombre
-
-- if: "${le-nombre} = ''"
-  id: save-nombre-in-project
-  type: set-project-data
-  value: "${autre-valeur}"
-  set: le-nombre
-----
 
 
 [[script-services-steps]]
@@ -809,3 +662,163 @@ _Texte_, ci-dessus, signifie un texte multi-lignes.
 ==== Obtenir un numéro de téléphone ====
 
 Typiquement, ces méthodes permettent surtout d'ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l'implémentation de ce type, il servait à ajouter des fichers de maisons d'édition pour l'envoi d'un manuscrit.
+
+
+
+[[scserv-use-variable, utilisation des variables]]
+=== Utilisation des variables (valeur d’étape) ===
+
+Dans un script-service, il est souvent utile de définir des variables et d'y faire référence.
+
+Une variable, dans un script-service, est **une valeur d'étape**, on y fait référence par : 
+
+----
+${<id d'étape>}
+----
+
+TIP: Dans la suite, dès que nous parlerons de _**valeur d’étape**_ il faudra donc comprendre qu'il s'agit de la valeur que prend l'étape au cours de son exécution ou la valeur qu'on lui définit explicitement.
+
+Certaines variables se définissent en une seule fois, par exemple avec le type <<scserv-type-select>> :
+
+----
+- id: 'le-nombre'
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+----
+
+Avec cette étape, l'user choisira un nombre de 1 à 5 et ce nombre deviendra la _valeur de l'étape `le-nombre`_ et pourra donc être utilisé avec `${le-nombre}`.
+
+Par exemple pour une condition :
+
+----
+# Étape conditionnelle qui n'est jouée que le
+# le nombre choisi est supérieur à 4
+- if: "${le-nombre} > 4"
+  id: etape-si-cinq
+  ...
+----
+
+On peut également définir une variable explicitement grâce au type d'étape <<scserv-type-set>>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à _définir la valeur d'une étape_. Si je joue :
+
+----
+- id: le-nombre
+  type: set
+  value: 3
+----
+
+… alors je mets explicitement la valeur de l'étape `le-nombre` à 3.
+
+Utilisé de cette manière l'usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j'ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :
+
+----
+- id: nom
+  type: set
+  value: "la Bhagavad-Gītā"
+----
+
+Je peux alors simplifier l'écriture des messages :
+
+----
+- id: version
+  type: select
+  q: "Quelle version de ${nom} dois-je prendre en référence ?
+  values: [1,2,3]
+----
+
+[[scserv-vars-affectation-complexe]]
+==== Affectation plus complexe de variables ====
+
+Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l'utilisation de _constantes_ que de véritables _variables_ dont la valeur dépend en réalité du contexte.
+
+Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c'est-à-dire leur utilisation dans n'importe quel projet similaire (i.e. définissant les mêmes données).
+
+----
+- id: project-name
+  type: get-project-data
+  key: title
+----
+
+Grâce au type de service <<scserv-type-get-project-data>>, nous pouvons obtenir la propriété `title` (titre) du projet et la stocker en valeur de l'étape. On peut ensuite l'utiliser avec `${project-name}` :
+
+----
+- id: pour-voir
+  q: "Que voulez-vous faire de “${project-name}” ?"
+  ...
+----
+
+> À titre de rappel, les propriétés de base de tout projet sont `title`, `id` et `path`, mais on peut en ajouter autant que l'on veut notamment grâce au type <<scserv-type-set-project-data>>.
+
+Nous pouvons aller encore plus loin dans l'affectation des variables et c'est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l'on veut que l'utilisateur puisse donner une valeur propre, c'est-à-dire autres que celles proposées. Vous vous souvenir de l'affectation d'un nombre, tout à l'heure, à la valeur d'une variable (la valeur de l'étape). Pour que l'user puisse utiliser sa propre valeur, il suffit de définir le paramètre `create` :
+
+----
+- id: le-nombre
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+  create: "Autre valeur…"
+----
+
+Cette fois, l'user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu'il a cliqué sur le bouton car la valeur de `${le-nombre}` sera vide. Nous la testons et lui proposons alors d'entrer sa valeur :
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+----
+
+Grâce à cette étape, l'user va pouvoir donner sa valeur.
+
+Le problème, c'est qu'elle sera consignée dans `${autre-valeur}` alors que plus tard, nous en aurons besoin dans `${le-nombre}`. Pour ce faire, il nous suffit de définir le paramètre `set` avec le nom de l'autre étape : 
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+  set: le-nombre
+----
+
+Attention de ne pas affecter la valeur trop vite ! Prenons l'exemple d'une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire : 
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+  set: le-nombre
+
+- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${le-nombre}"
+----
+
+Ça ne fonctionnerait pas parce qu'au moment de la ligne : 
+
+----
+- if: "${le-nombre} = ''"
+----
+
+`${le-nombre}` ne sera plus vide puisqu'il aura été défini juste au-dessus (`set: le-nombre` qui signifie "définir la valeur de l'étape `le-nombre` avec la valeur de cette étape).
+
+Il faut donc faire : 
+
+----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+
+- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${autre-valeur}"
+  set: le-nombre
+----
+

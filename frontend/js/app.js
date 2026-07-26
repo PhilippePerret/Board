@@ -13,8 +13,7 @@ class App {
   // Le panneau courant
   static get currentPanel()  { return this._currentPanel }
   static set currentPanel(p) { this._currentPanel = p }
-  static closeCurrentPanel(){
-    D.on && D.trace('App::closeCurrentPanel')
+  static closeCurrentPanel(){ D.on && D.trace('App::closeCurrentPanel')
     if (this.currentPanel) {
       this.currentPanel.close()
       this.currentPanel = null
@@ -45,7 +44,7 @@ class App {
     listen(DGet('#app-name'), 'click', this.openAppDataPanel.bind(this))
     listen(DGet('#tools-button'), 'click', this.openToolsPanel.bind(this))
     listen(DGet('#debug-button'), 'click', D.toggle.bind(D))
-    listen(DGet('#help-link'), 'click', (ev) => {stopEvent(ev); window.webkit.messageHandlers.openHelp.postMessage({})})
+    listen(DGet('#help-link'), 'click', (ev) => {stopEvent(ev); Aide.open()})
   }
 
   static get appDataPanel(){ return this._appdatapan || (this._appdatapan = new AppDataPanel()) }

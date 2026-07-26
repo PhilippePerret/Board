@@ -44,15 +44,6 @@ console.log("Date : ", parseDate("2000/12/23 20:12:13"))
 //*/
 
 
-/**
- * Retourne un lien vers l'aide
- * 
- * TODO à implémenter
- */
-function aide(key) {
-  return `[Lien vers aide '${key}']`
-}
-
 // Pour faire Object.isObject(obj)
 Object.isObject = obj => Object.getPrototypeOf(obj) === Object.prototype;
 

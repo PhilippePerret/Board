@@ -454,7 +454,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#scripts-services">Les scripts-services</a>
 <ul class="sectlevel2">
 <li><a href="#_liste_complète_des_types_assemblables">Liste complète des types assemblables</a></li>
-<li><a href="#scserv-use-variable">Utilisation des variables (valeur d’étape)</a></li>
 <li><a href="#script-services-steps">Une suite d&#8217;étapes</a></li>
 <li><a href="#_erreurs_classiques">Erreurs classiques</a></li>
 <li><a href="#scserv-common-params">Paramètres communs à tous les types</a></li>
@@ -501,6 +500,9 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <div class="sectionbody">
 <div class="ulist">
 <ul>
+<li>
+<p>bouton commun pour ouvrir les données du projet (en indiquant "prudence")</p>
+</li>
 <li>
 <p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
 </li>
@@ -675,15 +677,43 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <h2 id="scripts-services">Les scripts-services</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Les <em>scripts-services</em> ouvrent définitivement la voie de l&#8217;infini pour définir les services d&#8217;un projet. Ils permettent de <strong>composer soi-même un service</strong> en exploitant toutes les ressources de l&#8217;application.</p>
+<p>Les <em>scripts-services</em> offrent des possibilités infinies pour gérer ses projets. Ils permettent de <strong>composer soi-même un service complexe</strong> en exploitant toutes les ressources de l&#8217;application. Le tout premier script-service composé au moment de l&#8217;implémentation de cette application a permis de produire, avec un simple clic sur un bouton :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>choisir une maison d&#8217;édition (ME),</p>
+</li>
+<li>
+<p>ou en créer une nouvelle,</p>
+</li>
+<li>
+<p>faire un dossier d&#8217;envoi pour cette ME, dans le dossier <code>envois</code> du projet,</p>
+</li>
+<li>
+<p>choisir le manuscript courant s&#8217;il n&#8217;était pas déjà défini</p>
+</li>
+<li>
+<p>dupliquer dans le dossier de la ME le manuscript courant à envoyer,</p>
+</li>
+<li>
+<p>créer un fichier avec l&#8217;adresse et le téléphone de la ME,</p>
+</li>
+<li>
+<p>incrémenter l&#8217;historique des envois en y ajoutant cet envoi, avec la date (différée ou non).</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Mais tout pouvoir puissant implique des responsabilités à ses proportions, comme nous le verrons.</p>
+<p>Tout cela, nous le redisons : par un simple clique sur un bouton.</p>
+</div>
+<div class="paragraph">
+<p>ATTENTION: Tout pouvoir puissant, cependant, implique des responsabilités proportionnelles, comme nous le verrons. Il est donc conseillé d&#8217;avancer doucement dans la conception de ces <em>scripts-services</em> jusqu&#8217;à se sentir suffisamment à l&#8217;aise pour en composer des compliqués.</p>
 </div>
 <div class="sect2">
 <h3 id="_liste_complète_des_types_assemblables">Liste complète des types assemblables</h3>
 <div class="paragraph">
-<p><em>Utiliser la table ci-dessous pour un accès rapide aux différents type de service</em></p>
+<p><em>Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la table ci-dessous pour un accès rapide aux différents types de service</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -782,212 +812,6 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="scserv-use-variable">Utilisation des variables (valeur d’étape)</h3>
-<div class="paragraph">
-<p>Dans un script-service, il est souvent utile de définir des variables et d&#8217;y faire référence.</p>
-</div>
-<div class="paragraph">
-<p>Une variable, dans un script-service, est <strong>une valeur d&#8217;étape</strong>, on y fait référence par :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>${&lt;id d'étape&gt;}</pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Tip</div>
-</td>
-<td class="content">
-Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong></em> il faudra donc comprendre qu&#8217;il s&#8217;agit de la valeur que prend l&#8217;étape au cours de son exécution ou la valeur qu&#8217;on lui définit explicitement.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Certaines variables se définissent en une seule fois, par exemple avec le type <a href="#scserv-type-select">[scserv-type-select]</a> :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: 'le-nombre'
-  type: select
-  values: [1,2,3,4,5]
-  q: "Choisissez un nombre"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Avec cette étape, l&#8217;user choisira un nombre de 1 à 5 et ce nombre deviendra la <em>valeur de l&#8217;étape <code>le-nombre`</em> et pourra donc être utilisé avec `${le-nombre}</code>.</p>
-</div>
-<div class="paragraph">
-<p>Par exemple pour une condition :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre># Étape conditionnelle qui n'est jouée que le
-# le nombre choisi est supérieur à 4
-- if: "${le-nombre} &gt; 4"
-  id: etape-si-cinq
-  ...</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>On peut également définir une variable explicitement grâce au type d&#8217;étape <a href="#scserv-type-set"><code>set</code></a>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à <em>définir la valeur d&#8217;une étape</em>. Si je joue :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: le-nombre
-  type: set
-  value: 3</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>… alors je mets explicitement la valeur de l&#8217;étape <code>le-nombre</code> à 3.</p>
-</div>
-<div class="paragraph">
-<p>Utilisé de cette manière l&#8217;usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j&#8217;ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: nom
-  type: set
-  value: "la Bhagavad-Gītā"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Je peux alors simplifier l&#8217;écriture des messages :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: version
-  type: select
-  q: "Quelle version de ${nom} dois-je prendre en référence ?
-  values: [1,2,3]</pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="scserv-vars-affectation-complexe">Affectation plus complexe de variables</h4>
-<div class="paragraph">
-<p>Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l&#8217;utilisation de <em>constantes</em> que de véritables <em>variables</em> dont la valeur dépend en réalité du contexte.</p>
-</div>
-<div class="paragraph">
-<p>Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c&#8217;est-à-dire leur utilisation dans n&#8217;importe quel projet similaire (i.e. définissant les mêmes données).</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: project-name
-  type: get-project-data
-  key: title</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Grâce au type de service <a href="#scserv-type-get-project-data"><code>get-project-data</code></a>, nous pouvons obtenir la propriété <code>title</code> (titre) du projet et la stocker en valeur de l&#8217;étape. On peut ensuite l&#8217;utiliser avec <code>${project-name}</code> :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: pour-voir
-  q: "Que voulez-vous faire de “${project-name}” ?"
-  ...</pre>
-</div>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>À titre de rappel, les propriétés de base de tout projet sont <code>title</code>, <code>id</code> et <code>path</code>, mais on peut en ajouter autant que l&#8217;on veut notamment grâce au type <a href="#scserv-type-set-project-data">[scserv-type-set-project-data]</a>.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>Nous pouvons aller encore plus loin dans l&#8217;affectation des variables et c&#8217;est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l&#8217;on veut que l&#8217;utilisateur puisse donner une valeur propre, c&#8217;est-à-dire autres que celles proposées. Vous vous souvenir de l&#8217;affectation d&#8217;un nombre, tout à l&#8217;heure, à la valeur d&#8217;une variable (la valeur de l&#8217;étape). Pour que l&#8217;user puisse utiliser sa propre valeur, il suffit de définir le paramètre <code>create</code> :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- id: le-nombre
-  type: select
-  values: [1,2,3,4,5]
-  q: "Choisissez un nombre"
-  create: "Autre valeur…"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Cette fois, l&#8217;user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu&#8217;il a cliqué sur le bouton car la valeur de <code>${le-nombre}</code> sera vide. Nous la testons et lui proposons alors d&#8217;entrer sa valeur :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  translate: integer # pour transformer la chaine en nombre</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Grâce à cette étape, l&#8217;user va pouvoir donner sa valeur.</p>
-</div>
-<div class="paragraph">
-<p>Le problème, c&#8217;est qu&#8217;elle sera consignée dans <code>${autre-valeur}</code> alors que plus tard, nous en aurons besoin dans <code>${le-nombre}</code>. Pour ce faire, il nous suffit de définir le paramètre <code>set</code> avec le nom de l&#8217;autre étape :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  translate: integer # pour transformer la chaine en nombre
-  set: le-nombre</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Attention de ne pas affecter la valeur trop vite ! Prenons l&#8217;exemple d&#8217;une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  transform: integer # pour transformer la chaine en nombre
-  set: le-nombre
-
-- if: "${le-nombre} = ''"
-  id: save-nombre-in-project
-  type: set-project-data
-  value: "${le-nombre}"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ça ne fonctionnerait pas parce qu&#8217;au moment de la ligne :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- if: "${le-nombre} = ''"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>${le-nombre}</code> ne sera plus vide puisqu&#8217;il aura été défini juste au-dessus (<code>set: le-nombre</code> qui signifie "définir la valeur de l&#8217;étape <code>le-nombre</code> avec la valeur de cette étape).</p>
-</div>
-<div class="paragraph">
-<p>Il faut donc faire :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>- if: "${le-nombre} = ''"
-  id: autre-valeur
-  type: string
-  q: "Donnez votre propre valeur"
-  transform: integer # pour transformer la chaine en nombre
-
-- if: "${le-nombre} = ''"
-  id: save-nombre-in-project
-  type: set-project-data
-  value: "${autre-valeur}"
-  set: le-nombre</pre>
-</div>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="script-services-steps">Une suite d&#8217;étapes</h3>
@@ -1122,7 +946,7 @@ Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>set</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;identifiant de l&#8217;étape à laquelle on doit donner la valeur de cette étape.
-                Voir par exemple l&#8217;utilisation dans <a href="#scserv-vars-affectation-complexe">Affectation plus complexe de variables</a>.</p></td>
+                Voir par exemple l&#8217;utilisation dans <a href="#scserv-vars-affectation-complexe">[scserv-vars-affectation-complexe]</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>transform</code></p></td>
@@ -1879,6 +1703,123 @@ Nous présentons ci-dessous l&#8217;enregistrement d&#8217;un livre dans un fich
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a id="scserv-type-phone"></a>
 ==== Obtenir un numéro de téléphone ====</p>
 <p class="tableblock">Typiquement, ces méthodes permettent surtout d&#8217;ajouter des données manquantes dans un fichier qui est utilisé dans le script-service. Au moment de l&#8217;implémentation de ce type, il servait à ajouter des fichers de maisons d&#8217;édition pour l&#8217;envoi d&#8217;un manuscrit.</p>
+<p class="tableblock"><a id="scserv-use-variable"></a>
+=== Utilisation des variables (valeur d’étape) ===</p>
+<p class="tableblock">Dans un script-service, il est souvent utile de définir des variables et d&#8217;y faire référence.</p>
+<p class="tableblock">Une variable, dans un script-service, est <strong>une valeur d&#8217;étape</strong>, on y fait référence par :</p>
+<p class="tableblock">----
+${&lt;id d&#8217;étape&gt;}
+----</p>
+<p class="tableblock">TIP: Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong></em> il faudra donc comprendre qu&#8217;il s&#8217;agit de la valeur que prend l&#8217;étape au cours de son exécution ou la valeur qu&#8217;on lui définit explicitement.</p>
+<p class="tableblock">Certaines variables se définissent en une seule fois, par exemple avec le type <a href="#scserv-type-select">[scserv-type-select]</a> :</p>
+<p class="tableblock">----
+- id: 'le-nombre'
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+----</p>
+<p class="tableblock">Avec cette étape, l&#8217;user choisira un nombre de 1 à 5 et ce nombre deviendra la <em>valeur de l&#8217;étape <code>le-nombre`</em> et pourra donc être utilisé avec `${le-nombre}</code>.</p>
+<p class="tableblock">Par exemple pour une condition :</p>
+<p class="tableblock">----
+# Étape conditionnelle qui n&#8217;est jouée que le
+# le nombre choisi est supérieur à 4
+- if: "${le-nombre} &gt; 4"
+  id: etape-si-cinq
+  &#8230;&#8203;
+----</p>
+<p class="tableblock">On peut également définir une variable explicitement grâce au type d&#8217;étape <a href="#scserv-type-set"><code>set</code></a>. Si vous avez suivi, vous avez déjà compris que définir une variable revient à <em>définir la valeur d&#8217;une étape</em>. Si je joue :</p>
+<p class="tableblock">----
+- id: le-nombre
+  type: set
+  value: 3
+----</p>
+<p class="tableblock">… alors je mets explicitement la valeur de l&#8217;étape <code>le-nombre</code> à 3.</p>
+<p class="tableblock">Utilisé de cette manière l&#8217;usage peut être limité, mais ça peut simplifier certaines écritures. Par exemple, si j&#8217;ai un nom assez complexe ou long, le mettre dans une variable peut être pratique :</p>
+<p class="tableblock">----
+- id: nom
+  type: set
+  value: "la Bhagavad-Gītā"
+----</p>
+<p class="tableblock">Je peux alors simplifier l&#8217;écriture des messages :</p>
+<p class="tableblock">----
+- id: version
+  type: select
+  q: "Quelle version de ${nom} dois-je prendre en référence ?
+  values: [1,2,3]
+----</p>
+<p class="tableblock"><a id="scserv-vars-affectation-complexe"></a>
+==== Affectation plus complexe de variables ====</p>
+<p class="tableblock">Les utilisations de variable précédents restent néanmoins simplistes et correspondent plutôt à l&#8217;utilisation de <em>constantes</em> que de véritables <em>variables</em> dont la valeur dépend en réalité du contexte.</p>
+<p class="tableblock">Voyons comment utiliser une variable, par exemple, pour obtenir le titre du projet dans lequel est utilisé le script-service courant. Cette utilisation permet la portabilité complète des scripts-services, c&#8217;est-à-dire leur utilisation dans n&#8217;importe quel projet similaire (i.e. définissant les mêmes données).</p>
+<p class="tableblock">----
+- id: project-name
+  type: get-project-data
+  key: title
+----</p>
+<p class="tableblock">Grâce au type de service <a href="#scserv-type-get-project-data"><code>get-project-data</code></a>, nous pouvons obtenir la propriété <code>title</code> (titre) du projet et la stocker en valeur de l&#8217;étape. On peut ensuite l&#8217;utiliser avec <code>${project-name}</code> :</p>
+<p class="tableblock">----
+- id: pour-voir
+  q: "Que voulez-vous faire de “${project-name}” ?"
+  &#8230;&#8203;
+----</p>
+<p class="tableblock">&gt; À titre de rappel, les propriétés de base de tout projet sont <code>title</code>, <code>id</code> et <code>path</code>, mais on peut en ajouter autant que l&#8217;on veut notamment grâce au type <a href="#scserv-type-set-project-data">[scserv-type-set-project-data]</a>.</p>
+<p class="tableblock">Nous pouvons aller encore plus loin dans l&#8217;affectation des variables et c&#8217;est même une nécessité pour de nombreux scripts-service. Cela se présente typiquement lorsque l&#8217;on veut que l&#8217;utilisateur puisse donner une valeur propre, c&#8217;est-à-dire autres que celles proposées. Vous vous souvenir de l&#8217;affectation d&#8217;un nombre, tout à l&#8217;heure, à la valeur d&#8217;une variable (la valeur de l&#8217;étape). Pour que l&#8217;user puisse utiliser sa propre valeur, il suffit de définir le paramètre <code>create</code> :</p>
+<p class="tableblock">----
+- id: le-nombre
+  type: select
+  values: [1,2,3,4,5]
+  q: "Choisissez un nombre"
+  create: "Autre valeur…"
+----</p>
+<p class="tableblock">Cette fois, l&#8217;user peut cliquer sur le bouton "Autre valeur…" pour donner sa valeur personnelle. Nous savons qu&#8217;il a cliqué sur le bouton car la valeur de <code>${le-nombre}</code> sera vide. Nous la testons et lui proposons alors d&#8217;entrer sa valeur :</p>
+<p class="tableblock">----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+----</p>
+<p class="tableblock">Grâce à cette étape, l&#8217;user va pouvoir donner sa valeur.</p>
+<p class="tableblock">Le problème, c&#8217;est qu&#8217;elle sera consignée dans <code>${autre-valeur}</code> alors que plus tard, nous en aurons besoin dans <code>${le-nombre}</code>. Pour ce faire, il nous suffit de définir le paramètre <code>set</code> avec le nom de l&#8217;autre étape :</p>
+<p class="tableblock">----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  translate: integer # pour transformer la chaine en nombre
+  set: le-nombre
+----</p>
+<p class="tableblock">Attention de ne pas affecter la valeur trop vite ! Prenons l&#8217;exemple d&#8217;une valeur que nous devons enregistrer dans le projet, pour ne pas avoir à la définir chaque fois que nous utilisons le script-service. Nous ne pouvons pas faire :</p>
+<p class="tableblock">----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre
+  set: le-nombre</p>
+<p class="tableblock">- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${le-nombre}"
+----</p>
+<p class="tableblock">Ça ne fonctionnerait pas parce qu&#8217;au moment de la ligne :</p>
+<p class="tableblock">----
+- if: "${le-nombre} = ''"
+----</p>
+<p class="tableblock"><code>${le-nombre}</code> ne sera plus vide puisqu&#8217;il aura été défini juste au-dessus (<code>set: le-nombre</code> qui signifie "définir la valeur de l&#8217;étape <code>le-nombre</code> avec la valeur de cette étape).</p>
+<p class="tableblock">Il faut donc faire :</p>
+<p class="tableblock">----
+- if: "${le-nombre} = ''"
+  id: autre-valeur
+  type: string
+  q: "Donnez votre propre valeur"
+  transform: integer # pour transformer la chaine en nombre</p>
+<p class="tableblock">- if: "${le-nombre} = ''"
+  id: save-nombre-in-project
+  type: set-project-data
+  value: "${autre-valeur}"
+  set: le-nombre
+----</p>
 <p class="tableblock"><a id="services"></a>
 == Les services ==</p>
 <p class="tableblock">=== Définition des services ===</p>
