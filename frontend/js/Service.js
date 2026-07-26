@@ -82,11 +82,12 @@ class Service {
     this.uuid       = data.uuid ?? null
     this.type       = data.type ?? null // idem (others ou startup)
     this.onError    = data.onError
+    this.beforeExec = data.beforeExec
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.transient  = data.transient ?? false // service common depuis panneau
+    this.afterDefinedParams = data.afterDefinedParams ?? null
     this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
-    this.afterDefinedParams = data.afterDefinedParams ?? null
     this.isCommonService = (this.stype === 'common')
     this.isCustomService = (this.stype === 'custom')
     this.isScriptService = (this.id == 'run-script-service')

@@ -219,6 +219,8 @@ class Project {
     if (!this.services) this.services = {startup: [], others: []}
     this.constructor.add(this)
     this.card_path = [App.getData('support_folder'), 'project-cards', `${this.id}.yaml`].join('/')
+    this.data.card_path = this.card_path
+    console.info("card_path = ", this.card_path)
     this.initServices()
     
   }

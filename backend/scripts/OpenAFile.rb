@@ -7,7 +7,7 @@ begin
   if File.exist?(PATH)
     `open "#{PATH}"`
   else
-    raise new Error("Fichier introuvable : #{PATH}")
+    raise "Fichier introuvable : #{PATH}"
   end
 rescue Exception => e
   table[:ok] = false

@@ -22,6 +22,11 @@
  *    fonction à interpréter.
  *    Souvent, elle doit utiliser un ErrorsDialog pour afficher la
  *    liste des erreurs survenues.
+ * 
+ *  beforeExec
+ *    Fonction à exécuter avant d'exécuter le service (par exemple un
+ *    message d'alerte.)
+ *    La fonction reçoit le callback qu'elle doit rappeler.
  */
 
 
@@ -145,6 +150,15 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id: 'card_path', type: 'project'}
       ]
+    , afterDefinedParams: (params) => params[0]
+    , beforeExec: (callback) => {
+        message(true, getMsg('alert-before-edit-projet'))
+        const timerbeforeexec = setTimeout(() => {
+          console.log("-> appel du callback", callback)
+          clearTimeout(timerbeforeexec)
+          callback()
+        }, 3000)
+      }
   }
 ]
 

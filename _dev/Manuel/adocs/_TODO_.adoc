@@ -7,16 +7,21 @@
   IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux étapes sont "compilées"
   ==> FAIRE VRAIMENT DES LIGNES VIDES 
 
+- Problème de définition dans le projet Board
+    common_services_data:
+      open-a-file:
+      - file:///Users/philippeperret/Programmes/Board/_dev/Manuel/Manuel.html
+    BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d'autres
+          choses — attention, il s'agit peut-être d'un scorie. Quand on traitera ce bug,
+          commencer par supprimer cette donnée pour voir qui l'utilise (certainement
+          l'ouverture de la documentation)
+
+
 == Todo En cours
 
 == Todo list ==
 
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
-
-- En cas d'erreur (tout le temps) : utiliser la fenêtre des script-services
-- fenêtre des erreurs : ne pas utiliser le break:n'importe où qui coupe les mots, mais faire un test sur les longues parties sans espace/coupures possible
-
-
 - pouvoir récupérer les tâches de todoist
 - pouvoir ajouter des tâches à todoist
 

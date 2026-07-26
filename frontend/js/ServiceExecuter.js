@@ -48,15 +48,22 @@ class ServiceExecuter {
   // attaché, commun joué depuis le panneau) : this.front, s'il est défini,
   // est TOUJOURS prioritaire sur l'envoi au backend.
   finalyExec(paramsValues){ D.on && D.trace(paramsValues, 'ServiceExecuter.')
-    const flatParamsValues = this.flattenParamsValues(paramsValues)
-    if (this.front) {
-      // Pas un script backend, mais un traitement frontend
-      // Typiquement : le minuteur
-      this.front(this.projet, flatParamsValues)
-      return
+    if (this.service.beforeExec && !this.beforeExecIsDone) {
+      // Si une fonction est à exécuter avant
+      this.beforeExecIsDone = true
+      this.service.beforeExec.call(this.service, this.finalyExec.bind(this, paramsValues))
+      return 
+    } else {
+      const flatParamsValues = this.flattenParamsValues(paramsValues)
+      if (this.front) {
+        // Pas un script backend, mais un traitement frontend
+        // Typiquement : le minuteur
+        this.front(this.projet, flatParamsValues)
+        return
+      }
+      console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParamsValues)
+      server.send({action: `exec-service`, script: this.script, params: flatParamsValues, no_raise: true}, this.afterRunService.bind(this))
     }
-    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParamsValues)
-    server.send({action: `exec-service`, script: this.script, params: flatParamsValues, no_raise: true}, this.afterRunService.bind(this))
   }
 
   // -- Appelée après avoir exécuté le service --
