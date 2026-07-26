@@ -32,4 +32,14 @@ class Todoist {
     })
   }
 
+  static setTasksDone(task_ids, callback){
+    server.send({action: 'todoist-set-done', task_ids}, (retour) => callback(retour))
+  }
+
+  /**
+   * Pour ajouter de nouvelles tâches
+   */
+  static createNewTasks(projet, tasks, callback){
+    server.send({action:'todoist-create-tasks', project_id: projet.todoist_id, tasks}, (retour) => callbakc(retour))
+  }
 }

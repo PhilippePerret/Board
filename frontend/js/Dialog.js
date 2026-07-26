@@ -7,6 +7,9 @@
  * 
  * Si onShow est défini, c'est une fonction qui est appelée après l'ouverture
  * du panneau.
+ * 
+ * Si midBtn définit keep: true, la fenêtre courante est gardée.
+ * 
  */
 class Dialog {
   static panelIndex = 0
@@ -92,7 +95,7 @@ class Dialog {
     return stopEvent(ev)
   }
   onMid(ev){
-    this.hide()
+    this.midData.keep || this.hide()
     if ('function' == typeof this.midData.onclick) {
       this.midData.onclick()
     } else {

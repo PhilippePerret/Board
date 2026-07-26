@@ -15,7 +15,7 @@ module Todoist
     YAML.safe_load(IO.read(TODOIST_TOKEN_FILE))['token']
   end
 
-  def self.request(method, path, params: nil)
+  def self.request(method, path, params: nil, body: nil)
     raise "Token Todoist manquant (#{TODOIST_TOKEN_FILE})" if token.nil? || token.empty?
 
     uri = URI("#{BASE_URL}#{path}")
@@ -26,11 +26,15 @@ module Todoist
       when :post then Net::HTTP::Post.new(uri)
       end
     req['Authorization'] = "Bearer #{token}"
+    if body
+      req['Content-Type'] = 'application/json'
+      req.body = body.to_json
+    end
 
     res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
     raise "Erreur Todoist (#{res.code}) : #{res.body}" unless res.is_a?(Net::HTTPSuccess)
 
-    JSON.parse(res.body)
+    res.body.nil? || res.body.empty? ? true : JSON.parse(res.body)
   end
 
   # L'API v1 pagine les listes sous {"results" => [...], "next_cursor" => ...}
@@ -50,5 +54,21 @@ module Todoist
     list('/tasks', params: {project_id: project_id}).select do |task|
       task['due'] && task['due']['date'] && task['due']['date'] <= today
     end
+  end
+
+  def self.close_task(task_id)
+    request(:post, "/tasks/#{task_id}/close")
+  end
+
+  def self.close_tasks(task_ids)
+    task_ids.each { |task_id| close_task(task_id) }
+  end
+
+  def self.create_task(project_id, task)
+    request(:post, '/tasks', body: task.merge('project_id' => project_id))
+  end
+
+  def self.create_tasks(project_id, tasks)
+    tasks.each { |task| create_task(project_id, task) }.length
   end
 end

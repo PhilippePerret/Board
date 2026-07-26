@@ -86,6 +86,9 @@ class OKDialog extends Dialog {
 
 }
 
+/**
+ * Dialog pour gestion de LISTE DE TÂCHES
+ */
 class TasksDialog extends Dialog {
   constructor(data){
     super(data)
@@ -93,12 +96,47 @@ class TasksDialog extends Dialog {
     this.tasks    = data.tasks
     this.onCheck  = data.onCheck
     this.content  = this.buildTaskList()
-    this.ouiData  = {name: 'OK', onclick: data.onValidate}
+    this.ouiData  = {name: 'OK', onclick: data.onValidate.bind(null, this.newTasks)}
     this.nonData  = null
+    this.midData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
+    this.newTasks = []
+  }
+
+  onCreateNewTask(retour){
+    if (retour) {
+      console.log("retour onCreateNewTask", retour)
+      var task = {}
+      retour
+        .split("\n")
+        .filter(line => line.trim() != '')
+        .forEach(line => {
+          var val, segs = line.split(':')
+          const key = segs.shift()
+          if (key) {
+            val = segs.join(':')
+          } else {
+            key = 'content'
+            val = String(line)
+          }
+          Object.assign(task, {[key]: val})
+        })
+      this.newTasks.push(task)
+      this.list.appendChild(DCreate('DIV', {text: getMsg('todoist-text-new-task', [task.content])}))
+
+    } else {
+      new TextareaDialog({
+          title: getMsg('New task')
+        , width: '800px'
+        , q: getMsg('todoist-message-new-task') + "\n\n"
+        , default: MESSAGES['todoist-default-new-task']
+        , ouiBtn: {name: 'OK', onclick: this.onCreateNewTask.bind(this)}
+        , nonBtn: {name: getMsg('Cancel')}
+      }).show()
+    }
   }
 
   buildTaskList(){
-    const list = DCreate('DIV', {class: 'task-list'})
+    this.list = DCreate('DIV', {class: 'task-list'})
     this.tasks.forEach(task => {
       const liId  = `todoist-task-${task.id}`
       const li    = DCreate('DIV', {id: liId, class: 'task-li'})
@@ -108,9 +146,9 @@ class TasksDialog extends Dialog {
       const span  = DCreate('LABEL', {for: cbId, text: task.content})
       li.appendChild(cb)
       li.appendChild(span)
-      list.appendChild(li)
+      this.list.appendChild(li)
     })
-    return list
+    return this.list
   }
 }
 
@@ -157,7 +195,9 @@ class TextareaDialog extends Dialog {
 
   buildField(){
     const div = DCreate('DIV', {style: 'padding: 1em;'})
-    const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? 200}px;`, value: this.defaultValue})
+    const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? 200}px;`})
+    console.log("value juste avant", String(this.default))
+    input.value = this.defaultValue || this.default
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
     return div

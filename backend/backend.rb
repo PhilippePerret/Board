@@ -224,6 +224,14 @@ begin
     require_relative 'lib/todoist.rb'
     RETOUR.data = {tasks: Todoist.today_tasks(request['todoist_id'])}
 
+  when 'todoist-set-done'
+    require_relative 'lib/todoist.rb'
+    Todoist.close_tasks(request['task_ids'])
+
+  when 'todoist-create-tasks'
+    require_relative 'lib/todoist.rb'
+    RETOUR.data = {count: Todoist.create_tasks(request['project_id'], request['tasks'])}
+
 
 
   # action inconnue => ERRREUR

@@ -574,6 +574,12 @@ class Project {
     }
   }
 
+  // Après création de nouvelles tâches ou marquage de tâches 
+  // achevées, il faut actualiser l'affichage des tâches
+  updateTodoistTasks(retour){
+    console.error("Je dois apprendre à actualiser la liste des tâches.")
+  }
+
   // Quand on clique sur le badge ou l'image todoist
   onClickTodoist(ev, tasks){
     ev && stopEvent(ev)
@@ -605,9 +611,23 @@ class Project {
   }
 
   // Fonction appelée quand on fait ok pour valider les checks de tâche
-  onValidateTodoist(retour){
+  /**
+   * 
+   * 
+   *      TODO :  REPRENDRE CETTE PARTIE — EN FAIT, CETTE MÉTHODE NE DOIT
+   *              SERVIR QU'À VALIDER LES OPÉRATIONS :
+   *                  - MARQUAGE DE TÂCHE ACCOMPLIE
+   *                  - CRÉATION DES NOUVELLES TÂCHES
+   */
+  onValidateTodoist(newTasks, nombre, retour){
     if (retour) {
       console.log("[onValidateTodoist] retour= ", retour)
+      if (newTasks.length) {
+        // De nouvelles tâches sont à créer
+        console.log("Nouvelles tâches à créer", newTasks)
+      } else {
+        this.
+      }
     } else {
       var operations = []
       this.tasks.forEach(task => {
@@ -616,24 +636,36 @@ class Project {
         }
       })
       if (operations.length == 0) {
-        return true
+        this.onValidateTodoist.call(this, newTasks, 0, {ok: true})
       }
       operations = "\n\n" + operations.join("\n") + "\n\n"
       new ConfirmDialog({
           title: getMsg('confirm-tasks-checks')
         , width: '800px'
         , q: getMsg('ask-for-confirm-tasks-checks', [this.title, operations])
-        , ouiBtn: {name: getMsg('Confirm'), onclick: this.onMarkTaskTodoist.bind(this)} 
+        , ouiBtn: {name: getMsg('Confirm'), onclick: this.onValidateTodoist.bind(this, newTasks)} 
         , nonBtn: {name: getMsg('Cancel')}
       }).show()
     }
 
   }
-  onMarkTaskTodoist(retour){
+  onMarkTaskTodoist(nombre, retour){
     if (retour){
-      console.log("Retour des opérations todoist")
+      message(true, getMsg('todoist-task-closed-message', [this.title, String(nombre)]))
+      this.updateTodoistTasks()
     } else {
-      console.log("On doit demander les opérations todoist")
+      const task_ids = this.tasks.filter(t => t.checked).map(t => t.id)
+      console.log("Liste des tâches à marquer accomplies", task_ids)
+      Todoist.setTasksDone(task_ids, this.onMarkTaskTodoist.bind(this, task_ids.length))
+    }
+  }
+  onCreateNewTaskTodoist(tasks, retour){
+    if (retour) {
+      if (retour.error) raise(retour.error)
+      message(true, getMsg('todoist-tasks-created-message', [this.title, retour.data.count]))
+      this.updateTodoistTasks()
+    } else {
+      Todoist.createNewTasks(this, tasks, this.onCreateNewTaskTodoist.bind(this))
     }
   }
 
