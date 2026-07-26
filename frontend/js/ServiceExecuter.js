@@ -77,15 +77,16 @@ class ServiceExecuter {
         message(retour.error)
       }
       return
+    } else {
+      message(true, (retour.message || '') + ` Service “${this.name}” joué avec succès (<span class="tiny">(service ${this.id})</span>).`)
+      // console.log("ServiceExecuter # afterRunService termine normalement.")
+      if (this.service.transient /* common service joué depuis panneau */) {
+        Service.remove(this.service.uuid)
+        historize("- Service supprimé du cache")
+      }
+      typeof this.callback == 'function' && this.callback()
+      // D.outputTrace()
     }
-    message(true, retour.message + ` Service “${this.name}” joué avec succès <span class="tiny">(service ${this.id})</span>.`)
-    // console.log("ServiceExecuter # afterRunService termine normalement.")
-    if (this.service.transient /* common service joué depuis panneau */) {
-      Service.remove(this.service.uuid)
-      historize("- Service supprimé du cache")
-    }
-    typeof this.callback == 'function' && this.callback()
-    D.outputTrace()
   }
 
   /**
