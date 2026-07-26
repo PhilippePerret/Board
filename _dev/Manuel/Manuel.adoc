@@ -8,7 +8,9 @@
 :start-work: Démarrer le travail
 // Chemins d'accès
 // Utiliser {id}
-:js-folder: ../../../../frontend/js
+:frontend: ../../../../frontend
+:js-folder: {frontend}/js
+
 
 :app-name: include::{js-folder}/App.js[tag=app-name]
 

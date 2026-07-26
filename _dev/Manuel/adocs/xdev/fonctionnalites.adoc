@@ -1,8 +1,25 @@
 === fonctionnalités ===
 
+==== Messages en exergue ====
+
+Pour obtenir des messages en exergue qui se place au centre de la fenêtre et disparaissent rapidement, ajouter s'implement `true` en début de l'appel de `message()` :
+
+----
+message(true, "Ce message sera mis au centre")
+----
+
+==== Erreurs plus visibles ====
+
+Pour avoir une meilleure visualisation des erreurs, on doit utiliser le dialog `ErrorsDialog` qui permet un affichage plus lisible et consultable. Cf. le fichier `{js-folder}/Dialogs`.
+
+
+
+==== Liste complète ====
+
 _TD = Todo, à faire_
 _Docu_ : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n'est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
 _Man_: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est décrite dans le manuel utilisateur, avec un lien pour s'y rendre.
+
 
 [cols="2,4,2,1,1"]
 |====
