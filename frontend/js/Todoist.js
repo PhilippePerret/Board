@@ -32,8 +32,8 @@ class Todoist {
     })
   }
 
-  static setTasksDone(task_ids, callback){
-    server.send({action: 'todoist-set-done', task_ids}, (retour) => callback(retour))
+  static markCompleteAndCreateNewTask(project, done_ids, newTasks, callback){
+    server.send({action: 'todoist-mark-complete-and-create-new', project_id: project.todoist_id, done: done_ids, created: newTasks}, callback)
   }
 
   /**

@@ -42,7 +42,7 @@ const MESSAGES = {
     , 'confirm-tasks-checks': "Confirmation des tâches"
     , 'ask-for-confirm-tasks-checks': "Merci de confirmer opérations sur les tâches du projet “$1”.$2"
     , 'mark-task-checked': "La tâche “$1” est à marquer achevée."
-    , 'todoist-task-closed-message': "Les tâches du projet “$1” ($2) ont été marquées accomplies."
+    , 'todoist-fin-tasks-done-and-create': "Les tâches du projet “$1” ont été actualisées (achevées : $2, nouvelles : $3)."
     , 'todoist-tasks-created-message': "Les nouvelles tâches du projet “$1” ont été créées ($2)." 
     , 'todoist-new-task-title-errors': "Tâche invalide"
     , 'todoist-new-task-msg-correct-errors': "Merci de corriger les erreurs ci-dessous :"

@@ -433,11 +433,10 @@ class Project {
       div.appendChild(this.buildIcon())
     }
 
-    // ${this.todoistBadgeByTasks()}.svg
     this.todoistCont = DCreate('DIV', {style:'width:32px;', class:'todoist fright discret'})
     this.tasksBadge = DCreate('DIV', {class: 'badge fright'})
     this.todoistCont.appendChild(this.tasksBadge)
-    this.todoistImg = DCreate('IMG', {src: 'images/todoist.png', class:'picto', title: getMsg('todoist-tasks')})
+    this.todoistImg = DCreate('IMG', {src: `images/todoist${this.todoistBadgeByTasks()}.png`, class:'picto', title: getMsg('todoist-tasks')})
     this.todoistCont.appendChild(this.todoistImg)
     div.appendChild(this.todoistCont)
 
@@ -574,19 +573,12 @@ class Project {
     }
   }
 
-  // Après création de nouvelles tâches ou marquage de tâches 
-  // achevées, il faut actualiser l'affichage des tâches
-  updateTodoistTasks(retour){
-    console.error("Je dois apprendre à actualiser la liste des tâches.")
-  }
-
   // Quand on clique sur le badge ou l'image todoist
   onClickTodoist(ev, tasks){
     ev && stopEvent(ev)
     if (tasks) {
-      if (tasks.error){ 
-        raise(tasks.error)
-      } else {
+      if (tasks.error){ raise(tasks.error) } 
+      else {
         this.tasks = tasks
         new TasksDialog({
             title: 'Tâches Todoist'
@@ -610,70 +602,49 @@ class Project {
     return true
   }
 
-  // Fonction appelée quand on fait ok pour valider les checks de tâche
   /**
-   * 
-   * 
-   *      TODO :  REPRENDRE CETTE PARTIE — EN FAIT, CETTE MÉTHODE NE DOIT
-   *              SERVIR QU'À VALIDER LES OPÉRATIONS :
-   *                  - MARQUAGE DE TÂCHE ACCOMPLIE
-   *                  - CRÉATION DES NOUVELLES TÂCHES
-   * 
-   *      TODO : lorsque 0 tâches créées et 0 tâches cochées => ne pas confirmer
-   * 
+   * Fonction appelée quand on fait ok pour valider la liste des 
+   * tâches marquées achevées et les nouvelles tâches.
    */
-  onValidateTodoist(newTasks, nombre, retour){
-    console.log("-> onValidateTodoist", {newTasks, nombre, retour})
-    if (retour) {
-      console.log("[onValidateTodoist] retour= ", retour)
-      if (undefined == newTasks) {
-        console.log("Nouvelles tâches non définies")
-      } else if (newTasks.length) {
-        // De nouvelles tâches sont à créer
-        console.log("Nouvelles tâches à créer", newTasks)
-      } else {
-        console.log("Je passe par ici finalement.")
+  onValidateTodoist(newTasks){
+    // On passe par ici pour valider les tâches achevées et la
+    // demande de création des nouvelles tâches
+    var operations = []
+    this.tasks.forEach(task => {
+      if (task.checked) {
+        operations.push(getMsg('mark-task-checked', task.content))
       }
-    } else {
-      var operations = []
-      this.tasks.forEach(task => {
-        if (task.checked) {
-          operations.push(getMsg('mark-task-checked', task.content))
-        }
-      })
-      if (newTasks) {
-        newTasks.forEach(newTask => {
-          operations.push(getMsg('todoist-text-new-task', [newTask.content]))
-        })
-      }
-      operations = "\n\n" + operations.join("\n") + "\n\n"
-      new ConfirmDialog({
-          title: getMsg('confirm-tasks-checks')
-        , width: '800px'
-        , q: getMsg('ask-for-confirm-tasks-checks', [this.title, operations])
-        , ouiBtn: {name: getMsg('Confirm'), onclick: this.onValidateTodoist.bind(this, newTasks)} 
-        , nonBtn: {name: getMsg('Cancel')}
-      }).show()
+    })
+    if (operations.length == 0 && newTasks.length == 0){
+      // Rien à confirmer
+      return true
     }
-
+    if (newTasks) {
+      // On ajoute les évenutelles nouvelles tâches
+      operations.push('<hr>')
+      newTasks.forEach(newTask => {
+        operations.push(getMsg('todoist-text-new-task', [newTask.content]))
+      })
+    }
+    operations = "\n\n" + operations.join("\n") + "\n\n"
+    new ConfirmDialog({
+        title: getMsg('confirm-tasks-checks')
+      , width: '800px'
+      , q: getMsg('ask-for-confirm-tasks-checks', [this.title, operations])
+      , ouiBtn: {name: getMsg('Confirm'), onclick: this.onMarkAndCreateTodoistTask.bind(this, newTasks)} 
+      , nonBtn: {name: getMsg('Cancel')}
+    }).show()
   }
-  onMarkTaskTodoist(nombre, retour){
+
+  onMarkAndCreateTodoistTask(newTasks, retour){
     if (retour){
-      message(true, getMsg('todoist-task-closed-message', [this.title, String(nombre)]))
-      this.updateTodoistTasks()
+      if (retour.data.errors.length) raise(retour.data.errors.join("\n"))
+      message(true, getMsg('todoist-fin-tasks-done-and-create', [this.title, retour.data.done_count, retour.data.create_count]))
+      this.getTachesAndSetBadges()
     } else {
       const task_ids = this.tasks.filter(t => t.checked).map(t => t.id)
-      console.log("Liste des tâches à marquer accomplies", task_ids)
-      Todoist.setTasksDone(task_ids, this.onMarkTaskTodoist.bind(this, task_ids.length))
-    }
-  }
-  onCreateNewTaskTodoist(tasks, retour){
-    if (retour) {
-      if (retour.error) raise(retour.error)
-      message(true, getMsg('todoist-tasks-created-message', [this.title, retour.data.count]))
-      this.updateTodoistTasks()
-    } else {
-      Todoist.createNewTasks(this, tasks, this.onCreateNewTaskTodoist.bind(this))
+      console.log("Liste des tâches à marquer accomplies et tâches créées", task_ids, newTasks)
+      Todoist.markCompleteAndCreateNewTask(this, task_ids, newTasks, this.onMarkAndCreateTodoistTask.bind(this, newTasks))
     }
   }
 
@@ -681,9 +652,8 @@ class Project {
   // projets ayant un todoist_id pour charger les tâches courantes 
   // et afficher leur nombre dans un badge.
   getTachesAndSetBadges(tasks){
-    console.log("Je dois apprendre à charger les tâches et afficher leur nombre.", this)
     if (tasks) {
-      console.log("RETOUR DE todayTasksFor:", tasks)
+      // console.log("RETOUR DE todayTasksFor:", tasks)
       this.setTodoistBadge(tasks.length)
     } else {
       Todoist.todayTasksFor(this, this.getTachesAndSetBadges.bind(this), 'not-interractif')

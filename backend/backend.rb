@@ -230,7 +230,23 @@ begin
 
   when 'todoist-create-tasks'
     require_relative 'lib/todoist.rb'
-    RETOUR.data = {count: Todoist.create_tasks(request['project_id'], request['tasks'])}
+    RETOUR.data = Todoist.create_tasks(request['project_id'], request['tasks'])
+
+  when 'todoist-mark-complete-and-create-new'
+    require_relative 'lib/todoist.rb'
+    done    = Todoist.close_tasks(request['done'])
+    created = Todoist.create_tasks(request['project_id'], request['created'])
+    RETOUR.data = {
+      done_count:    done[:count],
+      created_count: created[:count],
+      errors: done[:errors] + created[:errors]
+    }
+
+  when 'todoist-mark-complete-and-create-new'
+    require_relative 'lib/todoist.rb'
+    Todoist.close_tasks(request['done'])
+    count = Todoist.create_tasks(request['project_id'], request['created'])
+    RETOUR.data = {count: count}
 
 
 

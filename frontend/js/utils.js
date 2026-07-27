@@ -77,12 +77,12 @@ function textSubstitute(msg, params){
           params.forEach( param => {
             i++
             const regexp = new RegExp(`\\$\\{?${i}\\}?`, 'g')
-            msg = msg.replace(regexp, param)
+            msg = msg.replace(regexp, String(param))
           })
         } else if ('object' == typeof params) {
           for(var key in params){
             const regexp = new RegExp(`\\$\\{?${key}\\}?`, 'g')
-            msg = msg.replace(regexp, params[key])
+            msg = msg.replace(regexp, String(params[key]))
           }
         } else {
           msg = msg.replace(/\$1/g, String(params))

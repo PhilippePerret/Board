@@ -61,11 +61,31 @@ module Todoist
   end
 
   def self.close_tasks(task_ids)
-    task_ids.each { |task_id| close_task(task_id) }
+    count = 0
+    errors = []
+    task_ids.each do |task_id|
+      begin
+        close_task(task_id)
+        count += 1
+      rescue => e
+        errors << "Tâche #{task_id} : #{e.message}"
+      end
+    end
+    {count: count, errors: errors}
   end
 
   def self.create_tasks(project_id, tasks)
-    tasks.each { |task| create_task(project_id, task) }.length
+    count = 0
+    errors = []
+    tasks.each do |task|
+      begin
+        create_task(project_id, task)
+        count += 1
+      rescue => e
+        errors << "#{task['content']} : #{e.message}"
+      end
+    end
+    {count: count, errors: errors}
   end
 
   def self.create_task(project_id, task)
