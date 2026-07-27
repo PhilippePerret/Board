@@ -64,11 +64,54 @@ module Todoist
     task_ids.each { |task_id| close_task(task_id) }
   end
 
-  def self.create_task(project_id, task)
-    request(:post, '/tasks', body: task.merge('project_id' => project_id))
-  end
-
   def self.create_tasks(project_id, tasks)
     tasks.each { |task| create_task(project_id, task) }.length
   end
+
+  def self.create_task(project_id, task)
+    task = _ensure_task_data(project_id, task)
+    request(:post, '/tasks', body: task)
+  end
+
+  def self._ensure_task_data(project_id, task)
+    task = task.merge('project_id' => project_id)
+    lang = APP_DATA['lang'].split('-')[0]
+
+    if task['due_string']
+      task['due_lang'] = lang
+    end
+
+    if task['duration']
+      amount, unit = _parse_duration(task.delete('duration'), lang)
+      task['duration']      = amount
+      task['duration_unit'] = unit
+    end
+
+    task
+  end
+
+  # task['duration'] arrive en langage courant, p.e. "3 jours" ou "45 minutes"
+  # => à convertir en [amount Integer, unit String ('minute'|'day')] pour l'API
+  # Note : la valeur est contrôlée en frontend donc arrive correcte ici
+  def self._parse_duration(str, lang)
+    amount, mot = str.downcase.strip.split(/\s+/, 2)
+    amount = amount.to_i
+    case mot
+    when Lang.minute_in(lang)   then [amount, 'minute']
+    when Lang.hour_in(lang)     then [amount * 60, 'minute']
+    when Lang.day_in(lang)      then [amount, 'day']
+    when Lang.week_in(lang)     then [amount * 7, 'day']
+    when Lang.month_in(lang)    then [amount * 31, 'day']
+    end
+  end
 end
+
+class Lang
+class << self
+  def minute_in(lang) = /(minute|mn)s?/           # TODO faire pour chaque langue
+  def hour_in(lang)   = /(heure|hr|hour|h)s?/     # idem
+  def day_in(lang)    = /(jour|jr|j|day|d)s?/     # idem
+  def week_in(lang)   = /(semaine|sem|week|w)s?/  # idem
+  def month_in(lang)  = /(moi|month)s?/           # idem
+end # /self
+end #/ Lang

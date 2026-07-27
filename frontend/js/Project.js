@@ -618,15 +618,21 @@ class Project {
    *              SERVIR QU'À VALIDER LES OPÉRATIONS :
    *                  - MARQUAGE DE TÂCHE ACCOMPLIE
    *                  - CRÉATION DES NOUVELLES TÂCHES
+   * 
+   *      TODO : lorsque 0 tâches créées et 0 tâches cochées => ne pas confirmer
+   * 
    */
   onValidateTodoist(newTasks, nombre, retour){
+    console.log("-> onValidateTodoist", {newTasks, nombre, retour})
     if (retour) {
       console.log("[onValidateTodoist] retour= ", retour)
-      if (newTasks.length) {
+      if (undefined == newTasks) {
+        console.log("Nouvelles tâches non définies")
+      } else if (newTasks.length) {
         // De nouvelles tâches sont à créer
         console.log("Nouvelles tâches à créer", newTasks)
       } else {
-        this.
+        console.log("Je passe par ici finalement.")
       }
     } else {
       var operations = []
@@ -635,8 +641,10 @@ class Project {
           operations.push(getMsg('mark-task-checked', task.content))
         }
       })
-      if (operations.length == 0) {
-        this.onValidateTodoist.call(this, newTasks, 0, {ok: true})
+      if (newTasks) {
+        newTasks.forEach(newTask => {
+          operations.push(getMsg('todoist-text-new-task', [newTask.content]))
+        })
       }
       operations = "\n\n" + operations.join("\n") + "\n\n"
       new ConfirmDialog({

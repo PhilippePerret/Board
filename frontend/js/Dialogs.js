@@ -86,72 +86,6 @@ class OKDialog extends Dialog {
 
 }
 
-/**
- * Dialog pour gestion de LISTE DE TÂCHES
- */
-class TasksDialog extends Dialog {
-  constructor(data){
-    super(data)
-    this.width    = '800px'
-    this.tasks    = data.tasks
-    this.onCheck  = data.onCheck
-    this.content  = this.buildTaskList()
-    this.ouiData  = {name: 'OK', onclick: data.onValidate.bind(null, this.newTasks)}
-    this.nonData  = null
-    this.midData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
-    this.newTasks = []
-  }
-
-  onCreateNewTask(retour){
-    if (retour) {
-      console.log("retour onCreateNewTask", retour)
-      var task = {}
-      retour
-        .split("\n")
-        .filter(line => line.trim() != '')
-        .forEach(line => {
-          var val, segs = line.split(':')
-          const key = segs.shift()
-          if (key) {
-            val = segs.join(':')
-          } else {
-            key = 'content'
-            val = String(line)
-          }
-          Object.assign(task, {[key]: val})
-        })
-      this.newTasks.push(task)
-      this.list.appendChild(DCreate('DIV', {text: getMsg('todoist-text-new-task', [task.content])}))
-
-    } else {
-      new TextareaDialog({
-          title: getMsg('New task')
-        , width: '800px'
-        , q: getMsg('todoist-message-new-task') + "\n\n"
-        , default: MESSAGES['todoist-default-new-task']
-        , ouiBtn: {name: 'OK', onclick: this.onCreateNewTask.bind(this)}
-        , nonBtn: {name: getMsg('Cancel')}
-      }).show()
-    }
-  }
-
-  buildTaskList(){
-    this.list = DCreate('DIV', {class: 'task-list'})
-    this.tasks.forEach(task => {
-      const liId  = `todoist-task-${task.id}`
-      const li    = DCreate('DIV', {id: liId, class: 'task-li'})
-      const cbId  = `${liId}-cb`
-      const cb    = DCreate('INPUT', {id: cbId, type:'checkbox'})
-      listen(cb, 'click', this.onCheck.bind(this, task))
-      const span  = DCreate('LABEL', {for: cbId, text: task.content})
-      li.appendChild(cb)
-      li.appendChild(span)
-      this.list.appendChild(li)
-    })
-    return this.list
-  }
-}
-
 // Pour faire une fenêtre présentant un menu de choix (et seulement ça)
 class SelectDialog extends Dialog {
   constructor(data){
@@ -278,5 +212,137 @@ class ColorDialog extends Dialog {
     this.onWhite.style.color      = color
     this.onBlack.style.color      = color
     this.disc.style.background    = color
+  }
+}
+
+
+
+/**
+ * Dialog pour gestion de LISTE DE TÂCHES
+ */
+class TasksDialog extends Dialog {
+  constructor(data){
+    super(data)
+    this.width    = '800px'
+    this.tasks    = data.tasks
+    this.onCheck  = data.onCheck
+    this.content  = this.buildTaskList()
+    this.ouiData  = {name: 'OK', onclick: () => {
+      data.onValidate.call(null, this.newTasks)
+    }}
+    this.nonData  = null
+    this.midData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
+    this.newTasks = []
+  }
+
+  /**
+   * Méthode appelée quand on clique sur le bouton "Nouvelle tâche…"
+   * Elle ouvre un textarea pour entrer les nouvelles données.
+   */
+  onCreateNewTask(newTask){
+    if (newTask) {
+      console.log("retour onCreateNewTask", newTask)
+      this.newTasks.push(newTask)
+      this.list.appendChild(DCreate('DIV', {text: getMsg('todoist-text-new-task', [newTask.content])}))
+
+    } else {
+
+      this.BoiteTaskData = new TextareaDialog({
+            title: getMsg('New task')
+          , id: 'task-data-textarea'
+          , width: '800px'
+          , q: getMsg('todoist-message-new-task') + "\n\n"
+          , default: MESSAGES['todoist-default-new-task']
+          , ouiBtn: {name: 'OK', onclick: this._validateTaskBeforeSubmit.bind(this), keep: true}
+          , nonBtn: {name: getMsg('Cancel')}
+        })
+      this.BoiteTaskData.show()
+    }
+  }
+  /**
+   ****************************************************************
+   ***            VALIDATION DES INFORMATIONS                   ***
+   */
+  _validateTaskBeforeSubmit(ev){ D.on && D.trace(ev)
+    const task = {}
+
+    // Pour valider la donnée de tâche +key+ de valeur +val+ et
+    // la mettre dans +task+ si elle est ok ou enregistrer l'erreur
+    // dans +errors+
+    const validateAndAdd = (key, val, errors, task) => {
+      const nombreErreursBefore = Number(errors.length)
+      this._validateByKey(key, val, errors)
+      if ( errors.length == nombreErreursBefore) Object.assign(task, {[key]: val})
+      // console.log("task dans validateAndAdd", task)
+    }
+    const contenu = DGet('#__task-data-textarea__').value
+    const errors = []
+    var line, val, key, segs, lines = contenu.trim().split("\n")
+    while((line = lines.shift()) !== undefined) {
+      if (key == 'description'){
+        if (line.match(/^[a-z]+\:/) /* nouvelle clé */) {
+          // On peut donc valider la description
+          validateAndAdd('description', val, errors, task)
+        } else {
+          val += "\n" + line
+          continue
+        }
+      }
+      segs  = line.split(':')
+      key   = segs.shift().trim() // TODO clé inconnue => content (cas où content n'est pas mis, mais où la ligne contient ":")
+      val   = segs.join(':').trim()
+      // Pour une description (multi-line) le check se fait plus tard (ci-dessus)
+      key == 'description' || validateAndAdd(key, val, errors, task)
+    }
+
+    // Si la tâche est ok, on peut l'ajouter
+    if (errors.length) {
+      new ErrorsDialog({
+        title:getMsg('todoist-new-task-title-errors') 
+        , q: getMsg('todoist-new-task-msg-correct-errors') + aide('todoist')
+        , errors
+      }).show()
+    } else {
+      // Keep:true oblige à forcer la fermeture de la boite
+      console.log("Données tâches valides, fermeture de la boite et création")
+      this.BoiteTaskData.hide()
+      this.onCreateNewTask(task)
+    }
+  }
+  // Validation par clé
+  _validateByKey(key, val, errors){
+    // console.log("[_validateByKey] key, val, errors", {key, val, errors})
+    switch(key) {
+      case 'content':
+        if (val == '') errors.push(getErr('prop-cant-be-empty', ['content']))
+        return
+      case 'description': return // idem
+      case 'start':       return Validator.date(val, errors)
+      case 'deadline':
+        Validator.date(val, errors)
+        return Validator.dateAfter('/* on doit avoir la date start */', val, errors)
+      case 'duration':    return Validator.duration(val, errors)
+      case 'priority':    if(!val.match(/^[1-5]$/)){errors.push(getErr('must-be-num-between', [val, 1, 5]))}
+      case 'labels':      return
+      default: 
+        errors.push(getErr('todoist-key-task-unknown', key))
+    }
+    return 
+  }
+
+  buildTaskList(){
+    this.list = DCreate('DIV', {class: 'task-list'})
+    this.tasks.forEach(task => {
+      const liId  = `todoist-task-${task.id}`
+      const li    = DCreate('DIV', {id: liId, class: 'task-li'})
+      const cbId  = `${liId}-cb`
+      const cb    = DCreate('INPUT', {id: cbId, type:'checkbox'})
+      listen(cb, 'click', this.onCheck.bind(this, task))
+      const span  = DCreate('LABEL', {for: cbId, text: task.content})
+      li.appendChild(cb)
+      li.appendChild(span)
+      this.list.appendChild(li)
+    })
+    return this.list
   }
 }

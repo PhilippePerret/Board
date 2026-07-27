@@ -33,7 +33,7 @@ const MESSAGES = {
     , 'New task...': "Nouvelle tâche…"
     , 'New task': "Nouvelle tâche"
     , 'todoist-message-new-task': "Définissez ci-dessous les paramètres généraux de cette nouvelle tâche. Vous pouvez supprimer tous les paramètres inutiles et utiliser des marqueurs simplifiés (today, tomorrow, 4j, etc.)"
-    , 'todoist-default-new-task': "content: \ndue: JJ/MM/AAAA\nduration: \npriority: 1-5\ndeadline: JJ/MM/AAAA\ndescription: \n\n"
+    , 'todoist-default-new-task': "content: \ndescription: \n\nstart: JJ/MM/AAAA\nduration: \npriority: 1-5\ndeadline: JJ/MM/AAAA\nlabels: lab 1, lab 2, ..."
     , 'todoist-text-new-task': "Nouvelle tâche : $1"
     , 'todoist-project-title': "Titre du projet dans Todoist"
     , 'todoist-tasks': "Tâches Todoist" // par exemple title du bouton de la carte
@@ -44,6 +44,8 @@ const MESSAGES = {
     , 'mark-task-checked': "La tâche “$1” est à marquer achevée."
     , 'todoist-task-closed-message': "Les tâches du projet “$1” ($2) ont été marquées accomplies."
     , 'todoist-tasks-created-message': "Les nouvelles tâches du projet “$1” ont été créées ($2)." 
+    , 'todoist-new-task-title-errors': "Tâche invalide"
+    , 'todoist-new-task-msg-correct-errors': "Merci de corriger les erreurs ci-dessous :"
     // -- test --
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'

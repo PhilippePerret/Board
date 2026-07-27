@@ -1,0 +1,77 @@
+[[todoist]]
+== Todoist ==
+
+Une autre force de {app-name} est de pouvoir travailler avec l'application Todoist.
+
+Il suffit de cliquer sur la petite icône image:{img-folder}/images/todoist.png[Logo Todoist, width=32px] pour avoir un accès direct à l'application pour : 
+
+- <<td-link-project, lier le projet>>
+- <<td-project-creation, créer le projet>>,
+- <<td-tasks-of-the-day, lire les tâches du jour>>,
+- <<td-create-task, créer de nouvelles tâches>>.
+
+[[td-link-project]]
+=== Lier le projet ===
+
+Si le projet existe déjà dans Todoist, il suffit de le lier en cliquant une première fois sur le logo. {app-name} demandera son titre (qui peut être différent du titre dans {app-name}) et le retrouvera, s'il existe sous ce nom, dans Todoist.
+
+Le projet dans {app-name} sera alors automatiquement lié au projet dans Todois. Cela, concrètement, signifie qu'on peut :
+
+- voir au démarrage le nombre de <<td-tasks-of-the-day, tâches du jour>>,
+- <<td-complete-task, marquer les tâches achevées>>,
+- <<td-create-task, créer de nouvelles tâches>>.
+
+[[td-project-creation]]
+=== Création du projet ===
+
+
+[[td-tasks, Les tâches]]
+=== Les tâches ===
+
+
+[[td-tasks-of-the-day]]
+==== Les Tâches du jour ====
+
+Au démarrage de l'application, on peut voir sur l'idône Todoists une pastille indiquant le nombre de tâches du jour courant.
+
+Pour les lires dans {app-name}, il suffit de cliquer sur l'icône.
+
+[[td-complete-task]]
+==== Marquer les tâches achevées ====
+
+[[td-create-task]]
+==== Créer de nouvelles tâches ====
+
+Pour créer de nouvelles tâches (pour aujourd'hui ou n'importe quand) : 
+
+. cliquer sur l'icône Todoist image:{img-folder}/images/todoist.png[Logo Todoist, width=24px],
+. cliquer sur le bouton “Nouvelle tâche…”,
+. définissez la nouvelle tâche (cf. ci-dessous <<td-define-new-task>>),
+. cliquer sur “OK” pour la prendre en compte,
+. cliquer sur “Nouvelle tâche…” pour en créer d'autres de la même manière,
+. cliquer enfin sur “OK” pour que la ou les nouvelles tâches soient crées dans Todoist, comme toute autre tâche.
+
+---
+[[td-define-new-task, Définition de la nouvelle tâche]]
+===== Définition de la nouvelle tâche =====
+
+Le contenu défini par `content:` est la seule information indispensable pour créer une nouvelle tâche. Toutes les autres sont optionnelles.
+
+
+[cols="1,3,2"]
+|====
+| **Propriété**   | **Description**                                     | **Exemples**
+| `content`       | Titre/action de la tâche                            | "Je dois faire ça ce jour-là"
+| `description`   | Description plus précise de la tâche                | "Cette tâche consiste précisément à…"
+| `startline`     | Date où la tâche doit apparaitre dans le calendrier | voir les <<td-formats-date>>.
+| `duration`      | Durée de la tâche                                   | "3 jours", "3j"
+| `deadline`      | Date où la tâche devra être achevée                 | voir les <<td-formats-date>>.
+| `priority`      | Priorité de la tâche sur les autres                 | de 1 à 5
+| `labels`        | Liste de labels de la tâche                         | "label 1, label 2………, label L"
+|====
+
+[[td-formats-date, formats de date]]
+====== Formats valides de date ======
+
+[[td-formats-duration]]
+====== Formats valides de durée ======

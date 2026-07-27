@@ -83,19 +83,19 @@ class Dialog {
     } else {
       error('this.ouiData.onclick n’est pas une fonction')
     }
-    this.hide()
+    this.ouiData.keep || this.hide()
     return stopEvent(ev)
   }
 
   onNon(ev){
-    this.hide()
+    ;(this.nonData && this.nonData.keep) || this.hide()
     if ('function' == typeof this.nonData.onclick) {
       this.nonData.onclick()
     }
     return stopEvent(ev)
   }
   onMid(ev){
-    this.midData.keep || this.hide()
+    ;(this.midData && this.midData.keep) || this.hide()
     if ('function' == typeof this.midData.onclick) {
       this.midData.onclick()
     } else {

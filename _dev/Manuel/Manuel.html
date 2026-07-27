@@ -451,6 +451,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#reglages-app">Réglages de l&#8217;application</a></li>
+<li><a href="#_todoist">Todoist</a>
+<ul class="sectlevel2">
+<li><a href="#td-link-project">Lier le projet</a></li>
+<li><a href="#td-project-creation">Création du projet</a></li>
+<li><a href="#td-tasks">Les tâches</a></li>
+</ul>
+</li>
 <li><a href="#scripts-services">Les scripts-services</a>
 <ul class="sectlevel2">
 <li><a href="#_liste_complète_des_types_assemblables">Liste complète des types assemblables</a></li>
@@ -494,12 +501,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>l&#8217;étape 'duplication-manuscrit' de type 'copy-file' tourne en rond lorsque le manuscrit vient d&#8217;être défini
-peut-être comme si "${manuscrit-path}" était mal défini.
-Recommencer maintenant que j&#8217;ai mis l&#8217;identifiant entre guillemets qui ne doivent pourtant pas jouer…
-LE BUG : EN fait, ça doit venir du fait que l&#8217;id n&#8217;était pas défini… Mais alors, il faut voir POURQUOI l&#8217;erreur de  l&#8217;id manquant n&#8217;est pas signalé
-IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux étapes sont "compilées"
-=&#8658; FAIRE VRAIMENT DES LIGNES VIDES</p>
+<p>Problème de définition dans le projet Board
+common_services_data:
+  open-a-file:</p>
+</li>
+<li>
+<p><a href="file:///Users/philippeperret/Programmes/Board/_dev/Manuel/Manuel.html" class="bare">file:///Users/philippeperret/Programmes/Board/_dev/Manuel/Manuel.html</a>
+BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;autres
+      choses — attention, il s&#8217;agit peut-être d&#8217;un scorie. Quand on traitera ce bug,
+      commencer par supprimer cette donnée pour voir qui l&#8217;utilise (certainement
+      l&#8217;ouverture de la documentation)</p>
 </li>
 </ul>
 </div>
@@ -508,13 +519,7 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <div class="sect1">
 <h2 id="_todo_en_cours">Todo En cours</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Dans raise, utiliser le traceur pour avoir un meilleur message</p>
-</li>
-</ul>
-</div>
+
 </div>
 </div>
 <div class="sect1">
@@ -523,16 +528,10 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <div class="ulist">
 <ul>
 <li>
-<p>bouton commun pour ouvrir les données du projet (en indiquant "prudence")</p>
+<p>pouvoir mettre des projets en "standby" (ils apparaissent repliés dans l&#8217;interface)</p>
 </li>
 <li>
 <p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
-</li>
-<li>
-<p>En cas d&#8217;erreur (tout le temps) : utiliser la fenêtre des script-services</p>
-</li>
-<li>
-<p>fenêtre des erreurs : ne pas utiliser le break:n&#8217;importe où qui coupe les mots, mais faire un test sur les longues parties sans espace/coupures possible</p>
 </li>
 <li>
 <p>pouvoir récupérer les tâches de todoist</p>
@@ -692,6 +691,107 @@ IDÉE : parce que la ligne vide contient en vérité "  " et donc que les deux �
 <div class="sectionbody">
 <div class="paragraph">
 <p>En cliquant sur le titre include::/../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todoist">Todoist</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Une autre force de Board est de pouvoir travailler avec l&#8217;application Todoist.</p>
+</div>
+<div class="paragraph">
+<p>Il suffit de cliquer sur la petite icône <span class="image"><img src="../../frontend/images/todoist.png" alt="Logo Todoist" width="32px"></span> pour avoir un accès direct à l&#8217;application pour :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#td-link-project">lier le projet</a></p>
+</li>
+<li>
+<p><a href="#td-project-creation">créer le projet</a>,</p>
+</li>
+<li>
+<p><a href="#td-tasks-of-the-day">lire les tâches du jour</a>,</p>
+</li>
+<li>
+<p><a href="#td-create-task">créer de nouvelles tâches</a>.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="td-link-project">Lier le projet</h3>
+<div class="paragraph">
+<p>Si le projet existe déjà dans Todoist, il suffit de le lier en cliquant une première fois sur le logo. Board demandera son titre (qui peut être différent du titre dans Board) et le retrouvera, s&#8217;il existe sous ce nom, dans Todoist.</p>
+</div>
+<div class="paragraph">
+<p>Le projet dans Board sera alors automatiquement lié au projet dans Todois. Cela, concrètement, signifie qu&#8217;on peut :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>voir au démarrage le nombre de <a href="#td-tasks-of-the-day">tâches du jour</a>,</p>
+</li>
+<li>
+<p><a href="#td-complete-task">marquer les tâches achevées</a>,</p>
+</li>
+<li>
+<p><a href="#td-create-task">créer de nouvelles tâches</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="td-project-creation">Création du projet</h3>
+
+</div>
+<div class="sect2">
+<h3 id="td-tasks">Les tâches</h3>
+<div class="sect3">
+<h4 id="td-tasks-of-the-day">Les Tâches du jour</h4>
+<div class="paragraph">
+<p>Au démarrage de l&#8217;application, on peut voir sur l&#8217;idône Todoists une pastille indiquant le nombre de tâches du jour courant.</p>
+</div>
+<div class="paragraph">
+<p>Pour les lires dans Board, il suffit de cliquer sur l&#8217;icône.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="td-complete-task">Marquer les tâches achevées</h4>
+
+</div>
+<div class="sect3">
+<h4 id="td-create-task">Créer de nouvelles tâches</h4>
+<div class="paragraph">
+<p>Pour créer de nouvelles tâches (pour aujourd&#8217;hui ou n&#8217;importe quand) :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>cliquer sur l&#8217;icône Todoist <span class="image"><img src="../../frontend/images/todoist.png" alt="Logo Todoist" width="24px"></span>,</p>
+</li>
+<li>
+<p>cliquer sur le bouton “Nouvelle tâche…”,</p>
+</li>
+<li>
+<p>définissez la nouvelle tâche (cf. ci-dessous <a href="#td-define-new-task">Définition de la nouvelle tâche</a>),</p>
+</li>
+<li>
+<p>cliquer sur “OK” pour la prendre en compte,</p>
+</li>
+<li>
+<p>cliquer sur “Nouvelle tâche…” pour en créer d&#8217;autres de la même manière,</p>
+</li>
+<li>
+<p>cliquer enfin sur “OK” pour que la ou les nouvelles tâches soient crées dans Todoist, comme toute autre tâche.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="td-define-new-task">Définition de la nouvelle tâche</h5>
+
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2394,7 +2494,7 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <div class="sect2">
 <h3 id="_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</h3>
 <div class="paragraph">
-<p>On peut très facilement gérer les fichiers versionnés avec include::../../../../frontend/js/App.js[tag=app-name]. On peut même choisir son système préféré :</p>
+<p>On peut très facilement gérer les fichiers versionnés avec Board. On peut même choisir son système préféré :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2407,13 +2507,13 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 </ul>
 </div>
 <div class="paragraph">
-<p>Ces deux modes sont invisibles, include::../../../../frontend/js/App.js[tag=app-name] se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
+<p>Ces deux modes sont invisibles, Board se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
 </div>
 <div class="paragraph">
 <p>Bien entendu, on peut choisir autant de fichiers versionné qu&#8217;on le désire, pour le même projet.</p>
 </div>
 <div class="paragraph">
-<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, include::../../../../frontend/js/App.js[tag=app-name] demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
+<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, Board demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2549,6 +2649,25 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 </div>
 <div class="sect2">
 <h3 id="_fonctionnalités">fonctionnalités</h3>
+<div class="sect3">
+<h4 id="_messages_en_exergue">Messages en exergue</h4>
+<div class="paragraph">
+<p>Pour obtenir des messages en exergue qui se place au centre de la fenêtre et disparaissent rapidement, ajouter s&#8217;implement <code>true</code> en début de l&#8217;appel de <code>message()</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>message(true, "Ce message sera mis au centre")</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_erreurs_plus_visibles">Erreurs plus visibles</h4>
+<div class="paragraph">
+<p>Pour avoir une meilleure visualisation des erreurs, on doit utiliser le dialog <code>ErrorsDialog</code> qui permet un affichage plus lisible et consultable. Cf. le fichier <code>../../../../frontend/js/Dialogs</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_liste_complète_des_fonctionnalités">Liste complète des fonctionnalités</h4>
 <div class="paragraph">
 <p><em>TD = Todo, à faire</em>
 <em>Docu</em> : (pour "documentation") mis à “X" pour indiquer que le fonctionnalité est documentée dans la partie développement, avec un lien vers cette partie. Autres valeurs : "-" pour indiquer que ça n&#8217;est pas encore fait, "N" pour "non", fonctionnalité qui ne sera pas documentée.
@@ -2804,6 +2923,7 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 </tbody>
 </table>
 </div>
+</div>
 <div class="sect2">
 <h3 id="_les_projet">Les projet</h3>
 <div class="paragraph">
@@ -2813,7 +2933,7 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <div class="sect2">
 <h3 id="_applescript">AppleScript</h3>
 <div class="paragraph">
-<p><strong>include::../../../../frontend/js/App.js[tag=app-name]</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
+<p><strong>Board</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
 </div>
 <div class="paragraph">
 <p>Une librairie avec des méthodes utiles est implémentée dans backend/script/lib/Lib.scpt (c&#8217;est un exécutable qui ne peut pas être modifié, il faut modifier <code>Lib-editable.scpt</code>).</p>
@@ -3244,7 +3364,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-21 17:15:25 +0200
+Last updated 2026-07-27 07:24:10 +0200
 </div>
 </div>
 </body>

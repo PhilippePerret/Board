@@ -14,6 +14,7 @@
 
 == Todo list ==
 
+- pouvoir mettre des projets en "standby" (ils apparaissent repliés dans l'interface)
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
 - pouvoir récupérer les tâches de todoist
 - pouvoir ajouter des tâches à todoist
