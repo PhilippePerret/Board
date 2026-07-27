@@ -107,8 +107,23 @@ module Todoist
     task = task.merge('project_id' => project_id)
     lang = APP_DATA['lang'].split('-')[0]
 
-    if task['due_string']
-      task['due_lang'] = lang
+    # 'start' (langage naturel, ex: "demain", "dans 3 jours") est la clé
+    # utilisée côté frontend (TasksDialog) ; l'API attend 'due_string' + 'due_lang'
+    if task['start']
+      task['due_string'] = task.delete('start')
+      task['due_lang']   = lang
+    end
+
+    # 'deadline' idem : langage naturel côté frontend, 'deadline_date' + 'deadline_lang' côté API
+    if task['deadline']
+      task['deadline_date'] = task.delete('deadline')
+      task['deadline_lang'] = lang
+    end
+
+    # 'labels' arrive en chaîne séparée par des virgules côté frontend,
+    # l'API attend un tableau
+    if task['labels'].is_a?(String)
+      task['labels'] = task['labels'].split(',').map(&:strip)
     end
 
     if task['duration']
