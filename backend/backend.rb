@@ -236,14 +236,6 @@ begin
     require_relative 'lib/todoist.rb'
     RETOUR.data = Todoist.close_and_create_tasks(request['project_id'], request['done'], request['created'])
 
-  when 'todoist-mark-complete-and-create-new'
-    require_relative 'lib/todoist.rb'
-    Todoist.close_tasks(request['done'])
-    count = Todoist.create_tasks(request['project_id'], request['created'])
-    RETOUR.data = {count: count}
-
-
-
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"

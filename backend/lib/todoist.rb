@@ -109,8 +109,9 @@ module Todoist
 
     # 'start' (langage naturel, ex: "demain", "dans 3 jours") est la clé
     # utilisée côté frontend (TasksDialog) ; l'API attend 'due_string' + 'due_lang'
-    if task['start']
-      task['due_string'] = task.delete('start')
+    due = task.delete('start') || task.delete('due')
+    if due
+      task['due_string'] = due
       task['due_lang']   = lang
     end
 
