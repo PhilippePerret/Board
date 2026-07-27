@@ -56,6 +56,16 @@ module Todoist
     end
   end
 
+  def self.close_and_create_tasks(project_id, dones, createds)
+    done    = close_tasks(dones)
+    created = create_tasks(project_id, createds)
+    {
+      done_count:    done[:count],
+      created_count: created[:count],
+      errors: done[:errors] + created[:errors]
+    }
+  end
+
   def self.close_task(task_id)
     request(:post, "/tasks/#{task_id}/close")
   end

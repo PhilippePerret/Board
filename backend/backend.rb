@@ -234,13 +234,7 @@ begin
 
   when 'todoist-mark-complete-and-create-new'
     require_relative 'lib/todoist.rb'
-    done    = Todoist.close_tasks(request['done'])
-    created = Todoist.create_tasks(request['project_id'], request['created'])
-    RETOUR.data = {
-      done_count:    done[:count],
-      created_count: created[:count],
-      errors: done[:errors] + created[:errors]
-    }
+    RETOUR.data = Todoist.close_and_create_tasks(request['project_id'], request['done'], request['created'])
 
   when 'todoist-mark-complete-and-create-new'
     require_relative 'lib/todoist.rb'

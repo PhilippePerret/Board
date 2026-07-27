@@ -26,7 +26,8 @@ header div#tools-button {
   -webkit-user-select: none!important;
 }
 
-.discret { opacity: 0.3;}
+.discret { opacity: 0.6;}
+.tres-discret { opacity: 0.3;}
 .discret:hover { opacity: 1;}
 .fright {float: right;}
 .fleft  {float: left;}

@@ -34,7 +34,7 @@ const MESSAGES = {
     , 'New task': "Nouvelle tâche"
     , 'todoist-message-new-task': "Définissez ci-dessous les paramètres généraux de cette nouvelle tâche. Vous pouvez supprimer tous les paramètres inutiles et utiliser des marqueurs simplifiés (today, tomorrow, 4j, etc.)"
     , 'todoist-default-new-task': "content: \ndescription: \n\nstart: JJ/MM/AAAA\nduration: \npriority: 1-5\ndeadline: JJ/MM/AAAA\nlabels: lab 1, lab 2, ..."
-    , 'todoist-text-new-task': "Nouvelle tâche : $1"
+    , 'todoist-text-new-task': "✔ Nouvelle tâche : $1"
     , 'todoist-project-title': "Titre du projet dans Todoist"
     , 'todoist-tasks': "Tâches Todoist" // par exemple title du bouton de la carte
     , 'msg-ask-for-todoist-project-title': "Merci d'indiquer ci-dessous le titre du projet $1 dans l'application Todoist."

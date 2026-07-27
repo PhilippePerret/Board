@@ -639,7 +639,7 @@ class Project {
   onMarkAndCreateTodoistTask(newTasks, retour){
     if (retour){
       if (retour.data.errors.length) raise(retour.data.errors.join("\n"))
-      message(true, getMsg('todoist-fin-tasks-done-and-create', [this.title, retour.data.done_count, retour.data.create_count]))
+      message(true, getMsg('todoist-fin-tasks-done-and-create', [this.title, retour.data.done_count, retour.data.created_count]))
       this.getTachesAndSetBadges()
     } else {
       const task_ids = this.tasks.filter(t => t.checked).map(t => t.id)
