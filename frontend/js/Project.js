@@ -618,6 +618,8 @@ class Project {
     if (operations.length == 0 && newTasks.length == 0){
       // Rien à confirmer
       return true
+    } else if (operations.length == 0) {
+      operations.push('<div class="italic">'+getMsg('todoist-no-task-done')+'</div>')
     }
     if (newTasks) {
       // On ajoute les évenutelles nouvelles tâches
@@ -625,6 +627,8 @@ class Project {
       newTasks.forEach(newTask => {
         operations.push(getMsg('todoist-text-new-task', [newTask.content]))
       })
+    } else {
+      operations.push('<div class="italic">'+getMsg('todoist-no-new-task')+'</div>')
     }
     operations = "\n\n" + operations.join("\n") + "\n\n"
     new ConfirmDialog({

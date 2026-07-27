@@ -218,7 +218,9 @@ class ColorDialog extends Dialog {
 
 
 /**
- * Dialog pour gestion de LISTE DE TÂCHES
+ * Dialog pour gestion complète de LISTE DE TÂCHES
+ * 
+ * Permet de créer de nouvelles tâches facilement.
  */
 class TasksDialog extends Dialog {
   constructor(data){
@@ -304,7 +306,7 @@ class TasksDialog extends Dialog {
       }).show()
     } else {
       // Keep:true oblige à forcer la fermeture de la boite
-      console.log("Données tâches valides, fermeture de la boite et création")
+      // console.log("Données tâches valides, fermeture de la boite et création")
       this.BoiteTaskData.hide()
       this.onCreateNewTask(task)
     }
@@ -317,7 +319,8 @@ class TasksDialog extends Dialog {
         if (val == '') errors.push(getErr('prop-cant-be-empty', ['content']))
         return
       case 'description': return // idem
-      case 'start':       return Validator.date(val, errors)
+      case 'start': case 'due': return Validator.date(val, errors)
+      
       case 'deadline':
         Validator.date(val, errors)
         return Validator.dateAfter('/* on doit avoir la date start */', val, errors)

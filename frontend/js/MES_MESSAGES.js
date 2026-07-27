@@ -46,6 +46,8 @@ const MESSAGES = {
     , 'todoist-tasks-created-message': "Les nouvelles tâches du projet “$1” ont été créées ($2)." 
     , 'todoist-new-task-title-errors': "Tâche invalide"
     , 'todoist-new-task-msg-correct-errors': "Merci de corriger les erreurs ci-dessous :"
+    , 'todoist-no-task-done': "Aucune tâche à marquer achevée."
+    , 'todoist-no-new-task': "Aucune nouvelle tâche."
     // -- test --
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'
