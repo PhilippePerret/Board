@@ -3,7 +3,7 @@
 
 Une autre force de {app-name} est de pouvoir travailler avec l'application Todoist.
 
-Il suffit de cliquer sur la petite icône image:{img-folder}/images/todoist.png[Logo Todoist, width=32px] pour avoir un accès direct à l'application pour : 
+Il suffit de cliquer sur la petite icône image:{img-folder}/images/todoist-none.png[Logo Todoist, width=32px] pour avoir un accès direct à l'application pour : 
 
 - <<td-link-project, lier le projet>>
 - <<td-project-creation, créer le projet>>,
@@ -24,6 +24,7 @@ Le projet dans {app-name} sera alors automatiquement lié au projet dans Todois.
 [[td-project-creation]]
 === Création du projet ===
 
+Pour créer le projet dans Todoist, il faut pour le moment le faire du côté de l'application Todoist elle-même. Nous vous laissons vous reporter à sa documentation pour le faire.
 
 [[td-tasks, Les tâches]]
 === Les tâches ===

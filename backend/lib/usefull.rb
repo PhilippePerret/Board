@@ -24,6 +24,7 @@ APP_DATA_FILE = ensure_file(
   # Les données courantes de l'application
 APP_DATA = YAML.safe_load(IO.read(APP_DATA_FILE))
 APP_DATA["support_folder"] = DATA_SUPPORT_FOLDER
+APP_DATA['lang'] ||= 'fr-FR' # seule langue disponible pour le moment
 
 # tag::scripts-with-lib[]
 OSASCRIPT_WITH_LIB = {

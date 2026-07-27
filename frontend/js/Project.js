@@ -252,6 +252,9 @@ class Project {
       this.service_data = this.service_data ?? {}
       Object.assign(this.service_data, {[key]: val})
     }
+    if (key === 'todoist_id') {
+      this.todoistImg.src = `images/todoist${this.todoistBadgeByTasks()}.png`
+    }
     callback && this.save(callback)
   }
 
@@ -434,7 +437,7 @@ class Project {
     }
 
     this.todoistCont = DCreate('DIV', {style:'width:32px;', class:'todoist fright discret'})
-    this.tasksBadge = DCreate('DIV', {class: 'badge fright'})
+    this.tasksBadge = DCreate('DIV', {class: 'badge fright hidden'})
     this.todoistCont.appendChild(this.tasksBadge)
     this.todoistImg = DCreate('IMG', {src: `images/todoist${this.todoistBadgeByTasks()}.png`, class:'picto', title: getMsg('todoist-tasks')})
     this.todoistCont.appendChild(this.todoistImg)

@@ -53,6 +53,17 @@ def run_test
     unless File.realpath(data['path']) == File.realpath(fixture_dir)
       raise "Path attendu #{fixture_dir.inspect}, trouvé #{data['path'].inspect}"
     end
+
+    # BUG 1 : un projet neuf (sans todoist_id) ne doit pas avoir de badge visible
+    badge_hidden = bridge_eval("document.querySelector('#project-#{created_id} .badge').classList.contains('hidden')")
+    raise "Le badge de tâches Todoist ne devrait pas être visible sur un projet neuf" unless badge_hidden == 'true'
+
+    # BUG 2 : quand todoist_id est renseigné (synchronisation réussie), l'icône
+    # doit passer de todoist-none.png à todoist.png
+    bridge_eval("Project.get(#{created_id.to_json}).set('todoist_id', 'fake-todoist-id')")
+    icon_src = bridge_eval("document.querySelector('#project-#{created_id} .todoist img').getAttribute('src')")
+    raise "L'icône Todoist devrait passer à todoist.png une fois todoist_id renseigné, trouvé #{icon_src.inspect}" \
+      unless icon_src.end_with?('todoist.png')
   end
 ensure
   remove_fixture_project(created_id) if created_id
