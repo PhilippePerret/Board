@@ -161,7 +161,8 @@ class NativeNotifier: NSObject {
             let webView = WKWebView(frame: .zero, configuration: config)
             webView.setValue(false, forKey: "drawsBackground")
             webView.translatesAutoresizingMaskIntoConstraints = false
-            webView.loadHTMLString(html, baseURL: nil)
+            let baseURL = Bundle.main.resourceURL?.appendingPathComponent("frontend")
+            webView.loadHTMLString(html, baseURL: baseURL)
             panel.contentView = webView
             finalizeFrame(fittingSize: nil)
             panel.orderFrontRegardless()

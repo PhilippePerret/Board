@@ -2,7 +2,44 @@
  * MODULE MESSAGERIE
  * 
  * Gère tout ce qui relève des messages (dans l'app et notification)
+ * 
+ * TODO
+ *    gestion de l'icône
+ * 
+ * @usage
+ *      Notifier.notify(data)
+ * 
+ * avec +data+ contient :
+ * mode         Type de fenêtre
+ *                        modal     : elle bloque tout jusqu'à être fermée
+ *              [default] floating  : elle flotte au-dessus
+ * message      [requis]  Le message à afficher
+ * title        Titre surmontant le message
+ * icon         Icône accompagnant le message 
+ *              Soit un path d'image existante
+ *              Soit un nom 'warning', 'notice', 'error'
+ * delay        Délai avant fermeture de la fenêtre
+ *              [default] 60 (1 minute)
+ * width        Largeur précise de la fenêtre (300 par défaut)
+ * height       Hauteur de la fenêtre
+ * size         Dimension [width, height] de la fenêtre
+ * top          Position top de la fenêtre
+ * left         Position left de la fenêtre
+ * position     Position [left, top] de la fenêtre
+ * buttons      Les boutons à afficher
+ *              Liste de {name: "label", value: "lab1", onclick: callback}
+ *              Si 'value' n'est pas transmis, c'est :name
+ *              Dans ce cas, 
+
  */
+
+const NOTIFIER_DEFAULT = {
+    left: 40
+  , top: 40
+  , width: 460
+  , opacity: 0.85
+  , background: "beige"
+}
 
 /**
  * Pour obtenir la taille d'un bloc quelconque
@@ -26,29 +63,8 @@ class Measure {
 }
 
 class Notifier {
-  
-  /**
-   * +data+ contient :
-   * mode         Type de fenêtre
-   *              modal     : elle bloque tout jusqu'à être fermée
-   *              floating  : elle flotte au-dessus
-   * message      Le message à afficher
-   * title        Titre surmontant le message
-   * icon         Icône accompagnant le message 
-   *              Soit un path d'image existante
-   *              Soit un nom 'warning', 'notice', 'error'
-   * delay        Délai avant fermeture de la fenêtre
-   * width        Largeur précise de la fenêtre (300 par défaut)
-   * height       Hauteur de la fenêtre
-   * size         Dimension [width, height] de la fenêtre
-   * top          Position top de la fenêtre
-   * left         Position left de la fenêtre
-   * position     Position [left, top] de la fenêtre
-   * buttons      Les boutons à afficher
-   *              Liste de {name: "label", value: "lab1", onclick: callback}
-   *              Si 'value' n'est pas transmis, c'est :name
-   *              Dans ce cas, 
-   */
+
+  // Cf. data ci-dessus
   static notify(data){
     this.data = this._ensure_data(data)
     window.server.send(this.data, this.onClick.bind(this))
@@ -82,8 +98,10 @@ class Notifier {
       })
     }
 
-    ;[left, top]      = data.position || [data.left, data.top] || [40, screen.height - 40]
-    left = left || 300
+    data.icon || Object.assign(data, {icon: 'images/board.svg'})
+
+    ;[left, top]      = data.position || [data.left, data.top] || [NOTIFIER_DEFAULT.left, screen.height - NOTIFIER_DEFAULT.top]
+    left = left || NOTIFIER_DEFAULT.left
     ;[html, width, height] = this.buildHtml(data)
     // Interpréter les left et top quand ce sont des pourcentage.
     if (left.endsWith('%')) {
@@ -104,6 +122,7 @@ class Notifier {
       , html:     html
       , position: [left, top]
       , size:     [width, height]
+      , delay:    data.delay || 60
     })
 
     console.log("Data envoyé à notify", data)
@@ -114,6 +133,7 @@ class Notifier {
     var html = []
     html.push(this.styles(data).replace(/\n/g, '').replace(/\s+/g, '').replace(/__/g, ' '))
     html.push('<div id="notify">')
+    data.icon && html.push(`<img src="${data.icon}" class="icon" />`)
     data.title && html.push(`<h1>${data.title}</h1>`)
     html.push(`<div id="message">${data.message}</div>`)
     data.buttons && html.push(this.buildDivButtons(data))
@@ -137,21 +157,40 @@ class Notifier {
     return `<div class="buttons">${buttons}</div>`
   }
   static styles(data){
-    const width = data.width || data.size?.[0] || 300;
+    const width = data.width || data.size?.[0] || NOTIFIER_DEFAULT.width;
     return `<style>
-    body * {
-      font-size: 16pt;
-      font-family: Arial__Narrow, Helvetica;
+    body__* {
+      font-size: 14pt;
+      font-family: "Avenir__Next", "Arial__Narrow", Helvetica, Geneva;
     }
     div#notify {
       width: ${width}px;
+      position: relative;
       background-color: beige;
       text-shadow: 5px__5px__5px__5px__#777;
       border-radius: 1em;
+      padding: 1rem;
+      opacity: ${NOTIFIER_DEFAULT.opacity};
+      z-index: 2000;
     }
-    button {font-size: 1em;}
+    img.icon {
+      position: absolute;
+      width: 36px;
+      top: 24px;
+      left: 24px;
+    }
+    h1 {
+      font-size:1.5rem;
+      margin-left: 4rem;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    button {
+      font-size: 1em;
+    }
     div#message {
-      padding:2em;
+      padding:2rem;
+      margin-left: 2rem;
     }
     div.buttons {
     text-align: right;
