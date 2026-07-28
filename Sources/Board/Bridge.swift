@@ -24,6 +24,13 @@ class Bridge: NSObject, WKScriptMessageHandler {
             return
         }
 
+        if let action = body["action"] as? String, action == "notify" {
+            NativeNotifier.handle(request: body) { [weak self] response in
+                self?.sendToJavascript(response)
+            }
+            return
+        }
+
         backend.run(json: jsonString) { [weak self] response in
             self?.sendToJavascript(response)
         }

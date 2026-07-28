@@ -312,21 +312,28 @@ class TasksDialog extends Dialog {
     }
   }
   // Validation par clé
+  get _content_(){ return this._content || (this._content = getMsg('todoist-content'))}
+  get _description_(){return this._description || (this._description = getMsg('todoist-description'))}
+  get _due_(){ return this._due ||(this._due = getMsg('todoist-due'))}
+  get _deadline_(){return this._deadline || (this._deadline = getMsg('todoist-deadline'))}
+  get _duration_(){ return this._duration || (this._duration = getMsg('todoist-duration'))}
+  get _priority_(){return this._priority || (this._priority = getMsg('todoist-priority'))}
+  get _labels_(){return this._labels || (this._labels = getMsg('todoist-labels'))}
+  get _repeat_(){return this._repeat || (this._repeat = getMsg('todoist-repeat'))}
+
   _validateByKey(key, val, errors){
     // console.log("[_validateByKey] key, val, errors", {key, val, errors})
     switch(key) {
-      case 'content':
-        if (val == '') errors.push(getErr('prop-cant-be-empty', ['content']))
-        return
-      case 'description': return // idem
-      case 'start': case 'due': return Validator.date(val, errors)
-      
-      case 'deadline':
-        Validator.date(val, errors)
-        return Validator.dateAfter('/* on doit avoir la date start */', val, errors)
-      case 'duration':    return Validator.duration(val, errors)
-      case 'priority':    if(!val.match(/^[1-5]$/)){errors.push(getErr('must-be-num-between', [val, 1, 5]))}
-      case 'labels':      return
+      case 'content': case this._content_:  if (val == '') errors.push(getErr('prop-cant-be-empty', ['content']))
+                                            return
+      case 'description': case this._description_: return // idem
+      case 'due':         case this._due_       : return Validator.date(val, errors)
+      case 'deadline':    case this._deadline_  : Validator.date(val, errors)
+                                                return Validator.dateAfter('/* on doit avoir la date start */', val, errors)
+      case 'duration':    case this._duration_  : return Validator.duration(val, errors)
+      case 'priority':    case this._priority_  : if(!val.match(/^[1-5]$/)){errors.push(getErr('must-be-num-between', [val, 1, 5]))}
+      case 'labels':      case this._labels_    :return
+      case 'repeat'     : case this._repeat_    : return Validator.repeat(val, errors)
       default: 
         errors.push(getErr('todoist-key-task-unknown', key))
     }

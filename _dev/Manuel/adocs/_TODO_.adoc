@@ -13,8 +13,12 @@
 
 == Todo En cours
 
+- un Notifier pour pouvoir faire des notifications comme sur le mac
+
 == Todo list ==
 
+- quand un projet même "caché" a une alerte, l'afficher : déplier le projet sur le bureau + notification
+- fin d'horloge : notification aussi.
 - pouvoir mettre des projets en "standby" (ils apparaissent repliés dans l'interface)
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
 - pouvoir récupérer les tâches de todoist

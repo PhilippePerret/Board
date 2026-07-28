@@ -1,6 +1,5 @@
 # MEMORY
 
-- PRIORITÉ — [État fin de session 2026-07-22](2026-07-22-Etat-fin-de-session.md) — evaluate_file.rb (backend) : bug slef non corrigé, tests pas tous rejoués
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X
@@ -28,3 +27,4 @@
 - [Pas de rappel "pas compilé/testé"](feedbacks/stop_repeating_not_compiled_tested.md) — ne pas répéter systématiquement après chaque edit
 - [Design tests validate()](feedbacks/step_validation_test_design.md) — unitaire direct (bridge_eval) + toujours un cas valide de contrôle, jamais que des invalidités
 - [Commande run-tests](feedbacks/run_tests_command.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement
+- [Paramètre ≠ décision](feedbacks/param_not_decision.md) — si la réponse honnête est "ça dépend de l'appel", c'est un param, pas une question à poser

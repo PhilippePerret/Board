@@ -7,6 +7,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
 
         NSApp.setActivationPolicy(.regular)
+        NativeNotifier.requestAuthorization()
 
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "Quitter Board", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")

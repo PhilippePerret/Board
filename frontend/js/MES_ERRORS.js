@@ -9,6 +9,8 @@
 const ERRORS = {
     'premier': 'pour-virgule'
     // --- Données générales ---
+    , 'hour-not-valid': "heure non valide : '$1'"
+    , 'repeat-not-valid': "la répétition n'est pas valide dans '$1'"
     , 'error-duration': "La durée « $1 » devrait avoir la forme '&lt;nombre> &lt;unité>' où unité peut être 'mois', 'semaine', 'jour', 'heure', 'minute' et leurs diminutifs (par exemple '12 h')."
     , 'prop-cant-be-empty': "La propriété « $1 » ne peut pas être vide."
     , 'must-be-num-between': "« $1 » devrait être un nombre entre $2 et $3"
