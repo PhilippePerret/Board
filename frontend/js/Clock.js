@@ -195,13 +195,14 @@ class Clock {
     this.sessionDuration = sessionMinutes * 60  // secondes
     this.workDuration    = workMinutes * 60     // secondes (durée d'une tranche)
 
-    this.startTime   = null
-    this.pauseStart  = null
-    this.totalPaused = 0
-    this.intervalId  = null
-    this.paused      = false
-    this.warned      = false // passage à 10 min de l'échéance déjà signalé ?
-    this.ended       = false // passage à l'échéance déjà signalé ?
+    this.startTime    = null
+    this.pauseStart   = null
+    this.totalPaused  = 0
+    this.intervalId   = null
+    this.paused       = false
+    this.warned       = false // passage à 10 min de l'échéance déjà signalé ?
+    this.ended        = false // passage à l'échéance déjà signalé ?
+    this.normed       = false // pas encore à 10 minutes
 
     this.panel // s'assure que le panneau est construit
     this._panel.classList.remove('clock-warning', 'clock-danger')
@@ -331,6 +332,7 @@ class Clock {
   }
 
   static notify(data){
+    data.message = data.message + getMsg('of-work-on-project', [Project.current.title])
     Notifier.notify(Object.assign({
           delay: 30
         , opacity: 1
@@ -401,7 +403,7 @@ class Clock {
         title: getMsg('End-of-session')
       , id: 'clock_changelog'
       , message: getMsg('clock-work-done')
-      , defaultValue: ''
+      , default: ''
       , width: '620px'
       , ouiBtn: {name: getMsg('Next'), onclick: this.onChangelogEntered.bind(this)}
       , nonBtn: {name: getMsg('Cancel')}
@@ -418,7 +420,7 @@ class Clock {
         title: getMsg('End-of-session')
       , id: 'clock_todo'
       , message: getMsg('clock-todo-next-session')
-      , defaultValue: ''
+      , default: ''
       , width: '620px'
       , ouiBtn: {name: getMsg('Save'), onclick: this.onTodoEntered.bind(this)}
       , nonBtn: {name: getMsg('Cancel')}

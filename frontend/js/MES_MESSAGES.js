@@ -9,8 +9,9 @@ const MESSAGES = {
     , ':': ' : '
     , 'Cancel': "Renoncer"
     , 'clock-work-done': 'Travail accompli au cours de la session : '
-    , 'clock-work-is-done': "Vous êtes arrivé à échéance."
-    , 'clock-10-minutes-remaining': "Il vous reste 10 minutes de travail."
+    , 'clock-work-is-done': "Vous êtes arrivé à échéance de travail"
+    , 'clock-10-minutes-remaining': "Il vous reste 10 minutes de travail"
+    , 'of-work-on-project': " sur le projet “$1”."
     , 'clock-ask-work-restarted': "Le travail a-t-il repris ?"
     , 'clock-todo-next-session': "Travail à accomplir à la prochaine session : "
     , 'clock-work-time': "Temps de travail :"
