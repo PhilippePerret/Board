@@ -48,6 +48,11 @@ button {
 }
 button:active { outline: auto; }
 
+.picto {
+  width: 32px;
+  background-color: inherit;
+  cursor: pointer;
+}
 
 fieldset {
   border: 1px solid #CCC;
@@ -142,8 +147,8 @@ footer div#message {
 }
 footer div#message > span {
   padding: 0.1em 1em;
+  font: 13pt Arial, Helvetica;
 }
-footer div#message > span, 
 .exergue-message {
   font: 20px Arial, Helvetica;
 }

@@ -12,13 +12,6 @@ div.project {
   overflow: hidden;
   vertical-align: top;
   display: inline-block;
-  border: 6px solid transparent;
-  border-radius: 1em;
-  width:  300px;
-  padding: 1em;
-  margin: 0 10px;
-  min-height: 30vh;
-  max-height: 40vh;
   opacity: 0.65;
   background-color: white;
 }
@@ -29,6 +22,58 @@ div.project.selected {
 
 div.project:hover, div.project.selected {
   max-height: 100vh;
+}
+
+div#standby-project-container {
+  position: fixed;
+  bottom: 0px;
+  right: 16vw;
+  z-index: 5;
+}
+
+div#project-cards-container div.project {
+  border: 6px solid transparent;
+  border-radius: 1em;
+  width:  300px;
+  padding: 1em;
+  margin: 0 10px;
+  min-height: 30vh;
+  max-height: 40vh;
+}
+div#standby-project-container div.project {
+  padding: 0px;
+  width: 180px;
+  height: 20px;
+  border: 1px solid transparent;
+  border-radius: 1em 1em 0 0;
+}
+div#standby-project-container div.project * {
+  font-size: 14pt;
+}
+div#standby-project-container div.project div.title {
+  overflow: hidden;
+  margin-left: 1em;
+}
+
+div#standby-project-container div.project img {
+  width: 24px;
+}
+div#standby-project-container div.project *:not(.title):not(.standby-btn) {
+  display:none;
+}
+
+div.project img.standby-btn {
+  position:absolute; 
+}
+
+
+div#project-cards-container div.project img.standby-btn {
+  bottom: 10px; 
+  left: 0px;
+}
+div#standby-project-container div.project img.standby-btn {
+  top: -1px;
+  right: 10px;
 }
 
 

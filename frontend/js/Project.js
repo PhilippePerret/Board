@@ -4,7 +4,7 @@ class Project {
   // common_services_data : données pour les services communs
   static PROPERTIES = [
     'id', 'title', 'path', 'common_services_data', 'workTime', 'createdAt', 'updatedAt',
-    'services', 'background', 'icon', 'genre',
+    'services', 'background', 'icon', 'genre', 'collapsed',
     // documentation
     'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html',
     // Pour les services (notamment les script-services)
@@ -42,16 +42,57 @@ class Project {
   } 
   
   static getTachesProjects(){
-    Object.values(this.ensureProjects)
-    .filter(projet => {
-      if (projet.todoist_id) { return true }
-      else projet.setTodoistBadge(0)
-    })
-    .forEach(projet => {
-      // Tous ces projets ont un identifiant todoist défini
-      projet.getTachesAndSetBadges()
-    })
-    D.outputTrace()
+    this.eachAsync('getTachesAndSetBadges', 'setTodoistBadge')
+  }
+
+  /**
+   * Boucler sur les projets avec une méthode asynchrone
+   * 
+   * Cas concret : après le chargement de tous les projets, 
+   * ils doivent chacun leur tour relever leurs tâches et
+   * renseigner leur badge.
+   * 
+   * +method+ est la méthode asynchrone envoyant la requête :
+   *    Todoist.todayTaskForNotInter(projet, callback)
+   * Toute +method+ doit recevoir ces deux arguments. Le 
+   * callback, ici, sera mis à eachAsync.
+   * 
+   * +methodRetour+ est la méthode synchrone qui doit traiter
+   * Le retour. Elle doit recevoir en argument le retour tel
+   * qu'il est remonté.
+   */
+  static eachAsync(method, methodOnRetour, projet, retour) {
+    if (projet) {
+      // synchro
+      console.info("Au retour, appel de '%s' sur e%s'", methodOnRetour, projet.title)
+      if ('function' == typeof projet[methodOnRetour]) {
+        projet[methodOnRetour].call(projet, retour)
+      } else {
+        methodOnRetour(projet, retour)
+      }
+    }
+    // on prend le projet suivant pour le traiter
+    // async
+    const nextProjet = this.nextAsyncProject()
+    if ( nextProjet ) { // Il reste des projets
+      const callback = this.eachAsync.bind(this, method, methodOnRetour, nextProjet)
+      console.info("Appel de '%s' sur '%s'", method, nextProjet.title)
+      if ('function' == typeof nextProjet[method]) {
+        nextProjet[method].call(nextProjet, callback)
+      } else {
+        method(nextProjet, callback)
+      }
+    } else {
+      // Plus de projet
+      // on nettoie
+      delete this.eachAsyncProjects
+    }
+  } 
+  static nextAsyncProject(){
+    if (undefined == this.eachAsyncProjects) {
+      this.eachAsyncProjects = [...Object.values(this.ensureProjects)]
+    }
+    return this.eachAsyncProjects.pop()
   }
 
   // Boucler une méthode sur tous les projets
@@ -189,7 +230,8 @@ class Project {
     this.maskProjectButtons()
   }
   
-  static get container(){ return this._container || (this._container = document.querySelector('#project-cards-container'))}
+  static get container(){ return this._container || (this._container = DGet('#project-cards-container'))}
+  static get standbyContainer(){return this.stdbycont || (this.stdbycont = DGet('#standby-project-container'))}
 
   static get ensureProjects() {
     return this._projects ?? (this._projects = {})
@@ -240,6 +282,9 @@ class Project {
       this.data.card_path = this.card_path
       console.info("card_path mise à %s", this.card_path)
     }
+    if (undefined == this.collapsed) {
+      this.collapsed = false
+    }
     this.initServices()
     
   }
@@ -280,15 +325,34 @@ class Project {
       , this.afterSave.bind(this, callback))
   }
   afterSave(callback, retour){
-    console.log("retour Project.afterSave et callback", retour, callback)
+    // console.log("retour Project.afterSave et callback", retour, callback)
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
-    callback && callback()
+    callback && 'function' == typeof callback && callback()
   }
 
   get extraDataPanel(){ return this._extradatapan || (this._extradatapan = new ProjectExtraDataPanel(this) )}
   
   defineExtraData(){
     this.extraDataPanel.toggle()
+  }
+
+  /**
+   * Pour mettre le projet en stand-by ou le réactiver
+   */
+  standbyize(ev){
+    if (ev.type =='mouseup'){
+      this.collapsed = !this.collapsed
+      const container = this.constructor[this.collapsed?'standbyContainer':'container']
+      container.append(this.obj)
+      this.set('collapsed', this.collapsed, true)
+      this.obj.classList[this.collapsed?'add':'remove']('collapsed')
+    }
+    return stopEvent(ev)
+  }
+  // Réactiver un projet en standby
+  reactive(){
+    this.collapsed = true
+    this.standbyize({type: 'mouseup'})
   }
 
   /**
@@ -309,6 +373,7 @@ class Project {
 
   /* Modification du titre (click sur titre) */
   modifyTitle(ev, aryData) {
+    if (this.collapsed) return stopEvent(ev)
     if (undefined == aryData) {
       stopEvent(ev)
       new TextFieldDialog({
@@ -418,7 +483,7 @@ class Project {
 
   buildIcon(){
     const iconPath = `file://${this.path}/${this.icon}`
-    const icon = DCreate('IMG', {src: iconPath, style: 'width:32px;float:left;margin-right:0.4em'})
+    const icon = DCreate('IMG', {src: iconPath, class:'project-icon', style: 'width:32px;float:left;margin-right:0.4em'})
     return icon
   }
 
@@ -445,7 +510,7 @@ class Project {
     div.appendChild(this.todoistCont)
 
     // Bouton Standby
-    this.standbyBtn = DCreate('IMG', {src: svg('pile'), class:'picto', style:'position:absolute; bottom: 20px; left: 20px;'})
+    this.standbyBtn = DCreate('IMG', {src: 'images/pile.svg', class:'picto standby-btn'})
     div.appendChild(this.standbyBtn)
 
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;z-index:1;'})
@@ -494,7 +559,8 @@ class Project {
     })
     div.appendChild(this.othersField)
 
-    this.constructor.container.appendChild(div)
+    const container = this.constructor[this.collapsed?'standbyContainer':'container']
+    container.appendChild(div)
     this.observe()
   }
 
@@ -527,23 +593,19 @@ class Project {
 
   }
 
-  standbyize(ev){
-    console.error("Je dois apprendre à mettre en standby")
-    return stopEvent(ev)
-  }
 
   observe(){
 
     // Pour pouvoir modifier le titre
     listen(this.divTitle, 'click', this.modifyTitle.bind(this))
-    this.obj.addEventListener('dblclick', this.onDblClick.bind(this))
     this.obj.addEventListener('mousedown', this.onMouseDown.bind(this))
 
     // Pour pouvoir voir les tâches du projet
     listen(this.todoistCont, 'click', this.onClickTodoist.bind(this))
 
     // Pour mettre le projet en standby (ou le sortir)
-    listen(this.standbyBtn, 'click', this.standbyize.bind(this))
+    listen(this.standbyBtn, 'mousedown', this.standbyize.bind(this))
+    listen(this.standbyBtn, 'mouseup', this.standbyize.bind(this))
     
     let dragged = null
 
@@ -564,10 +626,8 @@ class Project {
       })
   }
 
-  onDblClick(ev){
-    message("Édition du projet " + this.title)
-  }
   onMouseDown(ev){
+    if (this.collapsed) return stopEvent(ev)
     if (!ev.target.closest(".service")) {
       this.constructor.onSelect(this)
       return stopEvent(ev)
@@ -591,6 +651,7 @@ class Project {
 
   // Quand on clique sur le badge ou l'image todoist
   onClickTodoist(ev, tasks){
+    if (ev && this.collapsed) return stopEvent(ev)
     ev && stopEvent(ev)
     if (tasks) {
       if (tasks.error){ raise(tasks.error) } 
@@ -671,18 +732,30 @@ class Project {
   // Au démarrage, cette fonction est appelée seulement sur les 
   // projets ayant un todoist_id pour charger les tâches courantes 
   // et afficher leur nombre dans un badge.
-  getTachesAndSetBadges(tasks){
-    if (tasks) {
-      // console.log("RETOUR DE todayTasksFor:", tasks)
-      this.setTodoistBadge(tasks.length)
-    } else {
-      Todoist.todayTasksFor(this, this.getTachesAndSetBadges.bind(this), 'not-interractif')
-    }
+  getTachesAndSetBadges(callback){
+    Todoist.todayTaskForNotInter(this, callback, 'not-interractif')
   }
   // Régler le badge en fonction du nombre de tâches (chargement)
-  setTodoistBadge(nombre){
+  setTodoistBadge(retour){
+    console.log("[setTodoistBadge] Liste des tâches remontées", retour)
+    this.tasks = retour
+    const nombre = this.tasks.length
+    if (nombre){
+      this.reactiveIfTask(this.tasks)
+    }
     this.tasksBadge.textContent = nombre
     this.tasksBadge.classList[nombre?'remove':'add']('hidden')
+  }
+  /**
+   * Fonction de test qui dans le cas de tâche aujourd'hui, réactive
+   * un projet en standby
+   */
+  reactiveIfTask(tasks){
+    if (this.collapsed) {
+      if (tasks.length) {
+        this.reactive()
+      }
+    }
   }
 
   remove(){
