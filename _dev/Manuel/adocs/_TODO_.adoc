@@ -19,8 +19,6 @@
 
 == Todo list ==
 
-- Horloge arrivant à 10 minutes : Notifieur orange (picto clock.svg)
-  Horloge arrivant à échéance : Notifieur rouge (picto clock.svg)
 - Tâche approchante (à 10 minutes de début) Notifieur orange (picto todoist.png)
   Tâche arrivant à départ
 
