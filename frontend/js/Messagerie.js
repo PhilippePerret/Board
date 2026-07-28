@@ -4,6 +4,27 @@
  * Gère tout ce qui relève des messages (dans l'app et notification)
  */
 
+/**
+ * Pour obtenir la taille d'un bloc quelconque
+ * (par exemple pour calculer la taille d'une fenêtr)
+ */
+class Measure {
+  static boundsOf(code){
+    if ('string' == typeof code) {
+      code = DCreate('DIV', {text: code, style: "padding:1rem;display:inline-block;"})
+    } else if (code instanceof HTMLElement) {
+      code.style.position = 'fixed'
+      code.style.top      = '-1000px'
+    } else {
+      raise("Impossible de connaitre la dimension de l'argument envoyé (ni string ni HTML Element).")
+    }
+    document.body.appendChild(code)
+    const bounds = code.getBoundingClientRect()
+    code.remove()
+    return bounds
+  }
+}
+
 class Notifier {
   
   /**
@@ -17,9 +38,11 @@ class Notifier {
    *              Soit un path d'image existante
    *              Soit un nom 'warning', 'notice', 'error'
    * delay        Délai avant fermeture de la fenêtre
-   * bounds       Position et dimension de la fenêtre
-   *              {position: [left, top], size: [width, height]}
+   * width        Largeur précise de la fenêtre (300 par défaut)
+   * height       Hauteur de la fenêtre
    * size         Dimension [width, height] de la fenêtre
+   * top          Position top de la fenêtre
+   * left         Position left de la fenêtre
    * position     Position [left, top] de la fenêtre
    * buttons      Les boutons à afficher
    *              Liste de {name: "label", value: "lab1", onclick: callback}
@@ -30,9 +53,13 @@ class Notifier {
     this.data = this._ensure_data(data)
     window.server.send(this.data, this.onClick.bind(this))
   }
-  static onClick(btnValue){
-    const btn = this.getButton(btnValue)
-    if (btn && 'function' == typeof btn.onclick) btn.onclick()
+  static onClick(response){
+    console.log("response", response)
+    const btnValue = response.data?.value
+    if (btnValue) {
+      const btn = this.getButton(btnValue)
+      if (btn && 'function' == typeof btn.onclick) btn.onclick()
+    }
   }
 
   // Retourne les données du bouton du valeur +btnValue+
@@ -42,24 +69,103 @@ class Notifier {
 
   // Conformise les données qui doivent être envoyées
   static _ensure_data(data){
-    
+    var html, width, height, left, top, coef
+
     /* -- Les boutons -- */
     this.dataButtons = {}
+    var swiftButtons
     if (data.buttons) {
-      const swiftButtons = data.buttons.map(dbutton => {
-        value = dbutton.value || dbutton.name
+      swiftButtons = data.buttons.map(dbutton => {
+        var value = dbutton.value || dbutton.name
         Object.assign(this.dataButtons, {[value]: dbutton})
         return [dbutton.name, value]
       })
-      Object.assign(data, {buttons: swiftButtons})
     }
 
-    var [width, height] = data.size || (data.bounds?.size) || [180, 40]
-    var [left, top] = data.position || data.bounds?.position || [40, 40]
+    ;[left, top]      = data.position || [data.left, data.top] || [40, screen.height - 40]
+    left = left || 300
+    ;[html, width, height] = this.buildHtml(data)
+    // Interpréter les left et top quand ce sont des pourcentage.
+    if (left.endsWith('%')) {
+      coef = parseInt(left.slice(0, - 1)) / 100 // '50%' → 0.5
+      left = screen.width * coef - (width / 2)
+      console.log({left, coef, width})
+    }
+    if (left < 0) {left = 40}
+    if (top.endsWith('%')){
+      coef = parseInt(top.slice(0, - 1)) / 100 // '50%' → 0.5
+      top = screen.height * (1 - coef) - (height / 2)
+      console.log({top, coef, height})
+    }
 
-    Object.assign(data, {bounds: {position: [left, top], size: [width, left]}})
+    Object.assign(data, {
+        action:   'notify'
+      , buttons:  swiftButtons
+      , html:     html
+      , position: [left, top]
+      , size:     [width, height]
+    })
 
-    this.data = data
+    console.log("Data envoyé à notify", data)
+
+    return data
+  }
+  static buildHtml(data){
+    var html = []
+    html.push(this.styles(data).replace(/\n/g, '').replace(/\s+/g, '').replace(/__/g, ' '))
+    html.push('<div id="notify">')
+    data.title && html.push(`<h1>${data.title}</h1>`)
+    html.push(`<div id="message">${data.message}</div>`)
+    data.buttons && html.push(this.buildDivButtons(data))
+    html.push('</div>')
+    const bounds = Measure.boundsOf(html.join(''))
+    console.log("bounds calculé:", bounds)
+    html.push(this.scripts)
+
+    return [html.join('').trim().replace(/\n/g,''), bounds.width, bounds.height]
+  }
+  // Construction des boutons
+  static buildDivButtons(data){
+    const buttons = data.buttons.map(b => {
+      if (typeof b == 'string') {
+        b = {name: b, value: b}
+      } else {
+        if (!b.value) {b.value = b.name}
+      }
+      return `<button onclick="send('${b.value}')">${b.name}</button>`
+    }).join('')
+    return `<div class="buttons">${buttons}</div>`
+  }
+  static styles(data){
+    const width = data.width || data.size?.[0] || 300;
+    return `<style>
+    body * {
+      font-size: 16pt;
+      font-family: Arial__Narrow, Helvetica;
+    }
+    div#notify {
+      width: ${width}px;
+      background-color: beige;
+      text-shadow: 5px__5px__5px__5px__#777;
+      border-radius: 1em;
+    }
+    button {font-size: 1em;}
+    div#message {
+      padding:2em;
+    }
+    div.buttons {
+    text-align: right;
+    padding: 0.5em__1em;
+    }
+    </style>
+    `
+  }
+  static get scripts(){
+    return `
+    <script type="text/javascript">
+    function send(value){window.webkit.messageHandlers.notifClick.postMessage(value)}
+    </script>
+    `
   }
 }
 
@@ -112,3 +218,4 @@ const nettoie_message = debounce( () => {
 function divMessage(){
   return this._divmsg || (this._divmsg = DGet('#message'))
 }
+

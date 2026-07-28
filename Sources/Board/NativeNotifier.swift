@@ -1,5 +1,14 @@
 import Cocoa
+import WebKit
 import UserNotifications
+
+private class HTMLClickBridge: NSObject, WKScriptMessageHandler {
+    let onClick: (String?) -> Void
+    init(onClick: @escaping (String?) -> Void) { self.onClick = onClick }
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        onClick(message.body as? String)
+    }
+}
 
 class NativeNotifier: NSObject {
 
@@ -16,10 +25,11 @@ class NativeNotifier: NSObject {
         let title = request["title"] as? String ?? ""
         let message = request["message"] as? String ?? ""
         let icon = request["icon"] as? String
+        let html = request["html"] as? String
         let delay = request["delay"] as? Double
         let buttons = parseButtons(request["buttons"] as? [[String]])
-        let bounds = parseBounds(request["bounds"] as? [String: Any])
-        print("[NativeNotifier] handle mode=\(mode) title=\(title) message=\(message) bounds=\(String(describing: bounds))")
+        let position = parsePosition(request["position"] as? [Double])
+        let size = parseSize(request["size"] as? [Double])
 
         func respond(button: String? = nil, error: String? = nil) {
             var payload: [String: Any] = ["ok": error == nil, "id": id]
@@ -44,7 +54,7 @@ class NativeNotifier: NSObject {
             let clicked = showModal(title: title, message: message, icon: icon, buttons: buttons)
             respond(button: clicked)
         case "floating":
-            shared.showFloating(title: title, message: message, icon: icon, delay: delay, buttons: buttons, bounds: bounds) { clicked in
+            shared.showFloating(title: title, message: message, icon: icon, html: html, delay: delay, buttons: buttons, position: position, size: size) { clicked in
                 respond(button: clicked)
             }
         default:
@@ -56,12 +66,14 @@ class NativeNotifier: NSObject {
         (raw ?? []).map { arr in (label: arr[0], value: arr.count > 1 ? arr[1] : nil) }
     }
 
-    private static func parseBounds(_ bounds: [String: Any]?) -> NSRect? {
-        guard let bounds = bounds,
-              let position = bounds["position"] as? [Double], position.count == 2,
-              let size = bounds["size"] as? [Double], size.count == 2
-        else { return nil }
-        return NSRect(x: position[0], y: position[1], width: size[0], height: size[1])
+    private static func parsePosition(_ position: [Double]?) -> NSPoint? {
+        guard let position = position, position.count == 2 else { return nil }
+        return NSPoint(x: position[0], y: position[1])
+    }
+
+    private static func parseSize(_ size: [Double]?) -> NSSize? {
+        guard let size = size, size.count == 2 else { return nil }
+        return NSSize(width: size[0], height: size[1])
     }
 
     private static func resolveIcon(_ icon: String?) -> NSImage? {
@@ -105,36 +117,19 @@ class NativeNotifier: NSObject {
 
     // MARK: - floating (non bloquant)
 
-    private func showFloating(title: String, message: String, icon: String?, delay: Double?, buttons: [(label: String, value: String?)], bounds: NSRect?, completion: @escaping (String?) -> Void) {
+    private func showFloating(title: String, message: String, icon: String?, html: String?, delay: Double?, buttons: [(label: String, value: String?)], position: NSPoint?, size: NSSize?, completion: @escaping (String?) -> Void) {
+        let initialSize = size ?? NSSize(width: 320, height: 120)
         let panel = NSPanel(
-            contentRect: bounds ?? NSRect(x: 0, y: 0, width: 320, height: 120),
-            styleMask: [.titled, .closable, .nonactivatingPanel, .utilityWindow],
+            contentRect: NSRect(origin: position ?? .zero, size: initialSize),
+            styleMask: [.nonactivatingPanel, .utilityWindow],
             backing: .buffered,
             defer: false
         )
-        panel.title = title
         panel.level = .floating
         panel.isFloatingPanel = true
         panel.hidesOnDeactivate = false
-
-        let stack = NSStackView()
-        stack.orientation = .vertical
-        stack.alignment = .centerX
-        stack.spacing = 10
-        stack.edgeInsets = NSEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-
-        if let img = NativeNotifier.resolveIcon(icon) {
-            let imageView = NSImageView(image: img)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-            imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
-            stack.addArrangedSubview(imageView)
-        }
-
-        let label = NSTextField(wrappingLabelWithString: message)
-        label.alignment = .center
-        stack.addArrangedSubview(label)
+        panel.isOpaque = false
+        panel.backgroundColor = .clear
 
         var finished = false
         func finish(_ button: String?) {
@@ -144,6 +139,64 @@ class NativeNotifier: NSObject {
             self.floatingPanels.removeAll { $0 == panel }
             completion(button)
         }
+
+        func finalizeFrame(fittingSize: NSSize?) {
+            if size == nil, let fittingSize = fittingSize {
+                panel.setContentSize(fittingSize)
+            }
+            if let position = position {
+                panel.setFrameOrigin(position)
+            } else {
+                panel.center()
+            }
+            print("[NativeNotifier] position reçue =", String(describing: position), "size reçue =", String(describing: size), "frame finale =", panel.frame)
+        }
+
+        if let html = html {
+            let controller = WKUserContentController()
+            let bridge = HTMLClickBridge(onClick: finish)
+            controller.add(bridge, name: "notifClick")
+            let config = WKWebViewConfiguration()
+            config.userContentController = controller
+            let webView = WKWebView(frame: .zero, configuration: config)
+            webView.setValue(false, forKey: "drawsBackground")
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            webView.loadHTMLString(html, baseURL: nil)
+            panel.contentView = webView
+            finalizeFrame(fittingSize: nil)
+            panel.orderFrontRegardless()
+            floatingPanels.append(panel)
+            if let delay = delay {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    finish(nil)
+                }
+            }
+            return
+        }
+
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .centerX
+        stack.spacing = 4
+        stack.edgeInsets = NSEdgeInsets(top: 6, left: 8, bottom: 6, right: 8)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.wantsLayer = true
+        stack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        stack.layer?.cornerRadius = 10
+        stack.layer?.masksToBounds = true
+
+        if let img = NativeNotifier.resolveIcon(icon) {
+            let imageView = NSImageView(image: img)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            stack.addArrangedSubview(imageView)
+        }
+
+        let label = NSTextField(wrappingLabelWithString: message)
+        label.alignment = .center
+        label.font = NSFont.systemFont(ofSize: 11)
+        stack.addArrangedSubview(label)
 
         if !buttons.isEmpty {
             let buttonsStack = NSStackView()
@@ -159,18 +212,16 @@ class NativeNotifier: NSObject {
             stack.addArrangedSubview(buttonsStack)
         }
 
-        panel.contentView = stack
-        if let bounds = bounds {
-            panel.setFrame(bounds, display: false)
-        } else {
-            let fit = stack.fittingSize
-            print("[NativeNotifier] stack.fittingSize =", fit)
-            panel.setContentSize(fit)
-            panel.center()
-        }
-        print("[NativeNotifier] panel.frame =", panel.frame, "isVisible before order:", panel.isVisible)
+        let container = NSView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        panel.contentView = container
+        finalizeFrame(fittingSize: stack.fittingSize)
         panel.orderFrontRegardless()
-        print("[NativeNotifier] panel.isVisible after order:", panel.isVisible)
 
         floatingPanels.append(panel)
 

@@ -43,14 +43,14 @@ class Project {
   
   static getTachesProjects(){
     Object.values(this.ensureProjects)
-      .filter(projet => {
-        if (projet.todoist_id) { return true }
-        else projet.setTodoistBadge(0)
-      })
-      .forEach(projet => {
-        // Tous ces projets ont un identifiant todoist défini
-        projet.getTachesAndSetBadges()
-      })
+    .filter(projet => {
+      if (projet.todoist_id) { return true }
+      else projet.setTodoistBadge(0)
+    })
+    .forEach(projet => {
+      // Tous ces projets ont un identifiant todoist défini
+      projet.getTachesAndSetBadges()
+    })
     D.outputTrace()
   }
 
@@ -436,12 +436,17 @@ class Project {
       div.appendChild(this.buildIcon())
     }
 
+    // Bouton Todoist
     this.todoistCont = DCreate('DIV', {style:'width:32px;', class:'todoist fright discret'})
     this.tasksBadge = DCreate('DIV', {class: 'badge fright hidden'})
     this.todoistCont.appendChild(this.tasksBadge)
     this.todoistImg = DCreate('IMG', {src: `images/todoist${this.todoistBadgeByTasks()}.png`, class:'picto', title: getMsg('todoist-tasks')})
     this.todoistCont.appendChild(this.todoistImg)
     div.appendChild(this.todoistCont)
+
+    // Bouton Standby
+    this.standbyBtn = DCreate('IMG', {src: svg('pile'), class:'picto', style:'position:absolute; bottom: 20px; left: 20px;'})
+    div.appendChild(this.standbyBtn)
 
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;z-index:1;'})
     this.divTitle = tit
@@ -522,6 +527,11 @@ class Project {
 
   }
 
+  standbyize(ev){
+    console.error("Je dois apprendre à mettre en standby")
+    return stopEvent(ev)
+  }
+
   observe(){
 
     // Pour pouvoir modifier le titre
@@ -531,6 +541,9 @@ class Project {
 
     // Pour pouvoir voir les tâches du projet
     listen(this.todoistCont, 'click', this.onClickTodoist.bind(this))
+
+    // Pour mettre le projet en standby (ou le sortir)
+    listen(this.standbyBtn, 'click', this.standbyize.bind(this))
     
     let dragged = null
 
