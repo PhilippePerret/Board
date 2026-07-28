@@ -19,15 +19,13 @@
 
 == Todo list ==
 
-- fin d'horloge : notification aussi.
+- Horloge arrivant à 10 minutes : Notifieur orange (picto clock.svg)
+  Horloge arrivant à échéance : Notifieur rouge (picto clock.svg)
+- Tâche approchante (à 10 minutes de début) Notifieur orange (picto todoist.png)
+  Tâche arrivant à départ
+
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
-- pouvoir récupérer les tâches de todoist
-- pouvoir ajouter des tâches à todoist
-
   
-- utiliser des icônes SVG simples (pour l'interface)
-- pouvoir éditer le fichier d'un script perso
-
 == Idées d'autres services ==
 
 - git init (tout le flux, juste en donnant le nom du repo sur Github)

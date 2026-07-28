@@ -30,15 +30,18 @@
  *              Liste de {name: "label", value: "lab1", onclick: callback}
  *              Si 'value' n'est pas transmis, c'est :name
  *              Dans ce cas, 
+ * background   Couleur du fond
+ * opacity      Opacité
 
  */
 
 const NOTIFIER_DEFAULT = {
-    left: 40
-  , top: 40
-  , width: 460
-  , opacity: 0.85
-  , background: "beige"
+    left:         40
+  , top:          screen.height - 40
+  , width:        460
+  , opacity:      0.95
+  , background:   "beige"
+  , font_color:   'black'
 }
 
 /**
@@ -101,19 +104,18 @@ class Notifier {
     data.icon || Object.assign(data, {icon: 'images/board.svg'})
 
     ;[left, top]      = data.position || [data.left, data.top] || [NOTIFIER_DEFAULT.left, screen.height - NOTIFIER_DEFAULT.top]
-    left = left || NOTIFIER_DEFAULT.left
+    left  = left  ?? NOTIFIER_DEFAULT.left
+    top   = top   ?? NOTIFIER_DEFAULT.top
     ;[html, width, height] = this.buildHtml(data)
     // Interpréter les left et top quand ce sont des pourcentage.
-    if (left.endsWith('%')) {
+    if (String(left).endsWith('%')) {
       coef = parseInt(left.slice(0, - 1)) / 100 // '50%' → 0.5
       left = screen.width * coef - (width / 2)
-      console.log({left, coef, width})
     }
     if (left < 0) {left = 40}
-    if (top.endsWith('%')){
+    if (String(top).endsWith('%')){
       coef = parseInt(top.slice(0, - 1)) / 100 // '50%' → 0.5
       top = screen.height * (1 - coef) - (height / 2)
-      console.log({top, coef, height})
     }
 
     Object.assign(data, {
@@ -132,6 +134,7 @@ class Notifier {
   static buildHtml(data){
     var html = []
     html.push(this.styles(data).replace(/\n/g, '').replace(/\s+/g, '').replace(/__/g, ' '))
+    console.log("Ajout des styles:", html[0])
     html.push('<div id="notify">')
     data.icon && html.push(`<img src="${data.icon}" class="icon" />`)
     data.title && html.push(`<h1>${data.title}</h1>`)
@@ -166,11 +169,11 @@ class Notifier {
     div#notify {
       width: ${width}px;
       position: relative;
-      background-color: beige;
+      background-color: ${data.background || NOTIFIER_DEFAULT.background};
       text-shadow: 5px__5px__5px__5px__#777;
       border-radius: 1em;
       padding: 1rem;
-      opacity: ${NOTIFIER_DEFAULT.opacity};
+      opacity: ${data.opacity || NOTIFIER_DEFAULT.opacity};
       z-index: 2000;
     }
     img.icon {
@@ -191,6 +194,7 @@ class Notifier {
     div#message {
       padding:2rem;
       margin-left: 2rem;
+      color: ${data.font_color || NOTIFIER_DEFAULT.font_color}
     }
     div.buttons {
     text-align: right;

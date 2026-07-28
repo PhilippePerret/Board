@@ -6,11 +6,23 @@ const MESSAGES = {
     'premier': "sans virgule"
 
     // --- GÉNÉRAUX ---
+    , ':': ' : '
     , 'Cancel': "Renoncer"
+    , 'clock-work-done': 'Travail accompli au cours de la session : '
+    , 'clock-work-is-done': "Vous êtes arrivé à échéance."
+    , 'clock-10-minutes-remaining': "Il vous reste 10 minutes de travail."
+    , 'clock-ask-work-restarted': "Le travail a-t-il repris ?"
+    , 'clock-todo-next-session': "Travail à accomplir à la prochaine session : "
+    , 'clock-work-time': "Temps de travail :"
+    , 'clock-restart': 'Redémarrer'
     , 'Confirm': 'Confirmer'
+    , 'End-of-session': 'Fin de session'
     , 'Find': "Chercher"
-    , 'scripts': "Scripts"
     , 'file-opened': "Le fichier '$1' est ouvert."
+    , 'Minuteur': "Minuteur"
+    , 'Next': 'Suivant'
+    , 'Save': 'Enregistrer'
+    , 'scripts': "Scripts"
 
     // --- UI ---
     , 'countdown-timer': "Minuteur"

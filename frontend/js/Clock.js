@@ -11,6 +11,8 @@
  * (backend 'update-project-notes', ajout en tête de fichier) puis incrémente
  * projet.workTime.
  */
+const DIX_MINUTES = 600
+
 class Clock {
 
   static get panel(){
@@ -190,8 +192,8 @@ class Clock {
     // Aucune durée (session ou tranche) en dessous d'1 minute : remplacée par 15 min
     const sessionMinutes = data[0] < this.MIN_MINUTES ? this.FALLBACK_MINUTES : data[0]
     const workMinutes    = data[1] < this.MIN_MINUTES ? this.FALLBACK_MINUTES : data[1]
-    this.sessionDuration = sessionMinutes * 60 // secondes
-    this.workDuration    = workMinutes * 60 // secondes (durée d'une tranche)
+    this.sessionDuration = sessionMinutes * 60  // secondes
+    this.workDuration    = workMinutes * 60     // secondes (durée d'une tranche)
 
     this.startTime   = null
     this.pauseStart  = null
@@ -251,8 +253,8 @@ class Clock {
   static checkStillPaused(){
     return null // débranché (Phil s'en occupe lui-même) — TODO
     this.promptCheck(
-      "Le travail a-t-il repris (l'horloge est en pause) ?",
-      "Redémarrer",
+      getMsg('clock-ask-work-restarted'),
+      getMsg('clock-restart'),
       this.onClickRing.bind(this) // même bascule : relance le décompte
     )
   }
@@ -266,7 +268,7 @@ class Clock {
     const clear = () => { this._checkDialogOpen = false }
     server.send({action: 'run-osascript', 'script-name': 'ActivateApp'}, () => {
       new ConfirmDialog({
-          title: "Horloge de travail"
+          title: getMsg('Minuteur')
         , message: message
         , ouiBtn: {name: actionLabel, onclick: () => { clear(); actionFn() }}
         , nonBtn: {name: 'Ignorer', onclick: clear}
@@ -309,13 +311,37 @@ class Clock {
 
     // Seuils d'alerte : orange à 10 min de l'échéance, rouge à l'échéance
     // (modèle : Todoist-server/minuteur/timer.html, classes body.warn/.end)
-    const isWarn = remaining <= 600 && remaining > 0
-    const isEnd  = remaining <= 0
-    this._panel.classList.toggle('clock-warning', isWarn)
-    this._panel.classList.toggle('clock-danger', isEnd)
-    this._stateMarker.textContent = isEnd ? 'danger' : (isWarn ? 'warning' : 'normal')
+    if (remaining <= DIX_MINUTES) {
+      if (!this.warned) {
+        this._panel.classList.toggle('clock-warning', true)
+        this.notify({message: getMsg('clock-10-minutes-remaining'), font_color: 'black', background: 'rgb(255, 179, 0)'})
+        this._stateMarker.textContent = 'warning'
+        this.warned = true
+      }
+      if (remaining <= 0 && !this.ended) {
+        this._panel.classList.toggle('clock-danger', true)
+        this.notify({message: getMsg('clock-work-is-done'), background: '#CC0000'})
+        this._stateMarker.textContent = 'danger'
+        this.ended = true
+      }
+    } else if (!this.normed) {
+      this._stateMarker.textContent = 'normal'
+      this.normed = true
+    }
   }
 
+  static notify(data){
+    Notifier.notify(Object.assign({
+          delay: 30
+        , opacity: 1
+        , mode: 'floating'
+        , icon: 'images/minuteur.svg'
+        , font_color: 'white'
+     }, data))
+
+  }
+
+  
   static setState(state){
     if (state === 'prelaunch') {
       this.btnStop.classList.add('clock-btn-invisible')
@@ -372,13 +398,13 @@ class Clock {
 
   static promptChangelog(){
     new TextareaDialog({
-        title: "Fin de séance"
+        title: getMsg('End-of-session')
       , id: 'clock_changelog'
-      , message: "Travail accompli lors de cette séance : "
+      , message: getMsg('clock-work-done')
       , defaultValue: ''
       , width: '620px'
-      , ouiBtn: {name: 'Suivant', onclick: this.onChangelogEntered.bind(this)}
-      , nonBtn: {name: 'Annuler'}
+      , ouiBtn: {name: getMsg('Next'), onclick: this.onChangelogEntered.bind(this)}
+      , nonBtn: {name: getMsg('Cancel')}
     }).show()
   }
 
@@ -389,13 +415,13 @@ class Clock {
 
   static promptTodo(){
     new TextareaDialog({
-        title: "Fin de séance"
+        title: getMsg('End-of-session')
       , id: 'clock_todo'
-      , message: "Programme pour la fois prochaine :"
+      , message: getMsg('clock-todo-next-session')
       , defaultValue: ''
       , width: '620px'
-      , ouiBtn: {name: 'Enregistrer', onclick: this.onTodoEntered.bind(this)}
-      , nonBtn: {name: 'Annuler'}
+      , ouiBtn: {name: getMsg('Save'), onclick: this.onTodoEntered.bind(this)}
+      , nonBtn: {name: getMsg('Cancel')}
     }).show()
   }
 
@@ -416,7 +442,7 @@ class Clock {
       this.projet.workTime = (this.projet.workTime ?? 0) + this.pendingElapsedMinutes
       this.projet.save(() => {
         const workDiv = DGet('.worktime', this.projet.obj)
-        if (workDiv) workDiv.textContent = 'Temps de travail : ' + this.projet.workTime
+        if (workDiv) workDiv.textContent = getMsg('clock-work-time') + getMsg(':')+ this.projet.workTime
       })
 
       this.close()
