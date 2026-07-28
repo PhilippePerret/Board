@@ -50,8 +50,10 @@ module Todoist
   end
 
   def self.today_tasks(project_id)
-    list('/tasks', params: {project_id: project_id, filter: 'today | overdue'})
-      .select { |task| task['due'] }
+    today = Date.today.to_s
+    list('/tasks', params: {project_id: project_id, filter: 'today | overdue'}).select do |task|
+      task['due'] && task['due']['date'] && task['due']['date'] <= today
+    end
   end
 
   def self.close_and_create_tasks(project_id, dones, createds)

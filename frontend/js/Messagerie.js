@@ -225,8 +225,13 @@ function message(arg1, arg2, arg3){
     [msg, params] = [arg1, arg2]
   }
   try {
-    msg || raise("Aucun message envoyé.")
-    msg = textSubstitute(msg, params)
+    if( undefined == msg){
+      console.info("Aucun message envoyé.")
+      return
+    } 
+    if (msg != "") {
+      msg = textSubstitute(msg, params)
+    }
     if ( inExergueWindow ) {
       const divMsg = DCreate('DIV', {class:'exergue-message', text: msg})
       var timer = setTimeout(() => {clearTimeout(timer); divMsg.remove()}, 6000)

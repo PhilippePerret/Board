@@ -1,5 +1,6 @@
 == BUGS ==
 
+- voir pourquoi les tâches du jour récurrent, même cochées, sont remontées
 - quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
 - Problème de définition dans le projet Board

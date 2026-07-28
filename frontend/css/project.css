@@ -68,7 +68,7 @@ div.project img.standby-btn {
 
 
 div#project-cards-container div.project img.standby-btn {
-  bottom: 10px; 
+  bottom: 0px; 
   left: 0px;
 }
 div#standby-project-container div.project img.standby-btn {
