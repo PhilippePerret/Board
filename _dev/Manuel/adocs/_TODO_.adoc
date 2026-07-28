@@ -1,5 +1,6 @@
 == BUGS ==
 
+- quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
 - Problème de définition dans le projet Board
     common_services_data:
@@ -13,12 +14,10 @@
 
 == Todo En cours
 
-- charger progressivement les tâches des projets, ne pas les balancer tous d'un coup
-  => faire une méthode progressive sur chaque projet, un forEachAsync
+- quand une tâche de projet en standby arrive à l'heure => sortir le projet du standby et la notifier (Notifier.notify)
 
 == Todo list ==
 
-- quand un projet même "caché" a une alerte, l'afficher : déplier le projet sur le bureau + notification
 - fin d'horloge : notification aussi.
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
 - pouvoir récupérer les tâches de todoist

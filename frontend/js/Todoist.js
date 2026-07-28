@@ -35,9 +35,13 @@ class Todoist {
   }
 
   static _fetchToday(project, callback) {
+    console.log("[_fetchToday] callback", callback)
+    D.start()
+    D.trace(project, callback)
     server.send({action: 'todoist-today-tasks', todoist_id: project.todoist_id, no_raise: true}, (retour) => {
       callback(retour.data.tasks || {error: 'empty'})
     })
+    D.outputTrace()
   }
 
   static markCompleteAndCreateNewTask(project, done_ids, newTasks, callback){
@@ -48,6 +52,20 @@ class Todoist {
    * Pour ajouter de nouvelles tâches
    */
   static createNewTasks(projet, tasks, callback){
-    server.send({action:'todoist-create-tasks', project_id: projet.todoist_id, tasks}, (retour) => callbakc(retour))
+    server.send({action:'todoist-create-tasks', project_id: projet.todoist_id, tasks}, (retour) => callback(retour))
+  }
+}
+
+/**
+ * Gestion des tâches
+ * 
+ * Cette classe a été inaugurée pour pouvoir gérer les notifications de tâches
+ * lorsqu'elles sont heurées.
+ */
+class Task {
+  constructor(data){
+    this.content      = data.content
+    this.due          = data.due // forcément défini (sinon, elle ne serait jamais remontée)
+    this.description  = data.description ?? null
   }
 }

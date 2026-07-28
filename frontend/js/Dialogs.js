@@ -271,11 +271,14 @@ class TasksDialog extends Dialog {
     // Pour valider la donnée de tâche +key+ de valeur +val+ et
     // la mettre dans +task+ si elle est ok ou enregistrer l'erreur
     // dans +errors+
-    const validateAndAdd = (key, val, errors, task) => {
+    let validateAndAdd = (key, val, errors, task) => {
       const nombreErreursBefore = Number(errors.length)
-      this._validateByKey(key, val, errors)
-      if ( errors.length == nombreErreursBefore) Object.assign(task, {[key]: val})
+      // Validation par de et par la clé, qui est aussi transformée
+      // en sa valeur absolu (anglaise/todoist)
+      var [angKey, angVal] = this._validateByKey(key, val, errors)
+      if ( errors.length == nombreErreursBefore) Object.assign(task, {[angKey]: angVal})
       // console.log("task dans validateAndAdd", task)
+     return [angKey, angVal]
     }
     const contenu = DGet('#__task-data-textarea__').value
     const errors = []
@@ -284,7 +287,7 @@ class TasksDialog extends Dialog {
       if (key == 'description'){
         if (line.match(/^[a-z]+\:/) /* nouvelle clé */) {
           // On peut donc valider la description
-          validateAndAdd('description', val, errors, task)
+          [key, val] = validateAndAdd('description', val, errors, task)
         } else {
           val += "\n" + line
           continue
@@ -294,7 +297,9 @@ class TasksDialog extends Dialog {
       key   = segs.shift().trim() // TODO clé inconnue => content (cas où content n'est pas mis, mais où la ligne contient ":")
       val   = segs.join(':').trim()
       // Pour une description (multi-line) le check se fait plus tard (ci-dessus)
-      key == 'description' || validateAndAdd(key, val, errors, task)
+      if (key != 'description') {
+        [key, val] = validateAndAdd(key, val, errors, task)
+      }
     }
 
     // Si la tâche est ok, on peut l'ajouter
@@ -325,19 +330,30 @@ class TasksDialog extends Dialog {
     // console.log("[_validateByKey] key, val, errors", {key, val, errors})
     switch(key) {
       case 'content': case this._content_:  if (val == '') errors.push(getErr('prop-cant-be-empty', ['content']))
-                                            return
-      case 'description': case this._description_: return // idem
-      case 'due':         case this._due_       : return Validator.date(val, errors)
-      case 'deadline':    case this._deadline_  : Validator.date(val, errors)
-                                                return Validator.dateAfter('/* on doit avoir la date start */', val, errors)
-      case 'duration':    case this._duration_  : return Validator.duration(val, errors)
-      case 'priority':    case this._priority_  : if(!val.match(/^[1-5]$/)){errors.push(getErr('must-be-num-between', [val, 1, 5]))}
-      case 'labels':      case this._labels_    :return
-      case 'repeat'     : case this._repeat_    : return Validator.repeat(val, errors)
+                                            return ['content', val]
+      case 'description': case this._description_: return ['description', val] // idem
+      case 'due':         case this._due_ : 
+        Validator.date(val, errors)
+        return ['due', val]
+      case 'deadline':    case this._deadline_  : 
+        Validator.date(val, errors)
+        Validator.dateAfter('/* on doit avoir la date start */', val, errors)
+        return ['deadline', val]
+      case 'duration':    case this._duration_  : 
+        Validator.duration(val, errors)
+        return ['duration', val]
+      case 'priority':    case this._priority_  : 
+        if(!val.match(/^[1-5]$/)){ errors.push(getErr('must-be-num-between', [val, 1, 5])) }
+        return ['priority', val]
+      case 'labels':      case this._labels_    :
+        return ['labels', val]
+      case 'repeat'     : case this._repeat_    : 
+        Validator.repeat(val, errors)
+        return ['repeat', val]
       default: 
         errors.push(getErr('todoist-key-task-unknown', key))
+        return [key, val]
     }
-    return 
   }
 
   buildTaskList(){

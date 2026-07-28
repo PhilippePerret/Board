@@ -20,7 +20,7 @@ div.project.selected {
   border-color: rgb(98, 154, 232);
 }
 
-div.project:hover, div.project.selected {
+div#project-cards-container div.project.selected {
   max-height: 100vh;
 }
 

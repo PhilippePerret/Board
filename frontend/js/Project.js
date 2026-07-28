@@ -353,6 +353,11 @@ class Project {
   reactive(){
     this.collapsed = true
     this.standbyize({type: 'mouseup'})
+    if (this.tasks){
+      this.setNombreTachesInBadge(this.tasks.length)
+    } else {
+      this.getTachesAndSetBadges(this.setTodoistBadge.bind(this))
+    }
   }
 
   /**
@@ -721,7 +726,7 @@ class Project {
     if (retour){
       if (retour.data.errors.length) raise(retour.data.errors.join("\n"))
       message(true, getMsg('todoist-fin-tasks-done-and-create', [this.title, retour.data.done_count, retour.data.created_count]))
-      this.getTachesAndSetBadges()
+      this.getTachesAndSetBadges(this.setTodoistBadge.bind(this))
     } else {
       const task_ids = this.tasks.filter(t => t.checked).map(t => t.id)
       console.log("Liste des tâches à marquer accomplies et tâches créées", task_ids, newTasks)
@@ -743,9 +748,13 @@ class Project {
     if (nombre){
       this.reactiveIfTask(this.tasks)
     }
+    this.setNombreTachesInBadge(nombre)
+  }
+  setNombreTachesInBadge(nombre){
     this.tasksBadge.textContent = nombre
     this.tasksBadge.classList[nombre?'remove':'add']('hidden')
   }
+
   /**
    * Fonction de test qui dans le cas de tâche aujourd'hui, réactive
    * un projet en standby

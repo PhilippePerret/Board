@@ -214,6 +214,7 @@ button.aide {
   border: 1px solid;
   border-radius: 1em;
   width: 1.5em;
+  text-align: center;
   cursor: pointer;
   background-color: cadetblue;
   color: white;

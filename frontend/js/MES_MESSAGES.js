@@ -30,7 +30,7 @@ const MESSAGES = {
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
   
     // -- Todoist --
-    , 'todoist-content'     : "content"
+    , 'todoist-content'     : "contenu"
     , 'todoist-description' : "description"
     , 'todoist-due'         : "début"
     , 'todoist-deadline'    : "échéance"
@@ -42,7 +42,7 @@ const MESSAGES = {
     , 'New task...': "Nouvelle tâche…"
     , 'New task': "Nouvelle tâche"
     , 'todoist-message-new-task': "Définissez ci-dessous les paramètres généraux de cette nouvelle tâche. Vous pouvez supprimer tous les paramètres inutiles et utiliser des marqueurs simplifiés (today, tomorrow, 4j, etc.)"
-    , 'todoist-default-new-task': "contenu: \ndescription: \n\ndébut: JJ/MM/AAAA\nrépète: \ndurée: \npriorité: 1-5\néchéance: JJ/MM/AAAA\nlabels: lab 1, lab 2, ..."
+    , 'todoist-default-new-task': "contenu: \ndescription: \n\ndébut: JJ/MM/AAAA à h:mm\nrépète: \ndurée: \npriorité: 1-5\néchéance: JJ/MM/AAAA\nlabels: lab 1, lab 2, ..."
     , 'todoist-text-new-task': "✔ Nouvelle tâche : $1"
     , 'todoist-project-title': "Titre du projet dans Todoist"
     , 'todoist-tasks': "Tâches Todoist" // par exemple title du bouton de la carte

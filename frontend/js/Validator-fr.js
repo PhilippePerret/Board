@@ -4,7 +4,7 @@
 const dateDel = "[ :\\-\\/]"
 // Reg pour une heure
 // Peut s'exprimer par "10:32" comme "10 hrs 32" ou "10 heures"
-const heureReg = "[0-9]{1,2} ?(:|heure|hr|h)s? ?([0-9]{1,2})?"
+const heureReg = "[0-9]{1,2} ?(:|heure|hr|h|:)s? ?([0-9]{1,2})?"
 const dateReg = new RegExp(`^(le )?[0-9]{1,2}${dateDel}[0-9]{1,2}(${dateDel}[0-9]{2,4})?( à ${heureReg})?$`)
 
 const dateUnit = "(mois|semaine|sem|jour|jr|j|heure|hr|h|minute|min|mn)s?"
