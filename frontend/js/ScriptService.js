@@ -151,6 +151,11 @@ class ScriptService {
 
 class ServStep extends ExtendedObject {
 
+  static init(){
+    super.init()
+    this.unenableUndefinedId = false
+  }
+
   // Pour définir la valeur finale et passer à l'étape suivante
   setValue(value) {
     if ( value === ':abort:' ) {

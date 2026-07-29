@@ -9,8 +9,9 @@
 # réseau réel. Plutôt que d'attendre le vrai setInterval de Reminder (60s,
 # cf. frontend/js/Reminder.js#run), la tâche fixture est due dans le passé
 # et on déclenche Reminder.poll() nous-même via bridge_eval — déterministe,
-# rapide, pas de marqueur @long nécessaire.
+# rapide, pas besoin de marquer cette spec comme lente.
 
+require_relative '../../support/helpers'
 require_relative '../../support/todoist_e2e_stub'
 
 include BoardTest

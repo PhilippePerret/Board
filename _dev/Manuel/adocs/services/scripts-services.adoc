@@ -1,15 +1,19 @@
 [[scripts-services, les scripts-services]]
 == Les scripts-services ==
 
-Les _scripts-services_ offrent des possibilités infinies pour gérer ses projets. Ils permettent de **composer soi-même un service complexe** en exploitant toutes les ressources de l'application. Le tout premier script-service composé au moment de l'implémentation de cette application a permis de produire, avec un simple clic sur un bouton : 
+Les _scripts-services_ offrent des possibilités infinies pour gérer ses projets. Ils permettent de **composer soi-même un service complexe** en exploitant toutes les ressources de l'application. Le tout premier script-service composé au moment de l'implémentation de cette application a permis de produire, avec un simple clic sur un bouton un service qui accomplissait les tâches suivantes : 
 
-- choisir une maison d'édition (ME),
-- ou en créer une nouvelle,
-- faire un dossier d'envoi pour cette ME, dans le dossier `envois` du projet,
-- choisir le manuscript courant s'il n'était pas déjà défini
-- dupliquer dans le dossier de la ME le manuscript courant à envoyer,
-- créer un fichier avec l'adresse et le téléphone de la ME,
-- incrémenter l'historique des envois en y ajoutant cet envoi, avec la date (différée ou non).
+|====
+| Il demande de choisir une maison d'édition (ME)
+| Ou permet d'en créer une nouvelle
+| Il crée un dossier d'envoi pour cette ME, dans le dossier `envois` du projet,
+| Il demande de choisir le manuscript courant s'il n'était pas déjà défini
+| Il duplique le manuscrit dans le dossier de la ME le manuscript courant à envoyer +
+_(je préfère dupliquer le fichier pour être toujours certain de savoir ce que j'ai envoyé)_
+| Il crée un fichier avec l'adresse et le téléphone de la ME.
+| Il demande la date exacte d'envoi (aujourd'hui, demain ou une date précise).
+| Il incrémente l'historique des envois en y ajoutant cet envoi, avec la date (différée ou non).
+|====
 
 Tout cela, nous le redisons : par un simple clique sur un bouton.
 
@@ -53,18 +57,18 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
 ----
 ---
 - name: Première étape
-  id: 'etape-1
+  id: etape-1
 
 - name: Deuxième étape
-  id: 'etape-2
+  id: etape-2
 
 - name: Troisième étape
-  id: 'etape-3
+  id: etape-3
 
 # etc.
 ----
 
-Pour illustrer l'explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d'envoi de manuscrits à des maisons d'édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l'on écrit un roman, voire plus, par an.
+Pour illustrer l'explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d'envoi de manuscrits à des maisons d'édition comme celui présenté plus haut, pour ne pas avoir à répéter les mêmes actions des dizaines de fois, ce qui peut être pénible si l'on écrit un roman, voire plus, par an.
 
 En apparence, ce service doit être simple : 
 
@@ -90,13 +94,15 @@ Notre fichier YAML comprendra donc ces étapes, assurément :
 
 Noter que le `name` des étapes est optionnel, mais pour la clarté, il vaut mieux le définir.
 
-En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'est une valeur ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l'identifiant contient des tirets, il doit obligatoirement être entre guillemets.
+En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'est une valeur ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats.
+
+Nous verrons plus tard l'importance des identifiants, qui deviennent de véritables variables contenant une valeur dynamique.
 
 [code, yaml]
 ----
 ---
 - name: "Création du dossier de l'éditeur"
-  id: "creer-dossier-editeur"
+  id: creer-dossier-editeur
 
 - name: "Copie du manuscrit envoyé"
   id: copier_manuscrit
@@ -109,12 +115,16 @@ En revanche, chaque étape doit impérativement avoir un identifiant (`ìd`). C'
 
 ----
 
+{{todo poursuivre}}
+
 === Erreurs classiques ===
 
 Vous trouverez dans cette partie une liste des erreurs classique lorsqu'on établit ses étapes.
 
 |====
 | **Manifestation** | **Erreur** 
+| Signalement d'erreur    | Étape définie sans `id`.
+| Signalement d'erreur    | Étape définie avec un `id` existant.
 |====
 
 [[scserv-common-params, paramètres communs]]

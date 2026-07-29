@@ -9,6 +9,7 @@
 # de vie du Reminder) du flux de clic todoist par ailleurs en cours de
 # réparation (mismatch de nom de méthode entre Project.js et Todoist.js).
 
+require_relative '../../support/helpers'
 require_relative '../../support/todoist_e2e_stub'
 include BoardTest
 

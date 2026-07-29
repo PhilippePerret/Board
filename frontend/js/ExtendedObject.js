@@ -47,6 +47,7 @@ class ExtendedObject {
   }
 
   static init(){
+    this.unenableUndefinedId = true // mettre à false pour autoriser les id non définis
     this.__eo_items = []
     this.__eo_ids   = []
     this.__eo_table = {}
@@ -86,7 +87,9 @@ class ExtendedObject {
     for (var prop of Object.getOwnPropertyNames(data)) {
       this[prop] = data[prop]
     }
-    this.id ?? (this.id = this.constructor.nextId());
+    if (undefined == this.id && this.constructor.unenableUndefinedId ){ 
+      this.id = this.constructor.nextId()
+    }
     this.constructor.add(this)
 
   }

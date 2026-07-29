@@ -451,7 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#reglages-app">Réglages de l&#8217;application</a></li>
-<li><a href="#_todoist">Todoist</a>
+<li><a href="#todoist">Todoist</a>
 <ul class="sectlevel2">
 <li><a href="#td-link-project">Lier le projet</a></li>
 <li><a href="#td-project-creation">Création du projet</a></li>
@@ -501,6 +501,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
+<p>quand un projet est réactivé de force parce qu&#8217;il a des tâches à l&#8217;heure, il faut régler son badge</p>
+</li>
+<li>
+<p>Problème d&#8217;icône dans la documentation : fonctionne hors app, pas avec l&#8217;app</p>
+</li>
+<li>
 <p>Problème de définition dans le projet Board
 common_services_data:
   open-a-file:</p>
@@ -528,22 +534,7 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <div class="ulist">
 <ul>
 <li>
-<p>pouvoir mettre des projets en "standby" (ils apparaissent repliés dans l&#8217;interface)</p>
-</li>
-<li>
 <p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
-</li>
-<li>
-<p>pouvoir récupérer les tâches de todoist</p>
-</li>
-<li>
-<p>pouvoir ajouter des tâches à todoist</p>
-</li>
-<li>
-<p>utiliser des icônes SVG simples (pour l&#8217;interface)</p>
-</li>
-<li>
-<p>pouvoir éditer le fichier d&#8217;un script perso</p>
 </li>
 </ul>
 </div>
@@ -695,13 +686,13 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 </div>
 </div>
 <div class="sect1">
-<h2 id="_todoist">Todoist</h2>
+<h2 id="todoist">Todoist</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Une autre force de Board est de pouvoir travailler avec l&#8217;application Todoist.</p>
 </div>
 <div class="paragraph">
-<p>Il suffit de cliquer sur la petite icône <span class="image"><img src="../../frontend/images/todoist.png" alt="Logo Todoist" width="32px"></span> pour avoir un accès direct à l&#8217;application pour :</p>
+<p>Il suffit de cliquer sur la petite icône <span class="image"><img src="../../frontend/images/todoist-none.png" alt="Logo Todoist" width="32px"></span> pour avoir un accès direct à l&#8217;application pour :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -743,7 +734,9 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 </div>
 <div class="sect2">
 <h3 id="td-project-creation">Création du projet</h3>
-
+<div class="paragraph">
+<p>Pour créer le projet dans Todoist, il faut pour le moment le faire du côté de l&#8217;application Todoist elle-même. Nous vous laissons vous reporter à sa documentation pour le faire.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="td-tasks">Les tâches</h3>
@@ -787,9 +780,69 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 </li>
 </ol>
 </div>
+<hr>
 <div class="sect4">
 <h5 id="td-define-new-task">Définition de la nouvelle tâche</h5>
+<div class="paragraph">
+<p>Le contenu défini par <code>content:</code> est la seule information indispensable pour créer une nouvelle tâche. Toutes les autres sont optionnelles.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 50%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Propriété</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Exemples</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Titre/action de la tâche</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Je dois faire ça ce jour-là"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description plus précise de la tâche</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Cette tâche consiste précisément à…"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startline</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date où la tâche doit apparaitre dans le calendrier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">voir les <a href="#td-formats-date">formats de date</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Durée de la tâche</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"3 jours", "3j"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>deadline</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date où la tâche devra être achevée</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">voir les <a href="#td-formats-date">formats de date</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>priority</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priorité de la tâche sur les autres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">de 1 à 5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>labels</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste de labels de la tâche</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"label 1, label 2………, label L"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect5">
+<h6 id="td-formats-date">Formats valides de date</h6>
 
+</div>
+<div class="sect5">
+<h6 id="td-formats-duration">Formats valides de durée</h6>
+
+</div>
 </div>
 </div>
 </div>
@@ -799,33 +852,40 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <h2 id="scripts-services">Les scripts-services</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Les <em>scripts-services</em> offrent des possibilités infinies pour gérer ses projets. Ils permettent de <strong>composer soi-même un service complexe</strong> en exploitant toutes les ressources de l&#8217;application. Le tout premier script-service composé au moment de l&#8217;implémentation de cette application a permis de produire, avec un simple clic sur un bouton :</p>
+<p>Les <em>scripts-services</em> offrent des possibilités infinies pour gérer ses projets. Ils permettent de <strong>composer soi-même un service complexe</strong> en exploitant toutes les ressources de l&#8217;application. Le tout premier script-service composé au moment de l&#8217;implémentation de cette application a permis de produire, avec un simple clic sur un bouton un service qui accomplissait les tâches suivantes :</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>choisir une maison d&#8217;édition (ME),</p>
-</li>
-<li>
-<p>ou en créer une nouvelle,</p>
-</li>
-<li>
-<p>faire un dossier d&#8217;envoi pour cette ME, dans le dossier <code>envois</code> du projet,</p>
-</li>
-<li>
-<p>choisir le manuscript courant s&#8217;il n&#8217;était pas déjà défini</p>
-</li>
-<li>
-<p>dupliquer dans le dossier de la ME le manuscript courant à envoyer,</p>
-</li>
-<li>
-<p>créer un fichier avec l&#8217;adresse et le téléphone de la ME,</p>
-</li>
-<li>
-<p>incrémenter l&#8217;historique des envois en y ajoutant cet envoi, avec la date (différée ou non).</p>
-</li>
-</ul>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il demande de choisir une maison d&#8217;édition (ME)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ou permet d&#8217;en créer une nouvelle</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il crée un dossier d&#8217;envoi pour cette ME, dans le dossier <code>envois</code> du projet,</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il demande de choisir le manuscript courant s&#8217;il n&#8217;était pas déjà défini</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il duplique le manuscrit dans le dossier de la ME le manuscript courant à envoyer<br>
+<em>(je préfère dupliquer le fichier pour être toujours certain de savoir ce que j&#8217;ai envoyé)</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il crée un fichier avec l&#8217;adresse et le téléphone de la ME.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il demande la date exacte d&#8217;envoi (aujourd&#8217;hui, demain ou une date précise).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Il incrémente l&#8217;historique des envois en y ajoutant cet envoi, avec la date (différée ou non).</p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
 <p>Tout cela, nous le redisons : par un simple clique sur un bouton.</p>
 </div>

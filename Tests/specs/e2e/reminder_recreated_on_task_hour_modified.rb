@@ -7,6 +7,7 @@
 # Pilotage direct de Project#updateTasksAfterMarkAndCreate via bridge_eval,
 # même raison que reminder_destroyed_on_task_closed.rb.
 
+require_relative '../../support/helpers'
 require_relative '../../support/todoist_e2e_stub'
 include BoardTest
 

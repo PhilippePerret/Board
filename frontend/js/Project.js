@@ -783,7 +783,7 @@ class Project {
   }
   // Régler le badge en fonction du nombre de tâches (chargement)
   setTodoistBadge(tasks){
-    console.log("[Project.setTodoistBadge] Liste des tâches remontées", tasks)
+    // console.log("[Project.setTodoistBadge] Liste des tâches remontées", tasks)
     this.tasks = tasks
     const nombre = this.tasks.length
     if (nombre){
@@ -806,19 +806,17 @@ class Project {
    */
   reactiveIfTask(tasks){
     var time
-    console.log("tasks du jour", tasks)
+    // console.info("tasks du jour", tasks)
     if (tasks.length) {
       tasks.forEach(task => {
         task.avecHeure = DateUtils.hasHour(task.due.date)
         if (task.avecHeure) {
-          console.log("La task a une heure prévue", task)
+          // console.log("La task a une heure prévue", task)
           // On prend la date qui correspond à l'heure
           if (time = DateUtils.parseAsIso8601(task.due.date)) {
             // Time trouvé directement
-            console.info("Temps ISO 8601", task.due.date, time)
           } else {
             time = DateUtils.todayWithTime(DateUtils.extractHourFrom(task.due.date))
-            console.info("Temps autre format", time)
           }
           // On enregistre un register qui affichera le début de la tâche à l'heure
           // voulu + réactivera le projet s'il est en standby
@@ -833,7 +831,7 @@ class Project {
           // On enregistre le rappel
           Reminder.register(dataReminder)
         } else {
-          console.log("La task N'a PAS d'heure", task)
+          // console.log("La task N'a PAS d'heure", task)
           // Si le projet est en standby, il faut le réactiver
           this.collapsed && this.reactive()
         }
