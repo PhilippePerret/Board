@@ -815,7 +815,7 @@ class Project {
           // On prend la date qui correspond à l'heure
           if (time = DateUtils.parseAsIso8601(task.due.date)) {
             // Time trouvé directement
-            console.info("Temps ISO 8601", time)
+            console.info("Temps ISO 8601", task.due.date, time)
           } else {
             time = DateUtils.todayWithTime(DateUtils.extractHourFrom(task.due.date))
             console.info("Temps autre format", time)
