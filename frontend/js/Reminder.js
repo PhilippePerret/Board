@@ -23,7 +23,7 @@
 class Reminder extends ExtendedObject {
 
   static init(){
-    super()
+    super.init()
     this.running  = false
     this.stack    = []
   }
@@ -37,8 +37,8 @@ class Reminder extends ExtendedObject {
     const reminder = new Reminder(data)
     if (reminder.immediat) {
       reminder.exec()
-    } else {
-      reminder.schedule()
+    } else if ( !this.running ) {
+      this.run()
     }
   }
 
@@ -46,42 +46,70 @@ class Reminder extends ExtendedObject {
    * Vérifie tous les rappels pour voir ceux qui arriveraient à échéance
    */
   static poll() {
-    this.each('execIfTime', [new Date().getDate()])
+    console.log("-> Reminder::poll", new Date())
+    this.each('execIfTime', [new Date()])
     if (this.count == 0) {
       this.stop()
     }
   }
 
-  // Lancement du 
+  // Lancement du reminder
   static run(){
-    this.runTimer = setInteval(this.poll.bind(this), 60 * 1000)
+    console.log("-> Reminder::run")
+    this.runTimer = setInterval(this.poll.bind(this), 60 * 1000)
     this.running = true
   }
   static stop(){
-    this.removeInterval(this.runTimer)
+    console.log("-> Reminder::stop")
+    clearInterval(this.runTimer)
     delete this.runTimer
     this.running = false
   }
 
   constructor(data){
     super(data)
-    this.time = this.date.getDate()
   }
 
   /**
    * Fonction qui vérifie le temps +time+ avec le temps du rappel
    * et exécute le reminder si c'est l'heure
    */
-  execIfTime(time) {
-    console.log("Temps comparés", time, this.time)
-    if (this.time <= time) this.exec()
+  execIfTime(date) {
+    console.log("Temps comparés", date, this.time)
+    if (this.time <= date) this.exec()
   }
   /**
    * Exécution du rappel
    */
   exec(){
-    message(true, "Je dois apprendre à jouer le rappel", this)
+    console.log("-> Reminder.exec", this)
+    Notifier.notify(this.dataNotifierByType(this.type))
     this.constructor.remove(this)
   }
 
+  dataNotifierByType(type) {
+    const data = {
+        icon:       this.icon || this.project?.get('icon')
+      , title:      this.title
+      , message:    this.message
+      , background: '#333333'
+      , font_color: '#FFFFFF'
+      , mode:       'floating'
+      , delay:      this.delay
+    }
+    var sup
+    switch(type){
+      case 'notice':
+        sup = {background: '#0000FF'}
+        break
+      case 'warning':
+        sup = {background: '#ffc400'}
+        break
+      case 'error':
+        sup = {background: '#e60000'}
+        break
+
+    }
+    return Object.assign(data, sup)
+  }
 }
