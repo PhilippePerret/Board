@@ -1,5 +1,6 @@
 == BUGS ==
 
+- ON n'arrive plus à cliquer sur le badge standby d'un projet qui contient des services………
 - quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app

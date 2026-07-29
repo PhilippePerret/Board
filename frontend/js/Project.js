@@ -64,7 +64,7 @@ class Project {
   static eachAsync(method, methodOnRetour, projet, retour) {
     if (projet) {
       // synchro
-      console.info("Au retour, appel de '%s' sur e%s'", methodOnRetour, projet.title)
+      // console.info("Au retour, appel de '%s' sur e%s'", methodOnRetour, projet.title)
       if ('function' == typeof projet[methodOnRetour]) {
         projet[methodOnRetour].call(projet, retour)
       } else {
@@ -76,7 +76,7 @@ class Project {
     const nextProjet = this.nextAsyncProject()
     if ( nextProjet ) { // Il reste des projets
       const callback = this.eachAsync.bind(this, method, methodOnRetour, nextProjet)
-      console.info("Appel de '%s' sur '%s'", method, nextProjet.title)
+      // console.info("Appel de '%s' sur '%s'", method, nextProjet.title)
       if ('function' == typeof nextProjet[method]) {
         nextProjet[method].call(nextProjet, callback)
       } else {
@@ -340,20 +340,21 @@ class Project {
    * Pour mettre le projet en stand-by ou le réactiver
    */
   standbyize(ev){
-    if (ev.type =='mouseup'){
+    if (ev.type == 'mouseup' || ev.type == 'fake-mouseup'){
       this.collapsed = !this.collapsed
       const container = this.constructor[this.collapsed?'standbyContainer':'container']
       container.append(this.obj)
       this.set('collapsed', this.collapsed, true)
       this.obj.classList[this.collapsed?'add':'remove']('collapsed')
+      ev.type == 'mouseup' && stopEvent(ev)
+    } else if (ev.type == 'mousedown') {
+      return stopEvent(ev)
     }
-    ev && stopEvent(ev)
-    return false
   }
   // Réactiver un projet en standby
   reactive(){
     this.collapsed = true
-    this.standbyize({type: 'mouseup'})
+    this.standbyize({type: 'fake-mouseup'})
     if (this.tasks){
       this.setNombreTachesInBadge(this.tasks.length)
     } else {
@@ -763,6 +764,7 @@ class Project {
    * Si la tâche a une heure dans le future, elle est programmée.
    */
   reactiveIfTask(tasks){
+    var time
     console.log("tasks du jour", tasks)
     if (tasks.length) {
       tasks.forEach(task => {
@@ -770,7 +772,13 @@ class Project {
         if (task.avecHeure) {
           console.log("La task a une heure prévue", task)
           // On prend la date qui correspond à l'heure
-          const time = DateUtils.todayWithTime(DateUtils.extractHourFrom(task.due.date))
+          if (time = DateUtils.parseAsIso8601(task.due.date)) {
+            // Time trouvé directement
+            console.info("Temps ISO 8601", time)
+          } else {
+            time = DateUtils.todayWithTime(DateUtils.extractHourFrom(task.due.date))
+            console.info("Temps autre format", time)
+          }
           // On enregistre un register qui affichera le début de la tâche à l'heure
           // voulu + réactivera le projet s'il est en standby
           const dataReminder = {
