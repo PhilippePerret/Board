@@ -497,6 +497,7 @@ class Project {
     const divId = `project-${this.id}`
     this.divId = divId
     const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})
+    if (this.collapsed) div.classList.add('collapsed')
     div.dataset.projectId = this.id
     if (this.background) {
       this.setBackground(div, this.background)
