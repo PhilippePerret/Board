@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <circle cx="16" cy="16" r="15" fill="#111118"/>
-  <circle cx="16" cy="16" r="13" fill="none" stroke="#a9c26a" stroke-width="2.2"
-    stroke-linecap="round" stroke-dasharray="65 100" pathLength="100"
-    transform="rotate(-90 16 16)"/>
-  <text x="16" y="19" text-anchor="middle" font-family="'Avenir Next', sans-serif"
-    font-weight="600" font-size="8" fill="#a9c26a">10:45</text>
-</svg>

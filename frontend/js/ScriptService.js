@@ -149,7 +149,7 @@ class ScriptService {
 
 
 
-class ServStep {
+class ServStep extends ExtendedObject {
 
   // Pour définir la valeur finale et passer à l'étape suivante
   setValue(value) {
@@ -641,13 +641,9 @@ class ServStep {
 
 
   constructor(scriptService, data){
+    super(data)
     this.scriptService = scriptService
     this.projet = this.scriptService.projet
-    this.data = data
-    for (var prop of Object.getOwnPropertyNames(data)) {
-      this[prop] = data[prop]
-      // console.log("this[%s] = %s", prop, this[prop])
-    }
     this.isConditional = this.if
   }
 
