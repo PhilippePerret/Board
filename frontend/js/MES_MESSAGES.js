@@ -7,6 +7,7 @@ const MESSAGES = {
 
     // --- GÉNÉRAUX ---
     , ':': ' : '
+    , 'date/at': 'à' // pour une date avec heure
     , 'Cancel': "Renoncer"
     , 'clock-work-done': 'Travail accompli au cours de la session : '
     , 'clock-work-is-done': "Vous êtes arrivé à échéance de travail"
@@ -51,6 +52,7 @@ const MESSAGES = {
     , 'todoist-priority'    : "priorité"
     , 'todoist-labels'      : "labels"
     , 'todoist-repeat'      : "répète"
+    , 'task-due-to-start'   : "Désolé de vous interrompre, mais la tâche “$1” doit être commencée."
 
     , 'New task...': "Nouvelle tâche…"
     , 'New task': "Nouvelle tâche"

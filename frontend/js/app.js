@@ -28,15 +28,6 @@ class App {
       Service.init()
       this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
-      // --- Essai Reminder ---
-      const func = Reminder.register.bind(Reminder, {
-          message: "Le message à afficher."
-        , type: 'notice'
-        , title: 'Rappel'
-        , icon: 'images/board.svg'
-        , time: DateUtils.dateIn(2, 'minute')
-      })
-      retarde(func, 4)
     }
   }
 

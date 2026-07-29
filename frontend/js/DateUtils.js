@@ -1,9 +1,33 @@
 /**
- * DateUtils/Date.js
+ * DateUtils/DateUtils.js
  * v1.0.0
  * Méthodes utiles pour les Date
  */
+
+const REG_HOUR = /([0-9{1,2}) ?(?: (:|heure|hour|hr|h)s?) ?([0-9]{1,2})/
+
 class DateUtils {
+
+
+  /**
+   * @api
+   * 
+   * Retourne la date d'aujourd'hui à l'heure définie par
+   * +objTime+ qui peut-être soit "10:50" et ses variantes ou
+   * un objet {hour, minute}
+   * @param time  SOIT {String} h:mm et ses dérivés
+   *              SOIT {Object} {hour, minute, second}
+   * 
+   * @return La {Date} d'aujourd'hui correspondant à l'heure
+   */
+  static todayWithTime(time){
+    if ('string' == typeof time) {
+      return this.todayFromHour(time)
+    }
+    var d = new DateUtils()
+    return new Date(d.year, d.month, d.day, time.hour, time.minute, time.second || 0)
+  }
+
 
   /** 
    * @api
@@ -11,11 +35,29 @@ class DateUtils {
    *  @get    "10:30"/"10 h 30"/"10h30"/"10 heures 30"/ 
    *  @return La date à cette heure là pour aujourd'hui
   */
-  static dateFromHour(hourStr) {
+  static todayFromHour(hourStr) {
     const heure = this._parseHour(hourStr)
     if (heure === null) return null
-    var d = new DateUtils()
-    return new Date(d.year, d.month, d.day, heure.hour, heure.minute, 0)
+    return this.todayWithTime({hour: heure.hour, minute: heure.minute})
+  }
+
+  /**
+   * @api
+   * 
+   * Extrait l'heure d'une date string (qui doit se trouver après 'à/at')
+   */
+  static extractHourFrom(dateStr){
+    if ('string' == typeof dateStr) {
+      if ( this.hasHour(dateStr) ) {
+        var [date, hour] = dateStr.split(getMsg('date/at'))
+        return this._parseHour(hour.trim()) // {hour, minute}
+      } else {
+        // La date ne définit pas d'heure
+        return null
+      }
+    } else {
+      raise("DateUtils::extractHourFrom requiert une date string")
+    }
   }
 
   /**
@@ -30,12 +72,21 @@ class DateUtils {
     return d.add(amount, unit)
   }
 
+  /**
+   * @api
+   * 
+   * Fonction retournant true si la date, exprimée en string,
+   * possède une heure (donc le texte 'at', 'à' en fonction de la langue)
+   */
+  static hasHour(date){
+    return date.match(` ${getMsg('date/at')} `) !== null
+  }
 
 
 
 
   static _parseHour(str){
-    var found = str.match(/([0-9{1,2}):([0-9]{1,2})/)
+    var found = str.match(REG_HOUR)
     if (found === null) return null
     var [tout, h, m] = found
     return {hour: h, minute: m}

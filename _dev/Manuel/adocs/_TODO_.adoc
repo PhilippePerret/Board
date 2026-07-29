@@ -16,7 +16,6 @@
 
 == Todo En cours
 
-- Reminder pour gérer les annonces à faire (minuteur arrivant à expiration, tâche de projet approchante)
 - quand une tâche de projet en standby arrive à l'heure => sortir le projet du standby et la notifier (Notifier.notify)
   Noter que lorsqu'il n'y a pas d'heure, le projet est réactivé tout de suite
 

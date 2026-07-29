@@ -84,6 +84,10 @@ class Reminder extends ExtendedObject {
   exec(){
     // console.log("-> Reminder.exec", this)
     Notifier.notify(this.dataNotifierByType(this.type))
+    if (this.onDue) {
+      console.info("La fonction à jouer lors de l'échéance a été appelée.")
+      this.onDue()
+    }
     this.constructor.remove(this)
   }
 

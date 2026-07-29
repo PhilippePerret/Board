@@ -269,7 +269,7 @@ class Project {
 
 
   constructor(data){ D.on && D.trace(data)
-    console.log("data", data)
+    // console.log("data", data)
     this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
     this.data = data
     if (!this.id ) this.id = uniqId()
@@ -280,7 +280,7 @@ class Project {
     if (undefined == this.card_path) {
       this.card_path = [App.getData('support_folder'), 'project-cards', `${this.id}.yaml`].join('/')
       this.data.card_path = this.card_path
-      console.info("card_path mise à %s", this.card_path)
+      // console.info("card_path mise à %s", this.card_path)
     }
     if (undefined == this.collapsed) {
       this.collapsed = false
@@ -347,7 +347,8 @@ class Project {
       this.set('collapsed', this.collapsed, true)
       this.obj.classList[this.collapsed?'add':'remove']('collapsed')
     }
-    return stopEvent(ev)
+    ev && stopEvent(ev)
+    return false
   }
   // Réactiver un projet en standby
   reactive(){
@@ -740,7 +741,7 @@ class Project {
   }
   // Régler le badge en fonction du nombre de tâches (chargement)
   setTodoistBadge(retour){
-    console.log("[setTodoistBadge] Liste des tâches remontées", retour)
+    console.log("[Project.setTodoistBadge] Liste des tâches remontées", retour)
     this.tasks = retour
     const nombre = this.tasks.length
     if (nombre){
@@ -755,13 +756,38 @@ class Project {
 
   /**
    * Fonction de test qui dans le cas de tâche aujourd'hui, réactive
-   * un projet en standby
+   * un projet en standby.
+   * Mais attention, il ne faut le faire que si la tâche ne comporte
+   * pas d'heure ou que l'heure est dépassé.
+   * 
+   * Si la tâche a une heure dans le future, elle est programmée.
    */
   reactiveIfTask(tasks){
-    if (this.collapsed) {
-      if (tasks.length) {
-        this.reactive()
-      }
+    console.log("tasks du jour", tasks)
+    if (tasks.length) {
+      tasks.forEach(task => {
+        task.avecHeure = DateUtils.hasHour(task.due.date)
+        if (task.avecHeure) {
+          console.log("La task a une heure prévue", task)
+          // On prend la date qui correspond à l'heure
+          const time = DateUtils.todayWithTime(DateUtils.extractHourFrom(task.due.date))
+          // On enregistre un register qui affichera le début de la tâche à l'heure
+          // voulu + réactivera le projet s'il est en standby
+          const dataReminder = {
+              message:  getMsg('task-due-to-start', [task.content])
+            , time:     time
+            , project:  this
+          }
+          // Si le projet est en standby, on le réactivera
+          if (this.collapsed) Object.assign(dataReminder, {onDue: this.reactive.bind(this)})
+          // On enregistre le rappel
+          Reminder.register(dataReminder)
+        } else {
+          console.log("La task N'a PAS d'heure", task)
+          // Si le projet est en standby, il faut le réactiver
+          this.collapsed && this.reactive()
+        }
+      })
     }
   }
 

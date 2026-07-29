@@ -35,13 +35,13 @@ class Todoist {
   }
 
   static _fetchToday(project, callback) {
-    console.log("[_fetchToday] callback", callback)
+    // console.log("[_fetchToday] callback", callback)
     D.start()
     D.trace(project, callback)
     server.send({action: 'todoist-today-tasks', todoist_id: project.todoist_id, no_raise: true}, (retour) => {
       callback(retour.data.tasks || {error: 'empty'})
     })
-    D.outputTrace()
+    // D.outputTrace()
   }
 
   static markCompleteAndCreateNewTask(project, done_ids, newTasks, callback){
