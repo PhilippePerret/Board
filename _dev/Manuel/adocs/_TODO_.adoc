@@ -1,6 +1,5 @@
 == BUGS ==
 
-- ON n'arrive plus à cliquer sur le badge standby d'un projet qui contient des services………
 - quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
@@ -17,13 +16,8 @@
 
 == Todo En cours
 
-- quand une tâche de projet en standby arrive à l'heure => sortir le projet du standby et la notifier (Notifier.notify)
-  Noter que lorsqu'il n'y a pas d'heure, le projet est réactivé tout de suite
 
 == Todo list ==
-
-- Tâche approchante (à 10 minutes de début) Notifieur orange (picto todoist.png)
-  Tâche arrivant à départ
 
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
   

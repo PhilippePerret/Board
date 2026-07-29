@@ -4,7 +4,7 @@
  * Méthodes utiles pour les Date
  */
 
-const REG_HOUR = /([0-9]{1,2}) ?(?:(:|heure|hour|hr|h)s?) ?([0-9]{2})(?:\:([0-9]{2}))?/
+const REG_HOUR = /([0-9]{1,2}) ?(?:(?::|heure|hour|hr|h)s?) ?([0-9]{2})(?:\:([0-9]{2}))?/
 
 // "2026-07-29T09:00:00Z"
 const REG_ISO_8601= /([0-9]{4})\-([0-9]{2})\-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z)?/
@@ -22,8 +22,14 @@ class DateUtils {
   static parseAsIso8601(dateStr, asDateUtils = false){
     const found = dateStr.match(REG_ISO_8601)
     if (found === null) return null
-    const [year, month, day, hour, min, sec] = found.slice(0,6).map(n => parseInt(n))
-    const date = new Date(year, month - 1, day, hour, min, sec)
+    const [year, month, day, hour, min, sec] = found.slice(1,7).map(n => parseInt(n))
+    var date
+    if (found[8] == 'Z') {
+      const timestamp = Date.UTC(year, month-1, day, hour, min, sec)
+      date = new Date(timestamp)
+    } else {
+      date = new Date(year, month - 1, day, hour, min, sec)
+    }
     return asDateUtils ? new DateUtils(date) : date
   }
 
@@ -101,7 +107,6 @@ class DateUtils {
    * possède une heure (donc le texte 'at', 'à' en fonction de la langue)
    */
   static hasHour(date){
-    console.info("[hasHour]this.parseAsIso8601(%s)", date, this.parseAsIso8601(date))
     if (this.parseAsIso8601(date) !== null ) {
       return true
     } else {
@@ -132,6 +137,7 @@ class DateUtils {
     switch(unit){
       case 'year':    year    = year + amount; break
       case 'month':   month   = month + amount; break
+      case 'hour':    hour    = hour + amount; break
       case 'day':     day     = day + amount; break
       case 'week':    day     = day + 7 * amount; break
       case 'minute':  minute  = minute + amount; break
