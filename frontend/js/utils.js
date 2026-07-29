@@ -73,10 +73,8 @@ function textSubstitute(msg, params){
     } else {
       if (params) {
         if (Array.isArray(params)) {
-          var i = 0
-          params.forEach( param => {
-            i++
-            const regexp = new RegExp(`\\$\\{?${i}\\}?`, 'g')
+          params.forEach( (param, i) => {
+            const regexp = new RegExp(`\\$\\{?${i + 1}\\}?`, 'g')
             msg = msg.replace(regexp, String(param))
           })
         } else if ('object' == typeof params) {
@@ -89,7 +87,7 @@ function textSubstitute(msg, params){
         }
       }
       if (!msg) raise("msg indéfini après traitement des params")
-      msg = msg.replace(/\n/g, '<br>')
+      msg = msg.replace(/[^\\]\n/g, '<br>').replace(/\\\n/g, "\n")
     }
   } catch(err) {
     traceError()

@@ -6,6 +6,7 @@ const dateDel = "[ :\\-\\/]"
 // Peut s'exprimer par "10:32" comme "10 hrs 32" ou "10 heures"
 const heureReg = "[0-9]{1,2} ?(:|heure|hr|h|:)s? ?([0-9]{1,2})?"
 const dateReg = new RegExp(`^(le )?[0-9]{1,2}${dateDel}[0-9]{1,2}(${dateDel}[0-9]{2,4})?( à ${heureReg})?$`)
+const dateReg8601 = /[0-9]{4}\-[0-9]{2}\-[0-9]{2}/
 
 const dateUnit = "(mois|semaine|sem|jour|jr|j|heure|hr|h|minute|min|mn)s?"
 const dureeReg = new RegExp(`^([0-9]+) ${dateUnit}$`)
@@ -27,6 +28,9 @@ class Validator {
     if (date.match(dateReg)){
       // Formats JJ/MM/AAAA et dérivés
       return
+    } else if (date.match(dateReg8601)) {
+      // Iso 8601
+      return 
     } else if (date.match(/hier|avant\-hier|après\-demain|demain|dem|aujourd'hui|auj/) ){
       return
     } else if (date.match(dateDansReg)) {

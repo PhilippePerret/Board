@@ -80,14 +80,16 @@ module Todoist
     end
   end
 
-  def self.close_and_create_tasks(project_id, dones, createds)
-    done    = close_tasks(dones)
-    created = create_tasks(project_id, createds)
+  def self.update_tasks(project_id, done_ids, new_tasks, mod_tasks)
+    done      = close_tasks(done_ids)
+    created   = create_tasks(project_id, new_tasks)
+    modified  = modify_tasks(mod_tasks) # ID pour l'eur id
     {
-      done_count:    done[:count],
-      created_count: created[:count],
-      created_tasks: created[:tasks],
-      errors: done[:errors] + created[:errors]
+      today_tasks: today_tasks(project_id),
+      mod_count:   modified[:count],
+      new_count:   created[:count], # toutes les créées, peu importe leur date
+      done_count:  done_ids.count,
+      errors: done[:errors] + created[:errors] + modified[:errors]
     }
   end
 
@@ -98,7 +100,7 @@ module Todoist
   def self.close_tasks(task_ids)
     count = 0
     errors = []
-    task_ids.each do |task_id|
+    (task_ids || []).each do |task_id|
       begin
         close_task(task_id)
         count += 1
@@ -113,7 +115,7 @@ module Todoist
     count = 0
     errors = []
     created = []
-    tasks.each do |task|
+    (tasks || []).each do |task|
       begin
         created << create_task(project_id, task)
         count += 1
@@ -127,6 +129,62 @@ module Todoist
   def self.create_task(project_id, task)
     task = _ensure_task_data(project_id, task)
     request(:post, '/tasks', body: task)
+  end
+
+  def self.modify_tasks(tasks)
+    count = 0
+    errors = []
+    modified = []
+    (tasks || []).each do |task|
+      begin
+        modified << modify_task(task)
+        count += 1
+      rescue => e
+        errors << "#{task['content']} : #{e.message}"
+      end
+    end
+    {count: count, errors: errors, tasks: modified}
+  end
+
+  # L'identifiant de la tâche existante est dans 'ID' (pas 'id'), à retirer
+  # du body avant envoi. Pas de project_id à modifier (la tâche reste dans
+  # son projet) : _ensure_task_data(nil, task) traduit quand même
+  # start/deadline/duration/labels comme pour create_task, puis on retire
+  # le project_id (nil) qu'elle y aurait ajouté.
+  #
+  # Un champ absent de +task+ (ligne supprimée dans le formulaire d'édition,
+  # cf. Dialogs.js#_validateTaskBeforeSubmit) doit vider le champ existant
+  # côté Todoist, pas le laisser tel quel. Vérifié empiriquement (l'API
+  # ignore silencieusement `null` pour certains champs) : description
+  # attend '', due_string attend 'no date', priority attend 1 (sa valeur
+  # par défaut, "pas de priorité") — null fonctionne pour deadline_date,
+  # duration et labels ([]).
+  RESET_VALUE_IF_MISSING = {
+    'description'   => '',
+    'due_string'    => 'no date',
+    'deadline_date' => nil,
+    'duration'      => nil,
+    'labels'        => [],
+    'priority'      => 1,
+  }.freeze
+
+  def self.modify_task(task)
+    task = task.dup
+    task_id = task.delete('ID')
+
+    resets = {}
+    resets['description']   = RESET_VALUE_IF_MISSING['description']   unless task.key?('description')
+    resets['due_string']    = RESET_VALUE_IF_MISSING['due_string']    unless task.key?('due') || task.key?('start')
+    resets['deadline_date'] = RESET_VALUE_IF_MISSING['deadline_date'] unless task.key?('deadline')
+    resets['duration']      = RESET_VALUE_IF_MISSING['duration']      unless task.key?('duration')
+    resets['labels']        = RESET_VALUE_IF_MISSING['labels']        unless task.key?('labels')
+    resets['priority']      = RESET_VALUE_IF_MISSING['priority']      unless task.key?('priority')
+
+    task = _ensure_task_data(nil, task)
+    task.delete('project_id') if task['project_id'].nil?
+    task = resets.merge(task) # les valeurs réellement fournies priment sur les resets
+
+    request(:post, "/tasks/#{task_id}", body: task)
   end
 
   def self._ensure_task_data(project_id, task)

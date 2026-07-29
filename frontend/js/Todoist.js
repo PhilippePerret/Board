@@ -44,8 +44,8 @@ class Todoist {
     // D.outputTrace()
   }
 
-  static markCompleteAndCreateNewTask(project, done_ids, newTasks, callback){
-    server.send({action: 'todoist-mark-complete-and-create-new', project_id: project.todoist_id, done: done_ids, created: newTasks}, callback)
+  static update_tasks(project, done_ids, new_tasks, mod_tasks, callback){
+    server.send({action: 'todoist-update-tasks', project_id: project.todoist_id, no_raise: true, done_ids, new_tasks, mod_tasks}, callback)
   }
 
   /**

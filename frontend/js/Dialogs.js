@@ -227,15 +227,19 @@ class TasksDialog extends Dialog {
     super(data)
     this.width    = '800px'
     this.tasks    = data.tasks
-    this.onCheck  = data.onCheck
+    this.onCheck  = (task, ev) => {this.getLastCheck(task, ev); data.onCheck(task, ev)}
     this.content  = this.buildTaskList()
     this.ouiData  = {name: 'OK', onclick: () => {
       data.onValidate.call(null, this.newTasks)
     }}
     this.midData  = {name: getMsg('todoist-modify-checked'), onclick: this.onModifyCheckedTask.bind(this), keep: true}
-    // this.midData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
     this.nonData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
     this.newTasks = []
+  }
+
+  getLastCheck(task, ev){
+    if (undefined == this.__checks) { this.__checks = []}
+    this.__checks.push(task)
   }
 
   /**
@@ -243,33 +247,61 @@ class TasksDialog extends Dialog {
    * tâche cochée
    */
   onModifyCheckedTask(retour){
-    console.error("Je dois apprendre à modifier une tâche.")
-    // TODO Prendre la tâche cochée
-    // TODO Si pas de tâche cochée => messsage d'erreur
-    // TODO mettre en forme la donnée
-    this.onEditNewTask()
+    if ( !this.__checks ) return erreur("Aucun tâche cochées")
+    else if (this.__checks.length > 1) {
+      erreur("Il faut cocher seulement la tâche à modifier.")
+    } else {
+      const task = this.__checks[0]
+      this.__checks = []
+      // On la décoche
+      DGet(`#todoist-task-${task.id}-cb`).checked = false
+      // Mettre en forme la donnée
+      var repeat = '';
+      if (task.due.is_recursing) {
+        repeat = task.due.string
+      }
+      this.onEditNewTask(getMsg('todoist-default-fields-task', [
+          task.content
+        , task.description || ''
+        , task.due.date
+        , repeat
+        , task.duration || ''
+        , task.priority || ''
+        , task.deadline || ''
+        , task.labels   || ''
+      ]) + `\nID: ${task.id}`, task)
+    }
   }
 
   /**
    * Méthode appelée quand on clique sur le bouton "Nouvelle tâche…"
+   * OU quand on revient de l'édition.
    * Elle ouvre un textarea pour entrer les nouvelles données.
+   * 
+   * NOTE : La fonction porte mal SON NOM puisqu'elle sert aussi à
+   * l'édition de la tâche
    */
-  onCreateNewTask(newTask){
-    if (newTask) {
-      console.log("retour onCreateNewTask", newTask)
-      this.newTasks.push(newTask)
-      this.list.appendChild(DCreate('DIV', {text: getMsg('todoist-text-new-task', [newTask.content])}))
+  onCreateNewTask(task /* nouvelle ou modifiée */){
+    if (task ) {
+      console.log("retour onCreateNewTask", task )
+      const msgId = task.ID ? 'todoist-text-mod-task' : 'todoist-text-new-task'
+      this.list.appendChild(DCreate('DIV', {text: getMsg(msgId, [task .content])}))
+      this.newTasks.push(task)
 
     } else {
-      this.onEditNewTask(MESSAGES['todoist-default-new-task'])
+      this.onEditNewTask(
+          getMsg('todoist-default-fields-task', ['', '', getMsg('todoist-default-due-task'), '', '', '1-5', '', 'lab 1, lab 2, ...'])
+        , null
+      )
     }
   }
   onEditNewTask(dataTaskStr, task /* seulement si modification */){
+    const message = getMsg(task ? 'todoist-message-mod-task' : 'todoist-message-new-task')
     this.BoiteTaskData = new TextareaDialog({
           title: getMsg('New task')
         , id: 'task-data-textarea'
         , width: '800px'
-        , q: getMsg('todoist-message-new-task') + "\n\n"
+        , q: message + "\n\n"
         , default: dataTaskStr
         , ouiBtn: {name: 'OK', onclick: this._validateTaskBeforeSubmit.bind(this), keep: true}
         , nonBtn: {name: getMsg('Cancel')}
@@ -344,6 +376,7 @@ class TasksDialog extends Dialog {
   _validateByKey(key, val, errors){
     // console.log("[_validateByKey] key, val, errors", {key, val, errors})
     switch(key) {
+      case 'ID': return ['ID', val]
       case 'content': case this._content_:  if (val == '') errors.push(getErr('prop-cant-be-empty', ['content']))
                                             return ['content', val]
       case 'description': case this._description_: return ['description', val] // idem

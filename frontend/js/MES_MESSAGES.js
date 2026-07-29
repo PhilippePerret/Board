@@ -57,8 +57,11 @@ const MESSAGES = {
     , 'New task...': "Nouvelle tâche…"
     , 'New task': "Nouvelle tâche"
     , 'todoist-message-new-task': "Définissez ci-dessous les paramètres généraux de cette nouvelle tâche. Vous pouvez supprimer tous les paramètres inutiles et utiliser des marqueurs simplifiés (today, tomorrow, 4j, etc.)"
-    , 'todoist-default-new-task': "contenu: \ndescription: \n\ndébut: JJ/MM/AAAA à h:mm\nrépète: \ndurée: \npriorité: 1-5\néchéance: JJ/MM/AAAA\nlabels: lab 1, lab 2, ..."
+    , 'todoist-message-mod-task': "Redéfinissez ci-dessous les paramètres de la tâche."
+    , 'todoist-default-fields-task': "contenu: $1\\\ndescription: $2\\\n\\\ndébut: $3\\\nrépète: $4\\\ndurée: $5\\\npriorité: $6\\\néchéance: $7\\\nlabels: $8"
+    , 'todoist-default-due-task': "JJ/MM/AAAA à h:mm"
     , 'todoist-text-new-task': "✔ Nouvelle tâche : $1"
+    , 'todoist-text-mod-task': "✔ Tâche modifiée : $1"
     , 'todoist-project-title': "Titre du projet dans Todoist"
     , 'todoist-tasks': "Tâches Todoist" // par exemple title du bouton de la carte
     , 'msg-ask-for-todoist-project-title': "Merci d'indiquer ci-dessous le titre du projet $1 dans l'application Todoist."
@@ -73,6 +76,8 @@ const MESSAGES = {
     , 'todoist-no-task-done': "Aucune tâche à marquer achevée."
     , 'todoist-no-new-task': "Aucune nouvelle tâche."
     , 'todoist-modify-checked': "Modifier ✔…"
+    , 'todoist-errors-update-tasks': "Erreurs d'actualisation des tâches"
+    , 'todoist-message-actualisation': "Actualisation des tâches : nouvelles : $1, achevées : $2, modifiées : $3"
     // -- test --
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'

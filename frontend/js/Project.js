@@ -687,27 +687,33 @@ class Project {
   /**
    * Fonction appelée quand on fait ok pour valider la liste des 
    * tâches marquées achevées et les nouvelles tâches.
+   * 
+   * +newTasks+ est à entendre comme "tâches modifiées ou ajoutées"
    */
   onValidateTodoist(newTasks){
     // On passe par ici pour valider les tâches achevées et la
     // demande de création des nouvelles tâches
     var operations = []
+
+    // -- Tâches marquées achevées --
     this.tasks.forEach(task => {
       if (task.checked) {
         operations.push(getMsg('mark-task-checked', task.content))
       }
     })
+
     if (operations.length == 0 && newTasks.length == 0){
       // Rien à confirmer
       return true
     } else if (operations.length == 0) {
-      operations.push('<div class="italic">'+getMsg('todoist-no-task-done')+'</div>')
+      operations.push('<div class="italic">'+getMsg('todoist-no-task-done')+'</div><hr />')
     }
     if (newTasks) {
-      // On ajoute les évenutelles nouvelles tâches
+      // On ajoute les nouvelles tâches ou les tâches modifiées
       operations.push('<hr>')
       newTasks.forEach(newTask => {
-        operations.push(getMsg('todoist-text-new-task', [newTask.content]))
+        const msgId = newTask.ID ? 'todoist-text-mod-task' : 'todoist-text-new-task'
+        operations.push('<div>' + getMsg( msgId, [newTask.content]) + '</div>')
       })
     } else {
       operations.push('<div class="italic">'+getMsg('todoist-no-new-task')+'</div>')
@@ -722,31 +728,44 @@ class Project {
     }).show()
   }
 
-  onMarkAndCreateTodoistTask(newTasks, retour){
-    if (retour){
-      if (retour.data.errors.length) raise(retour.data.errors.join("\n"))
-      message(true, getMsg('todoist-fin-tasks-done-and-create', [this.title, retour.data.done_count, retour.data.created_count]))
-      this.updateTasksAfterMarkAndCreate(retour.data)
-    } else {
-      const task_ids = this.tasks.filter(t => t.checked).map(t => t.id)
-      console.log("Liste des tâches à marquer accomplies et tâches créées", task_ids, newTasks)
-      Todoist.markCompleteAndCreateNewTask(this, task_ids, newTasks, this.onMarkAndCreateTodoistTask.bind(this, newTasks))
-    }
+  /**
+   * C'est ici qu'on traite les tâches :
+   *  - nouvelles
+   *  - modifiées
+   *  - marquées achevées
+   */
+  onMarkAndCreateTodoistTask(tasks){
+    const done_ids  = this.tasks.filter(t => t.checked).map(t => t.id)
+    const mod_tasks = tasks.filter(t => t.ID)
+    const new_tasks = tasks.filter(t => (undefined == t.ID))
+    // console.log("Liste des tâches à traiter", {done_ids, mod_tasks, new_tasks})
+    Todoist.update_tasks(this, done_ids, new_tasks, mod_tasks, this.updateTasksAfterMarkAndCreate.bind(this))
   }
 
   /**
-   * Met à jour this.tasks localement après marquage de tâches achevées et
-   * création de nouvelles tâches, sans réinterroger Todoist (pas de refetch
-   * complet) : retire les tâches closes, ajoute les nouvelles tâches du
-   * jour et enregistre leur Reminder (via reactiveIfTask) si besoin.
+   * Retour de l'enregistrement des nouvelles tâches, des tâches
+   * modifiées et des tâches achevées.
+   * 
+   * La fonction actualise la liste des tâches [TODO] et le
+   * badge todoist pour refléter les changements [TODO]
+   * 
+   * @param retour Données remontées par le backend
    */
-  updateTasksAfterMarkAndCreate(data){
-    const closedIds = this.tasks.filter(t => t.checked).map(t => t.id)
-    this.tasks = this.tasks.filter(t => !closedIds.includes(t.id))
-    const todayTasks = (data.created_tasks || []).filter(t => this.isTaskDueTodayOrBefore(t))
-    this.tasks = this.tasks.concat(todayTasks)
-    this.setNombreTachesInBadge(this.tasks.length)
-    if (todayTasks.length) this.reactiveIfTask(todayTasks)
+  updateTasksAfterMarkAndCreate(retour){
+    console.log("-> updateTasksAfterMarkAndCreate", retour)
+    const data = retour.data
+    if (data.errors.length) {
+      new ErrorsDialog({
+          title: getMsg('todoist-errors-update-tasks')
+        , errors: data.errors
+      }).show()
+    } else {
+      this.tasks = data.today_tasks
+      this.setNombreTachesInBadge(this.tasks.length)
+      this.reactiveIfTask(this.tasks)
+      if (this.tasks.length) this.reactiveIfTask(this.tasks)
+      message(true, getMsg('todoist-message-actualisation', [data.new_count, data.done_count, data.mod_count]))
+    }
   }
 
   isTaskDueTodayOrBefore(task){
@@ -762,9 +781,9 @@ class Project {
     Todoist.todayTaskForNotInter(this, callback, 'not-interractif')
   }
   // Régler le badge en fonction du nombre de tâches (chargement)
-  setTodoistBadge(retour){
-    console.log("[Project.setTodoistBadge] Liste des tâches remontées", retour)
-    this.tasks = retour
+  setTodoistBadge(tasks){
+    console.log("[Project.setTodoistBadge] Liste des tâches remontées", tasks)
+    this.tasks = tasks
     const nombre = this.tasks.length
     if (nombre){
       this.reactiveIfTask(this.tasks)

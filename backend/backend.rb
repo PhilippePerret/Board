@@ -232,9 +232,9 @@ begin
     require_relative 'lib/todoist.rb'
     RETOUR.data = Todoist.create_tasks(request['project_id'], request['tasks'])
 
-  when 'todoist-mark-complete-and-create-new'
+  when 'todoist-update-tasks'
     require_relative 'lib/todoist.rb'
-    RETOUR.data = Todoist.close_and_create_tasks(request['project_id'], request['done'], request['created'])
+    RETOUR.data = Todoist.update_tasks(request['project_id'], request['done_ids'], request['new_tasks'], request['mod_tasks'])
 
   # action inconnue => ERRREUR
   else 
