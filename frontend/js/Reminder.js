@@ -96,7 +96,7 @@ class Reminder extends ExtendedObject {
     const newItems  = []
     const newTable  = {}
     const newIds    = []
-    this.__eo_items = this.items.filter(reminder => {
+    this.__eo_items = this.__eo_items.filter(reminder => {
       return reminder[type] == undefined
     })
     this.__eo_items.forEach(reminder => {
