@@ -1,8 +1,16 @@
 == BUGS ==
 
 - quand on utilise project.icon dans les Notifier, il faut le chemin absolu
-- quand une tâche est marquée achevée, elle doit être retirée du nombre du badge todoist
-
+- quand une tâche est marquée modifiée, il faut voir si elle n'a pas de reminder, car
+  il faudrait alors le retirer
+  Cela arrive lorsque l'on exécute une tâche avant l'heure. Elle a donc été programmée et on la retire avant.
+  Trois solutions : 
+    1/ avant d'exec un reminder, on checke si la tâche existe toujours
+    2/ on supprime le reminder au moment du retrait de la tâche (moins sûr)
+    3/ après être remonté de l'update des tasks, on vérifie la concordance avec les reminders
+      (qui de toutes façons peuvent avoir été modifiés)
+  FAIRE UN TEST POUR ÇA
+  AUTRE TEST : Une tâche programmée pour dans le futur mise à un futur plus proche
 - quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app

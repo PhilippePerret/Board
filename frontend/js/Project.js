@@ -761,6 +761,7 @@ class Project {
       }).show()
     } else {
       this.tasks = data.today_tasks
+      Reminder.destroy('task') // supprime tous les reminders de tâche
       this.setNombreTachesInBadge(this.tasks.length)
       this.reactiveIfTask(this.tasks)
       if (this.tasks.length) this.reactiveIfTask(this.tasks)
@@ -824,6 +825,7 @@ class Project {
           const dataReminder = {
               message:  getMsg('task-due-to-start', [task.content])
             , time:     time
+            , task:     task
             , project:  this
           }
           // Si le projet est en standby, on le réactivera

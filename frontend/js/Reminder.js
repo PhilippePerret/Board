@@ -26,6 +26,7 @@ class Reminder extends ExtendedObject {
     super.init()
     this.running  = false
     this.stack    = []
+    this.remindedTasks = {}
   }
 
   /**
@@ -59,6 +60,7 @@ class Reminder extends ExtendedObject {
     this.runTimer = setInterval(this.poll.bind(this), 60 * 1000)
     this.running = true
   }
+
   static stop(){
     // console.log("-> Reminder::stop")
     clearInterval(this.runTimer)
@@ -66,8 +68,51 @@ class Reminder extends ExtendedObject {
     this.running = false
   }
 
+  /**
+   * Fonction qui ajoute un reminder pour une tâche
+   * courante.
+   * 
+   * Noter qu'une même tâche peut tout à fait avoir plusieurs
+   * reminder (tâche toutes les heures, par exemple)
+   */
+  static addReminderToTask(task, reminder){
+    if (undefined == this.remindedTasks[task.id]){
+      Object.assign(this.remindedTasks, {[task.id]: []})
+    }
+    this.remindedTasks[task.id].push(reminder)
+  }
+
+  /**
+   * Suppression des reminders du type +type+
+   * 
+   * Fonction qui checke la validité des reminders courant
+   * après une modification des tâches courantes.
+   * Elle détruit ceux qui n'ont plus à être là.
+   * 
+   * Mais en fait, il vaut mieux tous les détruire et les
+   * refaire avec les nouvelles tâches
+   */
+  static destroy(type){
+    const newItems  = []
+    const newTable  = {}
+    const newIds    = []
+    this.__eo_items = this.items.filter(reminder => {
+      return reminder[type] == undefined
+    })
+    this.__eo_items.forEach(reminder => {
+      Object.assign(newTable, {[reminder.id]: reminder})
+      newIds.push(reminder.id)
+    })
+    this.__eo_table = newTable
+    this.__eo_ids   = newIds
+  }
+
   constructor(data){
     super(data)
+    if (data.task){
+      this.task = data.task
+      this.constructor.addReminderToTask(data.task, this)
+    }
   }
 
   /**
@@ -91,9 +136,14 @@ class Reminder extends ExtendedObject {
     this.constructor.remove(this)
   }
 
+  destroy(){
+
+  }
+
+
   dataNotifierByType(type) {
     const data = {
-        icon:       this.icon || this.project?.get('icon')
+        icon:       this.fullPathIcon()
       , title:      this.title
       , message:    this.message
       , background: '#333333'
@@ -115,6 +165,15 @@ class Reminder extends ExtendedObject {
 
     }
     return Object.assign(data, sup)
+  }
+
+  fullPathIcon(){
+    var icon;
+    if ( icon = this.project?.get('icon')) {
+      return this.project.getFullPath(icon)
+    } else {
+      return this.icon
+    }
   }
 }
 Reminder.init()
