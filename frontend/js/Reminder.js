@@ -46,7 +46,7 @@ class Reminder extends ExtendedObject {
    * Vérifie tous les rappels pour voir ceux qui arriveraient à échéance
    */
   static poll() {
-    console.log("-> Reminder::poll", new Date())
+    // console.log("-> Reminder::poll", new Date())
     this.each('execIfTime', [new Date()])
     if (this.count == 0) {
       this.stop()
@@ -55,12 +55,12 @@ class Reminder extends ExtendedObject {
 
   // Lancement du reminder
   static run(){
-    console.log("-> Reminder::run")
+    // console.log("-> Reminder::run")
     this.runTimer = setInterval(this.poll.bind(this), 60 * 1000)
     this.running = true
   }
   static stop(){
-    console.log("-> Reminder::stop")
+    // console.log("-> Reminder::stop")
     clearInterval(this.runTimer)
     delete this.runTimer
     this.running = false
@@ -75,14 +75,14 @@ class Reminder extends ExtendedObject {
    * et exécute le reminder si c'est l'heure
    */
   execIfTime(date) {
-    console.log("Temps comparés", date, this.time)
+    // console.log("Temps comparés", date, this.time)
     if (this.time <= date) this.exec()
   }
   /**
    * Exécution du rappel
    */
   exec(){
-    console.log("-> Reminder.exec", this)
+    // console.log("-> Reminder.exec", this)
     Notifier.notify(this.dataNotifierByType(this.type))
     this.constructor.remove(this)
   }
