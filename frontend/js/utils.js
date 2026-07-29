@@ -105,6 +105,14 @@ function unScrim(scrim){
   scrim.style = "backdrop-filter: none; background: rgba(0,0,0,0.1);"
 }
 
+function retarde(method, lapsSeconds){
+  var timer = setTimeout(() => {
+    clearTimeout(timer)
+    timer = null
+    method()
+  }, lapsSeconds * 1000)
+}
+
 // Historique
 function historize(msg, params) {
   if (undefined == window.HISTORIQUE) window.HISTORIQUE = []
