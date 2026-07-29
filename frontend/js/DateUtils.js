@@ -4,10 +4,28 @@
  * Méthodes utiles pour les Date
  */
 
-const REG_HOUR = /([0-9{1,2}) ?(?: (:|heure|hour|hr|h)s?) ?([0-9]{1,2})/
+const REG_HOUR = /([0-9]{1,2}) ?(?:(:|heure|hour|hr|h)s?) ?([0-9]{2})(?:\:([0-9]{2}))?/
+
+// "2026-07-29T09:00:00Z"
+const REG_ISO_8601= /([0-9]{4})\-([0-9]{2})\-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z)?/
 
 class DateUtils {
 
+  /**
+   * @api
+   * 
+   * Retourne la {Date} à partir d'un string ISO 8601 ("2026-07-29T09:00:00Z")
+   * 
+   * Note : pour bénéficier des helpers, ajouter true en second paramètre
+   *        ce qui retournera une {DateUtils}
+   */
+  static parseAsIso8601(dateStr, asDateUtils = false){
+    const found = dateStr.match(REG_ISO_8601)
+    if (found === null) return null
+    const [year, month, day, hour, min, sec] = found.slice(0,6).map(n => parseInt(n))
+    const date = new Date(year, month - 1, day, hour, min, sec)
+    return asDateUtils ? new DateUtils(date) : date
+  }
 
   /**
    * @api
@@ -44,12 +62,16 @@ class DateUtils {
   /**
    * @api
    * 
-   * Extrait l'heure d'une date string (qui doit se trouver après 'à/at')
+   * Extrait l'heure d'une date string (qui doit se trouver après 'à/at') (ou iso 8601)
    */
   static extractHourFrom(dateStr){
+    var date, hour
     if ('string' == typeof dateStr) {
-      if ( this.hasHour(dateStr) ) {
-        var [date, hour] = dateStr.split(getMsg('date/at'))
+      if ( date = this.parseAsIso8601(dateStr)) {
+        date = new DateUtils(date)
+        return { hour: date.hour, minute: date.minute }
+      } else if ( this.hasHour(dateStr) ) {
+        [date, hour] = dateStr.split(getMsg('date/at'))
         return this._parseHour(hour.trim()) // {hour, minute}
       } else {
         // La date ne définit pas d'heure
@@ -79,9 +101,13 @@ class DateUtils {
    * possède une heure (donc le texte 'at', 'à' en fonction de la langue)
    */
   static hasHour(date){
-    return date.match(` ${getMsg('date/at')} `) !== null
+    console.info("[hasHour]this.parseAsIso8601(%s)", date, this.parseAsIso8601(date))
+    if (this.parseAsIso8601(date) !== null ) {
+      return true
+    } else {
+      return date.match(` ${getMsg('date/at')} `) !== null
+    }
   }
-
 
 
 
