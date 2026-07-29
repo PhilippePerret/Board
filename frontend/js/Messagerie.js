@@ -183,6 +183,7 @@ class Notifier {
       left: 24px;
     }
     h1 {
+      font-style: normal; 
       font-size:1.5rem;
       margin-left: 4rem;
       margin-bottom: 0;
