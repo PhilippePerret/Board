@@ -419,6 +419,12 @@ module BoardTest
     if ENV['BOARD_TEST_BRIDGE_SOCKET']
       open_args += ['--env', "BOARD_TEST_BRIDGE_SOCKET=#{ENV['BOARD_TEST_BRIDGE_SOCKET']}"]
     end
+    # Propage le dossier de stub Todoist (cf. Tests/support/todoist_e2e_stub.rb
+    # + backend/lib/todoist.rb#stubbed_request) au sous-processus backend.rb,
+    # via l'app relancée — même mécanisme que BOARD_TEST_BRIDGE_SOCKET.
+    if ENV['BOARD_TEST_TODOIST_STUB_DIR']
+      open_args += ['--env', "BOARD_TEST_TODOIST_STUB_DIR=#{ENV['BOARD_TEST_TODOIST_STUB_DIR']}"]
+    end
     open_args << BOARD_APP
 
     opened = false

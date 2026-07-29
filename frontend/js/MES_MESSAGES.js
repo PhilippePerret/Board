@@ -72,6 +72,7 @@ const MESSAGES = {
     , 'todoist-new-task-msg-correct-errors': "Merci de corriger les erreurs ci-dessous :"
     , 'todoist-no-task-done': "Aucune tâche à marquer achevée."
     , 'todoist-no-new-task': "Aucune nouvelle tâche."
+    , 'todoist-modify-checked': "Modifier ✔…"
     // -- test --
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'

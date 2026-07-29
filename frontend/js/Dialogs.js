@@ -232,9 +232,22 @@ class TasksDialog extends Dialog {
     this.ouiData  = {name: 'OK', onclick: () => {
       data.onValidate.call(null, this.newTasks)
     }}
-    this.nonData  = null
-    this.midData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
+    this.midData  = {name: getMsg('todoist-modify-checked'), onclick: this.onModifyCheckedTask.bind(this), keep: true}
+    // this.midData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
+    this.nonData  = {name: getMsg('New task...'), onclick: this.onCreateNewTask.bind(this), keep: true}
     this.newTasks = []
+  }
+
+  /**
+   * Méthode appelée quand on cique sur le bouton pour modifier la
+   * tâche cochée
+   */
+  onModifyCheckedTask(retour){
+    console.error("Je dois apprendre à modifier une tâche.")
+    // TODO Prendre la tâche cochée
+    // TODO Si pas de tâche cochée => messsage d'erreur
+    // TODO mettre en forme la donnée
+    this.onEditNewTask()
   }
 
   /**
@@ -248,18 +261,20 @@ class TasksDialog extends Dialog {
       this.list.appendChild(DCreate('DIV', {text: getMsg('todoist-text-new-task', [newTask.content])}))
 
     } else {
-
-      this.BoiteTaskData = new TextareaDialog({
-            title: getMsg('New task')
-          , id: 'task-data-textarea'
-          , width: '800px'
-          , q: getMsg('todoist-message-new-task') + "\n\n"
-          , default: MESSAGES['todoist-default-new-task']
-          , ouiBtn: {name: 'OK', onclick: this._validateTaskBeforeSubmit.bind(this), keep: true}
-          , nonBtn: {name: getMsg('Cancel')}
-        })
-      this.BoiteTaskData.show()
+      this.onEditNewTask(MESSAGES['todoist-default-new-task'])
     }
+  }
+  onEditNewTask(dataTaskStr, task /* seulement si modification */){
+    this.BoiteTaskData = new TextareaDialog({
+          title: getMsg('New task')
+        , id: 'task-data-textarea'
+        , width: '800px'
+        , q: getMsg('todoist-message-new-task') + "\n\n"
+        , default: dataTaskStr
+        , ouiBtn: {name: 'OK', onclick: this._validateTaskBeforeSubmit.bind(this), keep: true}
+        , nonBtn: {name: getMsg('Cancel')}
+      })
+    this.BoiteTaskData.show()
   }
   /**
    ****************************************************************

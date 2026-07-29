@@ -796,3 +796,4 @@ class ServStep extends ExtendedObject {
 
   }
 } // ServStep
+ServStep.init()

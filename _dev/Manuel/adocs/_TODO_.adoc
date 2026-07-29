@@ -1,5 +1,8 @@
 == BUGS ==
 
+- quand on utilise project.icon dans les Notifier, il faut le chemin absolu
+- quand une tâche est marquée achevée, elle doit être retirée du nombre du badge todoist
+
 - quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
@@ -16,6 +19,7 @@
 
 == Todo En cours
 
+- Pouvoir modifier une tâche
 
 == Todo list ==
 

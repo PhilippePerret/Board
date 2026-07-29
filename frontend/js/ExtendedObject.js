@@ -4,6 +4,8 @@
  * 
  * Pour les opérations classiques sur les objets
  * 
+ * ATTENTION : Les classes filles doivent appeler <classe>.init()
+ * 
  */
 class ExtendedObject {
 

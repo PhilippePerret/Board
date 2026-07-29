@@ -117,3 +117,4 @@ class Reminder extends ExtendedObject {
     return Object.assign(data, sup)
   }
 }
+Reminder.init()

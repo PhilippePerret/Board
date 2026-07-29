@@ -22,9 +22,9 @@ class DateUtils {
   static parseAsIso8601(dateStr, asDateUtils = false){
     const found = dateStr.match(REG_ISO_8601)
     if (found === null) return null
-    const [year, month, day, hour, min, sec] = found.slice(1,7).map(n => parseInt(n))
+    const [year, month, day, hour, min, sec] = found.slice(1,6).map(n => parseInt(n))
     var date
-    if (found[8] == 'Z') {
+    if (found[7] == 'Z') {
       const timestamp = Date.UTC(year, month-1, day, hour, min, sec)
       date = new Date(timestamp)
     } else {

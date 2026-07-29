@@ -726,12 +726,33 @@ class Project {
     if (retour){
       if (retour.data.errors.length) raise(retour.data.errors.join("\n"))
       message(true, getMsg('todoist-fin-tasks-done-and-create', [this.title, retour.data.done_count, retour.data.created_count]))
-      this.getTachesAndSetBadges(this.setTodoistBadge.bind(this))
+      this.updateTasksAfterMarkAndCreate(retour.data)
     } else {
       const task_ids = this.tasks.filter(t => t.checked).map(t => t.id)
       console.log("Liste des tâches à marquer accomplies et tâches créées", task_ids, newTasks)
       Todoist.markCompleteAndCreateNewTask(this, task_ids, newTasks, this.onMarkAndCreateTodoistTask.bind(this, newTasks))
     }
+  }
+
+  /**
+   * Met à jour this.tasks localement après marquage de tâches achevées et
+   * création de nouvelles tâches, sans réinterroger Todoist (pas de refetch
+   * complet) : retire les tâches closes, ajoute les nouvelles tâches du
+   * jour et enregistre leur Reminder (via reactiveIfTask) si besoin.
+   */
+  updateTasksAfterMarkAndCreate(data){
+    const closedIds = this.tasks.filter(t => t.checked).map(t => t.id)
+    this.tasks = this.tasks.filter(t => !closedIds.includes(t.id))
+    const todayTasks = (data.created_tasks || []).filter(t => this.isTaskDueTodayOrBefore(t))
+    this.tasks = this.tasks.concat(todayTasks)
+    this.setNombreTachesInBadge(this.tasks.length)
+    if (todayTasks.length) this.reactiveIfTask(todayTasks)
+  }
+
+  isTaskDueTodayOrBefore(task){
+    if (!(task.due && task.due.date)) return false
+    const today = new Date().toISOString().slice(0, 10)
+    return task.due.date.slice(0, 10) <= today
   }
 
   // Au démarrage, cette fonction est appelée seulement sur les 

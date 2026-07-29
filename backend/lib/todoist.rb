@@ -16,6 +16,8 @@ module Todoist
   end
 
   def self.request(method, path, params: nil, body: nil)
+    return stubbed_request(method, path, params: params, body: body) if ENV['BOARD_TEST_TODOIST_STUB_DIR']
+
     raise "Token Todoist manquant (#{TODOIST_TOKEN_FILE})" if token.nil? || token.empty?
 
     uri = URI("#{BASE_URL}#{path}")
@@ -35,6 +37,28 @@ module Todoist
     raise "Erreur Todoist (#{res.code}) : #{res.body}" unless res.is_a?(Net::HTTPSuccess)
 
     res.body.nil? || res.body.empty? ? true : JSON.parse(res.body)
+  end
+
+  # Point de stub pour les tests e2e (moteur "pont") : backend.rb tourne
+  # dans un sous-processus séparé du process ruby des tests, donc un stub
+  # in-process (cf. Tests/support/todoist_stub.rb, utilisé par les specs
+  # unit) est inutilisable ici. BOARD_TEST_TODOIST_STUB_DIR (propagé par
+  # Tests/support/helpers_base.rb#launch_app via "open --env") pointe vers
+  # un dossier contenant les réponses à servir dans l'ordre
+  # (responses/0.json, 1.json, ...) ; chaque appel est en plus journalisé
+  # dans calls.jsonl pour vérification côté spec.
+  def self.stubbed_request(method, path, params:, body:)
+    dir = ENV['BOARD_TEST_TODOIST_STUB_DIR']
+    File.open(File.join(dir, 'calls.jsonl'), 'a') do |f|
+      f.puts({method: method, path: path, params: params, body: body}.to_json)
+    end
+    files = Dir.glob(File.join(dir, 'responses', '*.json')).sort_by { |f| File.basename(f, '.json').to_i }
+    file = files.first
+    raise "Stub Todoist : plus de réponse disponible pour #{method} #{path}" unless file
+    resp = JSON.parse(File.read(file))
+    File.delete(file)
+    raise resp['__error__'] if resp.is_a?(Hash) && resp['__error__']
+    resp
   end
 
   # L'API v1 pagine les listes sous {"results" => [...], "next_cursor" => ...}
@@ -62,6 +86,7 @@ module Todoist
     {
       done_count:    done[:count],
       created_count: created[:count],
+      created_tasks: created[:tasks],
       errors: done[:errors] + created[:errors]
     }
   end
@@ -87,15 +112,16 @@ module Todoist
   def self.create_tasks(project_id, tasks)
     count = 0
     errors = []
+    created = []
     tasks.each do |task|
       begin
-        create_task(project_id, task)
+        created << create_task(project_id, task)
         count += 1
       rescue => e
         errors << "#{task['content']} : #{e.message}"
       end
     end
-    {count: count, errors: errors}
+    {count: count, errors: errors, tasks: created}
   end
 
   def self.create_task(project_id, task)
