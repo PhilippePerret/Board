@@ -52,7 +52,7 @@ module Todoist
   def self.today_tasks(project_id)
     today = Date.today.to_s
     list('/tasks', params: {project_id: project_id, filter: 'today | overdue'}).select do |task|
-      task['due'] && task['due']['date'] && task['due']['date'] <= today
+      task['due'] && task['due']['date'] && task['due']['date'][0, 10] <= today
     end
   end
 
