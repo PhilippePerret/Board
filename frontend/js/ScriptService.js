@@ -503,7 +503,7 @@ class ServStep extends ExtendedObject {
   /**
    * Méthode complexe permettant d'enregistrer une valeur dans un fichier
    * this.prefix : si défini
-   * this.values : les données à enregistrer, à reconstituer
+   * this.keys : les données à enregistrer, à reconstituer
    */
   execSaveData(retour){
     if (retour) {
@@ -512,10 +512,10 @@ class ServStep extends ExtendedObject {
     } else {
       if (this.prefix) {
         const obj = {}
-        if (typeof this.values == 'string') {
-          this.values = this.evaluateProp('values')
+        if (typeof this.keys == 'string') {
+          this.keys = this.evaluateProp('keys')
         }
-        this.values.forEach(id => {
+        this.keys.forEach(id => {
           Object.assign(obj, { [id]: this.scriptService.getValue(`${this.prefix}-${id}`) })
         })
         const path = this.path
@@ -587,13 +587,13 @@ class ServStep extends ExtendedObject {
           return [value, value]
         } else if (Object.isObject(value)){
           if (!keyAndTitleChecked) {
-            this.key_values ?? raise('scserv-select-with-object-requires-key-values', [this.id, this.aideByType])
-            this.title_values ?? raise('scserv-select-with-object-requires-title-values', [this.id, this.aideByType])
+            this.key_value ?? raise('scserv-select-with-object-requires-key-values', [this.id, this.aideByType])
+            this.key_title ?? raise('scserv-select-with-object-requires-title-values', [this.id, this.aideByType])
             keyAndTitleChecked = true
           }
-          value[this.key_values]    ?? raise('scserv-select-with-object-unknown-key', [this.id, JSON.stringify(value), this.key_values, this.aideByType])
-          value[this.title_values]  ?? raise('scserv-select-with-object-unknown-title', [this.id, JSON.stringify(value), this.title_values, this.aideByType])
-          return [value[this.key_values], value[this.title_values]]
+          value[this.key_value]    ?? raise('scserv-select-with-object-unknown-key', [this.id, JSON.stringify(value), this.key_value, this.aideByType])
+          value[this.key_title]  ?? raise('scserv-select-with-object-unknown-title', [this.id, JSON.stringify(value), this.key_title, this.aideByType])
+          return [value[this.key_value], value[this.key_title]]
         } else if (Array.isArray(value) && value.length == 2) {
           return value
         } else {
@@ -795,10 +795,9 @@ class ServStep extends ExtendedObject {
       // c'est un paramètre qui n'existe pas (un select n'a pas de 
       // paramètre 'defaut') et c'est donc une erreur
       paramSpec || addFatalError( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
-      // --- On va s'arrêter là pour la pré-validation ---
-      return true
+      // --- On s'arrête là pour la pré-validation ---
     }
-
+    return true
   }
 } // ServStep
 ServStep.init()

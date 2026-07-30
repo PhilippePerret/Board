@@ -56,8 +56,8 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   'select': {
     params: { // les paramètres possible
         values:       {required: true, type: ['array-of-string', 'array-of-paire', 'array-of-object', 'path']}
-      , key_values:   {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété valeur dans la liste (le value de <option>)'}
-      , title_values: {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété titre pour les options'}
+      , key_value:   {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété valeur dans la liste (le value de <option>)'}
+      , key_title: {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété titre pour les options'}
       , create:       {type: 'boolean'}
       , default:      {type: 'string'}
     }
@@ -66,7 +66,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   'save-data': {
     params: {
         path:   {required: true, type: 'string'}
-      , values: {required: true, type: 'any'}
+      , keys:   {required: true, type: 'any'}
       , prefix: {required: false, type: 'string'}
     }
   },

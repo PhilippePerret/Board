@@ -130,6 +130,7 @@ begin
   # Écriture du changelog et de la todo-list après minuteur
   when 'update-project-notes'
     require_relative 'lib/project_files.rb'
+    update_project_notes(request)
 
   # ========== EXÉCUTIONS DES SERVICES =================
 

@@ -72,9 +72,9 @@ def exec_script(script_name, params = "")
         RETOUR.message  = retour_script["message"]
         RETOUR.data     = retour_script
       end
-    else 
+    else
       RETOUR.ok     = false
-      RETOUR.error  = JSON.parse(res)
+      RETOUR.error  = res
     end
   rescue Timeout::Error
     (Process.kill('TERM', pid) rescue nil) if pid

@@ -1,0 +1,74 @@
+Moteur : pont
+Arguments : *reminder_destroyed_on_task_closed* *reminder_recreated_on_task_hour_modified* *script_service_create_folder* *script_service_step_validate* *service_commun_horloge* *service_commun_ouverture_dossier* *service_commun_update_documentation* *tools_panel*
+Date : 2026-07-30 08h00
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/reminder_destroyed_on_task_closed.rb ---
+✓ Reminder détruit quand sa tâche est achevée avant son heure de début
+  (osascript : 6 appels, 0.159s)
+  (durée totale de la spec : 1.468s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/reminder_recreated_on_task_hour_modified.rb ---
+✗ Reminder recréé (ancien détruit, nouveau programmé) quand l'heure de la tâche est modifiée
+    1 reminder attendu (nouvelle heure) après modification, obtenu [1785391846000, 1785391846000]
+  (osascript : 6 appels, 0.101s)
+  (durée totale de la spec : 0.736s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/script_service_create_folder.rb ---
+✗ script-service : étape create-folder crée le dossier relatif au projet
+    Timeout d'attente dépassé (10s) — sortie-test créé ? false
+  (osascript : 5 appels, 0.123s)
+  (durée totale de la spec : 10.799s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/script_service_step_validate.rb ---
+✗ ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+    ['select', 'values' type multiple : ni tableau d'objets ni path (nombre)] nombre d'erreurs inattendu, attendu 1, obtenu []
+  (osascript : 10 appels, 0.075s)
+  (durée totale de la spec : 0.707s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge_redimensionnement.rb ---
+✓ service commun 'horloge' : redimensionnement (poignée, pas de démarrage, persistance)
+  (osascript : 17 appels, 4.506s)
+  (durée totale de la spec : 6.916s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_horloge.rb ---
+✗ service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 27 appels, 0.217s)
+  (durée totale de la spec : 10.873s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+✗ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (10s) — connexion impossible au socket /Users/philippeperret/Programmes/Board/Tests/.board-backups/bridge-14995.sock
+  (osascript : 13 appels, 1.237s)
+  (durée totale de la spec : 11.892s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_update_documentation.rb ---
+✗ service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-project-20260730-15427-sehkxu")
+  (osascript : 32 appels, 3.673s)
+  (durée totale de la spec : 7.076s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/tools_panel.rb ---
+✗ panneau 'Outils' : ouverture/fermeture, 1er outil (position/taille de fenêtre) activé
+    message inattendu après validation de l'outil : "scripts/GetAppWindowBounds.scpt:549:565: execution error: Erreur dans System Events : osascript n’est pas autorisé à un accès d’aide. (-25211"
+  (osascript : 17 appels, 0.494s)
+  (durée totale de la spec : 1.097s)
+
+Échecs :
+1. Reminder recréé (ancien détruit, nouveau programmé) quand l'heure de la tâche est modifiée
+    1 reminder attendu (nouvelle heure) après modification, obtenu [1785391846000, 1785391846000]
+  (osascript : 6 appels, 0.101s)
+2. script-service : étape create-folder crée le dossier relatif au projet
+    Timeout d'attente dépassé (10s) — sortie-test créé ? false
+  (osascript : 5 appels, 0.123s)
+3. ServStep#validate() : étape valide sans erreur, invalidités avec le bon message
+    ['select', 'values' type multiple : ni tableau d'objets ni path (nombre)] nombre d'erreurs inattendu, attendu 1, obtenu []
+  (osascript : 10 appels, 0.075s)
+4. service commun 'horloge' : définition, Start/Pause/Restart/Stop, changelog+todo, rejeu
+    Timeout d'attente dépassé (10s) — CHANGELOG.md existe ? false
+  (osascript : 27 appels, 0.217s)
+5. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (10s) — connexion impossible au socket /Users/philippeperret/Programmes/Board/Tests/.board-backups/bridge-14995.sock
+  (osascript : 13 appels, 1.237s)
+6. service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-project-20260730-15427-sehkxu")
+  (osascript : 32 appels, 3.673s)
+7. panneau 'Outils' : ouverture/fermeture, 1er outil (position/taille de fenêtre) activé
+    message inattendu après validation de l'outil : "scripts/GetAppWindowBounds.scpt:549:565: execution error: Erreur dans System Events : osascript n’est pas autorisé à un accès d’aide. (-25211"
+  (osascript : 17 appels, 0.494s)
+
+-------------------
+Success: 2  Failures: 7  Pendings: 0  Test count: 9
+Durée totale (moteur : pont) : 51.564s

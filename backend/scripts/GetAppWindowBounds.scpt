@@ -14,8 +14,12 @@ on run argv
 			if (count of windows) is 0 then
 				return "{\"ok\":false,\"error\":\"Aucune fenêtre ouverte pour " & appName & "\"}"
 			end if
-			set winPos to position of (front window)
-			set winSize to size of (front window)
+			try
+				set winPos to position of (front window)
+				set winSize to size of (front window)
+			on error
+				return "{\"ok\":false,\"error\":\"Aucune fenêtre ouverte pour " & appName & "\"}"
+			end try
 		end tell
 	end tell
 

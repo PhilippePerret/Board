@@ -25,7 +25,7 @@ Numérotation reprise telle quelle de la discussion avec Claude, pour référenc
 - 4. `translate` avec `value` seul → valide
 - 5. `save-data` sans `path` → erreur
 - 6. `save-data` sans `values` → erreur
-- 7. `save-data` avec `path`+`values` (sans `prefix`) → valide
+- 7. `save-data` avec `path`+`keys` (sans `prefix`) → valide
 - 8. `get-data` sans `base` → erreur
 - 9. `get-data` avec `base` seul → valide
 - 10. `create-file` sans `content` → erreur

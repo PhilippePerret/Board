@@ -35,7 +35,7 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
 | <<scserv-type-add-to-file>>       | Ajout s'un contenu à un fichier.          | `after`, `before` + `where`
 | <<scserv-type-get-data>>          | Obtention de données complexes 
                                       (array d'objets) depuis un fichier.       | `base`, `key`
-| <<scserv-type-save-data>>         | Enregistrement de données complexes.      | `prefix`, `values`
+| <<scserv-type-save-data>>         | Enregistrement de données complexes.      | `prefix`, `keys`
 | <<scserv-type-choose-folder>>     | Sélection d'un dossier (dans le Finder).  |
 | <<scserv-type-create-folder>>     | Création d'un dossier.                    | `path`
 | <<scserv-type-copy-file>>         | Copie d'un fichier.                       |
@@ -260,6 +260,166 @@ Nous les indiquons avec les propriétés `path` (chemin d'accès), `content` (co
 
 Notez qu'à la place de `before`, on peut utiliser `after` (après) ou `where` (“où”, solution complexe pour indiquer la place exacte, lorsqu'elle n'eest pas simple à définir). Pour ces propriétés, voir le type <<scserv-type-add-to-file>>.
 
+Dans le script réel, j'ai la possibilité de ne pas incrémenter l'historique (par exemple lorsque je veux préparer l'envoi mais que je ne sais pas encore quand je vais pouvoir le faire). Cela va nous permettre d'étudier le type <<scserv-type-select>> et les conditions.
+
+En fait, c'est en demandant la date d'envoi que nous allons savoir ça :
+
+----
+- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+----
+
+Pour fonction, le type <<scserv-type-select>> a besoin de : 
+
+- un titre dans `title` (le titre de la fenêtre de demande),
+- une question dans `q` (la question posée à l'utilisateur),
+- une liste de valeurs à proposer, dans `values`.
+
+Et comme là je veux me laisser la possibilité de donner ma propre date, j'ajoute : 
+
+- le nom du bouton pour créer une nouvelle valeur dans `create`.
+
+Comme vous pourrez le voir dans la description du type <<scserv-type-select>>, il y a plusieurs manière de donner les valeurs du menu select. Celle-ci : 
+
+----
+values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+----
+
+… affichera les items "Aujourd'hui", "Demain" et "Pas encore" et le texte qui leur est accolé ('today', 'demain', 'non') sera la valeur donnée en fonction du choix. Ici, si je choisis "Pas encore", alors l'étape `date-histo` prendra la valeur `non`. C'est aussi simple que ça. Et donc, il suffit que je vérifie cette condition :
+
+----
+- if "${date-histo} = non"
+----
+
+Cette condition signifie SI (if en anglais) la valeur de l'étape `date-histo` (`${date-histo}`) vaut (`=`) `non` alors on exécute l'étape. Donc : 
+
+----
+# Demande de la date d'envoi (ou pas)
+- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+
+# Enregistrement dans l'historique, soumis à condition
+- if "${date-histo} = non"
+  name: "Enregistrement envoi dans l'historique"
+  id: historique
+  type: add-to-file
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"  
+----
+
+Donc, cette étape d'enregistrement dans l'historique ne sera exécutée que si je n'ai pas choisi "Pas encore".
+
+Nous avons donc régler nos quatre étapes décisives, nous allons pouvoir finaliser tout à fait le script-service, mais vous allez voir qu'il nous reste du travail !
+
+Nous allons commencer par demander de choisir un éditeur. C'est encore le type <<scserv-type-select>> qui va être mis à contribution, mais cette fois, à l'aide d'un fichier qui contient tous les éditeurs, un fichier actualisable. Et nous avons aussi la possibilité d'en créer un nouveau, donc nous renseignons le nom du bouton create dans `create`. Cela donne : 
+
+----
+- id:     editeur-id
+  type:   select
+  title: "Choix de la maison d’édition"
+  q: "Choisir une maison dans la liste ou en introduire une nouvelle."
+  values: "./envois/editeurs.yaml"
+  key_value: id
+  key_title: name
+  create: "Nouvel éditeur…"
+----
+
+Nous avons une étape un peu plus complexe ici, au niveau des valeurs… Ce qu'il faut comprendre, c'est que les _objets_ contenus par le fichier `./envois/editeurs.yaml` sont des objets à plusieurs propriétés, comme nous l'avons vu tout à l'heure. Sans autre indication que ce fichier, cette étape du script-service ne saurait pas quelle propriété utiliser. Donc, ici, nous devons lui indiquer `key_value` et `key_title`.
+
+[cols="1,5"]
+|====
+| `key_value` | Indique la propriété (key) de l'objet qui doit servir de valeur finale (comme le "non" de tout à l'heure).
+| `key_title` | Indique la propriété de l'objet qui doit servir de titre à l'item, donc le nom que l'on lira dans le menu.
+|====
+
+Donc, dans notre objet éditeur, on prendra la propriété `name` qui servira de titre à l'item de menu, et la propriété `id` sera la valeur, donc la valeur donnée au final à cette étape.
+
+Pour rappel, un objet éditeur dans le fichier `./envois/editeurs.yaml` contient : 
+
+----
+---
+- id:  gallimard  # Identifiant de l'éditeur
+  name: Gallimard # nom
+  adresse: |> 
+    Son addresse
+  phone:    555 01 02 # son téléphone
+  ... 
+----
+
+Si le bouton "Nouvel éditeur…" est cliqué, la valeur est mise à '' (chaine vide). Dans les étapes suivantes, nous devons donc tester cette valeur pour savoir s'il faut définir ou non un nouvel éditeur. Comme les script-services ne peuvent pas définir plusieurs valeurs en même temps (c'est un principe fondateur), nous devons prendre plusieurs étapes pour définir cet éditeur. Chacune de ces étapes, évidemment, sera conditionnée par : 
+
+----
+- if "${editeur-id} = ''"
+----
+
+… pour ne pas être jouée si l'éditeur a été choisi dans la liste.
+
+Voilà la suite des données à rassembler : 
+
+----
+# Demander l'identifiant (non simple)
+# Sera mis dans ${new-editor-id}
+- if: "${editeur-id} = ''"
+  id: "new-editor-id"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Identifiant (ascii) du nouvel éditeur :"
+
+# Demander le vrai nom
+# Sera mis dans ${new-editor-name}
+- if: "${editeur-id} = ''"
+  id: "new-editor-name"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Nom du nouvel éditeur :"
+
+# Demander l'adresse
+# Sera mis dans ${new-editor-adresse}
+- if: "${editeur-id} = ''"
+  id: "new-editor-adresse"
+  type: text    # <= noter, un texte multi-lignes
+  title: "Nouvel éditeur"
+  q: "Adresse physique du nouvel éditeur :"
+
+# Demander le téléphone
+# Sera mis dans ${new-editor-phone}
+- if: "${editeur-id} = ''"
+  id: new-editor-phone
+  type: phone
+  title: "Nouvel éditeur"
+  q: "Numéro de téléphone du nouvel éditeur :"
+----
+
+Maintenant que nous avons les informations du nouvel éditeur, nous pouvons les ajouter au fichier. On peut le faire avec le type <<scserv-type-save-data>>.
+
+
+----
+- if: "${editeur-id} = ''"
+  id: 'enregistrement-editeur'
+  type: "save-data"
+  path: "${editors-data}"
+  prefix: 'new-editor'
+  keys: ['id', 'name', 'adresse', 'phone']
+----
+
+Attenton, il faut être attentif pour ce type particulier. Il a besoin de `prefix` et de `keys` pour pouvoir opérer.
+
+----
+- if: "${editeur-id} == ''"
+  id: 'affectation-editeur'
+  type: set
+  step: 'choix-editeur'
+  value: ${choix-editeur-id}
+----
 
 
 XXX
@@ -281,8 +441,8 @@ Au final, le script-service ressemble donc à ça :
   type:   select
   values: "${editors-data}"
   create: "Nouvel éditeur…"
-  key_values: id
-  title_values: name
+  key_value: id
+  key_title: name
   title: "Choix de la maison d’édition"
   q: "Choisir un éditeur dans la liste ou en introduire un nouveau."
 
@@ -316,7 +476,7 @@ Au final, le script-service ressemble donc à ça :
   type: "save-data"
   path: "${editors-data}"
   prefix: 'choix-editeur' # donnera 'choix-editeur-id', 'choix-editeur-name', etc.
-  values: ['id', 'name', 'adresse', 'phone']
+  keys: ['id', 'name', 'adresse', 'phone']
   
 - if: "${choix-editeur} == ''"
   id: 'affectation-editeur'
@@ -559,9 +719,9 @@ Enregistrement de données. Permet d'enregistrer une donnée à la volée.
 |====
 | `type`    2+| `save-data`
 | `id`      2+| Identifiant de l'étape.
-| `values`  2+| Les valeurs à enregistrer ou les identifiants
+| `keys`    2+| Les valeurs à enregistrer ou les identifiants
 |             | valeurs brutes | Sans `prefix` les valeurs sont des valeurs brutes
-|             | avec `prefix`  | Les clés d'un objet à reconstituer qui serviront aussi à obtenir les valeurs depuis les étapes d'identifiant `<prefix>-<clé>`
+|             | avec `prefix`  | Les clés d'un objet à reconstituer qui serviront aussi à obtenir les valeurs depuis les étapes d'identifiant `<prefix>-<key>`
 | `prefix`  2+| Préfixe à utiliser pour rassembler
 |====
 
@@ -825,7 +985,7 @@ Nous présentons ci-dessous l'enregistrement d'un livre dans un fichier qui les 
   id: new-book
   type: save-data
   prefix: newlivre      # préfixe des étapes de définition
-  values: ['titre', 'id', 'resume', 'auteur', 'annee']
+  keys: ['titre', 'id', 'resume', 'auteur', 'annee']
   path: "${books-file}"  # L'objet sera placé dans ce fichier
   
 # Il reste enfin à définir ${livre-id} qui sera utilisé par

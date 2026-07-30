@@ -35,22 +35,22 @@ CASES = [
   },
   {
     desc: "étape valide (select, 'values' en tableau d'objets)",
-    data: { id: 'selectvalide', type: 'select', values: [{ value: 'a', title: 'A' }], key_values: 'value', title_values: 'title' },
+    data: { id: 'selectvalide', type: 'select', values: [{ value: 'a', title: 'A' }], key_value: 'value', key_title: 'title' },
     expect: []
   },
   {
     desc: "'select' sans 'values'",
-    data: { id: 'selectsansvalues', type: 'select', key_values: 'k', title_values: 't' },
+    data: { id: 'selectsansvalues', type: 'select', key_value: 'k', key_title: 't' },
     expect: ['scserv-param-required']
   },
   {
     desc: "'select', 'values' type multiple : ni tableau d'objets ni path (nombre)",
-    data: { id: 'selectbadtype', type: 'select', values: 42, key_values: 'value', title_values: 'title' },
+    data: { id: 'selectbadtype', type: 'select', values: 42, key_value: 'value', key_title: 'title' },
     expect: ['scserv-param-bad-type']
   },
   {
     desc: "étape valide (select, 'values' en path vers un fichier)",
-    data: { id: 'selectpath', type: 'select', values: './values.yaml', key_values: 'value', title_values: 'title' },
+    data: { id: 'selectpath', type: 'select', values: './values.yaml', key_value: 'value', key_title: 'title' },
     expect: []
   },
   {
