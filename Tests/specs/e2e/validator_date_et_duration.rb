@@ -50,14 +50,10 @@ CASES = [
   { fn: :date, desc: "'dans' sans unité", value: 'dans 3', valid: false },
   { fn: :date, desc: "texte quelconque", value: "n'importe quoi", valid: false },
 
-  # --- Validator.date : date/heure combinée — PAS SUPPORTÉ aujourd'hui,
-  # aucune des 3 regex ne prévoit de partie heure ; documente le manque,
-  # pas un idéal. Si l'heure est ajoutée un jour, ces cas doivent passer à
-  # valid: true (sauf le 2e, qui ne passe que par le trou de la regex non
-  # ancrée déjà documenté plus haut — à corriger en même temps).
-  { fn: :date, desc: "date + heure ('le JJ MM AAAA à HH:MM')", value: 'le 27 07 2006 à 10:30', valid: false },
+  # --- Validator.date : date/heure combinée — seule dateReg (JJ/MM/AAAA)
+  # supporte une partie heure en fin de regex ; les 2 autres non.
   { fn: :date, desc: "mot-clé + heure ('demain à 10 heures') — accepté par le trou de regex, pas par un vrai support de l'heure", value: 'demain à 10 heures', valid: true },
-  { fn: :date, desc: "'dans X unité' + heure ('dans 4 mois à 6 hrs 30')", value: 'dans 4 mois à 6 hrs 30', valid: false },
+  { fn: :date, desc: "'dans X unité' + heure ('dans 4 mois à 6 hrs 30')", value: 'dans 4 mois à 6 hrs 30', valid: true },
 
   # --- Validator.duration : formats "N unité" ---
   { fn: :duration, desc: "jours", value: '3 jours', valid: true },

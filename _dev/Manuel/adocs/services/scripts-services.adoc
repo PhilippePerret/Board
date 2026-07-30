@@ -19,6 +19,7 @@ Tout cela, nous le redisons : par un simple clique sur un bouton.
 
 ATTENTION: Tout pouvoir puissant, cependant, implique des responsabilités proportionnelles, comme nous le verrons. Il est donc conseillé d'avancer doucement dans la conception de ces _scripts-services_ jusqu'à se sentir suffisamment à l'aise pour en composer des compliqués.
 
+[[scserv-types]]
 === Liste complète des types assemblables ===
 
 _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la table ci-dessous pour un accès rapide aux différents types de service_
@@ -114,8 +115,282 @@ Nous verrons plus tard l'importance des identifiants, qui deviennent de véritab
   id: historique
 
 ----
+      
+Nous déterminons l'action de l'étape en définissant son type. À titre de rappel, ils sont tous définis <<scserv-types, ici>>.  
 
+[code, yaml]
+----
+---
+- name: "Création du dossier de l'éditeur"
+  id: creer-dossier-editeur
+  type: create-folder
+
+- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+  type: copy-file
+
+- name: "Fichier information éditeur
+  id: informations_editeur
+  type: create-file
+
+- name: "Enregistrement envoi dans l'historique"
+  id: historique
+  type: add-to-file
+----
+
+Vous trouverez tout ce dont chaque type a besoin en rejoignant la section idoine depuis le <<scserv-types, tableau des types>>.
+    
+Nous allons commencer par `create-folder` qui a simplement besoin du chemin d'accès. Ce dossier sera créé dans le projet, dans un dossier général `envois` avec l'identifiant de l'éditeur. Nous inscrivons donc : 
+
+----
+---
+- name: "Création du dossier de l'éditeur"
+  id: creer-dossier-editeur
+  type: create-folder
+  path: "./envois/${editeur-id}"
+----
+
+Remarquez dès à présent la variable **`${editeur-id}`** qui contiendra donc l'identifiant de l'éditeur. Cette variable fait directement référence à la valeur (`value`) d'une étape précédente. Nous ne la ferons pas tout de suite, mais nous la notons déjà pour ne pas l'oublier.
+
+----
+---
+- id: editeur-id
+  name: "Identifiant de l'éditeur
+  # à compléter
+
+- name: "Création du dossier de l'éditeur"
+  id: creer-dossier-editeur
+  type: create-folder
+  path: "./envois/${editeur-id}"
+----
+
+Noter également les chemins qui commencent par `./` et font donc référence au dossier du projet.
+
+Nous devons ensuite copier le manuscrit avec le type `copy-file`. Pour ce type, nous devons simplement indiquer la source (le fichier à dupliquer) et la destination. Soit le dossier dans lequel mettre le fichier, qui gardera le même nom, soit le chemin complet avec le nouveau nom du fichier. Ici, nous gardons le même nom, donc : 
+
+----
+- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+  type: copy-file
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"
+----
+
+Notez la nouvelle variable **`${manuscrit-path}`**, entre guillemets, qui, bien entendu, connait le chemin d'accès au fichier. Ici aussi, nous devrons régler cette variable, donc cette étape, plus tard : 
+
+----
+- id: manuscrit-path
+  name: "Chemin d'accès au manuscrit"
+  
+- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+  type: copy-file
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"
+----
+
+Passons au fichier qui va contenir l'adresse et le téléphone de l'éditeur (juste par facilité car je pourrais aussi programmer un petit outil qui retrouve facilement ces informations en les prenant dans la base au moment où nous en avons besoin.)
+
+Pour créer un fichier, nous avons besoin de son chemin d'accès (relatif au projet ou absolu) et de son contenu. Nous les indiquons avec les propriétés `content` (contenu) et `path` (chemin d'accès) :
+
+----
+- name: "Fichier information éditeur
+  id: informations_editeur
+  type: create-file
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"
+----
+
+Vous devez déjà bien comprendre le `path` : nous allons mettre ce fichier dans le dossier créé tout à l'heure. Ce fichier s'appellera `infos.md`.
+
+Vous voyez que le contenu du fichier peut être complexe. Ici, nous faisons référence non pas à une valeur simple d'étape (`data-editor`) mais à une _propriété d'objet_. Un _objet_, c'est une chose informatique quelconque qui contient des propriétés. L'objet `data-editor`, que nous définirons plus tard, est un objet de cette forme : 
+
+----
+data-editor
+  id:       Son identifiant
+  name:     Son nom
+  adresse:  Son adresse
+  phone:    Son téléphone
+  email:    Son adresse mail
+----
+
+On peut imaginer évidemment autant de propriétés que l'on veut.
+
+On y fait référence ensuite, simplement, en utilisant soit `objet.propiété` soit `objet[propriété]`, les deux donnent le même résultat (ce sont des syntaxes classiques pour les programmeurs).
+
+Donc, ici, le contenu : 
+
+----
+"${data-editor}.adresse\n\n${data-editor}.phone"
+----
+
+… signifie que nous allons prendre l'`adresse` de l'éditeur choisir, la faire suivre de deux retours à la ligne (`\n`), puis que nous allons mettre son numéro de téléphone.
+
+NOTE: Noter que je mets ces deux informations car ce sont celles dont j'ai besoin pour un envoi. L'adresse pour le lieu de l'expédition et le téléphone pour le suivi.
+
+Notons que là aussi il nous faudra revenir sur une information : `data-editor` qui sera là aussi, _forcément_, la valeur d'une étape.
+
+----
+- id: data-editor
+  name: "Données complète de l'éditeur choisi"
+
+- name: "Fichier information éditeur
+  id: informations_editeur
+  type: create-file
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"
+----
+
+Il nous reste à régler le texte ajoute à l'historique d'envoi. Pour ça, nous avons besoin de trois choses : 
+
+- le chemin d'accès au fichier,
+- le contenu à ajouter,
+- l'endroit où ce contenu doit être ajouté.
+
+Nous les indiquons avec les propriétés `path` (chemin d'accès), `content` (contenu) et `before` (avant) pour indiquer l'endroit :
+
+----
+- name: "Enregistrement envoi dans l'historique"
+  id: historique
+  type: add-to-file
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"  
+----
+
+Notez qu'à la place de `before`, on peut utiliser `after` (après) ou `where` (“où”, solution complexe pour indiquer la place exacte, lorsqu'elle n'eest pas simple à définir). Pour ces propriétés, voir le type <<scserv-type-add-to-file>>.
+
+
+
+XXX
+
+{{todo: revenir sur `manuscrit-path` qui a juste été posé}}
+{{todo: revenir sur `editeur-id` — attention, dans le script original, ça s'appelle `editeur-choix`}}
 {{todo poursuivre}}
+
+
+Au final, le script-service ressemble donc à ça :
+
+----
+---
+- id: editors-data
+  type: set
+  value: "./envois/editeurs.yaml" 
+
+- id:     choix-editeur
+  type:   select
+  values: "${editors-data}"
+  create: "Nouvel éditeur…"
+  key_values: id
+  title_values: name
+  title: "Choix de la maison d’édition"
+  q: "Choisir un éditeur dans la liste ou en introduire un nouveau."
+
+- if: "${choix-editeur} = ''"
+#  id: "choix-editeur-id"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Identifiant (ascii) du nouvel éditeur :"
+
+- if: "${choix-editeur} = ''"
+  id: "choix-editeur-name"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Nom du nouvel éditeur :"
+
+- if: "${choix-editeur} = ''"
+  id: "choix-editeur-adresse"
+  type: text
+  title: "Nouvel éditeur"
+  q: "Adresse physique du nouvel éditeur :"
+
+- if: "${choix-editeur} = ''"
+  id: choix-editeur-phone
+  type: phone
+  title: "Nouvel éditeur"
+  q: "Numéro de téléphone du nouvel éditeur :"
+
+## Pour enregistrer l'éditeur
+- if: "${choix-editeur} = ''"
+  id: 'enregistrement-editeur'
+  type: "save-data"
+  path: "${editors-data}"
+  prefix: 'choix-editeur' # donnera 'choix-editeur-id', 'choix-editeur-name', etc.
+  values: ['id', 'name', 'adresse', 'phone']
+  
+- if: "${choix-editeur} == ''"
+  id: 'affectation-editeur'
+  type: set
+  step: 'choix-editeur'
+  value: ${choix-editeur-id}
+  
+- id: creation-du-dossier-envoi
+  type: 'create-folder'
+  path: "./envois/${choix-editeur}"
+  
+- id: 'manuscrit-path'
+  type: 'get-project-data'
+  
+- if: "${manuscrit-path} = null"
+  id: 'selection-manuscrit'
+  type: 'select-file'
+  title: "Choix du manuscrit"
+  q: "Choisir le manuscrit à envoyer dans le Finder puis “OK”."
+
+- if: "${manuscrit-path} = null"
+  id:   set-manuscrit-path
+  type: set-project-data
+  project_key: manuscrit-path
+  value: "${selection-manuscrit}"
+  set:  manuscript-path
+
+- id: 'duplication-manuscrit'
+  type: 'copy-file'
+  source: "${manuscrit-path}"
+  dest: "./envois/${choix-editeur}"
+
+
+- id: 'data-editor'
+  type: 'get-data'
+  base: "${editors-data}"
+  key:  "${choix-editeur}"
+  
+- id: 'fichier-info-editeur'
+  type: 'create-file'
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${choix-editeur}/infos.md"
+
+# Demander s'il faut ajouter à l'historique
+- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+
+- if: "${date-histo} == ''"
+  id: 'date-custom'
+  type: string
+  title: "Date de l'envoi"
+  q: "À quelle date doit être envoyé ce manuscrit ?"
+  set: date-histo
+
+- id:     date-mark-to-real-date
+  type:   translate
+  step:   date-histo # getter et setter
+  format: '%J %_M %Y'
+
+# Ajouter à l'historique s'il le faut
+- if: "${date-histo} ≠ non"
+  id: 'add-envoi-to-historique'
+  type: 'add-to-file'
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"
+----
+
+
+---
 
 === Erreurs classiques ===
 

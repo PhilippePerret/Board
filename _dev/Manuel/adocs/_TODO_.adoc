@@ -18,6 +18,9 @@
 
 == Todo list ==
 
+- Panneaux : il faudrait fermer le panneau avant de faire l'opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
+  En fait : clic → Fermer fenêtre → Sablier → Confirmation fin
+- pouvoir mettre une note gh (github) du type voulu
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
   
 == Idées d'autres services ==

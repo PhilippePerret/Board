@@ -93,18 +93,20 @@ class Reminder extends ExtendedObject {
    * refaire avec les nouvelles tâches
    */
   static destroy(type){
-    const newItems  = []
-    const newTable  = {}
-    const newIds    = []
+    const newItems    = []
+    const newTable    = {}
+    const newIds      = []
     this.__eo_items = this.__eo_items.filter(reminder => {
       return reminder[type] == undefined
     })
+    // Reminders restant
     this.__eo_items.forEach(reminder => {
       Object.assign(newTable, {[reminder.id]: reminder})
       newIds.push(reminder.id)
     })
-    this.__eo_table = newTable
-    this.__eo_ids   = newIds
+    this.__eo_table     = newTable
+    this.__eo_ids       = newIds
+    this.remindedTasks  = {}
   }
 
   constructor(data){

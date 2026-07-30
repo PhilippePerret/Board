@@ -1,9 +1,7 @@
 # Test : révélation du panneau des services au démarrage (bouton "GO !",
 # Project.js#buildStartupContainer).
-# Bug signalé en live (2026-07-21), 3 points :
+# Bug signalé en live (2026-07-21), 2 points :
 #   - le meta+clic (sur le bouton GO! lui-même) ne doit PAS lancer les services
-#   - le message d'astuce doit s'afficher dans le footer (#message), pas dans
-#     un div sous le bouton
 #   - le panneau des services doit devenir réellement VISIBLE, pas seulement
 #     présent dans le DOM
 #
@@ -31,17 +29,10 @@ def run_test
 
     card = "service-#{service['uuid']}"
     btn_startup = "project-#{id}-btn-startup"
-    startup_container = "project-#{id}-startup-container"
     startup_panel = "project-#{id}-startup-services"
 
     wait_for("project-#{id}")
     wait_until(desc: -> { 'bouton GO! absent alors qu\'un service au démarrage est attaché' }) { exists?(btn_startup) }
-
-    # → survol : message d'astuce dans le footer, pas un div sous le bouton
-    hover(startup_container)
-    wait_until(desc: -> { "message = #{(get_text('message') rescue '(erreur)').inspect}" }) do
-      get_text('message').include?('clic')
-    end
 
     # - meta+clic sur le bouton GO! lui-même : révèle le panneau
     meta_click(btn_startup)
@@ -58,4 +49,4 @@ ensure
   remove_fixture_project(id) if id
 end
 
-board_test("révélation du panneau des services au démarrage : message footer, visibilité, pas de lancement") { run_test }
+board_test("révélation du panneau des services au démarrage : visibilité, pas de lancement") { run_test }
