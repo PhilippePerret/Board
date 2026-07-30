@@ -27,7 +27,7 @@ div#project-cards-container div.project.selected {
 div#standby-project-container {
   position: fixed;
   bottom: 0px;
-  right: 16vw;
+  right: 1em;
   z-index: 5;
 }
 

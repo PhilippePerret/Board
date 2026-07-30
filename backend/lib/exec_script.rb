@@ -74,7 +74,11 @@ def exec_script(script_name, params = "")
       end
     else
       RETOUR.ok     = false
-      RETOUR.error  = res
+      if res.match?(/-25211|accès d.aide|assistive access/i)
+        RETOUR.error = "Board n'a pas la permission Accessibilité activée : Réglages Système → Confidentialité et sécurité → Accessibilité → cocher Board."
+      else
+        RETOUR.error = res
+      end
     end
   rescue Timeout::Error
     (Process.kill('TERM', pid) rescue nil) if pid

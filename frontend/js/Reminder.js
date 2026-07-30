@@ -172,7 +172,7 @@ class Reminder extends ExtendedObject {
   fullPathIcon(){
     var icon;
     if ( icon = this.project?.get('icon')) {
-      return this.project.getFullPath(icon)
+      return this.project.getFullPath(icon, 'file://')
     } else {
       return this.icon
     }

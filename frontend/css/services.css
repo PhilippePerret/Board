@@ -4,8 +4,8 @@
 /* Panneau d'édition du projet */
 div.services-panel {
   position: fixed;
-  top: 0;
-  height: calc(100% - 2em);
+  top: 50px;
+  height: calc(100% - 112px);
   width: var(--editor-width);
   right: 0;
   padding: 1em;
