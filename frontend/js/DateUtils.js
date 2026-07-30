@@ -7,7 +7,7 @@
 const REG_HOUR = /([0-9]{1,2}) ?(?:(?::|heure|hour|hr|h)s?) ?([0-9]{2})(?:\:([0-9]{2}))?/
 
 // "2026-07-29T09:00:00Z"
-const REG_ISO_8601= /([0-9]{4})\-([0-9]{2})\-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z)?/
+const REG_ISO_8601= /([0-9]{4})\-([0-9]{2})\-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})?$/
 
 class DateUtils {
 
@@ -21,11 +21,15 @@ class DateUtils {
    */
   static parseAsIso8601(dateStr, asDateUtils = false){
     const found = dateStr.match(REG_ISO_8601)
+    const [, sign, offH, offM] = found[7].match(/([+-])([0-9]{2}):([0-9]{2})/) || [null, false, null, null]
     if (found === null) return null
     const [year, month, day, hour, min, sec] = found.slice(1,7).map(n => parseInt(n))
     var date
     if (found[7] == 'Z') {
       const timestamp = Date.UTC(year, month-1, day, hour, min, sec)
+      date = new Date(timestamp)
+    } else if (sign) {
+      const timestamp = Date.UTC(year, month-1, day, hour, min, sec) - (sign == '-' ? -1 : 1) * (offH*60+Number(offM)) * 60000
       date = new Date(timestamp)
     } else {
       date = new Date(year, month - 1, day, hour, min, sec)
