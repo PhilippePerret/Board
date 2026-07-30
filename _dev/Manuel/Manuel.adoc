@@ -17,11 +17,17 @@
 
 include::adocs/_TODO_.adoc[]
 
+// Présentation
 include::adocs/presentation.adoc[]
 
+// Prise en main
 include::adocs/prise-en-main.adoc[]
 
+// Réglages de l'application
 include::adocs/app/reglages-app.adoc[]
+
+// Les PROJETS
+include::adocs/project/_main.adoc[]
 
 include::adocs/todoist.adoc[]
 

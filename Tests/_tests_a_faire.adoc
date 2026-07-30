@@ -26,8 +26,8 @@ Numérotation reprise telle quelle de la discussion avec Claude, pour référenc
 - 5. `save-data` sans `path` → erreur
 - 6. `save-data` sans `values` → erreur
 - 7. `save-data` avec `path`+`keys` (sans `prefix`) → valide
-- 8. `get-data` sans `base` → erreur
-- 9. `get-data` avec `base` seul → valide
+- 8. `get-data` sans `path` → erreur
+- 9. `get-data` avec `path` seul → valide
 - 10. `create-file` sans `content` → erreur
 - 11. `create-file` sans `path` → erreur
 - 12. `create-file` avec `content`+`path` → valide
@@ -111,8 +111,8 @@ Numérotation reprise telle quelle de la discussion avec Claude, pour référenc
 - 72. `save-data` écriture json
 - 73. `save-data` écriture csv
 - 74. `get-data` fichier objet, clé directe
-- 75. `get-data` fichier array d'objets, recherche `id == key`
-- 76. `get-data` sans `key` → retourne tout
+- 75. `get-data` fichier array d'objets, recherche `id == data_id`
+- 76. `get-data` sans `data_id` → retourne tout
 - 77. `select-file` sélection Finder → valeur = chemin choisi
 - 78. `choose-folder` sélection Finder → valeur = chemin choisi
 - 79. `set-project-data` — valeur enregistrée dans les extra-données du projet, relisible ensuite

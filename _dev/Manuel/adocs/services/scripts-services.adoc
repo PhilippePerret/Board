@@ -34,7 +34,7 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
 | <<scserv-type-create-file>>       | Création d'un fichier.                    | `path` + `content`
 | <<scserv-type-add-to-file>>       | Ajout s'un contenu à un fichier.          | `after`, `before` + `where`
 | <<scserv-type-get-data>>          | Obtention de données complexes 
-                                      (array d'objets) depuis un fichier.       | `base`, `key`
+                                      (array d'objets) depuis un fichier.       | `path`, `data_id`
 | <<scserv-type-save-data>>         | Enregistrement de données complexes.      | `prefix`, `keys`
 | <<scserv-type-choose-folder>>     | Sélection d'un dossier (dans le Finder).  |
 | <<scserv-type-create-folder>>     | Création d'un dossier.                    | `path`
@@ -103,7 +103,7 @@ Nous verrons plus tard l'importance des identifiants, qui deviennent de véritab
 ----
 ---
 - name: "Création du dossier de l'éditeur"
-  id: creer-dossier-editeur
+  id: creation-du-dossier-envoi
 
 - name: "Copie du manuscrit envoyé"
   id: copier_manuscrit
@@ -122,7 +122,7 @@ Nous déterminons l'action de l'étape en définissant son type. À titre de rap
 ----
 ---
 - name: "Création du dossier de l'éditeur"
-  id: creer-dossier-editeur
+  id:   creation-du-dossier-envoi
   type: create-folder
 
 - name: "Copie du manuscrit envoyé"
@@ -145,7 +145,7 @@ Nous allons commencer par `create-folder` qui a simplement besoin du chemin d'ac
 ----
 ---
 - name: "Création du dossier de l'éditeur"
-  id: creer-dossier-editeur
+  id: creation-du-dossier-envoi
   type: create-folder
   path: "./envois/${editeur-id}"
 ----
@@ -159,7 +159,7 @@ Remarquez dès à présent la variable **`${editeur-id}`** qui contiendra donc l
   # à compléter
 
 - name: "Création du dossier de l'éditeur"
-  id: creer-dossier-editeur
+  id: creation-du-dossier-envoi
   type: create-folder
   path: "./envois/${editeur-id}"
 ----
@@ -363,7 +363,8 @@ Si le bouton "Nouvel éditeur…" est cliqué, la valeur est mise à '' (chaine 
 
 … pour ne pas être jouée si l'éditeur a été choisi dans la liste.
 
-Voilà la suite des données à rassembler : 
+[[scserv-tuto-get-editor-infos]]
+Voilà la suite des données à rassembler. Noter que l'identifiant de ces étapes est particulièrement important, comme nous le verrons dans la suite, et qu'il doit être choisi avec soin. 
 
 ----
 # Demander l'identifiant (non simple)
@@ -401,32 +402,155 @@ Voilà la suite des données à rassembler :
 
 Maintenant que nous avons les informations du nouvel éditeur, nous pouvons les ajouter au fichier. On peut le faire avec le type <<scserv-type-save-data>>.
 
+----
+- if: "${editeur-id} = ''"
+  id: 'enregistrement-editeur'
+  type: "save-data"
+  path: "./envois/editeurs.yaml"
+  prefix: 'new-editor'
+  keys: ['id', 'name', 'adresse', 'phone']
+----
+
+Attenton, il faut être attentif pour ce type particulier. Il a besoin de `prefix` et de `keys` pour pouvoir opérer. Le _préfix_ et les _clés_ (keys) s'assemblent pour former les valeurs qui constitueront le nouvel objet : 
+  
+|====
+4+| Nouvel objet 
+  | **Key**   | **Composition**     | **Id étape**        | **Valeur étape***
+  | `id`      | `<prefix>-id`       | new-editor-id       | "${new-editor-id}"
+  | `name`    | `<prefix>-name`     | new-editor-name     | "${new-editor-name}"
+  | `adresse` | `<prefix>-adresse`  | new-editor-adresse  | "${new-editor-adresse}"    
+  | `phone`   | `<prefix>-phone`    | new-editor-phone    | "${new-editor-phone}"
+|====
+
+Vous comprenez maintenant pourquoi le nom des étapes de <<scserv-tuto-get-editor-infos, récolte des informations du nouvel éditeur>> sont tellement importantes.
+
+Un point de détail qui échappera au Padawan mais que maitre Yoda ne manquera pas de noter : c'est la seconde fois que je définis : 
+
+----
+path: "./envois/editeurs.yaml"
+----
+
+Le problème de ce genre de définition est le suivi : si le fichier change de lieu, je vais avoir plusieurs endroits à changer, si j'y pense ! C'est une faiblesse de conception.
+
+Au lieu de ça, il vaut mieux définir une variable qui contiendra ce chemin d'accès et l'utiliser partout où il devra être utilisé. De cette manière, si je change l'endroit, j'ai une seule modification à faire et toutes les utilisations s'adaptent. Pour ce faire, j'utilise le type <<scserv-type-set>>.
+
+----
+---
+### Tout en haut du fichier
+- id: editors-data
+  type: set
+  value: "./envois/editeurs.yaml" 
+----
+
+Et ensuite, je peux l'utiliser : 
+
+----
+- id:     editeur-id
+  type:   select
+  values: "${editors-data}"  # <= variable
+  ...
+----
+
+… et puis : 
 
 ----
 - if: "${editeur-id} = ''"
   id: 'enregistrement-editeur'
   type: "save-data"
-  path: "${editors-data}"
-  prefix: 'new-editor'
-  keys: ['id', 'name', 'adresse', 'phone']
+  path: "${editors-data}"  # <= variable
+  ...
 ----
 
-Attenton, il faut être attentif pour ce type particulier. Il a besoin de `prefix` et de `keys` pour pouvoir opérer.
+Vous n'y penserez peut-être pas tout de suite, mais lorsque vous aurez commis plusieurs fois l'erreur, ça finira pas rentrer. _Long est l'apprentissage du Jedi_
+
+Et maintenant, je ne dois pas oublier une dernière chose : donner à `editeur-id` la valeur qu'il doit avoir, car il est toujours à "" pour le moment. J'utilise là aussi le type <<scserv-type-set>>, mais en indiquant la valeur de quelle étape je veux définir.
 
 ----
 - if: "${editeur-id} == ''"
   id: 'affectation-editeur'
   type: set
-  step: 'choix-editeur'
-  value: ${choix-editeur-id}
+  step: 'editeur-id'
+  value: ${new-editor-id}
 ----
 
+`step` contient l'identifiant de l'étape qui doit être affectée. Et l'on prend bien sûr la valeur dans l'étape `new-editor-id` dans laquelle elle a été définie.
+
+BRAVO ! Vous venez d'accomplir déjà un gros morceau ! Nous avons choisi la maison d'édition en en définissant une nouvelle. Mais le chemin est encore long avant de voir le manuscrit partir. Dites-vous simplement que ce temps que vous passez sera _très vite_ rattrapé chaque fois que vous aurez un envoi à effectuer.
+
+Maintenant que nous avons l'identifiant de l'éditeur, nous pouvons créer son dossier, étape que nous avons déjà implémentée : 
+
+----
+- id: creation-du-dossier-envoi
+  type: 'create-folder'
+  path: "./envois/${editeur-id}"
+----
+
+L'étape suivante, celle qui récupère le manuscrit, a déjà été codée aussi : 
+
+----
+- id: 'manuscrit-path'
+  type: 'get-project-data'
+----
+
+Son type <<scserv-type-get-project-data>> permet de récupérer une valeur dans le projet, ici le chemin d'accès au manuscrit à transmettre.
+
+Le souci, c'est que la première fois, cette propriété n'est pas définie pour le projet. Il faut donc en tenir compte, en sachant qu'une propriété non définie va retourner `null`. Il faut donc, après cette étape, avoir celle-ci :
+
+----
+- if: "${manuscrit-path} = null"
+  id: 'selection-manuscrit'
+  type: 'select-file'
+  title: "Choix du manuscrit"
+  q: "Choisir le manuscrit à envoyer dans le Finder puis “OK”."
+----
+
+Ici, le type <<scserv-type-select-file>> (sélection de fichier) nous permet de choisir un fichier dans le Finder. Nous allons choisir le manuscrit. Et l'étape suivante permettra d'enregistrer ce manuscrit comme donnée de projet ; nous n'aurons plus à le préciser.
+
+NOTE: Lorsque le manuscrit changera, s'il a changé de nom (s'il est versionné par exemple), on pourra utiliser la <<project-remove-data>>.
+
+----
+- if: "${manuscrit-path} = null"
+  id:   set-manuscrit-path
+  type: set-project-data
+  project_key: manuscrit-path
+  value: "${selection-manuscrit}"
+  set:  manuscript-path
+----
+
+Le type <<scserv-type-set-project-data>> permet d'enregistrer la propriété de clé `project_key` (`manuscrit-path` ici) avec la valeur de `${selection-manuscrit}`, l'étape précédente.
+
+Le paramètre `set`, ici, va nous permettre de gagner une étape. En même temps qu'il définit la propriété du projet, il permet de définir la valeur de l'étape de l'identifiant donné, ici `manuscrit-path`.
+
+Donc, après cette étape, notre "${selection-manuscrit}" est renseigné.
+
+Maintenant qu'on a le manuscript, on peut procéder à la copie : 
+
+----
+- id: 'duplication-manuscrit'
+  type: 'copy-file'
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"
+----
+
+Pour le type <<scserv-type-copy-file>>, comme nous l'avons vu, il faut définir simplement `source` et `dest`.
+
+Pour la suite — la création du fichier avec les informations — nous devons avoir la donnée complète de l'éditeur ; rappelons-nous que si nous n'avons pas créé de nouvel éditeur, nous avons seulement son identifiant (`id`). Pour ce faire, nous allons utiliser le type <<scserv-type-get-data>>.
+
+----
+- id: 'data-editor'
+  type: 'get-data'
+  path: "${editors-data}"
+  data_id:  "${editeur-id}"
+----
+
+Pour ce type, nous devons préciser le chemin d'accès à la base des données (qui peut-être un fichier YAML, CSV ou même une base SQlite) dans la propriété `path`. Remarquez qu'à nouveau nous utilisons la variable `${editors-data}` et pas le chemin explicite, qui peut changer.
+
+Nous devons bien sûr indiquer quel sera la valeur pour 
 
 XXX
 
 {{todo: revenir sur `manuscrit-path` qui a juste été posé}}
 {{todo: revenir sur `editeur-id` — attention, dans le script original, ça s'appelle `editeur-choix`}}
-{{todo poursuivre}}
 
 
 Au final, le script-service ressemble donc à ça :
@@ -512,8 +636,8 @@ Au final, le script-service ressemble donc à ça :
 
 - id: 'data-editor'
   type: 'get-data'
-  base: "${editors-data}"
-  key:  "${choix-editeur}"
+  path: "${editors-data}"
+  data_id:  "${choix-editeur}"
   
 - id: 'fichier-info-editeur'
   type: 'create-file'
@@ -913,8 +1037,8 @@ On peut tirer des données d'un grand nombre de fichiers. La seule exigence est 
 [cols="1,4"]
 |====
 | `type` | `get-data`
-| `base` | Chemin d'accès au fichier contenant les données (évaluable)
-| `key`  | Si précisé, c'est la clé à prendre, qui deviendra la valeur de l'étape. +
+| `path` | Chemin d'accès au fichier contenant les données (évaluable)
+| `data_id`  | Si précisé, c'est la clé à prendre, qui deviendra la valeur de l'étape. +
 Si non précisé, c'est la liste des objets qui deviendra la valeur de l'étape.
 |====
 
@@ -1003,8 +1127,8 @@ Nous présentons ci-dessous l'enregistrement d'un livre dans un fichier qui les 
 # On charge les données du livre
 - id: book-data
   type: get-data
-  base: "${books-file}"
-  key:  "${livre-id}" 
+  path: "${books-file}"
+  data_id:  "${livre-id}" 
 ----
 
 

@@ -73,8 +73,8 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'get-data': {
     params: {
-        base:   {required: true, type: 'string', name: "Chemin d'accès aux données"}
-      , key:    {required: false, type: 'string', name: 'clé dans les données (au besoin)'}
+        path:     {required: true, type: 'string', name: "Chemin d'accès aux données"}
+      , data_id:  {required: false, type: 'string', name: 'ID dans les données (au besoin)'}
     }
   },
   

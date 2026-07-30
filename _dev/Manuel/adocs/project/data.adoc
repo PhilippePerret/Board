@@ -1,0 +1,7 @@
+=== Données des projets ===
+
+
+[[project-remove-data, destruction des données de projet]]
+==== Destruction des données de projet ====
+
+Todo: à implémenter : un panneau affichant toutes les données de projet et permettant de les détruire.

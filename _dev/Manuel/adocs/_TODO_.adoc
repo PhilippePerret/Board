@@ -18,6 +18,7 @@
 
 == Todo list ==
 
+- Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)
 - Panneaux : il faudrait fermer le panneau avant de faire l'opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
   En fait : clic → Fermer fenêtre → Sablier → Confirmation fin
 - pouvoir mettre une note gh (github) du type voulu

@@ -530,17 +530,17 @@ class ServStep extends ExtendedObject {
       const data = retour.data
       let value
       if (retour.error) { return this.addFatalError(retour.error) }
-      else if (this.key){
-        const key = this.evaluateProp('key')
+      else if (this.data_id){
+        const data_id = this.evaluateProp('data_id')
         if (Object.isObject(data)) {
-          value = data[key]
-          console.log("[execGetData] avec objet[%s]", key, data, value)
+          value = data[data_id]
+          console.log("[execGetData] avec objet[%s]", data_id, data, value)
         } else if (Array.isArray(data)) {
           value = data.find(c => { 
-            console.log({c, key})
-            return c.id == key 
+            console.log({c, data_id})
+            return c.id == data_id 
           })
-          console.log("[execGetData] avec array [%s]", key, data, value)
+          console.log("[execGetData] avec array [%s]", data_id, data, value)
         } else {
           value = data
           console.log("[execGetData] ni object ni array", data)
@@ -551,8 +551,8 @@ class ServStep extends ExtendedObject {
       // console.log("Donnée finale", value)
       this.setValue(value)
     } else {
-      this.base = this.expandPath(this.evaluateProp('base'))
-      server.send({action: 'get-data', path: this.base, no_raise: true}, this.execGetData.bind(this))
+      this.path = this.expandPath(this.evaluateProp('path'))
+      server.send({action: 'get-data', path: this.path, no_raise: true}, this.execGetData.bind(this))
     }
   }
 
