@@ -45,7 +45,9 @@ const BROWSERS = [
   , 'Thor'
 ]
 
-
+/**
+ * Propriétés de CONFIG
+ */
 const APP_DATA = [
     {id: 'documentation-editor'       , name: 'Éditeur pour la documentation'     , type: 'select'    , values: TEXT_EDITORS}
   , {id: 'default-browser'            , name: 'Navigateur par défaut'             , type: 'select'    , values : BROWSERS }
@@ -56,4 +58,29 @@ const APP_DATA = [
   , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md' }
   , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}
   , {id: 'version'                    , name: 'Version de l’application'          , type: 'string'    , locked: true}
+  , {id: 'remember-last-projet'       , name: 'Se souvenir du dernier projet'     , type: 'boolean'   , default: false}
+  , {id: 'last-project'               , name: 'Dernier project sélectionné'       , type: 'string'    , default: null}
 ]
+
+const TBL_APP_DATA = {}
+APP_DATA.forEach(prop => Object.assign(TBL_APP_DATA, {[prop.id]: prop}))
+
+class AppData {
+
+
+  static get(propId){ 
+    var propAbsData
+    if (prop?.id) {
+      prop = prop.id
+      propAbsData = prop
+    } else {
+      propAbsData = TBL_APP_DATA[propId]
+    }
+    return App.getData(propId) ?? propAbsData.default ?? ''
+  }
+  
+  
+  static update(prop, value){
+
+  }
+}

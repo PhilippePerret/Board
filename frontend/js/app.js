@@ -29,22 +29,42 @@ class App {
       this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
     }
+
+    retarde(this.editConfigData.bind(this), 3) // essai direct
   }
 
-  static openAppDataPanel(ev) {
+  static editConfigData(ev) {
     stopEvent(ev)
-    this.appDataPanel.toggle()
+    // ON ajoute les valeurs actuelles
+    const props = APP_DATA.map(prop => {
+      return Object.assign(prop, {value: this.getData(prop.id)})
+    })
+    new ConfigDialog({
+        title: 'Configuration de l’application'
+      , props: props
+      , ouiBtn: {name: getMsg('Save'), onclick: this.onSaveConfig.bind(this)}
+      , nonBtn: {name: getMsg('Cancel')}
+    }).show()
   }
+  static onSaveConfig(modos /* array de {id, value} */){
+    console.log("-> onSaveConfig pour enregistrement de la config", modos)
+    if (modos.length ) {
+      modos.forEach( modo => this.setData(modo.id, modo.value) )
+      this.saveData()
+    }
+  }
+
+
   static openToolsPanel(ev) {
     stopEvent(ev)
     this.toolsPanel.toggle()
   }
 
   static observe(){
-    listen(DGet('#app-name'), 'click', this.openAppDataPanel.bind(this))
-    listen(DGet('#tools-button'), 'click', this.openToolsPanel.bind(this))
-    listen(DGet('#debug-button'), 'click', D.toggle.bind(D))
-    listen(DGet('#help-link'), 'click', (ev) => {stopEvent(ev); Aide.open()})
+    listen(DGet('#app-name')    , 'click' , this.editConfigData.bind(this))
+    listen(DGet('#tools-button'), 'click' , this.openToolsPanel.bind(this))
+    listen(DGet('#debug-button'), 'click' , D.toggle.bind(D))
+    listen(DGet('#help-link')   , 'click' , (ev) => {stopEvent(ev); Aide.open()})
   }
 
   static get appDataPanel(){ return this._appdatapan || (this._appdatapan = new AppDataPanel()) }
@@ -55,6 +75,25 @@ class App {
   }
   static setData(key, value){
     Object.assign(this.data, {[key]: value})
+    this.apply(key, value)
+  }
+
+  /**
+   * Certains valeurs de configuration doivent s'appliquer tout de suite
+   */
+  static apply(key, value) {
+    switch(key){
+      case 'une prop à appliquer': break
+      case 'remember-last-project': 
+        if (value == 'true') {
+          if (Project.current) { this.setData('last-project', Project.current.id) }
+        } else {
+          this.setData('last-project', "")
+        }
+        break
+      default:
+        // rien à faire avec +key+
+    }
   }
 
   static get saveData(){ return this._savedata || (this._savedata = debounce(this.execSaveData.bind(this), 1000))}

@@ -227,24 +227,43 @@ class ColorDialog extends Dialog {
  *    string      Une chaine
  *    boolean     Une valeur booléenne (coché/décoché)
  *    integer     Un nombre
+ * 
+ * Les données modifiées (et seulement celles-là), sont tranmises en premier
+ * argument de la méthode bindée au bouton "Oui"/"Enregistrer"
  */
 class ConfigDialog extends Dialog {
   constructor(data){
     super(data)
     this.id ?? raise("Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
-    this.width    = '740px'
+    this.width    = '840px'
+    this.height   = '500px'
     this.props    = data.props
+    this.modos    = [] // Contiendra les modifications/array de {id, value}
     this.content  = this.buildConfig()
+    this.ouiData  = Object.assign(this.ouiData, {onclick: this.ouiData.onclick.bind(null, this.modos)})
   }
 
 
   buildConfig(){
     const container = DCreate('DIV', {id: `${this.FId}-container`, class: 'config-dialog-container'})
-    this.props.forEach(prop => {
+    this.props.forEach(dprop => {
+      // console.log("dprop = ", dprop)
       const line = DCreate('DIV', {class: 'config-data-prop'})
-      const name = DCreate('SPAN', {text: prop.name})
-      const desc = DCreate('SPAN', {text: prop.desc})
-      const valu = DCreate('SPAN', {text: prop.value})
+      const name = DCreate('SPAN', {text: dprop.name, class: 'config-data-name'})
+      const desc = DCreate('SPAN', {text: dprop.desc || '', class: 'config-data-desc'})
+      const valu = DCreate('SPAN', {text: dprop.value ?? '', class: 'config-data-value'})
+      listen(valu, 'click', (ev) => {
+        const callback = (values) => {
+          console.log("values reçues", values)
+          // On applique la modification à la liste des données
+          dprop.value = values[0].value // si réédité, pour valeur par défaut
+          this.modos.push({id: dprop.id, value: dprop.value})
+          // Ci-dessus, un même paramètre peut être redéfini, mais peu importe
+          // Et on la met dans le tableau
+          valu.innerHTML = dprop.value
+        }
+        new ParamsDefiner([dprop], callback).define()
+      })
       line.appendChild(name)
       line.appendChild(desc)
       line.appendChild(valu)

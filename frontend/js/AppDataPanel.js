@@ -1,4 +1,9 @@
 /**
+ * 
+ *              OBSOLÈTE
+ * 
+ * 
+ * 
  * Panneau de réglage des données de l'application (APP_DATA, cf.
  * frontend/js/AppData.js) — ouvert/fermé en cliquant sur "Tableau de bord"
  * (#app-name, cf. App.js).

@@ -1,0 +1,27 @@
+
+div.config-dialog-container {
+  border: 1px solid #CCC;
+}
+
+div.config-dialog-container div.config-data-prop {
+  display: flex;
+  border-bottom: 1px solid #CCC;
+  padding: 4px 8px;
+}
+div.config-dialog-container div.config-data-prop > span {
+  font-family: "Arial Narrow";
+  font-size: 14pt;
+}
+
+div.config-dialog-container div.config-data-prop span.config-data-name {
+  flex: 1;
+}
+div.config-dialog-container div.config-data-prop span.config-data-desc {
+  flex: 1;
+}
+div.config-dialog-container div.config-data-prop span.config-data-value {
+  flex: 0 0 200px;
+  text-align: right;
+  cursor: pointer;
+  border-left: 1px solid #CCC;
+}

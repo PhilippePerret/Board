@@ -1,9 +1,10 @@
 == BUGS ==
 
+- une tâche programmée à une certaine heure se déclenche trop tôt (1 heure avant)
+
 - les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
   essayer en essayant de modifier une tâche sans en avoir sélectionné une
 
-- une tâche programmée à une certaine heure se déclenche trop tôt (1 heure avant)
 
 - quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 
@@ -24,8 +25,10 @@
 == Todo list ==
 
 - Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)
+  Utiliser les ConfigDialog
 - Panneaux : il faudrait fermer le panneau avant de faire l'opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
   En fait : clic → Fermer fenêtre → Sablier → Confirmation fin
+
 - pouvoir mettre une note gh (github) du type voulu
 - pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
   
