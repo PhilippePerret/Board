@@ -10,16 +10,6 @@
 
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
 
-- Problème de définition dans le projet Board
-    common_services_data:
-      open-a-file:
-      - file:///Users/philippeperret/Programmes/Board/_dev/Manuel/Manuel.html
-    BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d'autres
-          choses — attention, il s'agit peut-être d'un scorie. Quand on traitera ce bug,
-          commencer par supprimer cette donnée pour voir qui l'utilise (certainement
-          l'ouverture de la documentation)
-
-
 == Todo En cours
 
 == Todo list ==

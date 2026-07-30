@@ -22,10 +22,12 @@ class App {
     }
   }
   static selectLastProjectIfRequired(){
+    var lastProjectId
     if (this.getData('remember-last-project') === true){
-      const lastProjectId = this.getData('last-project')
-      console.log("Je dois resélectionner le projet", lastProjectId)
-      Project.onSelect(Project.get(lastProjectId))
+      if (lastProjectId = this.getData('last-project')) {
+        console.log("Je dois resélectionner le projet", lastProjectId)
+        Project.onSelect(Project.get(lastProjectId))
+      }
     }
   }
 
@@ -92,7 +94,7 @@ class App {
   static setData(key, value, saveIt = false){
     Object.assign(this.data, {[key]: value})
     this.apply(key, value)
-    saveIt && this.save()
+    saveIt && this.saveData()
   }
 
   /**
