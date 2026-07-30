@@ -1,6 +1,6 @@
 /**
  * Données de réglage de l'application (appdata.yaml), éditables depuis le
- * panneau ouvert en cliquant sur "Tableau de bord" (AppDataPanel).
+ * panneau ouvert en cliquant sur le nom de l'application
  *
  * Comportement volontairement plus simple que CUSTOM_SERVICES_DATA/
  * COMMON_SERVICES_DATA (frontend/js/ServiceData.js) : la plupart du temps
@@ -58,8 +58,8 @@ const APP_DATA = [
   , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md' }
   , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}
   , {id: 'version'                    , name: 'Version de l’application'          , type: 'string'    , locked: true}
-  , {id: 'remember-last-projet'       , name: 'Se souvenir du dernier projet'     , type: 'boolean'   , default: false}
-  , {id: 'last-project'               , name: 'Dernier project sélectionné'       , type: 'string'    , default: null}
+  , {id: 'remember-last-project'      , name: 'Se souvenir du dernier projet'     , type: 'boolean'   , default: false}
+  , {id: 'last-project'               , name: 'Dernier project sélectionné'       , type: 'string'    , default: null , editable: false}
 ]
 
 const TBL_APP_DATA = {}

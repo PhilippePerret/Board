@@ -8,7 +8,26 @@ class App {
 
   static NAME = /* tag::app-name[] */"Tableau de bord"/* end::app-name[] */
 
-  // this.data = les données de appdata.json
+
+  /**
+   * @api
+   * 
+   * Enregistre le projet sélectionné au besoin
+   */
+  static rememberLastProjectIfRequired(projet){
+    console.log("this.getData('remember-last-project')", this.getData('remember-last-project'), typeof this.getData('remember-last-project'))
+    if (this.getData('remember-last-project') === true){
+      console.log("Je mémorise le projet sélectionné", projet)
+      this.setData('last-project', projet.id, true)
+    }
+  }
+  static selectLastProjectIfRequired(){
+    if (this.getData('remember-last-project') === true){
+      const lastProjectId = this.getData('last-project')
+      console.log("Je dois resélectionner le projet", lastProjectId)
+      Project.onSelect(Project.get(lastProjectId))
+    }
+  }
 
   // Le panneau courant
   static get currentPanel()  { return this._currentPanel }
@@ -29,8 +48,6 @@ class App {
       this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
     }
-
-    retarde(this.editConfigData.bind(this), 3) // essai direct
   }
 
   static editConfigData(ev) {
@@ -67,15 +84,15 @@ class App {
     listen(DGet('#help-link')   , 'click' , (ev) => {stopEvent(ev); Aide.open()})
   }
 
-  static get appDataPanel(){ return this._appdatapan || (this._appdatapan = new AppDataPanel()) }
   static get toolsPanel(){ return this._toolspan || (this._toolspan = new ToolsPanel()) }
 
   static getData(key){
     return this.data[key]
   }
-  static setData(key, value){
+  static setData(key, value, saveIt = false){
     Object.assign(this.data, {[key]: value})
     this.apply(key, value)
+    saveIt && this.save()
   }
 
   /**

@@ -248,6 +248,7 @@ class ConfigDialog extends Dialog {
     const container = DCreate('DIV', {id: `${this.FId}-container`, class: 'config-dialog-container'})
     this.props.forEach(dprop => {
       // console.log("dprop = ", dprop)
+      if ( dprop.editable === false ) return
       const line = DCreate('DIV', {class: 'config-data-prop'})
       const name = DCreate('SPAN', {text: dprop.name, class: 'config-data-name'})
       const desc = DCreate('SPAN', {text: dprop.desc || '', class: 'config-data-desc'})

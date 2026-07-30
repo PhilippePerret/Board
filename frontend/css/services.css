@@ -92,10 +92,6 @@ fieldset.services fieldset.services-group legend {
   color: rgb(28, 0, 140);
 }
 
-/* Panneau de réglages de l'application (AppDataPanel) */
-#app-data-panel .services-listing .service {
-  cursor: pointer;
-}
 .app-data-row .app-data-value {
   font-size: 14px;
   font-style: italic;

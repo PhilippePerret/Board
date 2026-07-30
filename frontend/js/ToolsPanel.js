@@ -1,8 +1,7 @@
 /**
  * Panneau "Outils" (TOOLS_DATA, cf. frontend/js/ToolsData.js) — ouvert en
  * cliquant sur le lien "Outils" du header (à côté de "Aide", cf. App.js).
- * Contrairement à AppDataPanel/ProjectExtraDataPanel (SidePanelDefiner),
- * chaque ligne déclenche directement son action au clic — pas de valeur à
+ * Chaque ligne déclenche directement son action au clic — pas de valeur à
  * éditer/persister.
  */
 class ToolsPanel extends SidePanel {

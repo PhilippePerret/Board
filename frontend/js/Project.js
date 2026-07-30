@@ -36,6 +36,7 @@ class Project {
       new Project(dataProjet).buildCard()
     })
     message("Projets courants affichés.")
+    App.selectLastProjectIfRequired()
     // Maintenant que les projets sont affichés, on peut chercher les
     // tâches qu'ils peuvent avoir
     this.getTachesProjects()
@@ -222,6 +223,7 @@ class Project {
     projet.obj.classList.add('selected')
     this.current = projet
     this.affProjectButtons()
+    App.rememberLastProjectIfRequired(projet)
   }
   static deselect(projet){
     projet.obj.classList.remove('selected')
