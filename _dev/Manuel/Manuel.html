@@ -451,6 +451,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#reglages-app">Réglages de l&#8217;application</a></li>
+<li><a href="#projects">Les Projets</a>
+<ul class="sectlevel2">
+<li><a href="#_données_des_projets">Données des projets</a></li>
+</ul>
+</li>
 <li><a href="#todoist">Todoist</a>
 <ul class="sectlevel2">
 <li><a href="#td-link-project">Lier le projet</a></li>
@@ -460,8 +465,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#scripts-services">Les scripts-services</a>
 <ul class="sectlevel2">
-<li><a href="#_liste_complète_des_types_assemblables">Liste complète des types assemblables</a></li>
+<li><a href="#scserv-types">Liste complète des types assemblables</a></li>
 <li><a href="#script-services-steps">Une suite d&#8217;étapes</a></li>
+<li><a href="#scserv-tuto-create-script-service">Tutoriel : création d&#8217;un script-service</a></li>
 <li><a href="#_erreurs_classiques">Erreurs classiques</a></li>
 <li><a href="#scserv-common-params">Paramètres communs à tous les types</a></li>
 <li><a href="#conditional-step">Étape conditionnelle</a></li>
@@ -533,6 +539,16 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <div class="sectionbody">
 <div class="ulist">
 <ul>
+<li>
+<p>Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)</p>
+</li>
+<li>
+<p>Panneaux : il faudrait fermer le panneau avant de faire l&#8217;opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
+En fait : clic → Fermer fenêtre → Sablier → Confirmation fin</p>
+</li>
+<li>
+<p>pouvoir mettre une note gh (github) du type voulu</p>
+</li>
 <li>
 <p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
 </li>
@@ -682,6 +698,20 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <div class="sectionbody">
 <div class="paragraph">
 <p>En cliquant sur le titre include::/../../../../../frontend/jsApp.js[tag=app-name] de l&#8217;application</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="projects">Les Projets</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_données_des_projets">Données des projets</h3>
+<div class="sect3">
+<h4 id="project-remove-data">Destruction des données de projet</h4>
+<div class="paragraph">
+<p>Todo: à implémenter : un panneau affichant toutes les données de projet et permettant de les détruire.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -893,7 +923,7 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <p>ATTENTION: Tout pouvoir puissant, cependant, implique des responsabilités proportionnelles, comme nous le verrons. Il est donc conseillé d&#8217;avancer doucement dans la conception de ces <em>scripts-services</em> jusqu&#8217;à se sentir suffisamment à l&#8217;aise pour en composer des compliqués.</p>
 </div>
 <div class="sect2">
-<h3 id="_liste_complète_des_types_assemblables">Liste complète des types assemblables</h3>
+<h3 id="scserv-types">Liste complète des types assemblables</h3>
 <div class="paragraph">
 <p><em>Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la table ci-dessous pour un accès rapide aux différents types de service</em></p>
 </div>
@@ -939,12 +969,12 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-data"><code>get-data</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Obtention de données complexes
                                       (array d&#8217;objets) depuis un fichier.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code>, <code>key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code>, <code>data_id</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-save-data"><code>save-data</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Enregistrement de données complexes.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>prefix</code>, <code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>prefix</code>, <code>keys</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-choose-folder"><code>choose-folder</code></a></p></td>
@@ -1004,19 +1034,22 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <div class="content">
 <pre>---
 - name: Première étape
-  id: 'etape-1
+  id: etape-1
 
 - name: Deuxième étape
-  id: 'etape-2
+  id: etape-2
 
 - name: Troisième étape
-  id: 'etape-3
+  id: etape-3
 
 # etc.</pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="scserv-tuto-create-script-service">Tutoriel : création d&#8217;un script-service</h3>
 <div class="paragraph">
-<p>Pour illustrer l&#8217;explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d&#8217;envoi de manuscrits à des maisons d&#8217;édition, pour ne pas avoir à répéter un même processus des dizaines de fois, ce qui peut être pénible si l&#8217;on écrit un roman, voire plus, par an.</p>
+<p>Pour illustrer l&#8217;explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d&#8217;envoi de manuscrits à des maisons d&#8217;édition comme celui présenté plus haut, pour ne pas avoir à répéter les mêmes actions des dizaines de fois, ce qui peut être pénible si l&#8217;on écrit un roman, voire plus, par an.</p>
 </div>
 <div class="paragraph">
 <p>En apparence, ce service doit être simple :</p>
@@ -1056,13 +1089,16 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <p>Noter que le <code>name</code> des étapes est optionnel, mais pour la clarté, il vaut mieux le définir.</p>
 </div>
 <div class="paragraph">
-<p>En revanche, chaque étape doit impérativement avoir un identifiant (<code>ìd</code>). C&#8217;est une valeur ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats. Si l&#8217;identifiant contient des tirets, il doit obligatoirement être entre guillemets.</p>
+<p>En revanche, chaque étape doit impérativement avoir un identifiant (<code>ìd</code>). C&#8217;est une valeur ne comportant que des lettres minuscules, des chiffres, des tirets et des traits plats.</p>
+</div>
+<div class="paragraph">
+<p>Nous verrons plus tard l&#8217;importance des identifiants, qui deviennent de véritables variables contenant une valeur dynamique.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>---
 - name: "Création du dossier de l'éditeur"
-  id: "creer-dossier-editeur"
+  id: creation-du-dossier-envoi
 
 - name: "Copie du manuscrit envoyé"
   id: copier_manuscrit
@@ -1074,6 +1110,845 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
   id: historique</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Nous déterminons l&#8217;action de l&#8217;étape en définissant son type. À titre de rappel, ils sont tous définis <a href="#scserv-types">ici</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- name: "Création du dossier de l'éditeur"
+  id:   creation-du-dossier-envoi
+  type: create-folder
+
+- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+  type: copy-file
+
+- name: "Fichier information éditeur
+  id: informations_editeur
+  type: create-file
+
+- name: "Enregistrement envoi dans l'historique"
+  id: historique
+  type: add-to-file</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vous trouverez tout ce dont chaque type a besoin en rejoignant la section idoine depuis le <a href="#scserv-types">tableau des types</a>.</p>
+</div>
+<div class="paragraph">
+<p>Nous allons commencer par <code>create-folder</code> qui a simplement besoin du chemin d&#8217;accès. Ce dossier sera créé dans le projet, dans un dossier général <code>envois</code> avec l&#8217;identifiant de l&#8217;éditeur. Nous inscrivons donc :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- name: "Création du dossier de l'éditeur"
+  id: creation-du-dossier-envoi
+  type: create-folder
+  path: "./envois/${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remarquez dès à présent la variable <strong><code>${editeur-id}</code></strong> qui contiendra donc l&#8217;identifiant de l&#8217;éditeur. Cette variable fait directement référence à la valeur (<code>value</code>) d&#8217;une étape précédente. Nous ne la ferons pas tout de suite, mais nous la notons déjà pour ne pas l&#8217;oublier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: editeur-id
+  name: "Identifiant de l'éditeur
+  # à compléter
+
+- name: "Création du dossier de l'éditeur"
+  id: creation-du-dossier-envoi
+  type: create-folder
+  path: "./envois/${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Noter également les chemins qui commencent par <code>./</code> et font donc référence au dossier du projet.</p>
+</div>
+<div class="paragraph">
+<p>Nous devons ensuite copier le manuscrit avec le type <code>copy-file</code>. Pour ce type, nous devons simplement indiquer la source (le fichier à dupliquer) et la destination. Soit le dossier dans lequel mettre le fichier, qui gardera le même nom, soit le chemin complet avec le nouveau nom du fichier. Ici, nous gardons le même nom, donc :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+  type: copy-file
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notez la nouvelle variable <strong><code>${manuscrit-path}</code></strong>, entre guillemets, qui, bien entendu, connait le chemin d&#8217;accès au fichier. Ici aussi, nous devrons régler cette variable, donc cette étape, plus tard :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: manuscrit-path
+  name: "Chemin d'accès au manuscrit"
+
+- name: "Copie du manuscrit envoyé"
+  id: copier_manuscrit
+  type: copy-file
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Passons au fichier qui va contenir l&#8217;adresse et le téléphone de l&#8217;éditeur (juste par facilité car je pourrais aussi programmer un petit outil qui retrouve facilement ces informations en les prenant dans la base au moment où nous en avons besoin.)</p>
+</div>
+<div class="paragraph">
+<p>Pour créer un fichier, nous avons besoin de son chemin d&#8217;accès (relatif au projet ou absolu) et de son contenu. Nous les indiquons avec les propriétés <code>content</code> (contenu) et <code>path</code> (chemin d&#8217;accès) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- name: "Fichier information éditeur
+  id: informations_editeur
+  type: create-file
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vous devez déjà bien comprendre le <code>path</code> : nous allons mettre ce fichier dans le dossier créé tout à l&#8217;heure. Ce fichier s&#8217;appellera <code>infos.md</code>.</p>
+</div>
+<div class="paragraph">
+<p>Vous voyez que le contenu du fichier peut être complexe. Ici, nous faisons référence non pas à une valeur simple d&#8217;étape (<code>data-editor</code>) mais à une <em>propriété d&#8217;objet</em>. Un <em>objet</em>, c&#8217;est une chose informatique quelconque qui contient des propriétés. L&#8217;objet <code>data-editor</code>, que nous définirons plus tard, est un objet de cette forme :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>data-editor
+  id:       Son identifiant
+  name:     Son nom
+  adresse:  Son adresse
+  phone:    Son téléphone
+  email:    Son adresse mail</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On peut imaginer évidemment autant de propriétés que l&#8217;on veut.</p>
+</div>
+<div class="paragraph">
+<p>On y fait référence ensuite, simplement, en utilisant soit <code>objet.propiété</code> soit <code>objet[propriété]</code>, les deux donnent le même résultat (ce sont des syntaxes classiques pour les programmeurs).</p>
+</div>
+<div class="paragraph">
+<p>Donc, ici, le contenu :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>"${data-editor}.adresse\n\n${data-editor}.phone"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… signifie que nous allons prendre l'`adresse` de l&#8217;éditeur choisir, la faire suivre de deux retours à la ligne (<code>\n</code>), puis que nous allons mettre son numéro de téléphone.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Noter que je mets ces deux informations car ce sont celles dont j&#8217;ai besoin pour un envoi. L&#8217;adresse pour le lieu de l&#8217;expédition et le téléphone pour le suivi.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Notons que là aussi il nous faudra revenir sur une information : <code>data-editor</code> qui sera là aussi, <em>forcément</em>, la valeur d&#8217;une étape.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: data-editor
+  name: "Données complète de l'éditeur choisi"
+
+- name: "Fichier information éditeur
+  id: informations_editeur
+  type: create-file
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Il nous reste à régler le texte ajoute à l&#8217;historique d&#8217;envoi. Pour ça, nous avons besoin de trois choses :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le chemin d&#8217;accès au fichier,</p>
+</li>
+<li>
+<p>le contenu à ajouter,</p>
+</li>
+<li>
+<p>l&#8217;endroit où ce contenu doit être ajouté.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Nous les indiquons avec les propriétés <code>path</code> (chemin d&#8217;accès), <code>content</code> (contenu) et <code>before</code> (avant) pour indiquer l&#8217;endroit :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- name: "Enregistrement envoi dans l'historique"
+  id: historique
+  type: add-to-file
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notez qu&#8217;à la place de <code>before</code>, on peut utiliser <code>after</code> (après) ou <code>where</code> (“où”, solution complexe pour indiquer la place exacte, lorsqu&#8217;elle n&#8217;eest pas simple à définir). Pour ces propriétés, voir le type <a href="#scserv-type-add-to-file"><code>add-to-file</code></a>.</p>
+</div>
+<div class="paragraph">
+<p>Dans le script réel, j&#8217;ai la possibilité de ne pas incrémenter l&#8217;historique (par exemple lorsque je veux préparer l&#8217;envoi mais que je ne sais pas encore quand je vais pouvoir le faire). Cela va nous permettre d&#8217;étudier le type <a href="#scserv-type-select"><code>select</code></a> et les conditions.</p>
+</div>
+<div class="paragraph">
+<p>En fait, c&#8217;est en demandant la date d&#8217;envoi que nous allons savoir ça :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pour fonctionner, le type <a href="#scserv-type-select"><code>select</code></a> a besoin de :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>un titre dans <code>title</code> (le titre de la fenêtre de demande),</p>
+</li>
+<li>
+<p>une question dans <code>q</code> (la question posée à l&#8217;utilisateur),</p>
+</li>
+<li>
+<p>une liste de valeurs à proposer, dans <code>values</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Et comme là je veux me laisser la possibilité de donner ma propre date, j&#8217;ajoute :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>le nom du bouton pour créer une nouvelle valeur dans <code>create</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Comme vous pourrez le voir dans la description du type <a href="#scserv-type-select"><code>select</code></a>, il y a plusieurs manière de donner les valeurs du menu select. Celle-ci :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… affichera les items "Aujourd&#8217;hui", "Demain" et "Pas encore" et le texte qui leur est accolé ('today', 'demain', 'non') sera la valeur donnée en fonction du choix. Ici, si je choisis "Pas encore", alors l&#8217;étape <code>date-histo</code> prendra la valeur <code>non</code>. C&#8217;est aussi simple que ça. Et donc, il suffit que je vérifie cette condition :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if "${date-histo} = non"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette condition signifie SI (if en anglais) la valeur de l&#8217;étape <code>date-histo</code> (<code>${date-histo}</code>) vaut (<code>=</code>) <code>non</code> alors on exécute l&#8217;étape. Donc :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Demande de la date d'envoi (ou pas)
+- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+
+# Enregistrement dans l'historique, soumis à condition
+- if "${date-histo} = non"
+  name: "Enregistrement envoi dans l'historique"
+  id: historique
+  type: add-to-file
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Donc, cette étape d&#8217;enregistrement dans l&#8217;historique ne sera exécutée que si je n&#8217;ai pas choisi "Pas encore".</p>
+</div>
+<div class="paragraph">
+<p>Nous avons donc régler nos quatre étapes décisives, nous allons pouvoir finaliser tout à fait le script-service, mais vous allez voir qu&#8217;il nous reste du travail !</p>
+</div>
+<div class="paragraph">
+<p>Nous allons commencer par demander de choisir un éditeur. C&#8217;est encore le type <a href="#scserv-type-select"><code>select</code></a> qui va être mis à contribution, mais cette fois, à l&#8217;aide d&#8217;un fichier qui contient tous les éditeurs, un fichier actualisable. Et nous avons aussi la possibilité d&#8217;en créer un nouveau, donc nous renseignons le nom du bouton create dans <code>create</code>. Cela donne :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id:     editeur-id
+  type:   select
+  title: "Choix de la maison d’édition"
+  q: "Choisir une maison dans la liste ou en introduire une nouvelle."
+  values: "./envois/editeurs.yaml"
+  key_value: id
+  key_title: name
+  create: "Nouvel éditeur…"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nous avons une étape un peu plus complexe ici, au niveau des valeurs… Ce qu&#8217;il faut comprendre, c&#8217;est que les <em>objets</em> contenus par le fichier <code>./envois/editeurs.yaml</code> sont des objets à plusieurs propriétés, comme nous l&#8217;avons vu tout à l&#8217;heure. Sans autre indication que ce fichier, cette étape du script-service ne saurait pas quelle propriété utiliser. Donc, ici, nous devons lui indiquer <code>key_value</code> et <code>key_title</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>key_value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indique la propriété (key) de l&#8217;objet qui doit servir de valeur finale (comme le "non" de tout à l&#8217;heure).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>key_title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indique la propriété de l&#8217;objet qui doit servir de titre à l&#8217;item, donc le nom que l&#8217;on lira dans le menu.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Donc, dans notre objet éditeur, on prendra la propriété <code>name</code> qui servira de titre à l&#8217;item de menu, et la propriété <code>id</code> sera la valeur, donc la valeur donnée au final à cette étape.</p>
+</div>
+<div class="paragraph">
+<p>Pour rappel, un objet éditeur dans le fichier <code>./envois/editeurs.yaml</code> contient :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id:  gallimard  # Identifiant de l'éditeur
+  name: Gallimard # nom
+  adresse: |&gt;
+    Son addresse
+  phone:    555 01 02 # son téléphone
+  ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Si le bouton "Nouvel éditeur…" est cliqué, la valeur est mise à '' (chaine vide). Dans les étapes suivantes, nous devons donc tester cette valeur pour savoir s&#8217;il faut définir ou non un nouvel éditeur. Comme les script-services ne peuvent pas définir plusieurs valeurs en même temps (c&#8217;est un principe fondateur), nous devons prendre plusieurs étapes pour définir cet éditeur. Chacune de ces étapes, évidemment, sera conditionnée par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if "${editeur-id} = ''"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… pour ne pas être jouée si l&#8217;éditeur a été choisi dans la liste.</p>
+</div>
+<div id="scserv-tuto-get-editor-infos" class="paragraph">
+<p>Voilà la suite des données à rassembler. Noter que l&#8217;identifiant de ces étapes est particulièrement important, comme nous le verrons dans la suite, et qu&#8217;il doit être choisi avec soin.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Demander l'identifiant (non simple)
+# Sera mis dans ${new-editor-id}
+- if: "${editeur-id} = ''"
+  id: "new-editor-id"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Identifiant (ascii) du nouvel éditeur :"
+
+# Demander le vrai nom
+# Sera mis dans ${new-editor-name}
+- if: "${editeur-id} = ''"
+  id: "new-editor-name"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Nom du nouvel éditeur :"
+
+# Demander l'adresse
+# Sera mis dans ${new-editor-adresse}
+- if: "${editeur-id} = ''"
+  id: "new-editor-adresse"
+  type: text    # &lt;= noter, un texte multi-lignes
+  title: "Nouvel éditeur"
+  q: "Adresse physique du nouvel éditeur :"
+
+# Demander le téléphone
+# Sera mis dans ${new-editor-phone}
+- if: "${editeur-id} = ''"
+  id: new-editor-phone
+  type: phone
+  title: "Nouvel éditeur"
+  q: "Numéro de téléphone du nouvel éditeur :"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maintenant que nous avons les informations du nouvel éditeur, nous pouvons les ajouter au fichier. On peut le faire avec le type <a href="#scserv-type-save-data"><code>save-data</code></a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${editeur-id} = ''"
+  id: 'enregistrement-editeur'
+  type: "save-data"
+  path: "./envois/editeurs.yaml"
+  prefix: 'new-editor'
+  keys: ['id', 'name', 'adresse', 'phone']</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Attenton, il faut être attentif pour ce type particulier. Il a besoin de <code>prefix</code> et de <code>keys</code> pour pouvoir opérer. Le <em>préfix</em> et les <em>clés</em> (keys) s&#8217;assemblent pour former les valeurs qui constitueront le nouvel objet :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Nouvel objet</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Key</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Composition</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Id étape</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Valeur étape</strong>*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;prefix&gt;-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new-editor-id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"${new-editor-id}"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;prefix&gt;-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new-editor-name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"${new-editor-name}"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>adresse</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;prefix&gt;-adresse</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new-editor-adresse</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"${new-editor-adresse}"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;prefix&gt;-phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new-editor-phone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"${new-editor-phone}"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Vous comprenez maintenant pourquoi le nom des étapes de <a href="#scserv-tuto-get-editor-infos">récolte des informations du nouvel éditeur</a> sont tellement importantes.</p>
+</div>
+<div class="paragraph">
+<p>Un point de détail qui échappera au Padawan mais que maitre Yoda ne manquera pas de noter : c&#8217;est la seconde fois que je définis :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>path: "./envois/editeurs.yaml"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le problème de ce genre de définition est le suivi : si le fichier change de lieu, je vais avoir plusieurs endroits à changer, si j&#8217;y pense ! C&#8217;est une faiblesse de conception.</p>
+</div>
+<div class="paragraph">
+<p>Au lieu de ça, il vaut mieux définir une variable qui contiendra ce chemin d&#8217;accès et l&#8217;utiliser partout où il devra être utilisé. De cette manière, si je change l&#8217;endroit, j&#8217;ai une seule modification à faire et toutes les utilisations s&#8217;adaptent. Pour ce faire, j&#8217;utilise le type <a href="#scserv-type-set"><code>set</code></a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+### Tout en haut du fichier
+- id: editors-data
+  type: set
+  value: "./envois/editeurs.yaml"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Et ensuite, je peux l&#8217;utiliser :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id:     editeur-id
+  type:   select
+  values: "${editors-data}"  # &lt;= variable
+  ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… et puis :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${editeur-id} = ''"
+  id: 'enregistrement-editeur'
+  type: "save-data"
+  path: "${editors-data}"  # &lt;= variable
+  ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vous n&#8217;y penserez peut-être pas tout de suite, mais lorsque vous aurez commis plusieurs fois l&#8217;erreur, ça finira pas rentrer. <em>Long est l&#8217;apprentissage du Jedi</em></p>
+</div>
+<div class="paragraph">
+<p>Et maintenant, je ne dois pas oublier une dernière chose : donner à <code>editeur-id</code> la valeur qu&#8217;il doit avoir, car il est toujours à "" pour le moment. J&#8217;utilise là aussi le type <a href="#scserv-type-set"><code>set</code></a>, mais en indiquant la valeur de quelle étape je veux définir.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${editeur-id} == ''"
+  id: 'affectation-editeur'
+  type: set
+  step: 'editeur-id'
+  value: ${new-editor-id}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>step</code> contient l&#8217;identifiant de l&#8217;étape qui doit être affectée. Et l&#8217;on prend bien sûr la valeur dans l&#8217;étape <code>new-editor-id</code> dans laquelle elle a été définie.</p>
+</div>
+<div class="paragraph">
+<p>BRAVO ! Vous venez d&#8217;accomplir déjà un gros morceau ! Nous avons choisi la maison d&#8217;édition en en définissant une nouvelle. Mais le chemin est encore long avant de voir le manuscrit partir. Dites-vous simplement que ce temps que vous passez sera <em>très vite</em> rattrapé chaque fois que vous aurez un envoi à effectuer.</p>
+</div>
+<div class="paragraph">
+<p>Maintenant que nous avons l&#8217;identifiant de l&#8217;éditeur, nous pouvons créer son dossier, étape que nous avons déjà implémentée :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: creation-du-dossier-envoi
+  type: 'create-folder'
+  path: "./envois/${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>L&#8217;étape suivante, celle qui récupère le manuscrit, a déjà été codée aussi :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'manuscrit-path'
+  type: 'get-project-data'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Son type <a href="#scserv-type-get-project-data"><code>get-project-data</code></a> permet de récupérer une valeur dans le projet, ici le chemin d&#8217;accès au manuscrit à transmettre.</p>
+</div>
+<div class="paragraph">
+<p>Le souci, c&#8217;est que la première fois, cette propriété n&#8217;est pas définie pour le projet. Il faut donc en tenir compte, en sachant qu&#8217;une propriété non définie va retourner <code>null</code>. Il faut donc, après cette étape, avoir celle-ci :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${manuscrit-path} = null"
+  id: 'selection-manuscrit'
+  type: 'select-file'
+  title: "Choix du manuscrit"
+  q: "Choisir le manuscrit à envoyer dans le Finder puis “OK”."</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ici, le type <a href="#scserv-type-select-file"><code>select-file</code></a> (sélection de fichier) nous permet de choisir un fichier dans le Finder. Nous allons choisir le manuscrit. Et l&#8217;étape suivante permettra d&#8217;enregistrer ce manuscrit comme donnée de projet ; nous n&#8217;aurons plus à le préciser.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Lorsque le manuscrit changera, s&#8217;il a changé de nom (s&#8217;il est versionné par exemple), on pourra utiliser la <a href="#project-remove-data">destruction des données de projet</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${manuscrit-path} = null"
+  id:   set-manuscrit-path
+  type: set-project-data
+  project_key: manuscrit-path
+  value: "${selection-manuscrit}"
+  set:  manuscript-path</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le type <a href="#scserv-type-set-project-data"><code>set-project-data</code></a> permet d&#8217;enregistrer la propriété de clé <code>project_key</code> (<code>manuscrit-path</code> ici) avec la valeur de <code>${selection-manuscrit}</code>, l&#8217;étape précédente.</p>
+</div>
+<div class="paragraph">
+<p>Le paramètre <code>set</code>, ici, va nous permettre de gagner une étape. En même temps qu&#8217;il définit la propriété du projet, il permet de définir la valeur de l&#8217;étape de l&#8217;identifiant donné, ici <code>manuscrit-path</code>.</p>
+</div>
+<div class="paragraph">
+<p>Donc, après cette étape, notre "${selection-manuscrit}" est renseigné.</p>
+</div>
+<div class="paragraph">
+<p>Maintenant qu&#8217;on a le manuscript, on peut procéder à la copie :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'duplication-manuscrit'
+  type: 'copy-file'
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pour le type <a href="#scserv-type-copy-file"><code>copy-file</code></a>, comme nous l&#8217;avons vu, il faut définir simplement <code>source</code> et <code>dest</code>.</p>
+</div>
+<div class="paragraph">
+<p>Pour la suite — la création du fichier avec les informations — nous devons avoir la donnée complète de l&#8217;éditeur ; rappelons-nous que si nous n&#8217;avons pas créé de nouvel éditeur, nous avons seulement son identifiant (<code>id</code>). Pour ce faire, nous allons utiliser le type <a href="#scserv-type-get-data"><code>get-data</code></a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'data-editor'
+  type: 'get-data'
+  path: "${editors-data}"
+  data_id:  "${editeur-id}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pour ce type, nous devons préciser le chemin d&#8217;accès à la base des données (qui peut-être un fichier YAML, CSV ou même une base SQlite) dans la propriété <code>path</code>. Remarquez qu&#8217;à nouveau nous utilisons la variable <code>${editors-data}</code> et pas le chemin explicite, qui peut changer.</p>
+</div>
+<div class="paragraph">
+<p>Le fichier indiqué pourrait ne contenir que la donnée que nous voulons, nous n&#8217;aurions alors pas besoin de <code>data_id</code>. Mais en l&#8217;occurence, ce fichier contient TOUTES les informations sur TOUS les éditeurs que nous avons, docn nous devons préciser quel est l&#8217;identifiant (propriété <code>id</code> dans les données) de la donnée précise que nous attendons. Nous l&#8217;indiquons avec <code>data_id</code>. Elle correspond bien entendu à l&#8217;identifiant de l&#8217;éditeur.</p>
+</div>
+<div class="paragraph">
+<p>Nous pouvons à présent créer le fichier d&#8217;information grâce au type <a href="#scserv-type-create-file"><code>create-file</code></a> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id:     'fichier-info-editeur'
+  type:   'create-file'
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ici, le chemin peut être mis <em>en dur</em> puisqu&#8217;il ne sera utilisé qu&#8217;ici.</p>
+</div>
+<div class="paragraph">
+<p>Comme nous l&#8217;avons déjà vu, nous devons demander quand l&#8217;envoi aura lieu :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Si une autre date doit être choisie (bouton "Autre date…") nous devons la définir :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${date-histo} == ''"
+  id: 'date-custom'
+  type: string
+  title: "Date de l'envoi"
+  q: "À quelle date doit être envoyé ce manuscrit ? (JJ MM)"
+  set: date-histo</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vous êtes normalement tout à fait en mesure maintenant de comprendre toute cette étape conditionnelle.</p>
+</div>
+<div class="paragraph">
+<p>Rappelez-vous le paramètre <code>set</code> qui permet de définir aussitôt la valeur de l&#8217;étape <code>date-histo</code>. Nous n&#8217;avons pas à utiliser une étape juste pour l&#8217;affecter (j&#8217;adore ce genre de propriété).</p>
+</div>
+<div class="paragraph">
+<p>Mais ici, avant de renseigner l&#8217;historique des envois, nous avons quand même un petit problème… Pour le moment, la date (<code>${date-histo}</code>) a possiblement une de ces valeurs :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>"demain"</p>
+</li>
+<li>
+<p>"today"</p>
+</li>
+<li>
+<p>"05 08"</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>À part la dernière — et encore —, ça ne sera pas très expressif dans l&#8217;historique… Il nous faut donc pouvoir convertir cette valeur en vraie valeur significative.</p>
+</div>
+<div class="paragraph">
+<p>Nous utilisons pour ça l&#8217;étape conditionnelle de type <a href="#scserv-type-translate"><code>translate</code></a> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${date-histo} ≠ non"
+  id:     date-to-real-date
+  type:   translate
+  step:   date-histo
+  format: '%J %_M %Y'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ici, le paramètre <code>step</code> (étape) est ce que l&#8217;on appelle un <em>getter</em> et un <em>setter</em>, c&#8217;est-à-dire qu&#8217;il va en même temps servir à récupérer la valeur (ce sera celle de l&#8217;étape <code>date-histo</code>) et à la redéfinir avec la bonne valeur. Le format, quant à lui, permet de dire quelle forme doit avoir la donnée résultante. Ici, elle devra resembler à "5 aout 2026" (<em>savez-vous qu&#8217;il n&#8217;y a plus de circonflexe à "aout" ?</em>). Pour les valeurs “translatable” et les formats, cf. <a href="#scserv-translate-markers-and-formats">la description des marqueurs et des formats</a>.</p>
+</div>
+<div class="paragraph">
+<p>Il ne nous reste plus qu&#8217;à enregistrer une ligne d&#8217;historique dans le fichier :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- if: "${date-histo} ≠ non"
+  id: 'add-envoi-to-historique'
+  type: 'add-to-file'
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le type <a href="#scserv-type-add-to-file"><code>add-to-file</code></a> se sert ici de <code>content</code> pour définir le contenu à injecter dans le fichier de chemin <code>path</code> en le plaçant avant (<code>before</code>) un retour chariot suivi d&#8217;un tiret, comprendre : le dernier envoi. La ligne ajoutée ressemblera à :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- 5 aout 2026 Envoi aux éditions Gallimard.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… suivie d&#8217;un retour chariot.</p>
+</div>
+<div class="paragraph">
+<p>Noter pour finir que l&#8217;étape ne sera jouée que si une date avait été fixée ou choisie.</p>
+</div>
+<div class="paragraph">
+<p>BRAVO ! Vous êtes parvenu(e) au bout de ce tutoriel qui vous a permis, je l&#8217;espère, de mesurer tout le potentiel de ces <em>scripts-services</em>.</p>
+</div>
+<div class="paragraph">
+<p>La version complète est présentée ci-dessous :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: editors-data
+  type: set
+  value: "./envois/editeurs.yaml"
+
+- id:     editeur-id
+  type:   select
+  values: "${editors-data}"
+  create: "Nouvel éditeur…"
+  key_value: id
+  key_title: name
+  title: "Choix de la maison d’édition"
+  q: "Choisir un éditeur dans la liste ou en introduire un nouveau."
+
+- if: "${editeur-id} = ''"
+#  id: "new-editeur-id"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Identifiant (ascii) du nouvel éditeur :"
+
+- if: "${editeur-id} = ''"
+  id: "new-editeur-name"
+  type: string
+  title: "Nouvel éditeur"
+  q: "Nom du nouvel éditeur :"
+
+- if: "${editeur-id} = ''"
+  id: "new-editeur-adresse"
+  type: text
+  title: "Nouvel éditeur"
+  q: "Adresse physique du nouvel éditeur :"
+
+- if: "${editeur-id} = ''"
+  id: new-editeur-phone
+  type: phone
+  title: "Nouvel éditeur"
+  q: "Numéro de téléphone du nouvel éditeur :"
+
+## Pour enregistrer l'éditeur
+- if: "${editeur-id} = ''"
+  id: 'enregistrement-editeur'
+  type: "save-data"
+  path: "${editors-data}"
+  prefix: 'new-editeur'
+  keys: ['id', 'name', 'adresse', 'phone']
+
+- if: "${editeur-id} == ''"
+  id: 'affectation-editeur'
+  type: set
+  step: 'editeur-id'
+  value: ${editeur-id-id}
+
+- id: creation-du-dossier-envoi
+  type: 'create-folder'
+  path: "./envois/${editeur-id}"
+
+- id: 'manuscrit-path'
+  type: 'get-project-data'
+
+- if: "${manuscrit-path} = null"
+  id: 'selection-manuscrit'
+  type: 'select-file'
+  title: "Choix du manuscrit"
+  q: "Choisir le manuscrit à envoyer dans le Finder puis “OK”."
+
+- if: "${manuscrit-path} = null"
+  id:   set-manuscrit-path
+  type: set-project-data
+  project_key: manuscrit-path
+  value: "${selection-manuscrit}"
+  set:  manuscript-path
+
+- id: 'duplication-manuscrit'
+  type: 'copy-file'
+  source: "${manuscrit-path}"
+  dest: "./envois/${editeur-id}"
+
+- id: 'data-editor'
+  type: 'get-data'
+  path: "${editors-data}"
+  data_id:  "${editeur-id}"
+
+- id: 'fichier-info-editeur'
+  type: 'create-file'
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"
+
+# Demander s'il faut ajouter à l'historique
+- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+
+- if: "${date-histo} == ''"
+  id: 'date-custom'
+  type: string
+  title: "Date de l'envoi"
+  q: "À quelle date doit être envoyé ce manuscrit ?"
+  set: date-histo
+
+- if: "${date-histo} == ''"
+  id:     date-mark-to-real-date
+  type:   translate
+  step:   date-histo # getter et setter
+  format: '%J %_M %Y'
+
+# Ajouter à l'historique s'il le faut
+- if: "${date-histo} ≠ non"
+  id: 'add-envoi-to-historique'
+  type: 'add-to-file'
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"</pre>
+</div>
+</div>
+<hr>
 </div>
 <div class="sect2">
 <h3 id="_erreurs_classiques">Erreurs classiques</h3>
@@ -1089,6 +1964,14 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Manifestation</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Erreur</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Signalement d&#8217;erreur</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Étape définie sans <code>id</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Signalement d&#8217;erreur</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Étape définie avec un <code>id</code> existant.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1375,7 +2258,7 @@ Noter les retours de chariot marqués par "\n".</p></td>
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant de l&#8217;étape.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>values</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keys</code></p></td>
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Les valeurs à enregistrer ou les identifiants</p></td>
 </tr>
 <tr>
@@ -1386,7 +2269,7 @@ Noter les retours de chariot marqués par "\n".</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">avec <code>prefix</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Les clés d&#8217;un objet à reconstituer qui serviront aussi à obtenir les valeurs depuis les étapes d&#8217;identifiant <code>&lt;prefix&gt;-&lt;clé&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les clés d&#8217;un objet à reconstituer qui serviront aussi à obtenir les valeurs depuis les étapes d&#8217;identifiant <code>&lt;prefix&gt;-&lt;key&gt;</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>prefix</code></p></td>
@@ -1520,7 +2403,7 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
   format: '%J %_M</pre>
 </div>
 </div>
-<div class="paragraph">
+<div id="scserv-translate-markers-and-formats" class="paragraph">
 <p><strong>Liste des marqueurs existants</strong></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1769,11 +2652,11 @@ Cette valeur est souvent réaffectée à l&#8217;étape <code>select</code> grâ
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>get-data</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>base</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Chemin d&#8217;accès au fichier contenant les données (évaluable)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Si précisé, c&#8217;est la clé à prendre, qui deviendra la valeur de l&#8217;étape.<br>
 Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#8217;étape.</p></td>
 </tr>
@@ -1857,7 +2740,7 @@ Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#
   id: new-book
   type: save-data
   prefix: newlivre      # préfixe des étapes de définition
-  values: ['titre', 'id', 'resume', 'auteur', 'annee']
+  keys: ['titre', 'id', 'resume', 'auteur', 'annee']
   path: "${books-file}"  # L'objet sera placé dans ce fichier
 
 # Il reste enfin à définir ${livre-id} qui sera utilisé par
@@ -1875,8 +2758,8 @@ Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#
 # On charge les données du livre
 - id: book-data
   type: get-data
-  base: "${books-file}"
-  key:  "${livre-id}"</pre>
+  path: "${books-file}"
+  data_id:  "${livre-id}"</pre>
 </div>
 </div>
 </div>
@@ -3424,7 +4307,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-27 07:24:10 +0200
+Last updated 2026-07-30 09:24:34 +0200
 </div>
 </div>
 </body>

@@ -69,6 +69,10 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
 # etc.
 ----
 
+
+[[scserv-tuto-create-script-service, création d'un script-service]]
+=== Tutoriel : création d'un script-service ===
+
 Pour illustrer l'explication qui va suivre, nous allons imaginer être une autrice ou un auteur et programmer un service de suivi d'envoi de manuscrits à des maisons d'édition comme celui présenté plus haut, pour ne pas avoir à répéter les mêmes actions des dizaines de fois, ce qui peut être pénible si l'on écrit un roman, voire plus, par an.
 
 En apparence, ce service doit être simple : 
@@ -273,7 +277,7 @@ En fait, c'est en demandant la date d'envoi que nous allons savoir ça :
   values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
 ----
 
-Pour fonction, le type <<scserv-type-select>> a besoin de : 
+Pour fonctionner, le type <<scserv-type-select>> a besoin de : 
 
 - un titre dans `title` (le titre de la fenêtre de demande),
 - une question dans `q` (la question posée à l'utilisateur),
@@ -545,15 +549,89 @@ Pour la suite — la création du fichier avec les informations — nous devon
 
 Pour ce type, nous devons préciser le chemin d'accès à la base des données (qui peut-être un fichier YAML, CSV ou même une base SQlite) dans la propriété `path`. Remarquez qu'à nouveau nous utilisons la variable `${editors-data}` et pas le chemin explicite, qui peut changer.
 
-Nous devons bien sûr indiquer quel sera la valeur pour 
+Le fichier indiqué pourrait ne contenir que la donnée que nous voulons, nous n'aurions alors pas besoin de `data_id`. Mais en l'occurence, ce fichier contient TOUTES les informations sur TOUS les éditeurs que nous avons, docn nous devons préciser quel est l'identifiant (propriété `id` dans les données) de la donnée précise que nous attendons. Nous l'indiquons avec `data_id`. Elle correspond bien entendu à l'identifiant de l'éditeur.
 
-XXX
+Nous pouvons à présent créer le fichier d'information grâce au type <<scserv-type-create-file>> :
 
-{{todo: revenir sur `manuscrit-path` qui a juste été posé}}
-{{todo: revenir sur `editeur-id` — attention, dans le script original, ça s'appelle `editeur-choix`}}
+----
+- id:     'fichier-info-editeur'
+  type:   'create-file'
+  content: "${data-editor}.adresse\n\n${data-editor}.phone"
+  path:   "./envois/${editeur-id}/infos.md"
+----
 
+Ici, le chemin peut être mis _en dur_ puisqu'il ne sera utilisé qu'ici.
 
-Au final, le script-service ressemble donc à ça :
+Comme nous l'avons déjà vu, nous devons demander quand l'envoi aura lieu : 
+
+----
+- id: 'date-histo'
+  type: select
+  title: "Date de l'envoi"
+  q: "Faut-il ajouter cet envoi à  l'historique des envois ? Et si oui, quelle date faut-il indiquer ?"
+  create: 'Autre date…'
+  values: [['today', 'Aujourd’hui'], ['demain', "Demain"], ['non', 'Pas encore']]
+----
+
+Si une autre date doit être choisie (bouton "Autre date…") nous devons la définir : 
+
+----
+- if: "${date-histo} == ''"
+  id: 'date-custom'
+  type: string
+  title: "Date de l'envoi"
+  q: "À quelle date doit être envoyé ce manuscrit ? (JJ MM)"
+  set: date-histo
+----
+
+Vous êtes normalement tout à fait en mesure maintenant de comprendre toute cette étape conditionnelle.
+
+Rappelez-vous le paramètre `set` qui permet de définir aussitôt la valeur de l'étape `date-histo`. Nous n'avons pas à utiliser une étape juste pour l'affecter (j'adore ce genre de propriété).
+
+Mais ici, avant de renseigner l'historique des envois, nous avons quand même un petit problème… Pour le moment, la date (`${date-histo}`) a possiblement une de ces valeurs : 
+
+- "demain"
+- "today"
+- "05 08"
+
+À part la dernière — et encore —, ça ne sera pas très expressif dans l'historique… Il nous faut donc pouvoir convertir cette valeur en vraie valeur significative.
+
+Nous utilisons pour ça l'étape conditionnelle de type <<scserv-type-translate>> :
+
+----
+- if: "${date-histo} ≠ non"
+  id:     date-to-real-date
+  type:   translate
+  step:   date-histo
+  format: '%J %_M %Y'
+----
+
+Ici, le paramètre `step` (étape) est ce que l'on appelle un _getter_ et un _setter_, c'est-à-dire qu'il va en même temps servir à récupérer la valeur (ce sera celle de l'étape `date-histo`) et à la redéfinir avec la bonne valeur. Le format, quant à lui, permet de dire quelle forme doit avoir la donnée résultante. Ici, elle devra resembler à "5 aout 2026" (_savez-vous qu'il n'y a plus de circonflexe à "aout" ?_). Pour les valeurs “translatable” et les formats, cf. <<scserv-translate-markers-and-formats, la description des marqueurs et des formats>>.
+
+Il ne nous reste plus qu'à enregistrer une ligne d'historique dans le fichier :
+
+----
+- if: "${date-histo} ≠ non"
+  id: 'add-envoi-to-historique'
+  type: 'add-to-file'
+  before: "\n-"
+  path: "./envois/_HISTORIQUE_.md"
+  content: "- ${date-histo} Envoi aux éditions ${data-editor}.name\n"
+----
+
+Le type <<scserv-type-add-to-file>> se sert ici de `content` pour définir le contenu à injecter dans le fichier de chemin `path` en le plaçant avant (`before`) un retour chariot suivi d'un tiret, comprendre : le dernier envoi. La ligne ajoutée ressemblera à : 
+
+----
+- 5 aout 2026 Envoi aux éditions Gallimard.
+----
+
+… suivie d'un retour chariot.
+
+Noter pour finir que l'étape ne sera jouée que si une date avait été fixée ou choisie.
+
+BRAVO ! Vous êtes parvenu(e) au bout de ce tutoriel qui vous a permis, je l'espère, de mesurer tout le potentiel de ces _scripts-services_.
+
+La version complète est présentée ci-dessous :
 
 ----
 ---
@@ -561,7 +639,7 @@ Au final, le script-service ressemble donc à ça :
   type: set
   value: "./envois/editeurs.yaml" 
 
-- id:     choix-editeur
+- id:     editeur-id
   type:   select
   values: "${editors-data}"
   create: "Nouvel éditeur…"
@@ -570,47 +648,47 @@ Au final, le script-service ressemble donc à ça :
   title: "Choix de la maison d’édition"
   q: "Choisir un éditeur dans la liste ou en introduire un nouveau."
 
-- if: "${choix-editeur} = ''"
-#  id: "choix-editeur-id"
+- if: "${editeur-id} = ''"
+#  id: "new-editeur-id"
   type: string
   title: "Nouvel éditeur"
   q: "Identifiant (ascii) du nouvel éditeur :"
 
-- if: "${choix-editeur} = ''"
-  id: "choix-editeur-name"
+- if: "${editeur-id} = ''"
+  id: "new-editeur-name"
   type: string
   title: "Nouvel éditeur"
   q: "Nom du nouvel éditeur :"
 
-- if: "${choix-editeur} = ''"
-  id: "choix-editeur-adresse"
+- if: "${editeur-id} = ''"
+  id: "new-editeur-adresse"
   type: text
   title: "Nouvel éditeur"
   q: "Adresse physique du nouvel éditeur :"
 
-- if: "${choix-editeur} = ''"
-  id: choix-editeur-phone
+- if: "${editeur-id} = ''"
+  id: new-editeur-phone
   type: phone
   title: "Nouvel éditeur"
   q: "Numéro de téléphone du nouvel éditeur :"
 
 ## Pour enregistrer l'éditeur
-- if: "${choix-editeur} = ''"
+- if: "${editeur-id} = ''"
   id: 'enregistrement-editeur'
   type: "save-data"
   path: "${editors-data}"
-  prefix: 'choix-editeur' # donnera 'choix-editeur-id', 'choix-editeur-name', etc.
+  prefix: 'new-editeur'
   keys: ['id', 'name', 'adresse', 'phone']
   
-- if: "${choix-editeur} == ''"
+- if: "${editeur-id} == ''"
   id: 'affectation-editeur'
   type: set
-  step: 'choix-editeur'
-  value: ${choix-editeur-id}
+  step: 'editeur-id'
+  value: ${editeur-id-id}
   
 - id: creation-du-dossier-envoi
   type: 'create-folder'
-  path: "./envois/${choix-editeur}"
+  path: "./envois/${editeur-id}"
   
 - id: 'manuscrit-path'
   type: 'get-project-data'
@@ -631,18 +709,17 @@ Au final, le script-service ressemble donc à ça :
 - id: 'duplication-manuscrit'
   type: 'copy-file'
   source: "${manuscrit-path}"
-  dest: "./envois/${choix-editeur}"
-
+  dest: "./envois/${editeur-id}"
 
 - id: 'data-editor'
   type: 'get-data'
   path: "${editors-data}"
-  data_id:  "${choix-editeur}"
+  data_id:  "${editeur-id}"
   
 - id: 'fichier-info-editeur'
   type: 'create-file'
   content: "${data-editor}.adresse\n\n${data-editor}.phone"
-  path:   "./envois/${choix-editeur}/infos.md"
+  path:   "./envois/${editeur-id}/infos.md"
 
 # Demander s'il faut ajouter à l'historique
 - id: 'date-histo'
@@ -659,7 +736,8 @@ Au final, le script-service ressemble donc à ça :
   q: "À quelle date doit être envoyé ce manuscrit ?"
   set: date-histo
 
-- id:     date-mark-to-real-date
+- if: "${date-histo} == ''"
+  id:     date-mark-to-real-date
   type:   translate
   step:   date-histo # getter et setter
   format: '%J %_M %Y'
@@ -925,7 +1003,7 @@ Si `step` est utilisé, c'est sa valeur qui est prise et remplacée. Noter qu'al
   format: '%J %_M
 ----
 
-
+[[scserv-translate-markers-and-formats]]
 **Liste des marqueurs existants**
 
 [cols="1,1,5"]
