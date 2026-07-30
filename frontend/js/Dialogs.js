@@ -249,10 +249,11 @@ class ConfigDialog extends Dialog {
     this.props.forEach(dprop => {
       // console.log("dprop = ", dprop)
       if ( dprop.editable === false ) return
-      const line = DCreate('DIV', {class: 'config-data-prop'})
-      const name = DCreate('SPAN', {text: dprop.name, class: 'config-data-name'})
-      const desc = DCreate('SPAN', {text: dprop.desc || '', class: 'config-data-desc'})
-      const valu = DCreate('SPAN', {text: dprop.value ?? '', class: 'config-data-value'})
+      const prefixId = `${this.id}-${this.dprop.id}`
+      const line = DCreate('DIV', {id: `${prefixId}-line`, class: 'config-data-prop'})
+      const name = DCreate('SPAN', {id: `${prefixId}-name`, text: dprop.name, class: 'config-data-name'})
+      const desc = DCreate('SPAN', {id: `${prefixId}-desc`, text: dprop.desc || '', class: 'config-data-desc'})
+      const valu = DCreate('SPAN', {id: `${prefixId}-value`, text: dprop.value ?? '', class: 'config-data-value'})
       listen(valu, 'click', (ev) => {
         const callback = (values) => {
           console.log("values reçues", values)
