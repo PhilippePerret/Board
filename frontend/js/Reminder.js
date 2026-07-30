@@ -83,6 +83,15 @@ class Reminder extends ExtendedObject {
   }
 
   /**
+   * Destruction du rappel +reminder+
+   */
+  static remove(reminder) {
+    const idx = this.__eo_ids.indexOf(reminder.id)
+    this.__eo_ids.splice(idx, 1)
+    this.__eo_items.splice(idx, 1)
+    delete this.__eo_table[reminder.id]
+  }
+  /**
    * Suppression des reminders du type +type+
    * 
    * Fonction qui checke la validité des reminders courant
@@ -115,15 +124,23 @@ class Reminder extends ExtendedObject {
       this.task = data.task
       this.constructor.addReminderToTask(data.task, this)
     }
+    console.log("Reminder enregistré", this)
   }
 
   /**
    * Fonction qui vérifie le temps +time+ avec le temps du rappel
    * et exécute le reminder si c'est l'heure
    */
-  execIfTime(date) {
-    // console.log("Temps comparés", date, this.time)
-    if (this.time <= date) this.exec()
+  execIfTime(now) {
+    // console.log("Temps comparés", now, this.time, this)
+    if ( this.time <= now ){
+      if ( DateUtils.close(this.time, now, 60) ) {
+        this.exec()
+      } else {
+        // L'heure est trop éloignée : on détruit ce rappel
+        this.constructor.remove(this)
+      }
+    }
   }
   /**
    * Exécution du rappel
@@ -138,15 +155,11 @@ class Reminder extends ExtendedObject {
     this.constructor.remove(this)
   }
 
-  destroy(){
-
-  }
-
 
   dataNotifierByType(type) {
     const data = {
         icon:       this.fullPathIcon()
-      , title:      this.title
+      , title:      this.calcTitle()
       , message:    this.message
       , background: '#333333'
       , font_color: '#FFFFFF'
@@ -167,6 +180,12 @@ class Reminder extends ExtendedObject {
 
     }
     return Object.assign(data, sup)
+  }
+
+  calcTitle(){
+    if (this.title) return title
+    if (this.project) return getMsg('title-project', this.project.title)
+    return
   }
 
   fullPathIcon(){

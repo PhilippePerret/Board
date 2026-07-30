@@ -1,6 +1,6 @@
 == BUGS ==
 
-- une tâche programmée à une certaine heure se déclenche trop tôt (1 heure avant)
+- BUG#1 une tâche programmée à une certaine heure se déclenche trop tôt (1 heure avant)
 
 - les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
   essayer en essayant de modifier une tâche sans en avoir sélectionné une
@@ -11,6 +11,8 @@
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
 
 == Todo En cours
+
+Bug #1
 
 == Todo list ==
 

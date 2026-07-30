@@ -14,6 +14,18 @@ class DateUtils {
   /**
    * @api
    * 
+   * @return true si les dates sont assez proches (moins du temps en minutes
+   * fourni en second argument)
+   */
+  static close(firstTime, lastTime, lapsMinutes) {
+    var diff = this._diff(firstTime, lastTime)
+    // console.log("closed = ", diff < lapsMinutes)
+    return diff < lapsMinutes
+  }
+
+  /**
+   * @api
+   * 
    * Retourne la {Date} à partir d'un string ISO 8601 ("2026-07-29T09:00:00Z")
    * 
    * Note : pour bénéficier des helpers, ajouter true en second paramètre
@@ -119,6 +131,12 @@ class DateUtils {
   }
 
 
+  // @return La différence en minutes entre +date1+ et +date2+
+  static _diff(date1, date2) {
+    var diff = Math.abs(date1.getTime() - date2.getTime())
+    diff = Math.round(diff / 1000) // => seconds
+    return diff / 60 // 
+  }
 
   static _parseHour(str){
     var found = str.match(REG_HOUR)
