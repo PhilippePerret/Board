@@ -771,8 +771,9 @@ class Project {
       this.tasks = data.today_tasks
       Reminder.destroy('task') // supprime tous les reminders de tâche
       this.setNombreTachesInBadge(this.tasks.length)
-      this.reactiveIfTask(this.tasks)
-      if (this.tasks.length) this.reactiveIfTask(this.tasks)
+      if (this.tasks.length) {
+        this.reactiveIfTask(this.tasks)
+      }
       message(true, getMsg('todoist-message-actualisation', [data.new_count, data.done_count, data.mod_count]))
     }
   }

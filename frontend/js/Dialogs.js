@@ -216,9 +216,46 @@ class ColorDialog extends Dialog {
 }
 
 
+/**
+ * Dialog complexe pour gestion de liste de propriétés
+ * 
+ * Dans le style du panneau :config de Firefox
+ * 
+ * Chaque ligne est une +prop+ qui peut avoir différents
+ * types :
+ * 
+ *    string      Une chaine
+ *    boolean     Une valeur booléenne (coché/décoché)
+ *    integer     Un nombre
+ */
+class ConfigDialog extends Dialog {
+  constructor(data){
+    super(data)
+    this.id ?? raise("Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
+    this.width    = '740px'
+    this.props    = data.props
+    this.content  = this.buildConfig()
+  }
+
+
+  buildConfig(){
+    const container = DCreate('DIV', {id: `${this.FId}-container`, class: 'config-dialog-container'})
+    this.props.forEach(prop => {
+      const line = DCreate('DIV', {class: 'config-data-prop'})
+      const name = DCreate('SPAN', {text: prop.name})
+      const desc = DCreate('SPAN', {text: prop.desc})
+      const valu = DCreate('SPAN', {text: prop.value})
+      line.appendChild(name)
+      line.appendChild(desc)
+      line.appendChild(valu)
+      container.appendChild(line)
+    })
+    return container
+  }
+}
 
 /**
- * Dialog pour gestion complète de LISTE DE TÂCHES
+ * Dialog complexe pour gestion complète de LISTE DE TÂCHES
  * 
  * Permet de créer de nouvelles tâches facilement.
  */
