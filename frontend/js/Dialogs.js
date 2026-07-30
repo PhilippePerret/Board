@@ -234,7 +234,7 @@ class ColorDialog extends Dialog {
 class ConfigDialog extends Dialog {
   constructor(data){
     super(data)
-    this.id ?? raise("Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
+    data.id ?? raise("Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
     this.width    = '840px'
     this.height   = '500px'
     this.props    = data.props

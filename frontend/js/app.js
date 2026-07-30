@@ -60,6 +60,7 @@ class App {
     })
     new ConfigDialog({
         title: 'Configuration de l’application'
+      , id: 'app-config'
       , props: props
       , ouiBtn: {name: getMsg('Save'), onclick: this.onSaveConfig.bind(this)}
       , nonBtn: {name: getMsg('Cancel')}
