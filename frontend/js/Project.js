@@ -308,6 +308,13 @@ class Project {
     this.services.others  = (this.services.others  ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'others'})))
   }
 
+  // Retourne le chemin absolu d'un chemin relatif au projet
+  getFullPath(relPath, prefix = '') {
+    if (relPath.startsWith('.')) relPath = relPath.slice(1)
+    if (relPath.startsWith('/')) relPath = relPath.slice(1)
+    return `${prefix}${this.path}/${relPath}`
+  }
+
   save(callback){
     const newData = {}
     this.constructor.PROPERTIES.forEach(prop => {
