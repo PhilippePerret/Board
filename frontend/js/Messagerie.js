@@ -148,7 +148,6 @@ class Notifier {
     data.buttons && html.push(this.buildDivButtons(data))
     html.push('</div>')
     const bounds = Measure.boundsOf(html.join(''))
-    console.log("bounds calculé:", bounds)
     html.push(this.scripts)
 
     return [html.join('').trim().replace(/\n/g,''), bounds.width, bounds.height]

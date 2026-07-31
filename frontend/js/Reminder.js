@@ -47,7 +47,7 @@ class Reminder extends ExtendedObject {
    * Vérifie tous les rappels pour voir ceux qui arriveraient à échéance
    */
   static poll() {
-    console.log("-> Reminder::poll", {now: new Date(), count: Number(this.count)})
+    // console.log("-> Reminder::poll", {now: new Date(), count: Number(this.count)})
     this.each('execIfTime', [new Date()])
     this.count > 0 || this.stop()
   }
@@ -60,7 +60,7 @@ class Reminder extends ExtendedObject {
   }
 
   static stop(){
-    console.log("-> Reminder::stop")
+    // console.log("-> Reminder::stop")
     clearInterval(this.runTimer)
     delete this.runTimer
     this.running = false

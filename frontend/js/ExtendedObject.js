@@ -38,7 +38,7 @@ class ExtendedObject {
    * @param args      [Array] Les arguments à transmettre
    */
   static each(method, args = []){
-    console.log("-> ExtendedObject::each", {method, count: String(this.count)})
+    // console.log("-> ExtendedObject::each", {method, count: String(this.count)})
     if ( this.count == 0 ) return
     if ( 'string' == typeof method ) {
       this.__eo_items.forEach(item => item[method].call(item, ...args))
