@@ -402,13 +402,17 @@ class Project {
       this.obj.classList[this.collapsed?'add':'remove']('collapsed')
       ev.type == 'mouseup' && stopEvent(ev)
     } else if (ev.type == 'mousedown') {
-      return stopEvent(ev)
+      stopEvent(ev)
     }
+    this.collapsed || this.onReactivation()
   }
   // Réactiver un projet en standby
   reactive(){
     this.collapsed = true
     this.standbyize({type: 'fake-mouseup'})
+  }
+  onReactivation(){
+    console.log("this.tasks", this.tasks)
     if (this.tasks){
       this.setNombreTachesInBadge(this.tasks.length)
     } else {
