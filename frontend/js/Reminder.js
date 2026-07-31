@@ -120,11 +120,18 @@ class Reminder extends ExtendedObject {
 
   constructor(data){
     super(data)
-    if (data.task){
-      this.task = data.task
-      this.constructor.addReminderToTask(data.task, this)
-    }
+    data.task && this.setAsTask()
     console.log("Reminder enregistré", this)
+  }
+
+  setAsTask(){
+    this.buttons = [
+        {name: 'Démarrée', onclick: Reminder.remove.bind(Reminder,this)}
+      , {name: 'Supprimer', onclick: Reminder.remove.bind(Reminder,this)}
+    ]
+    this.task = data.task
+    this.type = 'warning'
+    Reminder.addReminderToTask(data.task, this)
   }
 
   /**
@@ -165,6 +172,7 @@ class Reminder extends ExtendedObject {
       , font_color: '#FFFFFF'
       , mode:       'floating'
       , delay:      this.delay
+      , buttons:    this.buttons
     }
     var sup
     switch(type){

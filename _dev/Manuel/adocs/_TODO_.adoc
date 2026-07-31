@@ -11,16 +11,7 @@
 
 == Todo list ==
 
-- pouvoir déplacer en glissant le panneau des services (pour le rapproche d'un projet)
-- Il faudrait essayer de rationnaliser les données Projet, si c'est possible
-  Mais est-ce vraiment nécessaire ?
-  On a : 
-    - les données racines (title, date création, temps de travail, etc.)
-    - les données de services affectés (services startup et others)
-    - les données des autres services
-      - données des script-services 
-      - services communs non affectés
-- Pour les rappels de tâches à l'heure, les mettre en warning
+- Pour les rappels de tâches à l'heure, les mettre en warning (font orange)
 
 - Panneaux : il faudrait fermer le panneau avant de faire l'opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
   En fait : clic → Fermer fenêtre → Sablier → Confirmation fin

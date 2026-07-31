@@ -21,7 +21,10 @@ def run_test
 
   click('btn-remove-project')
   wait_for_suffix('btn-mid')
-  click_suffix('btn-mid')
+  # click_suffix_last, pas click_suffix : le ConfigDialog reste ouvert
+  # derrière avec son propre btn-mid (invisible, sans handler) — suffixe
+  # seul ambigu, cf. definition_genre_projet.rb
+  click_suffix_last('btn-mid')
 
   wait_until(desc: -> { "#{card_id} toujours présent dans l'accessibilité" }) { !exists?(card_id) }
   raise 'Board a quitté après suppression du projet affiché dans le ConfigDialog ouvert' unless board_running?

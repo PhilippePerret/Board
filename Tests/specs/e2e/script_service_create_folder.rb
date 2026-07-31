@@ -7,7 +7,8 @@ def run_test
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
     yaml_path = File.join(fixture_dir, 'envoi.yaml')
     File.write(yaml_path, <<~YAML)
-      - type: create-folder
+      - id: create-sortie
+        type: create-folder
         path: ./sortie-test
     YAML
 
