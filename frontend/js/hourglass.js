@@ -3,51 +3,75 @@ class Spinner {
   static build(){
     const style = DCreate('STYLE', {text: `
       #hourglass-spinner {
-        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 64px; height: 64px; z-index: 10000; pointer-events: none;
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) translateZ(0);
+        width: 56px; height: 88px; z-index: 10000; pointer-events: none;
+        display: flex; flex-direction: column; align-items: center;
       }
       #hourglass-spinner.hidden { display: none; }
-      #hourglass-spinner .frame { fill: none; stroke: #2b2b2b; stroke-width: 4; stroke-linejoin: round; }
-      #hourglass-spinner .sand { fill: #c9963f; }
-      #hourglass-spinner .top-sand, #hourglass-spinner .bottom-sand {
-        transform-box: fill-box; transform-origin: 50% 100%;
+
+      #hourglass-spinner .rig {
+        display: flex; flex-direction: column; align-items: center;
+        transition: transform 0.5s ease-in, opacity 0.5s ease-in;
       }
-      #hourglass-spinner .top-sand    { animation: hourglass-drain 2.2s linear infinite; }
-      #hourglass-spinner .bottom-sand { animation: hourglass-fill  2.2s linear infinite; }
+      #hourglass-spinner.stopping .rig {
+        transform: rotate(360deg);
+        opacity: 0;
+      }
+
+      #hourglass-spinner .bulb {
+        position: relative;
+        width: 56px; height: 40px;
+        overflow: hidden;
+        background: #0a0a0a;
+      }
+      #hourglass-spinner .bulb.top    { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+      #hourglass-spinner .bulb.bottom { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+
+      #hourglass-spinner .glass {
+        position: absolute; inset: 2px;
+        background: rgba(100, 100, 100, 0.7);
+      }
+      #hourglass-spinner .sand {
+        position: absolute; inset: 2px;
+        background: #e0a838;
+        transform-origin: 50% 100%;
+        will-change: transform;
+      }
+
+      #hourglass-spinner .neck { width: 2px; height: 6px; background: rgba(110, 110, 110, 0.55); }
+
+      #hourglass-spinner .bulb.top .sand {
+        animation: hourglass-drain 8s linear infinite;
+      }
+      #hourglass-spinner .bulb.bottom .sand {
+        transform: scaleY(0.07);
+        animation: hourglass-fill 8s linear infinite;
+      }
+
       @keyframes hourglass-drain {
         0%   { transform: scaleY(1); }
-        95%  { transform: scaleY(0); }
-        100% { transform: scaleY(0); }
+        80%  { transform: scaleY(0.07); }
+        100% { transform: scaleY(0.07); }
       }
       @keyframes hourglass-fill {
-        0%   { transform: scaleY(0); }
-        5%   { transform: scaleY(0); }
+        0%   { transform: scaleY(0.07); }
+        80%  { transform: scaleY(1); }
         100% { transform: scaleY(1); }
       }
+
       @media (prefers-reduced-motion: reduce) {
-        #hourglass-spinner .top-sand, #hourglass-spinner .bottom-sand { animation: none; }
+        #hourglass-spinner .sand { animation: none; }
       }
     `})
     document.head.appendChild(style)
 
     const wrap = DCreate('DIV', {id: 'hourglass-spinner', class: 'hidden'})
     wrap.innerHTML = `
-      <svg viewBox="0 0 100 100" aria-label="Chargement en cours">
-        <clipPath id="hourglass-clip-top">
-          <polygon points="22,8 78,8 50,48" />
-        </clipPath>
-        <clipPath id="hourglass-clip-bottom">
-          <polygon points="50,52 78,92 22,92" />
-        </clipPath>
-        <g clip-path="url(#hourglass-clip-top)">
-          <rect class="sand top-sand" x="15" y="8" width="70" height="40" />
-        </g>
-        <g clip-path="url(#hourglass-clip-bottom)">
-          <rect class="sand bottom-sand" x="15" y="52" width="70" height="40" />
-        </g>
-        <path class="frame" d="M18,6 H82 M18,94 H82
-                                M22,8 L78,8 L50,50 L78,92 L22,92 L50,50 Z" />
-      </svg>
+      <div class="rig">
+        <div class="bulb top"><div class="glass"></div><div class="sand"></div></div>
+        <div class="neck"></div>
+        <div class="bulb bottom"><div class="glass"></div><div class="sand"></div></div>
+      </div>
     `
     document.body.appendChild(wrap)
 
@@ -59,13 +83,20 @@ class Spinner {
     if (this.running) return
     this.running = true
     this._built || this.build()
+    clearTimeout(this._stopTimeout)
+    this._el.classList.remove('stopping')
     this._el.classList.remove('hidden')
   }
 
   static stop(){
     if ( !this.running) return
     this.running = false
-    this._el && this._el.classList.add('hidden')
+    if ( !this._el) return
+    this._el.classList.add('stopping')
+    this._stopTimeout = setTimeout(() => {
+      this._el.classList.add('hidden')
+      this._el.classList.remove('stopping')
+    }, 500)
   }
 
 }
