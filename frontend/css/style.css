@@ -44,9 +44,14 @@ button {
   white-space: nowrap;
   margin: 0 10px;
   background-color: white;
-  border: 1px solid white;
+  border: 1px solid rgb(208, 208, 208);
 }
 button:active { outline: auto; }
+
+/* Seulement pour les boutons svg des outils de projet */
+button.svg32 {
+  padding: 12px 28px !important;
+}
 
 .picto {
   width: 32px;

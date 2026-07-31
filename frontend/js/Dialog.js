@@ -29,6 +29,7 @@ class Dialog {
     this.nonData      = data.nonBtn ?? {name: 'NON', onclick: () => message("Bouton non à définir")}
     this.defaultKey   = data.defaultKey ?? 'Oui'
     this.unscrimmed   = data.unscrimmed ?? false // pour ne pas mettre de flou
+    this.project      = data.project ?? null
     // Une fonction qui peut tranformer la valeur avant de la retourner
     this.toRealValue  = data.toRealValue ?? ((v) => v)
     // Identifiant du champ de valeur (rappel : dans ces Dialog, il n'y a toujours
@@ -43,11 +44,15 @@ class Dialog {
     this.built = false
   }
 
+  // À surclasser par l'héritière
+  afterBuild(){}  // pas encore affiché
+  onShow(){}      // affiché
+
   show(){
     this.build()
     listen(window, 'keydown', this.onKeyDown.bind(this))
     this.obj.classList.remove('hidden')
-    this.onShow && this.onShow()
+    this.onShow()
   }
   open(){return this.show()}
   
@@ -161,6 +166,8 @@ class Dialog {
     this.observe()
     this.built = true
     if ( this.unscrimmed ) unScrim(scrim)
+
+    this.afterBuild()
   }
 
   observe(){

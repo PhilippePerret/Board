@@ -2,18 +2,15 @@
 # Source : demande explicite (2026-07-13).
 #
 # Param (frontend/js/ServiceData.js, groupe "Documentation") :
-#   - docu-main-file (type 'path', PAS absolute) : fichier .adoc principal
-#     sélectionné dans le Finder -> backend/scripts/UpdateDocumentation.rb
-#     reçoit [chemin_fichier] (chemin seul) ; le nom de fichier est déduit
-#     du chemin par le script lui-même (File.basename).
+#   - docu-main-file-adoc (type 'project', if_undefined 'path') : fichier
+#     .adoc principal sélectionné dans le Finder -> backend/scripts/
+#     UpdateDocumentation.rb reçoit [chemin_fichier] (chemin seul) ; le nom
+#     de fichier est déduit du chemin par le script lui-même (File.basename).
 #
-# UpdateDocumentation.rb fait `cd <dossier> && open . && asciidoctor <nom>` :
-# le `&&` place `open .` AVANT `asciidoctor`, donc la fenêtre Finder
-# s'ouvre sur le dossier du fichier même si `asciidoctor` n'est pas
-# installé/échoue (le script capture toute exception dans son propre
-# rescue et renvoie ok:false sans jamais remonter jusqu'à Board) — la
-# vérification porte donc sur l'ouverture Finder, pas sur le rendu
-# AsciiDoctor lui-même (non garanti présent sur la machine de test).
+# UpdateDocumentation.rb fait seulement `cd <dossier> && asciidoctor <nom>`
+# (PAS d'`open .` — jamais voulu, comportement retiré volontairement) : la
+# vérification porte donc sur l'enregistrement de common_services_data et
+# sur le message de résultat, pas sur une fenêtre Finder.
 
 require_relative '../../support/helpers'
 
@@ -31,7 +28,6 @@ def run_test
     File.write(main_file, "= Documentation =\n\nContenu de test.\n")
 
     card = "project-#{id}"
-    expected_name = File.basename(fixture_dir)
 
     wait_for(card)
     click(card)
@@ -43,13 +39,6 @@ def run_test
     wait_for_suffix('btn-oui')
     with_finder_selection(main_file) do
       click_suffix('btn-oui')
-
-      # → le dossier contenant le fichier doit s'ouvrir dans le Finder
-      #   (`open .` du script, avant l'appel à asciidoctor) — 4s par défaut
-      #   trop juste face à l'activation Finder réelle (cf. service_commun_ouverture_dossier.rb)
-      wait_until(8, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
-        finder_front_window_name == expected_name
-      end
     end
 
     # → common_services_data enregistrée groupée par param : [[chemin_fichier]]
@@ -57,12 +46,7 @@ def run_test
       common_services_data = read_project_card(id).dig('common_services_data', 'update-documentation')
       common_services_data.is_a?(Array) && File.realpath(common_services_data[0][0]) == File.realpath(main_file)
     end
-
-    # Ferme SEULEMENT la fenêtre ouverte par ce test (par son nom), jamais
-    # toutes les fenêtres Finder — un balayage total fermerait aussi les
-    # fenêtres Finder ouvertes par ailleurs sur cette machine, sans les
-    # rouvrir ensuite.
-    finder_close_front_window_if_named(expected_name)
+    assert_service_message_ok!
 
     # - recharger l'application : re-sélection, nouveau clic sur le service
     launch_app
@@ -70,12 +54,10 @@ def run_test
     click(card)
     wait_for(SERVICE_DOM_ID)
 
-    # → cette fois, aucun dialogue : le dossier s'ouvre direct dans le Finder
+    # → cette fois, aucun dialogue : le service se rejoue direct
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
-    wait_until(8, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
-      finder_front_window_name == expected_name
-    end
+    assert_service_message_ok!
   end
 ensure
   remove_fixture_project(id) if id

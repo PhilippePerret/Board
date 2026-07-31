@@ -315,6 +315,13 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'close-all-windows')
   end
 
+  # Ferme SEULEMENT la/les fenêtre(s) Finder ciblant exactement +dir+ (par
+  # chemin, pas par nom au premier plan) — jamais toutes les fenêtres
+  # Finder, contrairement à finder_close_all_windows.
+  def close_finder_window_on(dir)
+    osascript(FINDER_SCRIPT, 'close-windows-targeting', File.realpath(dir))
+  end
+
   def finder_restore_windows(snapshot)
     osascript(FINDER_SCRIPT, 'restore-windows', snapshot)
   end

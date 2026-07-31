@@ -332,7 +332,7 @@ class Project {
 
   save(callback){
     const newData = {}
-    this.constructor.PROPERTIES.forEach(prop => {
+    PROJECT_DATA.map(d => d.id).forEach(prop => {
       if (prop === 'services') {
         newData.services = {
             startup: (this.services?.startup ?? []).map(s => s.toPersistData())
@@ -365,19 +365,17 @@ class Project {
       for(var id in this.service_data) {
         var value = this.service_data[id]
         const type = getTypeFrom(value)
-        if ( type == 'path') {
-          // Si la valeur est un path, on essaie de le réduire
-          value = value.replace(this.path, '')
-        }
         props.push({id, type, value, name: key})
       }
     }
 
     const dataConfDial = {
-        id:     `project-${this.id}-panel-data`
-      , title:  getMsg('title-data-of-project', this.title)
-      , props:  props
-      , ouiBtn: {name: getMsg('Save'), onclick: this.onSaveAllData.bind(this)}
+      id:         `project-${this.id}-panel-data`
+      , title:    getMsg('title-data-of-project', this.title)
+      , width:    '1100px'
+      , props:    props
+      , project:  this
+      , ouiBtn:   {name: getMsg('Save'), onclick: this.onSaveAllData.bind(this)}
     }
     new ConfigDialog(dataConfDial).show()
   }

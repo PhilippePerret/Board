@@ -2,5 +2,6 @@
 Tests/version-*/support/*.scpt
 Tests/version-*/support/ax_helper
 Tests/support/overlay
+tests/resultats/
 
 Board.app/*

@@ -141,9 +141,9 @@ class ParamDefiner {
     const valueDefiner = definers[0]
     const prop = valueDefiner.id
     // S'assurer que la propriété est dans la liste, sinon => erreur développer
-    Project.PROPERTIES.indexOf(prop) > -1 || raise(`La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
+    TBL_PROJECT_DATA[prop] || raise(`La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
     Project.current[prop] = valueDefiner.value
-    console.info("Propriété '%s' mises à %s", prop, Project.current[prop])
+    // console.info("Propriété '%s' mises à %s", prop, Project.current[prop])
     Project.current.save()
     this.setValue(valueDefiner.value) // Fixe aussi la valeur de ce definer, puis poursuit
   }

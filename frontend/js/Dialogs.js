@@ -235,7 +235,7 @@ class ConfigDialog extends Dialog {
   constructor(data){
     super(data)
     data.id ?? raise("Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
-    this.width    = '840px'
+    if (undefined == data.width) this.width = '840px'
     this.height   = '500px'
     this.props    = data.props
     this.modos    = [] // Contiendra les modifications/array de {id, value}
@@ -244,6 +244,27 @@ class ConfigDialog extends Dialog {
     if (undefined == data.nonBtn) {
       this.nonData = {name: getMsg('Cancel')}
     }
+  }
+
+  onShow(){
+    console.log("-> onShow")
+    // Après la construction, on s'assure que les valeurs ne dépassent pas
+    // Si c'est le cas, on raccourcit jusqu'à obtenir la bonne valeur et on
+    // ajoute une ellipse (…).
+    this.props.forEach(dprop => {
+      if (!['url', 'path'].includes(dprop.type)) return
+      const el = DGet(`#${this.id}-${dprop.id}-value`)
+      // console.log("width et scroll", {width: el.clientWidth, scroll: el.scrollWidth })
+      // console.log(" el.scrollWidth > el.clientWidth est", el.scrollWidth > el.clientWidth)
+      var isTooLong = false
+      while ( el.scrollWidth > el.clientWidth ) {
+        isTooLong = true
+        el.textContent = el.textContent.slice(1)
+      }
+      if ( isTooLong ) {
+        el.textContent = '…' + el.textContent.slice(2)
+      }
+    })
   }
 
 
@@ -256,7 +277,12 @@ class ConfigDialog extends Dialog {
       const line = DCreate('DIV', {id: `${prefixId}-line`, class: 'config-data-prop'})
       const name = DCreate('SPAN', {id: `${prefixId}-name`, text: dprop.name || dprop.id, class: 'config-data-name'})
       const desc = DCreate('SPAN', {id: `${prefixId}-desc`, text: dprop.desc || '', class: 'config-data-desc'})
-      const valu = DCreate('SPAN', {id: `${prefixId}-value`, text: dprop.value ?? '', class: 'config-data-value'})
+      var dispValue = dprop.value ?? ''
+      if ( dprop.type == 'path' && this.project) {
+        // Si la valeur est un path, on essaie de la réduire
+        dispValue = dispValue.replace(this.project.path, '.')
+      }
+      const valu = DCreate('SPAN', {id: `${prefixId}-value`, text: dispValue, class: 'config-data-value'})
       listen(valu, 'click', (ev) => {
         const callback = (values) => {
           console.log("values reçues", values)
