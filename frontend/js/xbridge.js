@@ -8,7 +8,7 @@ window.server = {
     bridge.call(
       data,
       (response) => {
-        console.log("response", response)
+        // console.log("response", response)
         if (response.ok) {
             callback && callback(response)
         } else {
