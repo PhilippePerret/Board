@@ -179,9 +179,10 @@ class ParamDefiner {
   }
 
   onPath(){
-    this.waitForWindow(this.q || "Sélectionner l'élément dans le Finder et cliquer sur OK.",
-      this.getPathOfFinderSelection.bind(this)
-    )
+    const q = this.q || "Sélectionner l'élément dans le Finder et cliquer sur OK."
+    const callback = this.getPathOfFinderSelection.bind(this)
+    const options = {midBtn: {name: 'Vide', onclick: this.setValue.bind(this, '')}}
+    this.waitForWindow(q, callback, null, options)
   }
 
   // Trouver le moyen de ne prendre qu'un dossier 
@@ -356,6 +357,9 @@ class ParamDefiner {
       , content: options?.content ?? null
       , ouiBtn: {name: options?.ouiBtn ?? 'OK'        , onclick: callback}
       , nonBtn: {name: options?.nonBtn ?? 'Annuler'   , onclick: fallback}
+    }
+    if (options.midBtn) {
+      Object.assign(dialogData, {midBtn: options.midBtn})
     }
     this.addPreserveOption(dialogData)
     new ConfirmDialog(dialogData).show()

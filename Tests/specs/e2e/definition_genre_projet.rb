@@ -13,26 +13,32 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
+  panel_id = "project-#{project_id}-panel-data"
 
   # - le sélectionner (clic sur sa carte)
   wait_for(card_id)
   click(card_id)
 
-  # - ouvrir le panneau des extra-data
-  wait_for('btn-deal-project-extradata')
-  click('btn-deal-project-extradata')
+  # - ouvrir le dialogue de configuration du projet (ConfigDialog)
+  wait_for('btn-deal-project-data')
+  click('btn-deal-project-data')
 
-  # → la ligne "genre" est affichée dans le panneau
-  wait_for("project-extradata-#{project_id}-genre")
-  click("project-extradata-#{project_id}-genre")
+  # → la ligne "genre" est affichée dans le dialogue
+  wait_for("#{panel_id}-genre-value")
+  click("#{panel_id}-genre-value")
 
-  # → une SelectDialog s'ouvre avec les valeurs de GENRES_PROJETS
+  # → une SelectDialog s'ouvre avec les valeurs de GENRES_PROJETS (id du
+  #   ParamDefiner = 'genre', PAS de suffixe générique 'btn-oui' seul : le
+  #   ConfigDialog reste ouvert derrière, donc ambigu sans qualifier par id)
   wait_for('__genre__')
   set_value('__genre__', 'Application')
 
-  # - confirmer
-  wait_for_suffix('btn-oui')
-  click_suffix('btn-oui')
+  # - confirmer la SelectDialog
+  wait_for_suffix('genre-btn-oui')
+  click_suffix('genre-btn-oui')
+
+  # - valider le ConfigDialog (Save)
+  click("#{panel_id}-btn-oui")
 
   # → la fiche du projet sur disque doit porter le genre choisi
   wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do

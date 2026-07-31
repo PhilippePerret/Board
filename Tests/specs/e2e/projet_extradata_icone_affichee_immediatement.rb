@@ -1,14 +1,7 @@
-# Test : après sélection d'une icône via le panneau extra-data, la carte du
-# projet doit l'afficher tout de suite (sans rechargement).
-# Bug signalé : _dev/Manuel/adocs/_TODO_.adoc, "Quand on choisit une icône,
-# elle devrait s'afficher tout de suite."
-#
-# Cause (ProjectExtraData.js#apply, case 'icon') : `this.divTitle` est lu sur
-# le ProjectExtraDataPanel (qui n'a pas cette propriété — seul Project.js
-# en a une, Project.js:424) au lieu de `this.project.divTitle`. `undefined`
-# passé à insertBefore équivaut à un appendChild : l'image est ajoutée en
-# toute fin de carte au lieu d'être placée juste avant le titre (ordre normal
-# de Project.js#buildCard, qui insère l'icône avant le titre).
+# Test : après sélection d'une icône via le ConfigDialog du projet, la carte
+# du projet doit l'afficher tout de suite (sans rechargement).
+# Bug signalé à l'origine : _dev/Manuel/adocs/_TODO_.adoc, "Quand on choisit
+# une icône, elle devrait s'afficher tout de suite."
 
 require_relative '../../support/helpers'
 require 'tmpdir'
@@ -28,20 +21,22 @@ def run_test
   launch_app
 
   card = "project-#{project_id}"
-  panel_id = "projet-extradata-panel-#{project_id}"
+  panel_id = "project-#{project_id}-panel-data"
   wait_for(card)
   click(card)
 
-  wait_for('btn-deal-project-extradata')
-  click('btn-deal-project-extradata')
-  wait_for(panel_id)
+  wait_for('btn-deal-project-data')
+  click('btn-deal-project-data')
 
-  click("project-extradata-#{project_id}-icon")
+  click("#{panel_id}-icon-value")
   wait_for_suffix('btn-oui')
 
   with_finder_selection(icon_path) do
-    click_suffix('btn-oui')
+    click_suffix_last('btn-oui')
   end
+
+  # - valider le ConfigDialog (Save)
+  click("#{panel_id}-btn-oui")
 
   wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do
     read_project_card(project_id)['icon'] == 'icon.svg'

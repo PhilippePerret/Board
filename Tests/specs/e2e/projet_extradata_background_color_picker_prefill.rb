@@ -1,13 +1,12 @@
-# Test : quand un projet a déjà une couleur de fond définie, rouvrir le
-# picker de couleur ("Fond de la carte du projet" -> "Couleur") doit
-# proposer cette couleur, pas la valeur par défaut du picker.
-# Bug signalé : _dev/Manuel/adocs/_TODO_.adoc, "quand on choisit la couleur
-# de fond, s'il y en a déjà une, on doit l'appliquer au picker de couleurs".
+# Test : quand un projet a déjà une couleur de fond définie, rouvrir sa
+# ligne "background" dans le ConfigDialog doit proposer cette couleur en
+# valeur par défaut du champ, pas une valeur vide.
 #
-# Cause (ParamDefiner.js#onColor) : contrairement aux autres on<Type> de la
-# classe, ColorDialog est créé sans `defaultValue: this.currentOrDefault`
-# (et sans `id: this.id`) — le picker retombe donc systématiquement sur
-# '#ff0000' (Dialogs.js#ColorDialog#buildField).
+# Passe désormais par ConfigDialog (Project.js#editData) : chaque ligne
+# ouvre un ParamsDefiner avec `default: dprop.value` (Dialogs.js#buildConfig)
+# — le prefill est donc générique (ParamDefiner#currentOrDefault), plus
+# spécifique à un ColorDialog. `background` est déclaré type 'string' dans
+# PROJECT_DATA (ProjectData.js), donc un simple champ texte, pas un picker.
 
 require_relative '../../support/helpers'
 
@@ -19,25 +18,19 @@ def run_test
   launch_app
 
   card = "project-#{project_id}"
-  panel_id = "projet-extradata-panel-#{project_id}"
+  panel_id = "project-#{project_id}-panel-data"
   wait_for(card)
   click(card)
 
-  wait_for('btn-deal-project-extradata')
-  click('btn-deal-project-extradata')
-  wait_for(panel_id)
+  wait_for('btn-deal-project-data')
+  click('btn-deal-project-data')
+  wait_for("#{panel_id}-background-value")
+  click("#{panel_id}-background-value")
 
-  click("project-extradata-#{project_id}-background")
-  wait_for_suffix('btn-oui')
-  click_suffix('btn-oui') # "Couleur"
-
-  wait_until(desc: -> { 'picker de couleur jamais apparu' }) do
-    bridge_eval("!!document.querySelector('input[type=color]')") == 'true'
-  end
-
-  picker_value = bridge_eval("document.querySelector('input[type=color]').value")
-  raise "picker affiche #{picker_value.inspect} au lieu de la couleur déjà définie (#{existing_color.inspect})" unless
-    picker_value == existing_color
+  wait_for('__background__')
+  prefilled = get_value('__background__')
+  raise "champ prérempli à #{prefilled.inspect} au lieu de la couleur déjà définie (#{existing_color.inspect})" unless
+    prefilled == existing_color
 ensure
   remove_fixture_project(project_id) if project_id
 end

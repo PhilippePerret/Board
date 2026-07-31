@@ -196,6 +196,20 @@ module BoardTest
     JS
   end
 
+  # Texte du dernier message "en exergue" (Messagerie.js#message appelé avec
+  # true en 1er argument, ex. ServiceExecuter#afterRunService) : n'apparaît
+  # PAS dans #message (footer), mais dans un DIV.exergue-message éphémère
+  # (auto-retiré après 6s) ajouté à la fin de document.body.
+  def exergue_message_text
+    bridge_eval(<<~JS)
+      (function(){
+        var els=document.querySelectorAll('.exergue-message');
+        if(els.length===0) return '';
+        return els[els.length-1].textContent;
+      })()
+    JS
+  end
+
   def get_text_prefix(prefix)
     bridge_eval(<<~JS)
       (function(){
@@ -268,6 +282,24 @@ module BoardTest
         var el=Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
         if(!el) throw new Error('introuvable (suffix): '+s);
         fireClick(el);
+        return '';
+      })()
+    JS
+  end
+
+  # Variante "dernier match" : quand un suffixe générique (ex. 'btn-oui')
+  # peut correspondre à PLUSIEURS dialogues imbriqués en même temps (ex. un
+  # ConfigDialog resté ouvert derrière un ParamDefiner à id auto-généré
+  # "panel-N", imprévisible) — le dernier ajouté au DOM est toujours le plus
+  # récemment ouvert, donc le bon à cliquer.
+  def click_suffix_last(suffix)
+    bridge_eval(<<~JS)
+      (function(){
+        var fireClick=#{FIRE_CLICK_JS};
+        var s=#{suffix.to_json};
+        var matches=Array.from(document.querySelectorAll('[id]')).filter(function(e){return e.id.endsWith(s);});
+        if(matches.length===0) throw new Error('introuvable (suffix): '+s);
+        fireClick(matches[matches.length-1]);
         return '';
       })()
     JS

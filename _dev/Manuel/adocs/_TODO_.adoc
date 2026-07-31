@@ -9,8 +9,6 @@
 
 == Todo En cours
 
-- Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)
-
 == Todo list ==
 
 - pouvoir déplacer en glissant le panneau des services (pour le rapproche d'un projet)

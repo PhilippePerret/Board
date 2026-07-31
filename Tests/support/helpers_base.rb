@@ -97,11 +97,12 @@ module BoardTest
   # présence de "succès" (mot commun aux messages de succès des scripts
   # backend/scripts/*.scpt) — passer `expect:` pour un autre motif.
   def assert_service_message_ok!(timeout: 4, expect: /succès/i)
-    wait_until(timeout, desc: -> { "#message = #{(get_text('message') rescue '(erreur)').inspect}" }) do
-      (get_text('message') rescue '') != 'Message footer'
+    # ServiceExecuter#afterRunService appelle message(true, ...) : ça
+    # n'affiche PAS dans #message (footer) mais dans un DIV.exergue-message
+    # éphémère (Messagerie.js#message) — jamais lire #message ici.
+    wait_until(timeout, desc: -> { "message en exergue = #{(exergue_message_text rescue '(erreur)').inspect}" }) do
+      (exergue_message_text rescue '') =~ expect
     end
-    msg = get_text('message').to_s
-    raise "Le service a échoué (#message = #{msg.inspect})" unless msg =~ expect
   end
 
   # Glisser-déposer par coordonnées écran (mouse down/move/up réels) — pour

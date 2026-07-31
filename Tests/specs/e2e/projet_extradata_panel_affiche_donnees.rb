@@ -1,5 +1,5 @@
-# Test : ouverture du panneau extra-data sur un projet sélectionné →
-# affiche bien les données de CE projet.
+# Test : ouverture du ConfigDialog sur un projet sélectionné → affiche bien
+# les données de CE projet.
 # Source : .claude/2026-07-18-Etat-fin-de-session.md, Partie 3, cas 2.
 
 require_relative '../../support/helpers'
@@ -11,17 +11,16 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
-  panel_id = "projet-extradata-panel-#{project_id}"
-  genre_id = "project-extradata-#{project_id}-genre"
+  panel_id = "project-#{project_id}-panel-data"
+  genre_id = "#{panel_id}-genre-value"
 
   wait_for(card_id)
   click(card_id)
 
-  wait_for('btn-deal-project-extradata')
-  click('btn-deal-project-extradata')
+  wait_for('btn-deal-project-data')
+  click('btn-deal-project-data')
 
   wait_for(panel_id)
-  raise 'panneau construit mais marqué fermé après ouverture' unless panel_open?(panel_id)
 
   wait_until(desc: -> { "genre affiché = #{get_text(genre_id).inspect}" }) do
     get_text(genre_id).include?('Roman')

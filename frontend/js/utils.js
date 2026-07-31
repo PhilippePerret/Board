@@ -33,7 +33,7 @@ function getTypeFrom(value) {
  * chemin d'accès à un fichier.
  */
 function valueMayBeAPath(value){
-  if ( !value.startsWith(/\.?\//) ) return false
+  if ( value.match(/^\.?\//) === null ) return false
   if (value.match(/\n/)) return false
   if (value.split(' ').length < 3)  return true
 }

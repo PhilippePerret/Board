@@ -280,16 +280,16 @@ class Project {
   // Défini la propriété +key+ à +val+ et appelle le callback
   set(key, val, callback = false){ // ça part du principe que s'il faut enregistrer, il faut un callback
 
+    // Peut-être que plus tard il ne faudra pas le faire.
+    if ( val === '') val = null
+
     if (TBL_PROJECT_DATA[key]) {
       this[key] = val
-    } else {// une donnée service
+    } else {
+      // <= Ça n'est pas une donnée "officielle" de projet
+      // => On l'enregistre comme donnée service (dans service_data)
       this.service_data = this.service_data ?? {}
       Object.assign(this.service_data, {[key]: val})
-    }
-    // Si le projet existe dans Todoist, on lui met une icône normale
-    // qui recevra aussi un badge avec le nombre de tâches du jour.
-    if (key === 'todoist_id') {
-      this.todoistImg.src = `images/todoist${this.todoistBadgeByTasks()}.png`
     }
 
     // On applique tout de suite
@@ -306,6 +306,9 @@ class Project {
         break
       case 'path':
         console.error("Je dois apprendre à corriger le path dans l'affichage")
+        break
+      case 'todoist_id':
+        this.todoistImg.src = `images/todoist${this.todoistBadgeByTasks()}.png`
         break
       case 'background':
         this.project.setBackground(undefined, value)
@@ -353,6 +356,7 @@ class Project {
   }  
 
   editData(){
+    historize("-> Project.editData", this)
     // On récupère les propriétés éditable, en injectant leur valeur
     const props = PROJECT_DATA
     .filter(prop => prop.editable)
@@ -365,7 +369,7 @@ class Project {
       for(var id in this.service_data) {
         var value = this.service_data[id]
         const type = getTypeFrom(value)
-        props.push({id, type, value, name: key})
+        props.push({id, type, value, name: id})
       }
     }
 
@@ -375,14 +379,16 @@ class Project {
       , width:    '1100px'
       , props:    props
       , project:  this
-      , ouiBtn:   {name: getMsg('Save'), onclick: this.onSaveAllData.bind(this)}
+      , ouiBtn:   {name: getMsg('Save'), onclick: this.onSaveEditedData.bind(this)}
     }
     new ConfigDialog(dataConfDial).show()
   }
 
-  onSaveAllData(modos) {
-    console.log("Données projets à modifier", modos)
-    // todo
+  onSaveEditedData(modos) {
+    // console.log("Données projets à modifier", modos)
+    for (var id in modos) {
+      this.set(id, modos[id])
+    }
   }
 
   /**

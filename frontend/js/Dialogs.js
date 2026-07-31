@@ -278,7 +278,7 @@ class ConfigDialog extends Dialog {
       const name = DCreate('SPAN', {id: `${prefixId}-name`, text: dprop.name || dprop.id, class: 'config-data-name'})
       const desc = DCreate('SPAN', {id: `${prefixId}-desc`, text: dprop.desc || '', class: 'config-data-desc'})
       var dispValue = dprop.value ?? ''
-      if ( dprop.type == 'path' && this.project) {
+      if ( dprop.type == 'path' && this.project && dprop.id != 'path') {
         // Si la valeur est un path, on essaie de la réduire
         dispValue = dispValue.replace(this.project.path, '.')
       }

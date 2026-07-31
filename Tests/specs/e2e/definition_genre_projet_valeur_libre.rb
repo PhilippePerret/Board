@@ -14,30 +14,37 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
+  panel_id = "project-#{project_id}-panel-data"
 
   # - le sélectionner (clic sur sa carte)
   wait_for(card_id)
   click(card_id)
 
-  # - ouvrir le panneau des extra-data
-  wait_for('btn-deal-project-extradata')
-  click('btn-deal-project-extradata')
+  # - ouvrir le dialogue de configuration du projet (ConfigDialog)
+  wait_for('btn-deal-project-data')
+  click('btn-deal-project-data')
 
-  # → la ligne "genre" est affichée dans le panneau
-  wait_for("project-extradata-#{project_id}-genre")
-  click("project-extradata-#{project_id}-genre")
+  # → la ligne "genre" est affichée dans le dialogue
+  wait_for("#{panel_id}-genre-value")
+  click("#{panel_id}-genre-value")
 
-  # → la SelectDialog s'ouvre, avec un bouton "Autre valeur…"
-  wait_for_suffix('btn-mid')
-  click_suffix('btn-mid')
+  # → la SelectDialog s'ouvre, avec un bouton "Autre valeur…" (id du
+  #   ParamDefiner = 'genre', pas de suffixe générique : le ConfigDialog
+  #   reste ouvert derrière, avec son propre btn-mid invisible)
+  wait_for_suffix('genre-btn-mid')
+  click_suffix('genre-btn-mid')
 
-  # → une TextFieldDialog s'ouvre pour saisir une valeur libre
+  # → une TextFieldDialog s'ouvre pour saisir une valeur libre (même id
+  #   'genre', réutilisé par ParamDefiner#onString)
   wait_for('__genre__')
   set_value('__genre__', 'Docu-fiction')
 
   # - confirmer
-  wait_for_suffix('btn-oui')
-  click_suffix('btn-oui')
+  wait_for_suffix('genre-btn-oui')
+  click_suffix('genre-btn-oui')
+
+  # - valider le ConfigDialog (Save)
+  click("#{panel_id}-btn-oui")
 
   # → la fiche du projet sur disque doit porter la valeur libre saisie
   wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do
