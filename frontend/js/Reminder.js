@@ -120,11 +120,11 @@ class Reminder extends ExtendedObject {
 
   constructor(data){
     super(data)
-    data.task && this.setAsTask()
+    data.task && this.setAsTask(data)
     console.log("Reminder enregistré", this)
   }
 
-  setAsTask(){
+  setAsTask(data){
     this.buttons = [
         {name: 'Démarrée', onclick: Reminder.remove.bind(Reminder,this)}
       , {name: 'Supprimer', onclick: Reminder.remove.bind(Reminder,this)}

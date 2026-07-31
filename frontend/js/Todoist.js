@@ -39,6 +39,9 @@ class Todoist {
     D.start()
     D.trace(project, callback)
     server.send({action: 'todoist-today-tasks', todoist_id: project.todoist_id, no_raise: true}, (retour) => {
+      if (retour.data.tasks.length) {
+        console.log("tasks", JSON.parse(JSON.stringify(retour.data.tasks)))
+      }
       callback(retour.data.tasks || {error: 'empty'})
     })
     // D.outputTrace()
