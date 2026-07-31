@@ -250,7 +250,9 @@ class Project {
   }
   // Retourne le nouvel ordre
   static getProjectsOrder(){
-    return DGetAll('div.project', this.container).map( div => div.dataset.projectId)
+    const actifs  = DGetAll('div.project', this.container).map( div => div.dataset.projectId)
+    const standby = DGetAll('div.project', this.standbyContainer).map( div => div.dataset.projectId)
+    return [...actifs, ...standby]
   }
 
 
