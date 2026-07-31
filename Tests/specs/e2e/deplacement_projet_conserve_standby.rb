@@ -40,6 +40,12 @@ def run_test
     ids_apres.include?(id_standby)
   raise "des projets ont disparu de projects-in après déplacement (avant : #{ids_avant.inspect}, après : #{ids_apres.inspect})" unless
     (ids_avant - ids_apres).empty?
+
+  # Tue/relance Board avant le nettoyage : sans ça, le saveData debounced
+  # (1s) peut retomber APRÈS remove_fixture_project (suppression directe des
+  # fichiers côté Ruby) et réécrire appdata.yaml avec une référence à un
+  # projet déjà supprimé — cassant tous les tests suivants du même run.
+  launch_app
 ensure
   [id_actif_a, id_actif_b, id_standby].each { |id| remove_fixture_project(id) if id }
 end

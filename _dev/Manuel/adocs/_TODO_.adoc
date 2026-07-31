@@ -11,10 +11,7 @@
 
 == Todo list ==
 
-- click sur rappel doit le fermer.
-
-- Pour les rappels de tâches à l'heure, les mettre en warning (font orange)
-
+- Service/outils? : pouvoir placer une alerte (type 'time' ou 'date' ? pour alerte dans le futur)
 - Panneaux : il faudrait fermer le panneau avant de faire l'opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
   En fait : clic → Fermer fenêtre → Sablier → Confirmation fin
 

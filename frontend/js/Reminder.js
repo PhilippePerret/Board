@@ -47,11 +47,9 @@ class Reminder extends ExtendedObject {
    * Vérifie tous les rappels pour voir ceux qui arriveraient à échéance
    */
   static poll() {
-    // console.log("-> Reminder::poll", new Date())
+    console.log("-> Reminder::poll", {now: new Date(), count: Number(this.count)})
     this.each('execIfTime', [new Date()])
-    if (this.count == 0) {
-      this.stop()
-    }
+    this.count > 0 || this.stop()
   }
 
   // Lancement du reminder
@@ -62,7 +60,7 @@ class Reminder extends ExtendedObject {
   }
 
   static stop(){
-    // console.log("-> Reminder::stop")
+    console.log("-> Reminder::stop")
     clearInterval(this.runTimer)
     delete this.runTimer
     this.running = false
@@ -86,6 +84,7 @@ class Reminder extends ExtendedObject {
    * Destruction du rappel +reminder+
    */
   static remove(reminder) {
+    // console.log("-> Reminder::remove(reminder=)", reminder)
     const idx = this.__eo_ids.indexOf(reminder.id)
     this.__eo_ids.splice(idx, 1)
     this.__eo_items.splice(idx, 1)
@@ -122,11 +121,12 @@ class Reminder extends ExtendedObject {
     super(data)
     data.task && this.setAsTask(data)
     console.log("Reminder enregistré", this)
+    this.execCount = 0
   }
 
   setAsTask(data){
     this.buttons = [
-        {name: 'Démarrée', onclick: Reminder.remove.bind(Reminder,this)}
+        {name: 'Démarrée',  onclick: Reminder.remove.bind(Reminder,this)}
       , {name: 'Supprimer', onclick: Reminder.remove.bind(Reminder,this)}
     ]
     this.task = data.task
@@ -135,14 +135,21 @@ class Reminder extends ExtendedObject {
   }
 
   /**
-   * Fonction qui vérifie le temps +time+ avec le temps du rappel
-   * et exécute le reminder si c'est l'heure
+   * Fonction qui : 
+   *  - compare 
+   *  - toutes les minutes 
+   *  - le temps de maintenant avec le temps du rappel
+   *  - et exécute le reminder si c'est l'heure
    */
   execIfTime(now) {
-    // console.log("Temps comparés", now, this.time, this)
+    // console.info("Temps comparés pour reminder", {now, time: this.time, rappel: this})
     if ( this.time <= now ){
+      // console.info("Le temps est-il proche ?", {time: this.time, now: now, estProche: DateUtils.close(this.time, now, 60)})
       if ( DateUtils.close(this.time, now, 60) ) {
-        this.exec()
+        // Pour ne répéter le message que toutes les 3 minutes s'il n'est pas
+        // marqué exécuté.
+        if ( this.execCount % 3 == 0 ) this.exec()
+        ++ this.execCount
       } else {
         // L'heure est trop éloignée : on détruit ce rappel
         this.constructor.remove(this)
@@ -159,7 +166,6 @@ class Reminder extends ExtendedObject {
       console.info("La fonction à jouer lors de l'échéance a été appelée.")
       this.onDue()
     }
-    this.constructor.remove(this)
   }
 
 
@@ -180,7 +186,7 @@ class Reminder extends ExtendedObject {
         sup = {background: '#0000FF'}
         break
       case 'warning':
-        sup = {background: '#ffc400'}
+        sup = {background: '#ffc400', font_color: 'black'}
         break
       case 'error':
         sup = {background: '#e60000'}

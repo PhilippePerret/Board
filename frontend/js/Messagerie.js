@@ -73,8 +73,8 @@ class Notifier {
     window.server.send(this.data, this.onClick.bind(this))
   }
   static onClick(response){
-    console.log("response", response)
-    const btnValue = response.data?.value
+    // console.log("Notifier::onClick(response=)", response, this.dataButtons)
+    const btnValue = response.data?.button
     if (btnValue) {
       const btn = this.getButton(btnValue)
       if (btn && 'function' == typeof btn.onclick) btn.onclick()
@@ -127,15 +127,21 @@ class Notifier {
       , delay:    data.delay || 60
     })
 
-    console.log("Data envoyé à notify", data)
+    // console.log("Data envoyé à notify", data)
 
     return data
   }
   static buildHtml(data){
     var html = []
     html.push(this.styles(data).replace(/\n/g, '').replace(/\s+/g, '').replace(/__/g, ' '))
-    console.log("Ajout des styles:", html[0])
-    html.push('<div id="notify">')
+    // console.log("Ajout des styles:", html[0])
+    var div
+    if ( this.aucunBouton ) {
+      div = '<div id="notify" onclick="">'
+    } else {
+      div = '<div id="notify">'
+    }
+    html.push(div)
     data.icon && html.push(`<img src="${data.icon}" class="icon" />`)
     data.title && html.push(`<h1>${data.title}</h1>`)
     html.push(`<div id="message">${data.message}</div>`)
@@ -190,7 +196,9 @@ class Notifier {
       padding-bottom: 0;
     }
     button {
-      font-size: 1em;
+      font-size: 13pt;
+      margin-left: 1em;
+      opacity: 0.85;
     }
     div#message {
       padding:2rem;
