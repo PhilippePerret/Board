@@ -52,6 +52,7 @@ div#standby-project-container div.project * {
 }
 div#standby-project-container div.project div.title {
   overflow: hidden;
+  text-overflow: ellipsis;
   margin-left: 1em;
 }
 
