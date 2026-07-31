@@ -3,17 +3,16 @@
  */
 class Draggable {
 
-  static listenMove(obj){
-    this._panel = obj
-    listen(obj,   'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
-    listen(obj,   'mousedown', this.onMoveHandleDown.bind(this))
+  listenMove(handle, panel){
+    this._panel = panel || handle
+    listen(handle,   'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
+    listen(handle,   'mousedown', this.onMoveHandleDown.bind(this))
     listen(document, 'mousemove', this.onDragMove.bind(this))
     listen(document, 'mouseup'  , this.onDragEnd.bind(this))
-
   }
 
-  static beforeDragMove(ev){}
-  static onDragMove(ev){
+  beforeDragMove(ev){}
+  onDragMove(ev){
     this.beforeDragMove(ev)
     if (!this._dragging) return
     const dx = ev.clientX - this._dragStartX
@@ -22,11 +21,11 @@ class Draggable {
     this._panel.style.left = newLeft + 'px'
     this.afterDragMove(ev)
   }
-  static afterDragMove(ev){}
+  afterDragMove(ev){}
 
   // Déplacement HORIZONTAL du panneau (le "bottom" CSS n'est jamais touché)
   // TODO Pouvoir définir la contrainte ('h', 'v' ou '')
-  static onMoveHandleDown(ev){
+  onMoveHandleDown(ev){
     this._dragging       = true
     this._dragStartX     = ev.clientX
     this._panelStartLeft = this._panel.getBoundingClientRect().left
@@ -34,7 +33,7 @@ class Draggable {
     stopEvent(ev)
   }
 
-  static onDragEnd(){
+  onDragEnd(){
     if (this._resizing) {
       this._resizing = false
       this._panel.classList.remove('resizing')
@@ -46,6 +45,6 @@ class Draggable {
       this._panel.classList.remove('dragging')
     }
   }
-  static afterDragEnd(){}
+  afterDragEnd(){}
 
 }

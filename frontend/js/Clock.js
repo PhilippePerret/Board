@@ -15,12 +15,18 @@ const DIX_MINUTES = 600
 
 class Clock extends Draggable {
 
-  static get panel(){
+  // Une seule horloge dans l'app : instance unique paresseuse (construite
+  // au premier accès, pas au chargement du script).
+  static get instance(){
+    return this._instance || (this._instance = new Clock())
+  }
+
+  get panel(){
     this._panel || this.build()
     return this._panel
   }
 
-  static build(){
+  build(){
     const panel = DCreate('DIV', {class: 'clock-panel hidden'})
 
     const wrap = DCreate('DIV', {class: 'clock-wrap', id: 'clock-dial'})
@@ -35,12 +41,15 @@ class Clock extends Draggable {
 
     // Poignée de déplacement (bord droit, milieu vertical) — horizontal
     // seulement, "bottom" n'est jamais touché (cf. onDragMove).
-    this.handleMove = DCreate('DIV', {class: 'clock-handle-move', id: 'clock-handle-move'})
+    // role: 'group' : sans ça, un DIV vide (pas de texte direct) disparaît
+    // de l'arbre d'accessibilité (cf. Project.js, même pattern) — invisible
+    // pour le moteur de test "drag" (JXA/accessibilité).
+    this.handleMove = DCreate('DIV', {class: 'clock-handle-move', id: 'clock-handle-move', role: 'group'})
     panel.appendChild(this.handleMove)
 
     // Poignée de redimensionnement (bord haut, milieu horizontal) —
     // curseur contraint au déplacement vertical (cf. onResizeHandleDown).
-    this.handleResize = DCreate('DIV', {class: 'clock-handle-resize', id: 'clock-handle-resize'})
+    this.handleResize = DCreate('DIV', {class: 'clock-handle-resize', id: 'clock-handle-resize', role: 'group'})
     panel.appendChild(this.handleResize)
 
     // Croix de fermeture (haut droite)
@@ -80,7 +89,8 @@ class Clock extends Draggable {
 
     listen(this.handleResize, 'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
     listen(this.handleResize, 'mousedown', this.onResizeHandleDown.bind(this))
-    this.listenMove(this.handleMove)
+    
+    this.listenMove(this.handleMove, this._panel)
 
     listen(this.btnStop, 'mouseup', ev => { this.onClickStop(); stopEvent(ev) })
 
@@ -94,13 +104,13 @@ class Clock extends Draggable {
     this.setScale(App.getData('clock-scale') ?? 1)
   }
 
-  static get MIN_SCALE(){ return 0.6 }
+  get MIN_SCALE(){ return 0.6 }
   // px de glissé vertical pour faire varier le scale de 1 unité
-  static get RESIZE_DIVISOR(){ return 150 }
+  get RESIZE_DIVISOR(){ return 150 }
 
   // Limite haute du scale : le haut du panneau ne doit jamais dépasser le
   // bas du header (le bas, lui, reste posé sur le haut du footer).
-  static getMaxScale(){
+  getMaxScale(){
     const headerH = document.querySelector('header').getBoundingClientRect().height
     const footerH = document.querySelector('footer').getBoundingClientRect().height
     const available  = window.innerHeight - headerH - footerH
@@ -111,19 +121,19 @@ class Clock extends Draggable {
     return Math.max(this.MIN_SCALE, available / baseHeight)
   }
 
-  static setScale(value){
+  setScale(value){
     this._scale = value
     this._panel.style.setProperty('--clock-scale', value)
   }
 
-  static onPanelClick(ev){
+  onPanelClick(ev){
     if (ev.target.closest('.clock-btn-stop, .clock-close')) return
     this.onClickRing()
   }
 
   // Redimensionnement : seul le déplacement VERTICAL de la souris compte
   // (poignée en haut, ancrage du scale en bas-gauche — monter agrandit).
-  static onResizeHandleDown(ev){
+  onResizeHandleDown(ev){
     this._resizing          = true
     this._resizeStartY      = ev.clientY
     this._resizeStartScale  = this._scale
@@ -131,7 +141,7 @@ class Clock extends Draggable {
     stopEvent(ev)
   }
 
-  static beforeDragMove(ev){
+  beforeDragMove(ev){
     if (this._resizing) {
       const dy = ev.clientY - this._resizeStartY
       const newScale = this._resizeStartScale + (-dy) / this.RESIZE_DIVISOR
@@ -139,7 +149,7 @@ class Clock extends Draggable {
       return
     }
   }
-  static afterDragEnd(){
+  afterDragEnd(){
     App.setData('clock-scale', this._scale)
     App.saveData()
   }
@@ -148,12 +158,13 @@ class Clock extends Draggable {
    * @param projet Le projet courant
    * @param data   [sessionDuration, workDuration] en minutes (projet.common_services_data['work-clock'])
    */
-  static get MIN_MINUTES(){ return 1 }
-  static get FALLBACK_MINUTES(){ return 15 }
+  get MIN_MINUTES(){ return 1 }
+  get FALLBACK_MINUTES(){ return 15 }
 
   // Appelé depuis le bouton du service (ServiceData.js) : ferme l'horloge
   // si elle est déjà ouverte, sinon l'ouvre normalement.
-  static toggle(projet, data){
+  toggle(projet, data){
+    // console.log("-> Clock.toggle", projet, data)
     if (this._panel && !this._panel.classList.contains('hidden')) {
       this.close()
     } else {
@@ -161,7 +172,8 @@ class Clock extends Draggable {
     }
   }
 
-  static open(projet, data){
+  open(projet, data){
+    console.log("-> open")
     this.projet         = projet
     // Aucune durée (session ou tranche) en dessous d'1 minute : remplacée par 15 min
     const sessionMinutes = data[0] < this.MIN_MINUTES ? this.FALLBACK_MINUTES : data[0]
@@ -187,7 +199,7 @@ class Clock extends Draggable {
     this.panel.classList.remove('hidden')
   }
 
-  static close(){
+  close(){
     this.stopTicking()
     this.stopWorkCheck()
     this.stopPauseCheck()
@@ -195,19 +207,19 @@ class Clock extends Draggable {
   }
 
 
-  static get CHECK_INTERVAL_MS(){ return 30000 }
+  get CHECK_INTERVAL_MS(){ return 30000 }
 
   // Vérifie périodiquement (30s), pendant que l'horloge tourne, que le
   // travail est bien toujours en cours. TODO (Phil) : la détection réelle
   // reste à brancher — pour l'instant le check se déclenche systématiquement.
-  static startWorkCheck(){
+  startWorkCheck(){
     this.stopWorkCheck()
     this.workCheckId = setInterval(this.checkStillWorking.bind(this), this.CHECK_INTERVAL_MS)
   }
-  static stopWorkCheck(){
+  stopWorkCheck(){
     if (this.workCheckId) { clearInterval(this.workCheckId); this.workCheckId = null }
   }
-  static checkStillWorking(){
+  checkStillWorking(){
     return null // débranché (Phil s'en occupe lui-même) — TODO
     this.promptCheck(
       "Le travail est-il toujours en cours sur ce projet ?",
@@ -218,14 +230,14 @@ class Clock extends Draggable {
 
   // Vérifie périodiquement (30s), pendant la pause, que le travail n'a pas
   // repris sans clic sur le rond. Même remarque TODO que ci-dessus.
-  static startPauseCheck(){
+  startPauseCheck(){
     this.stopPauseCheck()
     this.pauseCheckId = setInterval(this.checkStillPaused.bind(this), this.CHECK_INTERVAL_MS)
   }
-  static stopPauseCheck(){
+  stopPauseCheck(){
     if (this.pauseCheckId) { clearInterval(this.pauseCheckId); this.pauseCheckId = null }
   }
-  static checkStillPaused(){
+  checkStillPaused(){
     return null // débranché (Phil s'en occupe lui-même) — TODO
     this.promptCheck(
       getMsg('clock-ask-work-restarted'),
@@ -237,7 +249,7 @@ class Clock extends Draggable {
   // Fait passer Board au premier plan puis affiche le dialogue de check.
   // Un seul dialogue de check à la fois (garde contre l'empilement si
   // l'user ignore plusieurs checks de suite).
-  static promptCheck(message, actionLabel, actionFn){
+  promptCheck(message, actionLabel, actionFn){
     if (this._checkDialogOpen) return
     this._checkDialogOpen = true
     const clear = () => { this._checkDialogOpen = false }
@@ -252,26 +264,26 @@ class Clock extends Draggable {
   }
 
   // Secondes réellement jouées, pauses exclues
-  static getElapsedSeconds(){
+  getElapsedSeconds(){
     if (!this.startTime) return 0
     const pausedMs = (this.paused && this.pauseStart) ? (Date.now() - this.pauseStart) : 0
     return (Date.now() - this.startTime - this.totalPaused - pausedMs) / 1000
   }
 
-  static startTicking(){
+  startTicking(){
     if (this.intervalId) return
     this.intervalId = setInterval(this.tick.bind(this), 250)
   }
-  static stopTicking(){
+  stopTicking(){
     if (this.intervalId) { clearInterval(this.intervalId); this.intervalId = null }
   }
 
-  static tick(){
+  tick(){
     if (this.paused) return
     this.updateDisplay()
   }
 
-  static updateDisplay(){
+  updateDisplay(){
     const elapsed   = this.getElapsedSeconds()
     const remaining = Math.max(0, this.workDuration - elapsed)
     const pad = n => String(Math.floor(n)).padStart(2, '0')
@@ -305,7 +317,7 @@ class Clock extends Draggable {
     }
   }
 
-  static notify(data){
+  notify(data){
     data.message = data.message + getMsg('of-work-on-project', [Project.current.title])
     Notifier.notify(Object.assign({
           delay: 30
@@ -318,7 +330,7 @@ class Clock extends Draggable {
   }
 
   
-  static setState(state){
+  setState(state){
     if (state === 'prelaunch') {
       this.btnStop.classList.add('clock-btn-invisible')
     } else if (state === 'running') {
@@ -328,7 +340,7 @@ class Clock extends Draggable {
 
   // Icône du bouton toggle : triangle (démarrer) / pause (en marche) /
   // triangle+barre (reprendre après pause).
-  static updateToggleIcon(){
+  updateToggleIcon(){
     const iconClass = !this.startTime ? 'clock-icon-start'
       : this.paused ? 'clock-icon-restart'
       : 'clock-icon-pause'
@@ -337,7 +349,7 @@ class Clock extends Draggable {
 
   // Un clic (sans déplacement) sur le rond fait avancer l'horloge d'un
   // état : pas démarrée -> start ; en marche -> pause ; en pause -> restart.
-  static onClickRing(){
+  onClickRing(){
     if (!this.startTime) {
       this.startTime = Date.now()
       this.paused = false
@@ -361,7 +373,7 @@ class Clock extends Draggable {
     this.updateToggleIcon()
   }
 
-  static onClickStop(){
+  onClickStop(){
     this.stopTicking()
     this.stopWorkCheck()
     this.stopPauseCheck()
@@ -372,7 +384,7 @@ class Clock extends Draggable {
     this.promptChangelog()
   }
 
-  static promptChangelog(){
+  promptChangelog(){
     new TextareaDialog({
         title: getMsg('End-of-session')
       , id: 'clock_changelog'
@@ -384,12 +396,12 @@ class Clock extends Draggable {
     }).show()
   }
 
-  static onChangelogEntered(value){
+  onChangelogEntered(value){
     this.pendingChangelog = value
     this.promptTodo()
   }
 
-  static promptTodo(){
+  promptTodo(){
     new TextareaDialog({
         title: getMsg('End-of-session')
       , id: 'clock_todo'
@@ -401,11 +413,11 @@ class Clock extends Draggable {
     }).show()
   }
 
-  static onTodoEntered(todo){
+  onTodoEntered(todo){
     this.finalizeStop(this.pendingChangelog, todo)
   }
 
-  static finalizeStop(changelog, todo){
+  finalizeStop(changelog, todo){
     server.send({
         action:     'update-project-notes'
       , path:       this.projet.path

@@ -12,14 +12,8 @@ div.services-panel {
   z-index:100;
   background-color: #aab2c9;
 }
-div.services-panel.closed {
-  right: calc(-1 * (var(--editor-width) + 100px));
-}
 div.services-panel .btn-deal-with-services {
-  position:absolute;
-  bottom:10px;
-  left: 50%;
-  transform:translate(-50%, -40px);
+  transform: translate(50%, 40px);
   font-family: "Arial Narrow";
   font-size: 13px;
 }
@@ -47,12 +41,10 @@ div.startup-services-panel {
 
 div.services-panel {
   padding:0.5em;
-  margin-bottom: 1em;
   cursor: ew-resize;
 }
 div.services-listing {
-  margin-bottom: 1em;
-  max-height: calc(88%);
+  max-height: calc(90%);
   overflow:auto;
   border: none;
   border-bottom: 1px solid white;

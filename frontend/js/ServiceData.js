@@ -57,7 +57,7 @@ const COMMON_SERVICES_DATA = [
       id: 'work-clock'
     , name: 'Démarrer l’horloge'
     , group: 'Outils'
-    , front: Clock.toggle.bind(Clock)
+    , front: Clock.instance.toggle.bind(Clock.instance)
     , params: [
           {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer', default: 120}
         , {id: 'work-duration', q: 'Durée d’une tranche de travail (minutes)', type: 'integer', useLastAsDefault: true}

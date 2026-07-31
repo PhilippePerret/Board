@@ -232,7 +232,7 @@ module BoardTest
     bridge_eval(<<~JS) == 'true'
       (function(){
         var el=document.getElementById(#{dom_id.to_json});
-        return !!el && !el.classList.contains('closed');
+        return !!el && !el.classList.contains('hidden');
       })()
     JS
   end

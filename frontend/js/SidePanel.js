@@ -1,9 +1,12 @@
 /**
  * Classe abstraite commune aux panneaux ancrés à droite façon "panneau des
  * services" (#common-services-panel/#custom-services-panel, services.css :
- * position fixed, slide via la classe .closed) — mais construits
- * dynamiquement (contrairement à ces deux-là, statiques dans index.html),
- * sur le modèle de Dialog.js#build (jamais reconstruits une fois ouverts).
+ * position fixed, masqué via la classe générique .hidden — comme tout autre
+ * panneau/dialogue de l'appli, plus de jeu sur `right`, incompatible avec le
+ * `left` inline posé par Draggable une fois le panneau glissé) — mais
+ * construits dynamiquement (contrairement à ces deux-là, statiques dans
+ * index.html), sur le modèle de Dialog.js#build (jamais reconstruits une
+ * fois ouverts).
  *
  * Une sous-classe redéfinit `title`, `domId` et `buildContent()`.
  */
@@ -50,14 +53,17 @@ class SidePanel extends Draggable {
   }
   setState(state){
     this.opened = (state == 'opened')
-    this.obj.classList[this.opened?'remove':'add']('closed')
+    this.obj.classList[this.opened?'remove':'add']('hidden')
   }
 
   toggleOpposites(){
     this.built || this.build()
+    // Le panneau qui prend la place doit apparaître au même endroit que
+    // celui qu'il remplace (position posée par Draggable en inline style).
+    this.oppositePanel.built || this.oppositePanel.build()
+    this.oppositePanel.obj.style.left = this.obj.style.left
+    this.oppositePanel.obj.style.top  = this.obj.style.top
     this.close()
-    console.log("this", this)
-    console.log("this.oppositePanel", this.oppositePanel)
     this.oppositePanel.open()
     return this.oppositePanel
   }
@@ -69,9 +75,11 @@ class SidePanel extends Draggable {
 
   build(){
     historize("-> SidePanel#build panneau %s", this.title)
-    const panel = DCreate('DIV', {class: 'services-panel closed', id: this.domId})
-    // this._panel = panel
-    Draggable.listenMove(panel)
+    const panel = DCreate('DIV', {class: 'services-panel hidden', id: this.domId})
+
+    // Pour rendre le panneau draggable
+    this.listenMove(panel)
+
     const fieldset = DCreate('DIV', {class: 'services-listing'})
     fieldset.appendChild(DCreate('DIV', {class: 'legend', text: this.title}))
     panel.appendChild(fieldset)
