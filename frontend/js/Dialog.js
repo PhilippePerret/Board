@@ -67,6 +67,9 @@ class Dialog {
    */
 
   onOui(ev){
+    this.ouiData.keep || this.hide()
+    Spinner.start()
+    stopEvent(ev)
     if ('function' == typeof this.ouiData.onclick) {
       let returnedValues = [];
       if (this.returnedIdValues) {
@@ -88,8 +91,8 @@ class Dialog {
     } else {
       error('this.ouiData.onclick n’est pas une fonction')
     }
-    this.ouiData.keep || this.hide()
-    return stopEvent(ev)
+    Spinner.stop()
+    return false
   }
 
   onNon(ev){

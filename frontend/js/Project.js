@@ -74,6 +74,7 @@ class Project {
       // Plus de projet
       // on nettoie
       delete this.eachAsyncProjects
+      Spinner.stop()
     }
   } 
   static nextAsyncProject(){

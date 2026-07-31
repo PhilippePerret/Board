@@ -45,6 +45,7 @@ class App {
     if (undefined == retour) {
       return server.send({action: 'load-all'}, this.init.bind(this))
     } else {
+      Spinner.start()
       this.observe()
       Service.init()
       this.data = retour.data.appData
