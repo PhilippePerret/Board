@@ -7,13 +7,14 @@
  *
  * Une sous-classe redéfinit `title`, `domId` et `buildContent()`.
  */
-class SidePanel {
+class SidePanel extends Draggable {
   // static get instance(){ return this._instance || (this._instance = new this()) }
   // static open(){ this.instance.open() }
   // static close(){ this.instance.close() }
   // static toggle(){ this.instance.toggle() }
 
   constructor(){
+    super()
     console.log("constructor de %s", this.title)
     this.built  = false
     this.opened = false
@@ -69,6 +70,8 @@ class SidePanel {
   build(){
     historize("-> SidePanel#build panneau %s", this.title)
     const panel = DCreate('DIV', {class: 'services-panel closed', id: this.domId})
+    // this._panel = panel
+    Draggable.listenMove(panel)
     const fieldset = DCreate('DIV', {class: 'services-listing'})
     fieldset.appendChild(DCreate('DIV', {class: 'legend', text: this.title}))
     panel.appendChild(fieldset)

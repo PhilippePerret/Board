@@ -8,6 +8,11 @@ require_relative '../../support/helpers'
 include BoardTest
 
 def run_test
+  # ConfigDialog modal (remplace le SidePanel extra-data persistant) : pas de
+  # notion de réouverture automatique au changement de projet, donc rien à
+  # garder "fermé" contre une réouverture qui n'existe plus.
+  pending('panneau extra-data remplacé par ConfigDialog modal : plus de réouverture auto à garder fermée')
+
   project_id_a = create_fixture_project(title: 'Projet A', genre: 'Roman')
   project_id_b = create_fixture_project(title: 'Projet B', genre: 'Jeu')
   launch_app

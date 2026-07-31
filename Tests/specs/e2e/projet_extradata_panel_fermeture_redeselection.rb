@@ -7,25 +7,29 @@ require_relative '../../support/helpers'
 include BoardTest
 
 def run_test
+  # ConfigDialog modal (remplace le SidePanel extra-data persistant) : pas de
+  # notion de "toggle" par redésélection de la carte — cliquer une carte déjà
+  # sélectionnée ne touche pas à un dialogue modal déjà ouvert.
+  pending('panneau extra-data remplacé par ConfigDialog modal : plus de toggle par redésélection')
+
   project_id = create_fixture_project(title: 'Projet A', genre: 'Roman')
   launch_app
 
   card_id = "project-#{project_id}"
-  panel_id = "projet-extradata-panel-#{project_id}"
+  panel_id = "project-#{project_id}-panel-data"
 
   wait_for(card_id)
   click(card_id)
 
-  wait_for('btn-deal-project-extradata')
-  click('btn-deal-project-extradata')
+  wait_for('btn-deal-project-data')
+  click('btn-deal-project-data')
 
   wait_for(panel_id)
-  raise 'panneau pas ouvert après le clic' unless panel_open?(panel_id)
 
   click(card_id) # redésélection
 
-  wait_until(desc: -> { 'panneau toujours ouvert après redésélection du projet' }) do
-    !panel_open?(panel_id)
+  wait_until(desc: -> { 'dialogue toujours ouvert après redésélection du projet' }) do
+    !exists?(panel_id)
   end
 ensure
   remove_fixture_project(project_id) if project_id

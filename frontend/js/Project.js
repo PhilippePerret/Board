@@ -386,9 +386,8 @@ class Project {
 
   onSaveEditedData(modos) {
     // console.log("Données projets à modifier", modos)
-    for (var id in modos) {
-      this.set(id, modos[id])
-    }
+    modos.forEach(modo => this.set(modo.id, modo.value))
+    this.saveData()
   }
 
   /**

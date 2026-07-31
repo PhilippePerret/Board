@@ -9,6 +9,15 @@ require_relative '../../support/helpers'
 include BoardTest
 
 def run_test
+  # Le panneau extra-data (SidePanel persistant, réadapté au projet
+  # sélectionné) a été remplacé par un ConfigDialog modal (Project.js#editData,
+  # ouvert par clic explicite sur 'btn-deal-project-data') : il n'y a plus de
+  # notion de panneau qui "reste ouvert" en changeant de sélection de projet —
+  # sélectionner un autre projet ne touche pas à un dialogue modal déjà
+  # ouvert. Prémisse du test obsolète, à revoir si un besoin équivalent est
+  # redéfini pour le ConfigDialog.
+  pending('panneau extra-data remplacé par ConfigDialog modal : plus de notion de "reste ouvert, réadapté" au changement de projet')
+
   project_id_a = create_fixture_project(title: 'Projet A', genre: 'Roman')
   project_id_b = create_fixture_project(title: 'Projet B', genre: 'Jeu')
   launch_app

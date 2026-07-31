@@ -33,6 +33,7 @@ class DateUtils {
    */
   static parseAsIso8601(dateStr, asDateUtils = false){
     const found = dateStr.match(REG_ISO_8601)
+    if (found === null) return 
     const [, sign, offH, offM] = String(found[7]).match(/([+-])([0-9]{2}):([0-9]{2})/) || [null, false, null, null]
     if (found === null) return null
     const [year, month, day, hour, min, sec] = found.slice(1,7).map(n => parseInt(n))

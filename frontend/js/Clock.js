@@ -13,7 +13,7 @@
  */
 const DIX_MINUTES = 600
 
-class Clock {
+class Clock extends Draggable {
 
   static get panel(){
     this._panel || this.build()
@@ -78,12 +78,9 @@ class Clock {
       this._clickedTarget = null
     })
 
-    listen(this.handleMove,   'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
     listen(this.handleResize, 'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
-    listen(this.handleMove,   'mousedown', this.onMoveHandleDown.bind(this))
     listen(this.handleResize, 'mousedown', this.onResizeHandleDown.bind(this))
-    listen(document, 'mousemove', this.onDragMove.bind(this))
-    listen(document, 'mouseup', this.onDragEnd.bind(this))
+    this.listenMove(this.handleMove)
 
     listen(this.btnStop, 'mouseup', ev => { this.onClickStop(); stopEvent(ev) })
 
@@ -124,15 +121,6 @@ class Clock {
     this.onClickRing()
   }
 
-  // Déplacement HORIZONTAL du panneau (le "bottom" CSS n'est jamais touché)
-  static onMoveHandleDown(ev){
-    this._dragging       = true
-    this._dragStartX     = ev.clientX
-    this._panelStartLeft = this._panel.getBoundingClientRect().left
-    this._panel.classList.add('dragging')
-    stopEvent(ev)
-  }
-
   // Redimensionnement : seul le déplacement VERTICAL de la souris compte
   // (poignée en haut, ancrage du scale en bas-gauche — monter agrandit).
   static onResizeHandleDown(ev){
@@ -143,31 +131,17 @@ class Clock {
     stopEvent(ev)
   }
 
-  static onDragMove(ev){
+  static beforeDragMove(ev){
     if (this._resizing) {
       const dy = ev.clientY - this._resizeStartY
       const newScale = this._resizeStartScale + (-dy) / this.RESIZE_DIVISOR
       this.setScale(Math.max(this.MIN_SCALE, Math.min(this.getMaxScale(), newScale)))
       return
     }
-    if (!this._dragging) return
-    const dx = ev.clientX - this._dragStartX
-    const maxLeft = window.innerWidth - this._panel.getBoundingClientRect().width
-    const newLeft = Math.max(0, Math.min(maxLeft, this._panelStartLeft + dx))
-    this._panel.style.left = newLeft + 'px'
   }
-  static onDragEnd(){
-    if (this._resizing) {
-      this._resizing = false
-      this._panel.classList.remove('resizing')
-      App.setData('clock-scale', this._scale)
-      App.saveData()
-      return
-    }
-    if (this._dragging) {
-      this._dragging = false
-      this._panel.classList.remove('dragging')
-    }
+  static afterDragEnd(){
+    App.setData('clock-scale', this._scale)
+    App.saveData()
   }
 
   /**
