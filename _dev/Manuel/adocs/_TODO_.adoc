@@ -1,7 +1,5 @@
 == BUGS ==
 
-- Il faut pouvoir dire à un rappel que c'est bon, on a démarré la tâche
-
 - les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
   essayer en essayant de modifier une tâche sans en avoir sélectionné une
 

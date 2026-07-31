@@ -6,6 +6,66 @@
  */
 class Tools {
 
+  /**
+   * Programmation d'un alerte
+   * 
+   * 2 dialogs vont s'enchainer et l'on reviendra à la fin à 
+   * celui-là.
+   *    - demande de la date et l'heure de l'alerte
+   *    - demande du message de l'alerte
+   *    - retour avec les deux informations.
+   */
+  static toolScheduleAlert(dataAlert, message){
+    if (dataAlert) {
+      if (message) {
+        
+      }
+      dataAlert.message = message
+      console.log("composer l'alerte avec : ", dataAlert)
+    } else {
+      var dataAlert = {
+        datetime: null
+        , message: null
+        , error: null
+      }
+      
+      const data = {
+        id: 'scheduled-alert'
+        , title: "Programmation d'alerte"
+        , q: "Merci d'entrer l'alerte sous la forme : [JJ MM ]H:MM"
+        , error: dataAlert.error
+        , ouiBtn: {name: 'Programmer', onclick: this.askForMessage.bind(this, dataAlert)}
+        , nonBtn: {name: getMsg('Cancel')}
+      }
+      new TextFieldDialog(data).show()
+    }
+  }
+  static askForMessage(dataAlert, datetime) {
+    var error
+    if ( datetime = Validator.datetime(datetime, REG_DATETIME_JJ_MM_HH_MM)) {
+      console.log("Time", datetime)
+        // TODO On la programme
+        // TODO Si dans le futur (demain, après) on l'enregistre
+        dataAlert.datetime = datetime
+    } else {
+      dataAlert.error = "Le format est invalide."
+      return this.toolScheduleAlert(dataAlert)
+    }
+    const dataMessage = {
+      title: "Programmation d'alerte"
+      , q: "Quel message afficher ?"
+      , ouiBtn: {name: 'Programmer', onclick: this.toolScheduleAlert.bind(this, dataAlert)}
+      , nonBtn: {name: getMsg('Cancel')}
+    }
+    new TextFieldDialog(dataMessage).show()
+  }
+
+  /**
+   * @api
+   * 
+   * Pour obtenir la dimension d'une fenêtre dans l'application 
+   * choisie
+   */
   static toolGetWindowBounds(retour){
     if (undefined == retour) {
       server.send({action: 'list-running-apps'}, this.toolGetWindowBounds.bind(this))

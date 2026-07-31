@@ -4,9 +4,14 @@
  * (`run`), sans valeur à afficher.
  */
 const TOOLS_DATA = [
-    {
-        id: 'app-window-bounds'
-      , name: 'Taille et position de fenêtre…'
-      , run: () => Tools.toolGetWindowBounds()
-    }
+  {
+      id: 'alert'
+    , name: "Programmer une alerte"
+    , run: () => Tools.toolScheduleAlert()
+  },
+  {
+      id: 'app-window-bounds'
+    , name: 'Taille et position de fenêtre…'
+    , run: () => Tools.toolGetWindowBounds()
+  }
 ]

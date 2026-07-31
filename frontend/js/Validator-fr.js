@@ -12,6 +12,9 @@ const dateUnit = "(mois|semaine|sem|jour|jr|j|heure|hr|h|minute|min|mn)s?"
 const dureeReg = new RegExp(`^([0-9]+) ${dateUnit}$`)
 const dateDansReg = new RegExp(`^dans ([0-9]+) ${dateUnit}?( à ${heureReg})?$`)
 
+// Retourne [Jour, Mois, Heure, Minutes] ou [Heure, Minute]
+const REG_DATETIME_JJ_MM_HH_MM = /^(?:([0-9]{1,2})[ \-]([0-9]{2}) )?([0-9]{1,2}):([0-9]{1,2})$/
+
 class Validator {
 
   /**
@@ -39,6 +42,27 @@ class Validator {
       err = `La date ${date} est invalide. Formats valide : JJ/MM/AAAA et les dérivés ou "demain", "après-demain", ou "dans x heures/jours/semaines/mois"`
     }
     return this._retErr(errors, err)
+  }
+
+  /**
+   * @api
+   * 
+   * Validation d'une datetime en envoyant l'expression 
+   * régulière correspondante.
+   * 
+   * @return {day, month, hour, minute}
+   */
+  static datetime(str, reg){
+    var found, day, month, hour, minute
+    if ( found = str.match(reg) ) {
+      found = found.slice(1)
+      ;[day, month, hour, minute] = found.map( n => {
+        if ('string' == typeof n) return parseInt(n, 10)
+      })
+      return {day, month, hour, minute}
+    } else {
+      return null
+    }
   }
 
   /**
