@@ -89,19 +89,24 @@ class DateUtils {
    */
   static extractHourFrom(dateStr){
     var date, hour
-    if ('string' == typeof dateStr) {
-      if ( date = this.parseAsIso8601(dateStr)) {
-        date = new DateUtils(date)
-        return { hour: date.hour, minute: date.minute }
-      } else if ( this.hasHour(dateStr) ) {
-        [date, hour] = dateStr.split(getMsg('date/at'))
-        return this._parseHour(hour.trim()) // {hour, minute}
+    try {
+      if ('string' == typeof dateStr) {
+        if ( date = this.parseAsIso8601(dateStr)) {
+          date = new DateUtils(date)
+          return { hour: date.hour, minute: date.minute }
+        } else if ( this.hasHour(dateStr) ) {
+          [date, hour] = dateStr.split(getMsg('date/at'))
+          return this._parseHour(hour.trim()) // {hour, minute}
+        } else {
+          // La date ne définit pas d'heure
+          return null
+        }
       } else {
-        // La date ne définit pas d'heure
-        return null
+        raise("DateUtils::extractHourFrom requiert une date string")
       }
-    } else {
-      raise("DateUtils::extractHourFrom requiert une date string")
+    } catch(err) {
+      console.error("Problème avec '%s' / date: '%s' / hour: '%s'", dateStr, date, hour,  err)
+      return {hour: 0, minute: 0}
     }
   }
 
