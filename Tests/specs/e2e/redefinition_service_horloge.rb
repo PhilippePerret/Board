@@ -29,18 +29,18 @@ def run_test
     meta_click(service_card)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom inchangé
+    click_suffix('btn-oui') # nom inchangé
 
     # → session-duration : valeur actuelle préremplie
     wait_for('__session-duration__')
     raise "session-duration pas préremplie = #{get_value('__session-duration__').inspect}" unless get_value('__session-duration__') == '90'
     set_value('__session-duration__', '100')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     # → work-duration : useLastAsDefault reprend la valeur tout juste saisie (100)
     wait_for('__work-duration__')
     raise "work-duration ne reprend pas la valeur juste saisie = #{get_value('__work-duration__').inspect}" unless get_value('__work-duration__') == '100'
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }

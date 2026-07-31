@@ -255,6 +255,83 @@ module BoardTest
     'ok'
   end
 
+  # Variantes "suffix" (id se terminant par, ex. 'btn-oui' préfixé par l'id
+  # du dialogue : "code-editor-btn-oui", "panel-3-btn-oui"…) — nécessaires
+  # depuis que Dialog.js préfixe ses boutons génériques (btn-oui/btn-non/
+  # btn-mid) par this.id, pour éviter les collisions entre dialogues
+  # imbriqués (ex. ConfigDialog + son édition de ligne).
+  def click_suffix(suffix)
+    bridge_eval(<<~JS)
+      (function(){
+        var fireClick=#{FIRE_CLICK_JS};
+        var s=#{suffix.to_json};
+        var el=Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
+        if(!el) throw new Error('introuvable (suffix): '+s);
+        fireClick(el);
+        return '';
+      })()
+    JS
+  end
+
+  def set_value_suffix(suffix, value)
+    bridge_eval(<<~JS)
+      (function(){
+        var s=#{suffix.to_json};
+        var el=Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
+        if(!el) throw new Error('introuvable (suffix): '+s);
+        el.value=#{value.to_s.to_json};
+        return '';
+      })()
+    JS
+  end
+
+  def get_value_suffix(suffix)
+    bridge_eval(<<~JS)
+      (function(){
+        var s=#{suffix.to_json};
+        var el=Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
+        if(!el) throw new Error('introuvable (suffix): '+s);
+        return el.value;
+      })()
+    JS
+  end
+
+  def get_text_suffix(suffix)
+    bridge_eval(<<~JS)
+      (function(){
+        var s=#{suffix.to_json};
+        var el=Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
+        if(!el) throw new Error('introuvable (suffix): '+s);
+        return el.textContent;
+      })()
+    JS
+  end
+
+  def has_class_suffix?(suffix, class_name)
+    bridge_eval(<<~JS) == 'true'
+      (function(){
+        var s=#{suffix.to_json};
+        var el=Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
+        if(!el) throw new Error('introuvable (suffix): '+s);
+        return el.classList.contains(#{class_name.to_json});
+      })()
+    JS
+  end
+
+  def exists_suffix?(suffix)
+    bridge_eval(<<~JS) == 'true'
+      (function(){
+        var s=#{suffix.to_json};
+        return !!Array.from(document.querySelectorAll('[id]')).find(function(e){return e.id.endsWith(s);});
+      })()
+    JS
+  end
+
+  def wait_for_suffix(suffix, timeout = 4)
+    wait_until(timeout, 0.1, desc: -> { "élément introuvable (suffix) : #{suffix}" }) { exists_suffix?(suffix) }
+    'ok'
+  end
+
   # querySelectorAll avec une liste de sélecteurs CSS renvoie les éléments
   # dans l'ordre du DOM, quel que soit l'ordre des sélecteurs dans la liste —
   # exactement l'ordre réel attendu ici, sans parcours manuel.

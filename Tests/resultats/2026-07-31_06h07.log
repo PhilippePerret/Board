@@ -1,0 +1,24 @@
+Moteur : pont
+Arguments : creation_nouveau_projet_selection_fichier.rb service_commun_ouverture_dossier.rb
+Date : 2026-07-31 06h07
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_nouveau_projet_selection_fichier.rb ---
+✓ création d'un nouveau projet, sélection Finder = un fichier
+  (osascript : 6 appels, 0.895s)
+  (durée totale de la spec : 1.490s)
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+✗ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "Board" (attendu "board-test-project-20260731-8417-y0dkq0")
+  (osascript : 25 appels, 2.940s)
+  (durée totale de la spec : 6.462s)
+
+Échecs :
+_LSOpenURLsWithCompletionHandler() failed with error -600.
+1. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (4s) — nom de la fenêtre Finder au premier plan = "Board" (attendu "board-test-project-20260731-8417-y0dkq0")
+  (osascript : 25 appels, 2.940s)
+
+-------------------
+Success: 1  Failures: 1  Pendings: 0  Test count: 2
+Durée totale (moteur : pont) : 7.952s

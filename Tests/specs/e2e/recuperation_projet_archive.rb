@@ -19,18 +19,18 @@ def run_test
 
   # - ouvrir le dialogue d'ajout de projet
   click('btn-add-project')
-  wait_for('btn-oui')
+  wait_for_suffix('btn-oui')
 
   # - jouer "Archives…"
-  wait_for('btn-mid')
-  click('btn-mid')
+  wait_for_suffix('btn-mid')
+  click_suffix('btn-mid')
 
   # → la liste des projets archivés s'affiche
   wait_for_prefix('__panel-')
   set_value_prefix('__panel-', project_id)
 
   # - confirmer ("Celui-là")
-  click('btn-oui')
+  click_suffix('btn-oui')
 
   # → le projet réapparaît dans le panneau
   wait_for(card_id)

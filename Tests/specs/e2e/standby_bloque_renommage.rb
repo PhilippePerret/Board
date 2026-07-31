@@ -18,7 +18,7 @@ def run_test
   click("#{card_id}-title")
 
   # → aucune dialog de renommage ouverte
-  raise 'Dialog de renommage ouverte alors que la carte est en standby' if exists?('btn-oui')
+  raise 'Dialog de renommage ouverte alors que la carte est en standby' if exists_suffix?('btn-oui')
 ensure
   remove_fixture_project(project_id) if project_id
 end

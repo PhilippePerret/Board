@@ -15,13 +15,13 @@ def run_test
     click('btn-add-project')
 
     # → Une fenêtre s'ouvre, demandant de choisir le dossier dans le Finder
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
 
     # - on choisit un dossier dans le Finder (fenêtre(s) Finder ouverte(s)
     #   par la sélection refermées en sortie de bloc)
     with_finder_selection(fixture_dir) do
       # - on click sur le bouton "OK"
-      click('btn-oui')
+      click_suffix('btn-oui')
 
       # → Une fenêtre s'ouvre, pour entrer le titre à donner au projet
       wait_for_prefix('__panel-')
@@ -30,13 +30,13 @@ def run_test
       set_value_prefix('__panel-', 'Tout premier projet')
 
       # - on clique sur le bouton "Appliquer"
-      click('btn-oui')
+      click_suffix('btn-oui')
 
       # → confirmation de l'import
-      wait_for('btn-oui')
+      wait_for_suffix('btn-oui')
 
       # - on confirme l'import en cliquant sur "Importer"
-      click('btn-oui')
+      click_suffix('btn-oui')
     end
 
     # Vérification : une carte projet a été écrite sur disque

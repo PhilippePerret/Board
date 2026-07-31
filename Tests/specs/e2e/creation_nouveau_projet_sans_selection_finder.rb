@@ -16,10 +16,10 @@ def run_test
     click('btn-add-project')
 
     # → Une fenêtre s'ouvre, demandant de choisir le dossier dans le Finder
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
 
     # - on click sur le bouton "OK" (sans sélection Finder)
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     # ==| Erreur : aucune sélection finder
     wait_until(desc: -> { "message affiché : #{get_text('message').inspect}" }) { get_text('message').include?(expected_error) }

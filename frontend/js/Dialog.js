@@ -142,14 +142,14 @@ class Dialog {
     // Pied de page
     const footer = DCreate('DIV', {class:'footer'})
     if (this.nonData) {
-      this.btnNon = DCreate('BUTTON', {id: 'btn-non', class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
+      this.btnNon = DCreate('BUTTON', {id: `${this.id}-btn-non`, class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
       footer.appendChild(this.btnNon)
       this.btnNon.disabled = (this.nonData?.enable === false)
     }
-    this.btnMid = DCreate('BUTTON', {id: 'btn-mid', class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
+    this.btnMid = DCreate('BUTTON', {id: `${this.id}-btn-mid`, class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
     footer.appendChild(this.btnMid)
     this.btnMid.disabled = (this.midData?.enable === false)
-    this.btnOui = DCreate('BUTTON', {id: 'btn-oui', class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
+    this.btnOui = DCreate('BUTTON', {id: `${this.id}-btn-oui`, class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
     footer.appendChild(this.btnOui)
     this.btnOui.disabled = (this.ouiData?.enable === false)
 

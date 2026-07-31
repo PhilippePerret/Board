@@ -363,14 +363,14 @@ module BoardTest
 
     wait_for('__service-name__')
     set_value('__service-name__', custom_name)
-    click('btn-oui')
+    click_suffix('btn-oui')
 
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
     with_finder_window(fixture_dir) do
-      click('btn-oui')
-      wait_for('btn-oui')
+      click_suffix('btn-oui')
+      wait_for_suffix('btn-oui')
     end
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     uuid = nil
     wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do

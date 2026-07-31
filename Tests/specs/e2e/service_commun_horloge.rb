@@ -42,13 +42,13 @@ def run_test
     #   avec la session qui vient d'être saisie)
     wait_for('__session-duration__', 10)
     set_value('__session-duration__', '20')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_for('__work-duration__', 10)
     prefill = get_value('__work-duration__')
     raise "work-duration pas préremplie avec la session (#{prefill.inspect})" unless prefill == '20'
     set_value('__work-duration__', '15')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     # → common_services_data enregistrée groupée par param : [[session], [work]]
     wait_until(5, desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
@@ -75,11 +75,11 @@ def run_test
     click('btn-clock-stop')
     wait_for('__clock_changelog__', 10)
     set_value('__clock_changelog__', 'Ecriture des tests de l’horloge.')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_for('__clock_todo__', 10)
     set_value('__clock_todo__', 'Relire les tests')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     # → CHANGELOG.md / TODO.md créés à la racine du projet
     changelog_path = File.join(fixture_dir, 'CHANGELOG.md')
@@ -134,7 +134,7 @@ def run_test
 
     click('btn-clock-stop')
     wait_for('__clock_changelog__', 10)
-    click('btn-non')
+    click_suffix('btn-non')
     wait_until(5, desc: -> { '__clock_changelog__ encore présent après Annuler' }) { !exists?('__clock_changelog__') }
 
     # → reprise : même bouton (toggle), doit reprendre là où c'était

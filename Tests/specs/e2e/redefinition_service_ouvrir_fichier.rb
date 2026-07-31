@@ -33,17 +33,17 @@ def run_test
     wait_for('__service-name__')
     raise "nom pas préempli = #{get_value('__service-name__').inspect}" unless get_value('__service-name__') == 'Nom initial'
     set_value('__service-name__', 'Nom modifié')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     # → path : bouton "Préserver" présent (this.actual bien remonté), on le garde
-    wait_for('btn-mid')
-    raise "pas de bouton Préserver pour le path" unless get_text('btn-mid') == 'Préserver'
-    click('btn-mid')
+    wait_for_suffix('btn-mid')
+    raise "pas de bouton Préserver pour le path" unless get_text_suffix('btn-mid') == 'Préserver'
+    click_suffix('btn-mid')
 
     # → logiciel : valeur actuelle préremplie dans le <select>, on la garde telle quelle
     wait_for('__app__')
     raise "logiciel pas préempli = #{get_value('__app__').inspect}" unless get_value('__app__') == 'Safari'
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }

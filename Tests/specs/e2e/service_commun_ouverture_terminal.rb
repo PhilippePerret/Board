@@ -51,7 +51,7 @@ def run_scenario(code_value, expected_output: nil)
     # juste après le "cd", qui efface l'historique (nom du dossier compris)
     # avant qu'on ait pu le lire.
     ids_before = terminal_all_window_ids
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     window_id = nil
     # Timeout élargi (10s, comme execution_services_startup.rb et

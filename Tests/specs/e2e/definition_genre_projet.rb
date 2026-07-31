@@ -31,8 +31,8 @@ def run_test
   set_value('__genre__', 'Application')
 
   # - confirmer
-  wait_for('btn-oui')
-  click('btn-oui')
+  wait_for_suffix('btn-oui')
+  click_suffix('btn-oui')
 
   # → la fiche du projet sur disque doit porter le genre choisi
   wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do

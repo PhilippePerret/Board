@@ -48,18 +48,29 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → dialogue de positionnement (bounds) : nécessite une fenêtre Finder au
-    #   premier plan au moment de valider — n'importe laquelle convient
-    wait_for('btn-oui')
-    with_finder_selection(fixture_dir) do
-      click('btn-oui')
-    end
+    #   premier plan au moment de valider — n'importe laquelle convient.
+    #   Le clic ne fait que lancer un aller-retour ASYNCHRONE (bridge ->
+    #   backend -> getInfoFinderWindow.scpt, qui a besoin de cette fenêtre
+    #   au premier plan) : la refermer dès que click_suffix revient (comme le
+    #   faisait with_finder_selection) la ferme AVANT que l'aller-retour soit
+    #   terminé -> AppleScript échoue (pas de front window) -> erreur JS
+    #   silencieuse côté ServiceDefiner -> exec-service jamais appelé. On
+    #   garde donc la fenêtre ouverte jusqu'à l'apparition du dialogue
+    #   suivant (sidebar), preuve que l'aller-retour est bien terminé.
+    wait_for_suffix('btn-oui')
+    expected_selection_name = finder_select(fixture_dir)
+    click_suffix('btn-oui')
 
     # → dialogue de taille de la sidebar (nouveau 3e param, valeur par défaut acceptée)
     wait_for('__sidebar__')
-    click('btn-oui')
+    finder_close_front_window_if_named(expected_selection_name)
+    click_suffix('btn-oui')
 
-    # → le dossier du projet doit s'ouvrir dans le Finder
-    wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+    # → le dossier du projet doit s'ouvrir dans le Finder (activation Finder +
+    #   "delay 1" du script AppleScript lui-même + overhead System Events :
+    #   4s par défaut trop juste, déjà vu en timeout alors que la fenêtre
+    #   finissait par apparaître)
+    wait_until(8, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
       finder_front_window_name == expected_name
     end
 
@@ -70,7 +81,11 @@ def run_test
     #   backend/lib/usefull.rb)
     assert_service_message_ok!
 
-    finder_close_all_windows
+    # Ferme SEULEMENT la fenêtre ouverte par ce test (par son nom), jamais
+    # toutes les fenêtres Finder — un balayage total fermerait aussi les
+    # fenêtres Finder ouvertes par ailleurs sur cette machine, sans les
+    # rouvrir ensuite.
+    finder_close_front_window_if_named(expected_name)
 
     # - recharger l'application
     launch_app
@@ -84,7 +99,6 @@ def run_test
   end
 ensure
   remove_fixture_project(id) if id
-  finder_close_all_windows rescue nil
 end
 
 board_test("service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite") { run_test }

@@ -37,10 +37,10 @@ def run_test
   wait_for(panel_id)
 
   click("project-extradata-#{project_id}-icon")
-  wait_for('btn-oui')
+  wait_for_suffix('btn-oui')
 
   with_finder_selection(icon_path) do
-    click('btn-oui')
+    click_suffix('btn-oui')
   end
 
   wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do

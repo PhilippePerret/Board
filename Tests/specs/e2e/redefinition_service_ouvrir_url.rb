@@ -28,12 +28,12 @@ def run_test
     meta_click(service_card)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom inchangé
+    click_suffix('btn-oui') # nom inchangé
 
     wait_for('__url__')
     raise "url pas préremplie = #{get_value('__url__').inspect}" unless get_value('__url__') == original_url
     set_value('__url__', new_url)
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }

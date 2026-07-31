@@ -17,8 +17,14 @@ class Bridge: NSObject, WKScriptMessageHandler {
     ) {
         guard message.name == "bridge" else { return }
 
-        guard let body = message.body as? [String: Any],
-              let data = try? JSONSerialization.data(withJSONObject: body),
+        guard let body = message.body as? [String: Any] else { return }
+
+        guard JSONSerialization.isValidJSONObject(body) else {
+            print("Bridge: message ignoré, body non JSON-valide (NaN/Infinity ?): \(body)")
+            return
+        }
+
+        guard let data = try? JSONSerialization.data(withJSONObject: body),
               let jsonString = String(data: data, encoding: .utf8)
         else {
             return

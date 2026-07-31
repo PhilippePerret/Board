@@ -44,9 +44,9 @@ def run_test
 
     # → dialogue de sélection du dossier de documentation dans le Finder
     #   (documentation-editor ne redemande rien : type 'app')
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
     with_finder_selection(fixture_dir) do
-      click('btn-oui')
+      click_suffix('btn-oui')
 
       # → le dossier doit s'ouvrir dans l'éditeur de test (fenêtre nommée
       #   d'après le dossier — seulement si le dossier contient un fichier,

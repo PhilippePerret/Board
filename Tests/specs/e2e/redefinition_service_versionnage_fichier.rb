@@ -30,17 +30,17 @@ def run_test
       meta_click(service_card)
 
       wait_for('__service-name__')
-      click('btn-oui') # nom inchangé
+      click_suffix('btn-oui') # nom inchangé
 
       # → path : Préserver
-      wait_for('btn-mid')
-      click('btn-mid')
+      wait_for_suffix('btn-mid')
+      click_suffix('btn-mid')
 
       # → archive-folder (path-or-null) : Préserver DISTINCT de "Aucun"
-      wait_for('btn-mid')
-      raise "pas de bouton Préserver pour path-or-null" unless get_text('btn-mid') == 'Préserver'
-      raise 'bouton "Aucun" absent (path-or-null doit garder ses 2 options)' unless get_text('btn-non') == 'Aucun'
-      click('btn-mid')
+      wait_for_suffix('btn-mid')
+      raise "pas de bouton Préserver pour path-or-null" unless get_text_suffix('btn-mid') == 'Préserver'
+      raise 'bouton "Aucun" absent (path-or-null doit garder ses 2 options)' unless get_text_suffix('btn-non') == 'Aucun'
+      click_suffix('btn-mid')
 
       wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
         found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }

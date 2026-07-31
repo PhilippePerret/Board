@@ -44,9 +44,9 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → dialogue de sélection du fichier dans le Finder
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
     with_finder_selection(main_file) do
-      click('btn-oui')
+      click_suffix('btn-oui')
     end
 
     # → common_services_data enregistrée : [chemin_fichier] — afterDefinedParams

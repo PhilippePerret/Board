@@ -35,20 +35,20 @@ def run_test
     meta_click(service_card)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom inchangé
+    click_suffix('btn-oui') # nom inchangé
 
     # → finder-window : composite, pas de "Préserver", resélection obligatoire
-    wait_for('btn-oui')
-    raise 'bouton Préserver présent pour un type composite (finder-window)' unless get_text('btn-mid') == ''
+    wait_for_suffix('btn-oui')
+    raise 'bouton Préserver présent pour un type composite (finder-window)' unless get_text_suffix('btn-mid') == ''
     with_finder_window(fixture_dir) do
-      click('btn-oui') # confirme la fenêtre lue -> avance au param suivant (sidebar)
-      wait_for('btn-oui') # dialogue booléen (sidebar) maintenant affiché
+      click_suffix('btn-oui') # confirme la fenêtre lue -> avance au param suivant (sidebar)
+      wait_for_suffix('btn-oui') # dialogue booléen (sidebar) maintenant affiché
     end
 
     # → boolean : bouton par défaut mis en valeur (actual = true -> Oui)
-    raise 'bouton par défaut absent/mauvais (actual=true doit mettre Oui en avant)' unless has_class?('btn-oui', 'default-btn')
-    raise 'le bouton Non ne doit pas être mis en valeur' if has_class?('btn-non', 'default-btn')
-    click('btn-oui') # garde "Oui"
+    raise 'bouton par défaut absent/mauvais (actual=true doit mettre Oui en avant)' unless has_class_suffix?('btn-oui', 'default-btn')
+    raise 'le bouton Non ne doit pas être mis en valeur' if has_class_suffix?('btn-non', 'default-btn')
+    click_suffix('btn-oui') # garde "Oui"
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }

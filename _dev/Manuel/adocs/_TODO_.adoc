@@ -1,23 +1,29 @@
 == BUGS ==
 
-- BUG#1 une tâche programmée à une certaine heure se déclenche trop tôt (1 heure avant)
+- Il faut pouvoir dire à un rappel que c'est bon, on a démarré la tâche
 
 - les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
   essayer en essayant de modifier une tâche sans en avoir sélectionné une
-
-
-- quand un projet est réactivé de force parce qu'il a des tâches à l'heure, il faut régler son badge
 
 - Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
 
 == Todo En cours
 
-Bug #1
+- Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)
 
 == Todo list ==
 
-- Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)
-  Utiliser les ConfigDialog
+- pouvoir déplacer en glissant le panneau des services (pour le rapproche d'un projet)
+- Il faudrait essayer de rationnaliser les données Projet, si c'est possible
+  Mais est-ce vraiment nécessaire ?
+  On a : 
+    - les données racines (title, date création, temps de travail, etc.)
+    - les données de services affectés (services startup et others)
+    - les données des autres services
+      - données des script-services 
+      - services communs non affectés
+- Pour les rappels de tâches à l'heure, les mettre en warning
+
 - Panneaux : il faudrait fermer le panneau avant de faire l'opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
   En fait : clic → Fermer fenêtre → Sablier → Confirmation fin
 

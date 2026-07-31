@@ -38,7 +38,7 @@ def run_test
     set_value('__code__', 'ls')
 
     ids_before = terminal_all_window_ids
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_until(10, desc: -> { "aucune nouvelle fenêtre Terminal (avant : #{ids_before.inspect}) -- DUMP:\n#{terminal_debug_dump}" }) do
       window_id = (terminal_all_window_ids - ids_before).first

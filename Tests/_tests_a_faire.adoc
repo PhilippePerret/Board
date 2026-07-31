@@ -115,7 +115,7 @@ Numérotation reprise telle quelle de la discussion avec Claude, pour référenc
 - 76. `get-data` sans `data_id` → retourne tout
 - 77. `select-file` sélection Finder → valeur = chemin choisi
 - 78. `choose-folder` sélection Finder → valeur = chemin choisi
-- 79. `set-project-data` — valeur enregistrée dans les extra-données du projet, relisible ensuite
+- 79. `set-project-data` — valeur enregistrée dans les données du projet, relisible ensuite
 - 80. `get-project-data` donnée absente → `null`
 - 81. `get-project-data` donnée présente → valeur récupérée
 - 82. `translate` `today`

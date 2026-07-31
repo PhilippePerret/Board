@@ -241,6 +241,9 @@ class ConfigDialog extends Dialog {
     this.modos    = [] // Contiendra les modifications/array de {id, value}
     this.content  = this.buildConfig()
     this.ouiData  = Object.assign(this.ouiData, {onclick: this.ouiData.onclick.bind(null, this.modos)})
+    if (undefined == data.nonBtn) {
+      this.nonData = {name: getMsg('Cancel')}
+    }
   }
 
 
@@ -249,9 +252,9 @@ class ConfigDialog extends Dialog {
     this.props.forEach(dprop => {
       // console.log("dprop = ", dprop)
       if ( dprop.editable === false ) return
-      const prefixId = `${this.id}-${this.dprop.id}`
+      const prefixId = `${this.id}-${dprop.id}`
       const line = DCreate('DIV', {id: `${prefixId}-line`, class: 'config-data-prop'})
-      const name = DCreate('SPAN', {id: `${prefixId}-name`, text: dprop.name, class: 'config-data-name'})
+      const name = DCreate('SPAN', {id: `${prefixId}-name`, text: dprop.name || dprop.id, class: 'config-data-name'})
       const desc = DCreate('SPAN', {id: `${prefixId}-desc`, text: dprop.desc || '', class: 'config-data-desc'})
       const valu = DCreate('SPAN', {id: `${prefixId}-value`, text: dprop.value ?? '', class: 'config-data-value'})
       listen(valu, 'click', (ev) => {
@@ -264,7 +267,7 @@ class ConfigDialog extends Dialog {
           // Et on la met dans le tableau
           valu.innerHTML = dprop.value
         }
-        new ParamsDefiner([dprop], callback).define()
+        new ParamsDefiner([Object.assign(dprop, {default: dprop.value})], callback).define()
       })
       line.appendChild(name)
       line.appendChild(desc)

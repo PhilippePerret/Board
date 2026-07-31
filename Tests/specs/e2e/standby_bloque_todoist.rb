@@ -30,7 +30,7 @@ def run_test
   click_todoist_badge(project_id)
 
   # → aucune dialog/panneau de tâches ouvert
-  raise 'Un panneau todoist est apparu alors que la carte est en standby' if exists?('btn-oui')
+  raise 'Un panneau todoist est apparu alors que la carte est en standby' if exists_suffix?('btn-oui')
 ensure
   remove_fixture_project(project_id) if project_id
 end

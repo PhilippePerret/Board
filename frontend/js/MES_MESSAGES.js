@@ -36,6 +36,7 @@ const MESSAGES = {
 
     // --- PROJETS ---
     , 'title-project': "Projet “$1”"
+    , 'title-data-of-project': "Données du projet “$1”"
     , 'alert-before-edit-projet': "Attention, données sensibles. Manipuler en sachant ce que vous faites."
     , 'expli-retrait-projet': "Le retrait du projet “$1” ne touche pas son dossier lui-même. Il est juste retiré de ce tablau de bord ou archivé (pour pouvoir le récupérer plus tard)\n\nAttention, si le projet n'est pas archivé, tous ses services et data seront perdues, bien sûr."
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder'

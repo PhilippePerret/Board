@@ -41,8 +41,8 @@ _Man_: (pour "Manuel"), mis à "X" pour indiquer que la fonctionnalité est déc
 | TD
 | TD
 
-| Définition des extra-data d'un projet
-| par le bouton "Extra-data"
+| Définition des data d'un projet
+| par le bouton "data"
 | TD
 | TD
 | TD

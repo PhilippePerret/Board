@@ -25,7 +25,7 @@ def run_test
   set_value_prefix('__panel-', NEW_TITLE)
 
   # - enregistrer
-  click('btn-oui')
+  click_suffix('btn-oui')
 
   # → titre modifié sur l'interface
   wait_until(desc: -> { "titre affiché : #{get_text(title_id).inspect}" }) { get_text(title_id) == NEW_TITLE }

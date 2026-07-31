@@ -82,8 +82,12 @@ def run_test
 
         go_and_verify.call
 
-        # - fermer toutes les fenêtres Finder
-        finder_close_all_windows
+        # - fermer SEULEMENT les 2 fenêtres ouvertes par ce test (par leur
+        #   nom), jamais toutes les fenêtres Finder — un balayage total
+        #   fermerait aussi des fenêtres Finder ouvertes par ailleurs sur
+        #   cette machine, sans les rouvrir ensuite.
+        close_finder_window_on(fixture_dir)
+        close_finder_window_on(other_dir)
 
         # - recharger l'application
         launch_app

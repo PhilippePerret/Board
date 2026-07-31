@@ -34,7 +34,7 @@ def run_test
     meta_click(service_card)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom inchangé
+    click_suffix('btn-oui') # nom inchangé
 
     # → 'project' (docu-folder) et 'app' (documentation-editor) : aucun
     #   dialogue, résolution silencieuse — si un dialogue bloquait, ce

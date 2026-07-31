@@ -24,8 +24,8 @@ def run_test
   click('btn-remove-project')
 
   # → confirmation avec deux choix : "Archiver" (oui) ou "Retirer" (mid)
-  wait_for('btn-oui')
-  click('btn-oui')
+  wait_for_suffix('btn-oui')
+  click_suffix('btn-oui')
 
   # → le projet ne doit plus être affiché
   wait_until(desc: -> { "#{card_id} toujours présent dans l'accessibilité" }) { !exists?(card_id) }

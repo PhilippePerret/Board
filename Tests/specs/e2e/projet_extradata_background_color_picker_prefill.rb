@@ -28,8 +28,8 @@ def run_test
   wait_for(panel_id)
 
   click("project-extradata-#{project_id}-background")
-  wait_for('btn-oui')
-  click('btn-oui') # "Couleur"
+  wait_for_suffix('btn-oui')
+  click_suffix('btn-oui') # "Couleur"
 
   wait_until(desc: -> { 'picker de couleur jamais apparu' }) do
     bridge_eval("!!document.querySelector('input[type=color]')") == 'true'

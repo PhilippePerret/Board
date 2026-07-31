@@ -18,12 +18,12 @@ def run_test
   click('btn-add-project')
 
   # → Une fenêtre s'ouvre, demandant de choisir le dossier dans le Finder
-  wait_for('btn-oui')
+  wait_for_suffix('btn-oui')
 
   # - la sélection Finder est un fichier (pas un dossier)
   with_finder_selection(fixture_path) do
     # - on click sur le bouton "OK"
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     # ==| Erreur : la sélection doit être un dossier
     wait_until(desc: -> { "message affiché : #{get_text('message').inspect}" }) { get_text('message').include?(expected_error) }

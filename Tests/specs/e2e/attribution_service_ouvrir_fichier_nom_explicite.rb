@@ -30,20 +30,20 @@ def run_test
     drag(SERVICE_DOM_ID, others_field)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom par défaut
+    click_suffix('btn-oui') # nom par défaut
 
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
     with_finder_selection(file_path) do
-      click('btn-oui')
+      click_suffix('btn-oui')
     end
 
     # → param 'app' : "Autre application…" (btn-mid) plutôt qu'un choix de
     #   la liste -> TextFieldDialog classique
-    wait_for('btn-mid')
-    click('btn-mid')
+    wait_for_suffix('btn-mid')
+    click_suffix('btn-mid')
     wait_for('__app__')
     set_value('__app__', APP_NAME)
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       list = read_project_card(id)['services']['others']

@@ -46,11 +46,11 @@ def run_test
 
       wait_for('__service-name__')
       set_value('__service-name__', CUSTOM_NAME_A)
-      click('btn-oui')
+      click_suffix('btn-oui')
 
       wait_for('__code__')
       set_value('__code__', 'ls')
-      click('btn-oui')
+      click_suffix('btn-oui')
 
       # → le service doit être attaché au projet A avec le nom personnalisé
       wait_until(desc: -> { "carte projet A = #{read_project_card(id_a).inspect}" }) do
@@ -70,7 +70,7 @@ def run_test
       wait_until(desc: -> { "nom prérempli = #{get_value('__service-name__').inspect}" }) do
         get_value('__service-name__') == DEFAULT_NAME
       end
-      click('btn-non')
+      click_suffix('btn-non')
     end
   end
 ensure

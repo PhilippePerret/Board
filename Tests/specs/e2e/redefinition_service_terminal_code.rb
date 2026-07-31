@@ -28,14 +28,14 @@ def run_test
     meta_click(service_card)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom inchangé
+    click_suffix('btn-oui') # nom inchangé
 
     # → path (project) : résolu silencieusement, pas de dialogue
     # → code (string) : valeur actuelle préremplie
     wait_for('__code__')
     raise "code pas prérempli = #{get_value('__code__').inspect}" unless get_value('__code__') == 'ls -la'
     set_value('__code__', 'pwd')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }

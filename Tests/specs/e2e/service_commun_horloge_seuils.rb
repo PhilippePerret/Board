@@ -42,11 +42,11 @@ def run_test
     # → durée de session puis durée de tranche : 1 minute pour les deux
     wait_for('__session-duration__', 10)
     set_value('__session-duration__', '1')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_for('__work-duration__', 10)
     set_value('__work-duration__', '1')
-    click('btn-oui')
+    click_suffix('btn-oui')
 
     wait_for('clock-dial', 10)
 

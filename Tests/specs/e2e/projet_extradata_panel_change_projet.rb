@@ -38,7 +38,7 @@ def run_test
   click(genre_b)
   wait_for('__genre__')
   set_value('__genre__', 'Application')
-  click('btn-oui')
+  click_suffix('btn-oui')
 
   wait_until(desc: -> { "carte B = #{read_project_card(project_id_b).inspect}" }) do
     read_project_card(project_id_b)['genre'] == 'Application'

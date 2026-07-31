@@ -1,7 +1,7 @@
 import Cocoa
 import WebKit
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, WKNavigationDelegate {
 
     private var webView: WKWebView!
     private var backend: Backend!
@@ -51,7 +51,7 @@ class ViewController: NSViewController {
 
         view.addSubview(webView)
 
-        TestBridge.shared.attach(webView: webView)
+        webView.navigationDelegate = self
 
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -66,5 +66,13 @@ class ViewController: NSViewController {
             url,
             allowingReadAccessTo: URL(fileURLWithPath: "/")
         )
+    }
+
+    // N'ouvrir le socket du moteur de test "pont" qu'une fois index.html
+    // chargé : sinon le socket accepte des connexions avant que le DOM
+    // existe, et un premier click() de test peut tomber sur un
+    // document.getElementById introuvable (course socket/chargement page).
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        TestBridge.shared.attach(webView: webView)
     }
 }

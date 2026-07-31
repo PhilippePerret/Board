@@ -40,7 +40,7 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
 | <<scserv-type-create-folder>>     | Création d'un dossier.                    | `path`
 | <<scserv-type-copy-file>>         | Copie d'un fichier.                       |
 | <<scserv-type-set-project-data>>  | Pour définir une propriété pour le projet.| `step` + `value` + `project_key`
-| <<scserv-type-get-project-data>>  | Pour obtenir une propriété du projet.     | `id` = prop extradata
+| <<scserv-type-get-project-data>>  | Pour obtenir une propriété du projet.     | `id` = prop data
 | <<scserv-type-translate>> | Pour transformer une marqueur selon un
                               certain format.                           | `value` + `format`
 | <<scserv-type-string>>            | Obtenir une valeur string.                | 
@@ -1219,7 +1219,7 @@ Type d'étape qui permet de définir une donnée de projet.
 |====
 | `type` | `get-project-data`
 | `id` | Identifiant.
-| `project_key` | La clé dans les extra-données du projet.
+| `project_key` | La clé dans les données du projet.
 | `value`       | La valeur à donner à cette clé. Elle vient, normalement, d'une autre étape ayant permis de la définir. Voir la <<sequence-project-data>>.
 |====
 
@@ -1232,7 +1232,7 @@ Type d'étape qui permet de récupérer une donnée de projet.
 |====
 | `type` | `get-project-data`
 | `id` | Identifiant. Mais pour ce type d'étape, il est particulier : il doit porter le nom de la donnée du projet, impérativement, pour pouvoir être redéfini si la donnée manque.
-| `project_key` | La clé dans les extra-données du projet.
+| `project_key` | La clé dans les données du projet.
 |====
 
 Voir la <<sequence-project-data>>.

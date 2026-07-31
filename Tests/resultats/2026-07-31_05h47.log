@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : creation_simple_nouveau_projet.rb
+Date : 2026-07-31 05h47
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/creation_simple_nouveau_projet.rb ---
+✗ création simple d'un nouveau projet
+    Error Domain=WKErrorDomain Code=4 "A JavaScript exception occurred" UserInfo={WKJavaScriptExceptionLineNumber=9, WKJavaScriptExceptionMessage=Error: introuvable: btn-add-project, WKJavaScriptExceptionColumnNumber=26, NSLocalizedDescription=A JavaScript exception occurred}
+  (osascript : 1 appel, 0.151s)
+  (durée totale de la spec : 0.338s)
+
+Échecs :
+1. création simple d'un nouveau projet
+    Error Domain=WKErrorDomain Code=4 "A JavaScript exception occurred" UserInfo={WKJavaScriptExceptionLineNumber=9, WKJavaScriptExceptionMessage=Error: introuvable: btn-add-project, WKJavaScriptExceptionColumnNumber=26, NSLocalizedDescription=A JavaScript exception occurred}
+  (osascript : 1 appel, 0.151s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 0.338s

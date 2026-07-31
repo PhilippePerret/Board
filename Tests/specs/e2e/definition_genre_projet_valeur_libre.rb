@@ -28,16 +28,16 @@ def run_test
   click("project-extradata-#{project_id}-genre")
 
   # → la SelectDialog s'ouvre, avec un bouton "Autre valeur…"
-  wait_for('btn-mid')
-  click('btn-mid')
+  wait_for_suffix('btn-mid')
+  click_suffix('btn-mid')
 
   # → une TextFieldDialog s'ouvre pour saisir une valeur libre
   wait_for('__genre__')
   set_value('__genre__', 'Docu-fiction')
 
   # - confirmer
-  wait_for('btn-oui')
-  click('btn-oui')
+  wait_for_suffix('btn-oui')
+  click_suffix('btn-oui')
 
   # → la fiche du projet sur disque doit porter la valeur libre saisie
   wait_until(desc: -> { "carte projet = #{read_project_card(project_id).inspect}" }) do

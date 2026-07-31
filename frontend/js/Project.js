@@ -1,19 +1,6 @@
 class Project {
 
-  // Toutes les propriétés des projets doivent être définies ici
-  // common_services_data : données pour les services communs
-  static PROPERTIES = [
-    'id', 'title', 'path', 'common_services_data', 'workTime', 'createdAt', 'updatedAt',
-    'services', 'background', 'icon', 'genre', 'collapsed',
-    // documentation
-    'docu-folder', 'docu-main-file-adoc', 'docu-main-file-html',
-    // Pour les services (notamment les script-services)
-    'service_data',
-    // Todoist project id (Todoist.js)
-    'todoist_id'
-
-  ]
-
+  
   static get current(){ return this._current}
   static set current(p){
     this._current = p
@@ -127,13 +114,13 @@ class Project {
   }
 
   /**
-   * Fonction appelée par le bouton "Extra data"
+   * Fonction appelée par le bouton "Data"
    * 
-   * Définition des extra-data du projet courant
+   * Édition des data du projet courant
    */
-  static defineExtraData(){
+  static editData(){
     if (this.current) {
-      this.current.defineExtraData.call(this.current)
+      this.current.editData.call(this.current)
     } else {
       // Ne devrait pas arriver
       erreur("Aucun projet courant.")
@@ -213,10 +200,8 @@ class Project {
    */
   static onSelect(projet){
     const same = (projet.id === this.current?.id)
-    const reopenExtraData = !same && App.currentPanel instanceof ProjectExtraDataPanel
     this.current && this.deselect(this.current)
     same || this.select(projet)
-    if (reopenExtraData) projet.defineExtraData()
   }
 
   static select(projet){
@@ -227,7 +212,6 @@ class Project {
   }
   static deselect(projet){
     projet.obj.classList.remove('selected')
-    if (App.currentPanel instanceof ProjectExtraDataPanel) App.currentPanel.close()
     this.current = null
     this.maskProjectButtons()
   }
@@ -272,7 +256,7 @@ class Project {
 
   constructor(data){ D.on && D.trace(data)
     // console.log("data", data)
-    this.constructor.PROPERTIES.forEach(prop => this[prop] = data[prop])
+    PROJECT_DATA.forEach(dprop => this[dprop.id] = data[dprop.id])
     this.data = data
     if (!this.id ) this.id = uniqId()
     if (!this.title) this.title = '-projet sans titre-'
@@ -292,18 +276,47 @@ class Project {
   }
 
   get(key){ return this[key] ?? this.data[key] ?? (this.service_data && this.service_data[key])}
+
+  // Défini la propriété +key+ à +val+ et appelle le callback
   set(key, val, callback = false){ // ça part du principe que s'il faut enregistrer, il faut un callback
-    if (this.constructor.PROPERTIES.indexOf(key) > -1) {
+
+    if (TBL_PROJECT_DATA[key]) {
       this[key] = val
     } else {// une donnée service
       this.service_data = this.service_data ?? {}
       Object.assign(this.service_data, {[key]: val})
     }
+    // Si le projet existe dans Todoist, on lui met une icône normale
+    // qui recevra aussi un badge avec le nombre de tâches du jour.
     if (key === 'todoist_id') {
       this.todoistImg.src = `images/todoist${this.todoistBadgeByTasks()}.png`
     }
+
+    // On applique tout de suite
+    this.apply(key, val)
+
     callback && this.save(callback)
   }
+
+    // Pour appliquer tout de suite le choix
+  apply(id, value) {
+    switch(id){
+      case 'title':
+        console.error("Je dois apprendre à corriger le titre dans l'affichage")
+        break
+      case 'path':
+        console.error("Je dois apprendre à corriger le path dans l'affichage")
+        break
+      case 'background':
+        this.project.setBackground(undefined, value)
+        break
+      case 'icon':
+        const icon = this.project.buildIcon()
+        this.project.obj.insertBefore(icon, this.project.divTitle)
+        break
+    }
+  }
+
 
   initServices(){
     this.services.startup = (this.services.startup ?? []).map(ds => new Service(Object.assign({}, ds, {type: 'startup'})))
@@ -337,12 +350,41 @@ class Project {
     // console.log("retour Project.afterSave et callback", retour, callback)
     message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
     callback && 'function' == typeof callback && callback()
+  }  
+
+  editData(){
+    // On récupère les propriétés éditable, en injectant leur valeur
+    const props = PROJECT_DATA
+    .filter(prop => prop.editable)
+    .map(prop => {
+      return Object.assign({}, prop, {value: this.get(prop.id)})
+    })
+    // Ajouter les service_data s'il y en a
+    var serviceData
+    if ( this.service_data ) {
+      for(var id in this.service_data) {
+        var value = this.service_data[id]
+        const type = getTypeFrom(value)
+        if ( type == 'path') {
+          // Si la valeur est un path, on essaie de le réduire
+          value = value.replace(this.path, '')
+        }
+        props.push({id, type, value, name: key})
+      }
+    }
+
+    const dataConfDial = {
+        id:     `project-${this.id}-panel-data`
+      , title:  getMsg('title-data-of-project', this.title)
+      , props:  props
+      , ouiBtn: {name: getMsg('Save'), onclick: this.onSaveAllData.bind(this)}
+    }
+    new ConfigDialog(dataConfDial).show()
   }
 
-  get extraDataPanel(){ return this._extradatapan || (this._extradatapan = new ProjectExtraDataPanel(this) )}
-  
-  defineExtraData(){
-    this.extraDataPanel.toggle()
+  onSaveAllData(modos) {
+    console.log("Données projets à modifier", modos)
+    // todo
   }
 
   /**

@@ -40,9 +40,9 @@ def run_test
 
     # → dialogue de sélection du dossier CONTENEUR (le service crée
     #   lui-même le sous-dossier "Documentation" dedans)
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
     with_finder_selection(fixture_dir) do
-      click('btn-oui')
+      click_suffix('btn-oui')
     end
 
     # → arborescence créée

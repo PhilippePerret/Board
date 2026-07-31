@@ -26,12 +26,12 @@ def run_test
     meta_click(service_card)
 
     wait_for('__service-name__')
-    click('btn-oui') # nom inchangé
+    click_suffix('btn-oui') # nom inchangé
 
     # → path stocké à plat : le bouton Préserver doit quand même apparaître
-    wait_for('btn-mid')
-    raise "pas de bouton Préserver (format à plat non géré)" unless get_text('btn-mid') == 'Préserver'
-    click('btn-mid')
+    wait_for_suffix('btn-mid')
+    raise "pas de bouton Préserver (format à plat non géré)" unless get_text_suffix('btn-mid') == 'Préserver'
+    click_suffix('btn-mid')
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == service['uuid'] }

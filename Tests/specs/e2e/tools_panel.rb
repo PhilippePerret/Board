@@ -45,7 +45,7 @@ def run_test
   default_app = get_value('__tools_app_window_bounds__')
   raise 'aucune application proposée dans la liste' if default_app.nil? || default_app.empty?
 
-  click('btn-oui')
+  click_suffix('btn-oui')
 
   wait_until(10, desc: -> { "#message = #{(get_text('message') rescue '(erreur)').inspect}" }) do
     (get_text('message') rescue '') != 'Message footer'

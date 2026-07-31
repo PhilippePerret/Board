@@ -23,8 +23,8 @@ def run_test
   raise 'panneau pas ouvert après le clic' unless panel_open?(panel_id)
 
   click('btn-remove-project')
-  wait_for('btn-mid')
-  click('btn-mid')
+  wait_for_suffix('btn-mid')
+  click_suffix('btn-mid')
 
   wait_until(desc: -> { "#{card_id} toujours présent dans l'accessibilité" }) { !exists?(card_id) }
   wait_until(desc: -> { 'panneau toujours ouvert après suppression du projet affiché' }) { !panel_open?(panel_id) }

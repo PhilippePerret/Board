@@ -1,3 +1,43 @@
+/**
+ * Reçoit une valeur et en déduit un type
+ * 
+ * note : un "type" de l'application, par exemple 'file' ou 'boolean
+ */
+const REG_BOOL = /^true|false$/
+const REG_URL  = /^https?::\/\/([a-zA-z0-9\-_#\?]+)$/
+const REG_INTEGER = /^[0-9]+$/
+const REG_FLOAT = /^[0-9.,]+$/
+function getTypeFrom(value) {
+
+  if ('string' == typeof value) {
+    if (value.match(REG_BOOL)) {
+      return 'boolean'
+    } else if (value.match(REG_URL)) {
+      return 'url'
+    } else if (value.match(REG_FLOAT)) {
+      return 'float'
+    } else if (value.match(REG_INTEGER)) {
+      return 'integer'
+    } else if (valueMayBeAPath(value)) {
+      return 'path'
+    } else {
+      return 'string'
+    }
+
+  } else {
+    return typeof value
+  }
+}
+/**
+ * @return TRUE si la +value+ a de fortes chances d'être le
+ * chemin d'accès à un fichier.
+ */
+function valueMayBeAPath(value){
+  if ( !value.startsWith(/\.?\//) ) return false
+  if (value.match(/\n/)) return false
+  if (value.split(' ').length < 3)  return true
+}
+
 function traceError(){
   console.trace()
 }

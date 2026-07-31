@@ -40,13 +40,14 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → dialogue de sélection du fichier .adoc principal dans le Finder
-    wait_for('btn-oui')
+    wait_for_suffix('btn-oui')
     with_finder_selection(main_file) do
-      click('btn-oui')
+      click_suffix('btn-oui')
 
       # → le dossier contenant le fichier doit s'ouvrir dans le Finder
-      #   (`open .` du script, avant l'appel à asciidoctor)
-      wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+      #   (`open .` du script, avant l'appel à asciidoctor) — 4s par défaut
+      #   trop juste face à l'activation Finder réelle (cf. service_commun_ouverture_dossier.rb)
+      wait_until(8, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
         finder_front_window_name == expected_name
       end
     end
@@ -57,7 +58,11 @@ def run_test
       common_services_data.is_a?(Array) && File.realpath(common_services_data[0][0]) == File.realpath(main_file)
     end
 
-    finder_close_all_windows
+    # Ferme SEULEMENT la fenêtre ouverte par ce test (par son nom), jamais
+    # toutes les fenêtres Finder — un balayage total fermerait aussi les
+    # fenêtres Finder ouvertes par ailleurs sur cette machine, sans les
+    # rouvrir ensuite.
+    finder_close_front_window_if_named(expected_name)
 
     # - recharger l'application : re-sélection, nouveau clic sur le service
     launch_app
@@ -68,13 +73,12 @@ def run_test
     # → cette fois, aucun dialogue : le dossier s'ouvre direct dans le Finder
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
-    wait_until(desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
+    wait_until(8, desc: -> { "nom de la fenêtre Finder au premier plan = #{(finder_front_window_name rescue '(erreur)').inspect} (attendu #{expected_name.inspect})" }) do
       finder_front_window_name == expected_name
     end
   end
 ensure
   remove_fixture_project(id) if id
-  finder_close_all_windows rescue nil
 end
 
 board_test("service commun 'actualiser la documentation' : définition au premier clic, exécution directe ensuite") { run_test }

@@ -18,6 +18,8 @@
 --   front-window-name          (nom de la fenêtre Finder au premier plan, "" si aucune)
 --   close-front-window-if-named <name> (ferme la fenêtre Finder au premier
 --     plan SEULEMENT si elle porte ce nom — sinon ignore, ne ferme rien)
+--   close-windows-targeting <posixPath> (ferme SEULEMENT les fenêtres dont
+--     la cible est exactement ce dossier — jamais les autres)
 --   close-all-windows           (ferme toutes les fenêtres Finder actuelles —
 --     à utiliser seulement après un snapshot-windows, pour repartir propre
 --     en début de suite ; la restauration se fait via restore-windows)
@@ -116,6 +118,33 @@ on run argv
 				return "erreur fermeture : " & errMsg
 			end try
 		end tell
+
+	else if theAction is "close-windows-targeting" then
+		-- Ferme SEULEMENT les fenêtres dont la cible est exactement ce
+		-- dossier (comparaison de POSIX path) — contrairement à
+		-- "close-all-windows", ne touche à aucune autre fenêtre Finder
+		-- (ex. celles de l'utilisateur, ouvertes en parallèle du test).
+		set targetPath to item 2 of argv
+		set diag to ""
+		tell application "Finder"
+			set allIds to id of every window
+		end tell
+		repeat with wid in allIds
+			tell application "Finder"
+				try
+					set w to first window whose id is wid
+					set wPath to POSIX path of (target of w as alias)
+					if wPath is targetPath then close w
+				on error errMsg
+					set diag to diag & "fenêtre " & (wid as string) & " : " & errMsg & linefeed
+				end try
+			end tell
+		end repeat
+		if diag is "" then
+			return "ok"
+		else
+			return "ok (avec erreurs)" & linefeed & diag
+		end if
 
 	else if theAction is "close-all-windows" then
 		tell application "Finder"

@@ -55,42 +55,52 @@ class ServiceDefiner {
       // On définit ceux qui sont des propriétés du projet
       // et l'on rassemble tous les paramètres pour service
       let paramsValues = []
-      definers.forEach(definer => {
-        switch(definer.type){
-          case 'service-name':
-            // console.log("define pour service-name", definer)
-            this.service.data.name = definer.value
-            break
-          case 'project':
-            if (Project.current[definer.id] != definer.value){
-              projectHasNewValue = true
-              Project.current[definer.id] = definer.value
+      try {
+        definers.forEach(definer => {
+          switch(definer.type){
+            case 'service-name':
+              // console.log("define pour service-name", definer)
+              this.service.data.name = definer.value
+              break
+            case 'project':
+              if (Project.current[definer.id] != definer.value){
+                projectHasNewValue = true
+                Project.current[definer.id] = definer.value
+              }
+              paramsValues.push([definer.value])
+              break
+            case 'finder-window':
+              // console.log("'finder-window', definer = ", definer)
+              definer.value.position = definer.value.position.map(n => n - 20)
+              paramsValues.push([definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType])
+              break
+            case 'bounds': {
+              // console.log("'bounds', define =", definer)
+              definer.value.position = definer.value.position.map(n => n - 20)
+              const [boundsX, boundsY] = definer.value.position
+              const [boundsW, boundsH] = definer.value.size
+              paramsValues.push([boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
+              break
             }
-            paramsValues.push([definer.value])
-            break
-          case 'finder-window':
-            // console.log("'finder-window', definer = ", definer)
-            definer.value.position = definer.value.position.map(n => n - 20)
-            paramsValues.push([definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType])
-            break
-          case 'bounds': {
-            // console.log("'bounds', define =", definer)
-            definer.value.position = definer.value.position.map(n => n - 20)
-            const [boundsX, boundsY] = definer.value.position
-            const [boundsW, boundsH] = definer.value.size
-            paramsValues.push([boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
-            break
+            default:
+              paramsValues.push([definer.value])
           }
-          default:
-            paramsValues.push([definer.value])
-        }
-      })
+        })
+      } catch (e) {
+        // Sans ce catch, une erreur ici (ex. definer.value.position
+        // undefined si le backend a renvoyé une erreur au lieu des bounds)
+        // est avalée silencieusement par le listener de clic — aucune trace,
+        // exec-service jamais appelé, échec impossible à diagnostiquer.
+        message(`[ServiceDefiner] ${e.message}`)
+        console.error('[ServiceDefiner.onDefined] erreur pendant le traitement des definers :', e, definers)
+        return
+      }
       if (this.afterDefinedParams){
         paramsValues = this.afterDefinedParams(paramsValues)
       }
       this.service.params = paramsValues
 
-      // Si des propriétés projet ont été modifiées, il 
+      // Si des propriétés projet ont été modifiées, il
       // faut enregistrer le projet
       if (projectHasNewValue) {
         Project.current.save(this.callback)

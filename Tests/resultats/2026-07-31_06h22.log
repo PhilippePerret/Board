@@ -1,0 +1,18 @@
+Moteur : pont
+Arguments : service_commun_ouverture_dossier.rb
+Date : 2026-07-31 06h22
+
+--- /Users/philippeperret/Programmes/Board/Tests/specs/e2e/service_commun_ouverture_dossier.rb ---
+✗ service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (8s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-project-20260731-12699-gcqlxw")
+  (osascript : 36 appels, 4.709s)
+  (durée totale de la spec : 10.440s)
+
+Échecs :
+1. service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite
+    Timeout d'attente dépassé (8s) — nom de la fenêtre Finder au premier plan = "" (attendu "board-test-project-20260731-12699-gcqlxw")
+  (osascript : 36 appels, 4.709s)
+
+-------------------
+Success: 0  Failures: 1  Pendings: 0  Test count: 1
+Durée totale (moteur : pont) : 10.440s
