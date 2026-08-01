@@ -41,6 +41,7 @@ class Reminder extends ExtendedObject {
     if (reminder.immediat) {
       reminder.exec()
     } else if ( reminder.onOtherDay ) {
+      App.saveReminder(reminder)
     } else if ( !this.running ) {
       this.run()
     }
@@ -76,11 +77,11 @@ class Reminder extends ExtendedObject {
    * Noter qu'une même tâche peut tout à fait avoir plusieurs
    * reminder (tâche toutes les heures, par exemple)
    */
-  static addReminderToTask(task, reminder){
-    if (undefined == this.remindedTasks[task.id]){
-      Object.assign(this.remindedTasks, {[task.id]: []})
+  static addReminderToTask(taskId, reminder){
+    if (undefined == this.remindedTasks[taskId]){
+      Object.assign(this.remindedTasks, {[taskId]: []})
     }
-    this.remindedTasks[task.id].push(reminder)
+    this.remindedTasks[taskId].push(reminder)
   }
 
   /**
@@ -125,6 +126,32 @@ class Reminder extends ExtendedObject {
     data.task && this.setAsTask(data)
     console.log("Reminder enregistré", this)
     this.execCount = 0
+    this.buttons && this.defineRealButtons()
+  }
+
+  set project(v) { this._project = v}
+  get project() { return this._project ?? (this._project = this.getProject())}
+  getProject(){
+    if (this.projectId) { return Project.get(this.projectId) }
+    else return null
+  }
+
+  /**
+   * @return Un dict des données du rappel pour enregistrement, par
+   * exemple lorsqu'il doit être déclenché plus 
+   */
+  savedData(){
+    return {
+        title: this.title
+      , message: this.message
+      , time: this.time.toISOString()
+      , icon: this.icon
+      , taskId: this.task?.id
+      , type: this.type
+      , delay: this.delay
+      , projectId: this.project?.id
+      , buttons: this.buttons
+    }
   }
 
   /** Retourne true quand c'est une alerte qui doit être jouée
@@ -140,12 +167,32 @@ class Reminder extends ExtendedObject {
   // Définir comme une tâche
   setAsTask(data){
     this.buttons = [
-        {name: 'Démarrée',  onclick: Reminder.remove.bind(Reminder,this)}
-      , {name: 'Supprimer', onclick: Reminder.remove.bind(Reminder,this)}
+      {name: getMsg('remind-started'), onclick: 'Reminder.remove'}
+      {name: getMsg('remind-remove'), onclick: 'Reminder.remove'}
     ]
-    this.task = data.task
+    this.defineRealButtons()
+    const taskId = this.taskId || data?.task.id
     this.type = 'warning'
-    Reminder.addReminderToTask(data.task, this)
+    Reminder.addReminderToTask(taskId, this)
+  }
+
+  /**
+   * Les boutons étant enregistrés avec les autres informations, on
+   * ne peut pas avec de fonction bindées à onclick. Pour gérer ça,
+   * on utilise des clés associées aux fonctions.
+   * 
+   * Ces clés sont toujours composées de la même façon :
+   *      <Classe>.<methode>
+   * … qui sera transformé en 
+   *      Classe.methode.bind(Classe, this)
+   * … où this sera donc le rappel.
+   */
+  defineRealButtons(){
+    this.realButtons = this.buttons?.map(button => {
+      const [sklass, method] = button.onclick.split('.')
+      const klass = eval(sklass)
+      return Object.assign({}, button, {onclick: klass[method].bind(klass, this)})
+    })
   }
 
   /**
@@ -192,7 +239,7 @@ class Reminder extends ExtendedObject {
       , font_color: '#FFFFFF'
       , mode:       'floating'
       , delay:      this.delay
-      , buttons:    this.buttons
+      , buttons:    this.realButtons
     }
     var sup
     switch(type){

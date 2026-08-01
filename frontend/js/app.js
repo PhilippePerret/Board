@@ -50,6 +50,8 @@ class App {
       Service.init()
       this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
+      // Réveil si nécessaire des rappels
+      this.awakeReminders()
     }
   }
 
@@ -134,5 +136,28 @@ class App {
   }
   static updateProjectsIn() {
     return Project.getProjectsOrder()
+  }
+
+
+  /**
+   * Si un rappel concerne un autre jour, on l'enristre dans 
+   * les données de l'application pour le reprogrammer le 
+   * bon jour.
+   */
+  static saveReminder(reminder){
+    if (undefined == this.reminders) this.reminders = []
+    this.reminders.push(reminder.savedData())
+    this.setData('reminders', this.reminders, true)
+  }
+
+  static awakeReminders(){
+    console.info("Réveil des rappels")
+    this.reminders = this.getData('reminders') ?? []
+    this.reminders.forEach(dreminder => {
+      dreminder = Object.assign(dreminder, {time: new Date(dreminder.time)})
+      Reminder.register(dreminder)
+    })
+    this.reminders = [] // Les futurs seront à nouveau enregistrés
+    this.setData('reminders', this.reminders, true)
   }
 }

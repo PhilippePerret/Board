@@ -49,6 +49,9 @@ const MESSAGES = {
     // Tools
     , 'tools-confirm-scheduling-alert': "Alerte programmée avec succès."
     
+    // Reminder / Rappels
+    , 'remind-started': "Démarrée"
+    , 'remind-remove': "Supprimer"
     // -- Todoist --
     , 'todoist-content'     : "contenu"
     , 'todoist-description' : "description"
