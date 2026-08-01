@@ -44,6 +44,7 @@ const MESSAGES = {
 
     // -- Script services --
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
+    , 'scserv-datetime-default-format': 'JJ MM HH:MM (03 08 05:12 pour 3 aout à 5 heures 12)'
   
     // -- Todoist --
     , 'todoist-content'     : "contenu"

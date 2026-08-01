@@ -431,9 +431,28 @@ class ServStep extends ExtendedObject {
         , message: this.q
         , errorMessage: this.errorMessage
         , ouiBtn: {name:'OK', onclick:this.execText.bind(this)}
-        , nonBtn: {name:'Abandonner', onclick:this.execText.bind(this, ':abort:')}
+        , nonBtn: {name: getMsg('Cancel'), onclick:this.execText.bind(this, ':abort:')}
       }
       new TextareaDialog(ddata).show()
+    }
+  }
+
+  execDateTime(retour) {
+    if (retour) {
+      // Vérification du format
+      var time
+      this.format || (this.format = REG_DATETIME_JJ_MM_HH_MM);
+      if ( datetime = Validator.datetime(retour, this.format, true) ){
+        this.setValue(datetime)
+      } else {
+        const dataDial = {
+          title: 'Date et heure'
+          , message: this.q || getMsg('scserv-datetime-default-format')
+          , ouiBtn: {name: 'OK', onclick: this.execDateTime.bind(this)}
+          , nonBtn: {name: getMsg('Cancel'), onclick:this.execDateTime.bind(this, ':abort:')}
+        }
+        new TextFieldDialog(dataDial).show()
+      }
     }
   }
 

@@ -41,6 +41,14 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
     }
   },
 
+  'date-time':{
+    params: {
+        default: {type: 'string'}
+      , format:   {type: 'regexp'} // Une expression régulière valide ou une string de type "JJ MM HH:MM"
+      , value:    {type: 'datetime', required: true}
+    }
+  },
+
   'phone': {
     params: {
       default: {type: 'string'}

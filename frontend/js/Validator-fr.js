@@ -52,14 +52,24 @@ class Validator {
    * 
    * @return {day, month, hour, minute}
    */
-  static datetime(str, reg){
+  static datetime(str, reg, asDate = false){
+    reg = reg ?? REG_DATETIME_JJ_MM_HH_MM
+    if ('string' == reg) {
+      raise("Je dois apprendre à transformer JJ MM HH:MM en expression régulière.")
+      reg = this.stringDatetimeToRegExp(reg)
+    }
     var found, day, month, hour, minute
     if ( found = str.match(reg) ) {
       found = found.slice(1)
       ;[day, month, hour, minute] = found.map( n => {
         if ('string' == typeof n) return parseInt(n, 10)
       })
-      return {day, month, hour, minute}
+      if ( asDate ) {
+        d = new DateUtils()
+        return new Date(d.year, (month || d.month) - 1, day || d.day, hour, minute, 0)
+      } else {
+        return {day, month, hour, minute}
+      }
     } else {
       return null
     }

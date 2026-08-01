@@ -143,3 +143,91 @@ Dans ce script, qui peut être un script AppleScript, un script ruby, bash ou au
 **Ordre des paramètres dans le script**
 
 L'ordre de réception des paramètres est celui défini par l'ordre des définitions des paramètres dans le fichier `ServiceData.js`. Le problème est que certains type de champ retourne plusieurs valeurs. C'est le cas typique, par exemple, pour le type `finder-window` qui retourne la position (2 valeurs), la taille (2 valeurs), le type de vue, etc. pour le seul paramètre `window`. Pour parlier ce problème, on peut renseigner la propriété d'aide `paramsOrder` avec l'ordre des paramètres.
+
+
+---
+
+[[scserv-dev-creation]]
+=== Création d'un scripts-services ===
+
+Au niveau du développement, pour créer un nouveau type de <<scripts-services, script-service>>, voilà ce qu'il faut implémenter.
+
+Dans `frontend/js/ScriptServiceData.js`, définir les données du nouveau script-service en s'inspirant de celle existantes. Il faut surtout mettre ici les paramètres qu'on doit trouver, en excluant les _paramètres universels_ comme l'identifiant (`id`), le nom (`name`) etc. Si des propriétés sont **absolument requises** c'est celles-là qu'il faut surtout définir.
+
+Ensuite, c'est le gros du morceau, il va faloir implémenter la fonction propre à ce nouveau type. Son nom est conventionnel, il se fait à partir de l'identifiant du service, khebabisé et préfixé par `exec` : 
+
+----
+mon-nouveau-service → execMonNouveauService
+----
+
+Cette fonction est à implémenter dans le fichier `fronted/js/ScriptService.js`. Là aussi, s'inspirer des méthodes existante. En général, un service un peu complexe a cette structure : 
+
+----
+<nomDeLaFonction(retour) {
+  // retour retourné par une opération backend ou un retour de
+  // Dialog. par exemple
+  if (retour) {
+    // Donc on traite ici le retour backend, par exemple
+    
+    // Et l'on fixe la valeur de l'étape du type de service :
+    this.setValue(lavaleur)
+  } else {
+    // On passe par ici en premier
+    // Appel d'une opération backend ou utilisation de Dialog
+    // avec callback sur cette même fonction
+  }
+}
+----
+
+Par exemple :
+
+----
+execMonNew(retour){
+  if (retour) {
+    if ( retour == 'oui') { ... }
+    else if ( retour == 'non') { ... }
+    
+    this.setValue(retour)
+    
+  } else {
+    const dataDialog = { 
+      ... 
+      ouiBtn: {... onclick: this.execMonNew.bind(this, 'oui')}
+      nonBtn: {... onclick: this.execMonNew.bind(this, 'non')}
+    }
+    new UnDialog(dataDialog).show()
+  }
+}
+----
+
+==== Message du dialog ====
+
+Les messages du dialogue doit être fourni par la propriété `message` qui est souvent définie par le paramètre `q` dans les données du service : 
+
+----
+const dataDialog = {
+  ...
+  , message: this.q
+  ...
+}
+----
+
+==== Bouton d'annulation ====
+
+Pour que le deuxième bouton soit un bouton d'annulation du service, il doit mettre la valeur `:abort: ` à l'étape. Ce bouton interrompra tout le processus. Avec par exemple :
+
+----
+nonBtn: {name: getMsg('Cancel'), onclick: this.execMonNew.bind(this, ':abort:')}
+----
+
+==== Signalement d'erreur ====
+
+Les erreurs sont signalées dans le panneau de dialogue par : 
+
+----
+const dataDialog = {
+  ...
+  , errorMessage: this.errorMessage
+  ...
+}
+----

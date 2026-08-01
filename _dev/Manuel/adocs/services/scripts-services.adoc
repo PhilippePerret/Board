@@ -1250,7 +1250,7 @@ Voir la <<sequence-project-data>>.
 | `type`      2+| `text`
 | `q`         2+| La question à poser à l'utilisateur. Par défaut : "Date et heure au format JJ MM HH:MM"
 | `default`   2+| Valeur par défaut.
-| `format`    2+| Optionnellement, le <<scserv-type-date-time, format de date>> à utiliser
+| `format`    2+| Optionnellement, le <<scserv-type-date-time, format de date>> à utiliser.
 |====
 
 
