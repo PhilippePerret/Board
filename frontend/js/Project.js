@@ -301,7 +301,7 @@ class Project {
     callback && this.save(callback)
   }
 
-    // Pour appliquer tout de suite le choix
+  // Pour appliquer tout de suite le choix
   apply(id, value) {
     switch(id){
       case 'title':
@@ -314,11 +314,11 @@ class Project {
         this.todoistImg.src = `images/todoist${this.todoistBadgeByTasks()}.png`
         break
       case 'background':
-        this.project.setBackground(undefined, value)
+        this.setBackground(undefined, value)
         break
       case 'icon':
-        const icon = this.project.buildIcon()
-        this.project.obj.insertBefore(icon, this.project.divTitle)
+        const icon = this.buildIcon()
+        this.obj.insertBefore(icon, this.divTitle)
         break
     }
   }

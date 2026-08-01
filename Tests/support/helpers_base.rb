@@ -139,6 +139,16 @@ module BoardTest
     osascript(FINDER_SCRIPT, 'open-window', posix_path)
   end
 
+  def finder_activate
+    osascript(FINDER_SCRIPT, 'activate')
+  end
+
+  # Dimensionne réellement la fenêtre Finder au premier plan (x, y, largeur,
+  # hauteur) — "open-window" seul garde les bounds par défaut du système.
+  def finder_set_front_window_bounds(x, y, w, h)
+    osascript(FINDER_SCRIPT, 'set-front-window-bounds', x.to_s, y.to_s, w.to_s, h.to_s)
+  end
+
   def finder_deselect
     osascript(FINDER_SCRIPT, 'deselect')
   end

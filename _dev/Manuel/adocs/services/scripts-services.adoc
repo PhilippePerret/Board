@@ -46,6 +46,7 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
 | <<scserv-type-string>>            | Obtenir une valeur string.                | 
 | <<scserv-type-text>>              | Obtenir une valeur texte (multi lignes).  |
 | <<scserv-type-date-time>>         | Obtenir une date et une heure             | 
+| <<scserv-type-alert>>             | Programmer une alerte                     | `time`, `message`, `title` `icon`, `alertType`
 | <<scserv-type-phone>>             | Obtenir un numéro de téléphone.           |
 |====
 
@@ -1254,6 +1255,21 @@ Voir la <<sequence-project-data>>.
 | `format`    2+| Optionnellement, le <<scserv-type-date-time, format de date>> à utiliser.
 |====
 
+[[scserv-type-alert, `alert`]]
+==== Programmer une alerte ====
+
+[cols="1,1,5"]
+|====
+| `time`      2+| Date et temps de l'alerte à donner.
+>| soit         | Heure seule | HH:MM
+>| soit         | Jour et heure | JJ MM HH:MM
+| `message`     | Le message d'alerte à afficher.
+| `title`       | [option] Le titre de l'alerte
+| `icon`        | [option] L'icône de la fenêtre (chemin relatif ou absolu)
+| `alertType` 2+| Type de l'alerte
+|====
+
+Toutes ces données sont obtenues d'autres étapes ou fournies en dur.
 
 [[scserv-type-text, `text`]]
 ==== Obtenir un texte ====

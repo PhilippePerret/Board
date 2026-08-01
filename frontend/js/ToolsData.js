@@ -13,6 +13,7 @@ const TOOLS_DATA = [
       , steps: [
           {id: 'date-time', type: 'date-time', q: "Heure de l'alerte (et jour si plus tard)"}
         , {id: 'message', type: 'string', q: "Message de l'alerte"}
+        , {id: 'schedule', type: 'alert', message: "${message}", titre: "Alerte programmée", time: "${date-time}"}
         , {id: 'conclusion', type: 'set', value: getMsg('tools-confirm-scheduling-alert')}
       ]
   },

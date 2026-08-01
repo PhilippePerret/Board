@@ -23,6 +23,14 @@ class DateUtils {
     return diff < lapsMinutes
   }
 
+  static isAfter(dateRef, dateAfter){
+    dateRef > dateAfter
+  }
+
+  static isBefore(dateRef, dateBefore){
+    dateRef > dateBefore
+  }
+
   /**
    * @api
    * 
@@ -33,7 +41,7 @@ class DateUtils {
    */
   static parseAsIso8601(dateStr, asDateUtils = false){
     const found = dateStr.match(REG_ISO_8601)
-    if (found === null) return 
+    if (found === null) return null
     const [, sign, offH, offM] = String(found[7]).match(/([+-])([0-9]{2}):([0-9]{2})/) || [null, false, null, null]
     if (found === null) return null
     const [year, month, day, hour, min, sec] = found.slice(1,7).map(n => parseInt(n))
@@ -136,6 +144,20 @@ class DateUtils {
     }
   }
 
+  /**
+   * @api
+   * 
+   * Retourne une date de la fin du jour +day+ ou aujourd'hui
+   */
+  static endOfDay(day){
+    day = day ?? new Date()
+    day.setHours(23)
+    day.setMinutes(59)
+    day.setSeconds(59)
+    return day
+  }
+
+
 
   // @return La différence en minutes entre +date1+ et +date2+
   static _diff(date1, date2) {
@@ -180,4 +202,9 @@ class DateUtils {
   get hour(){return this.date.getHours()}
   get minute(){return this.date.getMinutes()}
   get second(){return this.date.getSeconds()}
+
+  isAfter(date) {
+    if (date instanceof DateUtils) date = date.date
+    return this.date > date
+  }
 }

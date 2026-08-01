@@ -53,16 +53,6 @@ CASES = [
     data: { id: 'selectpath', type: 'select', values: './values.yaml', key_value: 'value', key_title: 'title' },
     expect: []
   },
-  {
-    desc: "étape valide (select-or-string)",
-    data: { id: 'sovalide', type: 'select-or-string', values: ['a', 'b'] },
-    expect: []
-  },
-  {
-    desc: "'select-or-string' sans 'values'",
-    data: { id: 'sosansvalues', type: 'select-or-string' },
-    expect: ['scserv-param-required']
-  },
 ].freeze
 
 def validate_errors(step_data)

@@ -336,7 +336,7 @@ class ParamDefiner {
     }).show()
   }
   onIcon(){
-    this.onPath()
+    this.onPathInProject()
   }
 
   /* 

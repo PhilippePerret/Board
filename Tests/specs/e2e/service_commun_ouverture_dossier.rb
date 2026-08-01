@@ -5,18 +5,19 @@
 # commun ne demande donc PAS de sélectionner quoi que ce soit dans le Finder,
 # juste de positionner/dimensionner une fenêtre Finder quelconque (au premier
 # plan au moment de valider) pour en récupérer le bounds — cf.
+# Puis de définir la taille de la sidebar (à 0 par défaut, donc non visible)
 # frontend/js/ServiceData.js (COMMON_SERVICES_DATA, param "window-bounds",
-# type "bounds") et frontend/js/ServiceDefiner.js#defineByType, case 'bounds'.
+# type "finder-window") et frontend/js/ServiceDefiner.js#onDefined, case
+# 'finder-window'.
 #
 # Déroulé attendu :
 #   - sélection du projet → le panneau des services communs s'ouvre seul
 #     (Project.js#affProjectButtons -> Service.showCommonPanel)
 #   - clic sur "Ouvrir dossier du projet"
-#   - PAS de dialogue de nommage : ServiceDefiner#unnamed vaut
-#     `this.service.stype == 'custom'` (Service.js#stype), donc false pour un
-#     service commun — contrairement à un service custom (cf.
-#     attribution_service.rb, qui lui passe par ce dialogue)
-#   - dialogue de positionnement de fenêtre Finder → OK
+#   - dialogue de positionnement de fenêtre Finder → une VRAIE fenêtre est
+#     ouverte et réglée au bounds voulu (with_finder_window, pas un simple
+#     reveal/select : le backend a besoin d'une fenêtre réelle, avec un
+#     bounds réel, pas juste d'un élément sélectionné) → OK
 #   - dialogue de taille de sidebar (3e param, "sidebar", type "integer",
 #     défaut 0) → OK (valeur par défaut acceptée)
 #   → le dossier du projet doit s'ouvrir dans le Finder
@@ -47,23 +48,30 @@ def run_test
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
 
-    # → dialogue de positionnement (bounds) : nécessite une fenêtre Finder au
-    #   premier plan au moment de valider — n'importe laquelle convient.
-    #   Le clic ne fait que lancer un aller-retour ASYNCHRONE (bridge ->
-    #   backend -> getInfoFinderWindow.scpt, qui a besoin de cette fenêtre
-    #   au premier plan) : la refermer dès que click_suffix revient (comme le
-    #   faisait with_finder_selection) la ferme AVANT que l'aller-retour soit
-    #   terminé -> AppleScript échoue (pas de front window) -> erreur JS
-    #   silencieuse côté ServiceDefiner -> exec-service jamais appelé. On
-    #   garde donc la fenêtre ouverte jusqu'à l'apparition du dialogue
-    #   suivant (sidebar), preuve que l'aller-retour est bien terminé.
+    # → dialogue de positionnement (finder-window) : ouvre une VRAIE fenêtre
+    #   Finder ciblée sur fixture_dir (pas un reveal), avec un bounds réel à
+    #   lire. Le clic sur OK ne fait que lancer un aller-retour ASYNCHRONE
+    #   (bridge -> backend -> getInfoFinderWindow.scpt, qui a besoin de
+    #   cette fenêtre au premier plan) : la refermer trop tôt la fermerait
+    #   AVANT que l'aller-retour soit terminé -> AppleScript échoue (pas de
+    #   front window) -> erreur JS silencieuse côté ServiceDefiner ->
+    #   exec-service jamais appelé. On garde donc la fenêtre ouverte jusqu'à
+    #   l'apparition du dialogue suivant (sidebar), preuve que l'aller-retour
+    #   est bien terminé.
     wait_for_suffix('btn-oui')
-    expected_selection_name = finder_select(fixture_dir)
+    finder_activate
+    sleep 0.3
+    expected_window_name = finder_open_window(Dir.home)
+    sleep 0.3
+    finder_set_front_window_bounds(100, 100, 400, 300)
+    sleep 3
+    sleep 0.3
     click_suffix('btn-oui')
 
     # → dialogue de taille de la sidebar (nouveau 3e param, valeur par défaut acceptée)
     wait_for('__sidebar__')
-    finder_close_front_window_if_named(expected_selection_name)
+    finder_close_front_window_if_named(expected_window_name)
+    sleep 0.3
     click_suffix('btn-oui')
 
     # → le dossier du projet doit s'ouvrir dans le Finder (activation Finder +
@@ -101,4 +109,4 @@ ensure
   remove_fixture_project(id) if id
 end
 
-board_test("service commun 'ouvrir dossier du projet' : définition au premier clic, exécution directe ensuite") { run_test }
+board_test("service commun 'ouvrir dossier du projet' : définition du bounds de la fenêtre au premier clic, exécution directe ensuite") { run_test }

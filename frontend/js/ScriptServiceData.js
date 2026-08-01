@@ -144,5 +144,15 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
       , value: {required: true, type: 'string'}
     }
 
+  },
+
+  'alert': {
+    params: {
+        time:       {required: true, type: 'string'}
+      , message:    {type: 'string'}
+      , title:      {type: 'string'}
+      , icon:       {type: 'icon'}
+      , alertType:  {type: 'string', values: ['warning', 'notice', 'error']}
+    }
   }
 }

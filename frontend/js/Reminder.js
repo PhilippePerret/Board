@@ -33,11 +33,14 @@ class Reminder extends ExtendedObject {
    * @api
    * 
    * -- Point d'entrée pour enregistrer un reminder -- 
+   * 
+   * Données requises : cf. @usage ci-dessus.
   */
   static register(data){
     const reminder = new Reminder(data)
     if (reminder.immediat) {
       reminder.exec()
+    } else if ( reminder.onOtherDay ) {
     } else if ( !this.running ) {
       this.run()
     }
@@ -124,6 +127,17 @@ class Reminder extends ExtendedObject {
     this.execCount = 0
   }
 
+  /** Retourne true quand c'est une alerte qui doit être jouée
+   * un autre jour
+   * 
+   * Note : si c'est le cas, elle a été enregistrée dans les données
+   * de l'application.
+  */
+  get onOtherDay() {
+    return this.time > DateUtils.endOfDay()
+  }
+
+  // Définir comme une tâche
   setAsTask(data){
     this.buttons = [
         {name: 'Démarrée',  onclick: Reminder.remove.bind(Reminder,this)}

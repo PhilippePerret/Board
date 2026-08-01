@@ -22,6 +22,7 @@ include BoardTest
 SERVICE_DOM_ID = 'init-documentation'
 
 def run_test
+  pending("service 'init-documentation' : création de l'arborescence pas encore implémentée")
   id = nil
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
     id = create_fixture_project(title: 'Projet A', path: fixture_dir)

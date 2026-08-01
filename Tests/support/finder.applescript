@@ -56,6 +56,23 @@ on run argv
 			return name of front window
 		end tell
 
+	else if theAction is "activate" then
+		tell application "Finder" to activate
+		return "ok"
+
+	else if theAction is "set-front-window-bounds" then
+		-- <x> <y> <w> <h> : dimensionne réellement la fenêtre Finder au
+		-- premier plan (contrairement à "open-window" seul, qui garde les
+		-- bounds par défaut du système).
+		set bx to (item 2 of argv) as integer
+		set bposY to (item 3 of argv) as integer
+		set bw to (item 4 of argv) as integer
+		set bh to (item 5 of argv) as integer
+		tell application "Finder"
+			set bounds of front window to {bx, bposY, bx + bw, bposY + bh}
+		end tell
+		return "ok"
+
 	else if theAction is "deselect" then
 		-- "set selection to {}" ne vide pas fiablement la sélection Finder.
 		-- Ouvrir une fenêtre sur un dossier, sans cliquer dessus, donne une
