@@ -16,8 +16,16 @@ class ScriptService {
     this.errors     = []
   }
 
-  /* -- Point d'entrée secondaire -- */
-  run(retour){
+  /** -- Point d'entrée secondaire -- 
+   *
+   * @param callback  Utilisé seulement par les outils qui utilisent 
+   *                  les scripts-service
+   *                  La fonction est appelée en fin de run avec le service
+   *                  en premier argument.
+   */
+  run(retour, callback){
+    console.log("-> ScriptService.run(retour, callback=)", retour, callback)
+    this.callback = callback
     if (undefined == retour) {
       server.send({action: 'load-yaml-file', path: this.scriptPath, no_raise: true}, this.run.bind(this))
     } else if (retour.error) {
@@ -87,6 +95,8 @@ class ScriptService {
           title: "Script service", 
           message: messageFin
         }).show()
+        // Si un callback est défini (cf. les outils)
+        if (this.callback) this.callback(this)
         return 
       } else {
         message("Abandon du script-service.")
@@ -167,7 +177,6 @@ class ServStep extends ExtendedObject {
       this.aborted = true
     } else {
       value = this.transformValue(value)
-      console
       message(`Valeur pour étape '${this.id} = ${(typeof value == 'object') ? JSON.stringify(value) : value}`)
       this.value = value
       // Pour définir une autre valeur d'étape
@@ -212,6 +221,7 @@ class ServStep extends ExtendedObject {
   // cette fonction.
   addFatalError(msg, params){
     this.setValue(':abort:')
+    this.errors || (this.errors = []);
     this.errors.push(getErr(msg, params))
     return false
   }
@@ -244,7 +254,8 @@ class ServStep extends ExtendedObject {
     }
 
     // Remplacements communs dans les paramètres
-    ['q', 'path', 'value', 'content'].forEach( param => {if (this[param]) { this[param] = this.evaluateProp(param)}})
+    // ['q', 'path', 'value', 'content'].forEach( param => {if (this[param]) { this[param] = this.evaluateProp(param)}})
+    Object.keys(this.data).forEach( param => {if (this[param]) { this[param] = this.evaluateProp(param)}})
     if (this.path) this.path = this.expandPath(this.path)
     if (this.value) this.ifSet() // pourra être modifié
 
@@ -269,14 +280,16 @@ class ServStep extends ExtendedObject {
    * 
    */
   execAlert() {
-    const dateTime = Validator.datetime(this.time, REG_DATETIME_JJ_MM_HH_MM, true)
+    // const dateTime = Validator.datetime(this.datetime, REG_DATETIME_JJ_MM_HH_MM, true)
     const dataRappel = {
         title: this.title
       , message: this.message
       , icon: this.icon
       , type: this.type ?? 'warning'
-      , time: dateTime
+      , time: this.time
     }
+    console.log("dataRappel", dataRappel)
+    this.time || raise("this.time non défini");
     Reminder.register(dataRappel)
     this.setValue(true)
   }

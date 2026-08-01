@@ -118,7 +118,16 @@ class Tools {
 
   execAsScriptService(){
     const service = new ScriptService(null, null)
-    service.run({data: this.data.steps})
+    service.run({data: this.data.steps}, this.afterExecAsScriptService.bind(this))
+  }
+
+  // À la fin de l'outil joué comme script service
+  /**
+   * Pour le moment, on n'a rien besoin de faire, si le tool est bien
+   * défini. Mais on pourrait peut-être plus tard, faire des trucs.
+   */
+  afterExecAsScriptService(service){
+    // console.info("service", service)
   }
 
 }
