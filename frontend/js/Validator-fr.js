@@ -65,8 +65,9 @@ class Validator {
         if ('string' == typeof n) return parseInt(n, 10)
       })
       if ( asDate ) {
+        if ( month ) month = month - 1
         const d = new DateUtils()
-        return new Date(d.year, (month || d.month) - 1, day || d.day, hour, minute, 0)
+        return new Date(d.year, (month || d.month), day || d.day, hour, minute, 0)
       } else {
         return {day, month, hour, minute}
       }

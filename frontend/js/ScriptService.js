@@ -310,6 +310,8 @@ class ServStep extends ExtendedObject {
       definer.define()
     }
   }
+
+  // Choix d'un dossier
   execChooseFolder(retour){
     historize('-> execChooseFolder', retour)
     if (retour){
@@ -328,6 +330,7 @@ class ServStep extends ExtendedObject {
     
   }
 
+
   // Copie d'un fichier
   execCopyFile(retour){
     if (retour) {
@@ -340,6 +343,7 @@ class ServStep extends ExtendedObject {
       server.send({action:'copy-file', source: src, dest: dst}, this.execCopyFile.bind(this))
     }
   }
+
 
   // Pour ajouter le contenu +content+ au fichier +path+
   execAddToFile(retour){
@@ -357,6 +361,7 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
   // Etape d'affectation d'une valeur au projet
   execSetProjectData(retour){
     if (retour) {
@@ -372,11 +377,13 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
   // Pour récupérer une valeur projet
   execGetProjectData(){
     historize('-> execGetProjectData')
     this.setValue(this.projet.get(this.key || this.id) || null) // la clé peut être l'id
   }
+
 
   /**
    * Fonction qui se contente de fixer la valeur d'une étape précédente ou
@@ -395,8 +402,9 @@ class ServStep extends ExtendedObject {
     }
   }
 
-  execTranslate(){
 
+  // Traduction mots clés → signification
+  execTranslate(){
     function translateDateLaps(ecart, format) {
       const date = new Date()
       date.setDate(date.getDate() + ecart)
@@ -443,7 +451,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-
+  // Demande de chaîne de caractères
   execString(retour){
     historize('-> execString', retour)
     if (retour) {
@@ -463,6 +471,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
+  // Demande de texte mutilignes
   execText(retour){
     if (retour) {
       this.setValue(retour)
@@ -478,6 +488,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
+  // Demande d'une date et d'une heure
   execDateTime(retour) {
     if (retour) {
       var datetime
@@ -498,6 +510,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
+  // Création d'un dossier
   execCreateFolder(){
     server.send({action: 'create-folder', data: this.path, no_raise: true}, this.afterCreateFolder.bind(this))
   }

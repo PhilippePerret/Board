@@ -23,10 +23,20 @@ class DateUtils {
     return diff < lapsMinutes
   }
 
+  /**
+   * @api
+   * 
+   * @return true si +dateRef+ est avant +dateAfter+
+   */
   static isAfter(dateRef, dateAfter){
     dateRef > dateAfter
   }
 
+  /**
+   * @api
+   * 
+   * @return true si +dateRef+ est après +dateBefore+
+   */
   static isBefore(dateRef, dateBefore){
     dateRef > dateBefore
   }
