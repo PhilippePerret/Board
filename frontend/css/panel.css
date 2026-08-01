@@ -50,7 +50,6 @@ button.mid-btn {
 .panel .message {
   padding: 2em 2em 1em;
   font-family: Avenir Next, serif;
-  background-color: #f1f1f1;
 }
 .panel .message .preserve-value {
   margin-top: 0.8em;
@@ -67,6 +66,9 @@ button.mid-btn {
   justify-content: space-between;
   align-items: center;
   border-radius: 0 0 0.5em 0.5em;
+}
+.panel .footer, .panel .message {
+  background-color: #f2efef;
 }
 .panel .footer * { 
   font-size: 13pt

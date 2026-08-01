@@ -40,13 +40,21 @@ def run_test
 
     # → dialogue de sélection du dossier CONTENEUR (le service crée
     #   lui-même le sous-dossier "Documentation" dedans)
+    #   Le clic ne fait que lancer un aller-retour ASYNCHRONE (bridge ->
+    #   backend -> getPathOfFinderSelection.scpt, qui lit `selection` du
+    #   Finder) : fermer la fenêtre tout de suite (comme le faisait
+    #   with_finder_selection) la ferme AVANT que l'aller-retour soit
+    #   terminé -> AppleScript ne trouve plus de sélection -> erreur JS
+    #   silencieuse -> exec-service jamais appelé (même course que
+    #   service_commun_ouverture_dossier.rb). On garde donc la fenêtre
+    #   ouverte jusqu'à la preuve que l'aller-retour est terminé (fichier créé).
     wait_for_suffix('btn-oui')
-    with_finder_selection(fixture_dir) do
-      click_suffix('btn-oui')
-    end
+    expected_selection_name = finder_select(fixture_dir)
+    click_suffix('btn-oui')
 
     # → arborescence créée
     wait_until(desc: -> { "docu.adoc existe ? #{File.exist?(main_docu_file)}" }) { File.exist?(main_docu_file) }
+    finder_close_front_window_if_named(expected_selection_name)
     raise "adocs/introduction.adoc pas créé" unless File.exist?(first_adoc)
 
     main_content = File.read(main_docu_file)

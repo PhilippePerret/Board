@@ -1,7 +1,8 @@
 # Test d'intégration Reminder (frontend/js/Reminder.js) : un rappel dont
-# l'heure est déjà passée doit s'exécuter (onDue appelé) et se retirer de
-# la pile dès le prochain poll — sans attendre le setInterval réel (60s),
-# on appelle Reminder.poll() directement pour rester rapide et déterministe.
+# l'heure est déjà passée doit s'exécuter (onDue appelé) au prochain poll —
+# sans attendre le setInterval réel (60s), on appelle Reminder.poll()
+# directement pour rester rapide et déterministe. Reminder#exec() ne retire
+# jamais le rappel de la pile — count reste à 1 après exécution.
 
 require_relative '../../support/helpers'
 include BoardTest
@@ -27,7 +28,7 @@ def run_test
 
   raise "countBefore attendu 1 (rappel enregistré), obtenu #{data['countBefore']}" unless data['countBefore'] == 1
   raise "onDue non appelé après poll() sur un rappel déjà échu" unless data['due']
-  raise "countAfter attendu 0 (rappel retiré après exécution), obtenu #{data['countAfter']}" unless data['countAfter'] == 0
+  raise "countAfter attendu 1 (Reminder#exec ne retire pas le rappel), obtenu #{data['countAfter']}" unless data['countAfter'] == 1
 end
 
 board_test("Reminder : rappel déjà échu exécuté et retiré au poll") { run_test }

@@ -939,16 +939,17 @@ Permet de **définir explicitement le `step.value` d'une étape** ou de l'étape
 [cols="1,1,4"]
 |====
 | `type`      2+| `set`
-| `id`        2+| Identifiant obligatoire
 | `step`      2+| Identifiant de l'étape dont il faut définir la valeur +
 Si non défini, c'est l'étape elle-même dont on définira la valeur
-| `value`     2+| Valeur à donner à `value` de l'étape
-|>          soit| Valeur explicite | Donnée telle quelle 
-|>          soit| Valeur d'étape   | ${<id etape>}
+| `value`     2+| Valeur à donner à `value` de l'étape `step` ou celle-ci.
+>|          soit| Valeur explicite | Donnée telle quelle 
+>|          soit| Valeur d'étape   | ${<id etape>}
 |====
 
 [[scserv-type-select-file, `select-file`]]
 ==== Sélection d'un fichier ====
+
+La valeur de l'étape contiendra le chemin d'accès absolu au fichier. Donc si l'étape a pour identifiant `mon-chemin`, on obtiendra ce chemin d'accès par `"${mon-chemin}"`.
 
 [cols="1,5"]
 |====
@@ -1485,3 +1486,14 @@ Si nous sommes le 25 juillet 2026 et que l'utilisateur choisit "Demain" pour l'�
 ----
 
 … alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"
+
+
+=== Message de conclusion ===
+
+Pour avoir un message de conclusion personnalisé après le travail du script, il suffit de définir une dernière étape de type `set` et d'identifiant `conclucion` avec la valeur (`value`) définissant le texte à afficher. Par exemple :
+
+----
+- id: conclusion  # obligatoire
+  type: set
+  value: "Tout s'est déroulé comme un charme !"
+----

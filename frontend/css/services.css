@@ -13,7 +13,10 @@ div.services-panel {
   background-color: #aab2c9;
 }
 div.services-panel .btn-deal-with-services {
-  transform: translate(50%, 40px);
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translate(-54%, 0);
   font-family: "Arial Narrow";
   font-size: 13px;
 }

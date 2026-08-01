@@ -8,9 +8,12 @@ const TOOLS_DATA = [
   // TODO : EN FAIT, ICI, ON VA SE SERVIR DES SCRIPTS-SERVICES
   {
       id: 'alerte'
-      , script_service: [
-          {title: 'Date et heure', id: 'date-time', type: 'date-time', q: "Date et heure de l'alerte"}
-        , {title: "Message", id: 'message', type: 'string', q: "Message à donner"}
+      , name: "Programmer une alerte"
+      , type: 'script_service'
+      , steps: [
+          {id: 'date-time', type: 'date-time', q: "Heure de l'alerte (et jour si plus tard)"}
+        , {id: 'message', type: 'string', q: "Message de l'alerte"}
+        , {id: 'conclusion', type: 'set', value: getMsg('tools-confirm-scheduling-alert')}
       ]
   },
   // {

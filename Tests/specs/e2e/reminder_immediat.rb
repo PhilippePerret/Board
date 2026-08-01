@@ -1,6 +1,7 @@
 # Test d'intégration Reminder : un rappel 'immediat' s'exécute (onDue
 # appelé) de façon synchrone dès Reminder.register(), sans passer par la
-# pile de poll — donc retiré immédiatement (count revient à 0).
+# pile de poll. Reminder#exec() ne retire jamais le rappel de la pile
+# (Reminder.js) — count reste à 1 après exécution.
 
 require_relative '../../support/helpers'
 include BoardTest
@@ -23,7 +24,7 @@ def run_test
   data = JSON.parse(result)
 
   raise "onDue non appelé pour un rappel 'immediat'" unless data['due']
-  raise "countAfter attendu 0 (exécuté et retiré immédiatement), obtenu #{data['countAfter']}" unless data['countAfter'] == 0
+  raise "countAfter attendu 1 (Reminder#exec ne retire pas le rappel), obtenu #{data['countAfter']}" unless data['countAfter'] == 1
 end
 
 board_test("Reminder : rappel 'immediat' exécuté et retiré de façon synchrone") { run_test }

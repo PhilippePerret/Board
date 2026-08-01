@@ -24,8 +24,12 @@ class Spinner {
         overflow: hidden;
         background: #0a0a0a;
       }
-      #hourglass-spinner .bulb.top    { clip-path: polygon(0 0, 100% 0, 50% 100%); }
-      #hourglass-spinner .bulb.bottom { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+      /* Triangle à coins réellement arrondis : chemin SVG, courbes
+         quadratiques (Q) centrées sur chaque sommet d'origine, plutôt qu'un
+         polygone à coins coupés (chanfrein). Box de référence 56x40 (taille
+         de .bulb) */
+      #hourglass-spinner .bulb.top    { clip-path: path('M8,0 L48,0 Q56,0 51.41,6.56 L32.59,33.44 Q28,40 23.41,33.44 L4.59,6.56 Q0,0 8,0 Z'); }
+      #hourglass-spinner .bulb.bottom { clip-path: path('M8,40 L48,40 Q56,40 51.41,33.44 L32.59,6.56 Q28,0 23.41,6.56 L4.59,33.44 Q0,40 8,40 Z'); }
 
       #hourglass-spinner .glass {
         position: absolute; inset: 2px;
@@ -38,7 +42,7 @@ class Spinner {
         will-change: transform;
       }
 
-      #hourglass-spinner .neck { width: 2px; height: 6px; background: rgba(110, 110, 110, 0.55); }
+      #hourglass-spinner .neck { width: 9px; height: 6px; background: rgba(110, 110, 110, 0.55); }
 
       #hourglass-spinner .bulb.top .sand {
         animation: hourglass-drain 8s linear infinite;

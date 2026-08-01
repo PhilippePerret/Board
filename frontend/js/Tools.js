@@ -15,7 +15,11 @@ class Tools {
    *    - demande du message de l'alerte
    *    - retour avec les deux informations.
    */
-  static toolScheduleAlert(dataAlert, message){
+  static toolScheduleAlert(dataAlert){
+    console.log("Je dois apprendre à jouer l'outil Schedule alerte")
+    console.log("Data outils", TOOLS_DATA['alerte'])
+  }
+  static ____toolScheduleAlert(dataAlert, message){
     if (dataAlert) {
       if (message) {
         
@@ -91,6 +95,30 @@ class Tools {
     const data = retour.data
     if (data.ok === false) { message(data.error); return }
     message(`Position/taille copiées dans le presse-papier : ${data.x}, ${data.y}, ${data.width}, ${data.height}`)
+  }
+
+  // Appelé par un bouton outil qui ne définit pas de :run, peut-être
+  // parce que c'est un script-service (il est défini comme un 
+  // script-service)
+  static onClick(dataTool){
+    new Tools(dataTool).run()
+  }
+
+
+  constructor(data){
+    this.data = data
+    this.type = data.type
+  }
+  run(){
+    console.log("Je joue l'outil", this)
+    switch(this.type){
+      case 'script_service': return this.execAsScriptService()
+    }
+  }
+
+  execAsScriptService(){
+    const service = new ScriptService(null, null)
+    service.run({data: this.data.steps})
   }
 
 }

@@ -335,7 +335,7 @@ class ParamDefiner {
       , nonBtn: {name: 'Aucune',  onclick: this.setValue.bind(this, null)}
     }).show()
   }
-  onIcone(){
+  onIcon(){
     this.onPath()
   }
 
@@ -358,7 +358,7 @@ class ParamDefiner {
       , ouiBtn: {name: options?.ouiBtn ?? 'OK'        , onclick: callback}
       , nonBtn: {name: options?.nonBtn ?? 'Annuler'   , onclick: fallback}
     }
-    if (options.midBtn) {
+    if (options?.midBtn) {
       Object.assign(dialogData, {midBtn: options.midBtn})
     }
     this.addPreserveOption(dialogData)

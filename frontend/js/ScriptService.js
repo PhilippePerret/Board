@@ -13,6 +13,7 @@ class ScriptService {
     this.scriptPath = scriptPath
     this.steps      = []
     this.values     = {}
+    this.errors     = []
   }
 
   /* -- Point d'entrée secondaire -- */
@@ -68,6 +69,7 @@ class ScriptService {
       if (this.currentStep.aborted) return message("Abandon du script-service.")
     }
     const step = this.steps.shift()
+    // console.log("step = ", step)
     this.currentStep = step
     if ( step ) {
       /* ============  EXÉCUTION DE L'ÉTAPE  =============*/
@@ -78,10 +80,12 @@ class ScriptService {
         this.displayErrors(this.errors)
       } else if (this.steps.length == 0 /* si toutes les étapes ont été jouées*/) {
         // Fin des opérations
-        message(getMsg('scserv-end'))
+        console.log("this.getValue('conclusion')", this.getValue('conclusion'))
+        const messageFin = this.getValue('conclusion') || getMsg('scserv-end')
+        message(messageFin)
         new OKDialog({
           title: "Script service", 
-          message: getMsg('scserv-end')
+          message: messageFin
         }).show()
         return 
       } else {
@@ -439,20 +443,21 @@ class ServStep extends ExtendedObject {
 
   execDateTime(retour) {
     if (retour) {
+      var datetime
       // Vérification du format
       var time
       this.format || (this.format = REG_DATETIME_JJ_MM_HH_MM);
       if ( datetime = Validator.datetime(retour, this.format, true) ){
         this.setValue(datetime)
-      } else {
-        const dataDial = {
-          title: 'Date et heure'
-          , message: this.q || getMsg('scserv-datetime-default-format')
-          , ouiBtn: {name: 'OK', onclick: this.execDateTime.bind(this)}
-          , nonBtn: {name: getMsg('Cancel'), onclick:this.execDateTime.bind(this, ':abort:')}
-        }
-        new TextFieldDialog(dataDial).show()
       }
+    } else {
+      const dataDial = {
+        title: 'Date et heure'
+        , message: this.q || getMsg('scserv-datetime-default-format')
+        , ouiBtn: {name: 'OK', onclick: this.execDateTime.bind(this)}
+        , nonBtn: {name: getMsg('Cancel'), onclick:this.execDateTime.bind(this, ':abort:')}
+      }
+      new TextFieldDialog(dataDial).show()
     }
   }
 

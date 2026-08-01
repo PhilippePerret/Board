@@ -46,6 +46,9 @@ const MESSAGES = {
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
     , 'scserv-datetime-default-format': 'JJ MM HH:MM (03 08 05:12 pour 3 aout à 5 heures 12)'
   
+    // Tools
+    , 'tools-confirm-scheduling-alert': "Alerte programmée avec succès."
+    
     // -- Todoist --
     , 'todoist-content'     : "contenu"
     , 'todoist-description' : "description"

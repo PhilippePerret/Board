@@ -54,7 +54,7 @@ class Validator {
    */
   static datetime(str, reg, asDate = false){
     reg = reg ?? REG_DATETIME_JJ_MM_HH_MM
-    if ('string' == reg) {
+    if ('string' == typeof reg) {
       raise("Je dois apprendre à transformer JJ MM HH:MM en expression régulière.")
       reg = this.stringDatetimeToRegExp(reg)
     }
@@ -65,7 +65,7 @@ class Validator {
         if ('string' == typeof n) return parseInt(n, 10)
       })
       if ( asDate ) {
-        d = new DateUtils()
+        const d = new DateUtils()
         return new Date(d.year, (month || d.month) - 1, day || d.day, hour, minute, 0)
       } else {
         return {day, month, hour, minute}

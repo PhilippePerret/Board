@@ -495,6 +495,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_collecte_informations">Collecte informations</a></li>
 <li><a href="#_définition_des_services_2">Définition des services</a></li>
 <li><a href="#_définition_des_services_3">Définition des services</a></li>
+<li><a href="#scserv-dev-creation">Création d&#8217;un scripts-services</a></li>
 </ul>
 </li>
 </ul>
@@ -507,22 +508,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>quand un projet est réactivé de force parce qu&#8217;il a des tâches à l&#8217;heure, il faut régler son badge</p>
+<p>les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
+essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
 </li>
 <li>
 <p>Problème d&#8217;icône dans la documentation : fonctionne hors app, pas avec l&#8217;app</p>
-</li>
-<li>
-<p>Problème de définition dans le projet Board
-common_services_data:
-  open-a-file:</p>
-</li>
-<li>
-<p><a href="file:///Users/philippeperret/Programmes/Board/_dev/Manuel/Manuel.html" class="bare">file:///Users/philippeperret/Programmes/Board/_dev/Manuel/Manuel.html</a>
-BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;autres
-      choses — attention, il s&#8217;agit peut-être d&#8217;un scorie. Quand on traitera ce bug,
-      commencer par supprimer cette donnée pour voir qui l&#8217;utilise (certainement
-      l&#8217;ouverture de la documentation)</p>
 </li>
 </ul>
 </div>
@@ -540,11 +530,7 @@ BUG : 'open-a-file' peut être malheureusement utilisé pour beaucoup d&#8217;au
 <div class="ulist">
 <ul>
 <li>
-<p>Pouvoir détruire des données projet (par exemple le 'manuscrit-path' défini par un script-service)</p>
-</li>
-<li>
-<p>Panneaux : il faudrait fermer le panneau avant de faire l&#8217;opération (surtout gênant quand on clique sur "Confirmer" pour les tâches et que ça met un temps à disparaitre)
-En fait : clic → Fermer fenêtre → Sablier → Confirmation fin</p>
+<p>Service/outils? : pouvoir placer une alerte (type 'time' ou 'date' ? pour alerte dans le futur)</p>
 </li>
 <li>
 <p>pouvoir mettre une note gh (github) du type voulu</p>
@@ -999,7 +985,7 @@ En fait : clic → Fermer fenêtre → Sablier → Confirmation fin</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-get-project-data"><code>get-project-data</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Pour obtenir une propriété du projet.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code> = prop extradata</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code> = prop data</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-translate"><code>translate</code></a></p></td>
@@ -1015,6 +1001,11 @@ En fait : clic → Fermer fenêtre → Sablier → Confirmation fin</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-text"><code>text</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Obtenir une valeur texte (multi lignes).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-date-time"><code>date-time</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Obtenir une date et une heure</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -2311,12 +2302,12 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Valeur à donner à <code>value</code> de l&#8217;étape</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;          soit</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Valeur explicite</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Donnée telle quelle</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;          soit</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Valeur d&#8217;étape</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">${&lt;id etape&gt;}</p></td>
 </tr>
@@ -2401,147 +2392,6 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
   value: "${la-date}"
   set: la-date
   format: '%J %_M</pre>
-</div>
-</div>
-<div id="scserv-translate-markers-and-formats" class="paragraph">
-<p><strong>Liste des marqueurs existants</strong></p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 14.2857%;">
-<col style="width: 14.2857%;">
-<col style="width: 71.4286%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Marque</strong></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><strong>Valeur résulat</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>today</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date d&#8217;aujourd&#8217;hui</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Permet de définir le format (cf. <a href="#scserv-data-formats">les formats de date</a>)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tomorrow</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date de demain</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date+&lt;x&gt;</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date dans le futur, <code>&lt;x&gt;</code> jours après aujourd&#8217;hui</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date-&lt;x&gt;</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date dans le passé, <code>&lt;x&gt;</code> jours avant aujourd&#8217;hui</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="scserv-data-formats">Les Formats de date</h5>
-<div class="paragraph">
-<p>Les formats de date, utilisés pour <a href="#scserv-param-transform">transformation des valeurs</a> ou le type <a href="#scserv-type-translate"><code>translate</code></a>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine <code>"%J %_M"</code>, <code>%J</code> est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et <code>%_M</code> est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).</p>
-</div>
-<div class="paragraph">
-<p><strong>Liste des marqueurs</strong></p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 16.6666%;">
-<col style="width: 66.6666%;">
-<col style="width: 16.6668%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Marqueur</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Explication</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Exemples</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%J</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le jour de la date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"1" ou "12"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%JJ</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le jour mais toujours sur 2 chiffres</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"01" ou "12"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%M</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le mois de la date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"02" ou "11"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%_M</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le nom du mois de la date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"février"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%Y</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;année en 4 chiffres</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"2026</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%YY</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;année en 2 chiffres</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"26"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%H</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;heure, en 1 ou 2 chiffres</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"5"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%m</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Les minutes, en 2 chiffres</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"03"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%S</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Les secondes en 2 chiffres</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"06"</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Si nous sommes le 25 juillet 2026 et que l&#8217;utilisateur choisit "Demain" pour l&#8217;étape suivante :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>---
-- id: date-chosen
-  type: select
-  values:[['today', "Aujourd'hui"],['demain', "Demain"]]
-  q: "Quelle date choisissez-vous ?"
-
-- id: la-date
-  type: translate
-  value: "${date-chosen}"
-  transform: date
-  format: "%_M, %Y le %J"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"</p>
 </div>
 </div>
 </div>
@@ -2784,7 +2634,7 @@ Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_key</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les extra-données du projet.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les données du projet.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
@@ -2814,7 +2664,7 @@ Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_key</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les extra-données du projet.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La clé dans les données du projet.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2906,6 +2756,34 @@ Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="scserv-type-date-time">Demander une date et un temps</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 71.4286%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>text</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>q</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">La question à poser à l&#8217;utilisateur. Par défaut : "Date et heure au format JJ MM HH:MM"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Valeur par défaut.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Optionnellement, le <a href="#scserv-type-date-time">format de date</a> à utiliser.</p></td>
 </tr>
 </tbody>
 </table>
@@ -3137,6 +3015,147 @@ Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong>
   type: set-project-data
   value: "${autre-valeur}"
   set: le-nombre</pre>
+</div>
+</div>
+<div id="scserv-translate-markers-and-formats" class="paragraph">
+<p><strong>Liste des marqueurs existants</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 71.4286%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Marque</strong></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><strong>Valeur résulat</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>today</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date d&#8217;aujourd&#8217;hui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permet de définir le format (cf. <a href="#scserv-data-formats">les formats de date</a>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tomorrow</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date de demain</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date+&lt;x&gt;</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date dans le futur, <code>&lt;x&gt;</code> jours après aujourd&#8217;hui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date-&lt;x&gt;</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date dans le passé, <code>&lt;x&gt;</code> jours avant aujourd&#8217;hui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Même chose que pour <code>today</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="scserv-data-formats">Les Formats de date</h5>
+<div class="paragraph">
+<p>Les formats de date, utilisés pour <a href="#scserv-param-transform">transformation des valeurs</a> ou le type <a href="#scserv-type-translate"><code>translate</code></a>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine <code>"%J %_M"</code>, <code>%J</code> est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et <code>%_M</code> est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).</p>
+</div>
+<div class="paragraph">
+<p><strong>Liste des marqueurs</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 66.6666%;">
+<col style="width: 16.6668%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Marqueur</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Explication</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Exemples</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%J</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le jour de la date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1" ou "12"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%JJ</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le jour mais toujours sur 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"01" ou "12"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%M</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le mois de la date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"02" ou "11"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%_M</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le nom du mois de la date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"février"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%Y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;année en 4 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2026</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%YY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;année en 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"26"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%H</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;heure, en 1 ou 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"5"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%m</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les minutes, en 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"03"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%S</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Les secondes en 2 chiffres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"06"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Si nous sommes le 25 juillet 2026 et que l&#8217;utilisateur choisit "Demain" pour l&#8217;étape suivante :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+- id: date-chosen
+  type: select
+  values:[['today', "Aujourd'hui"],['demain', "Demain"]]
+  q: "Quelle date choisissez-vous ?"
+
+- id: la-date
+  type: translate
+  value: "${date-chosen}"
+  transform: date
+  format: "%_M, %Y le %J"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"</p>
 </div>
 </div>
 </div>
@@ -3655,8 +3674,8 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des extra-data d&#8217;un projet</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">par le bouton "Extra-data"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définition des data d&#8217;un projet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">par le bouton "data"</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TD</p></td>
@@ -4299,6 +4318,109 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div class="paragraph">
 <p>L&#8217;ordre de réception des paramètres est celui défini par l&#8217;ordre des définitions des paramètres dans le fichier <code>ServiceData.js</code>. Le problème est que certains type de champ retourne plusieurs valeurs. C&#8217;est le cas typique, par exemple, pour le type <code>finder-window</code> qui retourne la position (2 valeurs), la taille (2 valeurs), le type de vue, etc. pour le seul paramètre <code>window</code>. Pour parlier ce problème, on peut renseigner la propriété d&#8217;aide <code>paramsOrder</code> avec l&#8217;ordre des paramètres.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="scserv-dev-creation">Création d&#8217;un scripts-services</h3>
+<div class="paragraph">
+<p>Au niveau du développement, pour créer un nouveau type de <a href="#scripts-services">script-service</a>, voilà ce qu&#8217;il faut implémenter.</p>
+</div>
+<div class="paragraph">
+<p>Dans <code>frontend/js/ScriptServiceData.js</code>, définir les données du nouveau script-service en s&#8217;inspirant de celle existantes. Il faut surtout mettre ici les paramètres qu&#8217;on doit trouver, en excluant les <em>paramètres universels</em> comme l&#8217;identifiant (<code>id</code>), le nom (<code>name</code>) etc. Si des propriétés sont <strong>absolument requises</strong> c&#8217;est celles-là qu&#8217;il faut surtout définir.</p>
+</div>
+<div class="paragraph">
+<p>Ensuite, c&#8217;est le gros du morceau, il va faloir implémenter la fonction propre à ce nouveau type. Son nom est conventionnel, il se fait à partir de l&#8217;identifiant du service, khebabisé et préfixé par <code>exec</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mon-nouveau-service → execMonNouveauService</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette fonction est à implémenter dans le fichier <code>fronted/js/ScriptService.js</code>. Là aussi, s&#8217;inspirer des méthodes existante. En général, un service un peu complexe a cette structure :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;nomDeLaFonction(retour) {
+  // retour retourné par une opération backend ou un retour de
+  // Dialog. par exemple
+  if (retour) {
+    // Donc on traite ici le retour backend, par exemple
+
+    // Et l'on fixe la valeur de l'étape du type de service :
+    this.setValue(lavaleur)
+  } else {
+    // On passe par ici en premier
+    // Appel d'une opération backend ou utilisation de Dialog
+    // avec callback sur cette même fonction
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Par exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>execMonNew(retour){
+  if (retour) {
+    if ( retour == 'oui') { ... }
+    else if ( retour == 'non') { ... }
+
+    this.setValue(retour)
+
+  } else {
+    const dataDialog = {
+      ...
+      ouiBtn: {... onclick: this.execMonNew.bind(this, 'oui')}
+      nonBtn: {... onclick: this.execMonNew.bind(this, 'non')}
+    }
+    new UnDialog(dataDialog).show()
+  }
+}</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_message_du_dialog">Message du dialog</h4>
+<div class="paragraph">
+<p>Les messages du dialogue doit être fourni par la propriété <code>message</code> qui est souvent définie par le paramètre <code>q</code> dans les données du service :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>const dataDialog = {
+  ...
+  , message: this.q
+  ...
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_bouton_dannulation">Bouton d&#8217;annulation</h4>
+<div class="paragraph">
+<p>Pour que le deuxième bouton soit un bouton d&#8217;annulation du service, il doit mettre la valeur `:abort: ` à l&#8217;étape. Ce bouton interrompra tout le processus. Avec par exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>nonBtn: {name: getMsg('Cancel'), onclick: this.execMonNew.bind(this, ':abort:')}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_signalement_derreur">Signalement d&#8217;erreur</h4>
+<div class="paragraph">
+<p>Les erreurs sont signalées dans le panneau de dialogue par :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>const dataDialog = {
+  ...
+  , errorMessage: this.errorMessage
+  ...
+}</pre>
+</div>
 </div>
 </div>
 </div>

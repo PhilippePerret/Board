@@ -9,14 +9,16 @@ class ToolsPanel extends SidePanel {
   get domId(){ return 'tools-panel' }
 
   buildContent(){
-    TOOLS_DATA.forEach(tool => this.buildRow(tool))
+    TOOLS_DATA.forEach(dtool => this.buildRow(dtool))
   }
 
-  buildRow(tool){
-    const row = DCreate('DIV', {class: 'service tools-row', id: `tool-${tool.id}`})
-    const name = DCreate('DIV', {text: tool.name})
+  // Construction de chaque bouton outil
+  buildRow(dtool){
+    const row = DCreate('DIV', {class: 'service tools-row', id: `tool-${dtool.id}`})
+    const name = DCreate('DIV', {text: dtool.name})
     row.appendChild(name)
     this.listingEl.appendChild(row)
-    listen(row, 'click', tool.run)
+    const bindee = dtool.run ? dtool.run : Tools.onClick.bind(Tools, dtool)
+    listen(row, 'click', bindee)
   }
 }
