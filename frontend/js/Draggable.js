@@ -3,10 +3,15 @@
  */
 class Draggable {
 
+  // handle : un élément, ou un tableau d'éléments (plusieurs poignées pour
+  // un même panneau, cf. SidePanel — poignée gauche + poignée droite)
   listenMove(handle, panel){
-    this._panel = panel || handle
-    listen(handle,   'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
-    listen(handle,   'mousedown', this.onMoveHandleDown.bind(this))
+    const handles = Array.isArray(handle) ? handle : [handle]
+    this._panel = panel || handles[0]
+    handles.forEach(h => {
+      listen(h, 'mouseup', ev => { this.onDragEnd(); stopEvent(ev) })
+      listen(h, 'mousedown', this.onMoveHandleDown.bind(this))
+    })
     listen(document, 'mousemove', this.onDragMove.bind(this))
     listen(document, 'mouseup'  , this.onDragEnd.bind(this))
   }

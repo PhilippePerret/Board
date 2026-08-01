@@ -77,8 +77,15 @@ class SidePanel extends Draggable {
     historize("-> SidePanel#build panneau %s", this.title)
     const panel = DCreate('DIV', {class: 'services-panel hidden', id: this.domId})
 
-    // Pour rendre le panneau draggable
-    this.listenMove(panel)
+    // Poignées de déplacement (gauche/droite, mi-hauteur) — dédiées, pas le
+    // panneau entier (cf. Clock.js) : sinon le mousedown intercepté sur tout
+    // le panneau (avec preventDefault) empêche le drag HTML5 natif des
+    // services listés dedans.
+    const handleLeft  = DCreate('DIV', {class: 'services-handle-move services-handle-move-left',  role: 'group'})
+    const handleRight = DCreate('DIV', {class: 'services-handle-move services-handle-move-right', role: 'group'})
+    panel.appendChild(handleLeft)
+    panel.appendChild(handleRight)
+    this.listenMove([handleLeft, handleRight], panel)
 
     const fieldset = DCreate('DIV', {class: 'services-listing'})
     fieldset.appendChild(DCreate('DIV', {class: 'legend', text: this.title}))

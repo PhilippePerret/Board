@@ -41,8 +41,25 @@ div.startup-services-panel {
 
 div.services-panel {
   padding:0.5em;
-  cursor: ew-resize;
 }
+
+/* Poignées de déplacement — gauche/droite, mi-hauteur, plus petites que
+   celles de l'horloge (clock.css) */
+.services-handle-move {
+  position: absolute;
+  bottom: 10px;
+  /* transform: translateY(-50%); */
+  width: 14px;
+  height: 37px;
+  border-radius: 11px;
+  background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 2px, transparent 2px 4px),
+  rgba(255, 255, 255, 0.12);
+  border: 1px solid #8fb454;
+  cursor: ew-resize;
+  z-index: 1;
+}
+.services-handle-move-left  { left: 4px; }
+.services-handle-move-right { right: 4px; }
 div.services-listing {
   max-height: calc(90%);
   overflow:auto;

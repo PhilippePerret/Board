@@ -45,6 +45,7 @@ _Une fois familiarisé(e) avec les scripts-services, vous pouvez utiliser la tab
                               certain format.                           | `value` + `format`
 | <<scserv-type-string>>            | Obtenir une valeur string.                | 
 | <<scserv-type-text>>              | Obtenir une valeur texte (multi lignes).  |
+| <<scserv-type-date-time>>         | Obtenir une date et une heure             | 
 | <<scserv-type-phone>>             | Obtenir un numéro de téléphone.           |
 |====
 
@@ -1002,62 +1003,6 @@ Si `step` est utilisé, c'est sa valeur qui est prise et remplacée. Noter qu'al
   set: la-date
   format: '%J %_M
 ----
-
-[[scserv-translate-markers-and-formats]]
-**Liste des marqueurs existants**
-
-[cols="1,1,5"]
-|====
-| **Marque** 2+| **Valeur résulat**
-| `today`     2+| Date d'aujourd'hui
-|               | `format` | Permet de définir le format (cf. <<scserv-data-formats>>)
-| `tomorrow`  2+| Date de demain
-|               | `format`  | Même chose que pour `today`
-| `date+<x>`  2+| Date dans le futur, `<x>` jours après aujourd'hui
-|               | `format`  | Même chose que pour `today`
-| `date-<x>`  2+| Date dans le passé, `<x>` jours avant aujourd'hui
-|               | `format`  | Même chose que pour `today`
-|====
-
-[[scserv-data-formats, les formats de date]]
-===== Les Formats de date =====
-
-Les formats de date, utilisés pour <<scserv-param-transform>> ou le type <<scserv-type-translate>>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine `"%J %_M"`, `%J` est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et `%_M` est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).
-
-**Liste des marqueurs**
-
-[cols="1,4,1"]
-|====
-| **Marqueur**    | **Explication**                       | **Exemples**
-| `%J`            | Le jour de la date                    | "1" ou "12"
-| `%JJ`           | Le jour mais toujours sur 2 chiffres  | "01" ou "12"
-| `%M`            | Le mois de la date                    | "02" ou "11"
-| `%_M`           | Le nom du mois de la date             | "février"
-| `%Y`            | L'année en 4 chiffres                 | "2026
-| `%YY`           | L'année en 2 chiffres                 | "26"
-| `%H`            | L'heure, en 1 ou 2 chiffres           | "5"
-| `%m`            | Les minutes, en 2 chiffres            | "03"
-| `%S`            | Les secondes en 2 chiffres            | "06"
-|====
-
-Si nous sommes le 25 juillet 2026 et que l'utilisateur choisit "Demain" pour l'étape suivante : 
-
-----
----
-- id: date-chosen
-  type: select
-  values:[['today', "Aujourd'hui"],['demain', "Demain"]]
-  q: "Quelle date choisissez-vous ?"
-
-- id: la-date
-  type: translate
-  value: "${date-chosen}"
-  transform: date
-  format: "%_M, %Y le %J"
-----
-
-… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"
-
 [[scserv-type-select, `select`]]
 ==== Select ====
 
@@ -1297,6 +1242,18 @@ Voir la <<sequence-project-data>>.
 | `type`    | `string`
 |====
 
+[[scserv-type-date-time, `date-time`]]
+==== Demander une date et un temps ====
+
+[cols="1,1,5"]
+|====
+| `type`      2+| `text`
+| `q`         2+| La question à poser à l'utilisateur. Par défaut : "Date et heure au format JJ MM HH:MM"
+| `default`   2+| Valeur par défaut.
+| `format`    2+| Optionnellement, le <<scserv-type-date-time, format de date>> à utiliser
+|====
+
+
 [[scserv-type-text, `text`]]
 ==== Obtenir un texte ====
 
@@ -1471,3 +1428,60 @@ Il faut donc faire :
   set: le-nombre
 ----
 
+
+
+
+[[scserv-translate-markers-and-formats]]
+**Liste des marqueurs existants**
+
+[cols="1,1,5"]
+|====
+| **Marque** 2+| **Valeur résulat**
+| `today`     2+| Date d'aujourd'hui
+|               | `format` | Permet de définir le format (cf. <<scserv-data-formats>>)
+| `tomorrow`  2+| Date de demain
+|               | `format`  | Même chose que pour `today`
+| `date+<x>`  2+| Date dans le futur, `<x>` jours après aujourd'hui
+|               | `format`  | Même chose que pour `today`
+| `date-<x>`  2+| Date dans le passé, `<x>` jours avant aujourd'hui
+|               | `format`  | Même chose que pour `today`
+|====
+
+[[scserv-data-formats, les formats de date]]
+===== Les Formats de date =====
+
+Les formats de date, utilisés pour <<scserv-param-transform>> ou le type <<scserv-type-translate>>, se définissent simplement par une chaine contenant des marqueurs qui seront remplacés par le valeur par rapport à la date fournie. Par exemple, dans la chaine `"%J %_M"`, `%J` est un marqueur qui sera remplacé par le jour de la date (le 12 si nous sommes les 12 février 2026) et `%_M` est un autre marqueur qui ser remplacé par le mois en version nom ("février" pour la même date).
+
+**Liste des marqueurs**
+
+[cols="1,4,1"]
+|====
+| **Marqueur**    | **Explication**                       | **Exemples**
+| `%J`            | Le jour de la date                    | "1" ou "12"
+| `%JJ`           | Le jour mais toujours sur 2 chiffres  | "01" ou "12"
+| `%M`            | Le mois de la date                    | "02" ou "11"
+| `%_M`           | Le nom du mois de la date             | "février"
+| `%Y`            | L'année en 4 chiffres                 | "2026
+| `%YY`           | L'année en 2 chiffres                 | "26"
+| `%H`            | L'heure, en 1 ou 2 chiffres           | "5"
+| `%m`            | Les minutes, en 2 chiffres            | "03"
+| `%S`            | Les secondes en 2 chiffres            | "06"
+|====
+
+Si nous sommes le 25 juillet 2026 et que l'utilisateur choisit "Demain" pour l'étape suivante : 
+
+----
+---
+- id: date-chosen
+  type: select
+  values:[['today', "Aujourd'hui"],['demain', "Demain"]]
+  q: "Quelle date choisissez-vous ?"
+
+- id: la-date
+  type: translate
+  value: "${date-chosen}"
+  transform: date
+  format: "%_M, %Y le %J"
+----
+
+… alors la valeur de "${la-date}" sera mise à "juillet, 2026 le 26"
