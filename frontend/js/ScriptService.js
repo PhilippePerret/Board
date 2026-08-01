@@ -257,6 +257,30 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
+  /**
+   * Programmer une alerte
+   * 
+   * time         Le datetime (doit être correct)
+   * message      Le message à écrire
+   * title        Titre optionnel
+   * typeAlert    Le type parmi warning, error, notice
+   * icon         L'icône de la fenêtre
+   * 
+   */
+  execAlert() {
+    const dateTime = Validator.datetime(this.time, REG_DATETIME_JJ_MM_HH_MM, true)
+    const dataRappel = {
+        title: this.title
+      , message: this.message
+      , icon: this.icon
+      , type: this.type ?? 'warning'
+      , time: dateTime
+    }
+    Reminder.register(dataRappel)
+    this.setValue(true)
+  }
+
   // Étape pour choisir un fichier
   execSelectFile(retour){
     historize('-> execSelectFile', retour)
@@ -818,7 +842,7 @@ class ServStep extends ExtendedObject {
       // Si on rencontre dans les données le paramètre 'defaut', 
       // c'est un paramètre qui n'existe pas (un select n'a pas de 
       // paramètre 'defaut') et c'est donc une erreur
-      paramSpec || addFatalError( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
+      paramSpec || this.addFatalError( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
       // --- On s'arrête là pour la pré-validation ---
     }
     return true
