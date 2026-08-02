@@ -606,13 +606,59 @@ module BoardTest
     id
   end
 
+  # Attente de la carte DOM d'un projet fixture, avec diagnostic complet en
+  # cas d'échec — pour voir CONCRÈTEMENT ce qui se passe côté fichiers/appdata
+  # au moment où la carte n'apparaît pas (cascade project-fixture introuvable,
+  # cf. Tests/resultats/2026-08-02_07h26.log), plutôt qu'un simple timeout
+  # générique.
+  def wait_for_project_card(project_id, timeout: 4)
+    card_id = "project-#{project_id}"
+    wait_until(timeout, 0.1, desc: -> { "carte #{card_id} introuvable" }) { exists?(card_id) }
+  rescue => e
+    card_path = project_card_path(project_id)
+    app_data_exists = File.exist?(APP_DATA_FILE)
+    app_data = app_data_exists ? (YAML.safe_load(File.read(APP_DATA_FILE)) rescue nil) : nil
+    diagnostic = {
+      project_id:            project_id,
+      card_dom_id:           card_id,
+      board_running:         board_running?,
+      card_file_path:        card_path,
+      card_file_exists:      File.exist?(card_path),
+      app_data_file:         APP_DATA_FILE,
+      app_data_file_exists:  app_data_exists,
+      app_data_readable:     !app_data.nil?,
+      projects_in:           app_data && app_data['projects-in'],
+      projects_out:          app_data && app_data['projects-out'],
+      id_in_projects_in:     app_data && app_data['projects-in']&.include?(project_id),
+      id_in_projects_out:    app_data && app_data['projects-out']&.include?(project_id)
+    }
+    raise "#{e.message}\n  DIAGNOSTIC : #{diagnostic.inspect}"
+  end
+
   # Retire complètement une carte projet fixture (fichier + entrée
   # appdata.json, in ou out) — nettoyage de fin de test.
+  #
+  # Appelé en `ensure`, donc potentiellement pendant que Board (instance
+  # partagée avec le test suivant si celui-ci ne fait pas launch_app) tourne
+  # encore. Board écrit lui-même appdata.yaml de façon asynchrone à chaque
+  # clic sur une carte projet (App.js#setData('last-project', ..., true) ->
+  # 'save-app-data', backend.rb, écriture brute sans verrou, sans re-lecture
+  # préalable). Si cette écriture atterrit après celle d'ici, elle réintroduit
+  # l'id dans projects-in avec le fichier de carte déjà supprimé — un id
+  # fantôme qui casse App.load_all (backend/lib/app.rb) à CHAQUE lancement
+  # suivant, pour tout le reste du run. Pas de pkill ici (tuerait l'instance
+  # dont dépend le test suivant s'il ne relance pas) : on écrit, puis on
+  # vérifie que l'id n'a pas été réintroduit par une écriture concurrente, et
+  # on ré-écrit si besoin — jusqu'à stabilisation.
   def remove_fixture_project(project_id)
     File.delete(project_card_path(project_id)) if File.exist?(project_card_path(project_id))
-    app_data = read_app_data
-    app_data['projects-in']&.delete(project_id)
-    app_data['projects-out']&.delete(project_id)
-    write_app_data(app_data)
+    wait_until(5, 0.2, desc: -> { "id #{project_id} toujours dans appdata.yaml malgré les tentatives de retrait" }) do
+      app_data = read_app_data
+      app_data['projects-in']&.delete(project_id)
+      app_data['projects-out']&.delete(project_id)
+      write_app_data(app_data)
+      sleep 0.3
+      !read_app_data['projects-in']&.include?(project_id) && !read_app_data['projects-out']&.include?(project_id)
+    end
   end
 end

@@ -230,6 +230,27 @@ class Reminder extends ExtendedObject {
     }
   }
 
+  /**
+   * Appelé par Notifier pour signaler un clic sur la notification,
+   * en dehors des boutons.
+   * Pour le moment, +value+ vaut toujours ':remove:' et demande
+   * l'annulation du rappel
+   */
+  onClickNotification(value){
+    switch(value){
+      case ':remove:':
+        Reminder.remove(this);
+        console.log("Suppression du rappel")
+        break
+        case ':remindme:':
+          // <= Quand on clique sur "me le rappeler plus tard"
+          // => Mettre à 10 minutess de maintenant
+          this.time.setMinutes(this.time.getMinutes() + 10)
+          console.log("Rappel réglé à dans 10 minutes", this.time)
+        break
+    }
+  }
+
 
   dataNotifierByType(type) {
     const data = {
@@ -241,6 +262,7 @@ class Reminder extends ExtendedObject {
       , mode:       'floating'
       , delay:      this.delay
       , buttons:    this.realButtons
+      , onclick:    this.onClickNotification.bind(this)
     }
     var sup
     switch(type){

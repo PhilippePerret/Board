@@ -23,7 +23,7 @@ def run_test
   launch_app
 
   card_id = "project-#{project_id}"
-  wait_for(card_id)
+  wait_for_project_card(project_id)
 
   # - cliquer sur le bouton standby
   click_standby_btn(project_id)

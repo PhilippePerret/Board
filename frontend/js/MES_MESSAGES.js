@@ -11,6 +11,10 @@ const MESSAGES = {
     , ':'   :   ' : '
     , 'date/at': 'à' // pour une date avec heure
     , 'Cancel': "Renoncer"
+    , 'its-noted': "C’est noté"
+    , 'remind-me-later': "Me le rappeler plus tard"
+
+    // Minuteur
     , 'clock-work-done': 'Travail accompli au cours de la session : '
     , 'clock-work-is-done': "Vous êtes arrivé à échéance de travail"
     , 'clock-10-minutes-remaining': "Il vous reste 10 minutes de travail"

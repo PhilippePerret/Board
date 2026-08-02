@@ -42,6 +42,7 @@ class Dialog {
     }
     
     this.built = false
+    this._boundOnKeyDown = this.onKeyDown.bind(this)
   }
 
   // À surclasser par l'héritière
@@ -50,14 +51,13 @@ class Dialog {
 
   show(){
     this.build()
-    listen(window, 'keydown', this.onKeyDown.bind(this))
     this.obj.classList.remove('hidden')
     this.onShow()
   }
   open(){return this.show()}
-  
+
   hide(){
-    unlisten(window, 'keydown', this.onKeyDown.bind(this))
+    unlisten(window, 'keydown', this._boundOnKeyDown)
     this.obj.remove()
   }
   close(){return this.hide()}
@@ -89,7 +89,8 @@ class Dialog {
         this.ouiData.onclick()
       }
     } else {
-      error('this.ouiData.onclick n’est pas une fonction')
+      // ouiData.onclick n'est pas une fonction (pas gênant en soi)
+      // console.warn("this.ouiData.onclick n'est pas une fonction", this.ouiData)
     }
     Spinner.stop()
     return false
@@ -97,14 +98,14 @@ class Dialog {
 
   onNon(ev){
     ;(this.nonData && this.nonData.keep) || this.hide()
-    if ('function' == typeof this.nonData.onclick) {
+    if ('function' == typeof this.nonData?.onclick) {
       this.nonData.onclick()
     }
     return stopEvent(ev)
   }
   onMid(ev){
     ;(this.midData && this.midData.keep) || this.hide()
-    if ('function' == typeof this.midData.onclick) {
+    if ('function' == typeof this.midData?.onclick) {
       this.midData.onclick()
     } else {
       console.error("this.midData.onclick", this.midData.onclick)
@@ -115,16 +116,20 @@ class Dialog {
   }
 
   static HANDLED_KEYS = {
-    Enter: {nokey: null},
-    Escape: {nokey: 'onNon'}
+      Enter:  {nokey: null}
+    , Escape: {nokey: 'onNon'}
   }
   onKeyDown(ev) {
-    var dev;
+    // console.log("-> onKeyDown", ev)
+    var dEvent;
     // console.log("ev", ev)
-    if ( (dev = Dialog.HANDLED_KEYS[ev.key]) ){
-      const method = dev.nokey ?? `on${this.defaultKey}`
+    if ( (dEvent = Dialog.HANDLED_KEYS[ev.key]) ){
+      // console.log("[onKeyDown] dEvent = ", dEvent)
+      const method = dEvent.nokey ?? `on${this.defaultKey}`
+      // console.log("[onKeyDown] method", method)
       this[method]()
-    } else { return stopEvent(ev)}
+    }
+    return stopEvent(ev) // Dans tous les cas
   }
 
 
@@ -181,6 +186,6 @@ class Dialog {
     }
     
     listen(this.btnMid, 'click', this.onMid.bind(this))
-    listen(window, 'keydown', this.onKeyDown.bind(this))
+    listen(window, 'keydown', this._boundOnKeyDown)
   }
 }

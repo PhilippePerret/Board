@@ -17,7 +17,7 @@ def run_test
   panel_id = "project-#{project_id}-panel-data"
 
   # - le sélectionner (clic sur sa carte)
-  wait_for(card_id)
+  wait_for_project_card(project_id)
   click(card_id)
 
   # - ouvrir le dialogue de configuration du projet (ConfigDialog)

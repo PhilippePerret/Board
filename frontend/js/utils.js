@@ -221,3 +221,15 @@ function svg(root, type){
   }
   return `<img src="images/${root}.svg" style="width:${w}px;vertical-align:middle;margin-right:8px;"> `
 }
+
+/**
+ * @return true si la couleur +hex+ est plutôt sombre
+ */
+function isDark(hex){
+  hex = hex.replace(/^#/, '')
+  if (hex.length == 3) hex = hex.replace(/./g, c => c + c)
+  const r = parseInt(hex.slice(0,2), 16)
+  const g = parseInt(hex.slice(2,4), 16)
+  const b = parseInt(hex.slice(4,6), 16)
+  return (0.299 * r + 0.587 * g + 0.114 * b) < 128
+}
