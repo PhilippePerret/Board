@@ -35,7 +35,7 @@
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 2px, transparent 2px 4px),
     rgba(255, 255, 255, 0.12);
   border: 1px solid #8fb454;
-  cursor: grab;
+  cursor: ew-resize;
 }
 .clock-panel.dragging .clock-handle-move { cursor: grabbing; }
 
