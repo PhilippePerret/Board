@@ -40,7 +40,7 @@ class ScriptService {
         if (step.id) { Object.assign(this.stepById, {[step.id]: step}) }
         return step
       })
-      console.info("Nombre d'étapes : %i", this.steps.length)
+      // console.info("Nombre d'étapes : %i", this.steps.length)
       this.errors = []
       if ( this.serviceSeemsValid() /* Premier contrôle rapide */) {
         this.execNextStep() 
@@ -288,7 +288,7 @@ class ServStep extends ExtendedObject {
       , type: this.type ?? 'warning'
       , time: this.time
     }
-    console.log("dataRappel", dataRappel)
+    // console.log("dataRappel", dataRappel)
     this.time || raise("this.time non défini");
     Reminder.register(dataRappel)
     this.setValue(true)
