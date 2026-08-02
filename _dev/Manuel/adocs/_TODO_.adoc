@@ -1,5 +1,8 @@
 == BUGS ==
 
+- BUG #2 On devrait pouvoir faire Enter pour fermer la fenêtre de fin de script-service (TEST : avec la programmation d'un rappel)
+- BUG #1 les panneaux doivent tous s'ouvrir là où on a placé le dernier (-> TEST)
+
 - Les rappels/alertes programmés ne fonctionnent pas
   Pourtant : 
     - ils sont bien registrés
