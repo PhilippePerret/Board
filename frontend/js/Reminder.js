@@ -167,8 +167,8 @@ class Reminder extends ExtendedObject {
   // Définir comme une tâche
   setAsTask(data){
     this.buttons = [
-      {name: getMsg('remind-started'), onclick: 'Reminder.remove'}
-      {name: getMsg('remind-remove'), onclick: 'Reminder.remove'}
+        {name: getMsg('remind-started'), onclick: 'Reminder.remove'}
+      , {name: getMsg('remind-remove'), onclick: 'Reminder.remove'}
     ]
     this.defineRealButtons()
     const taskId = this.taskId || data?.task.id
