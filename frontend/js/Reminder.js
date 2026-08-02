@@ -240,8 +240,8 @@ class Reminder extends ExtendedObject {
         icon:       this.fullPathIcon()
       , title:      this.calcTitle()
       , message:    this.message
-      , background: '#333333'
-      , font_color: '#FFFFFF'
+      , background: '#f7f7f7'
+      , font_color: '#070707'
       , mode:       'floating'
       , delay:      this.delay
       , buttons:    this.realButtons
