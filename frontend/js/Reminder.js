@@ -125,6 +125,11 @@ class Reminder extends ExtendedObject {
     super(data)
     data.task && this.setAsTask(data)
     console.log("Reminder enregistré", this)
+    if ('string' == typeof this.time){
+      this.time = new Date(this.time)
+      console.info("Le time du reminder a été transmis sous forme de string", this)
+      console.trace()
+    }
     this.execCount = 0
     this.buttons && this.defineRealButtons()
   }
@@ -258,7 +263,7 @@ class Reminder extends ExtendedObject {
   }
 
   calcTitle(){
-    if (this.title) return title
+    if (this.title) return this.title
     if (this.project) return getMsg('title-project', this.project.title)
     return
   }
