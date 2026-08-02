@@ -5,16 +5,16 @@
  */
 const TOOLS_DATA = [
 
-  // TODO : EN FAIT, ICI, ON VA SE SERVIR DES SCRIPTS-SERVICES
   {
+    // On se sert des scripts-services
       id: 'alerte'
       , name: "Programmer une alerte"
       , type: 'script_service'
       , steps: [
-          {id: 'date-time'  , type: 'date-time', q: "Heure de l'alerte (et jour si plus tard)"}
-        , {id: 'message'    , type: 'string', q: "Message de l'alerte"}
-        , {id: 'schedule'   , type: 'alert', message: "${message}", title: "Alerte programmée", time: "${date-time}"}
-        , {id: 'conclusion' , type: 'set', value: getMsg('tools-confirm-scheduling-alert')}
+          {id: 'date-time'  , type: 'date-time', q: "Heure de l'alerte (et jour si plus tard)", title: "Programmation d'alerte"}
+        , {id: 'message'    , type: 'string', q: "Message de l'alerte", title: "Programmation d'alerte"}
+        , {id: 'schedule'   , type: 'alert', message: "${message}", title: "Alerte programmée", time: "${date-time}", title: "Programmation d'alerte"}
+        , {id: 'conclusion' , type: 'set', value: getMsg('tools-confirm-scheduling-alert'), title: "Programmation d'alerte"}
       ]
   },
   // {

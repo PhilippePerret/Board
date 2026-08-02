@@ -83,6 +83,7 @@ class Service {
     this.type       = data.type ?? null // idem (others ou startup)
     this.onError    = data.onError
     this.beforeExec = data.beforeExec
+    this.bypassExec = data.bypassExec
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.transient  = data.transient ?? false // service common depuis panneau
     this.afterDefinedParams = data.afterDefinedParams ?? null

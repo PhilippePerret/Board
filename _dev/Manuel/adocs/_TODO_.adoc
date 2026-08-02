@@ -15,11 +15,10 @@
 
 == Todo En cours
 
-- Modifier les rappels enregistrés à chaque ajout/suppression
-
 == Todo list ==
 
 - pouvoir mettre une note gh (github) du type voulu
+- pouvoir ajouter un bug
   
 == Idées d'autres services ==
 

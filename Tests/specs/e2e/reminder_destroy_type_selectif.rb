@@ -1,0 +1,40 @@
+# Test : Reminder.destroy('task') (Reminder.js, appelé par
+# Project.js#updateTasksAfterMarkAndCreate) — ne retire QUE les rappels
+# liés à une tâche (prop 'task' définie), garde les rappels indépendants
+# d'une tâche.
+#
+# filter garde reminder[type] == undefined -> retire donc ceux qui ONT
+# la propriété 'task' définie.
+
+require_relative '../../support/helpers'
+include BoardTest
+
+def run_test
+  launch_app
+
+  result = bridge_eval(<<~JS)
+    (function(){
+      var t = new Date(Date.now() + 5 * 60 * 1000);
+      Reminder.register({ time: t, task: { id: 'fixture-task-destroy' }, message: 'lié à une tâche' });
+      Reminder.register({ time: t, message: 'indépendant' });
+      var beforeCount = Reminder.count;
+      Reminder.destroy('task');
+      // destroy() ne persiste JAMAIS (contrairement à .remove()) : sans ce
+      // saveReminders explicite, le rappel lié à la tâche resterait à vie
+      // dans appdata.yaml['reminders'] après ce test.
+      App.saveReminders();
+      var remaining = Reminder.asArray().map(function(r){ return r.message; });
+      return JSON.stringify({ beforeCount: beforeCount, remaining: remaining });
+    })()
+  JS
+  data = JSON.parse(result)
+
+  raise "2 rappels attendus avant destroy, obtenu #{data['beforeCount']}" unless data['beforeCount'] == 2
+  raise "le rappel lié à une tâche devrait avoir été retiré, obtenu #{data['remaining'].inspect}" if data['remaining'].include?('lié à une tâche')
+  raise "le rappel indépendant devrait être conservé, obtenu #{data['remaining'].inspect}" unless data['remaining'].include?('indépendant')
+ensure
+  (bridge_eval("Reminder.asArray().slice().forEach(function(r){ Reminder.remove(r); })") rescue nil)
+  sleep 1.2
+end
+
+board_test("Reminder.destroy('task') : retire seulement les rappels liés à une tâche") { run_test }

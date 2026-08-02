@@ -28,3 +28,4 @@
 - [Design tests validate()](feedbacks/step_validation_test_design.md) — unitaire direct (bridge_eval) + toujours un cas valide de contrôle, jamais que des invalidités
 - [Commande run-tests](feedbacks/run_tests_command.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement
 - [Paramètre ≠ décision](feedbacks/param_not_decision.md) — si la réponse honnête est "ça dépend de l'appel", c'est un param, pas une question à poser
+- [Pas de condescendance](feedbacks/no_condescending_overexplain.md) — si sa phrase exclut déjà l'explication évidente, la redonner = le prendre pour un con

@@ -17,16 +17,30 @@
  *        Si l'on veut utiliser un script tout à fait différent, il faut
  *        l'indiquer dans :script (p.e. 'script: OpenAFile.rb')
  * 
+ *  params
+ *    Définissent les paramètres du service. Un paramètre avec
+ *    persist:false est redemandé à chaque exécution, jamais enregistré.
+ *
  *  onError
  *    Pour définir ce qui doit se passer en cas d'erreur. C'est une 
  *    fonction à interpréter.
  *    Souvent, elle doit utiliser un ErrorsDialog pour afficher la
  *    liste des erreurs survenues.
  * 
- *  beforeExec
+ * afterDefinedParams
+ *    Appelée après la définition des paramètres par exemple pour les
+ *    modifier.
+ *  
+ * bypassExec
  *    Fonction à exécuter avant d'exécuter le service (par exemple un
  *    message d'alerte.)
  *    La fonction reçoit le callback qu'elle doit rappeler.
+ * 
+ * beforeExec
+ *    Peut traiter les paramètres avant l'exécution, pour mettre la 
+ *    valeur sous une toute autre forme. 
+ *    Voir par exemple l'utilisation pour create-git-issue
+ * 
  */
 
 
@@ -63,6 +77,22 @@ const COMMON_SERVICES_DATA = [
         , {id: 'work-duration', q: 'Durée d’une tranche de travail (minutes)', type: 'integer', useLastAsDefault: true}
       ]
   },
+
+  {
+      id: 'create-git-issue'
+    , name: "Enregistrer une erreur"
+    , group: 'Git'
+    , script: 'ExecCommand.sh'
+    , params: [
+          {id: 'path', type: 'project'}
+        , {id: 'issue_title', type: 'string', q: "Erreur :", persist: false}
+        , {id: 'issue_body' , type: 'text'  , q: "Description précise de l'erreur :", persist: false}
+      ]
+    , beforeExec: (dict) => {
+        return `cd "${dict.path}" && gh issue create -l bug -t "${dict.issue_title}" -b "${dict.issue_body}"`
+      }
+  },
+
   {
       id: 'edit-documentation'
     , name: 'Éditer la documentation'
@@ -151,7 +181,7 @@ const COMMON_SERVICES_DATA = [
         {id: 'card_path', type: 'project'}
       ]
     , afterDefinedParams: (params) => params[0]
-    , beforeExec: (callback) => {
+    , bypassExec: (callback) => {
         message(true, getMsg('alert-before-edit-projet'))
         const timerbeforeexec = setTimeout(() => {
           clearTimeout(timerbeforeexec)
@@ -208,14 +238,12 @@ const CUSTOM_SERVICES_DATA = [
     , scType: '.rb'
     , params: [
         {id: 'path', value: null, type: 'path', required: true},
-        {id: 'archive-folder', type: 'path-or-null', q: 'Sélectionner le dossier archives dans le Finder (ou aucun si le fichier ne doit pas être archivé).'}
+        {id: 'archive-folder', type: 'path-or-null', q: 'Sélectionner le dossier archives dans le Finder (ou aucun si le fichier ne doit pas être archivé).'},
+        /* tag::exemple-dyn-params[] */
+        /* Paramètre à définir au moment du lancement (persist:false => jamais enregistré) */
+        {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']], persist: false}
+        /* end::exemple-dyn-params[] */
     ]
-    /* Paramètres à définir au moment du lancement */
-    /* tag::exemple-dyn-params[] */
-    , dynParams: [
-        {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
-      ] 
-    /* end::exemple-dyn-params[] */
   },
 
   {

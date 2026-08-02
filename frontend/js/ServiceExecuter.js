@@ -14,22 +14,7 @@ class ServiceExecuter {
   exec(projet, callback){ D.on && D.trace([projet, callback], 'ServiceExecuter.')
     this.projet = projet
     if (typeof callback == 'function') this.callback = callback
-    const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
-    // S'il existe des paramètres dynamiques, il faut les traiters
-    if (SDATA.dynParams) {
-      this.dynParams = SDATA.dynParams.reverse()
-      this.treateDynParams()
-      return
-    } else {
-      this.execReally()
-    }
-  }
-
-  /**
-   * Exécution d'un service custom
-   */
-  execReally(){ D.on && D.trace(null, 'ServiceExecuter.')
-    this.finalyExec(this.params)
+    this.runWithDynParams(this.params)
   }
 
   /**
@@ -41,29 +26,71 @@ class ServiceExecuter {
    */
   execOnProject(projet){  D.on && D.trace(projet, 'ServiceExecuter.')
     this.projet = projet
-    this.finalyExec(projet.common_services_data[this.id])
+    this.runWithDynParams(projet.common_services_data[this.id])
+  }
+
+  // Point commun à exec() et execOnProject() : les params persist:false
+  // (jamais enregistrés, cf. ServiceDefiner) doivent être redemandés à
+  // CHAQUE exécution, quel que soit le chemin (panneau ou projet).
+  runWithDynParams(baseParams){
+    const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
+    const dynParams = SDATA.params.filter(p => p.persist === false)
+    if (dynParams.length > 0) {
+      new ParamsDefiner(dynParams, (definers) => this.onDynParamsDefined(SDATA, baseParams, definers)).define()
+    } else {
+      this.finalyExec(baseParams, this.persistedValuesById(SDATA, baseParams))
+    }
+  }
+
+  onDynParamsDefined(SDATA, baseParams, definers){
+    if (!definers) return // définition abandonnée
+    const values = definers.map(definer => [definer.value])
+    const valuesById = this.persistedValuesById(SDATA, baseParams)
+    definers.forEach(definer => { valuesById[definer.id] = definer.value })
+    this.finalyExec([...baseParams, ...values], valuesById)
+  }
+
+  // Reconstruit {id: valeur} des params déjà persistés, en zippant l'ordre
+  // déclaré (SDATA.params) avec les groupes de valeurs stockés (baseParams).
+  // Ne décompose jamais une valeur composite (ex. bounds) : elle est
+  // transmise telle quelle sous la clé de son param.
+  persistedValuesById(SDATA, baseParams){
+    const valuesById = {}
+    SDATA.params.filter(p => p.persist !== false).forEach((p, i) => {
+      const group = baseParams[i]
+      valuesById[p.id] = (Array.isArray(group) && group.length === 1) ? group[0] : group
+    })
+    return valuesById
   }
 
   // Point unique de sortie, quel que soit le chemin (custom attaché, commun
   // attaché, commun joué depuis le panneau) : this.front, s'il est défini,
   // est TOUJOURS prioritaire sur l'envoi au backend.
-  finalyExec(paramsValues){ D.on && D.trace(paramsValues, 'ServiceExecuter.')
-    if (this.service.beforeExec && !this.beforeExecIsDone) {
+  finalyExec(paramsValues, valuesById){ D.on && D.trace(paramsValues, 'ServiceExecuter.')
+    if (this.service.bypassExec && !this.bypassExecIsDone) {
       // Si une fonction est à exécuter avant
-      this.beforeExecIsDone = true
-      this.service.beforeExec.call(this.service, this.finalyExec.bind(this, paramsValues))
-      return 
+      this.bypassExecIsDone = true
+      this.service.bypassExec.call(this.service, this.finalyExec.bind(this, paramsValues, valuesById))
+      return
+    } else if (this.service.beforeExec) {
+      // Construit lui-même ce qui doit être envoyé au script, à partir
+      // des valeurs résolues indexées par id (persistées + dynamiques).
+      const built = this.service.beforeExec.call(this.service, valuesById)
+      this.sendToScript(Array.isArray(built) ? built : [built])
     } else {
-      const flatParamsValues = this.flattenParamsValues(paramsValues)
-      if (this.front) {
-        // Pas un script backend, mais un traitement frontend
-        // Typiquement : le minuteur
-        this.front(this.projet, flatParamsValues)
-        return
-      }
-      console.log("finalyExec (script '%s') avec les paramètres : ", this.script, flatParamsValues)
-      server.send({action: `exec-service`, script: this.script, params: flatParamsValues, no_raise: true}, this.afterRunService.bind(this))
+      this.sendToScript(this.flattenParamsValues(paramsValues))
     }
+  }
+
+  sendToScript(params){
+    if (this.front) {
+      // Pas un script backend, mais un traitement frontend
+      // Typiquement : le minuteur
+      this.front(this.projet, params)
+      return
+    }
+    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
+    server.send({action: `exec-service`, script: this.script, params: params, no_raise: true}, this.afterRunService.bind(this))
   }
 
   // -- Appelée après avoir exécuté le service --
@@ -110,40 +137,6 @@ class ServiceExecuter {
     })
     // console.log("params À LA FIN : ", JSON.parse(JSON.stringify(params)))
     return this.escapeParamsIfRequired(params)
-  }
-
-  treateDynParams(){
-    const param = this.dynParams.pop()
-    if (param){
-      this.defineByType(param)
-    } else {
-      this.execReally()
-    }
-  }
-
-  onDefineDynParam(values){
-    console.log("[onDefineDynParam] arguments", arguments)
-    console.log("[onDefineDynParam] values", values)
-    this.params = [...this.params, ...values]
-    this.treateDynParams()
-  }
-
-  defineByType(param){
-    switch(param.type) {
-      case 'select':
-        new SelectDialog({
-            title: 'Paramètres du service'
-          , id: param.id
-          , message: param.q
-          , idValues: [param.id]
-          , values: param.values
-          , ouiBtn: {name: 'OK', onclick: this.onDefineDynParam.bind(this)}
-        }).show()
-        break;
-      default: 
-        console.error('Type de paramètre dynamique inconnu :', param.type, param)
-        return null
-    }
   }
 
   /**
