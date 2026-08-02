@@ -144,10 +144,10 @@ class App {
    * les données de l'application pour le reprogrammer le 
    * bon jour.
    */
-  static saveReminder(reminder){
-    if (undefined == this.reminders) this.reminders = []
-    this.reminders.push(reminder.savedData())
-    this.setData('reminders', this.reminders, true)
+  static saveReminders(){
+    const reminders = Reminder.getRemindersToSave()
+    console.log("Reminders à sauver", reminders)
+    this.setData('reminders', reminders, true)
   }
 
   static awakeReminders(){

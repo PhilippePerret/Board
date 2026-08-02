@@ -86,20 +86,14 @@ class Notifier {
   static onClick(response){
     console.info("Notifier::onClick(response=)", response, this.dataButtons)
     const btnValue = response.data?.button
-    if (btnValue == ':remove:') {
-      // Mettre fin à la notification
-      console.info("Je dois apprendre à mettre fin à this.data =", this.data)
-      if (this.data.onclick) {
-        this.data.onclick(':remove:')
-      } else {
-        console.error("Les données (cf. this.data) transmises à Notifier.notify devraient définir onclick pour savoir quelle méthode appeler en cas de clic sur la notification. this.data =", this.data)
-      }
-    } else if (btnValue) {
-      const btn = this.getButton(btnValue)
-      if (btn && 'function' == typeof btn.onclick) btn.onclick()
+    const btn = btnValue ? this.getButton(btnValue) : null
+    var onclick
+    if ( btn ) { onclick = btn.onclick }
+    onclick = onclick ?? this.data.onclick
+    if ( 'function' == typeof onclick ) {
+      onclick(btnValue)
     } else {
-      // Appelé sans bouton (i.e. click sur notification ?)
-      console.info("Click sur notification")
+      console.warn('Désolé, mais aucune méthode à appeler avec "%s", la valeur du bouton cliqué', btnValue)
     }
   }
 

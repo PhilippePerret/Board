@@ -1,5 +1,6 @@
 == BUGS ==
 
+- BUG #2 Pour les rappels programmés, supprimer toutes les secondes
 - BUG #1 les panneaux doivent tous s'ouvrir là où on a placé le dernier (-> TEST)
 
 - Les rappels/alertes programmés ne fonctionnent pas
@@ -14,10 +15,11 @@
 
 == Todo En cours
 
+- Modifier les rappels enregistrés à chaque ajout/suppression
+
 == Todo list ==
 
 - pouvoir mettre une note gh (github) du type voulu
-- pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
   
 == Idées d'autres services ==
 
@@ -25,3 +27,7 @@
 - Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
 - Ouvrir le repo Git (statut, ou `git pull`/`push`)
 - Ouvrir l'URL locale du projet dans le navigateur
+
+== Autres versions ==
+
+- pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.

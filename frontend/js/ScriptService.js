@@ -177,7 +177,7 @@ class ServStep extends ExtendedObject {
       this.aborted = true
     } else {
       value = this.transformValue(value)
-      console.info(`Valeur pour étape '${this.id} = ${(typeof value == 'object') ? JSON.stringify(value) : value}`)
+      // console.info(`Valeur pour étape '${this.id} = ${(typeof value == 'object') ? JSON.stringify(value) : value}`)
       this.value = value
       // Pour définir une autre valeur d'étape
       this.ifSet()
@@ -245,12 +245,12 @@ class ServStep extends ExtendedObject {
     this.errors = errors
     // Pour une étape conditionnelle
     if (this.isConditional && this.conditionNotSatisfied()){ 
-      console.info("La condition n'est pas satisfaite, je passe à la suite.")
+      // console.info("La condition n'est pas satisfaite, je passe à la suite.")
       return callback()
     } else if (this.isConditional) {
-      console.info(`La condition est satisfaite, j'exécute l'étape ${this.id}.`)
+      // console.info(`La condition est satisfaite, j'exécute l'étape ${this.id}.`)
     } else {
-      console.info("Étape inconditionnelle")
+      // console.info("Étape inconditionnelle")
     }
 
     // Remplacements communs dans les paramètres
@@ -404,7 +404,7 @@ class ServStep extends ExtendedObject {
       this.scriptService.setValue(this.step, finalValue)
       this.setValue(true)
     } else {
-      console.log("Mise de la valeur de '%s' à '%s'", this.id, finalValue)
+      // console.log("Mise de la valeur de '%s' à '%s'", this.id, finalValue)
       this.setValue(finalValue)
     }
   }
@@ -447,8 +447,6 @@ class ServStep extends ExtendedObject {
       return this.addFatalError('scserv-unknown-marker-translate', [mark, this.id, marker_list.join(', '), this.aideByType])
     }
     // /Fin de transformation de la valeur
-
-    console.info("value date = ", value)
 
     // à la fin
     if (this.step) { 

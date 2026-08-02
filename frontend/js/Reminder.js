@@ -40,11 +40,28 @@ class Reminder extends ExtendedObject {
     const reminder = new Reminder(data)
     if (reminder.immediat) {
       reminder.exec()
-    } else if ( reminder.onOtherDay ) {
-      App.saveReminder(reminder)
-    } else if ( !this.running ) {
-      this.run()
+    } else {
+      // On enregistre TOUJOURS le rappel, même s'il est aujourd'hui
+      // dans le cas où l'on doive redémarrer l'application.
+      App.saveReminders()
+      if ( reminder.onOtherDay || this.running ) {
+        // Rien à faire
+      } else {
+        // Sinon on lance
+        this.run()
+      }
     }
+      
+  }
+
+  /**
+   * Appelé par App pour avoir la liste des reminders à 
+   * sauvegarder
+   */
+  static getRemindersToSave(){
+    const reminders = []
+    this.each((reminder) => {reminders.push(reminder.savedData())})
+    return reminders
   }
 
   /**
@@ -59,8 +76,15 @@ class Reminder extends ExtendedObject {
   // Lancement du reminder
   static run(){
     // console.log("-> Reminder::run")
-    this.runTimer = setInterval(this.poll.bind(this), 60 * 1000)
-    this.running = true
+    // On lance pile à la minute
+    this.startRunningTimer = setTimeout(setTimeout(() => { 
+      clearTimeout(this.startRunningTimer)
+      delete this.startRunningTimer
+      this.runTimer = setInterval(this.poll.bind(this), 60 * 1000)
+      this.running = true
+      console.log("Lancement réel du poll", new Date())
+    }, 60000 - (Date.now() % 60000)))
+    
   }
 
   static stop(){
@@ -93,6 +117,7 @@ class Reminder extends ExtendedObject {
     this.__eo_ids.splice(idx, 1)
     this.__eo_items.splice(idx, 1)
     delete this.__eo_table[reminder.id]
+    App.saveReminders()
   }
   /**
    * Suppression des reminders du type +type+
@@ -237,17 +262,19 @@ class Reminder extends ExtendedObject {
    * l'annulation du rappel
    */
   onClickNotification(value){
+    console.log("Reçu par onClickNotification:", value)
     switch(value){
       case ':remove:':
         Reminder.remove(this);
         console.log("Suppression du rappel")
         break
-        case ':remindme:':
-          // <= Quand on clique sur "me le rappeler plus tard"
-          // => Mettre à 10 minutess de maintenant
-          this.time.setMinutes(this.time.getMinutes() + 10)
-          console.log("Rappel réglé à dans 10 minutes", this.time)
-        break
+      case ':remindme:':
+        // <= Quand on clique sur "me le rappeler plus tard"
+        // => Mettre à 10 minutess de maintenant
+        this.time.setMinutes(this.time.getMinutes() + 10)
+        App.saveReminders()
+        console.log("Rappel réglé à dans 10 minutes", this.time)
+      break
     }
   }
 
