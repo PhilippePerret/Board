@@ -29,7 +29,8 @@
  * buttons      Les boutons à afficher
  *              Liste de {name: "label", value: "lab1", onclick: callback}
  *              Si 'value' n'est pas transmis, c'est :name
- *              Dans ce cas, 
+ *              Si aucun bouton n'est défini, c'est la notification entière
+ *              qui réagit au clic et se détruit si on clique dessus.
  * background   Couleur du fond
  * opacity      Opacité
 
@@ -72,12 +73,20 @@ class Notifier {
     this.data = this._ensure_data(data)
     window.server.send(this.data, this.onClick.bind(this))
   }
+
+  /**
+   * Fonction qui reçoit la valeur transmise par un click sur la 
+   * notification, sur un bouton ou sur toute la notification.
+   */
   static onClick(response){
-    // console.log("Notifier::onClick(response=)", response, this.dataButtons)
+    console.info("Notifier::onClick(response=)", response, this.dataButtons)
     const btnValue = response.data?.button
     if (btnValue) {
       const btn = this.getButton(btnValue)
       if (btn && 'function' == typeof btn.onclick) btn.onclick()
+    } else {
+      // Appelé sans bouton (i.e. click sur notification ?)
+      console.info("Click sur notification")
     }
   }
 
@@ -92,6 +101,7 @@ class Notifier {
 
     /* -- Les boutons -- */
     this.dataButtons = {}
+    this.aucunBouton = ! (data.buttons && data.buttons.length)
     var swiftButtons
     if (data.buttons) {
       swiftButtons = data.buttons.map(dbutton => {
@@ -131,13 +141,15 @@ class Notifier {
 
     return data
   }
+
+
   static buildHtml(data){
     var html = []
     html.push(this.styles(data).replace(/\n/g, '').replace(/\s+/g, '').replace(/__/g, ' '))
     // console.log("Ajout des styles:", html[0])
     var div
     if ( this.aucunBouton ) {
-      div = '<div id="notify" onclick="">'
+      div = `<div id="notify" onclick="send(':remove:')">`
     } else {
       div = '<div id="notify">'
     }
@@ -188,8 +200,8 @@ class Notifier {
       left: 24px;
     }
     h1 {
-      font-style: normal; 
-      font-size:1.5rem;
+      font-weight: normal; 
+      font-size:1.2rem;
       margin-left: 4rem;
       margin-bottom: 0;
       padding-bottom: 0;
