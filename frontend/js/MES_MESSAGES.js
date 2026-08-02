@@ -6,7 +6,9 @@ const MESSAGES = {
     'premier': "sans virgule"
 
     // --- GÉNÉRAUX ---
-    , ':': ' : '
+    , 'btn-yes': "Oui"
+    , 'btn-no': "Non"
+    , ':'   :   ' : '
     , 'date/at': 'à' // pour une date avec heure
     , 'Cancel': "Renoncer"
     , 'clock-work-done': 'Travail accompli au cours de la session : '
