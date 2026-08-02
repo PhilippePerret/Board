@@ -177,7 +177,7 @@ class ServStep extends ExtendedObject {
       this.aborted = true
     } else {
       value = this.transformValue(value)
-      message(`Valeur pour étape '${this.id} = ${(typeof value == 'object') ? JSON.stringify(value) : value}`)
+      console.info(`Valeur pour étape '${this.id} = ${(typeof value == 'object') ? JSON.stringify(value) : value}`)
       this.value = value
       // Pour définir une autre valeur d'étape
       this.ifSet()
@@ -268,6 +268,15 @@ class ServStep extends ExtendedObject {
     }
   }
 
+  /******************************************************/
+  /******************************************************/
+  /******************************************************/
+  /******************************************************/
+  /******************************************************/
+  /*                                                    */
+  /*    Méthodes d'exécution des TYPES d'ÉTAPES         */
+  /*                                                    */
+  /******************************************************/
 
   /**
    * Programmer une alerte
@@ -279,6 +288,7 @@ class ServStep extends ExtendedObject {
    * icon         L'icône de la fenêtre
    * 
    */
+  // ••• Type : alert
   execAlert() {
     // const dateTime = Validator.datetime(this.datetime, REG_DATETIME_JJ_MM_HH_MM, true)
     const dataRappel = {
@@ -294,7 +304,8 @@ class ServStep extends ExtendedObject {
     this.setValue(true)
   }
 
-  // Étape pour choisir un fichier
+
+  // ••• Type : select-file
   execSelectFile(retour){
     historize('-> execSelectFile', retour)
     if (retour){
@@ -311,7 +322,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
-  // Choix d'un dossier
+
+  // ••• Type : choose-folder
   execChooseFolder(retour){
     historize('-> execChooseFolder', retour)
     if (retour){
@@ -331,7 +343,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Copie d'un fichier
+  // ••• Type copy-file
   execCopyFile(retour){
     if (retour) {
       if (retour.error) return this.addFatalError(retour.error)
@@ -345,7 +357,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Pour ajouter le contenu +content+ au fichier +path+
+  // ••• Type : add-to-file
   execAddToFile(retour){
     historize('-> execAddToFile', retour)
     if (retour) {
@@ -362,7 +374,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Etape d'affectation d'une valeur au projet
+  // ••• Type : set-project-data
   execSetProjectData(retour){
     if (retour) {
       if (retour.error) return this.addFatalError(retour.error) // Ne peut pas encore passer par là
@@ -378,19 +390,14 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Pour récupérer une valeur projet
+  // ••• Type : get-project-data
   execGetProjectData(){
     historize('-> execGetProjectData')
     this.setValue(this.projet.get(this.key || this.id) || null) // la clé peut être l'id
   }
 
 
-  /**
-   * Fonction qui se contente de fixer la valeur d'une étape précédente ou
-   * de l'étape courante.
-   * Cette donnée servira plus tard car elle sera accessible avec 
-   * "${<step id>}".
-   */
+  // ••• type Set
   execSet(){
     var finalValue = this.value
     if (this.step) {
@@ -403,7 +410,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Traduction mots clés → signification
+  // ••• Type : translate
   execTranslate(){
     function translateDateLaps(ecart, format) {
       const date = new Date()
@@ -451,7 +458,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Demande de chaîne de caractères
+  // ••• Type : string
   execString(retour){
     historize('-> execString', retour)
     if (retour) {
@@ -472,7 +479,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Demande de texte mutilignes
+  // ••• Type : text
   execText(retour){
     if (retour) {
       this.setValue(retour)
@@ -489,7 +496,7 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Demande d'une date et d'une heure
+  // ••• Type : date-time
   execDateTime(retour) {
     if (retour) {
       var datetime
@@ -511,11 +518,13 @@ class ServStep extends ExtendedObject {
   }
 
 
-  // Création d'un dossier
+  // ••• Type : create-folder
   execCreateFolder(){
     server.send({action: 'create-folder', data: this.path, no_raise: true}, this.afterCreateFolder.bind(this))
   }
 
+
+  // ••• Type : create-file
   execCreateFile(retour){
     if (retour) {
       if (retour.error) return this.addFatalError(getErr(retour.error))
@@ -523,9 +532,10 @@ class ServStep extends ExtendedObject {
     } else {
       server.send({action: 'create-file', path: this.path, content: this.content}, this.execCreateFile.bind(this))
     }
-
   }
 
+
+  // ••• Type : phone
   execPhone(retour) {
     if (retour) {
       // phone valide
@@ -550,11 +560,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
-  /**
-   * @return La valeur sélectionnée ('autre' pour création)
-   * 
-   * this.values définit le type de valeurs proposées
-   */
+
+  // ••• Type : select
   execSelect(retour) {
     try {
       if (retour) {
@@ -575,11 +582,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
-  /**
-   * Méthode complexe permettant d'enregistrer une valeur dans un fichier
-   * this.prefix : si défini
-   * this.keys : les données à enregistrer, à reconstituer
-   */
+
+  // ••• Type : save-data
   execSaveData(retour){
     if (retour) {
       if (retour.error) { return this.addFatalError(retour.error) } 
@@ -600,6 +604,8 @@ class ServStep extends ExtendedObject {
     }
   }
 
+
+  // ••• Type : get-data
   execGetData(retour){
     if(retour){
       const data = retour.data
@@ -633,6 +639,11 @@ class ServStep extends ExtendedObject {
 
 
   /************** /FIN DES MÉTHODES D'EXÉCUTION ******************/
+  /***************************************************************/
+  /***************************************************************/
+  /***************************************************************/
+  /***************************************************************/
+
 
   afterCreateFolder(retour){
     console.log("[afterCreateFolder] RETOUR", retour)
