@@ -124,12 +124,8 @@ class Reminder extends ExtendedObject {
   constructor(data){
     super(data)
     data.task && this.setAsTask(data)
-    console.log("Reminder enregistré", this)
-    if ('string' == typeof this.time){
-      this.time = new Date(this.time)
-      console.info("Le time du reminder a été transmis sous forme de string", this)
-      console.trace()
-    }
+    // console.log("Reminder enregistré", this)
+    if ('string' == typeof this.time){ this.time = new Date(this.time) }
     this.execCount = 0
     this.buttons && this.defineRealButtons()
   }
@@ -229,7 +225,7 @@ class Reminder extends ExtendedObject {
     // console.log("-> Reminder.exec", this)
     Notifier.notify(this.dataNotifierByType(this.type))
     if (this.onDue) {
-      console.info("La fonction à jouer lors de l'échéance a été appelée.")
+      // console.info("La fonction à jouer lors de l'échéance a été appelée.")
       this.onDue()
     }
   }
