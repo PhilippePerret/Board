@@ -14,7 +14,8 @@
 - [Pas d'explications techniques](feedbacks/no_code_explanations.md) — user ne lit pas le code, format "<Ça> : normalement, corrigé."
 - [Décision vs détail d'implémentation](feedbacks/decision_vs_implementation_detail.md) — réponse de décision = uniquement ce qui pèse sur le choix, jamais mêlé aux détails mécaniques (ordre scripts, imports…)
 - [Dossier .claude = à moi](feedbacks/claude_dir_is_mine.md) — CLAUDE.md et tout .claude/ sous ma responsabilité, tenir à jour sans demander
-- [Aplatissement AX WebKit](project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
+- [Aplatissement AX WebKit](feedbacks/project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
+- [no_raise : erreur traitée par l'appelant](feedbacks/no_raise_caller_owns_error.md) — ok:true forcé par no_raise est voulu, ne jamais centraliser le check .error dans xbridge.js
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
 - [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande

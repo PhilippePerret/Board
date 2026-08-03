@@ -279,30 +279,30 @@ class Prompter {
   static promptPath(spec, callback){
     const q = spec.message || spec.q || getMsg('select-el-in-finder-and-ok')
     const options = {midBtn: {name: 'Vide', onclick: () => callback('')}}
-    this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour), null, options)
+    this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour), null, options, callback)
   }
 
   static promptFolder(spec, callback){
     const q = spec.message || spec.q || getMsg('select-folder-and-ok')
-    this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour))
+    this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour), null, null, callback)
   }
 
   static promptPathInProject(spec, callback){
     const transformer = v => v.replace(Project.current.path + '/', '')
-    const q = spec.message || spec.q || getMsg('select-el-in-project-and-ok') 
-    this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(transformer, callback, retour))
+    const q = spec.message || spec.q || getMsg('select-el-in-project-and-ok')
+    this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(transformer, callback, retour), null, null, callback)
   }
 
   static promptIcon(spec, callback){ this.promptPathInProject(spec, callback) }
 
   static promptFinderWindow(spec, callback){
-    const q = spec.message || spec.q || getMsg('set-window-in-finder-and-ok') 
-    this._waitForWindow(spec, q, (retour) => this._getInfoFinderWindow('all', callback, retour))
+    const q = spec.message || spec.q || getMsg('set-window-in-finder-and-ok')
+    this._waitForWindow(spec, q, (retour) => this._getInfoFinderWindow('all', callback, retour), null, null, callback)
   }
 
   static promptBounds(spec, callback){
     const q = spec.message || spec.q || getMsg('pos-window-in-finder-and-ok')
-    this._waitForWindow(spec, q, (retour) => this._getInfoFinderWindow(['position', 'size'], callback, retour))
+    this._waitForWindow(spec, q, (retour) => this._getInfoFinderWindow(['position', 'size'], callback, retour), null, null, callback)
   }
 
   static promptPathOrNull(spec, callback){
@@ -339,7 +339,7 @@ class Prompter {
 
   // -- Aides internes (Finder / fenêtres) --
 
-  static _waitForWindow(spec, message, callback, fallback = null, options = null){
+  static _waitForWindow(spec, message, callback, fallback = null, options = null, preserveCallback = callback){
     const dialogData = {
         title: getMsg('Defining-parameter')
       , message: message
@@ -348,7 +348,7 @@ class Prompter {
       , nonBtn: {name: options?.nonBtn ?? getMsg('Cancel')   , onclick: fallback}
     }
     if (options?.midBtn) Object.assign(dialogData, {midBtn: options.midBtn})
-    this._addPreserveOption(spec, dialogData, callback)
+    this._addPreserveOption(spec, dialogData, preserveCallback)
     new ConfirmDialog(dialogData).show()
   }
 

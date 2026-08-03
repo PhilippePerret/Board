@@ -1,5 +1,99 @@
-set -Ee
-trap 'echo "Erreur à la ligne $LINENO (code=$?)"' ERR
+cmd="$*"
 
+# --- Charger le vrai PATH de l'utilisateur ---
+#
+# Ce script est lancé par Board.app -> ruby -> zsh, un process GUI qui
+# n'hérite PAS du PATH d'un shell de login (pas de .zshrc/.zprofile
+# sourcé). Sans ça, des commandes installées via Homebrew (ex. gh) sont
+# introuvables même si elles marchent très bien dans un Terminal.
+#
+# On récupère le PATH réel en interrogeant le shell de login de
+# l'utilisateur ($SHELL -ilc), mais ça coûte cher (source tous les
+# fichiers rc, ~100-300ms) : on met donc le résultat en cache, invalidé
+# automatiquement si un fichier rc a été modifié depuis (comparaison de
+# mtime, quasi gratuite). Sur cache valide, le coût retombe à quelques
+# stat + un cat.
+cache_dir="$HOME/Library/Application Support/Board"
+cache_file="$cache_dir/user_path.cache"
+rc_files=(
+  "$HOME/.zshenv"
+  "$HOME/.zprofile"
+  "$HOME/.zshrc"
+  "$HOME/.bash_profile"
+  "$HOME/.bashrc"
+)
 
-eval "$*"
+mkdir -p "$cache_dir" 2>/dev/null
+
+need_refresh=1
+if [ -f "$cache_file" ]; then
+  need_refresh=0
+  cache_mtime=$(stat -f %m "$cache_file" 2>/dev/null || echo 0)
+  for rc in "${rc_files[@]}"; do
+    if [ -f "$rc" ]; then
+      rc_mtime=$(stat -f %m "$rc" 2>/dev/null || echo 0)
+      if [ "$rc_mtime" -gt "$cache_mtime" ]; then
+        need_refresh=1
+        break
+      fi
+    fi
+  done
+fi
+
+if [ "$need_refresh" -eq 1 ]; then
+  user_path="$($SHELL -ilc 'echo -n $PATH' 2>/dev/null)"
+  if [ -n "$user_path" ]; then
+    printf '%s' "$user_path" > "$cache_file"
+  fi
+else
+  user_path="$(cat "$cache_file")"
+fi
+
+if [ -n "$user_path" ]; then
+  export PATH="$user_path"
+fi
+
+# Échappe une chaîne pour l'insérer telle quelle dans une valeur JSON
+# (le script exécuté peut sortir n'importe quoi — une URL, du texte
+# libre — jamais du JSON, donc on l'encapsule nous-mêmes ci-dessous
+# plutôt que de le renvoyer brut : exec_script.rb fait un JSON.parse
+# sur notre stdout).
+json_escape() {
+  local s="$1"
+  s="${s//\\/\\\\}"
+  s="${s//\"/\\\"}"
+  s="${s//$'\n'/\\n}"
+  s="${s//$'\r'/\\r}"
+  s="${s//$'\t'/\\t}"
+  printf '%s' "$s"
+}
+
+# --- Jouer la commande ---
+err_file="$(mktemp)"
+trap 'rm -f "$err_file"' EXIT
+
+out="$(eval "$cmd" 2> "$err_file")"
+code=$?
+
+if [ $code -eq 0 ]; then
+  printf '{"ok": true, "message": "%s"}' "$(json_escape "$out")"
+  exit 0
+fi
+
+err="$(cat "$err_file")"
+
+# On cherche si l'échec vient d'une commande introuvable (format zsh :
+# "(eval):1: command not found: xxx"), peu importe où elle est dans la
+# chaîne (ex. après un `&&`). Avec le vrai PATH déjà chargé ci-dessus,
+# ce cas signifie que la commande n'est vraiment pas installée.
+missing="$(printf '%s\n' "$err" | sed -nE 's/^.*command not found: ([^ ]+).*/\1/p' | tail -1)"
+
+if [ -z "$missing" ]; then
+  # Échec pour une autre raison qu'une commande introuvable : on relaie
+  # l'erreur telle quelle.
+  printf '{"ok": false, "error": "%s"}' "$(json_escape "$err")"
+  exit 0
+fi
+
+printf '{"ok": false, "error": "%s"}' "$(json_escape "Commande '$missing' introuvable sur ce système. Installez-la, par exemple avec : brew install $missing")"
+exit 0

@@ -67,6 +67,7 @@ module BoardTest
     exit 2
   rescue => e
     puts "#{RED}✗ #{name}\n    #{e.message}#{RESET}"
+    puts e.backtrace.first(15).join("\n")
     print_timing
     exit 1
   end
@@ -698,6 +699,6 @@ module BoardTest
     return false unless File.exist?(DEBUG_LOG_FILE)
     size = File.size(DEBUG_LOG_FILE)
     return false if size <= offset
-    File.read(DEBUG_LOG_FILE, size - offset, offset).include?('save-app-data reçu')
+    File.read(DEBUG_LOG_FILE, size - offset, offset).force_encoding('UTF-8').include?('save-app-data reçu')
   end
 end
