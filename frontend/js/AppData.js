@@ -49,19 +49,19 @@ const BROWSERS = [
  * Propriétés de CONFIG
  */
 const APP_DATA = [
-    {id: 'documentation-editor'       , name: 'Éditeur pour la documentation'     , type: 'select'    , values: TEXT_EDITORS}
-  , {id: 'default-browser'            , name: 'Navigateur par défaut'             , type: 'select'    , values : BROWSERS }
-  , {id: 'code-editor'                , name: 'Éditeur pour le code'              , type: 'select'    , values: CODE_EDITORS}
-  , {id: 'text-editor'                , name: 'Éditeur pour les textes simples'   , type: 'select'    , values: TEXT_EDITORS}
-  , {id: 'yaml-editor'                , name: 'Éditeur pour fichiers YAML'        , type: 'select'    , values: [...YAML_EDITORS, ...CODE_EDITORS]}
-  , {id: 'docu-folder-name'           , name: 'Nom du dossier de documentation'   , type: 'string'    , default: 'Documentation'  }
+    {id: 'default-browser'            , name: getMsg('default-browser')           , type: 'select'    , values : BROWSERS }
+  , {id: 'code-editor'                , name: getMsg('code-editor')               , type: 'select'    , values: CODE_EDITORS}
+  , {id: 'text-editor'                , name: getMsg('text-simple-editor')        , type: 'select'    , values: TEXT_EDITORS}
+  , {id: 'yaml-editor'                , name: getMsg('yaml-editor')               , type: 'select'    , values: [...YAML_EDITORS, ...CODE_EDITORS]}
+  , {id: 'documentation-editor'       , name: getMsg('docu-editor')               , type: 'select'    , values: TEXT_EDITORS}
+  , {id: 'docu-folder-name'           , name: getMsg('docu-folder-name')          , type: 'string'    , default: getMsg('Documentation') }
   , {id: 'docu-main-edit-file'        , name: getMsg('docu-main-file-name')       , type: 'string'    , default: 'docu.adoc'}
   , {id: 'docu-main-disp-file'        , name: getMsg('docu-main-disp-file')       , type: 'string'    , default: 'docu.html'}
-  , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md' }
-  , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}
-  , {id: 'version'                    , name: 'Version de l’application'          , type: 'string'    , locked: true}
-  , {id: 'remember-last-project'      , name: 'Se souvenir du dernier projet'     , type: 'boolean'   , default: false}
-  , {id: 'last-project'               , name: 'Dernier project sélectionné'       , type: 'string'    , default: null , editable: false}
+  , {id: 'changelog-file'             , name: getMsg('changelog-file-name')       , type: 'string'    , default: 'CHANGELOG.md' }
+  , {id: 'todo-file'                  , name: getMsg('todo-file-name')            , type: 'string'    , default: 'TODO.md'}
+  , {id: 'version'                    , name: getMsg('app-version')               , type: 'string'    , locked: true}
+  , {id: 'remember-last-project'      , name: getMsg('remember-last-project')     , type: 'boolean'   , default: false}
+  , {id: 'last-project'               , name: getMsg('last-project-id')           , type: 'string'    , default: null , editable: false}
 ]
 
 const TBL_APP_DATA = {}

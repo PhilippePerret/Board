@@ -28,6 +28,19 @@ const MESSAGES = {
     , 'Preserve': "Préserver"
     , 'app-to-use': "Application à utiliser"
 
+    // App
+    , 'app-version': 'Version de l’application'
+    , 'remember-last-project': 'Se souvenir du dernier projet'
+    , 'default-browser': 'Navigateur par défaut'
+    , 'code-editor': 'Éditeur pour le code'
+    , 'text-simple-editor': 'Éditeur pour les textes simples'
+    , 'yaml-editor': 'Éditeur YAML'
+    , 'docu-editor': 'Éditeur pour la documentation'
+    , 'docu-folder-name': 'Nom du dossier de documentation'
+    , 'changelog-file-name': 'Nom du fichier changelog'
+    , 'todo-file-name': 'Nom du fichier TODO'
+    , 'last-project-id': 'Dernier project sélectionné'
+
     // Minuteur
     , 'start-clock': 'Démarrer l’horloge'
     , 'clock-work-done': 'Travail accompli au cours de la session : '
