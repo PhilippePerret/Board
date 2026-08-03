@@ -17,6 +17,9 @@ module BoardTest
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
   APP_DATA_FILE         = File.join(BOARD_SUPPORT_DIR, 'appdata.yaml')
   LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'js', 'MES_ERRORS.js')
+  # Même fichier que backend/lib/debug.rb (Debug::LOG_FILE) — volontairement
+  # hors de BOARD_SUPPORT_DIR pour ne pas être déplacé par run_tests.sh.
+  DEBUG_LOG_FILE        = File.join(Dir.home, 'Library', 'Application Support', 'Board-debug.log')
 
   GREEN  = "\e[32m"
   RED    = "\e[91m"
@@ -640,25 +643,61 @@ module BoardTest
   #
   # Appelé en `ensure`, donc potentiellement pendant que Board (instance
   # partagée avec le test suivant si celui-ci ne fait pas launch_app) tourne
-  # encore. Board écrit lui-même appdata.yaml de façon asynchrone à chaque
-  # clic sur une carte projet (App.js#setData('last-project', ..., true) ->
-  # 'save-app-data', backend.rb, écriture brute sans verrou, sans re-lecture
-  # préalable). Si cette écriture atterrit après celle d'ici, elle réintroduit
-  # l'id dans projects-in avec le fichier de carte déjà supprimé — un id
-  # fantôme qui casse App.load_all (backend/lib/app.rb) à CHAQUE lancement
-  # suivant, pour tout le reste du run. Pas de pkill ici (tuerait l'instance
-  # dont dépend le test suivant s'il ne relance pas) : on écrit, puis on
-  # vérifie que l'id n'a pas été réintroduit par une écriture concurrente, et
-  # on ré-écrit si besoin — jusqu'à stabilisation.
+  # encore. Board écrit lui-même appdata.yaml de façon asynchrone (App.js
+  # `saveData` est débouncée à 1000ms, réarmée par tout `setData(..., true)`,
+  # ex. le dernier clic "Save" de la spec qui vient de finir) — écriture
+  # brute sans verrou, sans re-lecture préalable. Si cette écriture atterrit
+  # après celle d'ici, elle réintroduit l'id dans projects-in avec le fichier
+  # de carte déjà supprimé — un id fantôme qui cassait App.load_all
+  # (backend/lib/app.rb) à CHAQUE lancement suivant (fixé aussi côté app :
+  # un fichier de carte manquant ne fait plus échouer le chargement complet).
+  #
+  # Un simple sleep ne peut pas prouver que ce save différé ne partira plus :
+  # on attend une confirmation réelle via Board-debug.log (backend/lib/debug.rb,
+  # horodaté à la milliseconde, jamais déplacé par run_tests.sh) — écrire,
+  # puis surveiller qu'aucune nouvelle ligne "save-app-data reçu" n'apparaît
+  # pendant toute la fenêtre de debounce + marge ; si une ligne apparaît quand
+  # même (Board a réécrit par-dessus), ré-écrire l'appdata nettoyée et
+  # rattendre. Boucle bornée (MAX_REMOVE_ATTEMPTS) pour éviter de tourner sans
+  # fin si un autre mécanisme sauvegarde périodiquement.
+  DEBOUNCE_SAVE_MS   = 1000 # App.js: debounce(execSaveData, 1000)
+  DEBOUNCE_MARGIN_MS = 400
+  MAX_REMOVE_ATTEMPTS = 8
+
   def remove_fixture_project(project_id)
     File.delete(project_card_path(project_id)) if File.exist?(project_card_path(project_id))
-    wait_until(5, 0.2, desc: -> { "id #{project_id} toujours dans appdata.yaml malgré les tentatives de retrait" }) do
+    attempts = 0
+    loop do
+      attempts += 1
+      if attempts > MAX_REMOVE_ATTEMPTS
+        raise "id #{project_id} toujours réintroduit dans appdata.yaml après #{MAX_REMOVE_ATTEMPTS} tentatives (écritures concurrentes de Board jamais stabilisées)"
+      end
       app_data = read_app_data
       app_data['projects-in']&.delete(project_id)
       app_data['projects-out']&.delete(project_id)
       write_app_data(app_data)
-      sleep 0.3
-      !read_app_data['projects-in']&.include?(project_id) && !read_app_data['projects-out']&.include?(project_id)
+      log_offset = File.exist?(DEBUG_LOG_FILE) ? File.size(DEBUG_LOG_FILE) : 0
+      break if wait_stable_no_save_app_data(log_offset, (DEBOUNCE_SAVE_MS + DEBOUNCE_MARGIN_MS) / 1000.0)
     end
+  end
+
+  # Vrai si aucune ligne "save-app-data reçu" n'est apparue dans
+  # DEBUG_LOG_FILE après +offset+ pendant toute la durée +wait_seconds+ (donc
+  # Board n'a pas réécrit appdata.yaml entre-temps). Sort dès qu'une ligne
+  # apparaît (pas la peine d'attendre le reste du délai).
+  def wait_stable_no_save_app_data(offset, wait_seconds, poll_interval: 0.05)
+    deadline = Time.now + wait_seconds
+    while Time.now < deadline
+      return false if new_save_app_data_line_since?(offset)
+      sleep poll_interval
+    end
+    !new_save_app_data_line_since?(offset)
+  end
+
+  def new_save_app_data_line_since?(offset)
+    return false unless File.exist?(DEBUG_LOG_FILE)
+    size = File.size(DEBUG_LOG_FILE)
+    return false if size <= offset
+    File.read(DEBUG_LOG_FILE, size - offset, offset).include?('save-app-data reçu')
   end
 end

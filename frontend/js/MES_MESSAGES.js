@@ -8,11 +8,23 @@ const MESSAGES = {
     // --- GÉNÉRAUX ---
     , 'btn-yes': "Oui"
     , 'btn-no': "Non"
+    , 'OK': 'OK'
     , ':'   :   ' : '
+    , 'new…': "Nouveau…"
+    , 'None': 'Aucun'
+    , 'Nonee': 'Aucune'
+    , 'other-value…': 'Autre valeur…'
     , 'date/at': 'à' // pour une date avec heure
-    , 'Cancel': "Renoncer"
+    , 'Cancel': "Annuler"
     , 'its-noted': "C’est noté"
     , 'remind-me-later': "Me le rappeler plus tard"
+    , '(by-default)': "(par défaut)"
+    , 'Color': 'Couleur'
+    , 'Image': 'Image'
+    , 'Nothing': 'Rien'
+    , 'This-one': 'Celui-là'
+    , 'This-onee': "Celle-là" 
+    , 'Preserve': "Préserver"
 
     // Minuteur
     , 'clock-work-done': 'Travail accompli au cours de la session : '
@@ -39,6 +51,8 @@ const MESSAGES = {
     , 'opening': "Ouverture"
     , 'run-a-script': "Jouer un script"
     , 'run-a-script-service': "Jouer un SCRIPT-SERVICE"
+    , 'Defining-a-color': "Définition d'une couleur"
+    , 'choose-a-color': "Sélectionner une couleur avec le picker ci-dessous."
 
     // --- PROJETS ---
     , 'title-project': "Projet “$1”"
@@ -48,6 +62,26 @@ const MESSAGES = {
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder'
     , 'folder-required': 'Il faut impérativement choisir un dossier.'
 
+    // -- Service --
+    , 'Choosing-finder-element': "Choix d'un élément de Finder"
+    , 'Defining-parameter': 'Définition de paramètre'
+    , 'app-choice': "Choix d'une application"
+    , 'choose-app-to-use': 'Choisir l’application à utiliser'
+    , 'other-app': 'Autre application…'
+    , 'new-service-name': 'Nouveau nom du service'
+    , 'which-name-for-project-service': 'Quel nouveau nom donner à ce service pour le projet ?'
+    , 'select-el-in-finder-and-ok': "Sélectionner l'élément dans le Finder et cliquer sur OK."    , 'which-url': "Quelle URL faut-il rejoindre ?"
+    , 'Choosing-a-folder': "Choix d'un dossier"
+    , 'select-folder-and-ok': "Sélectionner le dossier dans le Finder et cliquer sur OK."
+    , 'select-el-in-project-and-ok': "Sélectionner l'élément dans le dossier du projet et cliquer sur OK."
+    , 'set-window-in-finder-and-ok': "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK."
+    , 'pos-window-in-finder-and-ok' : "Positionner la fenêtre dans le Finder et cliquer “OK”."
+    , 'sel-el-in-finder-or-click-none' : "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'."
+    , 'choose-color-or-image': "Choisir une couleur ou une image"
+    , 'which-background': 'Que voulez-vous choisir comme fond ?'
+    , 'phone-number': 'Numéro de téléphone'
+    , 'which-phone-number': 'Merci de bien vouloir fournir un numéro de téléphone valide.'
+    , 'date-and-hour': 'Date et heure'
     // -- Script services --
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
     , 'scserv-datetime-default-format': 'JJ MM HH:MM (03 08 05:12 pour 3 aout à 5 heures 12)'

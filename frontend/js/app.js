@@ -46,9 +46,9 @@ class App {
       return server.send({action: 'load-all'}, this.init.bind(this))
     } else {
       Spinner.start()
+      this.data = retour.data.appData
       this.observe()
       Service.init()
-      this.data = retour.data.appData
       Project.initAllProjects(retour.data.projectsData)
       // Réveil si nécessaire des rappels
       this.awakeReminders()
@@ -95,7 +95,9 @@ class App {
   static getData(key){
     return this.data[key]
   }
+
   static setData(key, value, saveIt = false){
+    if (!this.data) return // rien à faire là
     Object.assign(this.data, {[key]: value})
     this.apply(key, value)
     saveIt && this.saveData()

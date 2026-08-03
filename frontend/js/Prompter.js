@@ -28,7 +28,7 @@ class Prompter {
    */
   static prompt(spec, callback){
     const method = `prompt${kebabToPascalCase(spec.type)}`
-    'function' == typeof this[method] || raise(`Prompter.${method} doit être défini.`)
+    'function' == typeof this[method] || raise(`[Systemic] Prompter.${method} doit être défini.`)
     this[method](spec, callback)
   }
 
@@ -43,7 +43,7 @@ class Prompter {
   static promptApp(spec, callback){
     const value = App.getData([spec.id])
     if (!value) {
-      console.error("Je dois apprendre à définir une valeur application.")
+      console.error(getErr('unknown-app-data', spec.id))
     } else {
       callback(value)
     }
@@ -58,7 +58,7 @@ class Prompter {
         (definers) => {
           const valueDefiner = definers[0]
           const prop = valueDefiner.id
-          TBL_PROJECT_DATA[prop] || raise(`La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
+          TBL_PROJECT_DATA[prop] || raise(`[System] La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
           Project.current[prop] = valueDefiner.value
           Project.current.save()
           callback(valueDefiner.value)
@@ -81,8 +81,8 @@ class Prompter {
       , message:  spec.message || spec.q
       , default:  spec.default ?? ''
       , errorMessage: spec.errorMessage
-      , ouiBtn: {name: 'OK', onclick: callback}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
@@ -94,8 +94,8 @@ class Prompter {
       , default:  spec.default ?? ''
       , width:    spec.width
       , errorMessage: spec.errorMessage
-      , ouiBtn: {name: 'OK', onclick: callback}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
@@ -103,9 +103,9 @@ class Prompter {
     new ConfirmDialog({
         title:      spec.name || spec.title
       , message:    spec.message || spec.q
-      , defaultKey: spec.actual === false ? 'Non' : 'Oui'
-      , ouiBtn: {name: 'Oui', onclick: () => callback(true)}
-      , nonBtn: {name: 'Non', onclick: () => callback(false)}
+      , defaultKey: spec.actual === false ? getMsg('btn-no') : getMsg('btn-yes')
+      , ouiBtn: {name: getMsg('btn-yes'), onclick: () => callback(true)}
+      , nonBtn: {name: getMsg('btn-no'), onclick: () => callback(false)}
     }).show()
   }
 
@@ -116,8 +116,8 @@ class Prompter {
       , message:  spec.message || spec.q
       , defaultValue: spec.default
       , toRealValue: (n) => parseInt(n)
-      , ouiBtn: {name: 'OK', onclick: callback}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
@@ -125,33 +125,33 @@ class Prompter {
     new TextFieldDialog({
         title:        spec.name || 'Définition d’URL'
       , id:           spec.id
-      , message:      spec.message || spec.q || "Quelle URL faut-il rejoindre ?"
+      , message:      spec.message || spec.q || getMsg('which-url')
       , defaultValue: spec.default || 'https://'
-      , ouiBtn: {name: 'OK', onclick: callback}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
   static promptServiceName(spec, callback){
     new TextFieldDialog({
-        title:    'Nouveau nom du service'
+        title:    getMsg('new-service-name') 
       , id:       spec.id
-      , message:  spec.message || 'Quel nouveau nom donner à ce service pour le projet ?'
+      , message:  spec.message || getMsg('which-name-for-project-service') 
       , defaultValue: spec.default
-      , ouiBtn: {name: 'OK', onclick: callback}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
   static promptPhone(spec, callback){
     new TextFieldDialog({
-        title:    spec.name || spec.title || 'Numéro de téléphone'
+        title:    spec.name || spec.title || getMsg('phone-number') 
       , id:       spec.id
-      , message:  spec.message || spec.q || 'Merci de bien vouloir fournir un numéro de téléphone valide.'
+      , message:  spec.message || spec.q || getMsg('which-phone-number')
       , default:  spec.default || ''
       , errorMessage: spec.errorMessage
-      , ouiBtn: {name: 'OK', onclick: (retour) => this._validatePhone(retour, spec, callback)}
-      , nonBtn: {name: 'Renoncer', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: (retour) => this._validatePhone(retour, spec, callback)}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
   static _validatePhone(retour, spec, callback){
@@ -167,16 +167,16 @@ class Prompter {
   static promptDateTime(spec, callback){
     const format = spec.format || REG_DATETIME_JJ_MM_HH_MM
     new TextFieldDialog({
-        title:    spec.name || 'Date et heure'
+        title:    spec.name || getMsg('date-and-hour')
       , id:       spec.id
       , message:  spec.message || spec.q || getMsg('scserv-datetime-default-format')
       , errorMessage: spec.errorMessage
-      , ouiBtn: {name: 'OK', onclick: (retour) => {
+      , ouiBtn: {name: getMsg('OK'), onclick: (retour) => {
           const datetime = Validator.datetime(retour, format, true)
           if (datetime) callback(datetime)
           else this.promptDateTime(spec, callback)
         }}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
@@ -208,11 +208,11 @@ class Prompter {
       , idValues: [spec.id]
       , values:   values
       , defaultValue: spec.default
-      , ouiBtn: {name: spec.okName || 'OK', onclick: callback}
-      , nonBtn: {name: spec.cancelName || 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: spec.okName || getMsg('OK'), onclick: callback}
+      , nonBtn: {name: spec.cancelName || getMsg('Cancel'), onclick: () => callback(null)}
     }
     if (spec.create) {
-      const btnName = spec.create === true ? "Nouveau…" : spec.create
+      const btnName = spec.create === true ? getMsg('new…') : spec.create
       data.midBtn = {name: btnName, onclick: () => callback("")}
     }
     new SelectDialog(data).show()
@@ -244,8 +244,9 @@ class Prompter {
 
   // Choix d'une valeur dans le menu, ou saisie libre (bouton "Autre valeur…")
   static promptSelectOrString(spec, callback){
+    const btnName = 'string' == typeof spec.create ? spec.create : getMsg('other-value…')
     this.promptSelect(Object.assign({}, spec, {
-      midBtn: {name: 'Autre valeur…', onclick: () => this.promptString(spec, callback)}
+      midBtn: {name: btnName, onclick: () => this.promptString(spec, callback)}
     }), callback)
   }
 
@@ -255,21 +256,21 @@ class Prompter {
   static promptLogiciel(spec, callback){
     if (this.APPS_LIST == undefined) {
       return server.send({action: 'list-applications'}, (retour) => {
-        this.APPS_LIST = [['none', "(par défaut)"], ...retour.data.apps]
+        this.APPS_LIST = [['none', getMsg('(by-default)') ], ...retour.data.apps]
         this.promptLogiciel(spec, callback)
       })
     }
     new SelectDialog({
-        title:    spec.name || "Choix d'une application"
+        title:    spec.name || getMsg('app-choice')
       , id:       spec.id
       , width:    '560px'
-      , message:  spec.message || 'Choisir l’application à utiliser'
+      , message:  spec.message || getMsg('choose-app-to-use')
       , idValues: [spec.id]
       , values:   this.APPS_LIST
       , defaultValue: spec.default
-      , ouiBtn: {name: 'OK', onclick: callback}
-      , midBtn: {name: 'Autre application…', onclick: () => this.promptString(spec, callback)}
-      , nonBtn: {name: 'Annuler', onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , midBtn: {name: getMsg('other-app'), onclick: () => this.promptString(spec, callback)}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     }).show()
   }
 
@@ -278,40 +279,40 @@ class Prompter {
   /*****************************************************************/
 
   static promptPath(spec, callback){
-    const q = spec.message || spec.q || "Sélectionner l'élément dans le Finder et cliquer sur OK."
+    const q = spec.message || spec.q || getMsg('select-el-in-finder-and-ok')
     const options = {midBtn: {name: 'Vide', onclick: () => callback('')}}
     this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour), null, options)
   }
 
   static promptFolder(spec, callback){
-    const q = spec.message || spec.q || "Sélectionner le dossier dans le Finder et cliquer sur OK."
+    const q = spec.message || spec.q || getMsg('select-folder-and-ok')
     this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour))
   }
 
   static promptPathInProject(spec, callback){
     const transformer = v => v.replace(Project.current.path + '/', '')
-    const q = spec.message || spec.q || "Sélectionner l'élément dans le dossier du projet et cliquer sur OK."
+    const q = spec.message || spec.q || getMsg('select-el-in-project-and-ok') 
     this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(transformer, callback, retour))
   }
 
   static promptIcon(spec, callback){ this.promptPathInProject(spec, callback) }
 
   static promptFinderWindow(spec, callback){
-    const q = spec.message || spec.q || "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK."
+    const q = spec.message || spec.q || getMsg('set-window-in-finder-and-ok') 
     this._waitForWindow(spec, q, (retour) => this._getInfoFinderWindow('all', callback, retour))
   }
 
   static promptBounds(spec, callback){
-    const q = spec.message || spec.q || "Positionner la fenêtre dans le Finder et cliquer “OK”."
+    const q = spec.message || spec.q || getMsg('pos-window-in-finder-and-ok')
     this._waitForWindow(spec, q, (retour) => this._getInfoFinderWindow(['position', 'size'], callback, retour))
   }
 
   static promptPathOrNull(spec, callback){
     const dialogData = {
       title:   'Définition de paramètre',
-      message: spec.message || spec.q || "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'.",
-      ouiBtn:  {name: 'OK',    onclick: (retour) => this._getPathOfFinderSelection(null, callback, retour)},
-      nonBtn:  {name: 'Aucun', onclick: () => callback(null)}
+      message: spec.message || spec.q || getMsg('sel-el-in-finder-or-click-none'),
+      ouiBtn:  {name: getMsg('OK'),    onclick: (retour) => this._getPathOfFinderSelection(null, callback, retour)},
+      nonBtn:  {name: getMsg('None'), onclick: () => callback(null)}
     }
     this._addPreserveOption(spec, dialogData, callback)
     new ConfirmDialog(dialogData).show()
@@ -319,22 +320,22 @@ class Prompter {
 
   static promptColorOrImage(spec, callback){
     new ConfirmDialog({
-        title:   spec.title || "Choisir une couleur ou une image"
-      , message: spec.message || spec.q || 'Que voulez-vous choisir comme fond ?'
-      , ouiBtn:  {name: 'Couleur', onclick: () => this.promptColor(spec, callback)}
-      , midBtn:  {name: 'Image',   onclick: () => this.promptImage(spec, callback)}
-      , nonBtn:  {name: 'Rien',    onclick: () => callback('none')}
+        title:   spec.title || getMsg('choose-color-or-image')
+      , message: spec.message || spec.q || getMsg('which-background')
+      , ouiBtn:  {name: getMsg('Color'),    onclick: () => this.promptColor(spec, callback)}
+      , midBtn:  {name: getMsg('Image'),    onclick: () => this.promptImage(spec, callback)}
+      , nonBtn:  {name: getMsg('Nothing'),  onclick: () => callback('none')}
     }).show()
   }
   static promptImage(spec, callback){ this.promptPath(spec, callback) }
   static promptColor(spec, callback){
     new ColorDialog({
-        title:   "Définition d'une couleur"
+        title:   getMsg('Defining-a-color') 
       , id:      spec.id
-      , message: spec.message || spec.q || "Sélectionner une couleur avec le picker ci-dessous."
+      , message: spec.message || spec.q || getMsg('choose-a-color') 
       , defaultValue: spec.default
-      , ouiBtn: {name: 'Celle-là', onclick: callback}
-      , nonBtn: {name: 'Aucune',  onclick: () => callback(null)}
+      , ouiBtn: {name: getMsg('This-onee'), onclick: callback}
+      , nonBtn: {name: getMsg('Nonee'),  onclick: () => callback(null)}
     }).show()
   }
 
@@ -342,11 +343,11 @@ class Prompter {
 
   static _waitForWindow(spec, message, callback, fallback = null, options = null){
     const dialogData = {
-        title: 'Définition de paramètre'
+        title: getMsg('Defining-parameter')
       , message: message
       , content: options?.content ?? null
-      , ouiBtn: {name: options?.ouiBtn ?? 'OK'        , onclick: callback}
-      , nonBtn: {name: options?.nonBtn ?? 'Annuler'   , onclick: fallback}
+      , ouiBtn: {name: options?.ouiBtn ?? getMsg('OK')        , onclick: callback}
+      , nonBtn: {name: options?.nonBtn ?? getMsg('Cancel')   , onclick: fallback}
     }
     if (options?.midBtn) Object.assign(dialogData, {midBtn: options.midBtn})
     this._addPreserveOption(spec, dialogData, callback)
@@ -355,10 +356,10 @@ class Prompter {
 
   static _addPreserveOption(spec, dialogData, callback){
     if (spec.actual == null) return
-    const preserve = DCreate('DIV', {class: 'preserve-value', text: `Préserver : ${spec.actual}`})
+    const preserve = DCreate('DIV', {class: 'preserve-value', text: `${getMsg('Preserve')} : ${spec.actual}`})
     if (dialogData.content) dialogData.content.appendChild(preserve)
     else dialogData.content = preserve
-    dialogData.midBtn = {name: 'Préserver', onclick: () => callback(spec.actual)}
+    dialogData.midBtn = {name: getMsg('Preserve'), onclick: () => callback(spec.actual)}
   }
 
   static _getPathOfFinderSelection(transformer, callback, retour){
@@ -418,8 +419,8 @@ class Prompter {
     const definer = new ParamsDefiner([{
         id: 'source'
       , type: 'path'
-      , title: spec.title || "Choix d'un élément de Finder"
-      , q: spec.message || spec.q || "Choisir l'élément dans le Finder et cliquer sur “OK”."
+      , title: spec.title || getMsg('Choosing-finder-element')
+      , q: spec.message || spec.q || getMsg('select-el-in-finder-and-ok')
     }], (definers) => callback(definers[0].value))
     definer.define()
   }
@@ -428,8 +429,8 @@ class Prompter {
     const definer = new ParamsDefiner([{
         id: 'source'
       , type: 'folder'
-      , title: spec.title || "Choix d'un dossier"
-      , q: spec.message || spec.q || "Choisir le dossier dans le Finder et cliquer sur “OK”."
+      , title: spec.title || getMsg('Choosing-a-folder')
+      , q: spec.message || spec.q || getMsg('select-folder-and-ok')
     }], (definers) => callback(definers[0].value))
     definer.define()
   }
@@ -467,16 +468,19 @@ class Prompter {
       date.setDate(date.getDate() + ecart)
       return formateDate(date, format || '%J %M %Y')
     }
+    // Pour l'aide
+    const marks = ['auj', 'today', 'tomorrow', 'demain', 'date+x', 'date-x']
     const mark = spec.value
     let value, m
     switch(true) {
+      case /^auj$/.test(mark):     value = translateDateLaps(0, spec.format); break
       case /^today$/.test(mark):     value = translateDateLaps(0, spec.format); break
       case /^tomorrow$/.test(mark):  value = translateDateLaps(1, spec.format); break
       case /^demain$/.test(mark):    value = translateDateLaps(1, spec.format); break
       case !!(m = mark.match(/^date\+([0-9]+)$/)): value = translateDateLaps(parseInt(m[1]), spec.format); break
       case !!(m = mark.match(/^date\-([0-9]+)$/)): value = translateDateLaps(-1 * parseInt(m[1]), spec.format); break
       default:
-        return callback(null, getErr('scserv-unknown-marker-translate', [mark, spec.id, ['today', 'tomorrow', 'demain', 'date+x', 'date-x'].join(', ')]))
+        return callback(null, getErr('scserv-unknown-marker-translate', [mark, spec.id, marks.join(', ')]))
     }
     callback(value)
   }

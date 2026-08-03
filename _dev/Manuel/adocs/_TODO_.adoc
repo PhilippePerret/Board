@@ -1,7 +1,10 @@
 == BUGS ==
 
+- BUG #4 Voir pourquoi le gh issue échoue sur une tentative de lecture du https//....
+- BUG #3 Quand un service remonte ok:true mais une erreur, cette erreur doit être affichée.
 - BUG #2 Pour les rappels programmés, supprimer toutes les secondes
 - BUG #1 les panneaux doivent tous s'ouvrir là où on a placé le dernier (-> TEST)
+
 
 - Les rappels/alertes programmés ne fonctionnent pas
   Pourtant : 
@@ -15,10 +18,13 @@
 
 == Todo En cours
 
+- pouvoir ajouter un bug gh 
+  gh issue create -l bug -t "Le titre", -b "La description"
+
 == Todo list ==
 
+- surveiller des mots ? (:error quand on est en train d'écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error, 
 - pouvoir mettre une note gh (github) du type voulu
-- pouvoir ajouter un bug
   
 == Idées d'autres services ==
 

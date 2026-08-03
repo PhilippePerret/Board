@@ -15,6 +15,10 @@ const ERRORS = {
     , 'prop-cant-be-empty': "La propriété « $1 » ne peut pas être vide."
     , 'must-be-num-between': "« $1 » devrait être un nombre entre $2 et $3"
     , 'invalid-phone-number': "Le numéro de téléphone $1 est invalide."
+    
+    // --- Application ---
+    , 'unknown-app-data': "Donnée application inconnue : '$1'"
+    
     // --- Projets ---
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder.'
     , 'folder-required': 'Il faut impérativement choisir un dossier.'

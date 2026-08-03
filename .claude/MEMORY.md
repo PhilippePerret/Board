@@ -1,5 +1,6 @@
 # MEMORY
 
+- PRIORITÉ : [État fin de session 2026-08-02](2026-08-02-Etat-fin-de-session.md) — bug cascade tests (68 échecs), cause trouvée + fix décidé, à CODER en premier demain, ne pas rediagnostiquer
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X
@@ -29,3 +30,5 @@
 - [Commande run-tests](feedbacks/run_tests_command.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement
 - [Paramètre ≠ décision](feedbacks/param_not_decision.md) — si la réponse honnête est "ça dépend de l'appel", c'est un param, pas une question à poser
 - [Pas de condescendance](feedbacks/no_condescending_overexplain.md) — si sa phrase exclut déjà l'explication évidente, la redonner = le prendre pour un con
+- [Pas de jargon interne](feedbacks/no_internal_jargon_labels.md) — jamais "volet 1/2" ou label maison sans redire ce que ça désigne concrètement
+- [Vérifier TDD avant de citer un échec](feedbacks/check_tdd_before_citing_failure.md) — un ✗ peut être un test TDD normal (fonctionnalité pas codée), pas une preuve de bug
