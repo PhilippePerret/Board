@@ -78,6 +78,7 @@ const COMMON_SERVICES_DATA = [
       ]
   },
 
+  // Git issue
   {
       id: 'create-git-issue'
     , name: getMsg('gh-save-a-error')
@@ -93,12 +94,17 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
+  // Initialisation de git
   {
       id: 'git-init'
-    , name: "Initier git pour le projet"
+    , name: getMsg('initing-git-for-project')
     , group: 'Git'
     , scType: '.rb' // => GitInit.rb
-    , params: []
+    , params: [
+          {id: 'path', type: 'project'}
+        , {id: 'github_account', type: 'project', if_undefined: { type: 'string', q: getMsg('github-account')} }
+        , {id: 'github_name', q: getMsg('github-project-name'), type: 'string'}
+      ]
 }, 
 
   {
@@ -114,6 +120,8 @@ const COMMON_SERVICES_DATA = [
         , {id: 'documentation-editor', type: 'app'}
       ]
   },
+
+  // Update de la documentation
   {
       id: 'update-documentation'
     , name: getMsg('update-documentation')
@@ -131,6 +139,8 @@ const COMMON_SERVICES_DATA = [
         {id: 'docu-main-file-adoc', type: 'project', if_undefined: {q: getMsg('select-docu-main-file'), type: 'path'}}
       ]
   },
+
+  // Ouverture de la documentation
   {
       id:   'open-a-file'
     , name: getMsg('open-documentation')
@@ -144,6 +154,8 @@ const COMMON_SERVICES_DATA = [
         return params
     }
   },
+
+  // Initialisation de la documentation
   {
       id:   'init-documentation'
     , name: getMsg('initing-documentation')

@@ -1,7 +1,6 @@
 == BUGS ==
 
 - BUG #4 Gérer le cas où on utilise gh sans git init dans le dossier
-- BUG #1 les panneaux doivent tous s'ouvrir là où on a placé le dernier (-> TEST)
 
 
 - Les rappels/alertes programmés ne fonctionnent pas

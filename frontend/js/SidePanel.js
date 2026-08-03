@@ -42,7 +42,12 @@ class SidePanel extends Draggable {
     historize("← SidePanel#toggle Panneau %s", this.title)
   }
   open(){
+    const previous = App.currentPanel
     App.closeCurrentPanel()
+    if (previous && previous !== this) {
+      this.obj.style.left = previous.obj.style.left
+      this.obj.style.top  = previous.obj.style.top
+    }
     this.setState('opened')
     App.currentPanel = this
     this.setOppositeButton() // Si nécessaire

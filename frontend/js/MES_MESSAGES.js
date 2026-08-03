@@ -129,6 +129,9 @@ const MESSAGES = {
     , 'open-in-vscode': 'Ouvrir dans VSCode'
     , 'code-to-run-at-launch': 'Code à exécuter à l’ouverture'
     , 'gh-save-a-error': "Enregistrer une erreur (gh)"
+    , 'initing-git-for-project': "Initier Git pour le projet"
+    , 'github-account': "Nom du votre compte Github"
+    , 'github-project-name': "Nom du projet dans Github"
     
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'
