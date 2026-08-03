@@ -23,6 +23,9 @@ const ERRORS = {
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder.'
     , 'folder-required': 'Il faut impérativement choisir un dossier.'
 
+    // Services
+    , 'serv-error-on-return': "Erreur au retour du service"
+
     // Scripts services
     , 'scserv-abort': "Abandon du service"
     , 'scserv-unknown-step': "L'étape d'identifiant '$1' est inconnue."

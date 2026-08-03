@@ -33,8 +33,16 @@ def run_test
   raise "le rappel lié à une tâche devrait avoir été retiré, obtenu #{data['remaining'].inspect}" if data['remaining'].include?('lié à une tâche')
   raise "le rappel indépendant devrait être conservé, obtenu #{data['remaining'].inspect}" unless data['remaining'].include?('indépendant')
 ensure
+  log_offset = File.exist?(DEBUG_LOG_FILE) ? File.size(DEBUG_LOG_FILE) : 0
   (bridge_eval("Reminder.asArray().slice().forEach(function(r){ Reminder.remove(r); })") rescue nil)
-  sleep 1.2
+  # Attend la confirmation réelle (Board-debug.log) que le save-app-data
+  # débouncé (App.saveReminders -> App.saveData, 1000ms) est bien parti,
+  # au lieu d'un sleep fixe deviné (même principe que remove_fixture_project).
+  begin
+    wait_until((DEBOUNCE_SAVE_MS + DEBOUNCE_MARGIN_MS) / 1000.0, 0.05, desc: -> { 'save-app-data jamais confirmé après nettoyage des reminders' }) { new_save_app_data_line_since?(log_offset) }
+  rescue
+    nil
+  end
 end
 
 board_test("Reminder.destroy('task') : retire seulement les rappels liés à une tâche") { run_test }

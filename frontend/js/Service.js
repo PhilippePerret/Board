@@ -45,6 +45,21 @@ class Service {
   }
 
   /**
+   * Jouer un code javascript lors d'un click
+   */
+  static evalJavascript(project, params){
+    console.log("project, params", project, params)
+    const code = params[0]
+    try {
+      eval(code)
+    } catch(err) {
+      new ErrorsDialog({
+        errors: err?.message?.split("\n") || err
+      }).show()
+    }
+  }
+
+  /**
    * Ajout du service dans le dictionnaire
    * 
    * ATTENTION

@@ -9,6 +9,9 @@ include BoardTest
 def run_test
   launch_app
 
+  # Diagnostic : identifier l'origine du rappel résiduel
+  puts "  reminders déjà présents avant register : #{bridge_eval('JSON.stringify(Reminder.asArray().map(function(r){return {message: r.message, task: r.task, type: r.type};}))')}"
+
   result = bridge_eval(<<~JS)
     (function(){
       window.__testDue = false;

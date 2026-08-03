@@ -64,6 +64,10 @@ const MESSAGES = {
     , 'Other-genre': "Autre genre…"
 
     // -- Service --
+    , 'service-exec-bash-code': 'Exécuter le code bash…'
+    , 'service-exec-js-code': "Exécuter le code JS…"
+    , 'ask-for-code-to-exec': 'Code à exécuter :'
+    , 'ask-save-work-time': 'Faut-il enregistrer le temps de travail ?'
     , 'Choosing-finder-element': "Choix d'un élément de Finder"
     , 'Defining-parameter': 'Définition de paramètre'
     , 'app-choice': "Choix d'une application"
@@ -84,6 +88,7 @@ const MESSAGES = {
     , 'which-phone-number': 'Merci de bien vouloir fournir un numéro de téléphone valide.'
     , 'date-and-hour': 'Date et heure'
     // -- Script services --
+    , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
     , 'scserv-datetime-default-format': 'JJ MM HH:MM (03 08 05:12 pour 3 aout à 5 heures 12)'
   

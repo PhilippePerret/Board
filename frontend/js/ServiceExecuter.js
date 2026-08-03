@@ -85,7 +85,7 @@ class ServiceExecuter {
   sendToScript(params){
     if (this.front) {
       // Pas un script backend, mais un traitement frontend
-      // Typiquement : le minuteur
+      // Typiquement : le minuteur ou l'exécution de code javascript
       this.front(this.projet, params)
       return
     }
@@ -100,8 +100,10 @@ class ServiceExecuter {
       if (this.service.onError) {
         this.service.onError(retour.error)
       } else {
-        // Juste un message d'erreur
-        message(retour.error)
+        new ErrorsDialog({
+            title: getErr('serv-error-on-return')
+          , errors: retour.error.split("\n")
+        }).show()
       }
       return
     } else {

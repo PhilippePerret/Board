@@ -251,7 +251,7 @@ const CUSTOM_SERVICES_DATA = [
     , name: getMsg('countdown-timer')
     , group: getMsg('lifecycle')
     , params: [
-        {id: 'save-time', q: 'Faut-il enregistrer le temps de travail ?', type: 'boolean', required: true}     
+        {id: 'save-time', q: getMsg('ask-save-work-time'), type: 'boolean', required: true}     
       ]
   },
 
@@ -261,7 +261,27 @@ const CUSTOM_SERVICES_DATA = [
     , group: getMsg('scripts')
     , front: ScriptService.run
     , params: [
-        {id: 'script-service-path', q: 'Sélectionner le script du service dans le Finder puis “OK”.', type: 'path'}
+        {id: 'script-service-path', q: getMsg('scserv-select-script-in-finder-and-ok'), type: 'path'}
+      ]
+  },
+
+  {
+      id: 'exec-bash-code'
+    , name: getMsg('service-exec-bash-code')
+    , group: getMsg('scripts')
+    , script: 'ExecCommand.sh'
+    , params: [
+        {id: 'code', q: getMsg('ask-for-code-to-exec'), description: "(en bash/zsh)", type: 'string'}
+      ]
+  },
+
+  {
+      id: 'exec-js-code'
+    , name: getMsg('service-exec-js-code')
+    , group: getMsg('scripts')
+    , front: Service.evalJavascript.bind(Service)
+    , params: [
+        {id: 'code', q: getMsg('ask-for-code-to-exec'), description: '(en javascript)', type: 'string'}
       ]
   },
 
