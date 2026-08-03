@@ -62,15 +62,22 @@ def exec_script(script_name, params = "")
       #################################################
       ###       Un bon retour de script             ###
       #################################################
-      retour_script = JSON.parse(res)
-      if retour_script["ok"] == false
-        RETOUR.ok     = false
-        RETOUR.error  = retour_script["error"]
-        RETOUR.data   = retour_script
+      # Un script qui réussit sans rien écrire sur sa sortie (ex.
+      # `open` qui ne produit rien) vaut un succès simple, pas une
+      # erreur de format JSON.
+      if res.nil? || res.strip.empty?
+        RETOUR.ok = true
       else
-        RETOUR.ok       = true
-        RETOUR.message  = retour_script["message"]
-        RETOUR.data     = retour_script
+        retour_script = JSON.parse(res)
+        if retour_script["ok"] == false
+          RETOUR.ok     = false
+          RETOUR.error  = retour_script["error"]
+          RETOUR.data   = retour_script
+        else
+          RETOUR.ok       = true
+          RETOUR.message  = retour_script["message"]
+          RETOUR.data     = retour_script
+        end
       end
     else
       RETOUR.ok     = false

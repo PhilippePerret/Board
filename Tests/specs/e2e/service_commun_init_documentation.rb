@@ -70,7 +70,11 @@ def run_test
     launch_app
 
     card = "project-#{id}"
-    docu_folder    = File.join(fixture_dir, DOCU_FOLDER_NAME)
+    # File.realpath sur fixture_dir (existe déjà) plutôt que sur les
+    # fichiers/dossiers dérivés (pas encore créés à ce stade) — résout le
+    # symlink macOS /var -> /private/var une bonne fois, sans exiger que
+    # chaque fichier existe déjà pour comparer les chemins.
+    docu_folder    = File.join(File.realpath(fixture_dir), DOCU_FOLDER_NAME)
     main_docu_file = File.join(docu_folder, DOCU_MAIN_EDIT_FILE)
     main_disp_file = File.join(docu_folder, DOCU_MAIN_DISP_FILE)
     first_adoc     = File.join(docu_folder, 'adocs', 'introduction.adoc')
@@ -122,8 +126,10 @@ def run_test
     card_data = read_project_card(id)
     raise "docu-main-file-adoc attendu #{main_docu_file.inspect}, trouvé #{card_data['docu-main-file-adoc'].inspect}" \
       unless card_data['docu-main-file-adoc'] && File.realpath(card_data['docu-main-file-adoc']) == File.realpath(main_docu_file)
+    # docu-main-file-html : pas encore créé à ce stade (généré par
+    # update-documentation, ci-dessous) -> comparaison de chemin, pas realpath
     raise "docu-main-file-html attendu #{main_disp_file.inspect}, trouvé #{card_data['docu-main-file-html'].inspect}" \
-      unless card_data['docu-main-file-html'] && File.realpath(card_data['docu-main-file-html']) == File.realpath(main_disp_file)
+      unless card_data['docu-main-file-html'] && File.expand_path(card_data['docu-main-file-html']) == File.expand_path(main_disp_file)
 
     # → enchaînement immédiat, même session : 'update-documentation' ne
     #   redemande rien (param type 'project', déjà résolu) et génère le html
