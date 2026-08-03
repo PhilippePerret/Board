@@ -5,7 +5,14 @@ require 'json'
 PROJECT_PATH        = ARGV[0]
 GITHUB_ACCOUNT      = ARGV[1]
 GITHUB_PROJET_NAME  = ARGV[2]
-REMOTE_GIT_PATH = "git@github.com:#{GITHUB_ACCOUNT}/#{GITHUB_PROJET_NAME}.git"
+
+REMOTE_GIT_PATH = 
+  if ENV['APP_BOARD_TESTS_RUNNING'] # lors des tests
+    remote_path = ENV['BOARD_TEST_GIT_REMOTE'] || raise("Il faut le git remote de test")
+  else
+    "git@github.com:#{GITHUB_ACCOUNT}/#{GITHUB_PROJET_NAME}.git"
+  end
+
 GITIGNORE_FILE = File.join(PROJECT_PATH, '.gitignore')
 GITIGNORE_DEFO = <<~GIT
 .DS_Store
@@ -21,7 +28,7 @@ temp/
 GIT
 
 def prefix(command)
-  return "cd '#{PROJECT_PATH}' && git #{command}"
+  return "cd '#{PROJECT_PATH}' && git #{command} 2>/dev/null"
 end
 
 output = {ok: true, error: nil}

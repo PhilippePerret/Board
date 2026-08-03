@@ -24,6 +24,12 @@
 
 set -e
 
+# Verrou générique "des tests tournent" — deuxième condition (en plus d'une
+# variable ciblée type BOARD_TEST_GIT_REMOTE) avant qu'un script backend
+# n'accepte de dévier d'un comportement réel (ex. GitInit.rb) : une variable
+# ciblée oubliée dans un shell ne suffit pas seule à détourner un run réel.
+export APP_BOARD_TESTS_RUNNING=1
+
 BOARD_DIR="$HOME/Library/Application Support/Board"
 
 # Si Board tournait déjà (lancé à la main par l'utilisateur) avant la suite,

@@ -447,6 +447,14 @@ module BoardTest
     if ENV['BOARD_TEST_TODOIST_STUB_DIR']
       open_args += ['--env', "BOARD_TEST_TODOIST_STUB_DIR=#{ENV['BOARD_TEST_TODOIST_STUB_DIR']}"]
     end
+    # Verrou générique "des tests tournent" (posé par run_tests.sh) +
+    # remote de test ciblé (cf. GitInit.rb) — même mécanisme.
+    if ENV['APP_BOARD_TESTS_RUNNING']
+      open_args += ['--env', "APP_BOARD_TESTS_RUNNING=#{ENV['APP_BOARD_TESTS_RUNNING']}"]
+    end
+    if ENV['BOARD_TEST_GIT_REMOTE']
+      open_args += ['--env', "BOARD_TEST_GIT_REMOTE=#{ENV['BOARD_TEST_GIT_REMOTE']}"]
+    end
     open_args << BOARD_APP
 
     opened = false

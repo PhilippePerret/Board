@@ -15,11 +15,12 @@
 
 == Todo En cours
 
+- Sevice : git init : il suffit que je donne le nom du projet sur Github et le service initie git (penser à régler déjà .gitignore)
 
 == Todo list ==
 
-- Sevice : git init : il suffit que je donne le nom du projet sur Github et le service initie git (penser à régler déjà .gitignore)
-- surveiller des mots ? (:error quand on est en train d'écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error, 
+- localiser le module ProjectData.js (gros boulot)
+- surveiller des mots ? (rêve que j'ai fait : :error quand on est en train d'écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error, 
 - pouvoir mettre une note gh (github) du type voulu
   
 == Idées d'autres services ==

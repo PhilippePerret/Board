@@ -72,6 +72,13 @@ const MESSAGES = {
     , 'group-tools': "Outils"
 
     // --- PROJETS ---
+    , 'data-project-id': 'ID du projet'
+    , 'data-project-folder': 'Dossier du projet'
+    , 'data-project-title': "Titre du projet"
+    , 'data-project-nature': "Nature du projet"
+    , 'data-project-createdat': "Date de création du projet"
+    , 'data-project-lastmod': 'Date de dernière modification'
+
     , 'title-project': "Projet “$1”"
     , 'title-data-of-project': "Données du projet “$1”"
     , 'project-saved-success': "Projet « $1 » enregistré avec succès à $2."

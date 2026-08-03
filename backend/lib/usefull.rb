@@ -97,7 +97,7 @@ end
   '.rb'   => 'ruby',
   '.sh'   => 'zsh'
 }
-SCRIPT_TIMEOUT = 30 # secondes
+SCRIPT_TIMEOUT = 60 # secondes
 
 
 def search_real_scriptname(script_name)
