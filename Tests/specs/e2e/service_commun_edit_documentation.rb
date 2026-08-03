@@ -71,6 +71,9 @@ def run_test
     # → cette fois, aucun dialogue : le dossier s'ouvre direct dans l'éditeur
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
+    sleep 1
+    # Diagnostic : une ErrorsDialog serait-elle ouverte silencieusement ?
+    puts "  errors-dialog présente ? #{exists_prefix?('panel-') rescue '?'} / message = #{(get_text('message') rescue '?').inspect}"
     wait_until(desc: -> { "fenêtres #{EDITOR_NAME} = #{`osascript -e 'tell application \"System Events\" to get name of every window of process \"CotEditor\"' 2>/dev/null`.strip.inspect} (attendu #{expected_name.inspect})" }) do
       coteditor_window_named?(expected_name)
     end

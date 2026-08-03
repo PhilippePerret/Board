@@ -144,6 +144,7 @@ class Reminder extends ExtendedObject {
     this.__eo_table     = newTable
     this.__eo_ids       = newIds
     this.remindedTasks  = {}
+    App.saveReminders()
   }
 
   constructor(data){

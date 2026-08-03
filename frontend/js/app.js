@@ -159,7 +159,8 @@ class App {
       dreminder = Object.assign(dreminder, {time: new Date(dreminder.time)})
       Reminder.register(dreminder)
     })
+    const hadReminders = this.reminders.length > 0
     this.reminders = [] // Les futurs seront à nouveau enregistrés
-    this.setData('reminders', this.reminders, true)
+    hadReminders && this.setData('reminders', this.reminders, true)
   }
 }

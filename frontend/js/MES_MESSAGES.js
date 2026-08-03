@@ -16,6 +16,7 @@ const MESSAGES = {
     , 'other-value…': 'Autre valeur…'
     , 'date/at': 'à' // pour une date avec heure
     , 'Cancel': "Annuler"
+    , 'Correct': "Corriger"
     , 'its-noted': "C’est noté"
     , 'remind-me-later': "Me le rappeler plus tard"
     , '(by-default)': "(par défaut)"
@@ -25,8 +26,10 @@ const MESSAGES = {
     , 'This-one': 'Celui-là'
     , 'This-onee': "Celle-là" 
     , 'Preserve': "Préserver"
+    , 'app-to-use': "Application à utiliser"
 
     // Minuteur
+    , 'start-clock': 'Démarrer l’horloge'
     , 'clock-work-done': 'Travail accompli au cours de la session : '
     , 'clock-work-is-done': "Vous êtes arrivé à échéance de travail"
     , 'clock-10-minutes-remaining': "Il vous reste 10 minutes de travail"
@@ -53,6 +56,7 @@ const MESSAGES = {
     , 'run-a-script-service': "Jouer un SCRIPT-SERVICE"
     , 'Defining-a-color': "Définition d'une couleur"
     , 'choose-a-color': "Sélectionner une couleur avec le picker ci-dessous."
+    , 'group-tools': "Outils"
 
     // --- PROJETS ---
     , 'title-project': "Projet “$1”"
@@ -62,36 +66,73 @@ const MESSAGES = {
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder'
     , 'folder-required': 'Il faut impérativement choisir un dossier.'
     , 'Other-genre': "Autre genre…"
+    , 'editing-project-data': "Éditer les données du projet"
+    , 'versionning-which-num': 'Quel numéro actualiser ?'
+    , 'versionning-patch': 'Patch'
+    , 'versionning-minor': 'Version mineure'
+    , 'versionning-major': 'Version majeure'
+    , 'select-archives-folder': 'Sélectionner le dossier archives dans le Finder (ou aucun si le fichier ne doit pas être archivé).'
 
-    // -- Service --
-    , 'service-exec-bash-code': 'Exécuter le code bash…'
-    , 'service-exec-js-code': "Exécuter le code JS…"
-    , 'ask-for-code-to-exec': 'Code à exécuter :'
-    , 'ask-save-work-time': 'Faut-il enregistrer le temps de travail ?'
+    // Finder
+    , 'open-file…': 'Ouvrir le fichier…'
+    , 'file-to-open': "Fichier à ouvrir"
+    , 'opening-window-in-finder': 'Ouvrir une fenêtre dans le Finder'
+    , 'sidebar-setting': "Réglage de la Sidebar"
+    , 'sidebar?': "Voulez-vous la sidebar ?"
+    , 'what-size-for-sidebar': 'Quelle taille donner à la sidebar (mettre 0 pour la cacher) ?'
     , 'Choosing-finder-element': "Choix d'un élément de Finder"
-    , 'Defining-parameter': 'Définition de paramètre'
-    , 'app-choice': "Choix d'une application"
-    , 'choose-app-to-use': 'Choisir l’application à utiliser'
-    , 'other-app': 'Autre application…'
-    , 'new-service-name': 'Nouveau nom du service'
-    , 'which-name-for-project-service': 'Quel nouveau nom donner à ce service pour le projet ?'
     , 'select-el-in-finder-and-ok': "Sélectionner l'élément dans le Finder et cliquer sur OK."    , 'which-url': "Quelle URL faut-il rejoindre ?"
+    , 'select-file-in-finder-and-btn': "Sélectionner le fichier à ouvrir dans le Finder, puis “Choisir”."
     , 'Choosing-a-folder': "Choix d'un dossier"
     , 'select-folder-and-ok': "Sélectionner le dossier dans le Finder et cliquer sur OK."
     , 'select-el-in-project-and-ok': "Sélectionner l'élément dans le dossier du projet et cliquer sur OK."
     , 'set-window-in-finder-and-ok': "Ouvrir la fenêtre dans le Finder et la régler comme voulue (position, taille, type de vue) puis cliquer OK."
     , 'pos-window-in-finder-and-ok' : "Positionner la fenêtre dans le Finder et cliquer “OK”."
     , 'sel-el-in-finder-or-click-none' : "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'."
+
+    // -- Service --
+    , 'service-exec-bash-code': 'Exécuter le code bash…'
+    , 'service-exec-js-code': "Exécuter le code JS…"
+    , 'ask-for-code-to-exec': 'Code à exécuter :'
+    , 'ask-save-work-time': 'Faut-il enregistrer le temps de travail ?'
+    , 'Defining-parameter': 'Définition de paramètre'
+    , 'app-choice': "Choix d'une application"
+    , 'choose-app-to-use': 'Choisir l’application à utiliser'
+    , 'other-app': 'Autre application…'
+    , 'new-service-name': 'Nouveau nom du service'
+    , 'which-name-for-project-service': 'Quel nouveau nom donner à ce service pour le projet ?'
     , 'choose-color-or-image': "Choisir une couleur ou une image"
     , 'which-background': 'Que voulez-vous choisir comme fond ?'
     , 'phone-number': 'Numéro de téléphone'
     , 'which-phone-number': 'Merci de bien vouloir fournir un numéro de téléphone valide.'
     , 'date-and-hour': 'Date et heure'
+    , 'versioning-file': 'Versionner un fichier/dossier'
+    
+    // IDE et Terminaux
+    , 'iterm-at-folder': 'iTerm au dossier'
+    , 'terminal-at-folder': 'Terminal au dossier'
+    , 'open-in-vscode': 'Ouvrir dans VSCode'
+    , 'code-to-run-at-launch': 'Code à exécuter à l’ouverture'
+    , 'gh-save-a-error': "Enregistrer une erreur (gh)"
+    
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
     , 'scserv-datetime-default-format': 'JJ MM HH:MM (03 08 05:12 pour 3 aout à 5 heures 12)'
-  
+    
+    // -- Documentation --
+    , 'Documentation': 'Documentation'
+    , 'group-documentation': "Documentation"
+    , 'editing-documentation': 'Éditer la documentation'
+    , 'initing-documentation': "Initier la documentation"
+    , 'update-documentation': 'Actualiser la documentation'
+    , 'open-documentation': 'Ouvrir la documentation'
+    , 'select-docu-folder-and-ok': 'Sélectionner le dossier dans lequel placer la documentation, puis “OK”.'
+    , 'select-docu-folder': 'Sélectionner le dossier de documentation dans le Finder'
+    , 'select-docu-main-file': 'Sélectionner le fichier principal de documentation (défaut : docu.adoc)'
+    , 'select-doc-main-final-file': 'Sélectionner le fichier du manuel (défaut : docu.html)'
+
+
     // Tools
     , 'tools-confirm-scheduling-alert': "Alerte programmée avec succès."
     

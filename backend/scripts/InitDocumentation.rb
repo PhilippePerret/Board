@@ -3,6 +3,7 @@
 Script permettant d'initier la documentation AsciiDoctor
 
 Créer :
+- dans le container désigné…
 - un fichier principal docu.adoc
 - un dossier adocs/ pour mettre les fichiers
 - le fichier de raccourcis macros.rb

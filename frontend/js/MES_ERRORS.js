@@ -45,6 +45,9 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "L'évaluator de l'étape '$1' est inconnu : $2 ($3)."
     , 'scserv-unknown-marker-translate': "Le marqueur de translation '$1' de l'étape '$2' est inconnu. Les marqueurs possibles sont : $3 ($4)."
 
+    // Documentation
+    , 'docu-error-on-update': "Erreur en cours d'actualisation"
+    
     // TODOIST
     , 'todoist-key-task-unknown': "La clé « $1 » est inconnue, pour une tâche Todoist."
 }

@@ -51,11 +51,11 @@ const COMMON_SERVICES_DATA = [
   {
       id: 'open-folder-project'
     , name: getMsg('open-folder-project')
-    , group: 'Outils'
+    , group: getMsg('group-tools')
     , params: [
           {id: 'path',  type: 'project'} // propriété qu'on prend au projet courant
-        , {id: 'window-bounds', q: 'Régler une fenêtre de Finder aux dimensions/positions voulues puis cliquer “OK”.', type: 'finder-window'}
-        , {id: 'sidebar', name: "Réglage de la Sidebar", q: 'Quelle taille donner à la sidebar (mettre 0 pour la cacher) ?', default: 0, type: 'integer'}
+        , {id: 'window-bounds', q: getMsg('set-window-in-finder-and-ok'), type: 'finder-window'}
+        , {id: 'sidebar', name: getMsg('sidebar-setting'), q: getMsg('what-size-for-sidebar'), default: 0, type: 'integer'}
       ]
     , afterDefinedParams: (params) => {
       // console.log("[afterDefinedParams] PARAMS AVANT : ", [...params])
@@ -69,8 +69,8 @@ const COMMON_SERVICES_DATA = [
   
   {
       id: 'work-clock'
-    , name: 'Démarrer l’horloge'
-    , group: 'Outils'
+    , name: getMsg('start-clock')
+    , group: getMsg('group-tools')
     , front: Clock.instance.toggle.bind(Clock.instance)
     , params: [
           {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer', default: 120}
@@ -80,7 +80,7 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'create-git-issue'
-    , name: "Enregistrer une erreur"
+    , name: getMsg('gh-save-a-error')
     , group: 'Git'
     , script: 'ExecCommand.sh'
     , params: [
@@ -95,41 +95,41 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'edit-documentation'
-    , name: 'Éditer la documentation'
-    , group: 'Documentation'
+    , name: getMsg('editing-documentation') 
+    , group: getMsg('group-documentation')
     , scType: '.rb'
     , params: [
         // Ancienne forme {id: 'docu-folder', absolute: true, q: 'Sélectionner le dossier de documentation dans le Finder', type: 'path'}
         // Nouvelle forme : on récupère la valeur dans le projet, mais si elle n'existe pas
         // on se sert de if_undefined pour la déterminer
-          {id: 'docu-folder', type: 'project', if_undefined: {type: 'path', q: 'Sélectionner le dossier de documentation dans le Finder'}}
+          {id: 'docu-folder', type: 'project', if_undefined: {type: 'path', q: getMsg('select-docu-folder')}}
         , {id: 'documentation-editor', type: 'app'}
       ]
   },
   {
       id: 'update-documentation'
-    , name: 'Actualiser la documentation'
-    , group: 'Documentation'
+    , name: getMsg('update-documentation')
+    , group: getMsg('group-documentation')
     , scType: '.rb'
     , onError: (errors) => {
         const data = {
-          title: "Erreur en cours d'actualisation", 
+          title: getErr('docu-error-on-update'), 
           errors: errors, 
-          ouiBtn: {name: 'Corriger', onclick: Service.runService.bind(Service, 'edit-documentation')}
+          ouiBtn: {name: getMsg('Correct'), onclick: Service.runService.bind(Service, 'edit-documentation')}
         }
         new ErrorsDialog(data).show()
       }
     , params: [
-        {id: 'docu-main-file-adoc', type: 'project', if_undefined: {q: 'Sélectionner le fichier principal de documentation (.adoc)', type: 'path'}}
+        {id: 'docu-main-file-adoc', type: 'project', if_undefined: {q: getMsg('select-docu-main-file'), type: 'path'}}
       ]
   },
   {
       id:   'open-a-file'
-    , name: 'Ouvrir la documentation'
-    , group: 'Documentation'
+    , name: getMsg('open-documentation')
+    , group: getMsg('group-documentation')
     , script: 'OpenOrUpdateInBrowser.scpt'
     , params: [
-        {id: 'docu-main-file-html', type: 'project', if_undefined: {q: 'Sélectionner le fichier du manuel (html/pdf', type: 'path'}}
+        {id: 'docu-main-file-html', type: 'project', if_undefined: {q: getMsg('select-doc-main-final-file'), type: 'path'}}
       ]
     , afterDefinedParams: (params) => { 
         params[0] = `file://${params[0]}`
@@ -138,34 +138,34 @@ const COMMON_SERVICES_DATA = [
   },
   {
       id:   'init-documentation'
-    , name: "Initier documentation"
-    , group: 'Documentation'
+    , name: getMsg('initing-documentation')
+    , group: getMsg('group-documentation')
     , scType: '.rb'
     , params: [
-        {id: 'docu-folder', absolute: true, q:'Sélection le dossier dans lequel placer la documentation, puis “OK”.', type: 'path'}
+        {id: 'docu-folder', absolute: true, q: getMsg('select-docu-folder-and-ok'), type: 'path'}
       ]
   },
   {
       id: 'open-iterm-at-folder'
-    , name: 'iTerm au dossier'
+    , name: getMsg('iterm-at-folder')
     , group: 'Consoles'
     , params: [ 
           {id: 'path', type: 'project'} 
-        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture', transient: true}
+        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true}
       ]
   },
   {
       id: 'open-terminal-at-folder'
-    , name: 'Terminal au dossier'
+    , name: getMsg('terminal-at-folder')
     , group: 'Consoles'
     , params: [
           {id: 'path', type: 'project'}
-        , {id: 'code', type: 'string', q: 'Code à exécuter à l’ouverture', transient: true}
+        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true}
       ]
   },
   {
       id: 'open-in-vscode'
-    , name: 'Ouvrir dans VSCode'
+    , name: getMsg('open-in-vscode') 
     , group: 'Consoles'
     , scType: '.sh'
     , params: [
@@ -174,7 +174,7 @@ const COMMON_SERVICES_DATA = [
   },
   {
       id: 'edit-projet'
-    , name: "Éditer les données du projet"  
+    , name: getMsg('editing-project-data') 
     , group: 'Prudence'
     , script: 'OpenAFile.rb'
     , params: [
@@ -197,23 +197,23 @@ const COMMON_SERVICES_DATA = [
 const CUSTOM_SERVICES_DATA = [
   {
       id: 'open-file'
-    , name: 'Ouvrir le fichier…'
+    , name: getMsg('open-file…')
     , group: getMsg('opening')
     , scType: '.sh'
     , params: [
-        {name: "Fichier à ouvrir", id: 'path', type: 'path', q: "Sélection le fichier à ouvrir dans le Finder, puis “Choisir”.", required: true},
-        {name: "Application à utiliser", id: 'app', type: 'logiciel', required: true}
+        {name: getMsg('file-to-open'), id: 'path', type: 'path', q: getMsg('select-file-in-finder-and-btn') , required: true},
+        {name: getMsg('app-to-use'), id: 'app', type: 'logiciel', required: true}
       ]
   },
 
   {
       id: 'open-finder-window'
-    , name: 'Ouvrir une fenêtre dans le Finder'
+    , name: getMsg('opening-window-in-finder')
     , group: getMsg('opening')
     /* tag::exemple-fix-param[] */
     , params: [
         {id: 'window', q: null, value: null, type: 'finder-window', required: true},
-        {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
+        {id: 'sidebar', q: getMsg('sidebar?') , value: null, type: 'boolean', required: false}
       ]
     /* end::exemple-fix-param[] */
 
@@ -233,15 +233,15 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'file-versioning'
-    , name: 'Versionner un fichier/dossier'
+    , name: getMsg('versioning-file')
     , group: getMsg('lifecycle')
     , scType: '.rb'
     , params: [
         {id: 'path', value: null, type: 'path', required: true},
-        {id: 'archive-folder', type: 'path-or-null', q: 'Sélectionner le dossier archives dans le Finder (ou aucun si le fichier ne doit pas être archivé).'},
+        {id: 'archive-folder', type: 'path-or-null', q: getMsg('select-archives-folder')},
         /* tag::exemple-dyn-params[] */
         /* Paramètre à définir au moment du lancement (persist:false => jamais enregistré) */
-        {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']], persist: false}
+        {id: 'nature-version', q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]], persist: false}
         /* end::exemple-dyn-params[] */
     ]
   },
