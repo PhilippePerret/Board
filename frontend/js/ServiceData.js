@@ -144,6 +144,9 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id: 'docu-folder', absolute: true, q: getMsg('select-docu-folder-and-ok'), type: 'path'}
       ]
+    , afterRun: () => {
+        console.log("J'ai initier la documentation.")
+      }
   },
   {
       id: 'open-iterm-at-folder'

@@ -15,6 +15,18 @@ def coteditor_window_named?(name)
   out.split(',').map(&:strip).include?(name)
 end
 
+def coteditor_running?
+  system('pgrep', '-x', 'CotEditor', out: File::NULL, err: File::NULL)
+end
+
+# Attend d'abord que l'application soit lancée (poll 1s), puis que le
+# dossier/fichier y soit effectivement ouvert (poll 1s) — deux étapes
+# distinctes plutôt qu'un unique timeout deviné sur l'ensemble.
+def wait_for_coteditor_window(name)
+  wait_until(15, 1, desc: -> { "#{EDITOR_NAME} jamais lancé" }) { coteditor_running? }
+  wait_until(15, 1, desc: -> { "fenêtres #{EDITOR_NAME} = #{`osascript -e 'tell application \"System Events\" to get name of every window of process \"CotEditor\"' 2>/dev/null`.strip.inspect} (attendu #{name.inspect})" }) { coteditor_window_named?(name) }
+end
+
 def run_test
   pending("#{EDITOR_NAME} non installé sur cette machine") unless coteditor_installed?
 
@@ -51,9 +63,7 @@ def run_test
       # → le dossier doit s'ouvrir dans l'éditeur de test (fenêtre nommée
       #   d'après le dossier — seulement si le dossier contient un fichier,
       #   CotEditor ouvre un document vierge sans rapport sinon)
-      wait_until(desc: -> { "fenêtres #{EDITOR_NAME} = #{`osascript -e 'tell application \"System Events\" to get name of every window of process \"CotEditor\"' 2>/dev/null`.strip.inspect} (attendu #{expected_name.inspect})" }) do
-        coteditor_window_named?(expected_name)
-      end
+      wait_for_coteditor_window(expected_name)
     end
 
     # → common_services_data enregistrée : [dossier, éditeur]
@@ -71,12 +81,9 @@ def run_test
     # → cette fois, aucun dialogue : le dossier s'ouvre direct dans l'éditeur
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
-    sleep 1
     # Diagnostic : une ErrorsDialog serait-elle ouverte silencieusement ?
     puts "  errors-dialog présente ? #{exists_prefix?('panel-') rescue '?'} / message = #{(get_text('message') rescue '?').inspect}"
-    wait_until(desc: -> { "fenêtres #{EDITOR_NAME} = #{`osascript -e 'tell application \"System Events\" to get name of every window of process \"CotEditor\"' 2>/dev/null`.strip.inspect} (attendu #{expected_name.inspect})" }) do
-      coteditor_window_named?(expected_name)
-    end
+    wait_for_coteditor_window(expected_name)
   end
 ensure
   remove_fixture_project(id) if id
