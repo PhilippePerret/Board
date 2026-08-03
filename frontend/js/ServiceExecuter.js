@@ -8,6 +8,7 @@ class ServiceExecuter {
     this.params   = service.params
     this.script   = service.script
     this.callback = callback ?? null
+    this.afterRunWithSuccess = service.data.afterRunWithSuccess ?? null
   }
   
   // Exécution du service
@@ -107,7 +108,9 @@ class ServiceExecuter {
       }
       return
     } else {
-      message(true, (retour.message || '') + ` Service “${this.name}” joué avec succès (<span class="tiny">(service ${this.id})</span>).`)
+      // S'il y a une méthode à appeler après le succès du service
+      if ( this.afterRunWithSuccess) this.afterRunWithSuccess(this.projet, retour)
+      message(true, (retour.message || '') + getMsg('service-success', [this.name, this.id]))
       // console.log("ServiceExecuter # afterRunService termine normalement.")
       if (this.service.transient /* common service joué depuis panneau */) {
         Service.remove(this.service.uuid)

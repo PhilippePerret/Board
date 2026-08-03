@@ -94,6 +94,14 @@ const COMMON_SERVICES_DATA = [
   },
 
   {
+      id: 'git-init'
+    , name: "Initier git pour le projet"
+    , group: 'Git'
+    , scType: '.rb' // => GitInit.rb
+    , params: []
+}, 
+
+  {
       id: 'edit-documentation'
     , name: getMsg('editing-documentation') 
     , group: getMsg('group-documentation')
@@ -142,10 +150,19 @@ const COMMON_SERVICES_DATA = [
     , group: getMsg('group-documentation')
     , scType: '.rb'
     , params: [
-        {id: 'docu-folder', absolute: true, q: getMsg('select-docu-folder-and-ok'), type: 'path'}
+        {id: 'docu_folder', absolute: true, q: getMsg('select-docu-folder-and-ok'), type: 'path'}
       ]
-    , afterRun: () => {
-        console.log("J'ai initier la documentation.")
+    , beforeExec(dict){
+        return [dict.docu_folder, App.getData('docu-folder-name'), App.getData('docu-main-edit-file')]
+      }
+    , afterRunWithSuccess: (projet, retour) => {
+        const folder = `${retour.request.params[0]}/${App.getData('docu-folder-name')}`
+        const mainEditFile = `${folder}/${App.getData('docu-main-edit-file')}`
+        const mainDispFile = `${folder}/${App.getData('docu-main-disp-file')}`
+        // On les enregistre pour le projet
+        projet.set('docu-folder', folder)
+        projet.set('docu-main-file-adoc', mainEditFile)
+        projet.set('docu-main-file-html', mainDispFile, true)
       }
   },
   {

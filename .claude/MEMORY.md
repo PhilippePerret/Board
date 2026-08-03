@@ -1,6 +1,5 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-02](2026-08-02-Etat-fin-de-session.md) — bug cascade tests (68 échecs), cause trouvée + fix décidé, à CODER en premier demain, ne pas rediagnostiquer
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X

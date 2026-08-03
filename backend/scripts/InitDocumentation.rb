@@ -16,16 +16,18 @@ begin
   
   table = inited_table
   
-  CONTAINER = ARGV[0].strip
+  CONTAINER         = ARGV[0].strip
+  DOCU_FOLDER_NAME  = ARGV[1].strip
+  MAIN_FILE_NAME    = ARGV[2].strip
 
-  if File.exist?(File.join(CONTAINER, 'Documentation'))
+  if File.exist?(File.join(CONTAINER, DOCU_FOLDER_NAME))
     raise "Le dossier existe déjà, je ne peux pas créer la documentation ici."
   end
-  DOCU_FOLDER = ensure_folder(CONTAINER, 'Documentation')
+  DOCU_FOLDER = ensure_folder(CONTAINER, DOCU_FOLDER_NAME)
 
   ADOCS_FOLDER = ensure_folder(DOCU_FOLDER, 'adocs')
   FIRST_ADOC_FILE = File.join(ADOCS_FOLDER, 'introduction.adoc')
-  MAIN_DOCU_FILE = File.join(DOCU_FOLDER, "docu.adoc")
+  MAIN_DOCU_FILE = File.join(DOCU_FOLDER, MAIN_FILE_NAME)
 
   IO.write(MAIN_DOCU_FILE, "= Documentation =\n\ninclude::adocs/introduction.adoc[]\n")
   IO.write(FIRST_ADOC_FILE, "== Introduction ==\n\nIntroduction à la documentation.\n")

@@ -17,7 +17,6 @@ class App {
   static rememberLastProjectIfRequired(projet){
     console.log("this.getData('remember-last-project')", this.getData('remember-last-project'), typeof this.getData('remember-last-project'))
     if (this.getData('remember-last-project') === true){
-      console.log("Je mémorise le projet sélectionné", projet)
       this.setData('last-project', projet.id, true)
     }
   }
@@ -25,7 +24,6 @@ class App {
     var lastProjectId
     if (this.getData('remember-last-project') === true){
       if (lastProjectId = this.getData('last-project')) {
-        console.log("Je dois resélectionner le projet", lastProjectId)
         Project.onSelect(Project.get(lastProjectId))
       }
     }

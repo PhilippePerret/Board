@@ -54,7 +54,9 @@ const APP_DATA = [
   , {id: 'code-editor'                , name: 'Éditeur pour le code'              , type: 'select'    , values: CODE_EDITORS}
   , {id: 'text-editor'                , name: 'Éditeur pour les textes simples'   , type: 'select'    , values: TEXT_EDITORS}
   , {id: 'yaml-editor'                , name: 'Éditeur pour fichiers YAML'        , type: 'select'    , values: [...YAML_EDITORS, ...CODE_EDITORS]}
-  , {id: 'documentation-folder-name'  , name: 'Nom du dossier de documentation'   , type: 'string'    , default: 'Documentation'  }
+  , {id: 'docu-folder-name'           , name: 'Nom du dossier de documentation'   , type: 'string'    , default: 'Documentation'  }
+  , {id: 'docu-main-edit-file'        , name: getMsg('docu-main-file-name')       , type: 'string'    , default: 'docu.adoc'}
+  , {id: 'docu-main-disp-file'        , name: getMsg('docu-main-disp-file')       , type: 'string'    , default: 'docu.html'}
   , {id: 'changelog-file'             , name: 'Nom du fichier changelog'          , type: 'string'    , default: 'CHANGELOG.md' }
   , {id: 'todo-file'                  , name: 'Nom du fichier TODO'               , type: 'string'    , default: 'TODO.md'}
   , {id: 'version'                    , name: 'Version de l’application'          , type: 'string'    , locked: true}

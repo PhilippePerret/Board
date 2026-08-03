@@ -280,7 +280,11 @@ class Project {
 
   get(key){ return this[key] ?? this.data[key] ?? (this.service_data && this.service_data[key])}
 
-  // Défini la propriété +key+ à +val+ et appelle le callback
+  /**
+   * Met la valeur de la propriété +key+ à +val+
+   * 
+   * @param callback  Soit true, soit la fonction à appeler après l'enregistrement
+   */
   set(key, val, callback = false){ // ça part du principe que s'il faut enregistrer, il faut un callback
 
     // Peut-être que plus tard il ne faudra pas le faire.
@@ -354,7 +358,7 @@ class Project {
   }
   afterSave(callback, retour){
     // console.log("retour Project.afterSave et callback", retour, callback)
-    message("Projet « " + this.title + ' » enregistré avec succès à ' + heureCourante() + '.')
+    message(getMsg('project-saved-success', [this.title, heureCourante()]))
     callback && 'function' == typeof callback && callback()
   }  
 

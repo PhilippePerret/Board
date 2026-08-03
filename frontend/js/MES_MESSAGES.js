@@ -61,6 +61,7 @@ const MESSAGES = {
     // --- PROJETS ---
     , 'title-project': "Projet “$1”"
     , 'title-data-of-project': "Données du projet “$1”"
+    , 'project-saved-success': "Projet « $1 » enregistré avec succès à $2."
     , 'alert-before-edit-projet': "Attention, données sensibles. Manipuler en sachant ce que vous faites."
     , 'expli-retrait-projet': "Le retrait du projet “$1” ne touche pas son dossier lui-même. Il est juste retiré de ce tablau de bord ou archivé (pour pouvoir le récupérer plus tard)\n\nAttention, si le projet n'est pas archivé, tous ses services et data seront perdues, bien sûr."
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder'
@@ -91,6 +92,7 @@ const MESSAGES = {
     , 'sel-el-in-finder-or-click-none' : "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'."
 
     // -- Service --
+    , 'service-success': ' Service “$1” joué avec succès (<span class="tiny">(service $2)</span>).'
     , 'service-exec-bash-code': 'Exécuter le code bash…'
     , 'service-exec-js-code': "Exécuter le code JS…"
     , 'ask-for-code-to-exec': 'Code à exécuter :'
@@ -107,7 +109,7 @@ const MESSAGES = {
     , 'which-phone-number': 'Merci de bien vouloir fournir un numéro de téléphone valide.'
     , 'date-and-hour': 'Date et heure'
     , 'versioning-file': 'Versionner un fichier/dossier'
-    
+
     // IDE et Terminaux
     , 'iterm-at-folder': 'iTerm au dossier'
     , 'terminal-at-folder': 'Terminal au dossier'
@@ -131,7 +133,8 @@ const MESSAGES = {
     , 'select-docu-folder': 'Sélectionner le dossier de documentation dans le Finder'
     , 'select-docu-main-file': 'Sélectionner le fichier principal de documentation (défaut : docu.adoc)'
     , 'select-doc-main-final-file': 'Sélectionner le fichier du manuel (défaut : docu.html)'
-
+    , 'docu-main-file-name': 'Docu : Nom du fichier principal (éditable)'
+    , 'docu-main-disp-file': 'Docu : Nom du fichier principal de diffusion'
 
     // Tools
     , 'tools-confirm-scheduling-alert': "Alerte programmée avec succès."
@@ -139,6 +142,7 @@ const MESSAGES = {
     // Reminder / Rappels
     , 'remind-started': "Démarrée"
     , 'remind-remove': "Supprimer"
+
     // -- Todoist --
     , 'todoist-content'     : "contenu"
     , 'todoist-description' : "description"

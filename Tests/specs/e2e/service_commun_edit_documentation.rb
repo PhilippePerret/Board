@@ -81,8 +81,6 @@ def run_test
     # → cette fois, aucun dialogue : le dossier s'ouvre direct dans l'éditeur
     click(SERVICE_DOM_ID)
     raise "Board a quitté juste après le clic sur #{SERVICE_DOM_ID}" unless board_running?
-    # Diagnostic : une ErrorsDialog serait-elle ouverte silencieusement ?
-    puts "  errors-dialog présente ? #{exists_prefix?('panel-') rescue '?'} / message = #{(get_text('message') rescue '?').inspect}"
     wait_for_coteditor_window(expected_name)
   end
 ensure
