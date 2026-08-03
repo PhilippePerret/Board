@@ -213,7 +213,7 @@ class Prompter {
     }
     if (spec.create) {
       const btnName = spec.create === true ? getMsg('new…') : spec.create
-      data.midBtn = {name: btnName, onclick: () => callback("")}
+      data.midBtn = {name: btnName, onclick: this.promptString.bind(this, spec, callback)}
     }
     new SelectDialog(data).show()
   }
@@ -242,17 +242,10 @@ class Prompter {
     })
   }
 
-  // Choix d'une valeur dans le menu, ou saisie libre (bouton "Autre valeur…")
-  static promptSelectOrString(spec, callback){
-    const btnName = 'string' == typeof spec.create ? spec.create : getMsg('other-value…')
-    this.promptSelect(Object.assign({}, spec, {
-      midBtn: {name: btnName, onclick: () => this.promptString(spec, callback)}
-    }), callback)
-  }
-
   // Choix d'un logiciel installé (lu dans /Applications, mis en cache),
   // ou saisie libre du nom (bouton "Autre application…")
   static APPS_LIST = undefined
+
   static promptLogiciel(spec, callback){
     if (this.APPS_LIST == undefined) {
       return server.send({action: 'list-applications'}, (retour) => {
