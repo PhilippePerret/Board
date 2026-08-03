@@ -247,7 +247,6 @@ class ConfigDialog extends Dialog {
   }
 
   onShow(){
-    console.log("-> onShow")
     // Après la construction, on s'assure que les valeurs ne dépassent pas
     // Si c'est le cas, on raccourcit jusqu'à obtenir la bonne valeur et on
     // ajoute une ellipse (…).
@@ -286,12 +285,14 @@ class ConfigDialog extends Dialog {
       listen(valu, 'click', (ev) => {
         const callback = (values) => {
           console.log("values reçues", values)
-          // On applique la modification à la liste des données
-          dprop.value = values[0].value // si réédité, pour valeur par défaut
-          this.modos.push({id: dprop.id, value: dprop.value})
-          // Ci-dessus, un même paramètre peut être redéfini, mais peu importe
-          // Et on la met dans le tableau
-          valu.innerHTML = dprop.value
+          if (values != null) {
+            // On applique la modification à la liste des données
+            dprop.value = values[0].value // si réédité, pour valeur par défaut
+            this.modos.push({id: dprop.id, value: dprop.value})
+            // Ci-dessus, un même paramètre peut être redéfini, mais peu importe
+            // Et on la met dans le tableau
+            valu.innerHTML = dprop.value
+          }
         }
         new ParamsDefiner([Object.assign(dprop, {default: dprop.value})], callback).define()
       })

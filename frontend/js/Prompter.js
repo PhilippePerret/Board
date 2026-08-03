@@ -200,6 +200,10 @@ class Prompter {
     } catch(err) {
       return callback(null, err.message)
     }
+    // Cas d'une valeur customisée : l'ajouter dans le menu
+    if ( spec.default && !values.find(d => d[0] == spec.default)) {
+      values.unshift([spec.default, spec.default])
+    }
     const data = {
         title:    spec.name || spec.title
       , id:       spec.id
@@ -217,6 +221,7 @@ class Prompter {
     }
     new SelectDialog(data).show()
   }
+  // Le select attends une liste de valeurs = [ [val1, tit1], [val2, tit2] ... ]
   static _normalizeSelectValues(spec){
     if (!Array.isArray(spec.values)) raise('scserv-param-bad-type', ['values', 'array of object', typeof spec.values])
     return spec.values.map(value => {
