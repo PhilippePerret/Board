@@ -42,6 +42,15 @@ def exec_script(script_name, params = "")
     end
     # On met les paramètres en string
     params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
+    # if params.is_a?(Array)
+    #   params = params.map do |param|
+    #     case param
+    #     when Array  then param.to_json
+    #     when Hash   then param.to_json
+    #     else param # String, Integer...
+    #     end
+    #   end
+    # end
     cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
     RETOUR.command = cmd
     res = nil

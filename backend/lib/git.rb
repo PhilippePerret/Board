@@ -18,6 +18,7 @@ class << self
   def commit(project_path:, files:, message:)
     files = JSON.parse(files)
     cmd = <<~BASH
+    exec 2>&1
     cd "#{project_path}"
     git add #{files.map{|p| p.inspect }.join(' ')}
     git commit -m "#{message}"
