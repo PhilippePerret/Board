@@ -1,0 +1,16 @@
+[[gh-issue-create, création d'un issue Github]]
+==== Création d'une issue Github ====
+
+Si votre projet est versionné sur https://github.com (ce que nous ne saurions trop vous conseiller), vous pouvez enregistrer directement depuis {APP-NAME} des _issues_ c'est-à-dires des erreurs, des fonctionnalités à implémenter et autre documentation à faire.
+
+Si vous changer la liste des labels Github que vous utilisez, il vous faut remettre la propriété `github_labels` du projet à rien pour qu'elle soit rafraichie :
+
+. Sélectionner la carte du projet,
+. cliquer sur la pile dans la barre des outils du projet,
+. trouver la propriété `github_labels`,
+. cliquer sur sa valeur,
+. => elle se met en édition,
+. vider la valeur,
+. confirmer et enregistrer.
+
+Vous aurez maintenant une liste de labels fraiche.

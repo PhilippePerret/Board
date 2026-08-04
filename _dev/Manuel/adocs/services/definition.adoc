@@ -10,6 +10,8 @@ Il existe deux grandes catégories de services :
 
 On peut basculer des <<services communs>> aux custom-services grâce au bouton “Services communs”.
 
+include::custom-services.adoc[]
+
 [[common-services, services communs]]
 ==== Services communs ====
 
@@ -18,6 +20,8 @@ Les services communs peuvent s'ajouter aux projets, mais ils peuvent aussi être
 On affiche les services communs simplement en cliquant sur la fiche d'un projet. En même temps qu'il se met en sélection, la liste des services communs s'affiche à droite de l'interface.
 
 On peut basculer des <<custom-services>> aux services communs grâce au bouton “Services personnalisés”.
+
+include::common-services.adoc[]
 
 [[services-data, données des sercices]]
 === Données des services ===

@@ -444,6 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_todo_en_cours">Todo En cours</a></li>
 <li><a href="#_todo_list">Todo list</a></li>
 <li><a href="#_idées_dautres_services">Idées d&#8217;autres services</a></li>
+<li><a href="#_autres_versions">Autres versions</a></li>
 <li><a href="#_présentation">Présentation</a></li>
 <li><a href="#_prise_en_main">Prise en main</a>
 <ul class="sectlevel2">
@@ -474,6 +475,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#evaluate">Contenu évaluable</a></li>
 <li><a href="#script-service-types">Les types d&#8217;étapes (step)</a></li>
 <li><a href="#scserv-use-variable">Utilisation des variables (valeur d’étape)</a></li>
+<li><a href="#_message_de_conclusion">Message de conclusion</a></li>
 </ul>
 </li>
 <li><a href="#services">Les services</a>
@@ -508,6 +510,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
+<p>BUG #4 Gérer le cas où on utilise gh sans git init dans le dossier</p>
+</li>
+<li>
+<p>Les rappels/alertes programmés ne fonctionnent pas
+Pourtant :</p>
+</li>
+<li>
+<p>ils sont bien registrés</p>
+</li>
+<li>
+<p>Reminder est bien runing</p>
+</li>
+<li>
 <p>les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
 essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
 </li>
@@ -521,7 +536,13 @@ essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
 <div class="sect1">
 <h2 id="_todo_en_cours">Todo En cours</h2>
 <div class="sectionbody">
-
+<div class="ulist">
+<ul>
+<li>
+<p>git issue create (tout type)</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -530,13 +551,26 @@ essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Service/outils? : pouvoir placer une alerte (type 'time' ou 'date' ? pour alerte dans le futur)</p>
+<p>pour essayer : git push</p>
+</li>
+<li>
+<p>on choisit les fichiers dans la list des status (coche)</p>
+</li>
+<li>
+<p>on donne le message</p>
+</li>
+<li>
+<p>ça push</p>
+</li>
+<li>
+<p>service git pour ajouter un truc au choix select → texte → description
+le sélection propose : erreur, amélioration, warning, feature (voir les autres)</p>
+</li>
+<li>
+<p>surveiller des mots ? (rêve que j&#8217;ai fait : :error quand on est en train d&#8217;écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error,</p>
 </li>
 <li>
 <p>pouvoir mettre une note gh (github) du type voulu</p>
-</li>
-<li>
-<p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
 </li>
 </ul>
 </div>
@@ -558,6 +592,18 @@ essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
 </li>
 <li>
 <p>Ouvrir l&#8217;URL locale du projet dans le navigateur</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_autres_versions">Autres versions</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
 </li>
 </ul>
 </div>
@@ -1007,6 +1053,11 @@ essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-date-time"><code>date-time</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Obtenir une date et une heure</p></td>
 <td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-alert"><code>alert</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Programmer une alerte</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>time</code>, <code>message</code>, <code>title</code> <code>icon</code>, <code>alertType</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#scserv-type-phone"><code>phone</code></a></p></td>
@@ -2289,17 +2340,13 @@ Noter les retours de chariot marqués par "\n".</p></td>
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><code>set</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant obligatoire</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>step</code></p></td>
 <td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Identifiant de l&#8217;étape dont il faut définir la valeur<br>
 Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeur</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
-<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Valeur à donner à <code>value</code> de l&#8217;étape</p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Valeur à donner à <code>value</code> de l&#8217;étape <code>step</code> ou celle-ci.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
@@ -2316,6 +2363,9 @@ Si non défini, c&#8217;est l&#8217;étape elle-même dont on définira la valeu
 </div>
 <div class="sect3">
 <h4 id="scserv-type-select-file">Sélection d&#8217;un fichier</h4>
+<div class="paragraph">
+<p>La valeur de l&#8217;étape contiendra le chemin d&#8217;accès absolu au fichier. Donc si l&#8217;étape a pour identifiant <code>mon-chemin</code>, on obtiendra ce chemin d&#8217;accès par <code>"${mon-chemin}"</code>.</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 16.6666%;">
@@ -2789,6 +2839,49 @@ Si non précisé, c&#8217;est la liste des objets qui deviendra la valeur de l&#
 </table>
 </div>
 <div class="sect3">
+<h4 id="scserv-type-alert">Programmer une alerte</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 71.4286%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>time</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Date et temps de l&#8217;alerte à donner.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Heure seule</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HH:MM</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">soit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jour et heure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JJ MM HH:MM</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le message d&#8217;alerte à afficher.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[option] Le titre de l&#8217;alerte</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>icon</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[option] L&#8217;icône de la fenêtre (chemin relatif ou absolu)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>alertType</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Type de l&#8217;alerte</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Toutes ces données sont obtenues d&#8217;autres étapes ou fournies en dur.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="scserv-type-text">Obtenir un texte</h4>
 <div class="paragraph">
 <p><em>Texte</em>, ci-dessus, signifie un texte multi-lignes.</p>
@@ -3160,6 +3253,19 @@ Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_message_de_conclusion">Message de conclusion</h3>
+<div class="paragraph">
+<p>Pour avoir un message de conclusion personnalisé après le travail du script, il suffit de définir une dernière étape de type <code>set</code> et d&#8217;identifiant <code>conclucion</code> avec la valeur (<code>value</code>) définissant le texte à afficher. Par exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>- id: conclusion  # obligatoire
+  type: set
+  value: "Tout s'est déroulé comme un charme !"</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -3196,6 +3302,43 @@ Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong>
 </div>
 <div class="paragraph">
 <p>On peut basculer des <a href="#custom-services">services personnalisés</a> aux services communs grâce au bouton “Services personnalisés”.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="gh-issue-create">Création d&#8217;une issue Github</h4>
+<div class="paragraph">
+<p>Si votre projet est versionné sur <a href="https://github.com" class="bare">https://github.com</a> (ce que nous ne saurions trop vous conseiller), vous pouvez enregistrer directement depuis Board des <em>issues</em> c&#8217;est-à-dires des erreurs, des fonctionnalités à implémenter et autre documentation à faire.</p>
+</div>
+<div class="paragraph">
+<p>Si vous changer la liste des labels Github que vous utilisez, il vous faut remettre la propriété <code>github_labels</code> du projet à rien pour qu&#8217;elle soit rafraichie :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Sélectionner la carte du projet,</p>
+</li>
+<li>
+<p>cliquer sur la pile dans la barre des outils du projet,</p>
+</li>
+<li>
+<p>trouver la propriété <code>github_labels</code>,</p>
+</li>
+<li>
+<p>cliquer sur sa valeur,</p>
+</li>
+<li>
+<p>&#8658; elle se met en édition,</p>
+</li>
+<li>
+<p>vider la valeur,</p>
+</li>
+<li>
+<p>confirmer et enregistrer.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Vous aurez maintenant une liste de labels fraiche.</p>
 </div>
 </div>
 </div>
@@ -4153,7 +4296,7 @@ des propriétés ne correspondent à rien.</p></td>
 <div class="content">
 <pre>, params: [
     {id: 'window', q: null, value: null, type: 'finder-window', required: true},
-    {id: 'sidebar', q: "Voulez-vous la sidebar ?", value: null, type: 'boolean', required: false}
+    {id: 'sidebar', q: getMsg('sidebar?') , value: null, type: 'boolean', required: false}
   ]</pre>
 </div>
 </div>
@@ -4248,8 +4391,8 @@ des propriétés ne correspondent à rien.</p></td>
 <div class="literalblock">
 <div class="content">
 <pre>, dynParams: [
-    {id: 'nature-version', q: 'Quel numéro actualiser ?', value: null, type: 'select', values: [['patch', 'Patch'], ['minor', 'Version mineure'], ['major', 'Version Majeure']]}
-  ] </pre>
+    {id: 'nature-version', q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]]}
+  ]</pre>
 </div>
 </div>
 </div>
