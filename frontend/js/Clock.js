@@ -222,8 +222,8 @@ class Clock extends Draggable {
   checkStillWorking(){
     return null // débranché (Phil s'en occupe lui-même) — TODO
     this.promptCheck(
-      "Le travail est-il toujours en cours sur ce projet ?",
-      "Mettre en pause",
+      getMsg('ask-still-working', this.projet.title),
+      getMsg('clock-set-pause'),
       this.onClickRing.bind(this)
     )
   }
@@ -258,7 +258,7 @@ class Clock extends Draggable {
           title: getMsg('Minuteur')
         , message: message
         , ouiBtn: {name: actionLabel, onclick: () => { clear(); actionFn() }}
-        , nonBtn: {name: 'Ignorer', onclick: clear}
+        , nonBtn: {name: getMsg('Ignore'), onclick: clear}
       }).show()
     })
   }

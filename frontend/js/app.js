@@ -60,7 +60,7 @@ class App {
       return Object.assign(prop, {value: this.getData(prop.id)})
     })
     new ConfigDialog({
-        title: 'Configuration de l’application'
+        title: getMsg('app-config')
       , id: 'app-config'
       , props: props
       , ouiBtn: {name: getMsg('Save'), onclick: this.onSaveConfig.bind(this)}
