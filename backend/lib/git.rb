@@ -15,6 +15,17 @@ require_relative 'usefull.rb'
 class Git
 class << self
 
+  def commit(project_path:, files:, message:)
+    files = JSON.parse(files)
+    cmd = <<~BASH
+    cd "#{project_path}"
+    git add #{files.map{|p| p.inspect }.join(' ')}
+    git commit -m "#{message}"
+    git push
+    BASH
+    `#{cmd}`
+  end
+
   def get_status_files(path)
     longuest_name = 0
     longuest_path = 0
@@ -27,10 +38,10 @@ class << self
         folder = File.dirname(path)
         longuest_name = name.length if name.length < 21 && name.length > longuest_name
         longuest_path = path.length if path.length < 32 && path.length > longuest_path
-        [mark, name, folder]
+        [mark, name, folder, path]
       end
       .map do |dfile|
-        mark, name, folder = dfile
+        mark, name, folder, path = dfile
         mark = case mark
         when 'M'  then 'Mod'
         when '??' then 'New'
@@ -52,7 +63,7 @@ class << self
           else
             folder.ljust(longuest_path, ' ')
           end
-        "<span title='#{original_name}'>#{name}</span> <span title='#{original_folder}'>#{folder}</span> (#{mark})"
+        [path, "<span title='#{original_name}'>#{name}</span> <span title='#{original_folder}'>#{folder}</span> (#{mark})"]
       end
   end
 end #/<< self
