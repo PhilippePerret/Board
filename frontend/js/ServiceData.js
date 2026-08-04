@@ -104,7 +104,32 @@ const COMMON_SERVICES_DATA = [
         , {id: 'issue_body' , type: 'text'  , q: getMsg('error-precise-description:')}
     ]
     , beforeExec: (dict) => {
-        return `cd "${dict.path}" && gh issue create -l bug -t "${dict.issue_title}" -b "${dict.issue_body}"`
+        return `cd ${shellEscape(dict.path)} && gh issue create -l bug -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
+      }
+  },
+
+  // Git issue quelconque
+  /**
+   * TODO
+   *  il faudrait avoir les étiquettes du projet en question. Pour ça, on pourrait
+   *  jouer un script "invisible" qui les récupèrerait et les mettrait dans les
+   *  données du projet (data github_labels)
+   */
+  {
+      id: 'gh-issue-create'
+    , name: getMsg('gh-issues-create') + aide('gh-issue-create')
+    , group: 'Git'
+    , script: 'ExecCommand.sh'
+    , params: [
+      {id: 'path', type: 'project'}
+    ]
+    , dynParams: [
+        {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
+      , {id: 'issue_title', type: 'string', q: getMsg('Message:')}
+      , {id: 'issue_body' , type: 'text'  , q: getMsg('gh-description:')}
+    ]
+    , beforeExec: (dict) => {
+        return `cd ${shellEscape(dict.path)} && gh issue create -l ${shellEscape(dict.issue_label)} -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
       }
   },
 
@@ -184,8 +209,8 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id: 'docu-main-file-html', type: 'project', if_undefined: {q: getMsg('select-doc-main-final-file'), type: 'path'}}
       ]
-    , afterDefinedParams: (params) => { 
-        params[0] = `file://${params[0]}`
+    , afterDefinedParams: (params) => {
+        if (!params[0].startsWith('file://')) params[0] = `file://${params[0]}`
         return params
     }
   },

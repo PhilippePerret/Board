@@ -7,6 +7,9 @@ const GENRES_PROJETS = [
   , 'Vacances'
 ]
 
+/**
+ * Le type définit la méthode prompt qui sera utilisée pour éditer la valeur
+ */
 const PROJECT_DATA = [
     {id: 'id'                   , desc: getMsg('data-project-id')         , type: 'string',   default: null   , editable: false}
   , {id: 'title'                , desc: getMsg('data-project-title')      , type: 'string'  , default: null   , editable: true}
@@ -26,6 +29,7 @@ const PROJECT_DATA = [
   , {id: 'service_data'         , editable: false}
   , {id: 'common_services_data' , editable: false}
   , {id: 'github_account'       , desc: getMsg('data-github-account')     , type: 'string'  , default: null   , editable: true}
+  , {id: 'github_labels'        , desc: getMsg('githug-label-desc')       , type: 'string'   , default: null   , editable: true}
 ]
 const TBL_PROJECT_DATA = {}
 PROJECT_DATA.forEach(data => Object.assign(TBL_PROJECT_DATA, {[data.id]: data}))

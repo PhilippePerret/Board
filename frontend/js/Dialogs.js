@@ -62,6 +62,9 @@ class ErrorsDialog extends Dialog {
         } else {
           error = error.join("\n")
         }
+      } else {
+        // Soit l'erreur soit un identifiant
+        error = getErr(error) || error
       }
       // On normalise tous les textes
       error = error.split(' ').flatMap( seg => {

@@ -62,15 +62,23 @@ class ParamDefiner {
 
 
   /**
+   * @api
+   * 
    * Fonctions pour définir les données des services
    * 
    * Inaugurée pour le service 'git-committing' pour obtenir au tout
    * départ la liste des fichiers à commiter
    * 
-   * @param data [Object] Données à transmettre pour jouer la fonction
-   * @param callback [Function] Fonction de rappel après l'opération
-   * @param retour [Object] Retour de l'opération asynchrone
+   * @param data      [Object] Données du paramètre tel que défini dans ServiceData.js
+   * @param callback  [Function] 
+   *    La méthode _getSelectValuesFromFunction qui doit recevoir les 
+   *    valeurs pour poursuivre. C'est-à-dire, pour un select, la 
+   *    liste des [value, title], mais ces données select doivent être
+   *    mises dans {data: <données options>}
+   *    
    */
+
+  // Pour +data+ et +callback+, cf. ci-dessus
   static gitGetStatusFiles(data, callback){
     console.log("-> gitGetStatusFiles/data=", data, callback)
     server.send({
@@ -78,6 +86,37 @@ class ParamDefiner {
       , project_path: data?.project_path ?? Project.current.path
       , git_ope: 'get_status_files'
     }, callback)
+  }
+
+  /**
+   * Obtenir les labels github du projet
+   * 
+   * Pour +data+ et +callback+, cf. ci-dessus
+   */
+  static projectIssueLabelsForSelect(data, callback, retour){
+    console.log("->projectIssueLabelsForSelect/ data/callback/retour", data, callback, retour)
+    const getLabelsProject = (project) => {
+      server.send({
+          action: 'git-ope'
+        , project_path: project.path
+        , git_ope: 'get_labels'
+      }, this.projectIssueLabelsForSelect.bind(this, data, callback))
+    }
+    var labels
+    const project = data?.project || data?.projet || Project.current
+    if ( retour ) {
+      labels = retour.data
+      project.set('github_labels', labels, true)
+    } else {
+      labels  = project.get('github_labels')
+    }
+    
+    if (labels) {
+      console.log("labels", labels)
+      callback({data: labels.split(',').map(label => [label, label])})
+    } else {
+      return getLabelsProject(project)
+    }
   }
 
 

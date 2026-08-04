@@ -117,6 +117,7 @@ const MESSAGES = {
     , 'data-project-lastmod': 'Date de dernière modification'
     , 'duration-work-done': 'Durée de travail accomplie (mn)'
     , 'background-img-or-color': 'Couleur ou image de fond'
+    , 'githug-label-desc': "Labels des issues Github"
 
     , 'title-project': "Projet “$1”"
     , 'title-data-of-project': "Données du projet “$1”"
@@ -182,6 +183,10 @@ const MESSAGES = {
     , 'git-committing': "Commiter sur Github"
     , 'git-message-commit': 'Message de commit pour ces fichiers'
     , 'git-commit-message-title': "Message du commit"
+    , 'gh-issues-create': "gh issue create (git)"
+    , 'github-label': "Label Github :"
+    , 'Message:': "Message :"
+    , 'gh-description:': "Description plus précise :"
     
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'

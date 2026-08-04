@@ -11,6 +11,7 @@ Toutes les fonctions ont en premier argument le chemin d'accès
 au fichier.
 =end
 require_relative 'usefull.rb'
+require 'shellwords'
 
 class Git
 class << self
@@ -19,14 +20,26 @@ class << self
     files = JSON.parse(files)
     cmd = <<~BASH
     exec 2>&1
-    cd "#{project_path}"
-    git add #{files.map{|p| p.inspect }.join(' ')}
-    git commit -m "#{message}"
+    cd #{Shellwords.escape(project_path)}
+    git add #{files.map { |p| Shellwords.escape(p) }.join(' ')}
+    git commit -m #{Shellwords.escape(message)}
     git push
     BASH
     `#{cmd}`
   end
 
+  # Retourne la liste des labels Github du projet
+  def get_labels(path)
+    cmd = <<~BASH
+    exec 2>&1
+    cd "#{path}"
+    gh label list --json name --jq '.[].name'
+    BASH
+    res = `#{cmd}`
+    res.split("\n").join(',')
+  end
+
+  # Retourne les fichiers en cours de traitement 
   def get_status_files(path)
     longuest_name = 0
     longuest_path = 0

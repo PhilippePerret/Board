@@ -143,6 +143,13 @@ function unScrim(scrim){
   scrim.style = "backdrop-filter: none; background: rgba(0,0,0,0.1);"
 }
 
+// Pour insérer une valeur telle quelle (retours chariot compris) dans une
+// commande shell construite par interpolation (ex. beforeExec de service) —
+// entoure de guillemets simples, échappe les guillemets simples internes.
+function shellEscape(str){
+  return `'${String(str).replace(/'/g, `'\\''`)}'`
+}
+
 function retarde(method, lapsSeconds){
   var timer = setTimeout(() => {
     clearTimeout(timer)
