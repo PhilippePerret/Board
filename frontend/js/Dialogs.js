@@ -27,9 +27,9 @@ class ErrorsDialog extends Dialog {
     console.log("errors au départ", this.errors)
     this.content = this.buildContainerErrors()
     if (data.ouiBtn && 'function' == data.ouiBtn.onclick) {
-      this.nonData = {name: 'Finir'}
+      this.nonData = {name: getMsg('Finish')}
     } else {
-      this.ouiData = {name: 'OK'}
+      this.ouiData = {name: getMsg('OK')}
       this.nonData = null // pas de bouton "Non"
     }
   }
@@ -79,7 +79,7 @@ class ErrorsDialog extends Dialog {
 class OKDialog extends Dialog {
   constructor(data) {
     super(data)
-    this.ouiData = {name: 'OK', onclick: null }
+    this.ouiData = {name: getMsg('OK'), onclick: null }
     this.nonData = null
     this.midData = null
   }
