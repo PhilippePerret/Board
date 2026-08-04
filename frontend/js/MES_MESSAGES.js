@@ -73,11 +73,17 @@ const MESSAGES = {
 
     // --- PROJETS ---
     , 'data-project-id': 'ID du projet'
+    , 'data-project-icon': 'Icône du projet'
     , 'data-project-folder': 'Dossier du projet'
     , 'data-project-title': "Titre du projet"
     , 'data-project-nature': "Nature du projet"
+    , 'data-project-standby': 'Mise en standby du projet'
+    , 'data-project-todoist': 'ID projet dans Todoist'
+    , 'data-github-account': 'Compte Github (du projet)'
     , 'data-project-createdat': "Date de création du projet"
     , 'data-project-lastmod': 'Date de dernière modification'
+    , 'duration-work-done': 'Durée de travail accomplie (mn)'
+    , 'background-img-or-color': 'Couleur ou image de fond'
 
     , 'title-project': "Projet “$1”"
     , 'title-data-of-project': "Données du projet “$1”"
@@ -148,6 +154,7 @@ const MESSAGES = {
     // -- Documentation --
     , 'Documentation': 'Documentation'
     , 'group-documentation': "Documentation"
+    , 'docu-folder': 'Dossier documentation'
     , 'editing-documentation': 'Éditer la documentation'
     , 'initing-documentation': "Initier la documentation"
     , 'update-documentation': 'Actualiser la documentation'
@@ -156,8 +163,8 @@ const MESSAGES = {
     , 'select-docu-folder': 'Sélectionner le dossier de documentation dans le Finder'
     , 'select-docu-main-file': 'Sélectionner le fichier principal de documentation (défaut : docu.adoc)'
     , 'select-doc-main-final-file': 'Sélectionner le fichier du manuel (défaut : docu.html)'
-    , 'docu-main-file-name': 'Docu : Nom du fichier principal (éditable)'
-    , 'docu-main-disp-file': 'Docu : Nom du fichier principal de diffusion'
+    , 'docu-main-file-name': 'Docu : Nom du fichier éditable'
+    , 'docu-main-disp-file': 'Docu : Nom du fichier de diffusion'
 
     // Tools
     , 'tools-confirm-scheduling-alert': "Alerte programmée avec succès."
