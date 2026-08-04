@@ -1,5 +1,7 @@
 # MEMORY
 
+- PRIORITÉ : [État fin de session 2026-08-03](2026-08-03-Etat-fin-de-session.md) — test git-init en cours, résultat non connu à la coupure, à vérifier en premier
+
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
 - [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X

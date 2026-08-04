@@ -30,12 +30,9 @@ class ServiceExecuter {
     this.runWithDynParams(projet.common_services_data[this.id])
   }
 
-  // Point commun à exec() et execOnProject() : les params persist:false
-  // (jamais enregistrés, cf. ServiceDefiner) doivent être redemandés à
-  // CHAQUE exécution, quel que soit le chemin (panneau ou projet).
   runWithDynParams(baseParams){
     const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
-    const dynParams = SDATA.params.filter(p => p.persist === false)
+    const dynParams = SDATA.dynParams || []
     if (dynParams.length > 0) {
       new ParamsDefiner(dynParams, (definers) => this.onDynParamsDefined(SDATA, baseParams, definers)).define()
     } else {

@@ -237,6 +237,15 @@ begin
     require_relative 'lib/todoist.rb'
     RETOUR.data = Todoist.update_tasks(request['project_id'], request['done_ids'], request['new_tasks'], request['mod_tasks'])
 
+
+  # Toutes les opérations GIT
+  when 'git-ope'
+    require_relative 'lib/git.rb'
+    args = request['git_args'] || []
+    args.unshift(request['project_path'])
+    RETOUR.data = Git.send(request['git_ope'], *args)
+
+
   # action inconnue => ERRREUR
   else 
     RETOUR.error = "unknown action: #{request["action"]}"

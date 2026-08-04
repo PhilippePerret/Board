@@ -15,6 +15,7 @@ class Dialog {
   static panelIndex = 0
 
   constructor(data){
+    this.data = data
     this.returnedIdValues = data.idValues ?? null // Pour savoir quelles valeurs retourner avec oui
     this.id    = data.id ?? `panel-${++Dialog.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
@@ -78,7 +79,6 @@ class Dialog {
           const el = DGet(this.FDomId, this.obj)
           if (el) {
             let value = el.value
-            if (el.TagName == 'SELECT') { value = el.options[el.selectedIndex].value }
             returnedValues.push(value)
           }
         })

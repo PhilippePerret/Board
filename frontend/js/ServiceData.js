@@ -18,8 +18,18 @@
  *        l'indiquer dans :script (p.e. 'script: OpenAFile.rb')
  * 
  *  params
- *    Définissent les paramètres du service. Un paramètre avec
- *    persist:false est redemandé à chaque exécution, jamais enregistré.
+ *    Définissent les paramètres du service. 
+ *    ON N'UTILISE JAMAIS LE PARAMÈTRE persist:false que ce gros con
+ *    de Claude avait décidé unilatéralement d'imposer aux paramètres
+ *    pour indiquer qu'ils étaient à redéfinir à chaque fois. Ces 
+ *    paramètres-là sont à définir dans dynParams et nulle par 
+ *    ailleurs.
+ * 
+ *  dynParams
+ *    Alors que les +params+ sont enregistrés une fois pour toutes
+ *    pour le projet donné, les +dynParams (pour "paramètres dyna-
+ *    miques") sont demandés chaque fois. C'est par exemple les 
+ *    fichiers à commiter et le message pour le commit
  *
  *  onError
  *    Pour définir ce qui doit se passer en cas d'erreur. C'est une 
@@ -27,16 +37,16 @@
  *    Souvent, elle doit utiliser un ErrorsDialog pour afficher la
  *    liste des erreurs survenues.
  * 
- * afterDefinedParams
+ *  afterDefinedParams
  *    Appelée après la définition des paramètres par exemple pour les
  *    modifier.
  *  
- * bypassExec
+ *  bypassExec
  *    Fonction à exécuter avant d'exécuter le service (par exemple un
  *    message d'alerte.)
  *    La fonction reçoit le callback qu'elle doit rappeler.
  * 
- * beforeExec
+ *  beforeExec
  *    Peut traiter les paramètres avant l'exécution, pour mettre la 
  *    valeur sous une toute autre forme. 
  *    Voir par exemple l'utilisation pour create-git-issue
@@ -73,12 +83,12 @@ const COMMON_SERVICES_DATA = [
     , group: getMsg('group-tools')
     , front: Clock.instance.toggle.bind(Clock.instance)
     , params: [
-          {id: 'session-duration', q: 'Durée d’une session de travail (minutes)', type: 'integer', default: 120}
-        , {id: 'work-duration', q: 'Durée d’une tranche de travail (minutes)', type: 'integer', useLastAsDefault: true}
+          {id: 'session-duration', q: getMsg('work-session-duration'), type: 'integer', default: 120}
+        , {id: 'work-duration', q: getMsg('work-section-duration'), type: 'integer', useLastAsDefault: true}
       ]
   },
 
-  // Git issue
+  // Git issue bug
   {
       id: 'create-git-issue'
     , name: getMsg('gh-save-a-error')
@@ -86,12 +96,29 @@ const COMMON_SERVICES_DATA = [
     , script: 'ExecCommand.sh'
     , params: [
           {id: 'path', type: 'project'}
-        , {id: 'issue_title', type: 'string', q: "Erreur :", persist: false}
-        , {id: 'issue_body' , type: 'text'  , q: "Description précise de l'erreur :", persist: false}
-      ]
+        ]
+    , dynParams: [
+          {id: 'issue_title', type: 'string', q: getMsg('error:')}
+        , {id: 'issue_body' , type: 'text'  , q: getMsg('error-precise-description:')}
+    ]
     , beforeExec: (dict) => {
         return `cd "${dict.path}" && gh issue create -l bug -t "${dict.issue_title}" -b "${dict.issue_body}"`
       }
+  },
+
+  // Git push
+  {
+      id: 'git-commit'
+    , name: getMsg('git-committing')
+    , group: 'Git'
+    , script: 'GitOpes.rb'
+    , params: [
+        {id: 'path', type: 'project'}
+      ]
+    , dynParams: [
+        {id: 'files', title: getMsg('choosing-files-to', ['commit']), type: 'select', select_class: 'monospace', q: getMsg('choose-files-to', getMsg('vb-commit')), width: '840px', multi: true, values: ParamDefiner.gitGetStatusFiles.bind(ParamDefiner)}
+      , {id: 'message', type: 'string', q: getMsg('git-message-commit')}
+      ]
   },
 
   // Initialisation de git
@@ -270,12 +297,13 @@ const CUSTOM_SERVICES_DATA = [
     , scType: '.rb'
     , params: [
         {id: 'path', value: null, type: 'path', required: true},
-        {id: 'archive-folder', type: 'path-or-null', q: getMsg('select-archives-folder')},
-        /* tag::exemple-dyn-params[] */
-        /* Paramètre à définir au moment du lancement (persist:false => jamais enregistré) */
-        {id: 'nature-version', q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]], persist: false}
-        /* end::exemple-dyn-params[] */
+        {id: 'archive-folder', type: 'path-or-null', q: getMsg('select-archives-folder')}
     ]
+    /* tag::exemple-dyn-params[] */
+    , dynParams: [
+        {id: 'nature-version', q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]]}
+      ]
+    /* end::exemple-dyn-params[] */
   },
 
   {

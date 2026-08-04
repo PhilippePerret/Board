@@ -87,36 +87,99 @@ class OKDialog extends Dialog {
 }
 
 // Pour faire une fenêtre présentant un menu de choix (et seulement ça)
+//
+// Widget custom (plus de <select> natif) : liste de lignes cliquables avec
+// filtre fuzzy. Contrat conservé pour Dialog#onOui (seul point qui lit la
+// valeur) : le conteneur racine porte id=this.FId et expose une propriété
+// .value — string en mode simple, array en mode multi (jamais présélectionné).
 class SelectDialog extends Dialog {
   constructor(data){
     super(data)
     this.values = data.values
+    this.isMulti = !!data.multi
+    this.items = []
     this.content = this.buildMenu()
   }
+
   buildMenu(){
-    const div = DCreate('DIV', {style: 'padding: 1em 1em 1em 3em;'})
-    const select = DCreate('SELECT', {id: this.FId} )
-    let indexOfDefault = 0
+    const container = DCreate('DIV', {id: this.FId, class: 'custom-select' + (this.data.select_class ? ' ' + this.data.select_class : '')})
+
+    const filterInput = DCreate('INPUT', {type: 'text', class: 'custom-select-filter', placeholder: getMsg('select-filter-placeholder')})
+    listen(filterInput, 'keydown', (ev) => ev.stopPropagation())
+    listen(filterInput, 'input', () => this.applyFilter(filterInput.value))
+    container.appendChild(filterInput)
+
+    const selectClass = ['custom-select-list']
+    if (this.data.select_class) selectClass.push(this.data.select_class)
+    const list = DCreate('DIV', {class: selectClass.join(' ')})
+    container.appendChild(list)
+
     const defVal = this.defaultValue
-    div.appendChild(select)
-    this.values.forEach((value, i) => {
+    let indexOfDefault = -1
+    this.items = this.values.map((value, i) => {
       var tit, val
       if (Array.isArray(value)){
         [val, tit] = value
       } else {
         [tit, val] = [value, value]
       }
-      if (indexOfDefault == 0 && (defVal === val || defVal === tit)) {
-        indexOfDefault = i
-      }
-      const opt = DCreate('OPTION')
-      opt.value = val
-      opt.textContent = tit
-      select.appendChild(opt)
+      const el = DCreate('DIV', {class: 'custom-select-option', text: tit})
+      list.appendChild(el)
+      const item = {value: val, title: String(tit).toLowerCase(), el, visible: true, selected: false}
+      listen(el, 'click', () => this.chooseItem(item))
+      if (!this.isMulti && indexOfDefault == -1 && (defVal === val || defVal === tit)) indexOfDefault = i
+      return item
     })
-    select.selectedIndex = indexOfDefault
 
-    return div
+    if (!this.isMulti) {
+      const chosen = this.items[indexOfDefault == -1 ? 0 : indexOfDefault]
+      if (chosen) this.selectOnly(chosen)
+    }
+
+    Object.defineProperty(container, 'value', {
+        get: () => this.isMulti
+          ? this.items.filter(it => it.selected).map(it => it.value)
+          : (this.items.find(it => it.selected)?.value ?? null)
+      , set: (val) => {
+          const item = this.items.find(it => String(it.value) === String(val) || it.el.textContent === String(val))
+          if (item) this.selectOnly(item)
+        }
+    })
+
+    return container
+  }
+
+  selectOnly(item){
+    this.items.forEach(it => this.setItemSelected(it, it === item))
+  }
+
+  setItemSelected(item, selected){
+    item.selected = selected
+    item.el.classList.toggle('selected', selected)
+  }
+
+  chooseItem(item){
+    this.isMulti ? this.setItemSelected(item, !item.selected) : this.selectOnly(item)
+  }
+
+  applyFilter(query){
+    const q = query.trim().toLowerCase()
+    this.items.forEach(item => {
+      const visible = !q || SelectDialog.fuzzyMatch(q, item.title)
+      if (visible === item.visible) return
+      item.visible = visible
+      item.el.classList.toggle('hidden', !visible)
+      if (!visible && item.selected) this.setItemSelected(item, false)
+    })
+  }
+
+  static fuzzyMatch(query, text){
+    let i = 0
+    for (const ch of text) {
+      if (ch === query[i]) i++
+      if (i === query.length) return true
+    }
+    return query.length === 0
   }
 }
 // Pour faire une fenêtre présentant un textarea 

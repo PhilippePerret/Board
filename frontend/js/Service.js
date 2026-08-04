@@ -82,18 +82,16 @@ class Service {
     delete this.services[serviceUUID]
   }
 
-
-
   constructor(data){ D.on && D.trace(data)
     // console.log("data Service", data)
-    this.id     = data.id || raise("Il faut fournir un identifiant au service.")
+    this.id     = data.id || raise("[System] Il faut fournir un identifiant au service.")
     this.data   = data
     /**
      * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
      * sont différentes des données abstraites qui définissent ce qu'il faut pour
      * définir le service. (??? qu'est-ce que ça signifie ???)
      */
-    this.params     = data.params || raise("Il faut définir les :params du servive " + this.id)
+    this.params     = data.params || raise("[System] Il faut définir les :params du servive " + this.id)
     this.uuid       = data.uuid ?? null
     this.type       = data.type ?? null // idem (others ou startup)
     this.onError    = data.onError

@@ -38,6 +38,7 @@ header div#tools-button {
 .small {font-size: 0.85em;}
 .tiny {font-size: 0.75em;}
 .break-all {word-break: break-all;}
+.no-overflow {overflow: hidden; text-overflow: ellipsis}
 
 button {
   padding: 4px 32px;
@@ -52,6 +53,38 @@ button:active { outline: auto; }
 /* Seulement pour les boutons svg des outils de projet */
 button.svg32 {
   padding: 12px 28px !important;
+}
+
+.custom-select.monospace .custom-select-option {
+  font-family: Monospace;
+  font-size: 14pt;
+}
+
+.custom-select-filter {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  margin-bottom: 0.5em;
+  border: 1px solid rgb(208, 208, 208);
+  font-size: 11pt;
+}
+
+.custom-select-list {
+  border: 1px solid rgb(208, 208, 208);
+}
+
+.custom-select-option {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.custom-select-option:hover {
+  background-color: rgb(230, 230, 230);
+}
+
+.custom-select-option.selected {
+  background-color: cadetblue;
+  color: white;
 }
 
 .picto {

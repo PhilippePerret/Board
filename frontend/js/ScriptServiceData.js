@@ -43,7 +43,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'date-time':{
     params: {
-        default: {type: 'string'}
+        default:  {type: 'string'}
       , format:   {type: 'regexp'} // Une expression régulière valide ou une string de type "JJ MM HH:MM"
       , value:    {type: 'datetime', required: true}
     }
@@ -64,8 +64,8 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   'select': {
     params: { // les paramètres possible
         values:       {required: true, type: ['array-of-string', 'array-of-paire', 'array-of-object', 'path']}
-      , key_value:   {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété valeur dans la liste (le value de <option>)'}
-      , key_title: {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété titre pour les options'}
+      , key_value:    {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété valeur dans la liste (le value de <option>)'}
+      , key_title:    {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété titre pour les options'}
       , create:       {type: 'boolean'}
       , default:      {type: 'string'}
     }
@@ -81,8 +81,8 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'get-data': {
     params: {
-        path:     {required: true, type: 'string', name: "Chemin d'accès aux données"}
-      , data_id:  {required: false, type: 'string', name: 'ID dans les données (au besoin)'}
+        path:     {required: true , type: 'string', name: getMsg('path-to-data')}
+      , data_id:  {required: false, type: 'string', name: getMsg('id-in-data')}
     }
   },
   
@@ -107,7 +107,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   },
 
   'add-to-file': {
-      description: "Ajout à un fichier, à un endroit quelconque"
+      description: getMsg('add-to-file-at')
     , params: {
           path:     {required: true, type: 'string'}
         , content:  {required: true, type: 'string'}
@@ -119,7 +119,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'select-file': {
     params: {
-        q: {required: false, type: 'string'}
+        q:  {required: false, type: 'string'}
       , in: {required: false, type: 'string'}
     }
   },
@@ -140,8 +140,8 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   /* Pour définir une propriété du projet */
   'set-project-data': {
     params: {
-        project_key: {required: true, type: 'string'}
-      , value: {required: true, type: 'string'}
+        project_key:  {required: true, type: 'string'}
+      , value:        {required: true, type: 'string'}
     }
 
   },

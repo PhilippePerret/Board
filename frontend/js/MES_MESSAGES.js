@@ -13,6 +13,7 @@ const MESSAGES = {
     , 'new…': "Nouveau…"
     , 'None': 'Aucun'
     , 'Nonee': 'Aucune'
+    , 'error:': "Erreur :"
     , 'other-value…': 'Autre valeur…'
     , 'date/at': 'à' // pour une date avec heure
     , 'Cancel': "Annuler"
@@ -27,6 +28,19 @@ const MESSAGES = {
     , 'This-onee': "Celle-là" 
     , 'Preserve': "Préserver"
     , 'app-to-use': "Application à utiliser"
+    , 'choosing-files-to': "Choix des fichiers à $1"
+    , 'choose-files-to': "Choisisez les fichiers à $1 (click)"
+    , 'select-filter-placeholder': "Filtrer…"
+
+    // Verbes
+    , 'vb-commit': 'committer'
+
+    // Data
+    , 'path-to-data': "Chemin d'accès aux données"
+    , 'id-in-data': 'ID dans les données (au besoin)'
+
+    // File
+    , 'add-to-file-at': "Ajout à un fichier, à un endroit quelconque"
 
     // App
     , 'app-version': 'Version de l’application'
@@ -42,6 +56,8 @@ const MESSAGES = {
     , 'last-project-id': 'Dernier project sélectionné'
 
     // Minuteur
+    , 'work-session-duration': 'Durée d’une session de travail (minutes)'
+    , 'work-section-duration': 'Durée d’une tranche de travail (minutes)'
     , 'start-clock': 'Démarrer l’horloge'
     , 'clock-work-done': 'Travail accompli au cours de la session : '
     , 'clock-work-is-done': "Vous êtes arrivé à échéance de travail"
@@ -70,6 +86,7 @@ const MESSAGES = {
     , 'Defining-a-color': "Définition d'une couleur"
     , 'choose-a-color': "Sélectionner une couleur avec le picker ci-dessous."
     , 'group-tools': "Outils"
+    , 'error-precise-description': "Description précise de l'erreur :"
 
     // --- PROJETS ---
     , 'data-project-id': 'ID du projet'
@@ -141,10 +158,13 @@ const MESSAGES = {
     , 'terminal-at-folder': 'Terminal au dossier'
     , 'open-in-vscode': 'Ouvrir dans VSCode'
     , 'code-to-run-at-launch': 'Code à exécuter à l’ouverture'
+    // Git
     , 'gh-save-a-error': "Enregistrer une erreur (gh)"
     , 'initing-git-for-project': "Initier Git pour le projet"
     , 'github-account': "Nom du votre compte Github"
     , 'github-project-name': "Nom du projet dans Github"
+    , 'git-committing': "Commiter sur Github"
+    , 'git-message-commit': 'Message de commit pour ces fichiers'
     
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'

@@ -31,6 +31,8 @@ module BoardTest
   # push a réellement atteint ce dépôt, pas juste que le script n'a pas
   # levé d'erreur).
   def git_bare_repo_last_commit_message(bare_repo)
-    `git --git-dir=#{bare_repo} log -1 --pretty=%s 2>/dev/null`.strip
+    # Explicitement la branche 'main' : HEAD du dépôt bare pointe par défaut
+    # sur 'master' (jamais poussée), pas sur 'main'.
+    `git --git-dir=#{bare_repo} log -1 --pretty=%s main 2>/dev/null`.strip
   end
 end

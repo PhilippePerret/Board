@@ -180,19 +180,30 @@ class Prompter {
     }).show()
   }
 
-  /*****************************************************************/
+  /******************************************************************/
   /*                          SELECT                                */
-  /*****************************************************************/
-
-  // spec.values : array de strings, de [value,title], d'objects
-  //               (avec spec.key_value/spec.key_title), ou un chemin
-  //               de fichier (string) à charger depuis le disque.
-  // spec.create : true|"Libellé" pour ajouter un bouton de création
+  /******************************************************************/
+  /**
+   * @param spec.values   
+   *    SOIT [Array]  un array de valeurs string (value = title)
+   *    SOIT [Array]  un array de [value, title]
+   *    SOIT [String] un fichier à charger contenant les valeurs
+   *    SOIT [Func]   une fonction permettant de définir les valeurs
+   * @param spec.create
+   *    Pour permettre de créer une nouvelle valeur
+   *    SOIT [Bool]   true pour dire que oui
+   *    SOIT [String] Le nom que doit prendre le bouton pour créer 
+   *                  la nouvelle valeur
+   */
   static promptSelect(spec, callback){
-    if ('string' == typeof spec.values) {
-      return this._loadSelectValuesFromFile(spec.values, (values) => {
-        this.promptSelect(Object.assign({}, spec, {values}), callback)
-      }, callback)
+    console.log("-> promptSelect/spec =", spec)
+    switch(typeof spec.values) {
+      case 'string':
+        return this._loadSelectValuesFromFile(spec.values, (values) => {
+          this.promptSelect(Object.assign({}, spec, {values}), callback)
+        }, callback)
+      case 'function':
+        return spec.values(spec, this._getSelectValuesFromFunction.bind(this, spec, callback))
     }
     let values
     try {
@@ -204,17 +215,18 @@ class Prompter {
     if ( spec.default && !values.find(d => d[0] == spec.default)) {
       values.unshift([spec.default, spec.default])
     }
-    const data = {
-        title:    spec.name || spec.title
+    const data = Object.assign({}, spec, {
+        title:    spec.title || spec.name
       , id:       spec.id
       , message:  spec.message || spec.q
       , width:    spec.width
       , idValues: [spec.id]
       , values:   values
+      , multi:    spec.multi
       , defaultValue: spec.default
       , ouiBtn: {name: spec.okName || getMsg('OK'), onclick: callback}
       , nonBtn: {name: spec.cancelName || getMsg('Cancel'), onclick: () => callback(null)}
-    }
+    })
     if (spec.create) {
       const btnName = spec.create === true ? getMsg('new…') : spec.create
       data.midBtn = {name: btnName, onclick: this.promptString.bind(this, spec, callback)}
@@ -245,6 +257,11 @@ class Prompter {
       if (retour.error) errCallback(null, retour.error)
       else callback(retour.data)
     })
+  }
+  static _getSelectValuesFromFunction(spec, callback, retour){
+    console.log("-> _getSelectValuesFromFunction/spec/callback/retour", spec, callback, retour)
+    spec.values = retour.data
+    this.promptSelect.call(this, spec, callback)
   }
 
   // Choix d'un logiciel installé (lu dans /Applications, mis en cache),

@@ -11,9 +11,7 @@ class ServiceDefiner {
     console.log("service à définir", service)
     this.id       = service.id
     this.service  = service
-    // Les params persist:false (ex-dynParams) ne sont jamais définis ici,
-    // à l'attache : ils sont redemandés à chaque exécution par ServiceExecuter.
-    this.params   = service.params.filter(p => p.persist !== false)
+    this.params   = service.params
     this.callback = callback
     this.afterDefinedParams = service.afterDefinedParams
 

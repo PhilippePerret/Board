@@ -60,9 +60,31 @@ class ParamsDefiner {
  */
 class ParamDefiner {
 
+
+  /**
+   * Fonctions pour définir les données des services
+   * 
+   * Inaugurée pour le service 'git-committing' pour obtenir au tout
+   * départ la liste des fichiers à commiter
+   * 
+   * @param data [Object] Données à transmettre pour jouer la fonction
+   * @param callback [Function] Fonction de rappel après l'opération
+   * @param retour [Object] Retour de l'opération asynchrone
+   */
+  static gitGetStatusFiles(data, callback){
+    console.log("-> gitGetStatusFiles/data=", data, callback)
+    server.send({
+        action: 'git-ope'
+      , project_path: data?.project_path ?? Project.current.path
+      , git_ope: 'get_status_files'
+    }, callback)
+  }
+
+
+
   constructor(paramLister, param){
     this.paramLister = paramLister
-    console.log("param dans constructeur", param)
+    // console.log("param dans constructeur", param)
     this.param    = param
     this.id       = param.id      ?? raise('Un identifiant est obligatoire.', param)
     this.name     = param.name    ?? param.id
@@ -77,8 +99,8 @@ class ParamDefiner {
   get currentOrDefault(){ return this.actual ?? this.default }
 
   define() {
-   historize('-> ParamDefiner.define', this)
-   Prompter.prompt(this.promptSpec(), this.onPrompted.bind(this))
+    historize('-> ParamDefiner.define', this)
+    Prompter.prompt(this.promptSpec(), this.onPrompted.bind(this))
   }
 
   // Données transmises à Prompter pour obtenir la valeur de ce paramètre
@@ -106,7 +128,12 @@ class ParamDefiner {
   }
 
   onPrompted(value, error){
-    if (error) { console.error(error); return }
+    if (error) { 
+      new ErrorsDialog({
+        errors: error.split("\n")
+      }).show()
+      console.error(error); return 
+    }
     this.onNonButton(value)
   }
 

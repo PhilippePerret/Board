@@ -15,11 +15,16 @@
 
 == Todo En cours
 
-- Sevice : git init : il suffit que je donne le nom du projet sur Github et le service initie git (penser à régler déjà .gitignore)
+- git issue create (tout type)
 
 == Todo list ==
 
-- localiser le module ProjectData.js (gros boulot)
+- pour essayer : git push
+  - on choisit les fichiers dans la list des status (coche)
+  - on donne le message 
+  - ça push
+- service git pour ajouter un truc au choix select → texte → description
+  le sélection propose : erreur, amélioration, warning, feature (voir les autres)
 - surveiller des mots ? (rêve que j'ai fait : :error quand on est en train d'écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error, 
 - pouvoir mettre une note gh (github) du type voulu
   
