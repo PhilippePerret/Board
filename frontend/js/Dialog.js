@@ -25,9 +25,9 @@ class Dialog {
     this.content      = data.content ?? null
     this.default      = data.default
     this.defaultValue = data.defaultValue
-    this.ouiData      = data.ouiBtn ?? {name: getMsg('btn-yes'), onclick: () => message("Bouton oui à définir")}
+    this.ouiData      = data.ouiBtn ?? {name: getMsg('btn-yes'), onclick: () => message("[SYSTEM] Bouton oui à définir")}
     this.midData      = data.midBtn ?? null
-    this.nonData      = data.nonBtn ?? {name: getMsg('btn-no'), onclick: () => message("Bouton non à définir")}
+    this.nonData      = data.nonBtn ?? {name: getMsg('btn-no'), onclick: () => message("[SYSTEM] Bouton non à définir")}
     this.defaultKey   = data.defaultKey ?? 'Oui'
     this.unscrimmed   = data.unscrimmed ?? false // pour ne pas mettre de flou
     this.project      = data.project ?? null

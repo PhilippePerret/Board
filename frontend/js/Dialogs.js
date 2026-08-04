@@ -297,7 +297,7 @@ class ColorDialog extends Dialog {
 class ConfigDialog extends Dialog {
   constructor(data){
     super(data)
-    data.id ?? raise("Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
+    data.id ?? raise("[SYSTEM] Il faut absolumenent définir un ID pour un dialog de type ConfigDialog")
     if (undefined == data.width) this.width = '840px'
     this.height   = '500px'
     this.props    = data.props
@@ -380,7 +380,7 @@ class TasksDialog extends Dialog {
     this.tasks    = data.tasks
     this.onCheck  = (task, ev) => {this.getLastCheck(task, ev); data.onCheck(task, ev)}
     this.content  = this.buildTaskList()
-    this.ouiData  = {name: 'OK', onclick: () => {
+    this.ouiData  = {name: getMsg('OK'), onclick: () => {
       data.onValidate.call(null, this.newTasks)
     }}
     this.midData  = {name: getMsg('todoist-modify-checked'), onclick: this.onModifyCheckedTask.bind(this), keep: true}
@@ -398,9 +398,9 @@ class TasksDialog extends Dialog {
    * tâche cochée
    */
   onModifyCheckedTask(retour){
-    if ( !this.__checks ) return erreur("Aucun tâche cochées")
+    if ( !this.__checks ) return erreur(getErr('no-tasks-checked'))
     else if (this.__checks.length > 1) {
-      erreur("Il faut cocher seulement la tâche à modifier.")
+      erreur(getErr('checked-only-modify-task'))
     } else {
       const task = this.__checks[0]
       this.__checks = []
@@ -454,7 +454,7 @@ class TasksDialog extends Dialog {
         , width: '800px'
         , q: message + "\n\n"
         , default: dataTaskStr
-        , ouiBtn: {name: 'OK', onclick: this._validateTaskBeforeSubmit.bind(this), keep: true}
+        , ouiBtn: {name: getMsg('OK'), onclick: this._validateTaskBeforeSubmit.bind(this), keep: true}
         , nonBtn: {name: getMsg('Cancel')}
       })
     this.BoiteTaskData.show()
