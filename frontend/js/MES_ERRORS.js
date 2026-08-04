@@ -50,4 +50,7 @@ const ERRORS = {
     
     // TODOIST
     , 'todoist-key-task-unknown': "La clé « $1 » est inconnue, pour une tâche Todoist."
+    , 'no-tasks-checked': "Aucune tâche cochée"
+    , 'checked-only-modify-task': "Il faut cocher seulement la tâche à modifier."
+    
 }

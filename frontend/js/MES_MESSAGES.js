@@ -10,6 +10,7 @@
         Dateutils.js
         Debug.js
         Dialog.js
+        Dialogs.js
 
  */
 const MESSAGES = {
