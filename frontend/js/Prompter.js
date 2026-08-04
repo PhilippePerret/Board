@@ -74,85 +74,79 @@ class Prompter {
   /*                    TYPES À DIALOGUE SIMPLE                    */
   /*****************************************************************/
 
+  // Base commune title/id/message/width partagée par tous les prompt* qui
+  // affichent un Dialog — un seul endroit à corriger pour que width/title
+  // marchent pareil pour params ET dynParams (même spec, même dispatcher).
+  static dialogBase(spec, fallbackTitle){
+    return {
+        title:   spec.title || spec.name || fallbackTitle
+      , id:      spec.id
+      , message: spec.message || spec.q
+      , width:   spec.width
+    }
+  }
+
   static promptString(spec, callback){
-    new TextFieldDialog({
-        title:    spec.name || spec.title
-      , id:       spec.id
-      , message:  spec.message || spec.q
-      , default:  spec.default ?? ''
+    new TextFieldDialog(Object.assign(this.dialogBase(spec), {
+        default:  spec.default ?? ''
       , errorMessage: spec.errorMessage
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   static promptText(spec, callback){
-    new TextareaDialog({
-        title:    spec.name || spec.title
-      , id:       spec.id
-      , message:  spec.message || spec.q
-      , default:  spec.default ?? ''
-      , width:    spec.width
+    new TextareaDialog(Object.assign(this.dialogBase(spec), {
+        default:  spec.default ?? ''
       , errorMessage: spec.errorMessage
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   static promptBoolean(spec, callback){
-    new ConfirmDialog({
-        title:      spec.name || spec.title
-      , message:    spec.message || spec.q
-      , defaultKey: spec.actual === false ? getMsg('btn-no') : getMsg('btn-yes')
+    new ConfirmDialog(Object.assign(this.dialogBase(spec), {
+        defaultKey: spec.actual === false ? getMsg('btn-no') : getMsg('btn-yes')
       , ouiBtn: {name: getMsg('btn-yes'), onclick: () => callback(true)}
       , nonBtn: {name: getMsg('btn-no'), onclick: () => callback(false)}
-    }).show()
+    })).show()
   }
 
   static promptInteger(spec, callback){
-    new TextFieldDialog({
-        title:    spec.name || spec.title
-      , id:       spec.id
-      , message:  spec.message || spec.q
-      , defaultValue: spec.default
+    new TextFieldDialog(Object.assign(this.dialogBase(spec), {
+        defaultValue: spec.default
       , toRealValue: (n) => parseInt(n)
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   static promptUrl(spec, callback){
-    new TextFieldDialog({
-        title:        spec.name || 'Définition d’URL'
-      , id:           spec.id
-      , message:      spec.message || spec.q || getMsg('which-url')
+    new TextFieldDialog(Object.assign(this.dialogBase(spec, 'Définition d’URL'), {
+        message:      spec.message || spec.q || getMsg('which-url')
       , defaultValue: spec.default || 'https://'
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   static promptServiceName(spec, callback){
-    new TextFieldDialog({
-        title:    getMsg('new-service-name') 
-      , id:       spec.id
-      , message:  spec.message || getMsg('which-name-for-project-service') 
+    new TextFieldDialog(Object.assign(this.dialogBase(spec, getMsg('new-service-name')), {
+        message:  spec.message || getMsg('which-name-for-project-service')
       , defaultValue: spec.default
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   static promptPhone(spec, callback){
-    new TextFieldDialog({
-        title:    spec.name || spec.title || getMsg('phone-number') 
-      , id:       spec.id
-      , message:  spec.message || spec.q || getMsg('which-phone-number')
+    new TextFieldDialog(Object.assign(this.dialogBase(spec, getMsg('phone-number')), {
+        message:  spec.message || spec.q || getMsg('which-phone-number')
       , default:  spec.default || ''
       , errorMessage: spec.errorMessage
       , ouiBtn: {name: getMsg('OK'), onclick: (retour) => this._validatePhone(retour, spec, callback)}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
   static _validatePhone(retour, spec, callback){
     retour = retour.replace(/\./, ' ')
@@ -166,10 +160,8 @@ class Prompter {
 
   static promptDateTime(spec, callback){
     const format = spec.format || REG_DATETIME_JJ_MM_HH_MM
-    new TextFieldDialog({
-        title:    spec.name || getMsg('date-and-hour')
-      , id:       spec.id
-      , message:  spec.message || spec.q || getMsg('scserv-datetime-default-format')
+    new TextFieldDialog(Object.assign(this.dialogBase(spec, getMsg('date-and-hour')), {
+        message:  spec.message || spec.q || getMsg('scserv-datetime-default-format')
       , errorMessage: spec.errorMessage
       , ouiBtn: {name: getMsg('OK'), onclick: (retour) => {
           const datetime = Validator.datetime(retour, format, true)
@@ -177,7 +169,7 @@ class Prompter {
           else this.promptDateTime(spec, callback)
         }}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   /******************************************************************/
@@ -215,12 +207,8 @@ class Prompter {
     if ( spec.default && !values.find(d => d[0] == spec.default)) {
       values.unshift([spec.default, spec.default])
     }
-    const data = Object.assign({}, spec, {
-        title:    spec.title || spec.name
-      , id:       spec.id
-      , message:  spec.message || spec.q
-      , width:    spec.width
-      , idValues: [spec.id]
+    const data = Object.assign({}, spec, this.dialogBase(spec), {
+        idValues: [spec.id]
       , values:   values
       , multi:    spec.multi
       , defaultValue: spec.default
@@ -275,10 +263,8 @@ class Prompter {
         this.promptLogiciel(spec, callback)
       })
     }
-    new SelectDialog({
-        title:    spec.name || getMsg('app-choice')
-      , id:       spec.id
-      , width:    '560px'
+    new SelectDialog(Object.assign(this.dialogBase(spec, getMsg('app-choice')), {
+        width:    spec.width || '560px'
       , message:  spec.message || getMsg('choose-app-to-use')
       , idValues: [spec.id]
       , values:   this.APPS_LIST
@@ -286,7 +272,7 @@ class Prompter {
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , midBtn: {name: getMsg('other-app'), onclick: () => this.promptString(spec, callback)}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   /*****************************************************************/
@@ -323,47 +309,42 @@ class Prompter {
   }
 
   static promptPathOrNull(spec, callback){
-    const dialogData = {
-      title:   'Définition de paramètre',
+    const dialogData = Object.assign(this.dialogBase(spec, 'Définition de paramètre'), {
       message: spec.message || spec.q || getMsg('sel-el-in-finder-or-click-none'),
       ouiBtn:  {name: getMsg('OK'),    onclick: (retour) => this._getPathOfFinderSelection(null, callback, retour)},
       nonBtn:  {name: getMsg('None'), onclick: () => callback(null)}
-    }
+    })
     this._addPreserveOption(spec, dialogData, callback)
     new ConfirmDialog(dialogData).show()
   }
 
   static promptColorOrImage(spec, callback){
-    new ConfirmDialog({
-        title:   spec.title || getMsg('choose-color-or-image')
-      , message: spec.message || spec.q || getMsg('which-background')
+    new ConfirmDialog(Object.assign(this.dialogBase(spec, getMsg('choose-color-or-image')), {
+        message:  spec.message || spec.q || getMsg('which-background')
       , ouiBtn:  {name: getMsg('Color'),    onclick: () => this.promptColor(spec, callback)}
       , midBtn:  {name: getMsg('Image'),    onclick: () => this.promptImage(spec, callback)}
       , nonBtn:  {name: getMsg('Nothing'),  onclick: () => callback('none')}
-    }).show()
+    })).show()
   }
   static promptImage(spec, callback){ this.promptPath(spec, callback) }
   static promptColor(spec, callback){
-    new ColorDialog({
-        title:   getMsg('Defining-a-color') 
-      , id:      spec.id
-      , message: spec.message || spec.q || getMsg('choose-a-color') 
+    new ColorDialog(Object.assign(this.dialogBase(spec, getMsg('Defining-a-color')), {
+        message: spec.message || spec.q || getMsg('choose-a-color')
       , defaultValue: spec.default
       , ouiBtn: {name: getMsg('This-onee'), onclick: callback}
       , nonBtn: {name: getMsg('Nonee'),  onclick: () => callback(null)}
-    }).show()
+    })).show()
   }
 
   // -- Aides internes (Finder / fenêtres) --
 
   static _waitForWindow(spec, message, callback, fallback = null, options = null, preserveCallback = callback){
-    const dialogData = {
-        title: getMsg('Defining-parameter')
-      , message: message
+    const dialogData = Object.assign(this.dialogBase(spec, getMsg('Defining-parameter')), {
+        message: message
       , content: options?.content ?? null
       , ouiBtn: {name: options?.ouiBtn ?? getMsg('OK')        , onclick: callback}
       , nonBtn: {name: options?.nonBtn ?? getMsg('Cancel')   , onclick: fallback}
-    }
+    })
     if (options?.midBtn) Object.assign(dialogData, {midBtn: options.midBtn})
     this._addPreserveOption(spec, dialogData, preserveCallback)
     new ConfirmDialog(dialogData).show()

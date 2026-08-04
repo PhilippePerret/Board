@@ -40,6 +40,8 @@
  *  afterDefinedParams
  *    Appelée après la définition des paramètres par exemple pour les
  *    modifier.
+ *    La fonction doit obligatoirement retourner la nouvelle liste 
+ *    des paramètres qui remplacera la liste fournie.
  *  
  *  bypassExec
  *    Fonction à exécuter avant d'exécuter le service (par exemple un
@@ -113,12 +115,18 @@ const COMMON_SERVICES_DATA = [
     , group: 'Git'
     , script: 'GitOpes.rb'
     , params: [
-        {id: 'path', type: 'project'}
+        {id: 'git_ope', type: 'raw', value: 'commit'}
+      , {id: 'path', type: 'project'}
       ]
     , dynParams: [
         {id: 'files', title: getMsg('choosing-files-to', ['commit']), type: 'select', select_class: 'monospace', q: getMsg('choose-files-to', getMsg('vb-commit')), width: '840px', multi: true, values: ParamDefiner.gitGetStatusFiles.bind(ParamDefiner)}
-      , {id: 'message', type: 'string', q: getMsg('git-message-commit')}
+      , {id: 'message', type: 'string', width: '740px', title: getMsg('git-commit-message-title'), q: getMsg('git-message-commit')}
       ]
+    , afterDefinedParams(params){
+        console.log("params de git-commit", params)
+        params[2][0] = JSON.stringify(params[2][0])
+        return params
+      }
   },
 
   // Initialisation de git

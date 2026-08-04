@@ -36,7 +36,7 @@ class ServiceExecuter {
     if (dynParams.length > 0) {
       new ParamsDefiner(dynParams, (definers) => this.onDynParamsDefined(SDATA, baseParams, definers)).define()
     } else {
-      this.finalyExec(baseParams, this.persistedValuesById(SDATA, baseParams))
+      this.finalyExec(this.applyAfterDefinedParams(baseParams), this.persistedValuesById(SDATA, baseParams))
     }
   }
 
@@ -45,7 +45,14 @@ class ServiceExecuter {
     const values = definers.map(definer => [definer.value])
     const valuesById = this.persistedValuesById(SDATA, baseParams)
     definers.forEach(definer => { valuesById[definer.id] = definer.value })
-    this.finalyExec([...baseParams, ...values], valuesById)
+    this.finalyExec(this.applyAfterDefinedParams([...baseParams, ...values]), valuesById)
+  }
+
+  // Appelé une seule fois, une fois TOUS les paramètres résolus (persistés
+  // + dynamiques) — jamais dans finalyExec, qui peut se réinvoquer lui-même
+  // via bypassExec (double application sinon).
+  applyAfterDefinedParams(paramsValues){
+    return this.service.afterDefinedParams ? this.service.afterDefinedParams(paramsValues) : paramsValues
   }
 
   // Reconstruit {id: valeur} des params déjà persistés, en zippant l'ordre
