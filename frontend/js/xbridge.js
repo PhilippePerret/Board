@@ -26,7 +26,15 @@ window.bridge = {
     __send(payload) { D.on && D.trace(payload)
         this._payload = payload // pour erreurs
         // console.log("payload", payload)
-        window.webkit.messageHandlers.bridge.postMessage(payload);
+        // Double rAF pour laisser WebKit peindre l'état déjà à jour du DOM
+        // (dialog fermé, spinner lancé…) avant que le pont Swift ne bloque
+        // le thread principal le temps du process Ruby — un setTimeout(0)
+        // seul ne garantit pas qu'un vrai repaint ait eu lieu entre-temps.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                window.webkit.messageHandlers.bridge.postMessage(payload);
+            });
+        });
     },
 
     receive(jsonString) { D.on && D.trace(jsonString)
