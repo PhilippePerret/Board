@@ -1,6 +1,16 @@
 /**
  * Pour obtenir ces emssages :
  * getMsg(id, params)
+ * 
+ * FICHIERS LOCALISÉS (TRAITÉS INTÉGRALEMENT)
+        Aide.js
+        App.js
+        AppData.js
+        Clock.js
+        Dateutils.js
+        Debug.js
+        Dialog.js
+
  */
 const MESSAGES = {
     'premier': "sans virgule"
@@ -34,6 +44,8 @@ const MESSAGES = {
 
     // Verbes
     , 'vb-commit': 'committer'
+    , 'Ignore': 'Ignorer'
+    , 'Finish': "Finir" // dans le sens d'un ordre donné
 
     // Data
     , 'path-to-data': "Chemin d'accès aux données"
@@ -43,6 +55,7 @@ const MESSAGES = {
     , 'add-to-file-at': "Ajout à un fichier, à un endroit quelconque"
 
     // App
+    , 'app-config': 'Configuration de l’application'
     , 'app-version': 'Version de l’application'
     , 'remember-last-project': 'Se souvenir du dernier projet'
     , 'default-browser': 'Navigateur par défaut'
@@ -75,6 +88,7 @@ const MESSAGES = {
     , 'Next': 'Suivant'
     , 'Save': 'Enregistrer'
     , 'scripts': "Scripts"
+    , 'ask-still-working': "Le travail est-il toujours en cours sur le projet “$1” ?"
 
     // --- UI ---
     , 'countdown-timer': "Minuteur"
@@ -86,7 +100,8 @@ const MESSAGES = {
     , 'Defining-a-color': "Définition d'une couleur"
     , 'choose-a-color': "Sélectionner une couleur avec le picker ci-dessous."
     , 'group-tools': "Outils"
-    , 'error-precise-description': "Description précise de l'erreur :"
+    , 'error-precise-description:': "Description précise de l'erreur :"
+    , 'clock-set-pause': "Mettre en pause"
 
     // --- PROJETS ---
     , 'data-project-id': 'ID du projet'
@@ -165,6 +180,7 @@ const MESSAGES = {
     , 'github-project-name': "Nom du projet dans Github"
     , 'git-committing': "Commiter sur Github"
     , 'git-message-commit': 'Message de commit pour ces fichiers'
+    , 'git-commit-message-title': "Message du commit"
     
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'
