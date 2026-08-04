@@ -34,3 +34,4 @@
 - [Pas de condescendance](feedbacks/no_condescending_overexplain.md) — si sa phrase exclut déjà l'explication évidente, la redonner = le prendre pour un con
 - [Pas de jargon interne](feedbacks/no_internal_jargon_labels.md) — jamais "volet 1/2" ou label maison sans redire ce que ça désigne concrètement
 - [Vérifier TDD avant de citer un échec](feedbacks/check_tdd_before_citing_failure.md) — un ✗ peut être un test TDD normal (fonctionnalité pas codée), pas une preuve de bug
+- [Expliquer avant de rediriger la faute](feedbacks/explain_before_redirecting_blame.md) — si le diagnostic mène à un autre fichier que celui accusé, le dire d'abord, ne pas éditer direct
