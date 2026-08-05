@@ -42,6 +42,7 @@
  *    modifier.
  *    La fonction doit obligatoirement retourner la nouvelle liste 
  *    des paramètres qui remplacera la liste fournie.
+ *    Se souvenir que toutes les valeurs se trouvent dans un array.
  *  
  *  bypassExec
  *    Fonction à exécuter avant d'exécuter le service (par exemple un
@@ -53,6 +54,8 @@
  *    Peut traiter les paramètres avant l'exécution, pour mettre la 
  *    valeur sous une toute autre forme. 
  *    Voir par exemple l'utilisation pour create-git-issue
+ *    Attention à la valeur renvoyée, suivant le script qui doit la 
+ *    recevoir. Des erreurs sont facilement possibles.
  * 
  *  afterRunWithSuccess   (projet, retour)
  *    Fonction appelée après avoir exécuté le service avec succès.
@@ -67,7 +70,9 @@ const COUNTDOWN_PROPERTIES = {
     ]
 }
 
-
+const GITHUB_LABELS = [
+  'todo'
+]
 /*******************************************************************/
 /**                     SERVICES COMMUNS                          **/
 /*******************************************************************/
@@ -115,7 +120,7 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
-  // Git issue quelconque
+  // Git create issue quelconque
   /**
    * TODO
    *  il faudrait avoir les étiquettes du projet en question. Pour ça, on pourrait
@@ -124,7 +129,8 @@ const COMMON_SERVICES_DATA = [
    */
   {
       id: 'gh-issue-create'
-    , name: getMsg('gh-issues-create') + aide('gh-issue-create')
+    , name: getMsg('gh-issues-create')
+    , aide: 'gh-issue-create'
     , group: 'Git'
     , script: 'ExecCommand.sh'
     , params: [
@@ -146,7 +152,8 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'git-issue-list'
-    , name: getMsg('git-issue-list') + aide('gh-issue-list')
+    , name: getMsg('git-issue-list')
+    , aide: 'gh-issue-list'
     , group: 'Git'
     , script: 'ExecCommand.sh'
     , params: [
@@ -198,7 +205,17 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
-  // Git push
+  // Labels 
+  {
+      id: 'git-install-labels'
+    , name: getMsg('git-installing-labels')
+    , group: 'Git'
+    , params: [
+        {id: 'labels_list', type: 'select', multi: true, values: GITHUB_LABELS}
+      ]
+  },
+
+  // Git commit push
   {
       id: 'git-commit'
     , name: getMsg('git-committing')

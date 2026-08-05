@@ -195,6 +195,7 @@ const MESSAGES = {
     , 'gh-comment': "Commenter"
     , 'gh-pin': 'Épingler'
     , 'gh-unpin': 'Désépingler'
+    , 'git-installing-labels': "Définition des labels Git"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'

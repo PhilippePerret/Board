@@ -145,8 +145,10 @@ class Service {
   build(contenant){
     const div = DCreate('DIV', {class:'service', id: this.id})
     div.setAttribute('draggable', true)
-    const name = DCreate('DIV', {class:'name', text: this.name})
-    div.appendChild(name)
+    var nameLabel = this.name
+    if (this.data.aide) nameLabel += aide(this.data.aide)
+    const divName = DCreate('DIV', {class:'name', text: nameLabel})
+    div.appendChild(divName)
     this.obj = div
     // console.log("this.constructor", this.constructor)
     contenant.appendChild(div)
