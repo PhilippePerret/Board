@@ -6,8 +6,13 @@
  * 
  */
 
-// Retourne une erreur de MES_ERRORS.js
+// Retourne une erreur de MES_ERRORS.js — undefined si errId n'est pas une
+// clé connue. Nécessaire pour Dialogs.js#normalizeErrors, qui fait
+// `getErr(error) || error` en supposant que error est SOIT un texte brut
+// SOIT un identifiant : ça ne retombe sur le texte brut que si getErr()
+// renvoie une valeur fausse pour un id inconnu.
 function getErr(errId, params){
+  if (!(errId in ERRORS)) return undefined
   return textSubstitute(ERRORS[errId], params)
 }
 

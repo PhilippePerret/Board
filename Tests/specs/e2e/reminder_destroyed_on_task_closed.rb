@@ -24,14 +24,21 @@ def run_test
     card_id = "project-#{project_id}"
     wait_for(card_id)
 
-    # → le Reminder a bien été programmé au chargement (lien task↔reminder)
-    before = bridge_eval(<<~JS)
-      (function(){
-        var list = (Reminder.remindedTasks && Reminder.remindedTasks[#{task['id'].to_json}]) || [];
-        return list.length.toString();
-      })()
-    JS
-    raise "reminder attendu (1) juste après chargement, obtenu #{before.inspect}" unless before == '1'
+    # → le Reminder a bien été programmé au chargement (lien task↔reminder).
+    #   Le chargement des tâches todoist (getTachesAndSetBadges) se fait de
+    #   façon asynchrone après l'apparition de la carte : on attend, pas de
+    #   vérification instantanée.
+    reminders_count = -> {
+      bridge_eval(<<~JS)
+        (function(){
+          var list = (Reminder.remindedTasks && Reminder.remindedTasks[#{task['id'].to_json}]) || [];
+          return list.length.toString();
+        })()
+      JS
+    }
+    wait_until(desc: -> { "reminders pour la tâche = #{reminders_count.call.inspect}" }) do
+      reminders_count.call == '1'
+    end
 
     # → simule la clôture de la tâche : today_tasks ne la contient plus
     bridge_eval(<<~JS)

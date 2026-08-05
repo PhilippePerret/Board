@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-03](2026-08-03-Etat-fin-de-session.md) — test git-init en cours, résultat non connu à la coupure, à vérifier en premier
+- PRIORITÉ : [État fin de session 2026-08-04](2026-08-04-Etat-fin-de-session.md) — 17 tests en échec (liste dans le fichier) + test git-init du 2026-08-03 toujours jamais revérifié
 
 - [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
 - [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
@@ -35,3 +35,4 @@
 - [Pas de jargon interne](feedbacks/no_internal_jargon_labels.md) — jamais "volet 1/2" ou label maison sans redire ce que ça désigne concrètement
 - [Vérifier TDD avant de citer un échec](feedbacks/check_tdd_before_citing_failure.md) — un ✗ peut être un test TDD normal (fonctionnalité pas codée), pas une preuve de bug
 - [Expliquer avant de rediriger la faute](feedbacks/explain_before_redirecting_blame.md) — si le diagnostic mène à un autre fichier que celui accusé, le dire d'abord, ne pas éditer direct
+- [Répondre avant d'enchaîner les outils](feedbacks/respond_before_more_tools.md) — après question directe, répondre en texte d'abord, pas silencieusement un nouvel appel d'outil

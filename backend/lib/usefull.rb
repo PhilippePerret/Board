@@ -14,6 +14,41 @@ APP_FOLDER = File.dirname(__dir__)
 DATA_SUPPORT_FOLDER = ensure_folder([Dir.home, "Library", "Application Support", "Board"])
 PROJECT_CARD_FOLDER = ensure_folder([DATA_SUPPORT_FOLDER, 'project-cards'])
 
+# Board.app est lancé par Finder/LaunchServices : le process (et donc ce
+# script Ruby, et tout ce qu'il lance ensuite via backtick/IO.popen)
+# n'hérite PAS du PATH d'un shell de login (pas de .zshrc/.zprofile
+# sourcé). Sans ça, des commandes Homebrew (ex. gh) sont introuvables
+# même si elles marchent très bien dans un Terminal.
+#
+# On récupère le vrai PATH en interrogeant le shell de login de
+# l'utilisateur ($SHELL -ilc), et on le pose une bonne fois pour toutes
+# dans ENV['PATH'] : tout backtick/IO.popen lancé ensuite dans ce
+# process (git.rb, exec_script.rb, scripts de backend/scripts/...) en
+# hérite automatiquement. Résultat mis en cache (coûte 100-300ms sinon),
+# invalidé si un fichier rc a été modifié depuis (comparaison de mtime).
+# Même fichier de cache que ExecCommand.sh (backend/scripts/), qui a la
+# même logique côté bash pour les scripts lancés hors de ce process.
+def load_real_user_path!
+  cache_file = File.join(DATA_SUPPORT_FOLDER, 'user_path.cache')
+  rc_files = %w[.zshenv .zprofile .zshrc .bash_profile .bashrc].map { |f| File.join(Dir.home, f) }
+
+  need_refresh = true
+  if File.exist?(cache_file)
+    cache_mtime = File.mtime(cache_file)
+    need_refresh = rc_files.any? { |rc| File.exist?(rc) && File.mtime(rc) > cache_mtime }
+  end
+
+  if need_refresh
+    user_path = `#{ENV['SHELL']} -ilc 'echo -n $PATH'`.strip
+    IO.write(cache_file, user_path) unless user_path.empty?
+  else
+    user_path = IO.read(cache_file)
+  end
+
+  ENV['PATH'] = user_path unless user_path.nil? || user_path.empty?
+end
+load_real_user_path!
+
 DEV_PROJECT_FOLDER   = File.join(APP_FOLDER, '_dev')
 
 APP_DATA_FILE = ensure_file(

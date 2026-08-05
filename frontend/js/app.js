@@ -21,10 +21,14 @@ class App {
     }
   }
   static selectLastProjectIfRequired(){
-    var lastProjectId
+    var lastProjectId, lastProject
     if (this.getData('remember-last-project') === true){
       if (lastProjectId = this.getData('last-project')) {
-        Project.onSelect(Project.get(lastProjectId))
+        if (lastProject = Project.get(lastProjectId)) {
+          Project.onSelect(lastProject)
+        } else {
+          this.setData('last-project', '', true)
+        }
       }
     }
   }

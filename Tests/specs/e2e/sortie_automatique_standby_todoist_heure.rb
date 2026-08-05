@@ -34,14 +34,18 @@ def run_test
     # → reste en standby juste après le chargement (poll automatique pas encore passé)
     raise "#{card_id} déjà sorti du standby avant le poll" unless has_class?(card_id, 'collapsed')
 
-    # → la tâche est bien dans les tâches courantes du projet
-    has_task = bridge_eval(<<~JS)
-      (function(){
-        var p = Project.get(#{project_id.to_json});
-        return p.tasks.some(function(t){ return t.content === #{task_content.to_json}; }).toString();
-      })()
-    JS
-    raise "tâche #{task_content.inspect} absente de project.tasks" unless has_task == 'true'
+    # → la tâche est bien dans les tâches courantes du projet. Chargement
+    #   todoist asynchrone après l'apparition de la carte : on attend, pas
+    #   de vérification instantanée (project.tasks vaut undefined avant).
+    has_task = -> {
+      bridge_eval(<<~JS)
+        (function(){
+          var p = Project.get(#{project_id.to_json});
+          return !!(p.tasks && p.tasks.some(function(t){ return t.content === #{task_content.to_json}; })) + '';
+        })()
+      JS
+    }
+    wait_until(desc: -> { "tâche présente = #{has_task.call.inspect}" }) { has_task.call == 'true' }
 
     # → un Reminder a été enregistré pour cette tâche, avec réactivation du standby
     has_reminder = bridge_eval(<<~JS)

@@ -36,17 +36,22 @@ def run_test
     wait_for('__service-name__')
     click_suffix('btn-oui') # nom par défaut
 
-    # → param 'path' : sélection réelle dans le Finder
+    # → param 'path' : sélection réelle dans le Finder. Le clic ne fait que
+    #   déclencher l'aller-retour ASYNCHRONE de lecture de la sélection
+    #   (bridge -> backend -> getInfoFinderSelection.scpt) : refermer la
+    #   fenêtre trop tôt la fermerait avant la fin de cet aller-retour,
+    #   qui lirait alors une autre fenêtre Finder déjà ouverte. On garde
+    #   donc la fenêtre ouverte jusqu'à l'apparition du dialogue suivant.
     wait_for_suffix('btn-oui')
     with_finder_selection(file_path) do
       click_suffix('btn-oui')
+      wait_for('__app__')
     end
 
     # → param 'app' (type 'logiciel') : choix dans la liste (Safari est
     #   dans /Applications sur toute machine — Finder, lui, n'y est PAS :
     #   /System/Library/CoreServices/Finder.app, hors du périmètre scanné
     #   par l'action backend 'list-applications')
-    wait_for('__app__')
     set_value('__app__', 'Safari')
     click_suffix('btn-oui')
 

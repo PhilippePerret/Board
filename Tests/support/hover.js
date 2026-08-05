@@ -15,6 +15,10 @@ ObjC.import('CoreGraphics')
 const appName = 'Board'
 const defaultTimeout = 5
 
+// Voir drag.js : ObjC.import n'expose pas les constantes C (enums).
+const kCGHIDEventTap    = 0
+const kCGEventMouseMoved = 5
+
 function axChildren(elem) {
   try { return elem.uiElements() } catch (e) { return [] }
 }
@@ -59,7 +63,7 @@ function centerOf(elem) {
 
 function postMouseEvent(type, point) {
   const event = $.CGEventCreateMouseEvent(null, type, point, 0)
-  $.CGEventPost($.kCGHIDEventTap, event)
+  $.CGEventPost(kCGHIDEventTap, event)
 }
 
 function run(argv) {
@@ -67,9 +71,13 @@ function run(argv) {
     throw new Error('Usage: hover.js <domId> [secondes]')
   }
   const seconds = argv.length > 1 ? Number(argv[1]) : 1.5
+  // Voir drag.js : sans activation, le clic écran peut atterrir sur une
+  // autre fenêtre que Board.
+  Application(appName).activate()
+  pauseBriefly(0.2)
   const el = waitForElement(argv[0], defaultTimeout)
   const p = centerOf(el)
-  postMouseEvent($.kCGEventMouseMoved, p)
+  postMouseEvent(kCGEventMouseMoved, p)
   pauseBriefly(seconds)
   return 'ok'
 }

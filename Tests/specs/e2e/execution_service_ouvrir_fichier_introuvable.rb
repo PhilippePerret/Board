@@ -24,11 +24,14 @@ def run_test
     service_card = "service-#{service['uuid']}"
     click(service_card)
 
+    # Convention du projet : les messages d'erreur passent tous par la
+    # popup ErrorsDialog, plus par #message (footer).
     expected = "Le fichier #{missing_path} est introuvable. Merci d'éditer le service."
-    wait_until(desc: -> { "message affiché = #{(get_text('message') rescue '(erreur)').inspect}" }) do
-      get_text('message') == expected
+    wait_until(desc: -> { "erreur affichée = #{(errors_dialog_text rescue '(erreur)').inspect}" }) do
+      errors_dialog_text == expected
     end
     raise "Board a quitté après clic sur un service 'open-file' pointant sur un fichier introuvable" unless board_running?
+    click_suffix('btn-oui') # referme la popup d'erreur
   end
 ensure
   remove_fixture_project(id) if id

@@ -32,14 +32,18 @@ def run_test
     wait_for('__service-name__')
     click_suffix('btn-oui') # nom par défaut
 
+    # Le clic ne fait que déclencher l'aller-retour ASYNCHRONE de lecture de
+    # la sélection Finder (bridge -> backend -> getInfoFinderSelection.scpt) :
+    # refermer la fenêtre trop tôt la fermerait avant la fin de cet
+    # aller-retour, qui lirait alors une autre fenêtre Finder déjà ouverte.
     wait_for_suffix('btn-oui')
     with_finder_selection(file_path) do
       click_suffix('btn-oui')
+      wait_for_suffix('btn-mid')
     end
 
     # → param 'app' : "Autre application…" (btn-mid) plutôt qu'un choix de
     #   la liste -> TextFieldDialog classique
-    wait_for_suffix('btn-mid')
     click_suffix('btn-mid')
     wait_for('__app__')
     set_value('__app__', APP_NAME)

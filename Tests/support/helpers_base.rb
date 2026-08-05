@@ -67,7 +67,7 @@ module BoardTest
     exit 2
   rescue => e
     puts "#{RED}✗ #{name}\n    #{e.message}#{RESET}"
-    puts e.backtrace.first(15).join("\n")
+    puts e.backtrace.first(15).join("\n") if ENV['BOARD_TEST_BACKTRACE']
     print_timing
     exit 1
   end
@@ -111,9 +111,25 @@ module BoardTest
 
   # Glisser-déposer par coordonnées écran (mouse down/move/up réels) — pour
   # le drag-and-drop HTML5 natif, qu'un simple click() ne peut pas
-  # déclencher. Voir Tests/support/drag.js. Non vérifié en conditions
-  # réelles (CoreGraphics/CGEvent jamais testé en live dans cette session).
+  # déclencher. Voir Tests/support/drag.js.
+  #
+  # Les coordonnées cliquées viennent de l'accessibilité (position/taille
+  # réelles à l'écran) : un élément existe dans le DOM/AX même caché par le
+  # scroll d'un panneau, donc "trouvé" par wait_for sans être cliquable à
+  # ses coordonnées. On le fait défiler dans la vue avant de calculer quoi
+  # que ce soit (scrollIntoView, via le canal JS direct).
   def drag(from_dom_id, to_dom_id)
+    if respond_to?(:bridge_eval, true)
+      [from_dom_id, to_dom_id].each do |id|
+        bridge_eval(<<~JS)
+          (function(){
+            var el = document.getElementById(#{id.to_json});
+            if (el) el.scrollIntoView({block:'center', inline:'center'});
+            return '';
+          })()
+        JS
+      end
+    end
     t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     out = IO.popen(['osascript', '-l', 'JavaScript', DRAG_SCRIPT, from_dom_id, to_dom_id], err: [:child, :out], &:read)
     record_osascript_call(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)

@@ -47,14 +47,12 @@ def run_test
 
   click_suffix('btn-oui')
 
+  expected_msg = /Position\/taille copiées dans le presse-papier|Application introuvable ou fermée|Aucune fenêtre ouverte/
   wait_until(10, desc: -> { "#message = #{(get_text('message') rescue '(erreur)').inspect}" }) do
-    (get_text('message') rescue '') != 'Message footer'
+    (get_text('message') rescue '') =~ expected_msg
   end
   msg = get_text('message').to_s
-  raise "message inattendu après validation de l'outil : #{msg.inspect}" unless
-    msg =~ /Position\/taille copiées dans le presse-papier/ ||
-    msg =~ /Application introuvable ou fermée/ ||
-    msg =~ /Aucune fenêtre ouverte/
+  raise "message inattendu après validation de l'outil : #{msg.inspect}" unless msg =~ expected_msg
 end
 
 board_test("panneau 'Outils' : ouverture/fermeture, 1er outil (position/taille de fenêtre) activé") { run_test }

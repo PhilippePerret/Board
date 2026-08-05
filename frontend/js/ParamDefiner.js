@@ -89,6 +89,24 @@ class ParamDefiner {
   }
 
   /**
+   * Obtenir la liste des issues du label donné
+   * 
+   */
+  static issuesListOfTypeForSelect(data, callback, retour){
+    console.log("->issuesListOfTypeForSelect/ data/callback/retour", data, callback, retour)
+    raise("juste pour voir")
+    if (retour) {
+
+    } else {
+      // Il faut relever les issue
+      server.send({
+          action:'git-ope'
+        , git_ope: 'get_issues'
+        , project_path: data?.project_path ?? Project.current.path
+      })
+    }
+  }
+  /**
    * Obtenir les labels github du projet
    * 
    * Pour +data+ et +callback+, cf. ci-dessus

@@ -4,14 +4,21 @@
 // (click()) ne déclenche pas cette séquence d'évènements.
 //
 // Usage : osascript -l JavaScript Tests/support/drag.js <fromDomId> <toDomId>
-//
-// AVERTISSEMENT : script non vérifié en conditions réelles (API
-// CoreGraphics/CGEvent, jamais lancées dans cette session). À tester.
 
 ObjC.import('CoreGraphics')
 
 const appName = 'Board'
 const defaultTimeout = 5
+
+// ObjC.import n'expose que les classes/méthodes Objective-C, pas les
+// constantes C (enums de CGEventTypes.h) — $.kCGHIDEventTap etc. valent
+// undefined, donc CGEventPost ne postait rien, sans lever d'erreur.
+// Valeurs numériques littérales à la place (documentées, stables).
+const kCGHIDEventTap        = 0
+const kCGEventLeftMouseDown = 1
+const kCGEventLeftMouseUp   = 2
+const kCGEventLeftMouseDragged = 6
+const kCGMouseButtonLeft    = 0
 
 function axChildren(elem) {
   try { return elem.uiElements() } catch (e) { return [] }
@@ -60,30 +67,36 @@ function centerOf(elem) {
 
 function postMouseEvent(type, point, button) {
   const event = $.CGEventCreateMouseEvent(null, type, point, button)
-  $.CGEventPost($.kCGHIDEventTap, event)
+  $.CGEventPost(kCGHIDEventTap, event)
 }
 
 function run(argv) {
   if (argv.length < 2) {
     throw new Error('Usage: drag.js <fromDomId> <toDomId>')
   }
+  // Sans ça, les clics simulés (coordonnées écran) atterrissent sur
+  // n'importe quelle fenêtre réellement visible à cet endroit (ex. VSCode),
+  // pas forcément Board.
+  Application(appName).activate()
+  pauseBriefly(0.2)
+
   const fromEl = waitForElement(argv[0], defaultTimeout)
   const toEl = waitForElement(argv[1], defaultTimeout)
   const from = centerOf(fromEl)
   const to = centerOf(toEl)
 
   const steps = 12
-  postMouseEvent($.kCGEventLeftMouseDown, from, $.kCGMouseButtonLeft)
+  postMouseEvent(kCGEventLeftMouseDown, from, kCGMouseButtonLeft)
   pauseBriefly(0.05)
   for (let i = 1; i <= steps; i++) {
     const t = i / steps
     const p = { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t }
-    postMouseEvent($.kCGEventLeftMouseDragged, p, $.kCGMouseButtonLeft)
+    postMouseEvent(kCGEventLeftMouseDragged, p, kCGMouseButtonLeft)
     pauseBriefly(0.03)
   }
   // Laisser le temps au dragover d'être traité avant le drop.
   pauseBriefly(0.1)
-  postMouseEvent($.kCGEventLeftMouseUp, to, $.kCGMouseButtonLeft)
+  postMouseEvent(kCGEventLeftMouseUp, to, kCGMouseButtonLeft)
 
   return 'ok'
 }

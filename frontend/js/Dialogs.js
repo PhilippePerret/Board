@@ -350,7 +350,7 @@ class ConfigDialog extends Dialog {
       const valu = DCreate('SPAN', {id: `${prefixId}-value`, text: dispValue, class: 'config-data-value'})
       listen(valu, 'click', (ev) => {
         const callback = (values) => {
-          console.log("values reçues", values)
+          // console.log("values reçues", values)
           if (values != null) {
             // On applique la modification à la liste des données
             dprop.value = values[0].value // si réédité, pour valeur par défaut

@@ -1,40 +1,43 @@
 == BUGS ==
 
-- BUG #4 Gérer le cas où on utilise gh sans git init dans le dossier
+cf. gh
 
-
-- Les rappels/alertes programmés ne fonctionnent pas
-  Pourtant : 
-    - ils sont bien registrés
-    - Reminder est bien runing
-
-- les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
-  essayer en essayant de modifier une tâche sans en avoir sélectionné une
-
-- Problème d'icône dans la documentation : fonctionne hors app, pas avec l'app
+- Test à faire : sélection d'un projet → relance → projet sélectionné → le retirer → relancer → pas de bug, et last_project de App a été vidé
 
 == Todo En cours
 
-- git issue create (tout type)
+- Obtenir la liste des "todo" provenant de github (gh)
+  - choisir le label (même mécanisme que pour issue create)
+  - commande gh issue list -l <label> envoyé au projet
+  - remontée et formatage du résultat.
 
 == Todo list ==
 
-- pour essayer : git push
-  - on choisit les fichiers dans la list des status (coche)
-  - on donne le message 
-  - ça push
-- service git pour ajouter un truc au choix select → texte → description
-  le sélection propose : erreur, amélioration, warning, feature (voir les autres)
-- surveiller des mots ? (rêve que j'ai fait : :error quand on est en train d'écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error, 
-- pouvoir mettre une note gh (github) du type voulu
+- faire passer tous les tests
+- ajouter les tests pour toutes les fonctionnalités
+- liste de… (gh)
+- github : créer les labels standard (liste de labels à cocher — option 'select_all' dans le paramètre, avec multi: true)
+- un type 'services' qui permet de définir la liste des services à afficher dans les panneaux en fonction du projet. Certains utilisateurs, par exemple, ne se serviront jamais de git.
+- service git pour ouvrir Github distant
   
-== Idées d'autres services ==
+== Réflexions ==
 
-- git init (tout le flux, juste en donnant le nom du repo sur Github)
-- Lancer un serveur de dev (`npm run dev`, `rails server`...) — terminal dédié, pas juste "jouer un script"
-- Ouvrir le repo Git (statut, ou `git pull`/`push`)
-- Ouvrir l'URL locale du projet dans le navigateur
+=== Réflexion sur la liste des isssues ===
+
+Ça concerne le service 'git-issue-list'. Il me semble que c'est un service un peu différent dans le sens où il doit accomplir une action avant et après.
+Non, en fait, c'est juste le select qui va appeler une fonction pour établir la liste des issues à remonter.
+Sauf quand même qu'il y a encore une opération derrière
+
+== Idées d'autres services ==
 
 == Autres versions ==
 
-- pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.
+- surveiller des mots ? (rêve que j'ai fait : :error quand on est en train d'écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error, 
+  Mais comment les taper ? une console qui permetttrait par exemple de faire ':error Ceci est une grave erreur' qui serait aussi transformé en service gh-create-issue de type 'bug' ?
+  Commandes possible :
+    :open     Ouvrir le projet
+    :versionne minor  Versionner le fichier désigné
+    :<custom> associé à service 
+    :run Actualiser le code       Joue le service appelé "Actualiser le code" dans le projet
+    :run item claude            Fonctionne en toute casse
+    Mais est-ce que c'est vraiment intéressant alors que prendre la souris serait plus rapide ?

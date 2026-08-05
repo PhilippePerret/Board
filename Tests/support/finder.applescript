@@ -46,7 +46,16 @@ on run argv
 
 	if theAction is "select" then
 		tell application "Finder"
-			reveal (POSIX file (item 2 of argv) as alias)
+			-- "reveal" seul peut reutiliser une fenetre Finder deja ouverte
+			-- (une des tiennes) au lieu d'en garantir une nouvelle : la
+			-- selection lue ensuite par le backend peut alors etre celle de
+			-- CETTE fenetre-la, pas celle du fichier vise. On force donc une
+			-- fenetre NEUVE, dediee, sur le dossier parent, puis on y selectionne
+			-- le fichier.
+			activate
+			set targetItem to (POSIX file (item 2 of argv) as alias)
+			make new Finder window to (container of targetItem)
+			select targetItem
 			return name of front window
 		end tell
 

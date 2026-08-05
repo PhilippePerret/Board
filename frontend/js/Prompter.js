@@ -195,6 +195,13 @@ class Prompter {
           this.promptSelect(Object.assign({}, spec, {values}), callback)
         }, callback)
       case 'function':
+        // REFLEXION 
+        // Le problème ici, c'est que la fonction peut avoir besoin de bien d'autres choses
+        // que ce que lui donne la spec. Le plus simple serait qu'on accumule dans +spec+
+        // le résultat des paramètres précédents, mais est-ce seulement possibles ?
+        // Sinon, je ne vois pas comment faire, si ce n'est en créant de dangereux effets
+        // de bord… L'autre solution, peut-être encore plus simple, c'est que +spec+ contienne
+        // service, le service en cours de définition
         return spec.values(spec, this._getSelectValuesFromFunction.bind(this, spec, callback))
     }
     let values

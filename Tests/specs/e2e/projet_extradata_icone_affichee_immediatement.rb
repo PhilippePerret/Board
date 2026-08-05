@@ -33,6 +33,13 @@ def run_test
 
   with_finder_selection(icon_path) do
     click_suffix_last('btn-oui')
+    # Le clic ne fait que déclencher l'aller-retour ASYNCHRONE de lecture de
+    # la sélection Finder : refermer la fenêtre trop tôt la fermerait avant
+    # la fin de cet aller-retour, qui lirait alors une autre fenêtre Finder
+    # déjà ouverte.
+    wait_until(desc: -> { "valeur du champ icône = #{(get_text("#{panel_id}-icon-value") rescue '(erreur)').inspect}" }) do
+      (get_text("#{panel_id}-icon-value") rescue nil) == 'icon.svg'
+    end
   end
 
   # - valider le ConfigDialog (Save)

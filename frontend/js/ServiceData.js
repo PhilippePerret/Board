@@ -46,14 +46,19 @@
  *  bypassExec
  *    Fonction à exécuter avant d'exécuter le service (par exemple un
  *    message d'alerte.)
- *    La fonction reçoit le callback qu'elle doit rappeler.
+ *    La fonction reçoit le callback qu'elle doit rappeler pour
+ *    poursuivre.
  * 
- *  beforeExec
+ *  beforeExec          (dict) chaque param <id param>: <valeur param>
  *    Peut traiter les paramètres avant l'exécution, pour mettre la 
  *    valeur sous une toute autre forme. 
  *    Voir par exemple l'utilisation pour create-git-issue
  * 
- */
+ *  afterRunWithSuccess   (projet, retour)
+ *    Fonction appelée après avoir exécuté le service avec succès.
+ * 
+
+*/
 
 
 /*******************************************************************/
@@ -128,8 +133,63 @@ const COMMON_SERVICES_DATA = [
       , {id: 'issue_title', type: 'string', q: getMsg('Message:')}
       , {id: 'issue_body' , type: 'text'  , q: getMsg('gh-description:')}
     ]
+    , afterDefinedParams: (params) => {
+      // On passe juste par ici pour actualiser la liste des labels (ordre)
+      var labels = Project.current.get('github_labels').split(',')
+      const label = params[1]
+      labels = labels.filter(e => e != label)
+      labels.unshift(label)
+      Project.current.set('github_labels', labels.join(','), true)
+      return params
+    }
     , beforeExec: (dict) => {
         return `cd ${shellEscape(dict.path)} && gh issue create -l ${shellEscape(dict.issue_label)} -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
+      }
+  },
+
+  {
+      id: 'git-issue-list'
+    , name: getMsg('git-issue-list') + aide('gh-issue-list')
+    , group: 'Git'
+    , script: 'ExecCommand.sh'
+    , params: [
+        {id: 'path', type: 'project'}
+      ]
+    , dynParams: [
+          {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
+        , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), values: 
+          [['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]}
+        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner)}
+        , {id: 'qh_message', type: 'string', q: getMsg('gh-message-operation')}
+      ]
+    , afterRunWithSuccess(projet, retour){
+        console.log("Après exécution / projet / retour ", projet, retour)
+      }
+    , beforeExec(dict){
+        const option = (function(ope){
+          switch(ope){
+            case 'close': return 'comment'
+            case 'lock':  return 'reason'
+            case 'pin': case 'unpin': return null
+            default:      return 'body'
+          }
+        })(dict.gh_operation)
+        const message = shellEscape(dict.gh_message)
+        const issues  = dict.issue_list.join(' ')
+        // On doit faire la commande 
+        const cmd = `
+          if [ -n "${option}" ]; then
+            for n in ${issues}; do
+              gh issue ${dict.gh_operation} "$n" --${option} ${message};
+            done;
+          else
+            for n in ${issues}; do
+              gh issue ${dict.gh_operation} "$n";
+            done;
+          fi
+        `.replace(/\n\s+/g, ' ')
+        console.log("Commande en une ligne", cmd)
+        return cmd
       }
   },
 
@@ -210,7 +270,7 @@ const COMMON_SERVICES_DATA = [
         {id: 'docu-main-file-html', type: 'project', if_undefined: {q: getMsg('select-doc-main-final-file'), type: 'path'}}
       ]
     , afterDefinedParams: (params) => {
-        if (!params[0].startsWith('file://')) params[0] = `file://${params[0]}`
+        if (!params[0][0].startsWith('file://')) params[0][0] = `file://${params[0][0]}`
         return params
     }
   },

@@ -210,6 +210,20 @@ module BoardTest
     JS
   end
 
+  # Texte affiché dans la popup d'erreur (ErrorsDialog, Dialogs.js) — id
+  # auto-généré ('panel-N'), pas de sélecteur stable par id : convention du
+  # projet, tous les messages d'erreur passent désormais par cette popup,
+  # plus par #message (footer).
+  def errors_dialog_text
+    bridge_eval(<<~JS)
+      (function(){
+        var els=document.querySelectorAll('.panel .message');
+        if(els.length===0) return '';
+        return els[els.length-1].textContent;
+      })()
+    JS
+  end
+
   def get_text_prefix(prefix)
     bridge_eval(<<~JS)
       (function(){

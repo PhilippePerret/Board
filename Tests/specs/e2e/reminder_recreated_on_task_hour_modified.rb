@@ -25,15 +25,21 @@ def run_test
     card_id = "project-#{project_id}"
     wait_for(card_id)
 
-    # → le Reminder est programmé pour l'ancienne heure au chargement
-    before = bridge_eval(<<~JS)
-      (function(){
-        var list = (Reminder.remindedTasks && Reminder.remindedTasks[#{task_id.to_json}]) || [];
-        return JSON.stringify(list.map(function(r){ return r.time.getTime(); }));
-      })()
-    JS
-    old_times = JSON.parse(before)
-    raise "1 reminder attendu (ancienne heure) au chargement, obtenu #{old_times.inspect}" unless old_times.length == 1
+    # → le Reminder est programmé pour l'ancienne heure au chargement.
+    #   Chargement todoist asynchrone après l'apparition de la carte : on
+    #   attend, pas de vérification instantanée.
+    reminder_times = -> {
+      JSON.parse(bridge_eval(<<~JS))
+        (function(){
+          var list = (Reminder.remindedTasks && Reminder.remindedTasks[#{task_id.to_json}]) || [];
+          return JSON.stringify(list.map(function(r){ return r.time.getTime(); }));
+        })()
+      JS
+    }
+    old_times = nil
+    wait_until(desc: -> { "reminders pour la tâche = #{(old_times = reminder_times.call).inspect}" }) do
+      (old_times = reminder_times.call).length == 1
+    end
 
     # → simule la modification de la tâche : today_tasks la renvoie avec la nouvelle heure
     bridge_eval(<<~JS)

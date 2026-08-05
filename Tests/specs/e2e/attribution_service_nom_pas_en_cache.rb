@@ -14,16 +14,17 @@
 # irrémédiablement le nom par défaut de CE service abstrait pour tout le
 # reste de la session, y compris son prochain glissé sur un AUTRE projet.
 #
-# Utilise 'open-terminal-at-folder' (service commun, groupe 'Consoles') —
-# même mécanisme que le "iTerm au dossier" du .adoc, sans dépendre d'iTerm.
+# Utilise 'open-folder-project' (service commun, groupe 'Outils', premier
+# bouton du panneau — 'open-terminal-at-folder' est actuellement masqué par
+# le scroll du panneau, donc jamais cliquable par coordonnées écran réelles).
 
 require_relative '../../support/helpers'
 
 include BoardTest
 
-SERVICE_DOM_ID = 'open-terminal-at-folder'
-DEFAULT_NAME   = 'Terminal au dossier' # frontend/js/ServiceData.js
-CUSTOM_NAME_A  = 'Terminal Claude'
+SERVICE_DOM_ID = 'open-folder-project'
+DEFAULT_NAME   = 'Ouvrir le dossier du projet' # frontend/js/MES_MESSAGES.js
+CUSTOM_NAME_A  = 'Dossier Claude'
 
 def run_test
   id_a = nil
@@ -48,8 +49,23 @@ def run_test
       set_value('__service-name__', CUSTOM_NAME_A)
       click_suffix('btn-oui')
 
-      wait_for('__code__')
-      set_value('__code__', 'ls')
+      # → dialogue de positionnement (finder-window) : vraie fenêtre Finder
+      #   au premier plan, dont on lit le bounds (n'importe quel dossier
+      #   convient, seule la géométrie de la fenêtre compte ici).
+      wait_for_suffix('btn-oui')
+      finder_activate
+      sleep 0.3
+      expected_window_name = finder_open_window(Dir.home)
+      sleep 0.3
+      finder_set_front_window_bounds(100, 100, 400, 300)
+      sleep 3
+      sleep 0.3
+      click_suffix('btn-oui')
+
+      # → dialogue de taille de la sidebar (valeur par défaut acceptée)
+      wait_for('__sidebar__')
+      finder_close_front_window_if_named(expected_window_name)
+      sleep 0.3
       click_suffix('btn-oui')
 
       # → le service doit être attaché au projet A avec le nom personnalisé
