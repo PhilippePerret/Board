@@ -27,6 +27,40 @@ class << self
     JSON.parse(res)
   end
 
+  def update_labels(project_path:, labels:)
+    # Première étape : récupérer les labels existants
+    cmd = <<~BASH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    gh label list --json name,color
+    BASH
+    table = JSON.parse(`#{cmd}`)
+    actual_labels = table.map { |h| h['name'] }
+    colors = table.map { |h| h['color'] }
+
+    # Deuxième étape : détruire les labels existants
+    cmd = <<~BASH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    for label in "#{actual_labels.join('" "')}" ; do
+      gh label delete "$label"
+    BASH
+    res = `#{cmd}`
+
+    # Deuxième étape : créer les nouveaux labels
+    labels = labels.split(',')
+    requests = labels.map do |label|
+      "gh label create \"#{label}\" --color #{colors.shift || '7777777'}" 
+    end
+    cmd = <<~BASH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    #{requests.join("\n")}
+    BASH
+    res = `#{cmd}`
+    return res
+  end
+
   def commit(project_path:, files:, message:)
     files = JSON.parse(files)
     cmd = <<~BASH

@@ -71,8 +71,9 @@ const COUNTDOWN_PROPERTIES = {
 }
 
 const GITHUB_LABELS = [
-  'todo'
-]
+  'todo', 'bug', 'improve', 'amélioration', 'documentation', 'docu', 'aide', 'help', 'feature', 'fonctionnalité', 'help wanted', 'erreur', 'error'
+] //.map(n => [n, n])
+
 /*******************************************************************/
 /**                     SERVICES COMMUNS                          **/
 /*******************************************************************/
@@ -210,9 +211,18 @@ const COMMON_SERVICES_DATA = [
       id: 'git-install-labels'
     , name: getMsg('git-installing-labels')
     , group: 'Git'
+    , script: 'GitOpes.rb'
     , params: [
+          {id: 'git_ope', type: 'raw', value: 'update_labels'}
+        , {id: 'path', type: 'project'}
+      ]
+    , dynParams: [
         {id: 'labels_list', type: 'select', multi: true, values: GITHUB_LABELS}
       ]
+    , afterDefinedParams(params){
+        params[2][0] = params[2][0].join(',')
+        return params
+      }
   },
 
   // Git commit push

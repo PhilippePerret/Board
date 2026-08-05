@@ -37,7 +37,7 @@ BOARD_DIR="$HOME/Library/Application Support/Board"
 BOARD_WAS_RUNNING=0
 pgrep -x Board >/dev/null 2>&1 && BOARD_WAS_RUNNING=1
 
-# --no-overlay : saute la fenêtre plein écran "SET TESTS BOARD EN COURS…"
+# --no-overlay : saute la fenêtre plein écran "TESTS EN COURS…"
 # (utile pour observer/piloter Board pendant qu'une spec tourne).
 NO_OVERLAY=0
 for a in "$@"; do
@@ -88,7 +88,7 @@ if [ "$NO_OVERLAY" -eq 0 ]; then
   "$OVERLAY_BIN" < "$OVERLAY_FIFO" &
   OVERLAY_PID=$!
   exec 3>"$OVERLAY_FIFO"
-  echo "SET TESTS BOARD EN COURS…" >&3
+  echo "SET TESTS EN COURS…" >&3
 fi
 
 BACKUPS_ROOT="$MAIN_TESTS_DIR/.board-backups"

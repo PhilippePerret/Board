@@ -17,13 +17,14 @@ res = nil
 case ope
 when 'commit'
   res = Git.commit(project_path: pat, files: ARGV[2], message: ARGV[3])
+when 'update_labels'
+  res = Git.update_labels(project_path: pat, labels: ARGV[2])
 else
   data[:error] = "Opération inconnue : #{ope.inspect}"
 end
 
 data[:ope]      = ope
 data[:path]     = pat
-data[:message]  = "je suis passé par GitOpes.rb pour jouer #{ope.inspect} sur le projet #{pat.inspect}. Résultat : #{res.inspect}"
 data[:res]      = res
 
 puts data.to_json
