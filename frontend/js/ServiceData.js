@@ -59,6 +59,13 @@
  * 
 
 */
+const COUNTDOWN_PROPERTIES = {
+    front: Clock.instance.toggle.bind(Clock.instance)
+  , params: [
+        {id: 'session-duration' , type: 'project', if_undefined: {id: 'session-duration', q: getMsg('work-session-duration'), type: 'integer', default: 120}}
+      , {id: 'work-duration'    , type: 'project', if_undefined: {id: 'work-duration', q: getMsg('work-section-duration'), type: 'integer', useLastAsDefault: true}}
+    ]
+}
 
 
 /*******************************************************************/
@@ -84,16 +91,11 @@ const COMMON_SERVICES_DATA = [
     }
   },
   
-  {
+  Object.assign({
       id: 'work-clock'
     , name: getMsg('start-clock')
     , group: getMsg('group-tools')
-    , front: Clock.instance.toggle.bind(Clock.instance)
-    , params: [
-          {id: 'session-duration', q: getMsg('work-session-duration'), type: 'integer', default: 120}
-        , {id: 'work-duration', q: getMsg('work-section-duration'), type: 'integer', useLastAsDefault: true}
-      ]
-  },
+  }, COUNTDOWN_PROPERTIES), 
 
   // Git issue bug
   {
@@ -134,12 +136,7 @@ const COMMON_SERVICES_DATA = [
       , {id: 'issue_body' , type: 'text'  , q: getMsg('gh-description:')}
     ]
     , afterDefinedParams: (params) => {
-      // On passe juste par ici pour actualiser la liste des labels (ordre)
-      var labels = Project.current.get('github_labels').split(',')
-      const label = params[1]
-      labels = labels.filter(e => e != label)
-      labels.unshift(label)
-      Project.current.set('github_labels', labels.join(','), true)
+        Project.current.updateLabelList(params[1][0])
       return params
     }
     , beforeExec: (dict) => {
@@ -157,11 +154,15 @@ const COMMON_SERVICES_DATA = [
       ]
     , dynParams: [
           {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
+        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner)}
         , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), values: 
           [['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]}
-        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner)}
-        , {id: 'qh_message', type: 'string', q: getMsg('gh-message-operation')}
+        , {id: 'gh_message', type: 'string', q: getMsg('gh-message-operation')}
       ]
+    , afterDefinedParams: (params) => {
+      Project.current.updateLabelList(params[1][0])
+      return params
+    }
     , afterRunWithSuccess(projet, retour){
         console.log("Après exécution / projet / retour ", projet, retour)
       }
@@ -174,22 +175,26 @@ const COMMON_SERVICES_DATA = [
             default:      return 'body'
           }
         })(dict.gh_operation)
-        const message = shellEscape(dict.gh_message)
         const issues  = dict.issue_list.join(' ')
         // On doit faire la commande 
-        const cmd = `
-          if [ -n "${option}" ]; then
+        var command
+        if (option) {
+          const message = shellEscape(dict.gh_message)
+          command = `
             for n in ${issues}; do
               gh issue ${dict.gh_operation} "$n" --${option} ${message};
             done;
-          else
+          `
+        } else {
+          command = `
             for n in ${issues}; do
               gh issue ${dict.gh_operation} "$n";
             done;
-          fi
-        `.replace(/\n\s+/g, ' ')
-        console.log("Commande en une ligne", cmd)
-        return cmd
+          `
+        }
+        command = command.replace(/\n\s+/g, ' ').trim()
+        console.log("COMMANDE EN UNE LIGNE", command)
+        return command
       }
   },
 
@@ -399,14 +404,13 @@ const CUSTOM_SERVICES_DATA = [
     /* end::exemple-dyn-params[] */
   },
 
-  {
+  // Minuteur pour un projet
+  Object.assign({
       id: 'run-chronometre'
     , name: getMsg('countdown-timer')
     , group: getMsg('lifecycle')
-    , params: [
-        {id: 'save-time', q: getMsg('ask-save-work-time'), type: 'boolean', required: true}     
-      ]
-  },
+
+  }, COUNTDOWN_PROPERTIES),
 
   {
       id: 'run-script-service'

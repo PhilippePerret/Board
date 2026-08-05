@@ -71,6 +71,8 @@ button.svg32 {
 
 .custom-select-list {
   border: 1px solid rgb(208, 208, 208);
+  min-height: 14em;
+  padding: 8px 0;
 }
 
 .custom-select-option {

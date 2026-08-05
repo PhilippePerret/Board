@@ -27,7 +27,7 @@ class Prompter {
    * Point d'entrée unique pour les clients.
    */
   static prompt(spec, callback){
-    const method = `prompt${kebabToPascalCase(spec.type)}`
+    const method = `prompt${kebabToPascalCase(spec.type)}` // p.e. promptSelect
     'function' == typeof this[method] || raise(`[Systemic] Prompter.${method} doit être défini.`)
     this[method](spec, callback)
   }

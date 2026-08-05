@@ -462,6 +462,21 @@ class Project {
       this.save()
     }
   }
+
+  /**
+   * Pour actualiser et/ou enregistrer la liste des labels
+   * 
+   * @param label [String] Le label choisi
+   */
+  updateLabelList(label){
+    // On passe juste par ici pour actualiser la liste des labels (ordre)
+    var labels = this.get('github_labels')?.split(',') || []
+    labels = labels.filter(e => e != label)
+    labels.unshift(label)
+    console.log("-> updateLabelList Nouvelle liste", {label: label, labels: labels})
+    this.set('github_labels', labels.join(','), true)
+  }
+
   /**
    * 
    * === MÉTHODES D'AJOUT DES SERVICES ===

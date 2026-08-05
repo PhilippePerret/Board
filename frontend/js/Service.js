@@ -105,6 +105,8 @@ class Service {
     this.isCommonService = (this.stype === 'common')
     this.isCustomService = (this.stype === 'custom')
     this.isScriptService = (this.id == 'run-script-service')
+    // Pour essayer, j'ajoute le service dans tous les paramètres
+    this.params.forEach(param => Object.assign(param, {service: this}))
   }
 
 

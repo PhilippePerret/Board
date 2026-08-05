@@ -192,6 +192,12 @@ class Reminder extends ExtendedObject {
   }
 
   // Définir comme une tâche
+  //
+  // Note : "Démarrée" et "Supprimer" appellent volontairement la même
+  // action (Reminder.remove) — il n'y a pour l'instant rien d'autre à
+  // faire que détruire le rappel, et proposer les deux libellés évite à
+  // l'utilisateur de devoir réfléchir selon la raison pour laquelle il
+  // veut s'en débarrasser.
   setAsTask(data){
     this.buttons = [
         {name: getMsg('remind-started'), onclick: 'Reminder.remove'}

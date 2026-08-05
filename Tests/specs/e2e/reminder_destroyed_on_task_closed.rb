@@ -6,8 +6,7 @@
 #
 # Pilotage direct de Project#updateTasksAfterMarkAndCreate via bridge_eval
 # (plutôt que le clic UI complet) : isole le comportement testé ici (cycle
-# de vie du Reminder) du flux de clic todoist par ailleurs en cours de
-# réparation (mismatch de nom de méthode entre Project.js et Todoist.js).
+# de vie du Reminder) du flux de clic todoist complet.
 
 require_relative '../../support/helpers'
 require_relative '../../support/todoist_e2e_stub'

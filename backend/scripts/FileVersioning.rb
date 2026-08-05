@@ -62,12 +62,12 @@ begin
   end # end class MyFile
 
 
-  FILEPATH        = ARGV[0] 
-  FILENAME        = ARGV[1]
+  FILEPATH        = ARGV[0]
+  FILENAME        = File.basename(FILEPATH)
   FEXTNAME        = File.extname(FILENAME)
-  afold           = ARGV[2]
+  afold           = ARGV[1]
   ARCHIVE_FOLDER  = afold == "nil" ? nil : afold
-  VERSIONTERM     = ARGV[4]
+  VERSIONTERM     = ARGV[2]
 
 
 

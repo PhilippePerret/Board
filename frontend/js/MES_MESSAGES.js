@@ -183,15 +183,15 @@ const MESSAGES = {
     , 'git-committing': "Commiter sur Github"
     , 'git-message-commit': 'Message de commit pour ces fichiers'
     , 'git-commit-message-title': "Message du commit"
-    , 'gh-issues-create': "Créer une issue de type…"
-    , 'git-issue-list': "Liste des issues de type…"
+    , 'gh-issues-create': "Nouvelle issue de type…"
+    , 'git-issue-list': "Marquer / lire issues de type…"
     , 'github-label': "Label Github :"
     , 'Message:': "Message :"
     , 'gh-description:': "Description plus précise :"
     , 'gh-operation': "Opération gh à exécuter"
     , 'gh-message-operation': "Message à associer à l'opération :"
     , 'action-on-checked-issues': "Cochez les issues à traiter et choisissez l'action."
-    , 'gh-close': "Fermer"
+    , 'gh-close': "Fermer / supprimer"
     , 'gh-comment': "Commenter"
     , 'gh-pin': 'Épingler'
     , 'gh-unpin': 'Désépingler'

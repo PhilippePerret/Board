@@ -27,31 +27,30 @@ def exec_script(script_name, params = "")
   end
   pid = nil
   begin
+    # Normalisé en tableau une fois pour toutes, AVANT tout traitement —
+    # chaque élément deviendra un argument de process séparé (IO.popen en
+    # forme tableau ci-dessous), jamais réinterprété par un shell
+    # intermédiaire. Un script comme ExecCommand.sh (services 'git-issue-
+    # list', 'exec-bash-code'…) reçoit ainsi son script shell tel quel, en
+    # UN SEUL argument, à charge pour son propre `eval` interne de
+    # l'interpréter — jamais une seconde fois par un shell extérieur avant
+    # (cf. bug 2026-08-05 : "$n" d'une boucle for shell prématurément
+    # expansé — vide — par ce shell extérieur, avant d'atteindre la boucle
+    # elle-même).
+    params = case params
+    when String then params.empty? ? [] : [params]
+    when Array then params.dup
+    else []
+    end
+
     # Certains script AS ont besoin de la librairie (à l'avenir : tous)
     if OSASCRIPT_WITH_LIB.key?(script_name)
-      params = case params
-      when String then [params]
-      when Array then params
-      else []
-      end
       folder = File.expand_path(File.join(__dir__, '..', 'scripts'))
       params.unshift File.join(folder, 'lib', 'Lib.scpt')
-      # return {params: params}
-    else
-      # return {non: "#{script_name} n'appartient pas à #{OSASCRIPT_WITH_LIB.inspect}"}
     end
-    # On met les paramètres en string
-    params = params.map {|s| s.inspect}.join(' ') if params.is_a?(Array)
-    # if params.is_a?(Array)
-    #   params = params.map do |param|
-    #     case param
-    #     when Array  then param.to_json
-    #     when Hash   then param.to_json
-    #     else param # String, Integer...
-    #     end
-    #   end
-    # end
-    cmd = "#{COMMAND_PER_EXT[extname]} scripts/#{script_name} #{params}".strip
+
+    argv = [COMMAND_PER_EXT[extname], "scripts/#{script_name}", *params.map { |p| p.nil? ? '' : p.to_s }]
+    cmd = argv.join(' ') # pour affichage/debug (RETOUR.command) seulement
     RETOUR.command = cmd
     res = nil
     # Timeout dur : un script (ou une commande qu'il lance, ex. osascript
@@ -60,7 +59,7 @@ def exec_script(script_name, params = "")
     # gelant toute l'app (le bridge est synchrone côté Swift).
     status = nil
     Timeout.timeout(SCRIPT_TIMEOUT) do
-      IO.popen("#{cmd} 2>&1") do |io|
+      IO.popen(argv, err: [:child, :out]) do |io|
         pid = io.pid
         res = io.read
       end

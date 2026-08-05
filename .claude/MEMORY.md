@@ -1,10 +1,7 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-04](2026-08-04-Etat-fin-de-session.md) — 17 tests en échec (liste dans le fichier) + test git-init du 2026-08-03 toujours jamais revérifié
+- [État fin de session 2026-08-05](2026-08-05-Etat-fin-de-session.md) — `Validator.repeat`/`Validator.dateAfter` abandonnés, à reprendre (pas urgent)
 
-- [macOS icon padding](feedbacks/macos_icons.md) — squircle doit avoir marge transparente, ne pas remplir tout le canvas
-- [Pas d'écrasement des variantes](feedbacks/no_overwrite.md) — variante = nouveau fichier (-v2, -v3…), jamais écraser l'original
-- [Diagonal isométrique 8h→2h](feedbacks/isometric_diagonal.md) — décalage X+Y simultané sur chaque pile, pas seulement X
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
 - [Jamais de décision unilatérale](feedbacks/never_unilateral_decisions.md) — poser une question ouverte avant de choisir, pas présenter un plan tout fait
 - [Avis ≠ exécution](feedbacks/opinion_not_execution.md) — donner un avis demandé n'autorise pas à agir dessus, attendre un feu vert distinct
@@ -15,10 +12,7 @@
 - [Pas d'explications techniques](feedbacks/no_code_explanations.md) — user ne lit pas le code, format "<Ça> : normalement, corrigé."
 - [Décision vs détail d'implémentation](feedbacks/decision_vs_implementation_detail.md) — réponse de décision = uniquement ce qui pèse sur le choix, jamais mêlé aux détails mécaniques (ordre scripts, imports…)
 - [Dossier .claude = à moi](feedbacks/claude_dir_is_mine.md) — CLAUDE.md et tout .claude/ sous ma responsabilité, tenir à jour sans demander
-- [Aplatissement AX WebKit](feedbacks/project_webkit_ax_flattening.md) — un div wrapper sans texte direct peut disparaître de l'arbre AX, `role="group"` corrige
-- [no_raise : erreur traitée par l'appelant](feedbacks/no_raise_caller_owns_error.md) — ok:true forcé par no_raise est voulu, ne jamais centraliser le check .error dans xbridge.js
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
-- [git log ≠ preuve d'auteur](feedbacks/git_log_not_authorship_proof.md) — tous les commits partent de l'user sur Github, jamais utiliser git log/blame pour dire qui a écrit quoi
 - [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande
 - [État fin de session](feedbacks/daily_etat_fin_session.md) — seulement s'il reste du non résolu à reporter, sinon pas de fichier
 - [Refermer les fenêtres de debug](feedbacks/close_debug_windows.md) — refermer immédiatement après lecture, pas seulement en fin de tâche

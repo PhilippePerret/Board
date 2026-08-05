@@ -70,12 +70,22 @@ class ParamDefiner {
    * départ la liste des fichiers à commiter
    * 
    * @param data      [Object] Données du paramètre tel que défini dans ServiceData.js
+   * @param data.definers   
+   *    Instances ParamDefiner. Quand on utilise ces fonctions, en 
+   *    général (vraiment ?) c'est pour définir les dynParams. Chacun
+   *    dans l'ordre de ServiceData a son propre PDefinir, avec la
+   *    propriété :valeur qui contient la valeur dont on peut avoir
+   *    besoin pour un paramètres courant.
+   *                      
    * @param callback  [Function] 
    *    La méthode _getSelectValuesFromFunction qui doit recevoir les 
    *    valeurs pour poursuivre. C'est-à-dire, pour un select, la 
    *    liste des [value, title], mais ces données select doivent être
    *    mises dans {data: <données options>}
    *    
+   * @ATTENTION 
+   *    Ce callback attend une table (dict) où la clé :data contient
+   *    la valeur attendue. Ne pas l'envoyer brute.
    */
 
   // Pour +data+ et +callback+, cf. ci-dessus
@@ -92,18 +102,19 @@ class ParamDefiner {
    * Obtenir la liste des issues du label donné
    * 
    */
-  static issuesListOfTypeForSelect(data, callback, retour){
-    console.log("->issuesListOfTypeForSelect/ data/callback/retour", data, callback, retour)
-    raise("juste pour voir")
+  static issuesListOfTypeForSelect(spec, callback, retour){
     if (retour) {
-
+      console.log("->issuesListOfTypeForSelect/ data/callback/retour", spec, callback, retour)
+      const issuesForSelect = retour.data.map(issue => [issue.number, issue.title])
+      callback({data: issuesForSelect})
     } else {
       // Il faut relever les issue
       server.send({
           action:'git-ope'
         , git_ope: 'get_issues'
-        , project_path: data?.project_path ?? Project.current.path
-      })
+        , git_args: [spec.definers[0].value]
+        , project_path: spec?.project_path ?? Project.current.path
+      }, this.issuesListOfTypeForSelect.bind(this, spec, callback))
     }
   }
   /**
@@ -140,9 +151,12 @@ class ParamDefiner {
 
 
   constructor(paramLister, param){
+    // paramLister contient notamment definers qui contient chaque
+    // instance ParamDefinir, avec les valeurs attribuées
     this.paramLister = paramLister
     // console.log("param dans constructeur", param)
     this.param    = param
+    // console.log("this.param dans le constructor de ParamDefiner (et paramLister", param, paramLister)
     this.id       = param.id      ?? raise('Un identifiant est obligatoire.', param)
     this.name     = param.name    ?? param.id
     this.type     = param.type    ?? raise('Le type doit être défini.', param)
@@ -180,6 +194,7 @@ class ParamDefiner {
       , message:  this.message
       , default:  defaultValue
       , actual:   this.actual
+      , definers: this.paramLister.definers // Pour disposer partout des choix et valeurs
       , ifUndefined: this.param.if_undefined
     })
   }

@@ -1,0 +1,77 @@
+= Plan de tests — fonctionnalités sans couverture e2e
+
+Établi le 2026-08-05, à partir d'un audit croisé services (`ServiceData.js`) +
+inventaire fonctionnalités frontend (`frontend/js/*.js`) vs `Tests/specs/e2e/`.
+
+Exclu du périmètre (consigne explicite) : tout ce qui touche GitHub/git
+(`create-git-issue`, `gh-issue-create`, `git-issue-list`, `git-commit`,
+`git-init`) — en cours de travail actif, incomplet exprès.
+
+Le moteur interne "script-service" (`run-script-service`/`ScriptService.js`)
+reste couvert par `Tests/_tests_a_faire.adoc`, pas re-détaillé ici (vérifié
+à jour : 13/13 types d'étapes réels couverts en test).
+
+Statut de chaque entrée : `[ ]` pas fait, `[x]` fait, `[?]` en attente de
+réponse de Phil avant de s'y attaquer (cf. questions en fin de fichier).
+
+== A. Services sans aucun test e2e
+
+- 1. `[x]` `open-in-vscode` — ouverture du dossier projet dans VSCode (`Tests/specs/e2e/service_commun_ouverture_vscode.rb`)
+- 2. `[x]` `edit-projet` — édition directe du fichier YAML de la carte projet (`Tests/specs/e2e/service_commun_edit_projet.rb`)
+- 3. `[x]` `run-chronometre` — minuteur décompte, service personnalisé partageant le widget Clock avec `work-clock` (`Tests/specs/e2e/service_custom_run_chronometre.rb`)
+- 4. `[x]` `exec-bash-code` — exécution code bash/zsh arbitraire (`Tests/specs/e2e/service_custom_exec_bash_code.rb`)
+- 5. `[x]` `exec-js-code` — exécution JS arbitraire côté frontend (`Tests/specs/e2e/service_custom_exec_js_code.rb`)
+- 6. `[x]` `run-script` — exécution réelle (`Tests/specs/e2e/service_custom_run_script.rb`)
+
+== B. Dialogues (`Dialog.js`/`Dialogs.js`)
+
+- 7. `[x]` Touche `Escape` sur un dialogue → équivaut à `onNon` (`Tests/specs/e2e/dialog_escape_appelle_onnon.rb`)
+- 8. `[x]` `ConfigDialog` — troncature/ellipse d'une valeur trop longue (`path`/`url`) dans `onShow` (`Tests/specs/e2e/config_dialog_troncature_valeur_longue.rb`)
+- 9. `[x]` `ColorDialog` — mise à jour live des aperçus texte-sur-fond au changement de couleur (`Tests/specs/e2e/color_dialog_maj_live_apercus.rb`)
+- 11. `[?]` Mécanisme `dynParams` générique — test écrit (`Tests/specs/e2e/service_dynparams_file_versioning.rb`) mais BLOQUÉ : `backend/scripts/FileVersioning.rb` lit `FILENAME=ARGV[1]` et `VERSIONTERM=ARGV[4]`, alors que `ServiceData.js` (`file-versioning`) ne fournit que 3 valeurs aplaties (`path`, `archive-folder`, `nature-version` en dynParam) → ARGV[3]/[4] seraient `nil`, `VERSIONTERM` jamais transmis en pratique. Semble être un vrai bug préexistant (script/déclaration désynchronisés), pas un souci du test — je n'ai pas touché au code app sans demande. À trancher avec Phil avant de considérer ce test exploitable.
+
+== C. Service.js / ServiceExecuter.js
+
+- 12. `[x]` `service.onError` custom — échec de "Actualiser la documentation" → `ErrorsDialog` avec bouton "Corriger" (`Tests/specs/e2e/service_commun_update_documentation_erreur.rb`). LIMITE DÉCOUVERTE : `Service.runService` (le relance censé suivre un clic sur "Corriger") est un stub qui ne fait rien de fonctionnel — testé seulement l'affichage du dialogue/bouton, pas le relance réelle.
+- 13. `[x]` Nettoyage d'un service `transient` après exécution réussie (`Tests/specs/e2e/service_transient_nettoyage_cache.rb`)
+- 14. `[x]` Meta+clic sur un bouton de service **commun** du panneau (pas encore attaché à un projet) pour rééditer ses paramètres déjà en cache (`Tests/specs/e2e/service_commun_meta_clic_panneau_redefinition.rb`) — confirmé : contrairement à la redéfinition d'un service attaché (`Service#redefine`), celle-ci NE préreamplit PAS les valeurs actuelles (`Service#defineCommonServiceParameters` n'injecte pas `actual`)
+
+== D. SidePanel.js / Clock.js
+
+- 15. `[x]` Bouton de fermeture de l'horloge (croix `clock-close`) (`Tests/specs/e2e/clock_bouton_fermeture.rb`)
+- 16. `[x]` Glissé de déplacement du panneau horloge entier (`Tests/specs/e2e/clock_glisse_deplacement.rb`)
+- 17. `[x]` Glissé réel souris d'un `SidePanel` — id ajouté aux poignées (`SidePanel.js`, `${this.domId}-handle-left`/`-right`) (`Tests/specs/e2e/sidepanel_glisse_reel.rb`)
+
+== E. App.js
+
+- 18. `[x]` `remember-last-project` — re-sélection automatique du dernier projet actif au relancement de l'app (`Tests/specs/e2e/app_remember_last_project.rb`)
+- 19. `[x]` Bouton Debug (`#debug-button` → `D.toggle()`, panneau `Debug.js`) (`Tests/specs/e2e/app_bouton_debug.rb`)
+
+== F. Aide contextuelle
+
+- 20. `[x]` Boutons d'aide contextuels inline (`aide()`, ex. à côté du libellé "Jouer un script-service") (`Tests/specs/e2e/aide_contextuelle_inline.rb`)
+
+== G. Notifier.js / Reminder.js
+
+- 21. `[x]` Notification flottante par défaut — boutons "C'est noté" / "Rappelle-moi plus tard" (`Tests/specs/e2e/reminder_notification_flottante_defaut.rb`)
+- 22. `[x]` Boutons `remind-started`/`remind-remove` — comportement confirmé intentionnel par Phil (commentaire ajouté dans `Reminder.js#setAsTask`). Déjà couvert : `reminder_notifier_boutons_tache.rb` vérifie `realButtons[0].onclick()` (Démarrée) ; le bouton 1 (Supprimer) est construit par le MÊME code (`defineRealButtons`, même method-name string `'Reminder.remove'`) — pas de test dupliqué ajouté, aucune valeur incrémentale à couvrir séparément.
+
+== H. Todoist (flux UI réel — actuellement piloté uniquement via `bridge_eval` dans les tests existants)
+
+Le vieux commentaire "en cours de réparation" dans `reminder_destroyed_on_task_closed.rb` était périmé (retiré) — Todoist fonctionne intégralement dans l'app.
+
+- 23. `[x]` Flux complet `TasksDialog` par vrais clics (clic badge → cocher tâche → OK → Confirmer → clôture backend) (`Tests/specs/e2e/todoist_flux_tasksdialog_reel.rb`) — scope volontairement limité à "cocher une tâche existante" (pas créer/éditer, qui ferait plusieurs aller-retours HTTP supplémentaires à stuber, pour une valeur incrémentale faible vu que le mécanisme `TextareaDialog`+validation est partagé)
+- 24. `[x]` `Todoist._resolveId` — première liaison projet ↔ Todoist (`Tests/specs/e2e/todoist_premiere_liaison_projet.rb`)
+- 25. `[?]` `Validator.repeat` / `Validator.dateAfter` (`Validator-fr.js`) — 2 bugs trouvés en creusant, pas des soucis de test :
+  - `Validator.dateAfter` (ligne 116-120) : `var err` déclaré mais JAMAIS assigné — la fonction ne fait RIEN, toujours "valide" quelle que soit la comparaison. Son seul appelant (`TasksDialog#_validateByKey`, cas `deadline`) lui passe en plus un COMMENTAIRE littéral `'/* on doit avoir la date start */'` en 1er argument au lieu de la vraie date `due` — même une fois `dateAfter` implémentée, cet appel resterait faux.
+  - `Validator.repeat` (ligne 108) : référence `valInit`, jamais déclarée nulle part dans la fonction (seul `val` existe) → `ReferenceError` si le format "repeat" est invalide (la branche d'erreur plante au lieu de juste signaler l'erreur).
+  Écrire un test sur l'état actuel documenterait ces bugs comme échecs plutôt que de vérifier un comportement voulu — rien corrigé (pas de modif app sans demande). À trancher : je corrige d'abord, ou j'écris les tests tels quels pour documenter l'état actuel ?
+
+== Signalé en passant (traité, hors plan de tests)
+
+- `Notifier.teinte()` n'avait pas de `return` → corrigé.
+- `ServicesTools.js` : code mort confirmé (`Editor` introuvable) → supprimé (source + bundle + référence `index.html`).
+- Types de paramètre `phone` et `bounds` : code présent (`Prompter.js`/`ServiceDefiner.js`) mais aucun service actuel ne les déclare — orphelins, non testables tels quels.
+- `Prompter.promptColorOrImage`/`promptImage`/`promptColor` (ColorDialog compris pour sa partie "reachability app") : plus aucune référence nulle part dans `frontend/js/` — `background` (ProjectData.js) est un simple champ `type: 'string'`, pas relié à ce picker. Orphelin, comme `phone`/`bounds`. `ColorDialog` lui-même reste testé pour la classe (point 9), directement via `bridge_eval`, indépendamment de cette question de branchement.
+
+`git-commit` confirmé exclu (reste avec le groupe Git en cours de travail).

@@ -13,20 +13,12 @@ cf. gh
 
 == Todo list ==
 
-- faire passer tous les tests
 - ajouter les tests pour toutes les fonctionnalités
-- liste de… (gh)
 - github : créer les labels standard (liste de labels à cocher — option 'select_all' dans le paramètre, avec multi: true)
 - un type 'services' qui permet de définir la liste des services à afficher dans les panneaux en fonction du projet. Certains utilisateurs, par exemple, ne se serviront jamais de git.
 - service git pour ouvrir Github distant
   
 == Réflexions ==
-
-=== Réflexion sur la liste des isssues ===
-
-Ça concerne le service 'git-issue-list'. Il me semble que c'est un service un peu différent dans le sens où il doit accomplir une action avant et après.
-Non, en fait, c'est juste le select qui va appeler une fonction pour établir la liste des issues à remonter.
-Sauf quand même qu'il y a encore une opération derrière
 
 == Idées d'autres services ==
 

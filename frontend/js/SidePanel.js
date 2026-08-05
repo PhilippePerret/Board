@@ -86,8 +86,8 @@ class SidePanel extends Draggable {
     // panneau entier (cf. Clock.js) : sinon le mousedown intercepté sur tout
     // le panneau (avec preventDefault) empêche le drag HTML5 natif des
     // services listés dedans.
-    const handleLeft  = DCreate('DIV', {class: 'services-handle-move services-handle-move-left',  role: 'group'})
-    const handleRight = DCreate('DIV', {class: 'services-handle-move services-handle-move-right', role: 'group'})
+    const handleLeft  = DCreate('DIV', {class: 'services-handle-move services-handle-move-left',  id: `${this.domId}-handle-left`,  role: 'group'})
+    const handleRight = DCreate('DIV', {class: 'services-handle-move services-handle-move-right', id: `${this.domId}-handle-right`, role: 'group'})
     panel.appendChild(handleLeft)
     panel.appendChild(handleRight)
     this.listenMove([handleLeft, handleRight], panel)

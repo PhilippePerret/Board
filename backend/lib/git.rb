@@ -16,6 +16,17 @@ require 'shellwords'
 class Git
 class << self
 
+  # Remonte la liste des issues correspondant au +label+
+  def get_issues(project_path, label)
+    cmd = <<~BASH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    gh issue list -l #{label} --json number,title
+    BASH
+    res = `#{cmd}`
+    JSON.parse(res)
+  end
+
   def commit(project_path:, files:, message:)
     files = JSON.parse(files)
     cmd = <<~BASH

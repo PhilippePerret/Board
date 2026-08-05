@@ -190,7 +190,7 @@ class Notifier {
 
   // @return onDark ou onLight en fonction de la tonalité générale
   static teinte(data){
-    data.teinte == 'light' ? 'onLight' : 'onDark'
+    return data.teinte == 'light' ? 'onLight' : 'onDark'
   }
 
   // Retourne les styles

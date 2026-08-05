@@ -6,6 +6,7 @@ class ServiceExecuter {
     this.name     = service.name
     this.front    = service.front ?? null
     this.params   = service.params
+    console.log("Params dans l'exécuteur du service", service, this.params)
     this.script   = service.script
     this.callback = callback ?? null
     this.afterRunWithSuccess = service.data.afterRunWithSuccess ?? null
