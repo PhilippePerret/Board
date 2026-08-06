@@ -30,6 +30,8 @@ const PROJECT_DATA = [
   , {id: 'common_services_data' , editable: false}
   , {id: 'github_account'       , desc: getMsg('data-github-account')     , type: 'string'  , default: null   , editable: true}
   , {id: 'github_labels'        , desc: getMsg('githug-label-desc')       , type: 'string'   , default: null   , editable: true}
+  , {id: 'session-duration'     , desc: getMsg('work-session-duration')   , type: 'integer' , default: null   , editable: true}
+  , {id: 'work-duration'        , desc: getMsg('work-section-duration')   , type: 'integer' , default: null   , editable: true}
 ]
 const TBL_PROJECT_DATA = {}
 PROJECT_DATA.forEach(data => Object.assign(TBL_PROJECT_DATA, {[data.id]: data}))

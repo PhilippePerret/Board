@@ -1,6 +1,6 @@
 ---
-name: run-tests-command
-description: commande exacte pour lancer les tests Board — ne jamais reproposer la syntaxe interne de run_tests.sh
+name: running-tests
+description: comment lancer les tests Board (commande, syntaxe des motifs) + règles du flux d'exécution (pas de sync manuelle)
 metadata:
   type: project
 ---
