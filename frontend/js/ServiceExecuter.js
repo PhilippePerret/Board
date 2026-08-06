@@ -9,6 +9,7 @@ class ServiceExecuter {
     console.log("Params dans l'exécuteur du service", service, this.params)
     this.script   = service.script
     this.callback = callback ?? null
+    this.repeat   = service.data.repeat ?? false
     this.afterRunWithSuccess = service.data.afterRunWithSuccess ?? null
   }
   
@@ -115,13 +116,19 @@ class ServiceExecuter {
     } else {
       // S'il y a une méthode à appeler après le succès du service
       if ( this.afterRunWithSuccess) this.afterRunWithSuccess(this.projet, retour)
-      message(true, (retour.message || '') + getMsg('service-success', [this.name, this.id]))
+      message(true, (retour.message || '').trimEnd() + getMsg('service-success', [this.name, this.id]))
       // console.log("ServiceExecuter # afterRunService termine normalement.")
       if (this.service.transient /* common service joué depuis panneau */) {
         Service.remove(this.service.uuid)
         historize("- Service supprimé du cache")
       }
-      typeof this.callback == 'function' && this.callback()
+      if (this.repeat) {
+        // Un service qui se répète en boucle jusqu'à ce que l'user 
+        // l'abandonne
+        this.exec(this.projet, this.callback)
+      } else {
+        typeof this.callback == 'function' && this.callback()
+      }
       // D.outputTrace()
     }
   }
