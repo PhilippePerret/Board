@@ -96,7 +96,41 @@ mkdir -p "$BACKUPS_ROOT"
 BACKUP_DIR=$(mktemp -d "$BACKUPS_ROOT/board-test-backup.XXXXXX")
 BOARD_EXISTED=0
 
+# Copie CONSERVÉE (pas déplacée, pas transitoire) de la config perso avant
+# toute manipulation — garde-fou indépendant de restore_board/du trap, qui
+# ne protège pas contre une interruption brutale (kill -9, terminal fermé de
+# force) : ÇA, rien ne peut l'intercepter côté script, donc il faut une copie
+# qui survit même dans ce cas. Garde les 20 dernières.
+PERSO_BACKUPS_DIR="$BACKUPS_ROOT/persos"
+mkdir -p "$PERSO_BACKUPS_DIR"
+
+# Détecte une pollution par des données de test (id contenant "fixture")
+# dans ce qu'on croit être la config perso — signe qu'un run précédent a
+# déjà mal restauré. Sauvegarder ÇA comme "config perso" écraserait la
+# dernière copie propre encore disponible dans l'historique des 20 gardées.
+board_dir_has_fixture_pollution() {
+  [ -d "$BOARD_DIR" ] || return 1
+  grep -rl "fixture" "$BOARD_DIR" >/dev/null 2>&1
+}
+
+preserve_personal_config() {
+  if [ ! -d "$BOARD_DIR" ]; then return; fi
+  if board_dir_has_fixture_pollution; then
+    echo "ERREUR : \"$BOARD_DIR\" contient des traces de données de test (id \"fixture\") — ce n'est probablement pas ta vraie config, mais un reste d'un run précédent mal restauré." >&2
+    echo "Sauvegarde ANNULÉE pour ne pas écraser la dernière copie propre. Vérifie \"$BOARD_DIR\" et \"$PERSO_BACKUPS_DIR\" à la main avant de relancer les tests." >&2
+    exit 1
+  fi
+  local stamp
+  stamp=$(date +%Y%m%d-%H%M%S)
+  cp -R "$BOARD_DIR" "$PERSO_BACKUPS_DIR/perso-$stamp"
+  # Garde seulement les 20 copies les plus récentes.
+  ls -1dt "$PERSO_BACKUPS_DIR"/perso-* 2>/dev/null | tail -n +21 | while IFS= read -r old; do
+    rm -rf "$old"
+  done
+}
+
 backup_board() {
+  preserve_personal_config
   if [ -d "$BOARD_DIR" ]; then
     BOARD_EXISTED=1
     mv "$BOARD_DIR" "$BACKUP_DIR/Board"
@@ -158,7 +192,12 @@ teardown() {
   rm -f "$BOARD_TEST_BRIDGE_SOCKET" 2>/dev/null || true
 }
 
-trap teardown EXIT INT TERM
+# HUP/QUIT en plus d'EXIT/INT/TERM : couvre fermeture de terminal et Ctrl-\.
+# Limite réelle, pas contournable par un script : un "kill -9" (SIGKILL) ne
+# peut être intercepté par AUCUN process, quoi qu'on fasse ici — c'est
+# justement pour ce cas que preserve_personal_config() existe (copie
+# conservée AVANT tout déplacement, indépendante de ce trap).
+trap teardown EXIT INT TERM HUP QUIT
 
 backup_board
 

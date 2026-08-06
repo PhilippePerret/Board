@@ -47,20 +47,28 @@ def run_test
 
     # → param fixe 'path' : sélection Finder
     wait_for_suffix('btn-oui')
+    uuid = nil
     with_finder_selection(original_path) do
       click_suffix('btn-oui')
-    end
+      # Fenêtre Finder fermée par with_finder_selection dès que ce bloc
+      # retourne — la lecture de la sélection est asynchrone côté app
+      # (bridge -> getPathOfFinderSelection.scpt). Le dialogue de sélection
+      # a lui-même son propre bouton "-btn-non" encore présent en DOM juste
+      # après le clic (retiré seulement une fois la lecture async résolue) :
+      # un simple wait_for_suffix('btn-non') l'attraperait AVANT le vrai
+      # dialogue archive-folder — retour immédiat, race intacte. On attend
+      # donc ICI la persistance réelle du service (cf. service_custom_run_script.rb).
 
-    # → param fixe 'archive-folder' (path-or-null), 1re définition : "Aucun"
-    wait_for_suffix('btn-non')
-    click_suffix('btn-non')
+      # → param fixe 'archive-folder' (path-or-null), 1re définition : "Aucun"
+      wait_for_suffix('btn-non')
+      click_suffix('btn-non')
 
-    uuid = nil
-    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      list = read_project_card(id)['services']['others']
-      found = list.is_a?(Array) && list.find { |s| Array(s['name']).include?(CUSTOM_NAME) }
-      uuid = found['uuid'] if found
-      !!found
+      wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+        list = read_project_card(id)['services']['others']
+        found = list.is_a?(Array) && list.find { |s| Array(s['name']).include?(CUSTOM_NAME) }
+        uuid = found['uuid'] if found
+        !!found
+      end
     end
     service_card = "service-#{uuid}"
 

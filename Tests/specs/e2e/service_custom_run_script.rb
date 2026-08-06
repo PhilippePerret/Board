@@ -43,16 +43,20 @@ def run_test
     click_suffix('btn-oui')
 
     wait_for_suffix('btn-oui')
+    uuid = nil
     with_finder_selection(script_path) do
       click_suffix('btn-oui')
-    end
-
-    uuid = nil
-    wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
-      list = read_project_card(id)['services']['others']
-      found = list.is_a?(Array) && list.find { |s| Array(s['name']).include?(CUSTOM_NAME) }
-      uuid = found['uuid'] if found
-      !!found
+      # Fenêtre Finder fermée par with_finder_selection dès que ce bloc
+      # retourne — la lecture de la sélection déclenchée par le clic est
+      # asynchrone côté app (bridge -> getPathOfFinderSelection.scpt), donc
+      # on doit attendre ICI, dans le bloc, que le service soit réellement
+      # persisté avant de laisser la fenêtre se fermer.
+      wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
+        list = read_project_card(id)['services']['others']
+        found = list.is_a?(Array) && list.find { |s| Array(s['name']).include?(CUSTOM_NAME) }
+        uuid = found['uuid'] if found
+        !!found
+      end
     end
 
     # → l'attribution ne joue PAS le service (Project#addService ne fait que

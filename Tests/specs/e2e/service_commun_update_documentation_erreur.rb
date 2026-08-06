@@ -44,11 +44,14 @@ def run_test
     wait_for_suffix('btn-oui')
     with_finder_selection(broken_adoc) do
       click_suffix('btn-oui')
-    end
-
-    # → échec asciidoctor -> onError custom -> ErrorsDialog avec bouton "Corriger"
-    wait_until(10, desc: -> { "texte ErrorsDialog = #{(errors_dialog_text rescue '(erreur)').inspect}" }) do
-      !(errors_dialog_text rescue '').empty?
+      # Fenêtre Finder fermée par with_finder_selection dès que ce bloc
+      # retourne — la lecture de la sélection est asynchrone côté app
+      # (bridge -> getPathOfFinderSelection.scpt), donc on attend ICI
+      # l'échec asciidoctor -> onError -> ErrorsDialog avant de laisser la
+      # fenêtre se fermer (cf. service_custom_run_script.rb).
+      wait_until(10, desc: -> { "texte ErrorsDialog = #{(errors_dialog_text rescue '(erreur)').inspect}" }) do
+        !(errors_dialog_text rescue '').empty?
+      end
     end
     raise "ErrorsDialog sans mention d'erreur asciidoctor : #{errors_dialog_text.inspect}" unless
       errors_dialog_text =~ /ERROR|fichier-inexistant/i

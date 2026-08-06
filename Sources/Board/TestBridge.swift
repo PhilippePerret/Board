@@ -70,9 +70,13 @@ final class TestBridge {
                 // Un booléen JS revient en NSNumber : "\(nsNumber)" donne "1"/"0",
                 // pas "true"/"false" — à intercepter avant le cas générique, sinon
                 // toute comparaison à "true" côté Ruby échoue silencieusement.
+                // "result as? Bool" seul est trompeur : Swift caste AUSSI un NSNumber
+                // portant un simple nombre JS (ex. .length) en Bool (non-nul -> true),
+                // écrasant silencieusement un compte réel par "true"/"false" — vérifier
+                // le typeID CFBoolean plutôt que de faire confiance au cast direct.
                 let resultText: String
-                if let b = result as? Bool {
-                    resultText = b ? "true" : "false"
+                if let n = result as? NSNumber, CFGetTypeID(n) == CFBooleanGetTypeID() {
+                    resultText = n.boolValue ? "true" : "false"
                 } else if let s = result as? String {
                     resultText = s
                 } else if let r = result {
