@@ -34,7 +34,7 @@ header div#tools-button {
 .fleft  {float: left;}
 .hidden {display:none;}
 .invisible {visibility: hidden;}
-.error {color: red; background-color: rgb(255, 230, 230);}
+.error {color: red;}
 .small {font-size: 0.85em;}
 .tiny {font-size: 0.75em;}
 .break-all {word-break: break-all;}

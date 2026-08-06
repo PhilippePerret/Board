@@ -17,7 +17,7 @@ div.config-dialog-container div.config-data-prop span.config-data-name {
   flex: 1 0 240px; /* 0 0 240px ne fonctionne pas, sans description */
 }
 div.config-dialog-container div.config-data-prop span.config-data-desc {
-  flex: 1;
+  flex: 8;
 }
 div.config-dialog-container div.config-data-prop span.config-data-value {
   flex: 0 0 340px;
