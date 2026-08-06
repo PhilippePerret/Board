@@ -25,13 +25,13 @@ def run_test
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
 
-    wait_for('__session-duration__', 10)
+    wait_for('__session-duration__', 5)
     set_value('__session-duration__', '20')
     click_suffix('btn-oui')
-    wait_for('__work-duration__', 10)
+    wait_for('__work-duration__', 5)
     click_suffix('btn-oui')
 
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
     wait_for('clock-close', 5)
 
     click('clock-close')

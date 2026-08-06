@@ -32,7 +32,7 @@ def run_test
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
 
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
     wait_for('clock-handle-resize', 5)
 
     scale_before = read_app_data['clock-scale']
@@ -56,7 +56,7 @@ def run_test
     click(card)
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
 
     raise "taille pas persistée après rechargement (#{scale_after_drag.inspect} -> #{read_app_data['clock-scale'].inspect})" unless read_app_data['clock-scale'] == scale_after_drag
   end

@@ -40,15 +40,15 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → durée de session puis durée de tranche : 1 minute pour les deux
-    wait_for('__session-duration__', 10)
+    wait_for('__session-duration__', 5)
     set_value('__session-duration__', '1')
     click_suffix('btn-oui')
 
-    wait_for('__work-duration__', 10)
+    wait_for('__work-duration__', 5)
     set_value('__work-duration__', '1')
     click_suffix('btn-oui')
 
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
 
     # - Start
     click('clock-dial')

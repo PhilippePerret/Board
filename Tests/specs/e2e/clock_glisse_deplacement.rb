@@ -28,7 +28,7 @@ def run_test
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
 
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
     wait_for('clock-handle-move', 5)
 
     left_before = bridge_eval("document.querySelector('.clock-panel')?.getBoundingClientRect().left").to_f

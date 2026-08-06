@@ -44,11 +44,11 @@ def run_test
 
     # → 1re définition : durée de session puis durée de tranche (préremplie
     #   avec la session), mêmes params/ids que work-clock (COUNTDOWN_PROPERTIES)
-    wait_for('__session-duration__', 10)
+    wait_for('__session-duration__', 5)
     set_value('__session-duration__', '20')
     click_suffix('btn-oui')
 
-    wait_for('__work-duration__', 10)
+    wait_for('__work-duration__', 5)
     prefill = get_value('__work-duration__')
     raise "work-duration pas préremplie avec la session (#{prefill.inspect})" unless prefill == '20'
     set_value('__work-duration__', '15')
@@ -74,7 +74,7 @@ def run_test
 
     # → clic sur le service attaché : ouvre le MÊME widget Clock que work-clock
     click(service_card)
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
     wait_for('btn-clock-toggle', 5)
 
     # - Start puis Stop (changelog + todo), comme service_commun_horloge.rb —
@@ -83,11 +83,11 @@ def run_test
     wait_for('btn-clock-stop', 5)
     click('btn-clock-stop')
 
-    wait_for('__clock_changelog__', 10)
+    wait_for('__clock_changelog__', 5)
     set_value('__clock_changelog__', 'Test minuteur personnalisé.')
     click_suffix('btn-oui')
 
-    wait_for('__clock_todo__', 10)
+    wait_for('__clock_todo__', 5)
     set_value('__clock_todo__', 'Rien à faire')
     click_suffix('btn-oui')
 

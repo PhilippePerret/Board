@@ -31,7 +31,7 @@ tell application "System Events"
         tell menu item "$MenuMacMini"
           click
           tell menu "$MenuMacMini"
-            click menu item "Tableau de bord"
+            click menu item "Super Board"
           end tell
         end tell
       end tell

@@ -1,7 +1,8 @@
 # MEMORY
 
-- [État fin de session 2026-08-05](2026-08-05-Etat-fin-de-session.md) — `Validator.repeat`/`Validator.dateAfter` abandonnés, à reprendre (pas urgent)
+- PRIORITÉ : [État fin de session 2026-08-05](2026-08-05-Etat-fin-de-session.md) — 15 tests en échec (dont des préexistants) à corriger en premier demain, + `Validator.repeat`/`Validator.dateAfter` abandonnés (pas urgent)
 
+- [Lancer les tests](feedbacks/running_tests.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement ni `update.command` en plus
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
 - [Jamais de décision unilatérale](feedbacks/never_unilateral_decisions.md) — poser une question ouverte avant de choisir, pas présenter un plan tout fait
 - [Avis ≠ exécution](feedbacks/opinion_not_execution.md) — donner un avis demandé n'autorise pas à agir dessus, attendre un feu vert distinct
@@ -23,10 +24,11 @@
 - ["S'il te plaît" obligatoire](feedbacks/no_please_direct_ask.md) — toute demande d'action à Phil doit dire "s'il te plaît", sinon c'est un ordre
 - [Pas de rappel "pas compilé/testé"](feedbacks/stop_repeating_not_compiled_tested.md) — ne pas répéter systématiquement après chaque edit
 - [Design tests validate()](feedbacks/step_validation_test_design.md) — unitaire direct (bridge_eval) + toujours un cas valide de contrôle, jamais que des invalidités
-- [Commande run-tests](feedbacks/run_tests_command.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement
 - [Paramètre ≠ décision](feedbacks/param_not_decision.md) — si la réponse honnête est "ça dépend de l'appel", c'est un param, pas une question à poser
 - [Pas de condescendance](feedbacks/no_condescending_overexplain.md) — si sa phrase exclut déjà l'explication évidente, la redonner = le prendre pour un con
 - [Pas de jargon interne](feedbacks/no_internal_jargon_labels.md) — jamais "volet 1/2" ou label maison sans redire ce que ça désigne concrètement
 - [Vérifier TDD avant de citer un échec](feedbacks/check_tdd_before_citing_failure.md) — un ✗ peut être un test TDD normal (fonctionnalité pas codée), pas une preuve de bug
 - [Expliquer avant de rediriger la faute](feedbacks/explain_before_redirecting_blame.md) — si le diagnostic mène à un autre fichier que celui accusé, le dire d'abord, ne pas éditer direct
 - [Répondre avant d'enchaîner les outils](feedbacks/respond_before_more_tools.md) — après question directe, répondre en texte d'abord, pas silencieusement un nouvel appel d'outil
+- [Workflow correction tests en échec](feedbacks/fix_failing_tests_workflow.md) — un test à la fois : pbcopy commande → Phil confirme échec → je cherche → si non trouvé Phil trouve → je corrige → on revérifie → suivant
+- [Pas d'étiquette "pas urgent/plus tard"](feedbacks/no_vague_later_labels.md) — perd son sens avec le temps, confusionnant ; soit priorité maintenant, soit pas d'étiquette temporelle floue

@@ -6,15 +6,8 @@ cf. gh
 
 == Todo En cours
 
-- Obtenir la liste des "todo" provenant de github (gh)
-  - choisir le label (même mécanisme que pour issue create)
-  - commande gh issue list -l <label> envoyé au projet
-  - remontée et formatage du résultat.
-
 == Todo list ==
 
-- ajouter les tests pour toutes les fonctionnalités
-- github : créer les labels standard (liste de labels à cocher — option 'select_all' dans le paramètre, avec multi: true)
 - un type 'services' qui permet de définir la liste des services à afficher dans les panneaux en fonction du projet. Certains utilisateurs, par exemple, ne se serviront jamais de git.
 - service git pour ouvrir Github distant
   

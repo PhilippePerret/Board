@@ -40,11 +40,11 @@ def run_test
 
     # → 1re définition : durée de session puis durée de tranche (préremplie
     #   avec la session qui vient d'être saisie)
-    wait_for('__session-duration__', 10)
+    wait_for('__session-duration__', 5)
     set_value('__session-duration__', '20')
     click_suffix('btn-oui')
 
-    wait_for('__work-duration__', 10)
+    wait_for('__work-duration__', 5)
     prefill = get_value('__work-duration__')
     raise "work-duration pas préremplie avec la session (#{prefill.inspect})" unless prefill == '20'
     set_value('__work-duration__', '15')
@@ -57,7 +57,7 @@ def run_test
 
     # → l'horloge s'affiche, rond cliquable, bouton toggle déjà visible
     #   (start/pause/restart), bouton Stop pas encore visible
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
     wait_for('btn-clock-toggle', 5)
     raise 'bouton Stop visible avant démarrage' if visible?('btn-clock-stop')
 
@@ -73,11 +73,11 @@ def run_test
 
     # - Stop → changelog puis todo
     click('btn-clock-stop')
-    wait_for('__clock_changelog__', 10)
+    wait_for('__clock_changelog__', 5)
     set_value('__clock_changelog__', 'Ecriture des tests de l’horloge.')
     click_suffix('btn-oui')
 
-    wait_for('__clock_todo__', 10)
+    wait_for('__clock_todo__', 5)
     set_value('__clock_todo__', 'Relire les tests')
     click_suffix('btn-oui')
 
@@ -108,7 +108,7 @@ def run_test
     click(SERVICE_DOM_ID)
 
     # → cette fois, aucun dialogue de définition : l'horloge s'affiche direct
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
     raise 'dialogue de définition réapparu après rechargement' if exists?('__session-duration__')
 
     # → clic sur les chiffres = même bascule que le rond (start)
@@ -121,7 +121,7 @@ def run_test
 
     # → on la rouvre pour la suite (toujours pas de dialogue de définition)
     click(SERVICE_DOM_ID)
-    wait_for('clock-dial', 10)
+    wait_for('clock-dial', 5)
 
     # → séquence Start, Stop, Annuler : le temps affiché avant Stop et après
     #   reprise (clic sur le toggle) doit rester cohérent — pas de saut
@@ -133,7 +133,7 @@ def run_test
     raise "format de temps inattendu avant Stop : #{before_digits.inspect}" unless before_digits =~ /\A\d{2}:\d{2}\z/
 
     click('btn-clock-stop')
-    wait_for('__clock_changelog__', 10)
+    wait_for('__clock_changelog__', 5)
     click_suffix('btn-non')
     wait_until(5, desc: -> { '__clock_changelog__ encore présent après Annuler' }) { !exists?('__clock_changelog__') }
 
