@@ -2,7 +2,8 @@
 
 - PRIORITÉ : [État fin de session 2026-08-05](2026-08-05-Etat-fin-de-session.md) — 15 tests en échec (dont des préexistants) à corriger en premier demain, + `Validator.repeat`/`Validator.dateAfter` abandonnés (pas urgent)
 
-- [Lancer les tests](feedbacks/running_tests.md) — `./scripts/run-tests <regex ou fichiers>`, jamais `Tests/version-pont/run_tests.sh` directement ni `update.command` en plus
+- [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
+- [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
 - [Jamais de décision unilatérale](feedbacks/never_unilateral_decisions.md) — poser une question ouverte avant de choisir, pas présenter un plan tout fait
 - [Avis ≠ exécution](feedbacks/opinion_not_execution.md) — donner un avis demandé n'autorise pas à agir dessus, attendre un feu vert distinct
@@ -17,7 +18,6 @@
 - [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande
 - [État fin de session](feedbacks/daily_etat_fin_session.md) — seulement s'il reste du non résolu à reporter, sinon pas de fichier
 - [Refermer les fenêtres de debug](feedbacks/close_debug_windows.md) — refermer immédiatement après lecture, pas seulement en fin de tâche
-- [2 échecs → logs, pas 3e essai](feedbacks/two_failures_then_log.md) — instrumenter le vrai chemin d'exécution, pas une reproduction à côté
 - [Numéroter = garder le texte entier](feedbacks/numbering_keeps_full_text.md) — ajouter des numéros ne veut pas dire raccourcir
 - [Régler plutôt que virer un garde-fou](feedbacks/tune_dont_remove_safety_code.md) — une plainte sur un timeout/garde-fou peut vouloir dire "ajuste-le", pas "supprime-le"
 - [Ne pas répéter la note bundle](feedbacks/stop_repeating_bundle_sync_note.md) — la sync Board.app est son job, pas la peine de le rappeler à chaque fix
@@ -30,5 +30,4 @@
 - [Vérifier TDD avant de citer un échec](feedbacks/check_tdd_before_citing_failure.md) — un ✗ peut être un test TDD normal (fonctionnalité pas codée), pas une preuve de bug
 - [Expliquer avant de rediriger la faute](feedbacks/explain_before_redirecting_blame.md) — si le diagnostic mène à un autre fichier que celui accusé, le dire d'abord, ne pas éditer direct
 - [Répondre avant d'enchaîner les outils](feedbacks/respond_before_more_tools.md) — après question directe, répondre en texte d'abord, pas silencieusement un nouvel appel d'outil
-- [Workflow correction tests en échec](feedbacks/fix_failing_tests_workflow.md) — un test à la fois : pbcopy commande → Phil confirme échec → je cherche → si non trouvé Phil trouve → je corrige → on revérifie → suivant
 - [Pas d'étiquette "pas urgent/plus tard"](feedbacks/no_vague_later_labels.md) — perd son sens avec le temps, confusionnant ; soit priorité maintenant, soit pas d'étiquette temporelle floue
