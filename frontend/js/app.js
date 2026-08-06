@@ -6,8 +6,33 @@ window.onload = function(ev){
 
 class App {
 
-  static NAME = /* tag::app-name[] */"Tableau de bord"/* end::app-name[] */
+  static NAME = /* tag::app-name[] */"Super Board"/* end::app-name[] */
+  // Changer aussi dans update.command pour Safari
 
+  /**
+   * @api
+   * 
+   * Point d'entrée
+   */
+  static init(retour){ D.on && D.trace(retour, 'App::')
+    if (undefined == retour) {
+      return server.send({action: 'load-all'}, this.init.bind(this))
+    } else {
+      this.setTitle()
+      Spinner.start()
+      this.data = retour.data.appData
+      this.observe()
+      Service.init()
+      Project.initAllProjects(retour.data.projectsData)
+      // Réveil si nécessaire des rappels
+      this.awakeReminders()
+    }
+  }
+
+  static setTitle() {
+    DGet('head title').textContent = App.NAME
+    DGet('div#app-name').textContent = App.NAME
+  }
 
   /**
    * @api
@@ -40,20 +65,6 @@ class App {
     if (this.currentPanel) {
       this.currentPanel.close()
       this.currentPanel = null
-    }
-  }
-
-  static init(retour){ D.on && D.trace(retour, 'App::')
-    if (undefined == retour) {
-      return server.send({action: 'load-all'}, this.init.bind(this))
-    } else {
-      Spinner.start()
-      this.data = retour.data.appData
-      this.observe()
-      Service.init()
-      Project.initAllProjects(retour.data.projectsData)
-      // Réveil si nécessaire des rappels
-      this.awakeReminders()
     }
   }
 
