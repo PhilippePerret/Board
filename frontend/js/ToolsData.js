@@ -6,17 +6,36 @@
 const TOOLS_DATA = [
 
   {
-    // On se sert des scripts-services
+    /**
+     * Programmation d'une alerte
+     * --------------------------
+     * 
+     * On se sert des scripts-services
+     */
       id: 'alerte'
-      , name: "Programmer une alerte"
+      , name: getMsg('schedule-a-alert') 
       , type: 'script_service'
       , steps: [
-          {id: 'date-time'  , type: 'date-time', q: "Heure de l'alerte (et jour si plus tard)", title: "Programmation d'alerte"}
-        , {id: 'message'    , type: 'string', q: "Message de l'alerte", title: "Programmation d'alerte"}
-        , {id: 'schedule'   , type: 'alert', message: "${message}", title: "Alerte programmée", time: "${date-time}", title: "Programmation d'alerte"}
-        , {id: 'conclusion' , type: 'set', value: getMsg('tools-confirm-scheduling-alert'), title: "Programmation d'alerte"}
+          {id: 'date-time'  , type: 'date-time', q: getMsg('hour-and-day-of-alert'), title: getMsg('scheduling-alert')}
+        , {id: 'message'    , type: 'string', q: getMsg('alert-message'), title: getMsg('scheduling-alert')}
+        , {id: 'schedule'   , type: 'alert', message: "${message}", time: "${date-time}", title: getMsg('scheduling-alert')}
+        , {id: 'conclusion' , type: 'set', value: getMsg('tools-confirm-scheduling-alert'), title: getMsg('scheduling-alert')}
       ]
   },
+  /**
+   * Initialisation de Git sur le projet
+   * + Définition des labels
+   * 
+   * RÉFLEXION
+   * Un outil devrait pouvoir être défini comme un service. Ça permettrait
+   * de passer de l'un à l'autre sans problème.
+   */    
+  {
+    id: 'git-init'
+  , name: getMsg('git-init-btn')
+  , run: () => Tools.toolGitInit()
+  },
+
   // {
   //     id: 'alert'
   //   , name: "Programmer une alerte"

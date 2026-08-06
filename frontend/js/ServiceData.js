@@ -71,7 +71,9 @@ const COUNTDOWN_PROPERTIES = {
 }
 
 const GITHUB_LABELS = [
-  'todo', 'bug', 'improve', 'amélioration', 'documentation', 'docu', 'aide', 'help', 'feature', 'fonctionnalité', 'help wanted', 'erreur', 'error'
+  'todo', 'bug', 'improve', 'amélioration', 'documentation', 'docu', 'aide', 'help', 
+  'feature', 'fonctionnalité', 'help wanted', 'erreur', 'error',
+  'typo', 'correction'
 ] //.map(n => [n, n])
 
 /*******************************************************************/
@@ -88,12 +90,10 @@ const COMMON_SERVICES_DATA = [
         , {id: 'sidebar', name: getMsg('sidebar-setting'), q: getMsg('what-size-for-sidebar'), default: 0, type: 'integer'}
       ]
     , afterDefinedParams: (params) => {
-      // console.log("[afterDefinedParams] PARAMS AVANT : ", [...params])
       const [pathGroup, boundsGroup, sidebarGroup] = params
-      boundsGroup.splice(0, 1)         // retire le path dupliqué (1er élément du groupe finder-window)
-      boundsGroup[4] = sidebarGroup[0] // écrase sidebarWidth (index 4 après ce retrait) par la valeur configurée
-      // console.log("[afterDefinedParams] PARAMS APRÈS : ", [pathGroup, boundsGroup])
-      return [pathGroup, boundsGroup]
+      const newBoundsGroup = boundsGroup.slice(1)  // copie, sans le path dupliqué (1er élément du groupe finder-window)
+      newBoundsGroup[4] = sidebarGroup[0]          // écrase sidebarWidth (index 4 après ce retrait) par la valeur configurée
+      return [pathGroup, newBoundsGroup]
     }
   },
   
@@ -246,19 +246,6 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
-  // Initialisation de git
-  {
-      id: 'git-init'
-    , name: getMsg('initing-git-for-project')
-    , group: 'Git'
-    , scType: '.rb' // => GitInit.rb
-    , params: [
-          {id: 'path', type: 'project'}
-        , {id: 'github_account', type: 'project', if_undefined: { type: 'string', q: getMsg('github-account')} }
-        , {id: 'github_name', q: getMsg('github-project-name'), type: 'string'}
-      ]
-}, 
-
   {
       id: 'edit-documentation'
     , name: getMsg('editing-documentation') 
@@ -302,8 +289,7 @@ const COMMON_SERVICES_DATA = [
         {id: 'docu-main-file-html', type: 'project', if_undefined: {q: getMsg('select-doc-main-final-file'), type: 'path'}}
       ]
     , afterDefinedParams: (params) => {
-        if (!params[0][0].startsWith('file://')) params[0][0] = `file://${params[0][0]}`
-        return params
+        return [[`file://${params[0][0]}`]]
     }
   },
 

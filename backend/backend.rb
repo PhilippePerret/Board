@@ -39,12 +39,14 @@ begin
     end
   end
 
+  RETOUR = Retour.new
+  RETOUR.init({})
+  
   # La requête frontend se trouve dans cette requête qui est une
   # table JSON
   input = STDIN.read.strip
   request = JSON.parse(input)
 
-  RETOUR = Retour.new
   RETOUR.init(request)
 
 
@@ -242,7 +244,9 @@ begin
   when 'git-ope'
     require_relative 'lib/git.rb'
     args = request['git_args'] || []
-    args.unshift(request['project_path'])
+    if request['project_path']
+      args.unshift(request['project_path'])
+    end
     RETOUR.data = Git.send(request['git_ope'], *args)
 
 

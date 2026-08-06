@@ -16,6 +16,44 @@ require 'shellwords'
 class Git
 class << self
 
+
+
+  # Initier git pour le projet donné
+  def init_for_project(project_path, github_account, github_name, labels)
+    
+    retour = {
+      ok: true,
+      error: nil,
+      message: nil,
+      labels: labels
+    }
+    
+    begin
+      # Primo vérification (il ne faut pas que git soit déjà installé)
+      if git_exist_for_project?(project_path)
+        retour[:error] = "GIT est déjà initialisé pour ce projet." # localiser
+      else
+        # Initialisation dans le dossier
+        res = git_init(project_path, github_account, github_name)
+        retour.merge!(res)
+
+        # Création des lables
+        if labels.count > 0
+          update_labels(project_path: project_path, labels: labels.join(','))
+          retour[:message] += " + définition des labels."
+        end
+      end
+    rescue Exception => e
+      retour[:ok] = false
+      retour[:error] = e.message
+    end
+    return retour
+  end
+
+  def git_exist_for_project?(project_path)
+    File.exist?(File.join(project_path, '.git'))
+  end
+
   # Remonte la liste des issues correspondant au +label+
   def get_issues(project_path, label)
     cmd = <<~BASH
@@ -34,23 +72,29 @@ class << self
     cd #{Shellwords.escape(project_path)}
     gh label list --json name,color
     BASH
-    table = JSON.parse(`#{cmd}`)
+    res = `#{cmd}`
+    raise "Impossible de récupérer les labels existants : #{res}" unless $?.success?
+    table = JSON.parse(res)
     actual_labels = table.map { |h| h['name'] }
     colors = table.map { |h| h['color'] }
 
     # Deuxième étape : détruire les labels existants
-    cmd = <<~BASH
-    exec 2>&1
-    cd #{Shellwords.escape(project_path)}
-    for label in "#{actual_labels.join('" "')}" ; do
-      gh label delete "$label"
-    BASH
-    res = `#{cmd}`
+    if actual_labels.any?
+      cmd = <<~BASH
+      exec 2>&1
+      cd #{Shellwords.escape(project_path)}
+      for label in "#{actual_labels.join('" "')}" ; do
+        gh label delete "$label" --yes
+      done
+      BASH
+      res = `#{cmd}`
+      raise "Impossible de détruire les labels existants : #{res}" unless $?.success?
+    end
 
-    # Deuxième étape : créer les nouveaux labels
+    # Troisième étape : créer les nouveaux labels
     labels = labels.split(',')
     requests = labels.map do |label|
-      "gh label create \"#{label}\" --color #{colors.shift || '7777777'}" 
+      "gh label create #{Shellwords.escape(label)} --color #{colors.shift || '7777777'}"
     end
     cmd = <<~BASH
     exec 2>&1
@@ -58,6 +102,7 @@ class << self
     #{requests.join("\n")}
     BASH
     res = `#{cmd}`
+    raise "Impossible de créer les nouveaux labels : #{res}" unless $?.success?
     return res
   end
 
@@ -125,5 +170,66 @@ class << self
         [path, "<span title='#{original_name}'>#{name}</span> <span title='#{original_folder}'>#{folder}</span> (#{mark})"]
       end
   end
+
+
+
+
+
+  def git_init(project_path, github_account, github_project_name)
+
+    remote_git_path = 
+      if ENV['APP_BOARD_TESTS_RUNNING'] # lors des tests
+        remote_path = ENV['BOARD_TEST_GIT_REMOTE'] || raise("Il faut le git remote de test")
+      else
+        "git@github.com:#{github_account}/#{github_project_name}.git"
+      end
+
+    gitignore_path = File.join(project_path, '.gitignore')
+    gitignore_default_content = <<~GIT
+    .DS_Store
+
+    _dev/
+
+    dev/
+
+    tmp/
+
+    temp/
+
+    GIT
+
+    # 2>&1 (pas 2>/dev/null) : une erreur doit être visible dans le retour,
+    # pas avalée en silence — c'est justement ce qui masquait l'échec d'un
+    # push vers un remote inexistant.
+    run = -> (command) {
+      full_command = "cd '#{project_path}' && git #{command} 2>&1"
+      res = `#{full_command}`
+      raise "git #{command} a échoué : #{res}" unless $?.success?
+      res
+    }
+
+    retour = {ok: true, message: nil, error: nil}
+
+    begin
+      run.call('init')
+
+      # Création du fichier gitignore
+      IO.write(gitignore_path, gitignore_default_content)
+
+      run.call('add -A')
+      run.call('commit -m "first commit"')
+      run.call('branch -M main')
+      run.call("remote add origin #{remote_git_path}")
+      run.call('push -u origin main')
+
+      retour[:message] = "Git préparé pour le dossier"
+    rescue Exception => e
+      retour[:ok] = false
+      retour[:error] = e.message
+    end
+
+    return retour
+  end
+
 end #/<< self
 end #/Git

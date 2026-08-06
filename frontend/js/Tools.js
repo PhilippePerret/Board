@@ -30,6 +30,81 @@ class Tools {
     }
   }
 
+  static toolGitInit(key, value){
+    console.log("key/retour", key, value)
+
+    // S'assurer qu'il y a un projet courant
+    const project = Project.current || raiseError('folder-required')
+
+    // Valeurs définies
+    if (key){
+      if (value === null) return // annulation
+      value = value.trim()
+      switch(key){
+        case 'github_account':
+          project.set('github_account', value, true)
+          break
+        case 'github_name':
+          project.set('github_name', value, true)
+          break
+      }
+    }
+    // S'assurer que l'utilisateur à un compte Github (github_account du projet)
+    const github_account = project.get('github_account')
+    if (!github_account) {
+      return Prompter.prompt({ 
+          title: getMsg('github-account')
+        , type: 'string'
+        , q: getMsg('github-account')
+      }, this.toolGitInit.bind(this, 'github_account'))
+    }
+    // S'assurer que le projet à un Github (github_name du projet)
+    const github_name = project.get('github_name')
+    if (!github_name) {
+      return Prompter.prompt({ 
+          title: getMsg('github-project-name')
+        , type: 'string'
+        , q: getMsg('github-project-name')
+      }, this.toolGitInit.bind(this, 'github_name'))
+    }
+    // Demander s'il faut créer les labels ?
+    Prompter.prompt({
+        title: "Labels ?"
+      , q: "Labels à créer (n'en sélectionner aucun pour ne pas les toucher."
+      , type: 'select'
+      , multi: true
+      , values: GITHUB_LABELS
+    }, this.execGitInitialisation.bind(this))
+  }
+
+  static execGitInitialisation(retour){
+    console.log("-> execGitInitialisation", retour)
+    const labels = retour // peut être vide => ne pas le faire
+    const project = Project.current || raiseError('folder-required')
+    const github_name = project.get('github_name')
+    const github_account = project.get('github_account')
+    console.log("Je vais procéder à l'initialisation de GIT sur le compte '%s' pour le projet '%s' ", github_account, github_name)
+    // Jouer le script GitInit.rb
+    server.send({
+        action: "git-ope"
+      , git_ope: 'init_for_project'
+      , git_args: [project.path, github_account, github_name, labels]
+      , no_raise: true
+    }, this.afterGitInitialisation.bind(this))
+    // todo
+    // Jouer le script de création des labels 
+    // todo
+
+  }
+  static afterGitInitialisation(retour){
+    console.log("-> afterGitInitialisation fin d'init git", retour)
+    if (retour.data.error) {
+      erreur(retour.data.error)
+    } else {
+      message(true, "Git installé avec succès.")
+    }
+  }
+
 
   static onAppChosen(appName){
     server.send({action: 'get-app-window-bounds', appName: appName}, this.onWindowBounds.bind(this))

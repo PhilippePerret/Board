@@ -14,13 +14,18 @@ ope = ARGV[0]
 pat = ARGV[1]
 res = nil
 
-case ope
-when 'commit'
-  res = Git.commit(project_path: pat, files: ARGV[2], message: ARGV[3])
-when 'update_labels'
-  res = Git.update_labels(project_path: pat, labels: ARGV[2])
-else
-  data[:error] = "Opération inconnue : #{ope.inspect}"
+begin
+  case ope
+  when 'commit'
+    res = Git.commit(project_path: pat, files: ARGV[2], message: ARGV[3])
+  when 'update_labels'
+    res = Git.update_labels(project_path: pat, labels: ARGV[2])
+  else
+    data[:error] = "Opération inconnue : #{ope.inspect}"
+  end
+rescue Exception => e
+  data[:ok] = false
+  data[:error] = e.message
 end
 
 data[:ope]      = ope
