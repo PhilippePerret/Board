@@ -109,7 +109,7 @@ class Dialog {
       this.midData.onclick()
     } else {
       console.error("this.midData.onclick", this.midData.onclick)
-      error('this.midData.onclick n’est pas une fonction')
+      footerError('this.midData.onclick n’est pas une fonction')
     }
     return stopEvent(ev)
 

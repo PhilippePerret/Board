@@ -22,11 +22,11 @@ const MAX_LEN_STRING = 90
 class ErrorsDialog extends Dialog {
   constructor(data){
     super(data)
-    this.width  = '1400px'
+    this.width  = data.width ?? '1400px'
     this.errors = data.errors ?? ''
     console.log("errors au départ", this.errors)
     this.content = this.buildContainerErrors()
-    if (data.ouiBtn && 'function' == data.ouiBtn.onclick) {
+    if (data.ouiBtn && 'function' == typeof data.ouiBtn.onclick) {
       this.nonData = {name: getMsg('Finish')}
     } else {
       this.ouiData = {name: getMsg('OK')}
@@ -35,10 +35,11 @@ class ErrorsDialog extends Dialog {
   }
   buildContainerErrors() {
     this.normalizeErrors()
-    console.log("erreurs après normalisation", this.errors)
+    // console.log("erreurs après normalisation", this.errors)
+    const icon = '<img src="images/error.svg" width="62" style="float:left;margin-right:1em;" />'
     return DCreate('DIV', {
         class: 'error small'
-      , text: this.errors.map(error => {
+      , text: icon + this.errors.map(error => {
           return `<div class="error">${error}</div>`
         }).join('')
       , style: 'margin:2em 0;padding: 0.5em 1em;'
@@ -196,7 +197,6 @@ class TextareaDialog extends Dialog {
   buildField(){
     const div = DCreate('DIV', {style: 'padding: 1em;'})
     const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? 200}px;`})
-    console.log("value juste avant", String(this.default))
     input.value = this.defaultValue || this.default
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
@@ -321,13 +321,13 @@ class ConfigDialog extends Dialog {
       const el = DGet(`#${this.id}-${dprop.id}-value`)
       // console.log("width et scroll", {width: el.clientWidth, scroll: el.scrollWidth })
       // console.log(" el.scrollWidth > el.clientWidth est", el.scrollWidth > el.clientWidth)
-      var isTooLong = false
-      while ( el.scrollWidth > el.clientWidth ) {
-        isTooLong = true
-        el.textContent = el.textContent.slice(1)
-      }
-      if ( isTooLong ) {
-        el.textContent = '…' + el.textContent.slice(2)
+      if ( el.scrollWidth > el.clientWidth ) {
+        const original = el.textContent
+        var cut = 0
+        while ( el.scrollWidth > el.clientWidth && cut < original.length - 1 ) {
+          cut += 1
+          el.textContent = '…' + original.slice(cut + 1)
+        }
       }
     })
   }
@@ -437,7 +437,7 @@ class TasksDialog extends Dialog {
    */
   onCreateNewTask(task /* nouvelle ou modifiée */){
     if (task ) {
-      console.log("retour onCreateNewTask", task )
+      // console.log("retour onCreateNewTask", task )
       const msgId = task.ID ? 'todoist-text-mod-task' : 'todoist-text-new-task'
       this.list.appendChild(DCreate('DIV', {text: getMsg(msgId, [task .content])}))
       this.newTasks.push(task)
