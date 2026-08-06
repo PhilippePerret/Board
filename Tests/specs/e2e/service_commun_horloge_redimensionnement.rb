@@ -32,8 +32,8 @@ def run_test
     wait_for(SERVICE_DOM_ID)
     click(SERVICE_DOM_ID)
 
-    wait_for('clock-dial', 5)
-    wait_for('clock-handle-resize', 5)
+    wait_for('clock-dial', 2)
+    wait_for('clock-handle-resize', 2)
 
     scale_before = read_app_data['clock-scale']
 
@@ -45,7 +45,7 @@ def run_test
     raise "l'horloge a démarré pendant le redimensionnement" if visible?('btn-clock-stop')
 
     # → persisté (App.saveData debounced ~1s)
-    wait_until(5, desc: -> { "appdata.yaml['clock-scale'] = #{read_app_data['clock-scale'].inspect}" }) do
+    wait_until(2, desc: -> { "appdata.yaml['clock-scale'] = #{read_app_data['clock-scale'].inspect}" }) do
       read_app_data['clock-scale'] && read_app_data['clock-scale'] != scale_before
     end
     scale_after_drag = read_app_data['clock-scale']

@@ -47,7 +47,7 @@ def run_test
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       stored = read_project_card(id).dig('common_services_data', SERVICE_DOM_ID)
-      stored.is_a?(Array) && stored[1].is_a?(Array) && stored[1][4] == 5
+      stored.is_a?(Array) && stored[2].is_a?(Array) && stored[2][0] == 5
     end
 
     # - meta+clic sur le MÊME bouton du panneau (service déjà défini) :
@@ -67,7 +67,7 @@ def run_test
 
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       stored = read_project_card(id).dig('common_services_data', SERVICE_DOM_ID)
-      stored.is_a?(Array) && stored[1].is_a?(Array) && stored[1][4] == 9
+      stored.is_a?(Array) && stored[2].is_a?(Array) && stored[2][0] == 9
     end
   end
 ensure

@@ -59,7 +59,7 @@ def run_test
     #   sauvegarder) : 1er clic explicite requis
     service_card = "service-#{uuid}"
     click(service_card)
-    assert_service_message_ok!(timeout: 8, expect: /#{MARKER}/)
+    assert_service_message_ok!(timeout: 3, expect: /#{MARKER}/)
   end
 ensure
   remove_fixture_project(id) if id

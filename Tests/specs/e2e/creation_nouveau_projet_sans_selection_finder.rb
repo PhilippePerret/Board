@@ -11,6 +11,8 @@ include BoardTest
 def run_test
   expected_error = loc_error('project-folder-not-selected')
 
+  launch_app
+
   with_finder_deselected do
     # - Click sur le bouton "add project"
     click('btn-add-project')
