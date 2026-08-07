@@ -30,7 +30,7 @@ class Dialog {
     this.nonData      = data.nonBtn ?? {name: getMsg('btn-no'), onclick: () => message("[SYSTEM] Bouton non à définir")}
     this.defaultKey   = data.defaultKey ?? 'Oui'
     this.unscrimmed   = data.unscrimmed ?? false // pour ne pas mettre de flou
-    this.project      = data.project ?? null
+    this.projet       = data.projet ?? null
     // Une fonction qui peut tranformer la valeur avant de la retourner
     this.toRealValue  = data.toRealValue ?? ((v) => v)
     // Identifiant du champ de valeur (rappel : dans ces Dialog, il n'y a toujours
@@ -109,7 +109,6 @@ class Dialog {
       this.midData.onclick()
     } else {
       console.error("this.midData.onclick", this.midData.onclick)
-      footerError('this.midData.onclick n’est pas une fonction')
     }
     return stopEvent(ev)
 
@@ -128,8 +127,8 @@ class Dialog {
       const method = dEvent.nokey ?? `on${this.defaultKey}`
       // console.log("[onKeyDown] method", method)
       this[method]()
+      return stopEvent(ev)
     }
-    return stopEvent(ev) // Dans tous les cas
   }
 
 

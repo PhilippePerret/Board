@@ -329,4 +329,3 @@ class Reminder extends ExtendedObject {
     }
   }
 }
-Reminder.init()

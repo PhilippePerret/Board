@@ -5,3 +5,5 @@ Tests/support/overlay
 tests/resultats/
 
 Board.app/*
+
+Tests/.board-backups/

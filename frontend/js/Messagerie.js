@@ -6,6 +6,11 @@
  * 
  */
 
+function raiseError(errId, params){
+  error(errId, params)
+  throw new Error()
+}
+
 // Retourne une erreur de MES_ERRORS.js — undefined si errId n'est pas une
 // clé connue. Nécessaire pour Dialogs.js#normalizeErrors, qui fait
 // `getErr(error) || error` en supposant que error est SOIT un texte brut
@@ -33,7 +38,7 @@ function message(arg1, arg2, arg3){
     if( undefined == msg){
       console.info("Aucun message envoyé.")
       return
-    } 
+    }
     if (msg != "") {
       msg = textSubstitute(msg, params)
     }
@@ -52,10 +57,19 @@ function message(arg1, arg2, arg3){
   }
 }
 
-function error(msg, params){
-  msg = textSubstitute(msg, params)
-  divMessage().innerHTML = '<span class="error">' + msg + '</span>'
-  nettoie_message()
+function footerError(msg, params) {
+  msg = getErr(msg, params) || msg
+  divMessage().innerHTML = msg
+  retarde(() => {nettoie_message()}, 20)
+}
+function error(msg, params, title){
+  msg = getErr(msg, params) ?? msg
+  new ErrorsDialog({
+      width: '580px'
+    , icon:  'images/error.svg'
+    , title: title ?? getMsg('fatal-error')
+    , errors: msg.split("\n")
+  }).show()
   return false
 }
 function erreur(msg){ return error(msg) }

@@ -70,8 +70,8 @@ def run_test
     wait_for_suffix('btn-oui')
     click_suffix('btn-oui') # Confirmer -> onMarkAndCreateTodoistTask -> backend
 
-    wait_until(10, desc: -> { "message en exergue = #{(exergue_message_text rescue '(erreur)').inspect} / ErrorsDialog = #{(errors_dialog_text rescue '(erreur)').inspect} / nb divs exergue = #{(bridge_eval("document.querySelectorAll('.exergue-message').length") rescue '(erreur)')} / diag = #{(bridge_eval('JSON.stringify(window.__diag||[])') rescue '(erreur)')}" }) do
-      (exergue_message_text rescue '') =~ /achevées : 1/
+    wait_until(10, desc: -> { "message en exergue = #{(exergue_message_text rescue '(erreur)').inspect}" }) do
+      (exergue_message_text rescue '') =~ /achevées : 1/
     end
 
     # → l'appel de clôture a bien ciblé LA tâche cochée

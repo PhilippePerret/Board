@@ -14,7 +14,9 @@ metadata:
     `./scripts/run-tests <motif ou fichiers AVEC EXTENSION>` # cf. plus bas
     ```
 1.   INTERDICTION FORMELLE DE REMETTRE LA MÊME COMMANDE DE LANCEMENT DANS LE PRESSE-PAPIER
-2. Attendre que Phil lance le test.
+2.1 Attendre que Phil lance le test.
+2.2 Pendant ce temps, donner un aperçu du test, sous la forme décrite ci-dessous
+    à "APERÇU DU TEST"
 3.  Lire le log de fin de test
 4.  Investiguer pour trouver le problème.
 5.  Corriger.
@@ -48,3 +50,36 @@ Exemples :
 ./scripts/run-tests "*creation_nouveau_projet*" "*evaluate_file*" "*step_validate*"
 ./scripts/run-tests e2e/script_service_evaluate_file.rb e2e/service_commun_horloge.rb
 ```
+
+
+APERÇU DU TEST
+
+```
+«««««««««««««««««««««««««««««««««
+<ce que le test est censé testé, en 20 mots max>
+<liste des actions successives avec : 
+<numéro> <action (10 mots)> <ok ou problème>>
+<conclusion synthétique>
+>
+»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+```
+
+Par exemple : 
+
+```
+Test vérifiant la persistance de la redéfinition des durées pour l'horloge
+
+1. Crée projet fixture avec service horloge (session=90 mns, travail=30 mns) — ok
+2. Lance l'appli — ok
+3. Sélectionne le projet — ok
+4. Meta-clic sur le service pour le redéfinir — ok
+5. Fenêtre nom → clique "Oui" — ok
+6. Fenêtre durée session : attendu 90, reçu 90 — ok
+7. Tape 100 → clique "Oui" — ok
+8. Fenêtre durée travail : attendu 100 (reprise), reçu 100 — ok
+9. Clique "Oui" — ok
+10. Carte projet : attendu [100, 100], reçu [90, 30] — ERREUR
+
+Conclusion : on peut redéfinir les duréees, mais elles ne sont pas persistées dans le fichier du projet.
+```
+

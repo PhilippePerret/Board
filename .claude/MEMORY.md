@@ -1,7 +1,5 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-06](2026-08-06-Etat-fin-de-session.md) — référence circulaire ParamDefiner à corriger (crash évité côté Swift mais pas éliminé), objectif demain = tous les tests pour mise en production
-
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur

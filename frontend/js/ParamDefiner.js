@@ -28,10 +28,11 @@ class ParamsDefiner {
    * @param callback Function à appeler enfin de processus avec la liste des
    *                  ParamDefiner créer pour chaque paramètre.
    */
-  constructor(params, callback){
+  constructor(params, callback, projet = null){
     this.params   = [...params].reverse()
     this.definers = []
     this.callback = callback
+    this.projet   = projet
   }
   define(){
     historize('-> ParamsDefiner.define', this)
@@ -47,7 +48,7 @@ class ParamsDefiner {
 
   abort(){
     this.callback(null)
-    return error('Définition abandonnée')
+    return footerError(getMsg('ope-aborted'))
   }
   resolve(){
     historize('-> ParamsDefiner.resolve', this)
@@ -93,7 +94,7 @@ class ParamDefiner {
     console.log("-> gitGetStatusFiles/data=", data, callback)
     server.send({
         action: 'git-ope'
-      , project_path: data?.project_path ?? Project.current.path
+      , project_path: (data?.projet ?? Project.current).path
       , git_ope: 'get_status_files'
     }, callback)
   }
@@ -113,7 +114,7 @@ class ParamDefiner {
           action:'git-ope'
         , git_ope: 'get_issues'
         , git_args: [spec.definers[0].value]
-        , project_path: spec?.project_path ?? Project.current.path
+        , project_path: (spec?.projet ?? Project.current).path
       }, this.issuesListOfTypeForSelect.bind(this, spec, callback))
     }
   }
@@ -124,27 +125,27 @@ class ParamDefiner {
    */
   static projectIssueLabelsForSelect(data, callback, retour){
     console.log("->projectIssueLabelsForSelect/ data/callback/retour", data, callback, retour)
-    const getLabelsProject = (project) => {
+    const getLabelsProjet = (projet) => {
       server.send({
           action: 'git-ope'
-        , project_path: project.path
+        , project_path: projet.path
         , git_ope: 'get_labels'
       }, this.projectIssueLabelsForSelect.bind(this, data, callback))
     }
     var labels
-    const project = data?.project || data?.projet || Project.current
+    const projet = data?.projet ?? Project.current
     if ( retour ) {
       labels = retour.data
-      project.set('github_labels', labels, true)
+      projet.set('github_labels', labels, true)
     } else {
-      labels  = project.get('github_labels')
+      labels  = projet.get('github_labels')
     }
     
     if (labels) {
       console.log("labels", labels)
       callback({data: labels.split(',').map(label => [label, label])})
     } else {
-      return getLabelsProject(project)
+      return getLabelsProjet(projet)
     }
   }
 
@@ -157,9 +158,9 @@ class ParamDefiner {
     // console.log("param dans constructeur", param)
     this.param    = param
     // console.log("this.param dans le constructor de ParamDefiner (et paramLister", param, paramLister)
-    this.id       = param.id      ?? raise('Un identifiant est obligatoire.', param)
+    this.id       = param.id      ?? raise(getErr('id-is-required', param))
     this.name     = param.name    ?? param.id
-    this.type     = param.type    ?? raise('Le type doit être défini.', param)
+    this.type     = param.type    ?? raise(getErr('type-is-required', param))
     this.q        = param.q       ?? null
     this.message  = param.message ?? this.q ?? null
     this.default  = param.default ?? null
@@ -168,6 +169,7 @@ class ParamDefiner {
   }
 
   get currentOrDefault(){ return this.actual ?? this.default }
+  get projet(){ return this.paramLister.projet ?? Project.current }
 
   define() {
     historize('-> ParamDefiner.define', this)
@@ -195,6 +197,7 @@ class ParamDefiner {
       , default:  defaultValue
       , actual:   this.actual
       , definers: this.paramLister.definers // Pour disposer partout des choix et valeurs
+      , projet:   this.projet
       , ifUndefined: this.param.if_undefined
     })
   }
@@ -215,7 +218,7 @@ class ParamDefiner {
   }
   // Méthode appelée quand on renonce, qu'on fait non, ou par Prompter avec value=null
   onNonButton(value) {
-    if ( value === null ) {
+    if ( value === null && this.type !== 'path-or-null' ) {
       this.abort()
     } else {
       this.setValue(value)

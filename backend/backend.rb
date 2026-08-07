@@ -54,7 +54,7 @@ begin
   ###       DISPATCH de l'ACTION      ###
   #######################################
   
-  case request["action"]
+  case request["action"].strip
 
   # === Destuction d'un projet ===
   when 'remove-project'
@@ -214,30 +214,9 @@ begin
 
   # ========== TODOIST (Todoist.js) =====================
 
-  when 'todoist-find-project'
+  when /^todoist/
     require_relative 'lib/todoist.rb'
-    id = Todoist.find_project_id(request['todoist-title'])
-    if id
-      RETOUR.data = {id: id}
-    else
-      RETOUR.error = "Projet « #{request['todoist-title']} » introuvable dans Todoist."
-    end
-
-  when 'todoist-today-tasks'
-    require_relative 'lib/todoist.rb'
-    RETOUR.data = {tasks: Todoist.today_tasks(request['todoist_id'])}
-
-  when 'todoist-set-done'
-    require_relative 'lib/todoist.rb'
-    Todoist.close_tasks(request['task_ids'])
-
-  when 'todoist-create-tasks'
-    require_relative 'lib/todoist.rb'
-    RETOUR.data = Todoist.create_tasks(request['project_id'], request['tasks'])
-
-  when 'todoist-update-tasks'
-    require_relative 'lib/todoist.rb'
-    RETOUR.data = Todoist.update_tasks(request['project_id'], request['done_ids'], request['new_tasks'], request['mod_tasks'])
+    Todoist.exec_request(request)
 
 
   # Toutes les opérations GIT

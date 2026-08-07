@@ -253,7 +253,7 @@ class ColorDialog extends Dialog {
     div.appendChild(input)
 
     const frame = DCreate('FIELDSET', {style: 'margin-top:1.5em;border:1px solid #999;border-radius:6px;padding:1em;'})
-    frame.appendChild(DCreate('LEGEND', {text: 'Échantillons', style: 'padding:0 0.5em;color:#999;'}))
+    frame.appendChild(DCreate('LEGEND', {text: getMsg('samples'), style: 'padding:0 0.5em;color:#999;'}))
 
     const previews = DCreate('DIV', {style: 'display:flex;justify-content:space-around;align-items:center;'})
 
@@ -343,9 +343,9 @@ class ConfigDialog extends Dialog {
       const name = DCreate('SPAN', {id: `${prefixId}-name`, text: dprop.name || dprop.id, class: 'config-data-name'})
       const desc = DCreate('SPAN', {id: `${prefixId}-desc`, text: dprop.desc || '', class: 'config-data-desc'})
       var dispValue = dprop.value ?? ''
-      if ( dprop.type == 'path' && this.project && dprop.id != 'path') {
+      if ( dprop.type == 'path' && this.projet && dprop.id != 'path') {
         // Si la valeur est un path, on essaie de la réduire
-        dispValue = dispValue.replace(this.project.path, '.')
+        dispValue = dispValue.replace(this.projet.path, '.')
       }
       const valu = DCreate('SPAN', {id: `${prefixId}-value`, text: dispValue, class: 'config-data-value'})
       listen(valu, 'click', (ev) => {
@@ -423,7 +423,7 @@ class TasksDialog extends Dialog {
         , task.priority || ''
         , task.deadline || ''
         , task.labels   || ''
-      ]) + `\nID: ${task.id}`, task)
+      ]) + `\nID: ${task.id}`, task) // localisation : laisser comme ça.
     }
   }
 

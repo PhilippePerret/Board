@@ -54,7 +54,7 @@ class Measure {
       code.style.position = 'fixed'
       code.style.top      = '-1000px'
     } else {
-      raise("Impossible de connaitre la dimension de l'argument envoyé (ni string ni HTML Element).")
+      raise("[SYSTEM] Impossible de connaitre la dimension de l'argument envoyé (ni string ni HTML Element).")
     }
     document.body.appendChild(code)
     const bounds = code.getBoundingClientRect()

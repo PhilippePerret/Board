@@ -23,6 +23,7 @@ class App {
       this.data = retour.data.appData
       this.observe()
       Service.init()
+      Reminder.init()
       Project.initAllProjects(retour.data.projectsData)
       // Réveil si nécessaire des rappels
       this.awakeReminders()

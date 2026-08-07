@@ -11,8 +11,50 @@ TODOIST_TOKEN_FILE = ensure_file(
 module Todoist
   BASE_URL = 'https://api.todoist.com/api/v1'
 
+  # -- Point d'entrée de toutes les requêtes ---
+  #
+  def self.exec_request(request)
+    RETOUR.ok = true
+
+    case request['action']
+    when 'todoist-get-api-key'
+      RETOUR.data = {apikey: token || '-undefined-'}
+
+    when 'todoist-find-project'
+      id = find_project_id(request['todoist-title'])
+      if id
+        RETOUR.data = {id: id}
+      else
+        RETOUR.error = "Projet « #{request['todoist-title']} » introuvable dans Todoist."
+      end
+    when 'todoist-today-tasks'
+      RETOUR.data = {tasks: today_tasks(request['todoist_id'])}
+
+    when 'todoist-set-done'
+      close_tasks(request['task_ids'])
+
+    when 'todoist-create-tasks'
+      RETOUR.data = create_tasks(request['project_id'], request['tasks'])
+
+    when 'todoist-update-tasks'
+      RETOUR.data = update_tasks(request['project_id'], request['done_ids'], request['new_tasks'], request['mod_tasks'])
+    
+    when 'todoist-save-token'
+      # Enregistrement du token la première fois
+      save_token(request['token'])
+    end
+  end
+
+
   def self.token
-    YAML.safe_load(IO.read(TODOIST_TOKEN_FILE))['token']
+    if File.exist?(TODOIST_TOKEN_FILE)
+      YAML.safe_load(IO.read(TODOIST_TOKEN_FILE))['token']
+    end
+  end
+
+  def self.save_token(apikey)
+    yamldata = {'token' => apikey}
+    IO.write(TODOIST_TOKEN_FILE, yamldata.to_yaml)
   end
 
   def self.request(method, path, params: nil, body: nil)

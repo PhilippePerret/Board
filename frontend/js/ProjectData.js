@@ -29,7 +29,8 @@ const PROJECT_DATA = [
   , {id: 'service_data'         , editable: false}
   , {id: 'common_services_data' , editable: false}
   , {id: 'github_account'       , desc: getMsg('data-github-account')     , type: 'string'  , default: null   , editable: true}
-  , {id: 'github_labels'        , desc: getMsg('githug-label-desc')       , type: 'string'   , default: null   , editable: true}
+  , {id: 'github_name'          , desc: getMsg('github-project-name')     , type: 'string'  , default: null   , editable: true}
+  , {id: 'github_labels'        , desc: getMsg('githug-label-desc')       , type: 'string'  , default: null   , editable: true}
   , {id: 'session-duration'     , desc: getMsg('work-session-duration')   , type: 'integer' , default: null   , editable: true}
   , {id: 'work-duration'        , desc: getMsg('work-section-duration')   , type: 'integer' , default: null   , editable: true}
 ]
