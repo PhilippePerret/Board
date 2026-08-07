@@ -64,8 +64,8 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   'select': {
     params: { // les paramètres possible
         values:       {required: true, type: ['array-of-string', 'array-of-paire', 'array-of-object', 'path']}
-      , key_value:    {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété valeur dans la liste (le value de <option>)'}
-      , key_title:    {required_if: (da) => {da.values.type == 'array-of-object'}, desc: 'Propriété titre pour les options'}
+      , key_value:    {required_if: (da) => {da.values.type == 'array-of-object'}}
+      , key_title:    {required_if: (da) => {da.values.type == 'array-of-object'}}
       , create:       {type: 'boolean'}
       , default:      {type: 'string'}
     }
@@ -102,7 +102,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
   'copy-file': {
     params: {
         source: {required: true, type: 'string'}
-      , dest:   {name: 'Destination (folder or file)', required: true, type: 'string'}
+      , dest:   {name: getMsg('destination-folder-or-file'), required: true, type: 'string'}
     }
   },
 

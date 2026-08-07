@@ -4,13 +4,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 
 Format : fichier:ligne — texte
 
-=== ScriptServiceData.js ===
-(schéma de validation des script-services — utilisé pour des messages d'erreur
-de configuration, pas sûr que ce soit vu par l'utilisateur final. À trancher.)
-ScriptServiceData.js:67 — 'Propriété valeur dans la liste (le value de <option>)' (desc)
-ScriptServiceData.js:68 — 'Propriété titre pour les options' (desc)
-ScriptServiceData.js:105 — 'Destination (folder or file)' (name)
-
 === Tools.js ===
 Tools.js:22 — 'Position et taille de fenêtre' (title)
 Tools.js:24 — 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + 'Sa taille et sa position seront mises dans le presse-papier' (message, 2 fragments)
