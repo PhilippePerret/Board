@@ -7,12 +7,13 @@
  */
 class ServiceDefiner {
   
-  constructor(service, callback){
+  constructor(service, callback, projet = null){
     console.log("service à définir", service)
     this.id       = service.id
     this.service  = service
     this.params   = service.params
     this.callback = callback
+    this.projet   = projet
 
     // Donnée qui remplaceront params dans le service pour le projet
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
@@ -35,7 +36,7 @@ class ServiceDefiner {
       })
     }
     console.log("[ServiceDefiner.params", this.params)
-    const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this))
+    const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet)
     serviceDefiner.define()
   }
   /**
@@ -59,7 +60,7 @@ class ServiceDefiner {
           switch(definer.type){
             case 'service-name':
               // console.log("define pour service-name", definer)
-              this.service.data.name = definer.value
+              this.service.setData('name', definer.value)
               break
             case 'project':
               if (Project.current[definer.id] != definer.value){
@@ -107,8 +108,7 @@ class ServiceDefiner {
     } else {
       // <= Il n'y a pas de definers
       // => Procédure abandonnée
-      message('Définition abandonnée.')
-      console.log("Définition abandonnée.")
+      message(getMsg('aborted-definition'))
     }
   }
 }

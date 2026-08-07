@@ -23,12 +23,12 @@ class CommonPanel extends ServicePanel {
     ServicePanel.commonPanel = this
     this.opened = true
   }
-  get title(){ return 'Services communs'}
+  get title(){ return getMsg('Common-services')}
   get serviceType(){return 'common'}
   get domId(){ return 'common-services-panel'}
   get SERVICES_DATA(){ return COMMON_SERVICES_DATA}
   get oppositePanel(){ return ServicePanel.customPanel}
-  get oppositeButton(){ return 'Services personnalisés'}
+  get oppositeButton(){ return getMsg('Custom-services')}
   get closeLabel(){ return null}
 }
 
@@ -37,12 +37,12 @@ class CustomPanel extends ServicePanel {
     super()
     ServicePanel.customPanel = this
   }
-  get title(){ return 'Services personnalisés'}
+  get title(){ return getMsg('Custom-services')}
   get serviceType(){return 'custom'}
   get domId(){ return 'custom-services-panel'}
   get SERVICES_DATA(){ return CUSTOM_SERVICES_DATA}
   get oppositePanel(){ return ServicePanel.commonPanel}
-  get oppositeButton(){ return 'Services communs'}
+  get oppositeButton(){ return getMsg('Common-services')}
   get closeLabel(){ return null}
 
 }

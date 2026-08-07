@@ -74,7 +74,7 @@ class ScriptService {
     if (this.errors.length) {
       console.log("this.errors au retour de step.exec", this.errors)
     } else if (this.currentStep) {
-      if (this.currentStep.aborted) return message("Abandon du script-service.")
+      if (this.currentStep.aborted) return message(getMsg('script-service-canceled'))
     }
     const step = this.steps.shift()
     // console.log("step = ", step)
@@ -92,14 +92,14 @@ class ScriptService {
         const messageFin = this.getValue('conclusion') || getMsg('scserv-end')
         message(messageFin)
         new OKDialog({
-          title: "Script service",
+          title: getMsg('Scripts-services'),
           message: messageFin
         }).show()
         // Si un callback est défini (cf. les outils)
         if (this.callback) this.callback(this)
         return
       } else {
-        message("Abandon du script-service.")
+        message(getMsg('script-service-canceled'))
       }
     }
   }
@@ -137,11 +137,11 @@ class ScriptService {
   // Affichage des erreurs rencontrées
   displayErrors(errors){
     const data = {
-        title:    'Erreur de définition du Script-service'
+        title:    getErr('Script-service-definition-error')
       , width:    '960px'
-      , message:  'Le fichier de définition du script-service contient des erreurs.'+"\n\n"
+      , message:  getErr('Script-service-file-contains-errors')+"\n\n"
       , errors:   errors
-      , ouiBtn:   {name: 'Le modifier', onclick: this.openData.bind(this)}
+      , ouiBtn:   {name: getMsg('modify-it'), onclick: this.openData.bind(this)}
     }
     new ErrorsDialog(data).show()
   }

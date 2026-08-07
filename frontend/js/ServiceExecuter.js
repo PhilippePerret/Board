@@ -17,6 +17,8 @@ class ServiceExecuter {
   exec(projet, callback){ D.on && D.trace([projet, callback], 'ServiceExecuter.')
     this.projet = projet
     if (typeof callback == 'function') this.callback = callback
+    this._execCount = (this._execCount || 0) + 1
+    console.log(`[DIAG] ServiceExecuter#exec — appel n°${this._execCount} pour '${this.id}'`)
     this.runWithDynParams(this.params)
   }
 
@@ -36,7 +38,7 @@ class ServiceExecuter {
     const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
     const dynParams = SDATA.dynParams || []
     if (dynParams.length > 0) {
-      new ParamsDefiner(dynParams, (definers) => this.onDynParamsDefined(SDATA, baseParams, definers)).define()
+      new ParamsDefiner(dynParams, (definers) => this.onDynParamsDefined(SDATA, baseParams, definers), this.projet).define()
     } else {
       this.finalyExec(this.applyAfterDefinedParams(baseParams), this.persistedValuesById(SDATA, baseParams))
     }
@@ -97,6 +99,11 @@ class ServiceExecuter {
       return
     }
     console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
+    params.forEach((p, i) => {
+      try { JSON.stringify(p) } catch (e) {
+        console.error(`[DIAG] appel n°${this._execCount} — params[${i}] invalide (${e.message}) :`, p)
+      }
+    })
     server.send({action: `exec-service`, script: this.script, params: params, no_raise: true}, this.afterRunService.bind(this))
   }
 

@@ -4,23 +4,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 
 Format : fichier:ligne — texte
 
-=== ServiceDefiner.js ===
-ServiceDefiner.js:110 — 'Définition abandonnée.'
-
-=== ServicePanel.js ===
-ServicePanel.js:26 — 'Services communs' (title)
-ServicePanel.js:31 — 'Services personnalisés' (oppositeButton)
-ServicePanel.js:40 — 'Services personnalisés' (title)
-ServicePanel.js:45 — 'Services communs' (oppositeButton)
-
-=== ScriptService.js ===
-ScriptService.js:77 — "Abandon du script-service." (x2 : lignes 77 et 102)
-ScriptService.js:95 — "Script service" (title)
-ScriptService.js:102 — "Abandon du script-service."
-ScriptService.js:140 — 'Erreur de définition du Script-service' (title)
-ScriptService.js:142 — 'Le fichier de définition du script-service contient des erreurs.'
-ScriptService.js:144 — 'Le modifier' (ouiBtn)
-
 === ScriptServiceData.js ===
 (schéma de validation des script-services — utilisé pour des messages d'erreur
 de configuration, pas sûr que ce soit vu par l'utilisateur final. À trancher.)
