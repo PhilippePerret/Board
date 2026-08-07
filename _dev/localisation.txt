@@ -4,15 +4,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 
 Format : fichier:ligne — texte
 
-=== Service.js ===
-Service.js:103 — `L'id '${this.id}' existe déjà…`
-Service.js:123 — "Un service doit avoir un :name."
-Service.js:198 — "Apprendre à sélectionner le service"
-Service.js:225 — 'Ouverture du fichier script' (title)
-Service.js:226 — 'Voulez-vous modifier le fichier du script (définissant les étapes) ?' (message)
-Service.js:227 — 'Oui' (ouiBtn)
-Service.js:228 — 'Non' (nonBtn)
-
 === ServiceData.js ===
 ServiceData.js:294 — 'Ouvrir l’URL…' (name du service — les autres services du fichier utilisent getMsg pour name)
 ServiceData.js:297 — 'Quel URL faut-il rejoindre ?' (q)

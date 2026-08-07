@@ -85,13 +85,13 @@ class Service {
   constructor(data){ D.on && D.trace(data)
     // console.log("data Service", data)
     this.id     = data.id || raise("[System] Il faut fournir un identifiant au service.")
-    this.data   = data
+    this._ownData = data
     /**
      * Les paramètres du service. Attention, là aussi les données des services réels (dans projet)
      * sont différentes des données abstraites qui définissent ce qu'il faut pour
      * définir le service. (??? qu'est-ce que ça signifie ???)
      */
-    this.params     = data.params || raise("[System] Il faut définir les :params du servive " + this.id)
+    this.params     = data.params || raise("[SYSTEM] Il faut définir les :params du servive " + this.id)
     this.uuid       = data.uuid ?? null
     this.type       = data.type ?? null // idem (others ou startup)
     this.onError    = data.onError
@@ -100,7 +100,7 @@ class Service {
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.transient  = data.transient ?? false // service common depuis panneau
     this.afterDefinedParams = data.afterDefinedParams ?? null
-    this.constructor.get(this.uuid || this.id) && raise(`L'id '${this.id}' existe déjà…`)
+    this.constructor.get(this.uuid || this.id) && raise(`[SYSTEM] L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.isCommonService = (this.stype === 'common')
     this.isCustomService = (this.stype === 'custom')
@@ -120,9 +120,12 @@ class Service {
   }
 
 
+  get data(){ return Object.assign({}, this.absData, this._ownData) }
+  setData(prop, value){ this._ownData[prop] = value }
+
   get(key, defValue = null) {return this.data[key] ?? this.absData[key] ?? defValue}
 
-  get name()    { return this.get('name') || raise("Un service doit avoir un :name.") }
+  get name()    { return this.get('name') || raise(getErr('service-requires-a-name', this.id)) }
   get group()   { return this.get('group', null) }
   get stype()   { return this.get('stype', 'custom') }
   get front()   { return this.get('front', null) }
@@ -166,7 +169,7 @@ class Service {
 
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
-    new ServiceDefiner(this, callback).define()
+    new ServiceDefiner(this, callback, projet).define()
   }
   
   // Retourne la carte à insérer dans le projet
@@ -199,7 +202,7 @@ class Service {
 
   onClickOnProjectService(projet, ev){
     if (ev.shiftKey) {
-      message("Apprendre à sélectionner le service")
+      message(getMsg('Learn-to-select-the-service'))
     } else if (ev.metaKey) {
       this.redefine(projet)
     } else {
@@ -226,10 +229,10 @@ class Service {
         // On poursuit pour définir les autres paramètres
       } else {
         new ConfirmDialog({
-            title: 'Ouverture du fichier script' 
-          , message: 'Voulez-vous modifier le fichier du script (définissant les étapes) ?'
-          , ouiBtn: {name: 'Oui', onclick: this.redefine.bind(this, projet, true)}
-          , nonBtn: {name: 'Non', onclick: this.redefine.bind(this, projet, false)}
+            title: getMsg('Opening-script-file') 
+          , message: getMsg('ask-for-modify-script-file')
+          , ouiBtn: {name: getMsg('btn-yes'), onclick: this.redefine.bind(this, projet, true)}
+          , nonBtn: {name: getMsg('btn-no'), onclick: this.redefine.bind(this, projet, false)}
         }).show()
         return
       }
@@ -252,12 +255,12 @@ class Service {
     })
 
     const definer = new ServiceDefiner(schemaService, () => {
-      this.data.name = schemaService.data.name
+      this.setData('name', schemaService.data.name)
       this.params = schemaService.params
       const nameEl = this.projectCard?.querySelector?.('.name')
       if (nameEl) nameEl.textContent = this.name
       projet.save()
-    })
+    }, projet)
     definer.define()
   }
 
