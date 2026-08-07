@@ -20,7 +20,15 @@ class Bridge: NSObject, WKScriptMessageHandler {
         guard let body = message.body as? [String: Any] else { return }
 
         guard JSONSerialization.isValidJSONObject(body) else {
-            print("Bridge: message ignoré, body non JSON-valide (NaN/Infinity ?): \(body)")
+            // Ne JAMAIS interpoler "body" ici : si l'objet JS contient une
+            // référence circulaire (raison la plus probable d'un échec de
+            // isValidJSONObject avec NaN/Infinity), décrire "body" via
+            // string interpolation part en récursion infinie côté
+            // NSDictionary/NSArray.description -> crash natif (stack
+            // overflow, déjà observé). On journalise seulement les clés,
+            // jamais les valeurs.
+            let keys = body.keys.sorted().joined(separator: ", ")
+            print("Bridge: message ignoré, body non JSON-valide (NaN/Infinity/référence circulaire ?) — clés : \(keys)")
             return
         }
 

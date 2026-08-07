@@ -1,0 +1,55 @@
+---
+title: Super Board
+icon: icons/icon-bon.svg
+path: "/Users/philippeperret/Programmes/Board"
+createdAt: 2026/07/04
+updatedAt: 2026/08/06
+common_services_data:
+  git-commit:
+  - - commit
+  - - "/Users/philippeperret/Programmes/Board"
+  git-issue-list:
+  - - "/Users/philippeperret/Programmes/Board"
+  open-in-vscode:
+  - - "/Users/philippeperret/Programmes/Board"
+  create-git-issue:
+  - - "/Users/philippeperret/Programmes/Board"
+  gh-issue-create:
+  - - "/Users/philippeperret/Programmes/Board"
+id: 1786019443266c9f3c78f1e05a
+services:
+  others:
+  - id: run-script
+    params:
+    - - "/Users/philippeperret/Programmes/Board/update.command"
+    name: Actualiser le code
+    uuid: 1786019542166d2e1b2591648d
+  - id: open-iterm-at-folder
+    params:
+    - - "/Users/philippeperret/Programmes/Board"
+    - - claude
+    name: Claude
+    uuid: 178607478939432f30816895f7
+  - id: git-commit
+    params:
+    - - commit
+    - - "/Users/philippeperret/Programmes/Board"
+    name: Commiter
+    uuid: 178607519661419bdcd371e0b6
+  startup:
+  - id: open-folder-project
+    params:
+    - - "/Users/philippeperret/Programmes/Board"
+    - - "/Users/philippeperret/Programmes/Board/icons/"
+      - 20
+      - 683
+      - 964
+      - 618
+      - 192
+      - column
+    - - 0
+    name: Ouvrir le projet
+    uuid: 1786019510167fa233cc1bfd2d8
+collapsed: false
+github_labels: todo,aide,Amélioration,bug,Feature,help wanted,question
+workTime: 0

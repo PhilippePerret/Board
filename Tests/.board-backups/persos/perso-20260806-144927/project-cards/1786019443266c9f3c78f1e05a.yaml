@@ -1,0 +1,30 @@
+---
+title: Super Board
+icon: icons/icon-bon.svg
+path: "/Users/philippeperret/Programmes/Board"
+createdAt: 2026/07/04
+updatedAt: 2026/08/06
+id: 1786019443266c9f3c78f1e05a
+services:
+  startup:
+  - id: open-folder-project
+    params:
+    - - "/Users/philippeperret/Programmes/Board"
+    - - "/Users/philippeperret/Programmes/Board/icons/"
+      - 20
+      - 683
+      - 964
+      - 618
+      - 192
+      - column
+    - - 0
+    name: Ouvrir le projet
+    uuid: 1786019510167fa233cc1bfd2d8
+  others:
+  - id: run-script
+    params:
+    - - "/Users/philippeperret/Programmes/Board/update.command"
+    name: Actualiser le code
+    uuid: 1786019542166d2e1b2591648d
+collapsed: false
+workTime: 0

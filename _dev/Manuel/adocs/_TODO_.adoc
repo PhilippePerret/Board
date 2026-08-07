@@ -2,8 +2,6 @@
 
 cf. gh
 
-- Test à faire : sélection d'un projet → relance → projet sélectionné → le retirer → relancer → pas de bug, et last_project de App a été vidé
-
 == Todo En cours
 
 == Todo list ==
