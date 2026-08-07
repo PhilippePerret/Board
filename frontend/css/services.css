@@ -96,9 +96,10 @@ fieldset.services .service:active {
 
 .service * {
   font-size: 19px;
-  font-family: Avenir Next Condensed;
+  font-family: Arial;
   color: white;
   text-align: center;
+  letter-spacing: 1.2px;
 }
 
 fieldset.services fieldset.services-group legend {
