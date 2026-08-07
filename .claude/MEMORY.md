@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-05](2026-08-05-Etat-fin-de-session.md) — 15 tests en échec (dont des préexistants) à corriger en premier demain, + `Validator.repeat`/`Validator.dateAfter` abandonnés (pas urgent)
+- PRIORITÉ : [État fin de session 2026-08-06](2026-08-06-Etat-fin-de-session.md) — référence circulaire ParamDefiner à corriger (crash évité côté Swift mais pas éliminé), objectif demain = tous les tests pour mise en production
 
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
@@ -31,3 +31,5 @@
 - [Expliquer avant de rediriger la faute](feedbacks/explain_before_redirecting_blame.md) — si le diagnostic mène à un autre fichier que celui accusé, le dire d'abord, ne pas éditer direct
 - [Répondre avant d'enchaîner les outils](feedbacks/respond_before_more_tools.md) — après question directe, répondre en texte d'abord, pas silencieusement un nouvel appel d'outil
 - [Pas d'étiquette "pas urgent/plus tard"](feedbacks/no_vague_later_labels.md) — perd son sens avec le temps, confusionnant ; soit priorité maintenant, soit pas d'étiquette temporelle floue
+- [Conclusion d'abord](feedbacks/lead_with_conclusion.md) — question factuelle oui/non : la réponse en ligne 1, mécanisme après seulement si demandé
+- [Pas d'auto-commentaire](feedbacks/no_self_commentary.md) — jamais parler de sa propre réponse ou reconnaître sa faute en méta, corriger et donner la suite, point
