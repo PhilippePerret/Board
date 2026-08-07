@@ -33,3 +33,4 @@
 - [Pas d'étiquette "pas urgent/plus tard"](feedbacks/no_vague_later_labels.md) — perd son sens avec le temps, confusionnant ; soit priorité maintenant, soit pas d'étiquette temporelle floue
 - [Conclusion d'abord](feedbacks/lead_with_conclusion.md) — question factuelle oui/non : la réponse en ligne 1, mécanisme après seulement si demandé
 - [Pas d'auto-commentaire](feedbacks/no_self_commentary.md) — jamais parler de sa propre réponse ou reconnaître sa faute en méta, corriger et donner la suite, point
+- [Pas de redemande en flux établi](feedbacks/stop_reasking_established_step.md) — une fois le cycle rebuild/reproduire/observer en place, dire l'état, ne plus redemander l'action
