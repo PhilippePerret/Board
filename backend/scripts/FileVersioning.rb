@@ -66,7 +66,7 @@ begin
   FILENAME        = File.basename(FILEPATH)
   FEXTNAME        = File.extname(FILENAME)
   afold           = ARGV[1]
-  ARCHIVE_FOLDER  = afold == "nil" ? nil : afold
+  ARCHIVE_FOLDER  = (afold == "nil" || afold.nil? || afold.empty?) ? nil : afold
   VERSIONTERM     = ARGV[2]
 
 
@@ -86,7 +86,7 @@ begin
       # On déplace le fichier dans les archives et l'on change son nom
       dest = File.join(ARCHIVE_FOLDER, FILENAME)
       FileUtils.mv(FILEPATH, dest)
-      FileUtils.rename(FILEPATH, new_version_name)
+      File.rename(FILEPATH, new_version_name)
       message << "Déplacé dans l'archive et renuméroté #{new_version_name.inspect}"
     elsif File.exist?(ARCHIVE_FOLDER)
       # C'est la version dans le dossier qu'il faut prendre
@@ -114,6 +114,8 @@ begin
     end
   else
     if has_version_in_name
+      new_version_path = File.join(File.dirname(FILEPATH), new_version_name)
+      File.rename(FILEPATH, new_version_path)
       message << "Renommage du fichier : #{new_version_name.inspect}."
     else
       raise "Le fichier ne contient pas de numéro de version, je ne peux pas le versionner."
