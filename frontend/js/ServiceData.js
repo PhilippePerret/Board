@@ -206,7 +206,7 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
-  // Labels 
+  // Labels (à mettre dans tools)
   {
       id: 'git-install-labels'
     , name: getMsg('git-installing-labels')
@@ -231,6 +231,7 @@ const COMMON_SERVICES_DATA = [
     , name: getMsg('git-committing')
     , group: 'Git'
     , script: 'GitOpes.rb'
+    , repeat: true
     , params: [
         {id: 'git_ope', type: 'raw', value: 'commit'}
       , {id: 'path', type: 'project'}
@@ -394,10 +395,10 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'open-URL'
-    , name: 'Ouvrir l’URL…'
+    , name: getMsg('Open-url…')
     , group: getMsg('opening')
     , params: [
-      {id: 'url', q:'Quel URL faut-il rejoindre ?', type: 'url', required: true}
+      {id: 'url', q:getMsg('which-url-to-reach'), type: 'url', required: true}
     ]
   },
 
