@@ -22,7 +22,7 @@ class Project {
     this.sortedProjects.map(dataProjet => {
       new Project(dataProjet).buildCard()
     })
-    message("Projets courants affichés.")
+    message(getMsg('current-projects-displayed'))
     App.selectLastProjectIfRequired()
     // Maintenant que les projets sont affichés, on peut chercher les
     // tâches qu'ils peuvent avoir
@@ -105,12 +105,12 @@ class Project {
   static addProject(){ D.on && D.trace()
     reset()
     new ConfirmDialog({
-        title: "Importation d'un nouveau projet"
-      , message: "Sélectionner le dossier du projet dans le Finder, puis cliquer “OK”."
+        title: getMsg('importing-new-project')
+      , message: getMsg('select-project-folder-and-ok')
       , width: '580px'
-      , ouiBtn: {name: 'OK', onclick: this.onProjectSelectedInFinder.bind(this), width: '160px'}
-      , midBtn: {name: 'Archives…', onclick: ProjectArchives.chooseArchivedProject.bind(ProjectArchives), enable: App.getData('projects-out').length > 0}
-      , nonBtn: {name: "Renoncer", onclick: null, width: '160px'}
+      , ouiBtn: {name: getMsg('OK'), onclick: this.onProjectSelectedInFinder.bind(this), width: '160px'}
+      , midBtn: {name: getMsg('archives…'), onclick: ProjectArchives.chooseArchivedProject.bind(ProjectArchives), enable: App.getData('projects-out').length > 0}
+      , nonBtn: {name: getMsg('Cancel'), onclick: null, width: '160px'}
     }).show()
   }
 
@@ -124,7 +124,7 @@ class Project {
       this.current.editData.call(this.current)
     } else {
       // Ne devrait pas arriver
-      erreur("Aucun projet courant.")
+      erreur(getErr('no-current-projet'))
     }
   }
 
@@ -144,10 +144,10 @@ class Project {
       , workTime: 0
     }))
     new TextFieldDialog({
-        title: "Nom du nouveau projet"
-      , message: "Nom à donner à ce projet"
+        title: getMsg('new-project-name')
+      , message: getMsg('name-to-give-to-project')
       , defaultValue: retour.data.name
-      , ouiBtn: {name: "Appliquer", onclick: this.buildCardNewProject.bind(this, projet.id)}
+      , ouiBtn: {name: getMsg('Apply'), onclick: this.buildCardNewProject.bind(this, projet.id)}
     }).show()
     // Pour définir le titre à donner
   }
@@ -157,10 +157,10 @@ class Project {
     projet.title = title
     projet.buildCard()
     const confirm = new ConfirmDialog({
-        title: "Confirmation de l'import"
-      , message: "Si tu es d'accord avec ces données, clique le bouton “Importer”"
-      , ouiBtn: {name:"Importer", onclick: projet.save.bind(projet), w: '160px'}
-      , nonBtn: {name: "Renoncer", w: '160px'}
+        title: getMsg('confirming-import')
+      , message: getMsg('click-button-if-data-ok', getMsg('Import'))
+      , ouiBtn: {name: getMsg('Import'), onclick: projet.save.bind(projet), w: '160px'}
+      , nonBtn: {name: getMsg('Cancel'), w: '160px'}
       , unscrimmed: true
 
     }).show()
@@ -185,14 +185,14 @@ class Project {
    */
   static removeCurrentProject(projet){
     projet = this.current
-    if (!projet) return error("Il faut sélectionner le projet à retirer.")
+    if (!projet) return error(getErr('select-project-to-what', getMsg('sustract')))
     new ConfirmDialog({
-        title: "Confirmation du retrait du projet"
+        title: getMsg('confirming-project-substract')
       , width: '660px'
       , message: getMsg('expli-retrait-projet', projet.title)
       , ouiBtn: {name: `${svg('archive', 'btn')}Archiver`, onclick: projet.archive.bind(projet)}
       , midBtn: {name: `${svg('bagx','btn')}Retirer`, onclick: projet.remove.bind(projet)}
-      , nonBtn: {name: 'Renoncer'}
+      , nonBtn: {name: getMsg('Cancel')}
     }).show()
   }
 
@@ -233,7 +233,7 @@ class Project {
     if (idProject.id) idProject = idProject.id
     delete this.ensureProjects[idProject]
     if (this.current?.id  == idProject) this.constructor.deselect(this.current)
-    message("Projet retiré de la liste des projets.")
+    message(getMsg('project-substracted'))
   }
 
 
@@ -262,8 +262,8 @@ class Project {
     PROJECT_DATA.forEach(dprop => this[dprop.id] = data[dprop.id])
     this.data = data
     if (!this.id ) this.id = uniqId()
-    if (!this.title) this.title = '-projet sans titre-'
-    if (!this.path ) raise("Le path du projet est obligatoire.")
+    if (!this.title) this.title = getErr('--untitled-project--')
+    if (!this.path ) raise("[SYSTEM] Le path du projet est obligatoire.")
     if (!this.services) this.services = {startup: [], others: []}
     this.constructor.add(this)
     if (undefined == this.card_path) {
@@ -385,7 +385,7 @@ class Project {
       , title:    getMsg('title-data-of-project', this.title)
       , width:    '1100px'
       , props:    props
-      , project:  this
+      , projet:   this
       , ouiBtn:   {name: getMsg('Save'), onclick: this.onSaveEditedData.bind(this)}
     }
     new ConfigDialog(dataConfDial).show()
@@ -435,10 +435,10 @@ class Project {
     if (undefined == this.startupservices) this.startupservices = [...this.services.startup].reverse()
     const startupservice = this.startupservices.pop()
     if (startupservice) {
-      message(`Lancement du service ${startupservice.name}…`)
+      message(getMsg('running-service-x', startupservice.name))
       startupservice.exec(this, null /* event */, this.startStartupServices.bind(this))
     } else {
-      message("Fin de démarrage du projet.")
+      message(getMsg('ending-startup-project-x', this.title))
     }
     return stopEvent(ev)
   }
@@ -449,10 +449,10 @@ class Project {
     if (undefined == aryData) {
       stopEvent(ev)
       new TextFieldDialog({
-          title: "Modification du titre du projet"
-        , message: "Nom à donner à ce projet"
+          title: getMsg('modifying-project-title')
+        , message: getMsg('name-to-give-to-project')
         , defaultValue: this.title
-        , ouiBtn: {name: "Appliquer", onclick: this.modifyTitle.bind(this, null)}
+        , ouiBtn: {name: getMsg('Apply'), onclick: this.modifyTitle.bind(this, null)}
       }).show()
       return false
     } else {
@@ -488,7 +488,7 @@ class Project {
     this.preAddService(service, 'others')
   }
   preAddService(service, where){
-    console.log("-> preAddService", service)
+    // console.log("-> preAddService", service)
     service = service.duplicateService()
     service.define(this, this.addService.bind(this, service, where))
   }
@@ -523,7 +523,7 @@ class Project {
     const startupContainer = DCreate('DIV', {id:`${this.obj.id}-startup-container`, class:'startup-services', role: 'group'})
     const divSServices = DCreate('DIV', {id:`${this.obj.id}-startup-services`, class: 'startup-services-panel hidden', role: 'group'})
     const divBtnStartup = DCreate('DIV', {class:'service'})
-    this.btnStartup = DCreate('DIV', {text: 'GO !', id:`${this.obj.id}-btn-startup`, class:'name'})
+    this.btnStartup = DCreate('DIV', {text: getMsg('GO!'), id:`${this.obj.id}-btn-startup`, class:'name'})
     divBtnStartup.appendChild(this.btnStartup)
     startupContainer.appendChild(divBtnStartup)
     startupContainer.appendChild(divSServices)
@@ -550,7 +550,7 @@ class Project {
   removeServiceFromListe(){
     const service = this.draggedService
     service.projectCard.remove()
-    message(`Service supprimé (${service.uuid})`)
+    message(getMsg('service-x-substracted', service.uuid))
     this.services[service.type] = this.services[service.type].filter(s => s.uuid != service.uuid)
     Service.remove(service.uuid)
     // Plus aucun service au démarrage : le bouton "GO !" (et son conteneur)
@@ -599,18 +599,18 @@ class Project {
     this.standbyBtn = DCreate('IMG', {src: 'images/pile.svg', class:'picto standby-btn'})
     div.appendChild(this.standbyBtn)
 
-    const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: 'Cliquer pour modifier le titre', style: 'display:inline-block;z-index:1;'})
+    const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: getMsg('click-to-modify-title'), style: 'display:inline-block;z-index:1;'})
     this.divTitle = tit
     div.appendChild(tit)
     const path  = DCreate('DIV', {class:'path', text: this.path})
     div.appendChild(path)
     const dates = DCreate('DIV', {class: 'dates'})
     div.appendChild(dates)
-    const crea  = DCreate('SPAN', {class: 'date', text: 'créé : ' + this.createdAt})
+    const crea  = DCreate('SPAN', {class: 'date', text: getMsg('created-at:') + this.createdAt})
     dates.appendChild(crea)
-    const upda  = DCreate('SPAN', {class: 'date', text: '/mod.: ' +this.updatedAt})
+    const upda  = DCreate('SPAN', {class: 'date', text: getMsg('modify-at:') + this.updatedAt})
     dates.appendChild(upda)
-    const work = DCreate('DIV', {class: 'worktime', text: 'Temps de travail : ' + this.workTime})
+    const work = DCreate('DIV', {class: 'worktime', text: getMsg('work-duration:') + this.workTime})
     div.appendChild(work)
 
     this.startupField = DCreate('FIELDSET', {id: `${divId}-startup-field`, class:'services'})
@@ -624,7 +624,7 @@ class Project {
      * la souris sur le bouton, le div contenant tous les services 
      * apparaitra, permettant d'en choisir un.
      */
-    const legendstartup = DCreate('LEGEND', {text:'Services au démarrage'})
+    const legendstartup = DCreate('LEGEND', {text:getMsg('startup-services')})
     this.startupField.appendChild(legendstartup)
     const startupServices = this.services.startup ?? []
     const hasStartup = startupServices.length > 0
@@ -638,7 +638,7 @@ class Project {
     div.appendChild(this.startupField)
 
     this.othersField = DCreate('FIELDSET', {id: `${divId}-others-field`, class:'services'})
-    const legendautre = DCreate('LEGEND', {text: 'Autres services'})
+    const legendautre = DCreate('LEGEND', {text: getMsg('others-services')})
     this.othersField.appendChild(legendautre)
     ;(this.services.others ?? []).forEach((service) => {
       this.othersField.appendChild(this.getServiceCard(service))
@@ -744,7 +744,7 @@ class Project {
       else {
         this.tasks = tasks
         new TasksDialog({
-            title: 'Tâches Todoist'
+            title: getMsg('todoist-tasks')
           , q: getMsg('todoist-message-today-project-task', [this.title])
           , tasks: tasks
           , onCheck: this.onCheckTaskTodoist.bind(this)

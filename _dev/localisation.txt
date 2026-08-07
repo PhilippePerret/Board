@@ -4,63 +4,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 
 Format : fichier:ligne — texte
 
-=== App.js ===
-App.js:9 — "Tableau de bord" (const NAME)
-
-=== Clock.js ===
-Clock.js:62 — 'normal' (text du marqueur d'état, DOM accessibilité)
-Clock.js:437 — `Séance terminée : ${this.pendingElapsedMinutes} min.`
-
-=== Dialog.js ===
-Dialog.js:112 — 'this.midData.onclick n’est pas une fonction'
-
-=== Dialogs.js ===
-Dialogs.js:253 — 'Échantillons' (LEGEND, ColorDialog)
-Dialogs.js:423 — `\nID: ${task.id}` (fragment "ID:")
-
-=== Notifier.js ===
-Notifier.js:57 — "Impossible de connaitre la dimension de l'argument envoyé (ni string ni HTML Element)."
-
-=== ParamDefiner.js ===
-ParamDefiner.js:50 — 'Définition abandonnée'
-ParamDefiner.js:89 — 'Un identifiant est obligatoire.'
-ParamDefiner.js:91 — 'Le type doit être défini.'
-
-=== Project.js ===
-Project.js:25 — "Projets courants affichés."
-Project.js:108 — "Importation d'un nouveau projet" (title)
-Project.js:109 — "Sélectionner le dossier du projet dans le Finder, puis cliquer “OK”." (message)
-Project.js:111 — 'OK' (ouiBtn)
-Project.js:112 — 'Archives…' (midBtn)
-Project.js:113 — "Renoncer" (nonBtn)
-Project.js:127 — "Aucun projet courant."
-Project.js:147 — "Nom du nouveau projet" (title)
-Project.js:148 — "Nom à donner à ce projet" (message)
-Project.js:150 — "Appliquer" (ouiBtn)
-Project.js:160 — "Confirmation de l'import" (title)
-Project.js:161 — "Si tu es d'accord avec ces données, clique le bouton “Importer”" (message)
-Project.js:162 — "Importer" (ouiBtn)
-Project.js:163 — "Renoncer" (nonBtn)
-Project.js:188 — "Il faut sélectionner le projet à retirer."
-Project.js:190 — "Confirmation du retrait du projet" (title)
-Project.js:193 — `Archiver` (ouiBtn, concaténé à une icône svg)
-Project.js:195 — 'Renoncer' (nonBtn)
-Project.js:236 — "Projet retiré de la liste des projets."
-Project.js:266 — "Le path du projet est obligatoire."
-Project.js:438 — `Lancement du service ${startupservice.name}…`
-Project.js:441 — "Fin de démarrage du projet."
-Project.js:452 — "Modification du titre du projet" (title)
-Project.js:453 — "Nom à donner à ce projet" (message)
-Project.js:455 — "Appliquer" (ouiBtn)
-Project.js:511 — 'GO !' (text bouton démarrage)
-Project.js:538 — `Service supprimé (${service.uuid})`
-Project.js:587 — 'Cliquer pour modifier le titre' (attribut title/tooltip)
-Project.js:594 — 'créé : ' (préfixe concaténé)
-Project.js:598 — 'Temps de travail : ' (préfixe concaténé)
-Project.js:612 — 'Services au démarrage' (LEGEND)
-Project.js:626 — 'Autres services' (LEGEND)
-Project.js:732 — 'Tâches Todoist' (title)
-
 === ProjectArchives.js ===
 ProjectArchives.js:9 — "Projets en archive" (title)
 ProjectArchives.js:10 — "Choisis le projet à remettre en activité." (message)
