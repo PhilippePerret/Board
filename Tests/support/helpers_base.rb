@@ -16,7 +16,7 @@ module BoardTest
   BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
   APP_DATA_FILE         = File.join(BOARD_SUPPORT_DIR, 'appdata.yaml')
-  LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'js', 'MES_ERRORS.js')
+  LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'locales', 'fr', 'ERRORS.js')
   # Même fichier que backend/lib/debug.rb (Debug::LOG_FILE) — volontairement
   # hors de BOARD_SUPPORT_DIR pour ne pas être déplacé par run_tests.sh.
   DEBUG_LOG_FILE        = File.join(Dir.home, 'Library', 'Application Support', 'Board-debug.log')
@@ -44,12 +44,12 @@ module BoardTest
     raise Pending, message
   end
 
-  # Lit le message d'erreur directement dans frontend/js/MES_ERRORS.js
+  # Lit le message d'erreur directement dans frontend/locales/fr/ERRORS.js
   # (ERRORS[key]) au lieu de le dupliquer en dur dans les tests.
   def loc_error(key)
     content = File.read(LOC_ERRORS_FILE)
     match = content.match(/'#{Regexp.escape(key)}'\s*:\s*'((?:\\.|[^'\\])*)'/)
-    raise "Clé introuvable dans MES_ERRORS.js : #{key.inspect}" unless match
+    raise "Clé introuvable dans ERRORS.js : #{key.inspect}" unless match
     match[1].gsub(/\\(.)/, '\1')
   end
 

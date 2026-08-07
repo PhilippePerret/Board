@@ -16,6 +16,12 @@
 const MESSAGES = {
     'premier': "sans virgule"
 
+    // --- STATIQUE (index.html) ---
+    , 'Board': "Tableau de bord"
+    , 'Help': "Aide"
+    , 'Debug': "Debug"
+    , 'Tools': "Outils"
+
     // --- GÉNÉRAUX ---
     , 'btn-yes': "Oui"
     , 'btn-no': "Non"

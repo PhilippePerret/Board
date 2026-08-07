@@ -247,18 +247,14 @@ class Service {
           return current === undefined ? p : Object.assign({}, p, {actual: current})
         })
 
-    const schemaService = Object.assign({}, this.absData, {
-        name: this.name
-      , data: Object.assign({}, this.data)
-      , params: schemaParams
-      , unnamed: true
-    })
+    this.unnamed = true
+    this.params  = schemaParams
+    projet.lockSave()
 
-    const definer = new ServiceDefiner(schemaService, () => {
-      this.setData('name', schemaService.data.name)
-      this.params = schemaService.params
+    const definer = new ServiceDefiner(this, () => {
       const nameEl = this.projectCard?.querySelector?.('.name')
       if (nameEl) nameEl.textContent = this.name
+      projet.unlockSave()
       projet.save()
     }, projet)
     definer.define()

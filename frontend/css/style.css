@@ -116,7 +116,8 @@ textarea {
 }
 
 header {
-  display:block;
+  display:flex;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -139,23 +140,16 @@ div#current-project-mark {
   color: rgb(249, 249, 21);
 }
 
+header div#tools-button,
 header div#help-link,
-header div#debug-button,
-header div#tools-button {
-  position: absolute;
-  left: 18.5em;
-  top: 50%;
-  transform: translateY(-50%);
+header div#debug-button {
+  margin-left: 1.5em;
   font: 14px Avenir Next;
   color: rgb(150, 150, 150);
   cursor: pointer;
   font-size: 16pt;
 }
-header div#tools-button {
-  left: 15em;
-}
 header div#debug-button {
-  left: 28em;
   font-size: 13pt;
 }
 header div#help-link:hover,

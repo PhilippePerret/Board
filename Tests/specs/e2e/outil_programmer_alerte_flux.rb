@@ -49,7 +49,7 @@ def run_test
   #   final apparaît directement.
   wait_for_suffix('btn-oui')
   conclusion_text = bridge_eval("document.querySelector('.overlay:not(.hidden) .message')?.textContent || ''")
-  expected = 'Alerte programmée avec succès.' # MES_MESSAGES.js, 'tools-confirm-scheduling-alert'
+  expected = 'Alerte programmée avec succès.' # frontend/locales/fr/MESSAGES.js, 'tools-confirm-scheduling-alert'
   raise "message de confirmation attendu #{expected.inspect}, obtenu #{conclusion_text.inspect}" unless conclusion_text.include?(expected)
 
   # → le rappel a bien été enregistré en mémoire, avec le bon message

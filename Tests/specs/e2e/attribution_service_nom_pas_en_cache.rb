@@ -23,7 +23,7 @@ require_relative '../../support/helpers'
 include BoardTest
 
 SERVICE_DOM_ID = 'open-folder-project'
-DEFAULT_NAME   = 'Ouvrir le dossier du projet' # frontend/js/MES_MESSAGES.js
+DEFAULT_NAME   = 'Ouvrir le dossier du projet' # frontend/locales/fr/MESSAGES.js
 CUSTOM_NAME_A  = 'Dossier Claude'
 
 def run_test

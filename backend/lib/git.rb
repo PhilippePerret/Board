@@ -94,7 +94,7 @@ class << self
     # Troisième étape : créer les nouveaux labels
     labels = labels.split(',')
     requests = labels.map do |label|
-      "gh label create #{Shellwords.escape(label)} --color #{colors.shift || '7777777'}"
+      "gh label create #{Shellwords.escape(label)} --color #{colors.shift || '777777'}"
     end
     cmd = <<~BASH
     exec 2>&1

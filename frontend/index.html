@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Tableau de bord</title>
+    <title></title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/debug.css">
     <link rel="stylesheet" href="css/dialogs.css">
@@ -16,9 +16,9 @@
   <header>
     <div id="app-name">Tableau de bord</div>
     <div id="current-project-mark"></div>
-    <div id="tools-button" title="Outils">Outils</div>
-    <div id="help-link" title="Aide">Aide</div>
-    <div id="debug-button" title="Debug">Debug</div>
+    <div id="tools-button"></div>
+    <div id="help-link"></div>
+    <div id="debug-button"></div>
   </header>
 
   <!--
@@ -37,7 +37,6 @@
   <pre id="output" class="hidden" style="white-space:pre-wrap"></pre>
 <footer>
   <div id="message"></div>
-  <button id="btn-try" onclick="essayer()" class="hidden">Essayer</button>
 </footer>
 
 <!-- 
@@ -61,9 +60,35 @@
 
 
 
-<script src="js/MES_ERRORS.js"></script>
+<script>
+(function(){
+  var SUPPORTED = ['fr', 'en', 'it', 'de', 'es', 'zh', 'ko', 'hi']
+  var lang = null
+  try { lang = localStorage.getItem('board-lang') } catch(e) {}
+  if (!SUPPORTED.includes(lang)) {
+    lang = (navigator.language || 'fr').slice(0, 2).toLowerCase()
+  }
+  if (!SUPPORTED.includes(lang)) lang = 'fr'
+  document.write('<script src="locales/' + lang + '/MESSAGES.js"><\/script>')
+  document.write('<script src="locales/' + lang + '/ERRORS.js"><\/script>')
+  document.documentElement.lang = lang
+})()
+</script>
+<script>
+(function(){
+  document.title = MESSAGES['Board']
+  var toolsBtn = document.getElementById('tools-button')
+  toolsBtn.title = MESSAGES['Tools']
+  toolsBtn.textContent = MESSAGES['Tools']
+  var helpLink = document.getElementById('help-link')
+  helpLink.title = MESSAGES['Help']
+  helpLink.textContent = MESSAGES['Help']
+  var debugBtn = document.getElementById('debug-button')
+  debugBtn.title = MESSAGES['Debug']
+  debugBtn.textContent = MESSAGES['Debug']
+})()
+</script>
 <script src="js/Draggable.js"></script>
-<script src="js/MES_MESSAGES.js"></script>
 <script src="js/ExtendedObject.js"></script>
 <script src="js/Dom.js"></script>
 <script src="js/hourglass.js"></script>

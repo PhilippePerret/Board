@@ -340,7 +340,22 @@ class Project {
     return `${prefix}${this.path}/${relPath}`
   }
 
+  lockSave(){ this._saveLocked = true }
+  unlockSave(){
+    this._saveLocked = false
+    const callbacks = this._pendingSaveCallbacks
+    this._pendingSaveCallbacks = null
+    if (callbacks && callbacks.length) {
+      this.save(() => callbacks.forEach(cb => cb()))
+    }
+  }
+
   save(callback){
+    if (this._saveLocked) {
+      this._pendingSaveCallbacks = this._pendingSaveCallbacks || []
+      if (callback) this._pendingSaveCallbacks.push(callback)
+      return
+    }
     const newData = {}
     PROJECT_DATA.map(d => d.id).forEach(prop => {
       if (prop === 'services') {
