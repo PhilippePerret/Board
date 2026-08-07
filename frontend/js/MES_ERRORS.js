@@ -15,6 +15,8 @@ const ERRORS = {
     , 'prop-cant-be-empty': "La propriété « $1 » ne peut pas être vide."
     , 'must-be-num-between': "« $1 » devrait être un nombre entre $2 et $3"
     , 'invalid-phone-number': "Le numéro de téléphone $1 est invalide."
+
+    , 'select-project-to-what': "Il faut sélectionner le projet à $1."
     
     // --- Application ---
     , 'unknown-app-data': "Donnée application inconnue : '$1'"
@@ -22,12 +24,17 @@ const ERRORS = {
     // --- Projets ---
     , 'project-folder-not-selected': 'Le dossier du projet doit être sélectionné dans le Finder.'
     , 'folder-required': 'Il faut impérativement choisir un dossier.'
+    , 'no-current-projet': "Aucun projet courant."
+    , '--untitled-project--': '-projet sans titre-'
 
     // Services
     , 'serv-error-on-return': "Erreur au retour du service"
+    , 'service-requires-a-name': "Un service doit avoir un :name. ($1)"
 
     // Scripts services
     , 'scserv-abort': "Abandon du service"
+    , 'Script-service-definition-error': 'Erreur de définition du Script-service'
+    , 'Script-service-file-contains-errors': 'Le fichier de définition du script-service contient des erreurs.'
     , 'scserv-unknown-step': "L'étape d'identifiant '$1' est inconnue."
     , 'scserv-list-required': "Le fichier YAML devrait définir une liste d’étapes ($1)."
     , 'scserv-type-required': "Une étape de script-service ($1) doit toujours avoir un type ($2)."

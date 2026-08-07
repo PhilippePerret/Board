@@ -4,12 +4,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 
 Format : fichier:ligne — texte
 
-=== Tools.js ===
-Tools.js:22 — 'Position et taille de fenêtre' (title)
-Tools.js:24 — 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + 'Sa taille et sa position seront mises dans le presse-papier' (message, 2 fragments)
-Tools.js:26 — 'Valider' (ouiBtn)
-Tools.js:27 — 'Annuler' (nonBtn)
-Tools.js:41 — `Position/taille copiées dans le presse-papier : ${data.x}, ${data.y}, ${data.width}, ${data.height}`
 
 === ToolsData.js ===
 ToolsData.js:11 — "Programmer une alerte" (name)

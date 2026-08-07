@@ -19,12 +19,12 @@ class Tools {
       server.send({action: 'list-running-apps'}, this.toolGetWindowBounds.bind(this))
     } else {
     new SelectDialog({
-        title: 'Position et taille de fenêtre'
+        title: getMsg('Window-position-and-size')
       , id: 'tools_app_window_bounds'
-      , message: 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + '<div class="small">Sa taille et sa position seront mises dans le presse-papier</div>'
+      , message: getMsg('which-widhow-app')
       , values: retour.data.apps
-      , ouiBtn: {name: 'Valider', onclick: this.onAppChosen.bind(this)}
-      , nonBtn: {name: 'Annuler'}
+      , ouiBtn: {name: getMsg('Validate'), onclick: this.onAppChosen.bind(this)}
+      , nonBtn: {name: getMsg('Cancel')}
     }).show()
 
     }
@@ -113,7 +113,7 @@ class Tools {
   static onWindowBounds(retour){
     const data = retour.data
     if (data.ok === false) { message(data.error); return }
-    message(`Position/taille copiées dans le presse-papier : ${data.x}, ${data.y}, ${data.width}, ${data.height}`)
+    message(getMsg('size-and-position-in-clipboard', [data.x, data.y, data.width, data.height]))
   }
 
   // Appelé par un bouton outil qui ne définit pas de :run, peut-être

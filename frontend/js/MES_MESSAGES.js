@@ -20,10 +20,12 @@ const MESSAGES = {
     , 'btn-yes': "Oui"
     , 'btn-no': "Non"
     , 'OK': 'OK'
+    , 'GO!': 'GO !'
     , ':'   :   ' : '
     , 'new…': "Nouveau…"
     , 'None': 'Aucun'
     , 'Nonee': 'Aucune'
+    , 'Empty': 'Vide'
     , 'error:': "Erreur :"
     , 'other-value…': 'Autre valeur…'
     , 'date/at': 'à' // pour une date avec heure
@@ -42,18 +44,40 @@ const MESSAGES = {
     , 'choosing-files-to': "Choix des fichiers à $1"
     , 'choose-files-to': "Choisisez les fichiers à $1 (click)"
     , 'select-filter-placeholder': "Filtrer…"
+    , 'fatal-error': "Erreur fatale"
+    , 'ope-aborted': 'Opération abandonnée'
+    , 'samples': "Échantillons" // (musique)
+    , 'work-duration:': 'Temps de travail : '
+    , 'created-at:': 'créé : '
+    , 'modify-at:': '/mod. : '
+    , 'url-definition': 'Définition d’URL'
 
     // Verbes
     , 'vb-commit': 'committer'
     , 'Ignore': 'Ignorer'
     , 'Finish': "Finir" // dans le sens d'un ordre donné
+    , 'Apply': "Appliquer"
+    , 'Import': 'Importer'
+    , 'sustract': "retirer"
+    , 'Open-url…': 'Ouvrir l’URL…'
+    , 'modify-it': 'Le modifier'
+    , 'Validate': 'Valider'
+
+    // Logique
+    , 'id-is-required': "Un identifiant (`id`) est obligatoire"
+    , 'type-is-required': "Le type doit être défini."
 
     // Data
     , 'path-to-data': "Chemin d'accès aux données"
     , 'id-in-data': 'ID dans les données (au besoin)'
 
+    // Prompt
+    , 'Parameter-definition': 'Définition de paramètre'
+
     // File
     , 'add-to-file-at': "Ajout à un fichier, à un endroit quelconque"
+    , 'which-url-to-reach': 'Quel URL faut-il rejoindre ?'
+    , 'destination-folder-or-file': 'Destination (dossier ou fichier)'
 
     // App
     , 'app-config': 'Configuration de l’application'
@@ -92,12 +116,16 @@ const MESSAGES = {
     , 'ask-still-working': "Le travail est-il toujours en cours sur le projet “$1” ?"
 
     // --- UI ---
+    , 'Window-position-and-size': 'Position et taille de fenêtre'
+    , 'which-widhow-app': 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + '<div class="small">Sa taille et sa position seront mises dans le presse-papier</div>'
+    , 'size-and-position-in-clipboard': "Position/taille copiées dans le presse-papier : $1, $2, $3, $4."
+    , 'click-button-if-data-ok': "Si tu es d'accord avec ces données, clique le bouton “$1”"
     , 'countdown-timer': "Minuteur"
     , 'lifecycle': "Cycle de vie"
     , 'open-folder-project': "Ouvrir le dossier du projet"
     , 'opening': "Ouverture"
     , 'run-a-script': "Jouer un script"
-    , 'run-a-script-service': "Jouer un SCRIPT-SERVICE"
+    , 'run-a-script-service': "Jouer un script-service"
     , 'Defining-a-color': "Définition d'une couleur"
     , 'choose-a-color': "Sélectionner une couleur avec le picker ci-dessous."
     , 'group-tools': "Outils"
@@ -105,11 +133,13 @@ const MESSAGES = {
     , 'clock-set-pause': "Mettre en pause"
 
     // --- PROJETS ---
+    , 'current-projects-displayed': "Projets courants affichés."
     , 'data-project-id': 'ID du projet'
     , 'data-project-icon': 'Icône du projet'
     , 'data-project-folder': 'Dossier du projet'
     , 'data-project-title': "Titre du projet"
     , 'data-project-nature': "Nature du projet"
+    , 'importing-new-project': "Importation d'un nouveau projet"
     , 'data-project-standby': 'Mise en standby du projet'
     , 'data-project-todoist': 'ID projet dans Todoist'
     , 'data-github-account': 'Compte Github (du projet)'
@@ -120,7 +150,10 @@ const MESSAGES = {
     , 'githug-label-desc': "Labels des issues Github"
 
     , 'title-project': "Projet “$1”"
+    , 'new-project-name': "Nom du nouveau projet"
+    , 'name-to-give-to-project': "Nom à donner à ce projet"
     , 'title-data-of-project': "Données du projet “$1”"
+    , 'select-project-folder-and-ok': "Sélectionner le dossier du projet dans le Finder, puis cliquer “OK”."
     , 'project-saved-success': "Projet « $1 » enregistré avec succès à $2."
     , 'alert-before-edit-projet': "Attention, données sensibles. Manipuler en sachant ce que vous faites."
     , 'expli-retrait-projet': "Le retrait du projet “$1” ne touche pas son dossier lui-même. Il est juste retiré de ce tablau de bord ou archivé (pour pouvoir le récupérer plus tard)\n\nAttention, si le projet n'est pas archivé, tous ses services et data seront perdues, bien sûr."
@@ -133,6 +166,21 @@ const MESSAGES = {
     , 'versionning-minor': 'Version mineure'
     , 'versionning-major': 'Version majeure'
     , 'select-archives-folder': 'Sélectionner le dossier archives dans le Finder (ou aucun si le fichier ne doit pas être archivé).'
+    , 'archives…': "Archives…"
+    , 'confirming-import': "Confirmation de l'import"
+    , 'confirming-project-substract': "Confirmation du retrait du projet"
+    , 'project-substracted': "Projet retiré de la liste des projets."
+    , 'ending-startup-project-x': "Fin de démarrage du projet “$1”."
+    , 'modifying-project-title': "Modification du titre du projet"
+    , 'click-to-modify-title': 'Cliquer pour modifier le titre'
+    // Projet et Service
+    , 'startup-services': 'Services au démarrage'
+    , 'others-services': 'Autres services'
+    // Projet et Todoist
+    , 'todoist-tasks': 'Tâches Todoist'
+    // Projet et archives
+    , 'archived-projects': "Projets en archives"
+    , 'choose-project-to-restart': "Choisis le projet à remettre en activité."
 
     // Finder
     , 'open-file…': 'Ouvrir le fichier…'
@@ -152,6 +200,9 @@ const MESSAGES = {
     , 'sel-el-in-finder-or-click-none' : "Sélectionner l'élément dans le Finder ou cliquer 'Aucun'."
 
     // -- Service --
+    , 'Common-services': 'Services communs'
+    , 'Custom-services': 'Services personnalisés'
+    , 'running-service-x': "Lancement du service $1…"
     , 'service-success': ' Service “$1” joué avec succès (<span class="tiny">(service $2)</span>).'
     , 'service-exec-bash-code': 'Exécuter le code bash…'
     , 'service-exec-js-code': "Exécuter le code JS…"
@@ -169,6 +220,12 @@ const MESSAGES = {
     , 'which-phone-number': 'Merci de bien vouloir fournir un numéro de téléphone valide.'
     , 'date-and-hour': 'Date et heure'
     , 'versioning-file': 'Versionner un fichier/dossier'
+    , "Service supprimé ($1)": "Service supprimé ($1)"
+    , 'Learn-to-select-the-service': "Apprendre à sélectionner le service"
+    , 'aborted-definition': 'Définition abandonnée.'
+    // Scripts-services
+    , 'Scripts-services': "Script service"
+    , 'script-service-canceled': "Abandon du script-service."
 
     // IDE et Terminaux
     , 'iterm-at-folder': 'iTerm au dossier'
@@ -184,7 +241,7 @@ const MESSAGES = {
     , 'git-message-commit': 'Message de commit pour ces fichiers'
     , 'git-commit-message-title': "Message du commit"
     , 'gh-issues-create': "Nouvelle issue de type…"
-    , 'git-issue-list': "Marquer / lire issues de type…"
+    , 'git-issue-list': "Marquer issues de type…"
     , 'github-label': "Label Github :"
     , 'Message:': "Message :"
     , 'gh-description:': "Description plus précise :"
@@ -196,11 +253,14 @@ const MESSAGES = {
     , 'gh-pin': 'Épingler'
     , 'gh-unpin': 'Désépingler'
     , 'git-installing-labels': "Définition des labels Git"
+    , 'git-init-btn': "Initier Git sur le projet"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Sélectionner le script du service dans le Finder puis “OK”.'
     , 'scserv-end': 'Script-service terminé avec succès (en tout cas sans erreur).'
     , 'scserv-datetime-default-format': 'JJ MM HH:MM (03 08 05:12 pour 3 aout à 5 heures 12)'
+    , 'Opening-script-file': 'Ouverture du fichier script'
+    , 'ask-for-modify-script-file': "Voulez-vous modifier le fichier du script (définissant les étapes) ?"
     
     // -- Documentation --
     , 'Documentation': 'Documentation'
@@ -223,6 +283,10 @@ const MESSAGES = {
     // Reminder / Rappels
     , 'remind-started': "Démarrée"
     , 'remind-remove': "Supprimer"
+    , 'scheduling-alert': "Programmation d'alerte"
+    , 'schedule-a-alert': "Programmer une alerte"
+    , 'hour-and-day-of-alert': "Heure de l'alerte (et jour si plus tard)"
+    , 'alert-message': "Message de l'alerte"
 
     // -- Todoist --
     , 'todoist-content'     : "contenu"
