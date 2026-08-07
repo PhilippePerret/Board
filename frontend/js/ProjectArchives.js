@@ -6,11 +6,11 @@ class ProjectArchives {
       server.send({action: 'get-options-for-projects-out'}, this.chooseArchivedProject.bind(this))
     } else {
       new SelectDialog({
-            title: "Projets en archive"
-          , message: "Choisis le projet à remettre en activité."
+            title: getMsg('archived-projects')
+          , message: getMsg('choose-project-to-restart')
           , values: retour.data
-          , ouiBtn: {name: 'Celui-là', onclick: this.onChooseArchivedProject.bind(this)}
-          , nonBtn: {name: 'Renoncer'}
+          , ouiBtn: {name: getMsg('This-one'), onclick: this.onChooseArchivedProject.bind(this)}
+          , nonBtn: {name: getMsg('Cancel')}
         , 
       }).show()
     }
@@ -22,7 +22,7 @@ class ProjectArchives {
     if (undefined == retour) {
       // Remonter les données du projet en le remettant dans la liste
       // des projets courant
-      if (!pid) raise("ProjectId indéfini…")
+      if (!pid) raise("[SYSTEM] undefined ProjectId.")
       server.send({action: 'retreive-project-from-archives', projectId: pid},
         this.onChooseArchivedProject.bind(this, pid)
       )

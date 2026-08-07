@@ -5,10 +5,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 Format : fichier:ligne — texte
 
 === ProjectArchives.js ===
-ProjectArchives.js:9 — "Projets en archive" (title)
-ProjectArchives.js:10 — "Choisis le projet à remettre en activité." (message)
-ProjectArchives.js:12 — 'Celui-là' (ouiBtn)
-ProjectArchives.js:13 — 'Renoncer' (nonBtn)
 ProjectArchives.js:25 — "ProjectId indéfini…"
 
 === Prompter.js ===
