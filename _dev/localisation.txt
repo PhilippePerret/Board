@@ -4,15 +4,6 @@ marqués [SYSTEM]/[SYSTEMIC]). Fichiers Aide.js à Dialogs.js re-scannés aussi
 
 Format : fichier:ligne — texte
 
-=== ProjectArchives.js ===
-ProjectArchives.js:25 — "ProjectId indéfini…"
-
-=== Prompter.js ===
-Prompter.js:125 — 'Définition d’URL' (titre de secours, promptUrl)
-Prompter.js:284 — 'Vide' (midBtn, promptPath)
-Prompter.js:312 — 'Définition de paramètre' (titre de secours, _waitForWindow)
-Prompter.js:403 — "this.time non défini"
-
 === Service.js ===
 Service.js:103 — `L'id '${this.id}' existe déjà…`
 Service.js:123 — "Un service doit avoir un :name."

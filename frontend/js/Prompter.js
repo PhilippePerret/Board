@@ -11,11 +11,14 @@
  *
  *
  * @usage
- *    Prompter.prompt({type: 'string', id, name, message, default}, callback)
+ *    Prompter.prompt(
+ *      {type: 'string', id, name, message, default}, 
+ *      callback
+ *    )
  *
  * callback(value, error)
  *    error   truthy    → l'opération a échoué (callback(null, error))
- *    value   null      → l'utilisateur a annulé/renoncé
+ *    value   null      → l'utilisateur a annulé/renoncé, donc on peut s'arrêter
  *    value   sinon     → la valeur obtenue (si valeur demandée, sinon le
  *                        résultat de l'opération)
  */
@@ -53,8 +56,23 @@ class Prompter {
   static promptProject(spec, callback){
     const value = Project.current[spec.id]
     if (!value) {
+      const ifUndefined = Object.assign(spec.ifUndefined, {id: spec.id})
+      // useLastAsDefault sur un param 'project' : le ParamsDefiner créé
+      // juste en dessous n'a qu'un seul élément (lui-même), donc ne peut
+      // jamais voir le paramètre précédent — on va le chercher dans
+      // spec.definers, la liste du ParamsDefiner du service entier
+      // (transmise par ParamDefiner.promptSpec).
+      if (ifUndefined.useLastAsDefault && spec.definers) {
+        const previous = spec.definers[spec.definers.length - 2]
+        if (previous) ifUndefined.default = previous.value
+      } else if (spec.default != null) {
+        // Valeur actuelle de CETTE instance de service (redéfinition,
+        // cf. Service#redefine qui injecte spec.actual) — doit primer sur
+        // le default statique déclaré dans if_undefined.
+        ifUndefined.default = spec.default
+      }
       const definers = new ParamsDefiner(
-        [Object.assign(spec.ifUndefined, {id: spec.id})],
+        [ifUndefined],
         (definers) => {
           const valueDefiner = definers[0]
           const prop = valueDefiner.id
@@ -122,7 +140,7 @@ class Prompter {
   }
 
   static promptUrl(spec, callback){
-    new TextFieldDialog(Object.assign(this.dialogBase(spec, 'Définition d’URL'), {
+    new TextFieldDialog(Object.assign(this.dialogBase(spec, getMsg('url-definition')), {
         message:      spec.message || spec.q || getMsg('which-url')
       , defaultValue: spec.default || 'https://'
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
@@ -288,7 +306,7 @@ class Prompter {
 
   static promptPath(spec, callback){
     const q = spec.message || spec.q || getMsg('select-el-in-finder-and-ok')
-    const options = {midBtn: {name: 'Vide', onclick: () => callback('')}}
+    const options = {midBtn: {name: getMsg('Empty'), onclick: () => callback('')}}
     this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour), null, options, callback)
   }
 
@@ -316,7 +334,7 @@ class Prompter {
   }
 
   static promptPathOrNull(spec, callback){
-    const dialogData = Object.assign(this.dialogBase(spec, 'Définition de paramètre'), {
+    const dialogData = Object.assign(this.dialogBase(spec, getMsg('Parameter-definition')), {
       message: spec.message || spec.q || getMsg('sel-el-in-finder-or-click-none'),
       ouiBtn:  {name: getMsg('OK'),    onclick: (retour) => this._getPathOfFinderSelection(null, callback, retour)},
       nonBtn:  {name: getMsg('None'), onclick: () => callback(null)}
@@ -407,7 +425,7 @@ class Prompter {
   /*****************************************************************/
 
   static promptAlert(spec, callback){
-    spec.time || raise("this.time non défini")
+    spec.time || raise("[SYSTEM] this.time non défini")
     Reminder.register({
         title: spec.title
       , message: spec.message
