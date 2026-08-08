@@ -52,7 +52,7 @@ button:active:not(:disabled) {
   cursor: pointer!important;
 }
 button:disabled { 
-  opacity:0.6!important;
+  opacity:0.4!important;
   color: black!important;
   background-color:white!important;
   border-color: transparent!important;
@@ -70,6 +70,7 @@ button.svg32 {
 
 .custom-select-filter {
   width: 100%;
+  background: transparent;
   box-sizing: border-box;
   padding: 4px 8px;
   margin-bottom: 0.5em;
