@@ -107,7 +107,7 @@ def move_project_out_to_projects_in(pid)
       newProjectsOut: APP_DATA['projects-out']
     }
   else
-    {error: "Projet #{pid} introuvable dans les archives."}
+    {error: ['backend-app-project-unfound', pid]}
   end
 end
 
@@ -122,7 +122,7 @@ def remove_or_archive_project(project_id, archive_it)
     end
      save_app_data
   else
-    return {error: "Projet introuvable : #{project_id} (dans #{PROJECT_CARD_FOLDER})"}
+    return {error: ['backend-app-project-unfound', project_id]}
   end
   return {
     newProjectsIn: APP_DATA['projects-in'],

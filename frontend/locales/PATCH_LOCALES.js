@@ -10,8 +10,6 @@ Object.assign(MESSAGES, {
 
   // App
   , 'backend-app-data-save': "Données de l'application sauvées."
-  , 'backend-unknown-action': ":Action inconnue : '$1'."
-  , 'backend-access-unabled': "Board n'a pas la permission Accessibilité activée : Réglages Système → Confidentialité et sécurité → Accessibilité → cocher Board."
   
   // Git
   , 'git-issue-gestion': "Gestion des issues Github"
@@ -26,6 +24,11 @@ Object.assign(MESSAGES, {
 Object.assign.ERRORS, {
   'premier': "juste pour virgule"
   // Nouveaus messages d'erreur à mettre dans les ERRORS.js
+
+  // App
+  , 'backend-app-project-unfound': "Projet $1 introuvable dans les archives."
+  , 'backend-unknown-action': ":Action inconnue : '$1'."
+  , 'backend-access-unabled': "Board n'a pas la permission Accessibilité activée : Réglages Système → Confidentialité et sécurité → Accessibilité → cocher Board."
 
   // File
   , 'backend-unfound-file': "Fichier introuvable : $1"
