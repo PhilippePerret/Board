@@ -50,19 +50,50 @@ class << self
     return retour
   end
 
+  # @return true si le dossier du projet est déjà gité
   def git_exist_for_project?(project_path)
     File.exist?(File.join(project_path, '.git'))
   end
 
   # Remonte la liste des issues correspondant au +label+
-  def get_issues(project_path, label)
+  def get_issues(project_path, labels)
+    if labels.empty?
+      _get_all_issues(project_path)
+    else
+      labels.map { |label| _get_issues_of_label(project_path, label )}.flatten
+    end
+  end
+
+  # @return toutes les issues
+  def _get_all_issues(project_path)
     cmd = <<~BASH
     exec 2>&1
     cd #{Shellwords.escape(project_path)}
-    gh issue list -l #{label} --json number,title
+    gh issue list --json number,title
     BASH
-    res = `#{cmd}`
-    JSON.parse(res)
+    begin
+      res = `#{cmd}`
+      JSON.parse(res)
+    rescue Excpetion => e
+      RETOUR.error e.message
+      []
+    end
+  end
+
+  # @return les issues d'un certain label
+  def _get_issues_of_label(project_path, label)
+    cmd = <<~BASH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    gh issue list -l '#{label}' --json number,title
+    BASH
+    begin
+      res = `#{cmd}`
+      JSON.parse(res)
+    rescue Excpetion => e
+      RETOUR.error e.message
+      []
+    end
   end
 
   def update_labels(project_path:, labels:)

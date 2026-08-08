@@ -162,8 +162,8 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       ]
     , dynParams: [
-          {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
-        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, width: '680px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+          {id: 'issue_label', type: 'select', q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: 
           [['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]}
         , {id: 'gh_message', type: 'string', q: getMsg('gh-message-operation'), width: '600px', title: getMsg('git-issue-gestion')}
