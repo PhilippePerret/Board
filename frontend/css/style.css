@@ -253,7 +253,9 @@ button.aide {
   cursor: pointer;
   background-color: cadetblue;
   color: white;
+  opacity: 0.6;
 }
+button.aide:hover { opacity: 1; }
 
 div.todoist {
   position:relative;
