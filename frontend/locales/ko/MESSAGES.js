@@ -48,7 +48,7 @@ const MESSAGES = {
     , 'Preserve': "유지"
     , 'app-to-use': "사용할 애플리케이션"
     , 'choosing-files-to': "$1할 파일 선택"
-    , 'choose-files-to': "$1할 파일을 선택하세요 (클릭)"
+    , 'choose-files-to': "$1할 파일을 선택하세요"
     , 'select-filter-placeholder': "필터링…"
     , 'fatal-error': "치명적 오류"
     , 'ope-aborted': '작업이 취소되었습니다'

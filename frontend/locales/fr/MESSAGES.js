@@ -48,7 +48,7 @@ const MESSAGES = {
     , 'Preserve': "Préserver"
     , 'app-to-use': "Application à utiliser"
     , 'choosing-files-to': "Choix des fichiers à $1"
-    , 'choose-files-to': "Choisisez les fichiers à $1 (click)"
+    , 'choose-files-to': "Choisisez les fichiers à $1"
     , 'select-filter-placeholder': "Filtrer…"
     , 'fatal-error': "Erreur fatale"
     , 'ope-aborted': 'Opération abandonnée'

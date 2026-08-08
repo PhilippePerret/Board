@@ -48,7 +48,7 @@ const MESSAGES = {
     , 'Preserve': "Preserve"
     , 'app-to-use': "Application to use"
     , 'choosing-files-to': "Choosing files to $1"
-    , 'choose-files-to': "Choose the files to $1 (click)"
+    , 'choose-files-to': "Choose the files to $1"
     , 'select-filter-placeholder': "Filter…"
     , 'fatal-error': "Fatal error"
     , 'ope-aborted': 'Operation aborted'

@@ -48,7 +48,7 @@ const MESSAGES = {
     , 'Preserve': "सुरक्षित रखें"
     , 'app-to-use': "उपयोग करने के लिए एप्लिकेशन"
     , 'choosing-files-to': "$1 के लिए फ़ाइलों का चयन"
-    , 'choose-files-to': "$1 के लिए फ़ाइलें चुनें (क्लिक करें)"
+    , 'choose-files-to': "$1 के लिए फ़ाइलें चुनें"
     , 'select-filter-placeholder': "फ़िल्टर करें…"
     , 'fatal-error': "गंभीर त्रुटि"
     , 'ope-aborted': 'ऑपरेशन रद्द कर दिया गया'

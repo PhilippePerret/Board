@@ -48,7 +48,7 @@ const MESSAGES = {
     , 'Preserve': "保留"
     , 'app-to-use': "要使用的应用程序"
     , 'choosing-files-to': "选择要$1的文件"
-    , 'choose-files-to': "选择要$1的文件（点击）"
+    , 'choose-files-to': "选择要$1的文件"
     , 'select-filter-placeholder': "筛选…"
     , 'fatal-error': "严重错误"
     , 'ope-aborted': '操作已取消'
