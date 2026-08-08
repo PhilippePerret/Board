@@ -19,6 +19,9 @@ Object.assign(MESSAGES, {
 
   // File
   , 'backend-file-created': "Le fichier $1 a été créé."
+
+  // Documentation
+  , 'backend-docu-opened-in': "Dossier de documentation ouvert avec succès dans $1"
 })
 
 Object.assign.ERRORS, {
@@ -51,6 +54,9 @@ Object.assign.ERRORS, {
   // Todoist
   , 'backend-todoist-unfound-project': "Projet « $1 » introuvable dans Todoist."
   , 'backend-task-error': "Tâche $1 : $2"
+
+  // Documentation
+  , 'backend-docu-unfound-folder': "Le dossier de documantation '$1' est introuvable."
 
 
 }

@@ -7,10 +7,10 @@ table = {ok: true, message: nil, error: nil}
 
 if File.exist?(DOCU_FOLDER) 
   `open -a "#{EDITOR_NAME}" "#{DOCU_FOLDER}"`
-  table[:message] = "Dossier de documentation ouvert avec succès dans #{EDITOR_NAME}"
+  table[:message] = ['backend-docu-opened-in', EDITOR_NAME]
 else
   table[:ok] = false
-  table[:error] = "Le dossier de documantation '#{DOCU_FOLDER}' est introuvable."
+  table[:error] = ['backend-docu-unfound-folder', DOCU_FOLDER]
 end
 
 puts table.to_json
