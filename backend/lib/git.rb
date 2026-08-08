@@ -31,16 +31,23 @@ class << self
     begin
       # Primo vérification (il ne faut pas que git soit déjà installé)
       if git_exist_for_project?(project_path)
-        retour[:error] = "GIT est déjà initialisé pour ce projet." # localiser
+        retour[:error] = ['backend-already-git']
       else
         # Initialisation dans le dossier
         res = git_init(project_path, github_account, github_name)
         retour.merge!(res)
+        return retour if res[:ok] === false
 
         # Création des lables
         if labels.count > 0
-          update_labels(project_path: project_path, labels: labels.join(','))
-          retour[:message] += " + définition des labels."
+          res_ope = update_labels(project_path: project_path, labels: labels.join(','))
+          if (res_ope[:ok])
+            msg = retour[:message]
+            msg = [msg] if msg.is_a?(String)
+            msg << 'backend-add-labels-ajout'
+          else
+            retour = res_ope
+          end
         end
       end
     rescue Exception => e
@@ -104,7 +111,7 @@ class << self
     gh label list --json name,color
     BASH
     res = `#{cmd}`
-    raise "Impossible de récupérer les labels existants : #{res}" unless $?.success?
+    return {ok: false, error: ['backend-unabled-labels', res]} unless $?.success?
     table = JSON.parse(res)
     actual_labels = table.map { |h| h['name'] }
     colors = table.map { |h| h['color'] }
@@ -119,7 +126,7 @@ class << self
       done
       BASH
       res = `#{cmd}`
-      raise "Impossible de détruire les labels existants : #{res}" unless $?.success?
+      return {ok: false, error: ['backend-unabled-to-destroy-labels', res]} unless $?.success?
     end
 
     # Troisième étape : créer les nouveaux labels
@@ -133,8 +140,9 @@ class << self
     #{requests.join("\n")}
     BASH
     res = `#{cmd}`
-    raise "Impossible de créer les nouveaux labels : #{res}" unless $?.success?
-    return res
+    raise {ok: false, error: ['backend-unable-to-create-labels', res]} unless $?.success?
+    
+    return {ok: true, message: res}
   end
 
   def commit(project_path:, files:, message:)
@@ -210,7 +218,9 @@ class << self
 
     remote_git_path = 
       if ENV['APP_BOARD_TESTS_RUNNING'] # lors des tests
-        remote_path = ENV['BOARD_TEST_GIT_REMOTE'] || raise("Il faut le git remote de test")
+        remote_path = ENV['BOARD_TEST_GIT_REMOTE'] || begin
+          return {ok: false, error: ['backend-remote-test-required']}
+        end
       else
         "git@github.com:#{github_account}/#{github_project_name}.git"
       end
@@ -235,25 +245,31 @@ class << self
     run = -> (command) {
       full_command = "cd '#{project_path}' && git #{command} 2>&1"
       res = `#{full_command}`
-      raise "git #{command} a échoué : #{res}" unless $?.success?
-      res
+      return {ok: false, error: ['backend-git-failed', [command, res]]} unless $?.success?
+      {ok: true, message: res}
     }
 
     retour = {ok: true, message: nil, error: nil}
 
     begin
-      run.call('init')
+      res = run.call('init')
+      return res unless res[:ok]
 
       # Création du fichier gitignore
       IO.write(gitignore_path, gitignore_default_content)
 
-      run.call('add -A')
-      run.call('commit -m "first commit"')
-      run.call('branch -M main')
-      run.call("remote add origin #{remote_git_path}")
-      run.call('push -u origin main')
+      res = run.call('add -A')
+      return res unless res[:ok]
+      res = run.call('commit -m "first commit"')
+      return res unless res[:ok]
+      res = run.call('branch -M main')
+      return res unless res[:ok]
+      res = run.call("remote add origin #{remote_git_path}")
+      return res unless res[:ok]
+      res = run.call('push -u origin main')
+      return res unless res[:ok]
 
-      retour[:message] = "Git préparé pour le dossier"
+      retour[:message] = 'backend-git-ready'
     rescue Exception => e
       retour[:ok] = false
       retour[:error] = e.message
