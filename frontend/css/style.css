@@ -46,15 +46,16 @@ button {
   margin: 0 10px;
   background-color: white;
   border: 1px solid rgb(208, 208, 208);
+}
+button:active:not(:disabled) { 
+  outline: auto; 
   cursor: pointer!important;
 }
-button:active:not(:disabled) { outline: auto; }
 button:disabled { 
   opacity:0.6!important;
   color: black!important;
   background-color:white!important;
   border-color: transparent!important;
-  cursor: none!important;
 }
 
 /* Seulement pour les boutons svg des outils de projet */
