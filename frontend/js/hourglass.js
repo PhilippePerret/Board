@@ -83,7 +83,12 @@ class Spinner {
     this._built = true
   }
 
+  // Compteur (pas un booléen) : plusieurs appelants peuvent tenir le
+  // sablier ouvert en même temps (ex. Dialog.onOui à l'ouverture du clic
+  // + ServiceExecuter le temps réel du backend) — il ne se ferme que
+  // quand le dernier relâche.
   static start(){
+    this._count = (this._count || 0) + 1
     if (this.running) return
     this.running = true
     this._built || this.build()
@@ -93,6 +98,8 @@ class Spinner {
   }
 
   static stop(){
+    this._count = Math.max(0, (this._count || 0) - 1)
+    if (this._count > 0) return
     if ( !this.running) return
     this.running = false
     if ( !this._el) return

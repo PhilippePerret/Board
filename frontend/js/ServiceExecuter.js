@@ -93,10 +93,15 @@ class ServiceExecuter {
   }
 
   sendToScript(params){
+    // Tenu jusqu'à afterRunService (ou juste après this.front ci-dessous) —
+    // compteur (Spinner.js) : n'éteint pas un sablier déjà tenu par ailleurs
+    // (Dialog.onOui), ne s'éteint que quand tous les tenants ont relâché.
+    Spinner.start()
     if (this.front) {
       // Pas un script backend, mais un traitement frontend
       // Typiquement : le minuteur ou l'exécution de code javascript
       this.front(this.projet, params)
+      Spinner.stop()
       return
     }
     console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
@@ -110,8 +115,9 @@ class ServiceExecuter {
 
   // -- Appelée après avoir exécuté le service --
   afterRunService(retour){ D.on && D.trace(retour, 'ServiceExecuter.')
+    Spinner.stop()
     console.log("Retour du run de service", retour)
-    if (retour.error) { 
+    if (retour.error) {
       if (this.service.onError) {
         this.service.onError(retour.error)
       } else {
