@@ -28,11 +28,12 @@ Object.assign(MESSAGES, {
   , 'backend-archiv-saved': "Version sauvegardée en archives."
 })
 
-Object.assign.ERRORS, {
+Object.assign(ERRORS, {
   'premier': "juste pour virgule"
   // Nouveaus messages d'erreur à mettre dans les ERRORS.js
 
   // App
+  , 'app-sorry-fatal-error': "Une erreur fatale s'est produite, merci de nous excuser."
   , 'backend-app-project-unfound': "Projet $1 introuvable dans les archives."
   , 'backend-unknown-action': ":Action inconnue : '$1'."
   , 'backend-access-unabled': "Board n'a pas la permission Accessibilité activée : Réglages Système → Confidentialité et sécurité → Accessibilité → cocher Board."
@@ -71,4 +72,4 @@ Object.assign.ERRORS, {
   , 'backend-archiv-unfound-folder': "Dossier archives introuvable : $1."
 
 
-}
+})

@@ -68,19 +68,19 @@ begin
   when "save-project"
     data = request["data"]
     project_id = data['id']
-    Debug.log("save-project reçu, id=#{project_id.inspect}")
+    # Debug.log("save-project reçu, id=#{project_id.inspect}")
     IO.write(project_path(project_id), data.to_yaml)
     APP_DATA['projects-in'] << project_id unless APP_DATA['projects-in'].include?(project_id)
     save_app_data
-    Debug.log("save-project terminé, id=#{project_id.inspect}")
+    # Debug.log("save-project terminé, id=#{project_id.inspect}")
 
   # === Sauvegarde des données de l'application ===
 
   when 'save-app-data'
-    Debug.log("save-app-data reçu, projects-in=#{request['data']['projects-in'].inspect}")
+    # Debug.log("save-app-data reçu, projects-in=#{request['data']['projects-in'].inspect}")
     IO.write(APP_DATA_FILE, request['data'].to_yaml)
     RETOUR.ok = true
-    RETOUR.message = "Données de l'application sauvées."
+    RETOUR.message = 'backend-app-data-save'
    
   # à l'initialisation (App.init)
   when 'load-all'
@@ -151,12 +151,12 @@ begin
   when 'load-yaml-file'
     path = request['path']
     if !File.exist?(path)
-      RETOUR.error = "Fichier introuvable : #{path}"
+      RETOUR.error = ['backend-unfound-file', path]
     else
       begin
         RETOUR.data = YAML.safe_load(File.read(path).gsub(/\n\s+\n/,"\n\n"))
       rescue Psych::SyntaxError => e
-        RETOUR.error = "Code YAML invalide (#{path}) : #{e.message}"
+        RETOUR.error = ['backend-invalid-yaml', [path, e.message]]
       end
     end
 
@@ -231,7 +231,7 @@ begin
 
   # action inconnue => ERRREUR
   else 
-    RETOUR.error = "unknown action: #{request["action"]}"
+    RETOUR.error = ['backend-unknown-action', request["action"]]
   end
 
   

@@ -43,11 +43,16 @@ window.bridge = {
         try {
             data = JSON.parse(jsonString);
         } catch (e) {
-            console.error("Invalid JSON from backend:", jsonString);
-            console.error("Erreur avec la requête : ", this._payload)
-            return;
+            erreur('app-sorry-fatal-error')
+            console.error("Invalid JSON from backend:", jsonString)
+            console.error("[SYSTEM] Erreur avec la requête : ", this._payload)
+            return
         }
-        const id = data.id;
+        const id = data.id
+
+        // Résolution des messages localisés remontant du
+        // backend (sous forme d'identifiants)
+        Speaking.resolveBackendMessages(data)
 
         if (id && this.callbacks[id]) {
             this.callbacks[id](data);
