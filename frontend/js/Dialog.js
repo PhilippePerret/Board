@@ -25,11 +25,25 @@
  *    bouton soit actif. La valeur est une fonction qui doit retour-
  *    ner true (bouton actif) ou false (bouton inactif)
  * 
+ * ouiBtnIf
+ *    La fonction de condition peut être aussi transmise sous forme
+ *    de propriété.
+ *    Cette fonction reçoit le dialog (this) en premier argumetn. par
+ *    exemple, pour obtenir les values d'un sélect, il suffit de 
+ *    faire dialog.values
+ * 
  * nonBtn
  *    Définition du bouton Cancel. :name, :onclick
  *    :if comme le bouton ouiBtn
  * 
+ * nonBtnIf
+ *    Condition sur le bouton "Non" en propriété
+ *    Reçoit le Dialog en argument
+ * 
  * Si midBtn définit keep: true, la fenêtre courante est gardée.
+ * 
+ * midBtnIf
+ *    Cf. ouiBtnIf, pour le bouton du millieu.
  * 
  */
 class Dialog {
