@@ -4,6 +4,9 @@
 // (click()) ne déclenche pas cette séquence d'évènements.
 //
 // Usage : osascript -l JavaScript Tests/support/drag.js <fromDomId> <toDomId>
+//     ou : osascript -l JavaScript Tests/support/drag.js <fromDomId> <dx>,<dy>
+//         (décalage relatif en pixels depuis fromDomId, ex. "300,0" = 300px
+//         vers la droite — pas besoin d'un 2e élément DOM comme cible)
 
 ObjC.import('CoreGraphics')
 
@@ -65,6 +68,11 @@ function centerOf(elem) {
   return { x: pos[0] + size[0] / 2, y: pos[1] + size[1] / 2 }
 }
 
+function parseOffset(str) {
+  const m = str.match(/^(-?\d+),(-?\d+)$/)
+  return m ? { dx: parseInt(m[1], 10), dy: parseInt(m[2], 10) } : null
+}
+
 function postMouseEvent(type, point, button) {
   const event = $.CGEventCreateMouseEvent(null, type, point, button)
   $.CGEventPost(kCGHIDEventTap, event)
@@ -81,9 +89,11 @@ function run(argv) {
   pauseBriefly(0.2)
 
   const fromEl = waitForElement(argv[0], defaultTimeout)
-  const toEl = waitForElement(argv[1], defaultTimeout)
   const from = centerOf(fromEl)
-  const to = centerOf(toEl)
+  const offset = parseOffset(argv[1])
+  const to = offset
+    ? { x: from.x + offset.dx, y: from.y + offset.dy }
+    : centerOf(waitForElement(argv[1], defaultTimeout))
 
   const steps = 12
   postMouseEvent(kCGEventLeftMouseDown, from, kCGMouseButtonLeft)

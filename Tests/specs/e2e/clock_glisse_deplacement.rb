@@ -33,8 +33,11 @@ def run_test
 
     left_before = bridge_eval("document.querySelector('.clock-panel')?.getBoundingClientRect().left").to_f
 
-    # → glissé réel (mousedown/move/up) vers le nom de l'app dans le header
-    drag('clock-handle-move', 'app-name')
+    # → glissé réel (mousedown/move/up), 300px vers la droite (décalage
+    # relatif, cf. drag.js) — une cible "app-name" avait un X quasi
+    # identique à celui de la poignée (bord droit du panneau bas-gauche) :
+    # dx horizontal quasi nul même en cas de glissé réel réussi, faux négatif.
+    drag('clock-handle-move', '300,0')
 
     raise "l'horloge a démarré pendant le déplacement" if visible?('btn-clock-stop')
 

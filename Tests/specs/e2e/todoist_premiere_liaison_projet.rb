@@ -41,6 +41,11 @@ def run_test
   ]
   with_todoist_e2e_stub(stub_responses) do |stub_dir|
     project_id = create_fixture_project(title: project_title)
+    # Sans token local (dossier de données toujours vierge à chaque run,
+    # cf. run_tests.sh), Todoist._resolveAPIKey affiche le dialogue "Clé
+    # API" au lieu du dialogue "titre du projet" attendu ici — token bidon,
+    # seul le stub HTTP (with_todoist_e2e_stub) compte pour la suite.
+    File.write(File.join(BOARD_SUPPORT_DIR, 'todoist.yaml'), {'token' => 'fake-test-token-e2e'}.to_yaml)
     launch_app
 
     card = "project-#{project_id}"
