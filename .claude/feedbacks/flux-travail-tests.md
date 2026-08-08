@@ -21,7 +21,7 @@ metadata:
 4.  Investiguer pour trouver le problème.
 5.  Corriger.
 6.  INTERDICTION FORMELLE DE REMETTRE LA COMMANDE DE LANCEMENT DANS LE PRESSE-PAPIER
-7.  Demander POLIMENT à Phil de relancer le test. NE PAS SYSTÉMATISER CETTE DEMANDE (car elle se transforme en ordre). Varier les annonces : "Le presse-papier est prêt", "Le test est prêt à être lancé", "Je suis prêt", etc.
+7.  Dire uniquement "Fini." Rien d'autre — pas "prêt", pas de rappel du presse-papier (déjà rempli à l'étape 1, jamais remis, cf. règle formelle ci-dessus).
 8.  Si OK et que PLUSIEURS TESTS D'AFFILÉE N'ONT PAS ÉCHOUÉ, alors : reproposer dans le presse-papier un run de l'ensemble des TESTS RESTANTS pour voir ceux qui passent aussi et arrêter de perdre du temps à jouer individuellement des succès.
 9.  SINON→ Passer au test suivant
 10. En cas d'échecs successifs (plus de 2 échecs), PLACER DES LOGS pour déterminer le problème.
