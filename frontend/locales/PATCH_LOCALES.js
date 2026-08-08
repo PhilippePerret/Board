@@ -16,6 +16,8 @@ Object.assign(MESSAGES, {
   , 'backend-add-labels-ajout': " + définition des labels."
   , 'backend-git-ready': "Git préparé pour le dossier"
   , 'backend-git-failed': "git $1 a échoué : $2"
+  , 'git-issue-list': "Issues de type…"
+
 
   // File
   , 'backend-file-created': "Le fichier $1 a été créé."
