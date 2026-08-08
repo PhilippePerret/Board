@@ -84,6 +84,7 @@ const MESSAGES = {
     , 'add-to-file-at': "Zu einer Datei hinzufügen, an beliebiger Stelle"
     , 'which-url-to-reach': 'Welche URL soll erreicht werden?'
     , 'destination-folder-or-file': 'Ziel (Ordner oder Datei)'
+    , 'backend-file-created': "Die Datei $1 wurde erstellt."
 
     // App
     , 'app-config': 'Anwendungskonfiguration'
@@ -98,6 +99,7 @@ const MESSAGES = {
     , 'changelog-file-name': 'Name der Changelog-Datei'
     , 'todo-file-name': 'Name der TODO-Datei'
     , 'last-project-id': 'Zuletzt ausgewähltes Projekt'
+    , 'backend-app-data-save': "Anwendungsdaten gespeichert."
 
     // Minuteur
     , 'work-session-duration': 'Dauer einer Arbeitssitzung (Minuten)'
@@ -247,7 +249,7 @@ const MESSAGES = {
     , 'git-message-commit': 'Commit-Nachricht für diese Dateien'
     , 'git-commit-message-title': "Commit-Nachricht"
     , 'gh-issues-create': "Neues Issue vom Typ…"
-    , 'git-issue-list': "Issues vom Typ markieren…"
+    , 'git-issue-list': "Issues vom Typ…"
     , 'github-label': "Github-Label:"
     , 'Message:': "Nachricht:"
     , 'gh-description:': "Genauere Beschreibung:"
@@ -260,6 +262,10 @@ const MESSAGES = {
     , 'gh-unpin': 'Lösen'
     , 'git-installing-labels': "Definition der Git-Labels"
     , 'git-init-btn': "Git für das Projekt initialisieren"
+    , 'git-issue-gestion': "Verwaltung der Github-Issues"
+    , 'backend-add-labels-ajout': " + Definition der Labels."
+    , 'backend-git-ready': "Git für den Ordner vorbereitet"
+    , 'backend-git-failed': "git $1 fehlgeschlagen: $2"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Wähle das Service-Skript im Finder aus, dann „OK“.'
@@ -282,6 +288,11 @@ const MESSAGES = {
     , 'select-doc-main-final-file': 'Wähle die Handbuchdatei aus (Standard: docu.html)'
     , 'docu-main-file-name': 'Docu: Name der bearbeitbaren Datei'
     , 'docu-main-disp-file': 'Docu: Name der veröffentlichten Datei'
+    , 'backend-docu-opened-in': "Dokumentationsordner erfolgreich geöffnet in $1"
+
+    // Archive
+    , 'backend-archiv-move-and-num': "In das Archiv verschoben und neu nummeriert $1"
+    , 'backend-archiv-saved': "Version im Archiv gespeichert."
 
     // Tools
     , 'tools-confirm-scheduling-alert': "Erinnerung erfolgreich geplant."

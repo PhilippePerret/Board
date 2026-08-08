@@ -20,6 +20,11 @@ const ERRORS = {
 
     // --- Application ---
     , 'unknown-app-data': "Dato applicazione sconosciuto: '$1'"
+    , 'app-sorry-fatal-error': "Si è verificato un errore fatale, ci scusiamo."
+    , 'backend-app-project-unfound': "Progetto $1 non trovato negli archivi."
+    , 'backend-unknown-action': "Azione sconosciuta: '$1'."
+    , 'backend-access-unabled': "Board non ha il permesso di Accessibilità attivato: Impostazioni di Sistema → Privacy e sicurezza → Accessibilità → seleziona Board."
+    , 'backend-command-not-found': "Il comando bash '$1' è sconosciuto."
 
     // --- Projets ---
     , 'project-folder-not-selected': 'La cartella del progetto deve essere selezionata in Finder.'
@@ -52,12 +57,40 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "Il valutatore della fase '$1' è sconosciuto: $2 ($3)."
     , 'scserv-unknown-marker-translate': "Il marcatore di traduzione '$1' della fase '$2' è sconosciuto. I marcatori possibili sono: $3 ($4)."
 
+    // File
+    , 'backend-unfound-file': "File non trovato: $1"
+    , 'backend-invalid-yaml': "Codice YAML non valido ($1): $2"
+    , 'backend-unfound-folder-unable-file': "La cartella '$1' non è stata trovata. Impossibile creare in sicurezza il file '$2'."
+    , 'backend-unable-to-create-file': "Il file $1 non è stato possibile crearlo."
+    , 'backend-no-xml-file': "Nessuna lettura di file XML per ora."
+    , 'backend-version-no-num': "Il file $1 non contiene un numero di versione, impossibile assegnargli una versione."
+
+    // Git
+    , 'backend-unabled-labels': "Impossibile recuperare le etichette esistenti: $1"
+    , 'backend-already-git': "Git è già inizializzato per questo progetto."
+    , 'backend-unabled-to-destroy-labels': "Impossibile eliminare le etichette esistenti: $1"
+    , 'backend-unable-to-create-labels': "Impossibile creare le nuove etichette: $1"
+    , 'backend-remote-test-required': "È richiesto il remote git di test"
+    , 'backend-not-a-git-folder': "Questa cartella non è un repository git ($1)."
+    , 'backend-not-a-git-repo': "La cartella $1 non è un repository Git."
+    , 'backend-git-unknown-ope': "Operazione Git sconosciuta: $1"
+
+    // Script
+    , 'backend-script-unfound': "Impossibile trovare lo script da eseguire ($1)"
+
     // Documentation
     , 'docu-error-on-update': "Errore durante l'aggiornamento"
+    , 'backend-docu-unfound-folder': "La cartella della documentazione '$1' non è stata trovata."
 
     // TODOIST
     , 'todoist-key-task-unknown': "La chiave « $1 » è sconosciuta, per un'attività Todoist."
     , 'no-tasks-checked': "Nessuna attività selezionata"
     , 'checked-only-modify-task': "Deve essere selezionata solo l'attività da modificare."
+    , 'backend-todoist-unfound-project': "Progetto « $1 » non trovato in Todoist."
+    , 'backend-task-error': "Attività $1: $2"
+
+    // Archives
+    , 'backend-archiv-unknown-problem': "Versione non archiviata a causa di un problema sconosciuto."
+    , 'backend-archiv-unfound-folder': "Cartella archivi non trovata: $1."
 
 }

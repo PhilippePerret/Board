@@ -84,6 +84,7 @@ const MESSAGES = {
     , 'add-to-file-at': "파일의 임의 위치에 추가"
     , 'which-url-to-reach': '어떤 URL에 접속해야 하나요?'
     , 'destination-folder-or-file': '대상 (폴더 또는 파일)'
+    , 'backend-file-created': "파일 $1이(가) 생성되었습니다."
 
     // App
     , 'app-config': '애플리케이션 설정'
@@ -98,6 +99,7 @@ const MESSAGES = {
     , 'changelog-file-name': '변경 이력 파일 이름'
     , 'todo-file-name': 'TODO 파일 이름'
     , 'last-project-id': '마지막으로 선택한 프로젝트'
+    , 'backend-app-data-save': "애플리케이션 데이터가 저장되었습니다."
 
     // Minuteur
     , 'work-session-duration': '작업 세션 시간 (분)'
@@ -247,7 +249,7 @@ const MESSAGES = {
     , 'git-message-commit': '해당 파일들에 대한 커밋 메시지'
     , 'git-commit-message-title': "커밋 메시지"
     , 'gh-issues-create': "새 이슈 유형…"
-    , 'git-issue-list': "유형별 이슈 표시…"
+    , 'git-issue-list': "유형별 이슈…"
     , 'github-label': "Github 라벨:"
     , 'Message:': "메시지:"
     , 'gh-description:': "더 자세한 설명:"
@@ -260,6 +262,10 @@ const MESSAGES = {
     , 'gh-unpin': '고정 해제'
     , 'git-installing-labels': "Git 라벨 정의"
     , 'git-init-btn': "프로젝트에 Git 초기화"
+    , 'git-issue-gestion': "Github 이슈 관리"
+    , 'backend-add-labels-ajout': " + 라벨 정의."
+    , 'backend-git-ready': "폴더에 대해 Git 준비 완료"
+    , 'backend-git-failed': "git $1 실패: $2"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Finder에서 서비스 스크립트를 선택한 후 “확인”을 클릭하세요.'
@@ -282,6 +288,11 @@ const MESSAGES = {
     , 'select-doc-main-final-file': '매뉴얼 파일을 선택하세요 (기본값: docu.html)'
     , 'docu-main-file-name': '문서: 편집 가능한 파일 이름'
     , 'docu-main-disp-file': '문서: 게시된 파일 이름'
+    , 'backend-docu-opened-in': "문서 폴더가 $1에서 성공적으로 열렸습니다"
+
+    // Archive
+    , 'backend-archiv-move-and-num': "보관함으로 이동하고 번호를 다시 매겼습니다 $1"
+    , 'backend-archiv-saved': "버전이 보관함에 저장되었습니다."
 
     // Tools
     , 'tools-confirm-scheduling-alert': "알림이 성공적으로 예약되었습니다."

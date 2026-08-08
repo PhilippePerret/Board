@@ -20,6 +20,11 @@ const ERRORS = {
 
     // --- Application ---
     , 'unknown-app-data': "Unknown application data: '$1'"
+    , 'app-sorry-fatal-error': "A fatal error occurred, please accept our apologies."
+    , 'backend-app-project-unfound': "Project $1 not found in the archives."
+    , 'backend-unknown-action': "Unknown action: '$1'."
+    , 'backend-access-unabled': "Board does not have Accessibility permission enabled: System Settings → Privacy & Security → Accessibility → check Board."
+    , 'backend-command-not-found': "The bash command '$1' is unknown."
 
     // --- Projets ---
     , 'project-folder-not-selected': 'The project folder must be selected in Finder.'
@@ -52,12 +57,40 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "The evaluator of step '$1' is unknown: $2 ($3)."
     , 'scserv-unknown-marker-translate': "The translation marker '$1' of step '$2' is unknown. Possible markers are: $3 ($4)."
 
+    // File
+    , 'backend-unfound-file': "File not found: $1"
+    , 'backend-invalid-yaml': "Invalid YAML code ($1): $2"
+    , 'backend-unfound-folder-unable-file': "The folder '$1' was not found. Cannot safely create the file '$2'."
+    , 'backend-unable-to-create-file': "The file $1 could not be created."
+    , 'backend-no-xml-file': "No XML file reading yet."
+    , 'backend-version-no-num': "The file $1 has no version number, it cannot be versioned."
+
+    // Git
+    , 'backend-unabled-labels': "Unable to retrieve existing labels: $1"
+    , 'backend-already-git': "Git is already initialized for this project."
+    , 'backend-unabled-to-destroy-labels': "Unable to delete existing labels: $1"
+    , 'backend-unable-to-create-labels': "Unable to create new labels: $1"
+    , 'backend-remote-test-required': "The test git remote is required"
+    , 'backend-not-a-git-folder': "This folder is not a git repository ($1)."
+    , 'backend-not-a-git-repo': "The folder $1 is not a Git repository."
+    , 'backend-git-unknown-ope': "Unknown Git operation: $1"
+
+    // Script
+    , 'backend-script-unfound': "Unable to find the script to run ($1)"
+
     // Documentation
     , 'docu-error-on-update': "Error while updating"
+    , 'backend-docu-unfound-folder': "The documentation folder '$1' was not found."
 
     // TODOIST
     , 'todoist-key-task-unknown': "The key « $1 » is unknown, for a Todoist task."
     , 'no-tasks-checked': "No task checked"
     , 'checked-only-modify-task': "Only the task to modify must be checked."
+    , 'backend-todoist-unfound-project': "Project « $1 » not found in Todoist."
+    , 'backend-task-error': "Task $1: $2"
+
+    // Archives
+    , 'backend-archiv-unknown-problem': "Version not archived due to an unknown problem."
+    , 'backend-archiv-unfound-folder': "Archive folder not found: $1."
 
 }

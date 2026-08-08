@@ -84,6 +84,7 @@ const MESSAGES = {
     , 'add-to-file-at': "添加到文件的任意位置"
     , 'which-url-to-reach': '需要访问哪个 URL？'
     , 'destination-folder-or-file': '目标（文件夹或文件）'
+    , 'backend-file-created': "文件 $1 已创建。"
 
     // App
     , 'app-config': '应用程序配置'
@@ -98,6 +99,7 @@ const MESSAGES = {
     , 'changelog-file-name': 'Changelog 文件名称'
     , 'todo-file-name': 'TODO 文件名称'
     , 'last-project-id': '上次选择的项目'
+    , 'backend-app-data-save': "应用数据已保存。"
 
     // Minuteur
     , 'work-session-duration': '工作阶段时长（分钟）'
@@ -247,7 +249,7 @@ const MESSAGES = {
     , 'git-message-commit': '这些文件的提交信息'
     , 'git-commit-message-title': "提交信息"
     , 'gh-issues-create': "新建类型为…的 issue"
-    , 'git-issue-list': "标记类型为…的 issue"
+    , 'git-issue-list': "类型为…的 issue"
     , 'github-label': "Github 标签："
     , 'Message:': "信息："
     , 'gh-description:': "更详细的描述："
@@ -260,6 +262,10 @@ const MESSAGES = {
     , 'gh-unpin': '取消置顶'
     , 'git-installing-labels': "定义 Git 标签"
     , 'git-init-btn': "为项目初始化 Git"
+    , 'git-issue-gestion': "Github issue 管理"
+    , 'backend-add-labels-ajout': " + 标签定义。"
+    , 'backend-git-ready': "Git 已为该文件夹准备就绪"
+    , 'backend-git-failed': "git $1 失败：$2"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': '在 Finder 中选择该服务的脚本，然后点击“确定”。'
@@ -282,6 +288,11 @@ const MESSAGES = {
     , 'select-doc-main-final-file': '选择手册文件（默认：docu.html）'
     , 'docu-main-file-name': '文档：可编辑文件名称'
     , 'docu-main-disp-file': '文档：发布文件名称'
+    , 'backend-docu-opened-in': "文档文件夹已成功在 $1 中打开"
+
+    // Archive
+    , 'backend-archiv-move-and-num': "已移动到存档并重新编号 $1"
+    , 'backend-archiv-saved': "版本已保存到存档。"
 
     // Tools
     , 'tools-confirm-scheduling-alert': "提醒已成功安排。"

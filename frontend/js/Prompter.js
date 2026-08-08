@@ -52,9 +52,12 @@ class Prompter {
     }
   }
 
-  // Propriété du projet courant, avec définition à la volée si absente
+  // Propriété du projet ciblé par la définition (spec.projet — le projet
+  // sur lequel le service est en cours d'attachement, pas forcément
+  // Project.current), avec définition à la volée si absente.
   static promptProject(spec, callback){
-    const value = Project.current[spec.id]
+    const projet = spec.projet ?? Project.current
+    const value = projet[spec.id]
     if (!value) {
       const ifUndefined = Object.assign(spec.ifUndefined, {id: spec.id})
       // useLastAsDefault sur un param 'project' : le ParamsDefiner créé

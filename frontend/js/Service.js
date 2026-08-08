@@ -99,7 +99,7 @@ class Service {
     this.bypassExec = data.bypassExec
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.transient  = data.transient ?? false // service common depuis panneau
-    this.afterDefinedParams = data.afterDefinedParams ?? null
+    this.afterDefinedParams = data.afterDefinedParams ?? SERVICES_DATA_TABLE[data.id]?.afterDefinedParams ?? null
     this.constructor.get(this.uuid || this.id) && raise(`[SYSTEM] L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
     this.isCommonService = (this.stype === 'common')
@@ -284,7 +284,10 @@ class Service {
   }
   
   duplicateService(){
-    const dataDupService = Object.assign({}, this.data, {uuid: uniqId()})
+    const dataDupService = Object.assign({}, this.data, {
+        uuid: uniqId()
+      , params: this.data.params.map(p => Object.assign({}, p))
+    })
     return new Service(dataDupService)
   }
 

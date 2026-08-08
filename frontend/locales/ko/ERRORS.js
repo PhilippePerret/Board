@@ -20,6 +20,11 @@ const ERRORS = {
 
     // --- Application ---
     , 'unknown-app-data': "알 수 없는 애플리케이션 데이터: '$1'"
+    , 'app-sorry-fatal-error': "심각한 오류가 발생했습니다. 양해 부탁드립니다."
+    , 'backend-app-project-unfound': "보관함에서 프로젝트 $1을(를) 찾을 수 없습니다."
+    , 'backend-unknown-action': "알 수 없는 작업: '$1'."
+    , 'backend-access-unabled': "Board에 손쉬운 사용 권한이 활성화되어 있지 않습니다: 시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용 → Board 선택."
+    , 'backend-command-not-found': "알 수 없는 bash 명령어 '$1'."
 
     // --- Projets ---
     , 'project-folder-not-selected': 'Finder에서 프로젝트 폴더를 선택해야 합니다.'
@@ -52,12 +57,40 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "단계 '$1'의 평가기는 알 수 없습니다: $2 ($3)."
     , 'scserv-unknown-marker-translate': "단계 '$2'의 번역 마커 '$1'은(는) 알 수 없습니다. 가능한 마커: $3 ($4)."
 
+    // File
+    , 'backend-unfound-file': "파일을 찾을 수 없습니다: $1"
+    , 'backend-invalid-yaml': "잘못된 YAML 코드 ($1): $2"
+    , 'backend-unfound-folder-unable-file': "폴더 '$1'을(를) 찾을 수 없습니다. 파일 '$2'을(를) 안전하게 생성할 수 없습니다."
+    , 'backend-unable-to-create-file': "파일 $1을(를) 생성할 수 없습니다."
+    , 'backend-no-xml-file': "아직 XML 파일을 읽지 않았습니다."
+    , 'backend-version-no-num': "파일 $1에 버전 번호가 없어 버전을 지정할 수 없습니다."
+
+    // Git
+    , 'backend-unabled-labels': "기존 라벨을 가져올 수 없습니다: $1"
+    , 'backend-already-git': "이 프로젝트는 이미 Git이 초기화되어 있습니다."
+    , 'backend-unabled-to-destroy-labels': "기존 라벨을 삭제할 수 없습니다: $1"
+    , 'backend-unable-to-create-labels': "새 라벨을 생성할 수 없습니다: $1"
+    , 'backend-remote-test-required': "테스트용 git remote가 필요합니다"
+    , 'backend-not-a-git-folder': "이 폴더는 git 저장소가 아닙니다 ($1)."
+    , 'backend-not-a-git-repo': "폴더 $1은(는) Git 저장소가 아닙니다."
+    , 'backend-git-unknown-ope': "알 수 없는 Git 작업: $1"
+
+    // Script
+    , 'backend-script-unfound': "실행할 스크립트를 찾을 수 없습니다 ($1)"
+
     // Documentation
     , 'docu-error-on-update': "업데이트 중 오류 발생"
+    , 'backend-docu-unfound-folder': "문서 폴더 '$1'을(를) 찾을 수 없습니다."
 
     // TODOIST
     , 'todoist-key-task-unknown': "Todoist 작업에서 키 « $1 »은(는) 알 수 없습니다."
     , 'no-tasks-checked': "선택된 작업이 없습니다"
     , 'checked-only-modify-task': "수정할 작업만 선택되어야 합니다."
+    , 'backend-todoist-unfound-project': "Todoist에서 프로젝트 « $1 »을(를) 찾을 수 없습니다."
+    , 'backend-task-error': "작업 $1: $2"
+
+    // Archives
+    , 'backend-archiv-unknown-problem': "알 수 없는 문제로 버전이 보관되지 않았습니다."
+    , 'backend-archiv-unfound-folder': "보관함 폴더를 찾을 수 없습니다: $1."
 
 }

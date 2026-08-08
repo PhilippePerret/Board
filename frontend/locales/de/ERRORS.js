@@ -20,6 +20,11 @@ const ERRORS = {
 
     // --- Application ---
     , 'unknown-app-data': "Unbekannte Anwendungsdaten: '$1'"
+    , 'app-sorry-fatal-error': "Ein schwerwiegender Fehler ist aufgetreten, bitte entschuldigen Sie."
+    , 'backend-app-project-unfound': "Projekt $1 in den Archiven nicht gefunden."
+    , 'backend-unknown-action': "Unbekannte Aktion: '$1'."
+    , 'backend-access-unabled': "Board hat keine aktivierte Bedienungshilfen-Berechtigung: Systemeinstellungen → Datenschutz & Sicherheit → Bedienungshilfen → Board aktivieren."
+    , 'backend-command-not-found': "Der Bash-Befehl '$1' ist unbekannt."
 
     // --- Projets ---
     , 'project-folder-not-selected': 'Der Projektordner muss im Finder ausgewählt werden.'
@@ -52,12 +57,40 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "Der Evaluator des Schritts '$1' ist unbekannt: $2 ($3)."
     , 'scserv-unknown-marker-translate': "Der Übersetzungsmarker '$1' des Schritts '$2' ist unbekannt. Mögliche Marker sind: $3 ($4)."
 
+    // File
+    , 'backend-unfound-file': "Datei nicht gefunden: $1"
+    , 'backend-invalid-yaml': "Ungültiger YAML-Code ($1): $2"
+    , 'backend-unfound-folder-unable-file': "Der Ordner '$1' wurde nicht gefunden. Die Datei '$2' kann nicht sicher erstellt werden."
+    , 'backend-unable-to-create-file': "Die Datei $1 konnte nicht erstellt werden."
+    , 'backend-no-xml-file': "Noch kein Lesen von XML-Dateien."
+    , 'backend-version-no-num': "Die Datei $1 enthält keine Versionsnummer, sie kann nicht versioniert werden."
+
+    // Git
+    , 'backend-unabled-labels': "Bestehende Labels konnten nicht abgerufen werden: $1"
+    , 'backend-already-git': "Git ist für dieses Projekt bereits initialisiert."
+    , 'backend-unabled-to-destroy-labels': "Bestehende Labels konnten nicht gelöscht werden: $1"
+    , 'backend-unable-to-create-labels': "Neue Labels konnten nicht erstellt werden: $1"
+    , 'backend-remote-test-required': "Das Test-Git-Remote ist erforderlich"
+    , 'backend-not-a-git-folder': "Dieser Ordner ist kein Git-Repository ($1)."
+    , 'backend-not-a-git-repo': "Der Ordner $1 ist kein Git-Repository."
+    , 'backend-git-unknown-ope': "Unbekannte Git-Operation: $1"
+
+    // Script
+    , 'backend-script-unfound': "Das auszuführende Skript wurde nicht gefunden ($1)"
+
     // Documentation
     , 'docu-error-on-update': "Fehler bei der Aktualisierung"
+    , 'backend-docu-unfound-folder': "Der Dokumentationsordner '$1' wurde nicht gefunden."
 
     // TODOIST
     , 'todoist-key-task-unknown': "Der Schlüssel « $1 » ist für eine Todoist-Aufgabe unbekannt."
     , 'no-tasks-checked': "Keine Aufgabe ausgewählt"
     , 'checked-only-modify-task': "Es darf nur die zu ändernde Aufgabe ausgewählt sein."
+    , 'backend-todoist-unfound-project': "Projekt « $1 » in Todoist nicht gefunden."
+    , 'backend-task-error': "Aufgabe $1: $2"
+
+    // Archives
+    , 'backend-archiv-unknown-problem': "Version aufgrund eines unbekannten Problems nicht archiviert."
+    , 'backend-archiv-unfound-folder': "Archivordner nicht gefunden: $1."
 
 }

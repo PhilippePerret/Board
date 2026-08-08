@@ -84,6 +84,7 @@ const MESSAGES = {
     , 'add-to-file-at': "किसी भी स्थान पर फ़ाइल में जोड़ें"
     , 'which-url-to-reach': 'किस URL तक पहुँचना है?'
     , 'destination-folder-or-file': 'गंतव्य (फ़ोल्डर या फ़ाइल)'
+    , 'backend-file-created': "फ़ाइल $1 बना दी गई है।"
 
     // App
     , 'app-config': 'एप्लिकेशन कॉन्फ़िगरेशन'
@@ -98,6 +99,7 @@ const MESSAGES = {
     , 'changelog-file-name': 'Changelog फ़ाइल का नाम'
     , 'todo-file-name': 'TODO फ़ाइल का नाम'
     , 'last-project-id': 'अंतिम चयनित प्रोजेक्ट'
+    , 'backend-app-data-save': "एप्लिकेशन डेटा सहेजा गया।"
 
     // Minuteur
     , 'work-session-duration': 'एक कार्य सत्र की अवधि (मिनट)'
@@ -247,7 +249,7 @@ const MESSAGES = {
     , 'git-message-commit': 'इन फ़ाइलों के लिए कमिट संदेश'
     , 'git-commit-message-title': "कमिट संदेश"
     , 'gh-issues-create': "प्रकार का नया इश्यू…"
-    , 'git-issue-list': "प्रकार के इश्यू चिह्नित करें…"
+    , 'git-issue-list': "प्रकार के इश्यू…"
     , 'github-label': "Github लेबल:"
     , 'Message:': "संदेश:"
     , 'gh-description:': "अधिक सटीक विवरण:"
@@ -260,6 +262,10 @@ const MESSAGES = {
     , 'gh-unpin': 'अनपिन करें'
     , 'git-installing-labels': "Git लेबल परिभाषित करना"
     , 'git-init-btn': "प्रोजेक्ट पर Git आरंभ करें"
+    , 'git-issue-gestion': "Github issue प्रबंधन"
+    , 'backend-add-labels-ajout': " + लेबल परिभाषा।"
+    , 'backend-git-ready': "फ़ोल्डर के लिए Git तैयार है"
+    , 'backend-git-failed': "git $1 विफल: $2"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Finder में सेवा की स्क्रिप्ट चुनें, फिर “OK”।'
@@ -282,6 +288,11 @@ const MESSAGES = {
     , 'select-doc-main-final-file': 'मैनुअल फ़ाइल चुनें (डिफ़ॉल्ट: docu.html)'
     , 'docu-main-file-name': 'दस्तावेज़: संपादन योग्य फ़ाइल का नाम'
     , 'docu-main-disp-file': 'दस्तावेज़: प्रकाशित फ़ाइल का नाम'
+    , 'backend-docu-opened-in': "दस्तावेज़ फ़ोल्डर सफलतापूर्वक $1 में खोला गया"
+
+    // Archive
+    , 'backend-archiv-move-and-num': "संग्रह में ले जाया गया और पुनः क्रमांकित $1"
+    , 'backend-archiv-saved': "संस्करण संग्रह में सहेजा गया।"
 
     // Tools
     , 'tools-confirm-scheduling-alert': "अलर्ट सफलतापूर्वक शेड्यूल किया गया।"

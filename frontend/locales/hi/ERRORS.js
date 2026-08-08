@@ -20,6 +20,11 @@ const ERRORS = {
 
     // --- Application ---
     , 'unknown-app-data': "अज्ञात एप्लिकेशन डेटा: '$1'"
+    , 'app-sorry-fatal-error': "एक गंभीर त्रुटि हुई है, कृपया क्षमा करें।"
+    , 'backend-app-project-unfound': "प्रोजेक्ट $1 संग्रह में नहीं मिला।"
+    , 'backend-unknown-action': "अज्ञात क्रिया: '$1'।"
+    , 'backend-access-unabled': "Board के लिए एक्सेसिबिलिटी अनुमति सक्रिय नहीं है: सिस्टम सेटिंग्स → गोपनीयता और सुरक्षा → एक्सेसिबिलिटी → Board चुनें।"
+    , 'backend-command-not-found': "bash कमांड '$1' अज्ञात है।"
 
     // --- Projets ---
     , 'project-folder-not-selected': 'प्रोजेक्ट फ़ोल्डर Finder में चुना जाना चाहिए।'
@@ -52,12 +57,40 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "चरण '$1' का इवैल्यूएटर अज्ञात है: $2 ($3)।"
     , 'scserv-unknown-marker-translate': "चरण '$2' का अनुवाद मार्कर '$1' अज्ञात है। संभावित मार्कर: $3 ($4)।"
 
+    // File
+    , 'backend-unfound-file': "फ़ाइल नहीं मिली: $1"
+    , 'backend-invalid-yaml': "अमान्य YAML कोड ($1): $2"
+    , 'backend-unfound-folder-unable-file': "फ़ोल्डर '$1' नहीं मिला। फ़ाइल '$2' को सुरक्षित रूप से नहीं बनाया जा सकता।"
+    , 'backend-unable-to-create-file': "फ़ाइल $1 नहीं बनाई जा सकी।"
+    , 'backend-no-xml-file': "अभी तक कोई XML फ़ाइल पठन नहीं।"
+    , 'backend-version-no-num': "फ़ाइल $1 में कोई संस्करण संख्या नहीं है, इसे संस्करणित नहीं किया जा सकता।"
+
+    // Git
+    , 'backend-unabled-labels': "मौजूदा लेबल प्राप्त नहीं किए जा सके: $1"
+    , 'backend-already-git': "इस प्रोजेक्ट के लिए Git पहले से ही आरंभ किया जा चुका है।"
+    , 'backend-unabled-to-destroy-labels': "मौजूदा लेबल हटाए नहीं जा सके: $1"
+    , 'backend-unable-to-create-labels': "नए लेबल नहीं बनाए जा सके: $1"
+    , 'backend-remote-test-required': "परीक्षण के लिए git remote आवश्यक है"
+    , 'backend-not-a-git-folder': "यह फ़ोल्डर git रिपॉज़िटरी नहीं है ($1)।"
+    , 'backend-not-a-git-repo': "फ़ोल्डर $1 एक Git रिपॉज़िटरी नहीं है।"
+    , 'backend-git-unknown-ope': "अज्ञात Git ऑपरेशन: $1"
+
+    // Script
+    , 'backend-script-unfound': "चलाने के लिए स्क्रिप्ट नहीं मिली ($1)"
+
     // Documentation
     , 'docu-error-on-update': "अपडेट के दौरान त्रुटि"
+    , 'backend-docu-unfound-folder': "दस्तावेज़ फ़ोल्डर '$1' नहीं मिला।"
 
     // TODOIST
     , 'todoist-key-task-unknown': "Todoist कार्य के लिए, कुंजी « $1 » अज्ञात है।"
     , 'no-tasks-checked': "कोई कार्य चयनित नहीं"
     , 'checked-only-modify-task': "केवल संशोधित किए जाने वाले कार्य को ही चुना जाना चाहिए।"
+    , 'backend-todoist-unfound-project': "Todoist में प्रोजेक्ट « $1 » नहीं मिला।"
+    , 'backend-task-error': "कार्य $1: $2"
+
+    // Archives
+    , 'backend-archiv-unknown-problem': "अज्ञात समस्या के कारण संस्करण संग्रहीत नहीं हुआ।"
+    , 'backend-archiv-unfound-folder': "संग्रह फ़ोल्डर नहीं मिला: $1।"
 
 }

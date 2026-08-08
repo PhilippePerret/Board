@@ -84,6 +84,7 @@ const MESSAGES = {
     , 'add-to-file-at': "Añadir a un archivo, en cualquier lugar"
     , 'which-url-to-reach': '¿Qué URL hay que alcanzar?'
     , 'destination-folder-or-file': 'Destino (carpeta o archivo)'
+    , 'backend-file-created': "El archivo $1 ha sido creado."
 
     // App
     , 'app-config': 'Configuración de la aplicación'
@@ -98,6 +99,7 @@ const MESSAGES = {
     , 'changelog-file-name': 'Nombre del archivo changelog'
     , 'todo-file-name': 'Nombre del archivo TODO'
     , 'last-project-id': 'Último proyecto seleccionado'
+    , 'backend-app-data-save': "Datos de la aplicación guardados."
 
     // Minuteur
     , 'work-session-duration': 'Duración de una sesión de trabajo (minutos)'
@@ -247,7 +249,7 @@ const MESSAGES = {
     , 'git-message-commit': 'Mensaje de commit para estos archivos'
     , 'git-commit-message-title': "Mensaje del commit"
     , 'gh-issues-create': "Nueva issue de tipo…"
-    , 'git-issue-list': "Marcar issues de tipo…"
+    , 'git-issue-list': "Issues de tipo…"
     , 'github-label': "Etiqueta Github:"
     , 'Message:': "Mensaje:"
     , 'gh-description:': "Descripción más precisa:"
@@ -260,6 +262,10 @@ const MESSAGES = {
     , 'gh-unpin': 'Desfijar'
     , 'git-installing-labels': "Definición de las etiquetas Git"
     , 'git-init-btn': "Inicializar Git en el proyecto"
+    , 'git-issue-gestion': "Gestión de issues de Github"
+    , 'backend-add-labels-ajout': " + definición de las etiquetas."
+    , 'backend-git-ready': "Git preparado para la carpeta"
+    , 'backend-git-failed': "git $1 ha fallado: $2"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Selecciona el script del servicio en Finder, luego “OK”.'
@@ -282,6 +288,11 @@ const MESSAGES = {
     , 'select-doc-main-final-file': 'Selecciona el archivo del manual (por defecto: docu.html)'
     , 'docu-main-file-name': 'Docu: nombre del archivo editable'
     , 'docu-main-disp-file': 'Docu: nombre del archivo publicado'
+    , 'backend-docu-opened-in': "Carpeta de documentación abierta con éxito en $1"
+
+    // Archive
+    , 'backend-archiv-move-and-num': "Movido al archivo y renumerado $1"
+    , 'backend-archiv-saved': "Versión guardada en archivos."
 
     // Tools
     , 'tools-confirm-scheduling-alert': "Alerta programada con éxito."

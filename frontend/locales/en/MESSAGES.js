@@ -84,6 +84,7 @@ const MESSAGES = {
     , 'add-to-file-at': "Add to a file, at any location"
     , 'which-url-to-reach': 'Which URL should be reached?'
     , 'destination-folder-or-file': 'Destination (folder or file)'
+    , 'backend-file-created': "The file $1 was created."
 
     // App
     , 'app-config': 'Application configuration'
@@ -98,6 +99,7 @@ const MESSAGES = {
     , 'changelog-file-name': 'Changelog file name'
     , 'todo-file-name': 'TODO file name'
     , 'last-project-id': 'Last selected project'
+    , 'backend-app-data-save': "Application data saved."
 
     // Minuteur
     , 'work-session-duration': 'Duration of a work session (minutes)'
@@ -247,7 +249,7 @@ const MESSAGES = {
     , 'git-message-commit': 'Commit message for these files'
     , 'git-commit-message-title': "Commit message"
     , 'gh-issues-create': "New issue of type…"
-    , 'git-issue-list': "Mark issues of type…"
+    , 'git-issue-list': "Issues of type…"
     , 'github-label': "Github label:"
     , 'Message:': "Message:"
     , 'gh-description:': "More precise description:"
@@ -260,6 +262,10 @@ const MESSAGES = {
     , 'gh-unpin': 'Unpin'
     , 'git-installing-labels': "Defining Git labels"
     , 'git-init-btn': "Initialize Git on the project"
+    , 'git-issue-gestion': "Github issue management"
+    , 'backend-add-labels-ajout': " + label definition."
+    , 'backend-git-ready': "Git ready for the folder"
+    , 'backend-git-failed': "git $1 failed: $2"
 
     // -- Script services --
     , 'scserv-select-script-in-finder-and-ok': 'Select the service script in Finder then “OK”.'
@@ -282,6 +288,11 @@ const MESSAGES = {
     , 'select-doc-main-final-file': 'Select the manual file (default: docu.html)'
     , 'docu-main-file-name': 'Docu: editable file name'
     , 'docu-main-disp-file': 'Docu: published file name'
+    , 'backend-docu-opened-in': "Documentation folder successfully opened in $1"
+
+    // Archive
+    , 'backend-archiv-move-and-num': "Moved to archive and renumbered $1"
+    , 'backend-archiv-saved': "Version saved to archive."
 
     // Tools
     , 'tools-confirm-scheduling-alert': "Alert scheduled successfully."

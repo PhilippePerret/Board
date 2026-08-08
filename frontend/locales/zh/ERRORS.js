@@ -20,6 +20,11 @@ const ERRORS = {
 
     // --- Application ---
     , 'unknown-app-data': "未知的应用程序数据：'$1'"
+    , 'app-sorry-fatal-error': "发生了致命错误，敬请谅解。"
+    , 'backend-app-project-unfound': "在存档中找不到项目 $1。"
+    , 'backend-unknown-action': "未知操作：'$1'。"
+    , 'backend-access-unabled': "Board 未启用辅助功能权限：系统设置 → 隐私与安全性 → 辅助功能 → 勾选 Board。"
+    , 'backend-command-not-found': "未知的 bash 命令 '$1'。"
 
     // --- Projets ---
     , 'project-folder-not-selected': '必须在 Finder 中选择项目文件夹。'
@@ -52,12 +57,40 @@ const ERRORS = {
     , 'scserv-unknown-evaluator': "步骤 '$1' 的求值器未知：$2 ($3)。"
     , 'scserv-unknown-marker-translate': "步骤 '$2' 的翻译标记 '$1' 未知。可能的标记为：$3 ($4)。"
 
+    // File
+    , 'backend-unfound-file': "找不到文件：$1"
+    , 'backend-invalid-yaml': "YAML 代码无效（$1）：$2"
+    , 'backend-unfound-folder-unable-file': "找不到文件夹 '$1'。无法安全地创建文件 '$2'。"
+    , 'backend-unable-to-create-file': "无法创建文件 $1。"
+    , 'backend-no-xml-file': "尚未读取 XML 文件。"
+    , 'backend-version-no-num': "文件 $1 不包含版本号，无法进行版本管理。"
+
+    // Git
+    , 'backend-unabled-labels': "无法获取现有标签：$1"
+    , 'backend-already-git': "该项目已初始化 Git。"
+    , 'backend-unabled-to-destroy-labels': "无法删除现有标签：$1"
+    , 'backend-unable-to-create-labels': "无法创建新标签：$1"
+    , 'backend-remote-test-required': "需要测试用的 git remote"
+    , 'backend-not-a-git-folder': "该文件夹不是 git 仓库（$1）。"
+    , 'backend-not-a-git-repo': "文件夹 $1 不是 Git 仓库。"
+    , 'backend-git-unknown-ope': "未知的 Git 操作：$1"
+
+    // Script
+    , 'backend-script-unfound': "找不到要运行的脚本（$1）"
+
     // Documentation
     , 'docu-error-on-update': "更新时出错"
+    , 'backend-docu-unfound-folder': "找不到文档文件夹 '$1'。"
 
     // TODOIST
     , 'todoist-key-task-unknown': "对于 Todoist 任务，键« $1 »未知。"
     , 'no-tasks-checked': "没有勾选任何任务"
     , 'checked-only-modify-task': "只能勾选要修改的任务。"
+    , 'backend-todoist-unfound-project': "在 Todoist 中找不到项目 « $1 »。"
+    , 'backend-task-error': "任务 $1：$2"
+
+    // Archives
+    , 'backend-archiv-unknown-problem': "由于未知问题，版本未存档。"
+    , 'backend-archiv-unfound-folder': "找不到存档文件夹：$1。"
 
 }
