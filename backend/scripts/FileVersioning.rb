@@ -24,7 +24,6 @@ CAS 2.2 Le fichier doit être versionné lui-même
 =end
 
 table = {ok: true, error: nil, message: nil}
-suivi = []
 
 begin
 
@@ -74,7 +73,6 @@ begin
   message = []
 
   myfile = MyFile.new(FILENAME)
-  suivi << "le fichier " + (myfile.version_in_name? ? 'a' : 'n’a pas') + ' son numéro de version'
 
   has_version_in_name = myfile.version_in_name?
   if has_version_in_name
@@ -87,7 +85,7 @@ begin
       dest = File.join(ARCHIVE_FOLDER, FILENAME)
       FileUtils.mv(FILEPATH, dest)
       File.rename(FILEPATH, new_version_name)
-      message << "Déplacé dans l'archive et renuméroté #{new_version_name.inspect}"
+      message << ['backend-archiv-move-and-num', new_version_name.inspect]
     elsif File.exist?(ARCHIVE_FOLDER)
       # C'est la version dans le dossier qu'il faut prendre
       sorted_files = Dir["#{ARCHIVE_FOLDER}/*#{FEXTNAME}"]
@@ -105,12 +103,14 @@ begin
       dest = File.join(ARCHIVE_FOLDER, lastfile.next_version(VERSIONTERM))
       FileUtils.cp(FILEPATH, dest)
       if File.exist?(dest)
-        message << "Version sauvegardée en archives."
+        message << 'backend-archiv-saved'
       else
-        raise "Version non archivées suite à un problème inconnu."
+        puts {'ok' => false, 'error' => ['backend-archiv-unknown-problem']}
+        exit 0
       end
     else
-      raise "Dossier archive introuvable : #{ARCHIVE_FOLDER}."
+      puts {'ok' => false, 'error' => ['backend-archiv-unfound-folder', ARCHIVE_FOLDER]}
+      exit 0
     end
   else
     if has_version_in_name
@@ -118,19 +118,13 @@ begin
       File.rename(FILEPATH, new_version_path)
       message << "Renommage du fichier : #{new_version_name.inspect}."
     else
-      raise "Le fichier ne contient pas de numéro de version, je ne peux pas le versionner."
+      puts {'ok' => false, 'error' => ['backend-version-no-num', new_version_name.inspect]}
+      exit 0
     end
   end  
 
-  table[:message] =  message.join(', ')
-
-rescue Exception => e
-
-  table[:ok] = false
-  table[:error] = e.message
+  table[:message] =  [message, []]
   
 end
-
-# table["rdata"] = rdata
 
 puts table.to_json

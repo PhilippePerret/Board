@@ -22,6 +22,10 @@ Object.assign(MESSAGES, {
 
   // Documentation
   , 'backend-docu-opened-in': "Dossier de documentation ouvert avec succès dans $1"
+
+  // Archive
+  , 'backend-archiv-move-and-num': "Déplacé dans l'archive et renuméroté $1"
+  , 'backend-archiv-saved': "Version sauvegardée en archives."
 })
 
 Object.assign.ERRORS, {
@@ -39,6 +43,7 @@ Object.assign.ERRORS, {
   , 'backend-unfound-folder-unable-file': "Le dossier '$1' est introuvable. Impossible de créer le fichier '$2' en toute confiance."
   , 'backend-unable-to-create-file': "Le fichier $1 n'a pas pu être créé."
   , 'backend-no-xml-file': "Pas encore de lecture des fichiers XML."
+  , 'backend-version-no-num': "Le fichier $1 ne contient pas de numéro de version, impossible de le versionner."
 
   // Git
   , 'backend-unabled-labels': "Impossible de récupérer les labels existants : $1"
@@ -57,6 +62,10 @@ Object.assign.ERRORS, {
 
   // Documentation
   , 'backend-docu-unfound-folder': "Le dossier de documantation '$1' est introuvable."
+
+  // Archives
+  , 'backend-archiv-unknown-problem': "Version non archivées suite à un problème inconnu."
+  , 'backend-archiv-unfound-folder': "Dossier archives introuvable : $1."
 
 
 }
