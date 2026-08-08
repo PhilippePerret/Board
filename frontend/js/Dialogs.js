@@ -99,10 +99,10 @@ class OKDialog extends Dialog {
 class SelectDialog extends Dialog {
   constructor(data){
     super(data)
-    this.values = data.values
-    this.isMulti = !!data.multi
-    this.items = []
-    this.content = this.buildMenu()
+    this.values   = data.values
+    this.isMulti  = !!data.multi
+    this.items    = []
+    this.content  = this.buildMenu()
   }
 
   buildMenu(){
