@@ -25,7 +25,7 @@ module Todoist
       if id
         RETOUR.data = {id: id}
       else
-        RETOUR.error = "Projet « #{request['todoist-title']} » introuvable dans Todoist."
+        RETOUR.error = ['backend-todoist-unfound-project', request['todoist-title']]
       end
     when 'todoist-today-tasks'
       RETOUR.data = {tasks: today_tasks(request['todoist_id'])}
@@ -147,7 +147,7 @@ module Todoist
         close_task(task_id)
         count += 1
       rescue => e
-        errors << "Tâche #{task_id} : #{e.message}"
+        errors << ['backend-task-error', [task_id, e.message]]
       end
     end
     {count: count, errors: errors}

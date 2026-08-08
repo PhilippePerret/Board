@@ -45,5 +45,9 @@ Object.assign.ERRORS, {
   // Script
   , 'backend-script-unfound': "Impossible de trouver le script à jouer ($1)"
 
+  // Todoist
+  , 'backend-todoist-unfound-project': "Projet « $1 » introuvable dans Todoist."
+  , 'backend-task-error': "Tâche $1 : $2"
+
 
 }
