@@ -105,8 +105,8 @@ class ParamDefiner {
    */
   static issuesListOfTypeForSelect(spec, callback, retour){
     if (retour) {
-      console.log("->issuesListOfTypeForSelect/ data/callback/retour", spec, callback, retour)
-      const issuesForSelect = retour.data.map(issue => [issue.number, issue.title])
+      // console.log("->issuesListOfTypeForSelect/ data/callback/retour", spec, callback, retour)
+      const issuesForSelect = retour.data.map(issue => [issue.number, `#${issue.number} ${issue.title}`])
       callback({data: issuesForSelect})
     } else {
       // Il faut relever les issue

@@ -167,6 +167,13 @@ fi
 
 BOARD_TEST_BRIDGE_SOCKET="$BACKUPS_ROOT/bridge-$$.sock"
 
+# Dossier de données dédié aux tests (cf. backend/lib/usefull.rb#DATA_SUPPORT_FOLDER) :
+# en plus du backup/restore de $BOARD_DIR ci-dessus, garantit qu'aucune
+# écriture ne touche JAMAIS le vrai dossier, y compris si le process est tué
+# par kill -9 (non couvert par le trap teardown, cf. commentaire plus haut).
+BOARD_TEST_DATA_DIR="$BACKUPS_ROOT/data-$$"
+mkdir -p "$BOARD_TEST_DATA_DIR"
+
 quit_app() {
   pkill -x Board 2>/dev/null || true
 }
@@ -174,6 +181,7 @@ quit_app() {
 teardown() {
   quit_app
   restore_board
+  rm -rf "$BOARD_TEST_DATA_DIR" 2>/dev/null || true
   finder_cleanup=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" close-windows-except "$INITIAL_FINDER_WINDOW_IDS" 2>&1) || true
   if [ -n "$finder_cleanup" ] && [ "$finder_cleanup" != "ok" ]; then
     echo "Nettoyage fenêtres Finder : $finder_cleanup"
@@ -214,7 +222,7 @@ until ! pgrep -x Board >/dev/null 2>&1; do sleep 0.1; done
 # verrait jamais BOARD_TEST_BRIDGE_SOCKET et resterait inactif.
 opened=0
 for i in 1 2 3; do
-  if open --env BOARD_TEST_BRIDGE_SOCKET="$BOARD_TEST_BRIDGE_SOCKET" "$APP_DIR/Board.app"; then opened=1; break; fi
+  if open --env BOARD_TEST_BRIDGE_SOCKET="$BOARD_TEST_BRIDGE_SOCKET" --env BOARD_TEST_DATA_DIR="$BOARD_TEST_DATA_DIR" "$APP_DIR/Board.app"; then opened=1; break; fi
   sleep 0.5
 done
 [ "$opened" -eq 1 ] || { echo "open Board.app a échoué après 3 essais" >&2; exit 1; }
@@ -327,7 +335,7 @@ for spec in "${SPECS[@]}"; do
   rel_spec="${spec#$VTEST_DIR/}"
   echo "${GRAY}--- $rel_spec ---${RESET}"
   t_start=$(date +%s.%N)
-  if output=$(BOARD_TEST_ENGINE=pont BOARD_TEST_BRIDGE_SOCKET="$BOARD_TEST_BRIDGE_SOCKET" ruby "$spec" 2>&1); then code=0; else code=$?; fi
+  if output=$(BOARD_TEST_ENGINE=pont BOARD_TEST_BRIDGE_SOCKET="$BOARD_TEST_BRIDGE_SOCKET" BOARD_TEST_DATA_DIR="$BOARD_TEST_DATA_DIR" ruby "$spec" 2>&1); then code=0; else code=$?; fi
   t_end=$(date +%s.%N)
   spec_dur=$(awk -v a="$t_start" -v b="$t_end" 'BEGIN{printf "%.3f", b-a}')
   TOTAL_DUR=$(awk -v t="$TOTAL_DUR" -v d="$spec_dur" 'BEGIN{printf "%.3f", t+d}')

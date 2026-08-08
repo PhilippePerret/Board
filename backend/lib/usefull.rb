@@ -11,7 +11,11 @@ def ensure_file(dpath, ini_content)
 end
 
 APP_FOLDER = File.dirname(__dir__)
-DATA_SUPPORT_FOLDER = ensure_folder([Dir.home, "Library", "Application Support", "Board"])
+# BOARD_TEST_DATA_DIR (positionné par Tests/support/helpers_base.rb#launch_app
+# et Tests/version-pont/run_tests.sh) redirige TOUTES les données app vers un
+# dossier de test dédié — jamais le dossier réel, même si le process est tué
+# par un signal non interceptable (kill -9) avant tout nettoyage.
+DATA_SUPPORT_FOLDER = ensure_folder(ENV['BOARD_TEST_DATA_DIR'] ? [ENV['BOARD_TEST_DATA_DIR']] : [Dir.home, "Library", "Application Support", "Board"])
 PROJECT_CARD_FOLDER = ensure_folder([DATA_SUPPORT_FOLDER, 'project-cards'])
 
 # Board.app est lancé par Finder/LaunchServices : le process (et donc ce

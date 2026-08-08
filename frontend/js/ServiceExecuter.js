@@ -18,7 +18,7 @@ class ServiceExecuter {
     this.projet = projet
     if (typeof callback == 'function') this.callback = callback
     this._execCount = (this._execCount || 0) + 1
-    console.log(`[DIAG] ServiceExecuter#exec — appel n°${this._execCount} pour '${this.id}'`)
+    this._rerun = () => this.exec(projet, callback)
     this.runWithDynParams(this.params)
   }
 
@@ -31,6 +31,7 @@ class ServiceExecuter {
    */
   execOnProject(projet){  D.on && D.trace(projet, 'ServiceExecuter.')
     this.projet = projet
+    this._rerun = () => this.execOnProject(projet)
     this.runWithDynParams(projet.common_services_data[this.id])
   }
 
@@ -130,9 +131,12 @@ class ServiceExecuter {
         historize("- Service supprimé du cache")
       }
       if (this.repeat) {
-        // Un service qui se répète en boucle jusqu'à ce que l'user 
-        // l'abandonne
-        this.exec(this.projet, this.callback)
+        // Un service qui se répète en boucle jusqu'à ce que l'user
+        // l'abandonne — rejoue via le même point d'entrée que le premier
+        // run (exec ou execOnProject) : un service commun (git-commit…)
+        // tire ses valeurs de projet.common_services_data, pas de
+        // this.params (schéma abstrait, jamais résolu pour ces services-là).
+        this._rerun()
       } else {
         typeof this.callback == 'function' && this.callback()
       }

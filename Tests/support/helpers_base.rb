@@ -13,7 +13,12 @@ module BoardTest
   DRAG_SCRIPT            = File.join(ROOT, 'Tests', 'support', 'drag.js')
   HOVER_SCRIPT           = File.join(ROOT, 'Tests', 'support', 'hover.js')
   BOARD_APP             = File.join(ROOT, 'Board.app')
-  BOARD_SUPPORT_DIR     = File.join(Dir.home, 'Library', 'Application Support', 'Board')
+  # Reflète backend/lib/usefull.rb#DATA_SUPPORT_FOLDER : si BOARD_TEST_DATA_DIR
+  # est positionné (run_tests.sh, ou export manuel avant un spec isolé), les
+  # helpers de lecture/écriture directe (read_app_data, read_project_card…)
+  # doivent regarder le même dossier que celui utilisé par l'app relancée —
+  # jamais le dossier réel de production.
+  BOARD_SUPPORT_DIR     = ENV['BOARD_TEST_DATA_DIR'] || File.join(Dir.home, 'Library', 'Application Support', 'Board')
   PROJECT_CARD_FOLDER   = File.join(BOARD_SUPPORT_DIR, 'project-cards')
   APP_DATA_FILE         = File.join(BOARD_SUPPORT_DIR, 'appdata.yaml')
   LOC_ERRORS_FILE       = File.join(ROOT, 'frontend', 'locales', 'fr', 'ERRORS.js')
@@ -470,6 +475,9 @@ module BoardTest
     end
     if ENV['BOARD_TEST_GIT_REMOTE']
       open_args += ['--env', "BOARD_TEST_GIT_REMOTE=#{ENV['BOARD_TEST_GIT_REMOTE']}"]
+    end
+    if ENV['BOARD_TEST_DATA_DIR']
+      open_args += ['--env', "BOARD_TEST_DATA_DIR=#{ENV['BOARD_TEST_DATA_DIR']}"]
     end
     open_args << BOARD_APP
 
