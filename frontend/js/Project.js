@@ -486,9 +486,15 @@ class Project {
   updateLabelList(label){
     // On passe juste par ici pour actualiser la liste des labels (ordre)
     var labels = this.get('github_labels')?.split(',') || []
-    labels = labels.filter(e => e != label)
+    const initLabel = JSON.parse(JSON.stringify(labels))
+    labels = labels.reduce((accu, curLabel) => {
+      if (accu.indexOf(curLabel) < 0 && curLabel != label) accu.push(curLabel)
+      return accu
+    }, [])
     labels.unshift(label)
-    console.log("-> updateLabelList Nouvelle liste", {label: label, labels: labels})
+    console.log("-> updateLabelList Nouvelle liste de labels", {
+      ancienne: initLabel, label: label, nouvelle: labels
+    })
     this.set('github_labels', labels.join(','), true)
   }
 
