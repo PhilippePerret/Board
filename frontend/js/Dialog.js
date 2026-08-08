@@ -8,6 +8,27 @@
  * Si onShow est défini, c'est une fonction qui est appelée après l'ouverture
  * du panneau.
  * 
+ * title
+ *    Le titre que doit avoir le dialog
+ * 
+ * width
+ *    La largeur avec unité. Par exemple '680px'
+ * 
+ * mode
+ *    'float' ou 'modal' pour définir le comportement de la 
+ *    fenêtre suivant qu'elle doit flotter sur le reste ou 
+ *    bloquer les opération (modal)
+ * 
+ * ouiBtn
+ *    Définition du bouton OK. :name, :onclick
+ *    :if peut définir une condition qui doit être rempli pour que le
+ *    bouton soit actif. La valeur est une fonction qui doit retour-
+ *    ner true (bouton actif) ou false (bouton inactif)
+ * 
+ * nonBtn
+ *    Définition du bouton Cancel. :name, :onclick
+ *    :if comme le bouton ouiBtn
+ * 
  * Si midBtn définit keep: true, la fenêtre courante est gardée.
  * 
  */
@@ -31,6 +52,9 @@ class Dialog {
     this.defaultKey   = data.defaultKey ?? 'Oui'
     this.unscrimmed   = data.unscrimmed ?? false // pour ne pas mettre de flou
     this.projet       = data.projet ?? null
+    this.ouiBtnIf     = data.ouiBtnIf ?? data.ouiBtn?.if ?? null
+    this.nonBtnIf     = data.nonBtnIf ?? data.nonBtn?.if ?? null
+    this.midBtnIf     = data.midBtnIf ?? data.midBtn?.if ?? null
     // Une fonction qui peut tranformer la valeur avant de la retourner
     this.toRealValue  = data.toRealValue ?? ((v) => v)
     // Identifiant du champ de valeur (rappel : dans ces Dialog, il n'y a toujours
@@ -52,6 +76,7 @@ class Dialog {
 
   show(){
     this.build()
+    this._setButtons()
     this.obj.classList.remove('hidden')
     this.onShow()
   }
@@ -62,6 +87,20 @@ class Dialog {
     this.obj.remove()
   }
   close(){return this.hide()}
+
+
+  /**
+   * Méthode qui gère l'état des boutons si leur paramètre :if
+   * est défini.
+   */
+  _setButtons(){
+    if ( this.ouiBtnIf ) { this._treateStateButton(this.ouiBtnIf, this.btnOui) }
+    if ( this.nonBtnIf ) { this._treateStateButton(this.nonBtnIf, this.btnNon) }
+    if ( this.midBtnIf ) { this._treateStateButton(this.midBtnIf, this.btnMid) }
+  }
+  _treateStateButton(condition, bouton){
+    bouton.disabled = !condition(this)
+  }
 
   /**
    * === GESTIONNAIRE D'ÉVÈNEMENTS ===

@@ -238,11 +238,11 @@ const COMMON_SERVICES_DATA = [
       , {id: 'path', type: 'project'}
       ]
     , dynParams: [
-        {id: 'files', title: getMsg('choosing-files-to', ['commit']), type: 'select', select_class: 'monospace', q: getMsg('choose-files-to', getMsg('vb-commit')), width: '840px', multi: true, values: ParamDefiner.gitGetStatusFiles.bind(ParamDefiner)}
+        {id: 'files', title: getMsg('choosing-files-to',['commit']), ouiBtnIf:function(dialog){return dialog.values.length > 0}, type: 'select', select_class: 'monospace', q: getMsg('choose-files-to', getMsg('vb-commit')), width: '840px', multi: true, values: ParamDefiner.gitGetStatusFiles.bind(ParamDefiner)}
       , {id: 'message', type: 'string', width: '740px', title: getMsg('git-commit-message-title'), q: getMsg('git-message-commit')}
       ]
     , afterDefinedParams(params){
-        console.log("params de git-commit", params)
+        // console.log("params de git-commit", params)
         params[2][0] = JSON.stringify(params[2][0])
         return params
       }
