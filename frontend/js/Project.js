@@ -422,6 +422,10 @@ class Project {
       container.append(this.obj)
       this.set('collapsed', this.collapsed, true)
       this.obj.classList[this.collapsed?'add':'remove']('collapsed')
+      if (this.collapsed && this.constructor.current === this) {
+        this.constructor.deselect(this)
+        App.getData('remember-last-project') === true && App.setData('last-project', '', true)
+      }
       ev.type == 'mouseup' && stopEvent(ev)
     } else if (ev.type == 'mousedown') {
       stopEvent(ev)

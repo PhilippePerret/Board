@@ -51,7 +51,11 @@ class App {
     if (this.getData('remember-last-project') === true){
       if (lastProjectId = this.getData('last-project')) {
         if (lastProject = Project.get(lastProjectId)) {
-          Project.onSelect(lastProject)
+          if (lastProject.collapsed) {
+            this.setData('last-project', '', true)
+          } else {
+            Project.onSelect(lastProject)
+          }
         } else {
           this.setData('last-project', '', true)
         }
