@@ -19,7 +19,7 @@ def exec_script(script_name, params = "")
       script_name = search_real_scriptname(script_name)
       if script_name.nil?
         RETOUR.ok = false
-        RETOUR.error = "Impossible de trouver le script à jouer (#{ini_script_name})"
+        RETOUR.error = ['backend-script-unfound', ini_script_name]
         return
       end
       extname = File.extname(script_name)
@@ -90,7 +90,7 @@ def exec_script(script_name, params = "")
     else
       RETOUR.ok     = false
       if res.match?(/-25211|accès d.aide|assistive access/i)
-        RETOUR.error = "Board n'a pas la permission Accessibilité activée : Réglages Système → Confidentialité et sécurité → Accessibilité → cocher Board."
+        RETOUR.error = ['backend-access-unabled']
       else
         RETOUR.error = res
       end

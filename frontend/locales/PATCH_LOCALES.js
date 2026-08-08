@@ -36,6 +36,7 @@ Object.assign.ERRORS, {
   , 'backend-app-project-unfound': "Projet $1 introuvable dans les archives."
   , 'backend-unknown-action': ":Action inconnue : '$1'."
   , 'backend-access-unabled': "Board n'a pas la permission Accessibilité activée : Réglages Système → Confidentialité et sécurité → Accessibilité → cocher Board."
+  , 'backend-command-not-found': "La commande bash '$1' est inconnue."
 
   // File
   , 'backend-unfound-file': "Fichier introuvable : $1"
@@ -52,6 +53,7 @@ Object.assign.ERRORS, {
   , 'backend-unable-to-create-labels': "Impossible de créer les nouveaux labels : $1"
   , 'backend-remote-test-required': "Il faut le git remote de test"
   , 'backend-not-a-git-folder': "Ce dossier n'est pas un dépôt git ($1)." 
+  , 'backend-not-a-git-repo': "Le dossier $1 n'est pas un repo Git."
 
   // Script
   , 'backend-script-unfound': "Impossible de trouver le script à jouer ($1)"

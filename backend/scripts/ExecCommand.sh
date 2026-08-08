@@ -70,9 +70,15 @@ json_escape() {
 
 # --- Jouer la commande ---
 err_file="$(mktemp)"
-trap 'rm -f "$err_file"' EXIT
+pwd_file="$(mktemp)"
+trap 'rm -f "$err_file" "$pwd_file"' EXIT
 
-out="$(eval "$cmd" 2> "$err_file")"
+# pwd écrit APRÈS la commande, dans le même sous-shell (celui de la
+# substitution $(...)) : reflète le dossier réel une fois le "cd" fait,
+# que la commande elle-même réussisse ou non. "exit $ec" propage le vrai
+# code de sortie de $cmd vers l'extérieur (sinon "code" recevrait celui
+# de "pwd", toujours 0).
+out="$(eval "$cmd" 2> "$err_file"; ec=$?; pwd > "$pwd_file"; exit $ec)"
 code=$?
 
 if [ $code -eq 0 ]; then
@@ -88,12 +94,19 @@ err="$(cat "$err_file")"
 # ce cas signifie que la commande n'est vraiment pas installée.
 missing="$(printf '%s\n' "$err" | sed -nE 's/^.*command not found: ([^ ]+).*/\1/p' | tail -1)"
 
-if [ -z "$missing" ]; then
-  # Échec pour une autre raison qu'une commande introuvable : on relaie
-  # l'erreur telle quelle.
-  printf '{"ok": false, "error": "%s"}' "$(json_escape "$err")"
+if [ -n "$missing" ]; then
+  printf '{"ok": false, "error": ["backend-command-not-found", "%s"]}' "$(json_escape "$missing")"
   exit 0
 fi
 
-printf '{"ok": false, "error": "%s"}' "$(json_escape "Commande '$missing' introuvable sur ce système. Installez-la, par exemple avec : brew install $missing")"
+# gh (et git, via gh) échoue avec ce message précis quand le dossier
+# courant n'est pas/plus un dépôt git — cas fréquent des services
+# create-git-issue/gh-issue-create/git-issue-list (ServiceData.js).
+if printf '%s\n' "$err" | grep -q 'not a git repository'; then
+  printf '{"ok": false, "error": ["backend-not-a-git-repo", "%s"]}' "$(json_escape "$(cat "$pwd_file")")"
+  exit 0
+fi
+
+# Échec pour une autre raison : on relaie l'erreur telle quelle.
+printf '{"ok": false, "error": "%s"}' "$(json_escape "$err")"
 exit 0
