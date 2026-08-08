@@ -54,6 +54,7 @@ Object.assign.ERRORS, {
   , 'backend-remote-test-required': "Il faut le git remote de test"
   , 'backend-not-a-git-folder': "Ce dossier n'est pas un dépôt git ($1)." 
   , 'backend-not-a-git-repo': "Le dossier $1 n'est pas un repo Git."
+  , 'backend-git-unknown-ope': "Opération Git inconnue : $1"
 
   // Script
   , 'backend-script-unfound': "Impossible de trouver le script à jouer ($1)"

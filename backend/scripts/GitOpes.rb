@@ -21,7 +21,7 @@ begin
   when 'update_labels'
     res = Git.update_labels(project_path: pat, labels: ARGV[2])
   else
-    data[:error] = "Opération inconnue : #{ope.inspect}"
+    data[:error] = ['backend-git-unknown-ope', ope.inspect]
   end
 rescue Exception => e
   data[:ok] = false
