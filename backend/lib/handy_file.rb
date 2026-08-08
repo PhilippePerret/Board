@@ -12,7 +12,7 @@ class << self
     if File.exist?(path)
       `open "#{path}"`
     else
-      RETOUR.error "Fichier introuvable : #{path}"
+      RETOUR.error ['backend-unfound-file', path]
     end
   end
 
@@ -20,7 +20,7 @@ class << self
     if File.exist?(File.dirname(path))
       IO.write(path, content)
     else
-      RETOUR.error = "Le dossier '#{File.dirname(path)}' est introuvable. Impossible de créer le fichier en toute confiance."
+      RETOUR.error = ['backend-unfound-folder-unable-file', [File.dirname(path), File.basename(path)]]
     end
   end
 
@@ -28,9 +28,9 @@ class << self
     FileUtils.copy(source, dest)
     dest = File.join(dest, File.basename(source)) if File.directory?(dest)
     if File.exist?(dest)
-      RETOUR.message = "Le fichier #{dest} a été créé."
+      RETOUR.message = ['backend-file-created', dest]
     else
-      RETOUR.error = "Le fichier #{dest} n'a pas pu être créé."
+      RETOUR.error = ['backend-unable-to-create-file', dest]
     end
   end
 
@@ -109,7 +109,7 @@ class << self
     when '.yaml', '.yml'  then data = data.to_yaml
     when '.json'          then data = data.to_json
     when '.csv'           then data = data.to_csv
-    when '.xml'           then return RETOUR.error = "Pas encore de lecture des fichiers XML."
+    when '.xml'           then return RETOUR.error = 'backend-no-xml-file'
     when '.txt', '.text', '.md', '.markdown' then data = data
     else                  data = data.to_yaml
     end
@@ -118,7 +118,7 @@ class << self
 
   def evaluate path
     if !File.exist?(path)
-      RETOUR.error = "Fichier inexistant"
+      RETOUR.error = ['backend-unfound-file', path]
       return
     end
 
@@ -126,7 +126,7 @@ class << self
     when '.yaml', '.yml'  then RETOUR.data = YAML.safe_load(IO.read(path))
     when '.json'          then RETOUR.data = JSON.parse(IO.read(path))
     when '.csv'           then RETOUR.data = CSV.read(path)
-    when '.xml'           then RETOUR.error = "Pas encore de lecture des fichiers XML."
+    when '.xml'           then RETOUR.error = 'backend-no-xml-file'
     else 
       # On doit essayer d'évaluer le fichier et de prendre le 
       # résultat qui doit obligatoirement, aujourd'hui être au
@@ -144,9 +144,6 @@ end #/FileHandy
 
 
 if SELF_LOAD # tests
-
-
-  puts "Je vais faire les tests"
 
   # Créer le fichier
   File.delete("./essai.txt") if File.exist?("./essai.txt")
