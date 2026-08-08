@@ -113,8 +113,8 @@ const COMMON_SERVICES_DATA = [
           {id: 'path', type: 'project'}
         ]
     , dynParams: [
-          {id: 'issue_title', type: 'string', q: getMsg('error:')}
-        , {id: 'issue_body' , type: 'text'  , q: getMsg('error-precise-description:')}
+          {id: 'issue_title', type: 'string', q: getMsg('error:'), width: '680px', title: getMsg('gh-save-a-error')}
+        , {id: 'issue_body' , type: 'text'  , q: getMsg('error-precise-description:'), width: '680px', title: getMsg('gh-save-a-error')}
     ]
     , beforeExec: (dict) => {
         return `cd ${shellEscape(dict.path)} && gh issue create -l bug -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
@@ -139,8 +139,8 @@ const COMMON_SERVICES_DATA = [
     ]
     , dynParams: [
         {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
-      , {id: 'issue_title', type: 'string', q: getMsg('Message:')}
-      , {id: 'issue_body' , type: 'text'  , q: getMsg('gh-description:')}
+      , {id: 'issue_title', type: 'string', q: getMsg('Message:'), width: '680px'}
+      , {id: 'issue_body' , type: 'text'  , q: getMsg('gh-description:'), width: '680px'}
     ]
     , afterDefinedParams: (params) => {
         Project.current.updateLabelList(params[1][0])
@@ -151,6 +151,7 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
+  // Travail sur une liste d'issues
   {
       id: 'git-issue-list'
     , name: getMsg('git-issue-list')
@@ -161,11 +162,11 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       ]
     , dynParams: [
-          {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
-        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner)}
-        , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), values: 
+          {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, width: '680px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+        , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: 
           [['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]}
-        , {id: 'gh_message', type: 'string', q: getMsg('gh-message-operation')}
+        , {id: 'gh_message', type: 'string', q: getMsg('gh-message-operation'), width: '600px', title: getMsg('git-issue-gestion')}
       ]
     , afterDefinedParams: (params) => {
       Project.current.updateLabelList(params[1][0])
