@@ -140,12 +140,19 @@ class << self
     #{requests.join("\n")}
     BASH
     res = `#{cmd}`
-    raise {ok: false, error: ['backend-unable-to-create-labels', res]} unless $?.success?
-    
-    return {ok: true, message: res}
+    if $?.success?
+      return {ok: true, message: res}
+    else
+      return {ok: false, error: ['backend-unable-to-create-labels', res]}
+    end
   end
 
+  # Commit des fichiers avec un message
   def commit(project_path:, files:, message:)
+    unless git_exist_for_project?(project_path)
+      RETOUR.error ['backend-not-a-git-folder', project_path]
+      return
+    end
     files = JSON.parse(files)
     cmd = <<~BASH
     exec 2>&1
@@ -154,7 +161,12 @@ class << self
     git commit -m #{Shellwords.escape(message)}
     git push
     BASH
-    `#{cmd}`
+    res = `#{cmd}`
+    if $?.success?
+      res
+    else
+      RETOUR.error = res
+    end
   end
 
   # Retourne la liste des labels Github du projet
