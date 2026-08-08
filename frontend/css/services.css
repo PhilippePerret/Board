@@ -24,7 +24,7 @@ div.services-panel .btn-deal-with-services {
   display:none;
 } */
 
-div.services-panel button.btn-close {
+div.services-panel button.btn-close:not(:disabled) {
   position: absolute;
   right: 20px;
   bottom: 60px;

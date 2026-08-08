@@ -73,16 +73,16 @@ button.mid-btn {
 .panel .footer * { 
   font-size: 13pt
 }
-.panel .footer button.main {
+.panel .footer button.main:not(:disabled) {
   background-color: rgb(44, 182, 44);
   color: white;
   border: none;
   border-radius: 4px;
 }
-.panel .footer button.main:active {
+.panel .footer button.main:not(:disabled):active {
   background-color: green;
 }
-.panel .footer button.default-btn {
+.panel .footer button.default-btn:not(:disabled) {
   outline: 2px solid rgb(44, 182, 44);
   outline-offset: 2px;
 }
