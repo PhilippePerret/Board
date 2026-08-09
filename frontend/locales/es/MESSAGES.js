@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': 'Posición y tamaño de la ventana'
     , 'which-widhow-app': '¿De qué aplicación hay que tener en cuenta la ventana en primer plano?' + '<div class="small">Su tamaño y posición se copiarán en el portapapeles</div>'
-    , 'size-and-position-in-clipboard': "Posición/tamaño copiados en el portapapeles: $1, $2, $3, $4."
+    , 'window-position-and-size': "Posición y tamaño de la ventana en primer plano en la aplicación $1:"
     , 'click-button-if-data-ok': "Si estos datos son correctos, haz clic en el botón “$1”"
     , 'countdown-timer': "Temporizador"
     , 'lifecycle': "Ciclo de vida"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   'reemplaza $1'
     , 'test-array': 'reemplaza $1 y $2'
     , 'test-objet': 'reemplaza $ceci y ${cela}'
+
+    // --- Finder ---
+    , 'window-opened': "Ventana abierta con éxito."
+    , 'folder-opened': "Carpeta abierta con éxito."
+
+    // --- Git ---
+    , 'git-init-success': "Git instalado con éxito."
+    , 'Which-labels': "¿Etiquetas?"
+    , 'which-labels-to-create': "Etiquetas a crear (no seleccionar ninguna para no tocarlas)."
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "iTerm abierto en la carpeta."
+    , 'terminal-opened-at-folder': "Terminal abierto en la carpeta."
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - Clave API"
+    , 'which-todoist-api-key': "Indica tu clave API (token) de Todoist"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "Documentación abierta."
 }

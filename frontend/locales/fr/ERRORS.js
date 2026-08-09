@@ -92,5 +92,15 @@ const ERRORS = {
     // Archives
     , 'backend-archiv-unknown-problem': "Version non archivée suite à un problème inconnu."
     , 'backend-archiv-unfound-folder': "Dossier archives introuvable : $1."
-    
+
+    // Date
+    , 'invalid-date': "Date invalide : '$1' : $2"
+
+    // UI
+    , 'no-open-window-in': "Aucune fenêtre ouverte dans l'application $1."
+    , 'app-unfound-or-close': "Application $1 introuvable ou fermée."
+
+    // Finder
+    , 'no-selection': "Aucune sélection"
+    , 'not-a-folder': "La sélection devrait être un dossier"
 }

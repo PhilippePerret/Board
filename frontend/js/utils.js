@@ -76,7 +76,7 @@ function parseDate(dateStr) {
   try {
     return new Date(...args)
   } catch(err) {
-    raise("Date invalide : $1 : $2", [dateStr, err.message])
+    raise(getErr('invalid-date', [dateStr, err.message]))
   }
 }
 /*

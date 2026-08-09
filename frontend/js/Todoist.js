@@ -38,8 +38,8 @@ class Todoist {
       server.send({action: 'todoist-save-token', token: apikey}, this._resolveId.bind(this, projet, callback))
     } else {
       const datadialog = {
-          title: "Todoist - Clé API"
-        , q: "Merci d'indiquer votre clé API (token) Todoist"
+          title: getMsg('Todois-api-key')
+        , q: getMsg('which-todoist-api-key')
         , ouiBtn: {name: getMsg('OK'), onclick: this._ask_for_api_key.bind(this, projet, callback)}
       }
       new TextFieldDialog(datadialog).show()

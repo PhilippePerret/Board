@@ -93,4 +93,14 @@ const ERRORS = {
     , 'backend-archiv-unknown-problem': "अज्ञात समस्या के कारण संस्करण संग्रहीत नहीं हुआ।"
     , 'backend-archiv-unfound-folder': "संग्रह फ़ोल्डर नहीं मिला: $1।"
 
+    // Date
+    , 'invalid-date': "अमान्य तिथि: '$1': $2"
+
+    // UI
+    , 'no-open-window-in': "एप्लिकेशन $1 में कोई विंडो खुली नहीं है।"
+    , 'app-unfound-or-close': "एप्लिकेशन $1 नहीं मिला या बंद है।"
+
+    // Finder
+    , 'no-selection': "कोई चयन नहीं"
+    , 'not-a-folder': "चयन एक फ़ोल्डर होना चाहिए"
 }

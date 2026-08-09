@@ -186,12 +186,21 @@ class SelectDialog extends Dialog {
     return query.length === 0
   }
 }
-// Pour faire une fenêtre présentant un textarea 
+
+// Pour faire un Dialog présentant un textarea 
+/**
+ * 
+ * Propriétés spéciales
+ * 
+ *  dontSelectContent:  si true, ne sélectionne pas le contenu
+ */
 class TextareaDialog extends Dialog {
   constructor(data){
     super(data)
     this.content = this.buildField()
-    this.onShow = ()=>{const tf = DGet(this.FDomId); tf.focus(); tf.select()}
+    if (!data.dontSelectContent){
+      this.onShow = ()=>{const tf = DGet(this.FDomId); tf.focus(); tf.select()}
+    }
   }
 
   buildField(){

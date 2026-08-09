@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': 'Window position and size'
     , 'which-widhow-app': 'Which application\'s foreground window should be used?' + '<div class="small">Its size and position will be copied to the clipboard</div>'
-    , 'size-and-position-in-clipboard': "Position/size copied to the clipboard: $1, $2, $3, $4."
+    , 'window-position-and-size': "Position and size of the frontmost window in application $1:"
     , 'click-button-if-data-ok': "If you agree with this data, click the “$1” button"
     , 'countdown-timer': "Timer"
     , 'lifecycle': "Lifecycle"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   'replaces $1'
     , 'test-array': 'replaces $1 and $2'
     , 'test-objet': 'replaces $ceci and ${cela}'
+
+    // --- Finder ---
+    , 'window-opened': "Window opened successfully."
+    , 'folder-opened': "Folder opened successfully."
+
+    // --- Git ---
+    , 'git-init-success': "Git installed successfully."
+    , 'Which-labels': "Labels?"
+    , 'which-labels-to-create': "Labels to create (select none to leave them untouched)."
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "iTerm opened at folder."
+    , 'terminal-opened-at-folder': "Terminal opened at folder."
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - API Key"
+    , 'which-todoist-api-key': "Please provide your Todoist API key (token)"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "Documentation opened."
 }

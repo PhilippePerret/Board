@@ -55,6 +55,7 @@ class Validator {
   static datetime(str, reg, asDate = false){
     reg = reg ?? REG_DATETIME_JJ_MM_HH_MM
     if ('string' == typeof reg) {
+      // TODO
       raise("Je dois apprendre à transformer JJ MM HH:MM en expression régulière.")
       reg = this.stringDatetimeToRegExp(reg)
     }

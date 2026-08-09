@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': 'Fensterposition und -größe'
     , 'which-widhow-app': 'Welche Anwendung soll für das Vordergrundfenster berücksichtigt werden?' + '<div class="small">Größe und Position werden in die Zwischenablage kopiert</div>'
-    , 'size-and-position-in-clipboard': "Position/Größe in die Zwischenablage kopiert: $1, $2, $3, $4."
+    , 'window-position-and-size': "Position und Größe des vordersten Fensters in der Anwendung $1:"
     , 'click-button-if-data-ok': "Wenn diese Daten stimmen, klicke auf die Schaltfläche „$1“"
     , 'countdown-timer': "Timer"
     , 'lifecycle': "Lebenszyklus"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   'ersetzt $1'
     , 'test-array': 'ersetzt $1 und $2'
     , 'test-objet': 'ersetzt $ceci und ${cela}'
+
+    // --- Finder ---
+    , 'window-opened': "Fenster erfolgreich geöffnet."
+    , 'folder-opened': "Ordner erfolgreich geöffnet."
+
+    // --- Git ---
+    , 'git-init-success': "Git erfolgreich installiert."
+    , 'Which-labels': "Labels?"
+    , 'which-labels-to-create': "Zu erstellende Labels (keines auswählen, um sie nicht zu verändern)."
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "iTerm im Ordner geöffnet."
+    , 'terminal-opened-at-folder': "Terminal im Ordner geöffnet."
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - API-Schlüssel"
+    , 'which-todoist-api-key': "Bitte gib deinen Todoist-API-Schlüssel (Token) an"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "Dokumentation geöffnet."
 }

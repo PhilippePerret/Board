@@ -93,4 +93,14 @@ const ERRORS = {
     , 'backend-archiv-unknown-problem': "알 수 없는 문제로 버전이 보관되지 않았습니다."
     , 'backend-archiv-unfound-folder': "보관함 폴더를 찾을 수 없습니다: $1."
 
+    // Date
+    , 'invalid-date': "잘못된 날짜: '$1': $2"
+
+    // UI
+    , 'no-open-window-in': "$1 애플리케이션에 열린 창이 없습니다."
+    , 'app-unfound-or-close': "$1 애플리케이션을 찾을 수 없거나 종료되었습니다."
+
+    // Finder
+    , 'no-selection': "선택 항목 없음"
+    , 'not-a-folder': "선택한 항목은 폴더여야 합니다"
 }

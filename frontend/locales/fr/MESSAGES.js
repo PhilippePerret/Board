@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': 'Position et taille de fenêtre'
     , 'which-widhow-app': 'De quelle application faut-il prendre en compte la fenêtre au premier plan ?' + '<div class="small">Sa taille et sa position seront mises dans le presse-papier</div>'
-    , 'size-and-position-in-clipboard': "Position/taille copiées dans le presse-papier : $1, $2, $3, $4."
+    , 'window-position-and-size': "Position et taille de la fenêtre au premier plan dans l'application $1 :"
     , 'click-button-if-data-ok': "Si tu es d'accord avec ces données, clique le bouton “$1”"
     , 'countdown-timer': "Minuteur"
     , 'lifecycle': "Cycle de vie"
@@ -243,6 +243,7 @@ const MESSAGES = {
     // Git
     , 'gh-save-a-error': "Enregistrer une erreur (gh)"
     , 'initing-git-for-project': "Initier Git pour le projet"
+    , 'git-init-btn': "Initier Git sur le projet"
     , 'github-account': "Nom du votre compte Github"
     , 'github-project-name': "Nom du projet dans Github"
     , 'git-committing': "Commiter sur Github"
@@ -261,7 +262,6 @@ const MESSAGES = {
     , 'gh-pin': 'Épingler'
     , 'gh-unpin': 'Désépingler'
     , 'git-installing-labels': "Définition des labels Git"
-    , 'git-init-btn': "Initier Git sur le projet"
     , 'git-issue-gestion': "Gestion des issues Github"
     , 'backend-add-labels-ajout': " + définition des labels."
     , 'backend-git-ready': "Git préparé pour le dossier"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   'remplace $1'
     , 'test-array': 'remplace $1 et $2'
     , 'test-objet': 'remplace $ceci et ${cela}'
+
+    // --- Finder ---
+    , 'window-opened': "Fenêtre ouverte avec succès."
+    , 'folder-opened': "Dossier ouvert avec succès."
+
+    // --- Git ---
+    , 'git-init-success': "Git installé avec succès."
+    , 'Which-labels': "Labels ?"
+    , 'which-labels-to-create': "Labels à créer (n'en sélectionner aucun pour ne pas les toucher)."
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "iTerm ouvert au dossier."
+    , 'terminal-opened-at-folder': "Terminal ouvert au dossier."
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - Clé API"
+    , 'which-todoist-api-key': "Merci d'indiquer votre clé API (token) Todoist"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "Documentation ouverte."
 }

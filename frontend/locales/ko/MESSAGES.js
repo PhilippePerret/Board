@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': '창 위치 및 크기'
     , 'which-widhow-app': '어떤 애플리케이션의 전면 창을 기준으로 해야 하나요?' + '<div class="small">해당 창의 크기와 위치가 클립보드에 복사됩니다</div>'
-    , 'size-and-position-in-clipboard': "위치/크기가 클립보드에 복사되었습니다: $1, $2, $3, $4."
+    , 'window-position-and-size': "$1 애플리케이션의 맨 앞 창 위치와 크기:"
     , 'click-button-if-data-ok': "이 데이터가 맞다면 “$1” 버튼을 클릭하세요"
     , 'countdown-timer': "타이머"
     , 'lifecycle': "라이프사이클"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   '$1을(를) 대체'
     , 'test-array': '$1과(와) $2를 대체'
     , 'test-objet': '$ceci와(과) ${cela}를 대체'
+
+    // --- Finder ---
+    , 'window-opened': "창이 성공적으로 열렸습니다."
+    , 'folder-opened': "폴더가 성공적으로 열렸습니다."
+
+    // --- Git ---
+    , 'git-init-success': "Git가 성공적으로 설치되었습니다."
+    , 'Which-labels': "라벨?"
+    , 'which-labels-to-create': "생성할 라벨 (아무것도 선택하지 않으면 변경하지 않습니다)."
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "해당 폴더에서 iTerm이 열렸습니다."
+    , 'terminal-opened-at-folder': "해당 폴더에서 터미널이 열렸습니다."
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - API 키"
+    , 'which-todoist-api-key': "Todoist API 키(토큰)를 입력해 주세요"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "문서가 열렸습니다."
 }

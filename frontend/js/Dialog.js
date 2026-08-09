@@ -35,6 +35,7 @@
  * nonBtn
  *    Définition du bouton Cancel. :name, :onclick
  *    :if comme le bouton ouiBtn
+ *    nonBtn: ':none:' pour ne pas affiche de bouton non du tout
  * 
  * nonBtnIf
  *    Condition sur le bouton "Non" en propriété
@@ -62,7 +63,11 @@ class Dialog {
     this.defaultValue = data.defaultValue
     this.ouiData      = data.ouiBtn ?? {name: getMsg('btn-yes'), onclick: () => message("[SYSTEM] Bouton oui à définir")}
     this.midData      = data.midBtn ?? null
-    this.nonData      = data.nonBtn ?? {name: getMsg('btn-no'), onclick: () => message("[SYSTEM] Bouton non à définir")}
+    if (data.nonBtn == ':none:') {
+      this.nonData = null
+    } else {
+      this.nonData      = data.nonBtn ?? {name: getMsg('btn-no'), onclick: () => message("[SYSTEM] Bouton non à définir")}
+    }
     this.defaultKey   = data.defaultKey ?? 'Oui'
     this.unscrimmed   = data.unscrimmed ?? false // pour ne pas mettre de flou
     this.projet       = data.projet ?? null

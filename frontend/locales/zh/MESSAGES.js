@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': '窗口位置和大小'
     , 'which-widhow-app': '应考虑哪个应用程序的前台窗口？' + '<div class="small">其大小和位置将复制到剪贴板</div>'
-    , 'size-and-position-in-clipboard': "位置/大小已复制到剪贴板：$1, $2, $3, $4。"
+    , 'window-position-and-size': "应用程序 $1 中最前窗口的位置和大小："
     , 'click-button-if-data-ok': "如果这些数据正确，请点击“$1”按钮"
     , 'countdown-timer': "计时器"
     , 'lifecycle': "生命周期"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   '替换 $1'
     , 'test-array': '替换 $1 和 $2'
     , 'test-objet': '替换 $ceci 和 ${cela}'
+
+    // --- Finder ---
+    , 'window-opened': "窗口已成功打开。"
+    , 'folder-opened': "文件夹已成功打开。"
+
+    // --- Git ---
+    , 'git-init-success': "Git 安装成功。"
+    , 'Which-labels': "标签？"
+    , 'which-labels-to-create': "要创建的标签（不选择则不做任何更改）。"
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "已在该文件夹打开 iTerm。"
+    , 'terminal-opened-at-folder': "已在该文件夹打开终端。"
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - API 密钥"
+    , 'which-todoist-api-key': "请提供您的 Todoist API 密钥（令牌）"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "文档已打开。"
 }

@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': 'विंडो की स्थिति और आकार'
     , 'which-widhow-app': 'किस एप्लिकेशन की अग्रभूमि विंडो को ध्यान में रखा जाना चाहिए?' + '<div class="small">इसका आकार और स्थिति क्लिपबोर्ड में कॉपी की जाएगी</div>'
-    , 'size-and-position-in-clipboard': "स्थिति/आकार क्लिपबोर्ड में कॉपी किया गया: $1, $2, $3, $4।"
+    , 'window-position-and-size': "एप्लिकेशन $1 में सबसे आगे की विंडो की स्थिति और आकार:"
     , 'click-button-if-data-ok': "यदि यह डेटा सही है, तो “$1” बटन पर क्लिक करें"
     , 'countdown-timer': "टाइमर"
     , 'lifecycle': "जीवनचक्र"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   '$1 को बदलता है'
     , 'test-array': '$1 और $2 को बदलता है'
     , 'test-objet': '$ceci और ${cela} को बदलता है'
+
+    // --- Finder ---
+    , 'window-opened': "विंडो सफलतापूर्वक खोली गई।"
+    , 'folder-opened': "फ़ोल्डर सफलतापूर्वक खोला गया।"
+
+    // --- Git ---
+    , 'git-init-success': "Git सफलतापूर्वक इंस्टॉल हुआ।"
+    , 'Which-labels': "लेबल?"
+    , 'which-labels-to-create': "बनाने के लिए लेबल (कोई न चुनें तो उन्हें नहीं बदला जाएगा)।"
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "iTerm उस फ़ोल्डर में खोला गया।"
+    , 'terminal-opened-at-folder': "टर्मिनल उस फ़ोल्डर में खोला गया।"
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - API कुंजी"
+    , 'which-todoist-api-key': "कृपया अपनी Todoist API कुंजी (टोकन) दर्ज करें"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "दस्तावेज़ खोला गया।"
 }

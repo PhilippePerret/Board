@@ -69,8 +69,8 @@ class Tools {
     }
     // Demander s'il faut créer les labels ?
     Prompter.prompt({
-        title: "Labels ?"
-      , q: "Labels à créer (n'en sélectionner aucun pour ne pas les toucher."
+        title: getMsg('Which-labels')
+      , q: getMsg('which-labels-to-create')
       , type: 'select'
       , multi: true
       , values: GITHUB_LABELS
@@ -83,7 +83,7 @@ class Tools {
     const project = Project.current || raiseError('folder-required')
     const github_name = project.get('github_name')
     const github_account = project.get('github_account')
-    console.log("Je vais procéder à l'initialisation de GIT sur le compte '%s' pour le projet '%s' ", github_account, github_name)
+    // console.log("Je vais procéder à l'initialisation de GIT sur le compte '%s' pour le projet '%s' ", github_account, github_name)
     // Jouer le script GitInit.rb
     server.send({
         action: "git-ope"
@@ -97,23 +97,42 @@ class Tools {
 
   }
   static afterGitInitialisation(retour){
-    console.log("-> afterGitInitialisation fin d'init git", retour)
+    // console.log("-> afterGitInitialisation fin d'init git", retour)
     if (retour.data.error) {
       erreur(retour.data.error)
     } else {
-      message(true, "Git installé avec succès.")
+      message(true, getMsg('git-init-success'))
     }
   }
 
 
   static onAppChosen(appName){
-    server.send({action: 'get-app-window-bounds', appName: appName}, this.onWindowBounds.bind(this))
+    server.send({action: 'get-app-window-bounds', appName: appName, no_raise: true}, this.onWindowBounds.bind(this, appName))
   }
 
-  static onWindowBounds(retour){
+  static onWindowBounds(appName, retour){
+    console.log("retour complet", retour)
     const data = retour.data
-    if (data.ok === false) { message(data.error); return }
-    message(getMsg('size-and-position-in-clipboard', [data.x, data.y, data.width, data.height]))
+    if (data.error) { 
+      error(getErr(data.error, appName))
+    } else {
+      const dataDial = {
+          id: 'window-infos'
+        , title: getMsg('Window-position-and-size')
+        , q: getMsg('window-position-and-size', appName)
+        , default: `
+          bounds: {${data.x}, ${data.y}, ${data.x + data.width}, {${data.y + data.height}}
+          left: ${data.x}
+          top: ${data.y}
+          width: ${data.width}
+          height: ${data.height}
+          `.replace(/\n\s+/g, "\n").trim()
+        , dontSelectContent: true
+        , ouiBtn: {name: getMsg('OK'), onclick: () => {}}
+        , nonBtn: ':none:'
+      }
+      new TextareaDialog(dataDial).show()
+    }
   }
 
   // Appelé par un bouton outil qui ne définit pas de :run, peut-être

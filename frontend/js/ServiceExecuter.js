@@ -116,7 +116,7 @@ class ServiceExecuter {
   // -- Appelée après avoir exécuté le service --
   afterRunService(retour){ D.on && D.trace(retour, 'ServiceExecuter.')
     Spinner.stop()
-    console.log("Retour du run de service", retour)
+    console.log("RETOUR DU RUN DE SERVICE", retour)
     if (retour.error) {
       if (this.service.onError) {
         this.service.onError(retour.error)

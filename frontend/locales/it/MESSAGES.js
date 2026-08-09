@@ -126,7 +126,7 @@ const MESSAGES = {
     // --- UI ---
     , 'Window-position-and-size': 'Posizione e dimensione della finestra'
     , 'which-widhow-app': 'Di quale applicazione bisogna considerare la finestra in primo piano?' + '<div class="small">La sua dimensione e posizione saranno copiate negli appunti</div>'
-    , 'size-and-position-in-clipboard': "Posizione/dimensione copiate negli appunti: $1, $2, $3, $4."
+    , 'window-position-and-size': "Posizione e dimensione della finestra in primo piano nell'applicazione $1:"
     , 'click-button-if-data-ok': "Se questi dati vanno bene, clicca il pulsante “$1”"
     , 'countdown-timer': "Timer"
     , 'lifecycle': "Ciclo di vita"
@@ -344,4 +344,24 @@ const MESSAGES = {
     , 'test-raw':   'sostituisce $1'
     , 'test-array': 'sostituisce $1 e $2'
     , 'test-objet': 'sostituisce $ceci e ${cela}'
+
+    // --- Finder ---
+    , 'window-opened': "Finestra aperta con successo."
+    , 'folder-opened': "Cartella aperta con successo."
+
+    // --- Git ---
+    , 'git-init-success': "Git installato con successo."
+    , 'Which-labels': "Etichette?"
+    , 'which-labels-to-create': "Etichette da creare (non selezionarne per non modificarle)."
+
+    // --- Console ---
+    , 'iterm-opened-at-folder': "iTerm aperto nella cartella."
+    , 'terminal-opened-at-folder': "Terminal aperto nella cartella."
+
+    // --- Todoist ---
+    , 'Todois-api-key': "Todoist - Chiave API"
+    , 'which-todoist-api-key': "Inserisci la tua chiave API (token) Todoist"
+
+    // --- Documentation ---
+    , 'docu-opened-in-browser': "Documentazione aperta."
 }

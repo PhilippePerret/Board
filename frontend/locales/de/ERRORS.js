@@ -93,4 +93,14 @@ const ERRORS = {
     , 'backend-archiv-unknown-problem': "Version aufgrund eines unbekannten Problems nicht archiviert."
     , 'backend-archiv-unfound-folder': "Archivordner nicht gefunden: $1."
 
+    // Date
+    , 'invalid-date': "Ungültiges Datum: '$1': $2"
+
+    // UI
+    , 'no-open-window-in': "Kein Fenster in der Anwendung $1 geöffnet."
+    , 'app-unfound-or-close': "Anwendung $1 nicht gefunden oder geschlossen."
+
+    // Finder
+    , 'no-selection': "Keine Auswahl"
+    , 'not-a-folder': "Die Auswahl sollte ein Ordner sein"
 }

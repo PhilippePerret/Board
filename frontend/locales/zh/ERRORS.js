@@ -93,4 +93,14 @@ const ERRORS = {
     , 'backend-archiv-unknown-problem': "由于未知问题，版本未存档。"
     , 'backend-archiv-unfound-folder': "找不到存档文件夹：$1。"
 
+    // Date
+    , 'invalid-date': "日期无效：“$1”：$2"
+
+    // UI
+    , 'no-open-window-in': "应用程序 $1 中没有打开的窗口。"
+    , 'app-unfound-or-close': "应用程序 $1 未找到或已关闭。"
+
+    // Finder
+    , 'no-selection': "无选择"
+    , 'not-a-folder': "所选内容应为文件夹"
 }

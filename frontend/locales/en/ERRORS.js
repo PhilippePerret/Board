@@ -8,6 +8,7 @@
  */
 const ERRORS = {
     'premier': 'pour-virgule'
+    
     // --- Données générales ---
     , 'hour-not-valid': "invalid time: '$1'"
     , 'repeat-not-valid': "the repetition is not valid in '$1'"
@@ -93,4 +94,14 @@ const ERRORS = {
     , 'backend-archiv-unknown-problem': "Version not archived due to an unknown problem."
     , 'backend-archiv-unfound-folder': "Archive folder not found: $1."
 
+    // Date
+    , 'invalid-date': "Invalid date: '$1': $2"
+
+    // UI
+    , 'no-open-window-in': "No window open in application $1."
+    , 'app-unfound-or-close': "Application $1 not found or closed."
+
+    // Finder
+    , 'no-selection': "No selection"
+    , 'not-a-folder': "The selection should be a folder"
 }

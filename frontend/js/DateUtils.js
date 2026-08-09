@@ -120,7 +120,7 @@ class DateUtils {
           return null
         }
       } else {
-        raise("DateUtils::extractHourFrom requiert une date string")
+        raise('[SYSTEM] DateUtils::extractHourFrom requiert une date string')
       }
     } catch(err) {
       console.error("Problème avec '%s' / date: '%s' / hour: '%s'", dateStr, date, hour,  err)
