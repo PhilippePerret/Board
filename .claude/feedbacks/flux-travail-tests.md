@@ -9,35 +9,30 @@ metadata:
 
 **Corriger les tests les uns après les autres en respectant ce fluc de travail :**
 
-1.  Mettre la commande de lancement du test dans le presse-papier UNE SEULE FOIS indiquant l'indice du fichier test/le nombre de fichiers à corriger. Par exemple : "3/14 Test du lancement de l'horloge prêt"
+1.1 Indiquer pour commencer : Indice fichier test / nombre fichiers à corriger. Par exemple : "3/14 Test du lancement de l'horloge prêt"
+1.2  Lorsque Phil le demande, ET SEULEMENT LORSQUE PHIL LE DEMANDE, mettre la commande de lancement du test dans le presse-papier. NE JAMAIS LA REMETTRE, JAMAIS.
     ```
     `./scripts/run-tests <motif ou fichiers AVEC EXTENSION>` # cf. plus bas
     ```
-1.   INTERDICTION FORMELLE DE REMETTRE LA MÊME COMMANDE DE LANCEMENT DANS LE PRESSE-PAPIER
-2.1 Attendre que Phil lance le test.
-2.2 Pendant ce temps, donner un aperçu du test, sous la forme décrite ci-dessous
-    à "APERÇU DU TEST"
-3.  Lire le log de fin de test
+2.1 Pendant que Phil lance le test, écrire en console un aperçu du test, sous la forme décrite ci-dessous à "APERÇU DU TEST"
+3.  Dès que Phil a signalé la fin du test par un "ok" ou autre formule, LIRE LE LOG de fin de test
 4.  Investiguer pour trouver le problème.
-5.  Corriger.
-6.  INTERDICTION FORMELLE DE REMETTRE LA COMMANDE DE LANCEMENT DANS LE PRESSE-PAPIER
-7.  Dire uniquement "Fini." Rien d'autre — pas "prêt", pas de rappel du presse-papier (déjà rempli à l'étape 1, jamais remis, cf. règle formelle ci-dessus).
-8.  Si OK et que PLUSIEURS TESTS D'AFFILÉE N'ONT PAS ÉCHOUÉ, alors : reproposer dans le presse-papier un run de l'ensemble des TESTS RESTANTS pour voir ceux qui passent aussi et arrêter de perdre du temps à jouer individuellement des succès.
-9.  SINON→ Passer au test suivant
-10. En cas d'échecs successifs (plus de 2 échecs), PLACER DES LOGS pour déterminer le problème.
-11. Corriger. 
-12. INTERDICTION FORMELLE DE REMETTRE LA COMMANDE DE LANCEMENT DANS LE PRESSE-PAPIER
-13. Demander POLIMENT de relancer le test (cf. réserve ci-dessus)
-14. Si OK → Passer au test suivant
-15. Laisser Phil corriger le problème pour de bon.
-16. → Passer au test suivant
+5.  Proposition des corrections et les appliquer si autorisations.
+6.  Dire "Fini." Rien d'autre — pas "prêt", pas de "tu peux relancer le test", rien, juste "fini"
+7.  SI PLUSIEURS TESTS D'AFFILÉE N'ONT PAS ÉCHOUÉ, alors Phil va certainement demander la commande pour rejouer ensemble les tests restants, pour garder seulement ceux qui échouent encore, plutôt que de perdre du temps à les repasser un par un.
+8.  SINON → Passer normalement au test suivant
+9. En cas d'échecs successifs sur le même test (plus de 2 échecs), PLACER DES LOGS pour déterminer le problème.
+10. Corriger. 
+11. Dire "Fini", pas autre chose.
+12. Si OK → Passer au test suivant
+13. Si PAS OK → Laisser Phil corriger le problème pour de bon.
+14. → Passer au test suivant
 
 
 === Recommandation ===
 
-- Ne jamais actualisation (update.command), les tests le font.
-- ne pas répéter comme un crétin que la commande est dans le presse-papier. Phil est intelligent, organisé, il a un Terminal UNIQUEMENT réservé au test en cours, il a juste à jouer ↑ pour reprendre la commande.
-
+- Ne jamais actualiser (update.command) et encore moins demander à Phil de le faire (Phil n'est pas ton esclave, c'est toi qui est le sien). Et de touts façons, les tests le font automatiquement.
+- ne pas dire comme un crétin que la commande est dans le presse-papier. Phil le voit.
 
 === Commande de lancement du test ===
 
