@@ -27,6 +27,9 @@ def run_test
 
     # ==| Erreur : la sélection doit être un dossier
     wait_until(desc: -> { "texte ErrorsDialog = #{(errors_dialog_text rescue '(erreur)').inspect}" }) { (errors_dialog_text rescue '').include?(expected_error) }
+
+    # - on referme la fenêtre d'erreur (sinon reste dans le DOM pour le test suivant)
+    click_suffix('btn-oui')
   end
 ensure
   fixture_file&.close

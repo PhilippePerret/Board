@@ -31,7 +31,15 @@ def run_test
     service_card = "service-#{service['uuid']}"
 
     # - premier clic → le dossier s'ouvre
-    click_service_and_wait_folder(service_card, fixture_dir)
+    click(service_card)
+    sleep 0.5
+    err1 = (errors_dialog_text rescue nil)
+    raise "[DIAG] ErrorsDialog ouverte après le 1er clic : #{err1}" if err1 && !err1.empty?
+    expected_name1 = File.basename(fixture_dir)
+    t0 = Time.now
+    wait_until(5, desc: -> { "[DIAG #{(Time.now - t0).round(1)}s] nom fenêtre Finder = #{finder_front_window_name.inspect} (attendu #{expected_name1.inspect})" }) do
+      finder_front_window_name == expected_name1
+    end
 
     # - on referme le dossier
     close_folder_and_wait(fixture_dir)
@@ -40,7 +48,14 @@ def run_test
     sleep 2
 
     # - second clic → le dossier doit se rouvrir
-    click_service_and_wait_folder(service_card, fixture_dir)
+    click(service_card)
+    sleep 0.5
+    err = (errors_dialog_text rescue nil)
+    raise "[DIAG] ErrorsDialog ouverte après le 2e clic : #{err}" if err && !err.empty?
+    expected_name = File.basename(fixture_dir)
+    wait_until(3, desc: -> { "nom de la fenêtre Finder au premier plan = #{finder_front_window_name.inspect} (attendu #{expected_name.inspect})" }) do
+      finder_front_window_name == expected_name
+    end
   end
 ensure
   (finder_close_front_window_if_named(File.basename(dir)) rescue nil) if dir

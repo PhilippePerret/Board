@@ -519,6 +519,10 @@ module BoardTest
   # create_fixture_project(services: {'startup' => [], 'others' => [...]}) —
   # évite de repasser par le glisser-déposer quand ce n'est pas l'objet du
   # test (cf. Tests/specs/e2e/attribution_service.rb pour ce cas-là).
+  # 'params' groupé par paramètre déclaré (ServiceData.js: path, window-bounds,
+  # sidebar), pas une liste plate — même forme que ServiceDefiner.js#onDefined
+  # (paramsValues), seule forme que afterDefinedParams (ServiceData.js,
+  # boundsGroup.slice(1)) sait décomposer.
   def fixture_open_folder_service(path, name: 'Ouvrir projet A', type: 'others')
     {
       'id' => 'open-folder-project',
@@ -526,7 +530,7 @@ module BoardTest
       'type' => type,
       'scType' => '.scpt',
       'name' => name,
-      'params' => [path, 100, 100, 600, 400, 200, 'list view', true],
+      'params' => [[path], [path, 100, 100, 600, 400, 200, 'list view'], [0]],
       'projectId' => nil
     }
   end
