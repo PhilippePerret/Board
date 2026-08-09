@@ -193,9 +193,38 @@ class Service {
    */
   observeServiceCard(projet, card){
     listen(card, 'click', this.onClickOnProjectService.bind(this, projet))
-    listen(card, 'dragstart', e => projet.draggedService = this)
+    listen(card, 'dragstart', e => {
+      projet.draggedService = this
+      // La carte elle-même (celle qui se déplace en direct entre les
+      // autres pendant le survol, cf. dragover ci-dessous) doit rester
+      // reconnaissable — sinon confondue avec un bouton normal une fois
+      // "posée" entre deux autres services. setTimeout(0) : WebKit capture
+      // l'image de glissé (le bouton "volant" qui suit le curseur) juste
+      // APRÈS ce handler dragstart, pas avant — sans ce délai, le bouton
+      // volant récupère aussi le bord pointillé rouge, ce qu'il ne doit
+      // JAMAIS faire (lui doit garder l'aspect normal, seule la carte
+      // intercalée entre les autres doit changer d'aspect).
+      setTimeout(() => card.classList.add('service-drag-ghost'), 0)
+    })
+    // Réordonnement : lâché sur un AUTRE service de la même liste (même
+    // .type, startup ou others) — le nœud DOM du service glissé est
+    // déplacé dès le survol, pas seulement au drop (retour visuel
+    // immédiat). preventDefault() ici change dropEffect (plus "none"),
+    // ce qui empêche le retrait ci-dessous de se déclencher.
+    listen(card, 'dragover', e => {
+      const dragged = projet.draggedService
+      if (!dragged || dragged === this || dragged.type !== this.type) return
+      e.preventDefault()
+      const rect = card.getBoundingClientRect()
+      const before = (e.clientY - rect.top) < rect.height / 2
+      card.parentNode.insertBefore(dragged.projectCard, before ? card : card.nextSibling)
+    })
     listen(card, 'dragend', e => {
-      if (e.dataTransfer.dropEffect != "none") return
+      card.classList.remove('service-drag-ghost')
+      if (e.dataTransfer.dropEffect != "none") {
+        projet.persistServiceOrder(this.type)
+        return
+      }
       projet.removeServiceFromListe();
     })
   }

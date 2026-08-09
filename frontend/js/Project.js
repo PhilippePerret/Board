@@ -591,6 +591,23 @@ class Project {
     this.save()
   }
 
+  /**
+   * RÉORDONNER LES SERVICES D'UNE LISTE (startup ou others)
+   * --------------------------------------------------------
+   * Appelée au dragend d'un réordonnement (Service.js#observeServiceCard) :
+   * le DOM a déjà été déplacé pendant le survol (dragover), il ne reste
+   * qu'à faire correspondre this.services[where] à cet ordre.
+   */
+  persistServiceOrder(where){
+    const container = where == 'startup' ? this.divSServices : this.othersField
+    if (!container) return
+    const orderedUuids = Array.from(container.children)
+      .map(el => el.id?.replace('service-', ''))
+      .filter(Boolean)
+    this.services[where].sort((a, b) => orderedUuids.indexOf(a.uuid) - orderedUuids.indexOf(b.uuid))
+    this.save()
+  }
+
   buildIcon(){
     const iconPath = `file://${this.path}/${this.icon}`
     const icon = DCreate('IMG', {src: iconPath, class:'project-icon', style: 'width:32px;float:left;margin-right:0.4em'})
@@ -723,7 +740,12 @@ class Project {
     this.startupField.addEventListener("dragover", e => {e.preventDefault()})
     this.startupField.addEventListener("drop", e => {
         e.preventDefault();
-        const service = Service.get(e.dataTransfer.getData("id"))
+        // dataTransfer "id" vide : glissé de réordonnement (service déjà
+        // attaché, cf. Service.js#observeServiceCard), pas un ajout depuis
+        // le panneau — déjà géré par dragover/dragend, rien à faire ici.
+        const id = e.dataTransfer.getData("id")
+        if (!id) return
+        const service = Service.get(id)
         // console.log("Drop sur la zone startup", service)
         this.addStartupService(service)
       })
@@ -731,7 +753,9 @@ class Project {
     this.othersField.addEventListener("dragover", e => e.preventDefault())
     this.othersField.addEventListener("drop", e => {
           e.preventDefault();
-          const service = Service.get(e.dataTransfer.getData("id"))
+          const id = e.dataTransfer.getData("id")
+          if (!id) return
+          const service = Service.get(id)
           // console.log("Drop sur la zone autres services", service)
           this.addOtherService(service)
       })

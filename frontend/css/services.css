@@ -80,6 +80,15 @@ div.services-listing {
 }
 .service:active { outline: auto; }
 
+.service-drag-ghost {
+  background-color: #f5e6c8 !important;
+  border: 2px dashed #c0392b !important;
+  opacity: 0.95;
+}
+.service-drag-ghost * {
+  color: #3a2a1a !important;
+}
+
 #custom-services-panel .services-listing .service {
   cursor: move;
 }
