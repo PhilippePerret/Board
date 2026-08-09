@@ -105,11 +105,11 @@ begin
       if File.exist?(dest)
         message << 'backend-archiv-saved'
       else
-        puts {'ok' => false, 'error' => ['backend-archiv-unknown-problem']}
+        puts({'ok' => false, 'error' => ['backend-archiv-unknown-problem']}.to_json)
         exit 0
       end
     else
-      puts {'ok' => false, 'error' => ['backend-archiv-unfound-folder', ARCHIVE_FOLDER]}
+      puts({'ok' => false, 'error' => ['backend-archiv-unfound-folder', ARCHIVE_FOLDER]}.to_json)
       exit 0
     end
   else
@@ -118,7 +118,7 @@ begin
       File.rename(FILEPATH, new_version_path)
       message << "Renommage du fichier : #{new_version_name.inspect}."
     else
-      puts {'ok' => false, 'error' => ['backend-version-no-num', new_version_name.inspect]}
+      puts({'ok' => false, 'error' => ['backend-version-no-num', new_version_name.inspect]}.to_json)
       exit 0
     end
   end  
