@@ -10,6 +10,8 @@ const ERRORS = {
     'premier': 'pour-virgule'
     // --- Données générales ---
     , 'hour-not-valid': "유효하지 않은 시간: '$1'"
+    , 'error-date': "날짜 '$1'이(가) 유효하지 않습니다. 유효한 형식: 일/월/년, '내일', '모레', 또는 'X시간/일/주/개월 후'."
+    , 'deadline-before-start': "마감일 '$1'은(는) 시작일 '$2'보다 이후여야 합니다."
     , 'repeat-not-valid': "'$1'의 반복 설정이 유효하지 않습니다"
     , 'error-duration': "기간 « $1 »은(는) '<숫자> <단위>' 형식이어야 합니다. 단위는 '개월', '주', '일', '시간', '분' 및 그 약어일 수 있습니다 (예: '12 h')."
     , 'prop-cant-be-empty': "속성 « $1 »은(는) 비워둘 수 없습니다."

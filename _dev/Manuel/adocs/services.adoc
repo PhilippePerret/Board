@@ -22,3 +22,6 @@ include::services/update-minor-version.adoc[]
 
 === Lancer un script quelconque ===
 include::services/run-custom-script.adoc[]
+
+=== Faire jouer du code au dossier ===
+include::services/run-code-in-dossier.adoc[]

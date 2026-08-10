@@ -6,7 +6,7 @@ begin
   MAIN_FILE_NAME = File.basename(MAIN_FILE_PATH)
   FOLDER_MAIN_FILE = File.dirname(MAIN_FILE_PATH)
   MACROS_FILE = File.join(FOLDER_MAIN_FILE, 'macros.rb')
-  cmd = "cd '#{FOLDER_MAIN_FILE}' && /opt/homebrew/bin/asciidoctor --failure-level=WARN "
+  cmd = "cd '#{FOLDER_MAIN_FILE}' && asciidoctor --failure-level=WARN "
   if File.exist?(MACROS_FILE)
     cmd += "-r ./macros.rb "
   end

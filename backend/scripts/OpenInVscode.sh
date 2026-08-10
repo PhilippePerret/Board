@@ -1,3 +1,3 @@
 folder="$1"
 
-/opt/homebrew/bin/code "$folder"
+code "$folder"

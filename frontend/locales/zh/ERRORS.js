@@ -10,6 +10,8 @@ const ERRORS = {
     'premier': 'pour-virgule'
     // --- Données générales ---
     , 'hour-not-valid': "时间无效：'$1'"
+    , 'error-date': "日期 '$1' 无效。有效格式：日/月/年、“明天”、“后天”，或“X小时/天/周/月后”。"
+    , 'deadline-before-start': "截止日期 '$1' 必须晚于开始日期 '$2'。"
     , 'repeat-not-valid': "'$1' 中的重复规则无效"
     , 'error-duration': "时长« $1 » 应采用 '<数字> <单位>' 的形式，其中单位可以是“月”“周”“天”“小时”“分钟”及其缩写（例如 '12 h'）。"
     , 'prop-cant-be-empty': "属性« $1 »不能为空。"

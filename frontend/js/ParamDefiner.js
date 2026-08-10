@@ -166,6 +166,7 @@ class ParamDefiner {
     this.default  = param.default ?? null
     this.actual   = param.actual  ?? null // valeur en vigueur, distincte de default
     this.values   = param.values  ?? null
+    this.if       = param.if      ?? null
   }
 
   get currentOrDefault(){ return this.actual ?? this.default }
@@ -173,7 +174,12 @@ class ParamDefiner {
 
   define() {
     historize('-> ParamDefiner.define', this)
-    Prompter.prompt(this.promptSpec(), this.onPrompted.bind(this))
+    if ('function' == typeof this.if && this.if(this.paramLister.definers) === false) {
+      this.setValue(null)
+    } else {
+      // cas normal de définition
+      Prompter.prompt(this.promptSpec(), this.onPrompted.bind(this))
+    }
   }
 
   // Données transmises à Prompter pour obtenir la valeur de ce paramètre

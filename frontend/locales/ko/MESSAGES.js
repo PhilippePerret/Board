@@ -364,4 +364,25 @@ const MESSAGES = {
 
     // --- Documentation ---
     , 'docu-opened-in-browser': "문서가 열렸습니다."
+
+    // --- Validator (regexp) ---
+    , 'regexp:date-prefix': "(?:)"
+    , 'regexp:hour-words': "시"
+    , 'regexp:relative-days': "그제|모레|어제|내일|오늘"
+    , 'regexp:date-unit': "개월|달|주|일|시간|분"
+    , 'regexp:duration-in': "([0-9]+) ?(개월|달|주|일|시간|분) ?후"
+    , 'regexp:every-prefix': "매"
+    , 'regexp:day-word': "일"
+    , 'regexp:weekdays': "월요일|화요일|수요일|목요일|금요일|토요일|일요일"
+    , 'regexp:of-month': "일"
+    , 'regexp:unit-month': "개월|달"
+    , 'regexp:unit-week': "주"
+    , 'regexp:unit-day': "일"
+    , 'regexp:unit-hour': "시간"
+    , 'regexp:unit-minute': "분"
+    , 'regexp:day-before-yesterday': "그제"
+    , 'regexp:yesterday': "어제"
+    , 'regexp:today': "오늘"
+    , 'regexp:tomorrow': "내일"
+    , 'regexp:day-after-tomorrow': "모레"
 }

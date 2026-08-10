@@ -4,7 +4,7 @@
  * Méthodes utiles pour les Date
  */
 
-const REG_HOUR = /([0-9]{1,2}) ?(?:(?::|heure|hour|hr|h)s?) ?([0-9]{2})(?:\:([0-9]{2}))?/
+const REG_HOUR = /([0-9]{1,2}) ?(?:(?::|heure|hour|hr|h)s?) ?([0-9]{2})?(?:\:([0-9]{2}))?/
 
 // "2026-07-29T09:00:00Z"
 const REG_ISO_8601= /([0-9]{4})\-([0-9]{2})\-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})?$/
@@ -29,16 +29,16 @@ class DateUtils {
    * @return true si +dateRef+ est avant +dateAfter+
    */
   static isAfter(dateRef, dateAfter){
-    dateRef > dateAfter
+    return dateRef > dateAfter
   }
 
   /**
    * @api
-   * 
+   *
    * @return true si +dateRef+ est après +dateBefore+
    */
   static isBefore(dateRef, dateBefore){
-    dateRef > dateBefore
+    return dateRef < dateBefore
   }
 
   /**
@@ -180,7 +180,7 @@ class DateUtils {
     var found = str.match(REG_HOUR)
     if (found === null) return null
     var [tout, h, m] = found
-    return {hour: h, minute: m}
+    return {hour: parseInt(h, 10), minute: m === undefined ? 0 : parseInt(m, 10)}
   }
 
   constructor(date){
@@ -217,4 +217,69 @@ class DateUtils {
     if (date instanceof DateUtils) date = date.date
     return this.date > date
   }
+
+  /**
+   * @api
+   *
+   * Transforme une date-string acceptée par Validator.date() (ISO 8601,
+   * JJ/MM/AAAA et dérivés, mot-clé relatif localisé, ou "dans X unité"
+   * localisé) en vraie {Date}.
+   *
+   * @return La {Date} correspondante, ou null si le format n'est pas reconnu.
+   */
+  static parseNatural(str){
+    if (!str) return null
+    var found
+    if ( found = this.parseAsIso8601(str) ) return found
+
+    if ( found = str.match(NATURAL_NUMERIC_DATE_REG) ) {
+      const day   = parseInt(found[1], 10)
+      const month = parseInt(found[2], 10) - 1
+      const year  = found[3] ? (found[3].length == 2 ? 2000 + parseInt(found[3], 10) : parseInt(found[3], 10)) : new Date().getFullYear()
+      const d = new Date(year, month, day)
+      if (found[4]) {
+        const heure = this._parseHour(found[4])
+        if (heure) { d.setHours(heure.hour); d.setMinutes(heure.minute) }
+      }
+      return d
+    }
+
+    for (const [word, offset] of NATURAL_RELATIVE_DAY_OFFSET) {
+      if (word && str.match(new RegExp(`(${word})`))) {
+        return this.dateIn(offset, 'day')
+      }
+    }
+
+    if ( found = str.match(NATURAL_DURATION_IN_REG) ) {
+      const amount = parseInt(found[1], 10)
+      const unitWord = found[2]
+      const unitEntry = NATURAL_UNIT_TO_CANON.find(([w]) => new RegExp(`^(${w})$`).test(unitWord))
+      return this.dateIn(amount, unitEntry ? unitEntry[1] : 'day')
+    }
+
+    return null
+  }
 }
+
+// --- Localisation (mots utilisés par Validator.js et parseNatural) ---
+const NATURAL_UNIT_TO_CANON = [
+  [getMsg('regexp:unit-month'),  'month'],
+  [getMsg('regexp:unit-week'),   'week'],
+  [getMsg('regexp:unit-day'),    'day'],
+  [getMsg('regexp:unit-hour'),   'hour'],
+  [getMsg('regexp:unit-minute'), 'minute'],
+]
+// Ordre important : les formes longues ("après-demain") contiennent parfois
+// les formes courtes ("demain") comme sous-chaîne — elles doivent être
+// testées en premier.
+const NATURAL_RELATIVE_DAY_OFFSET = [
+  [getMsg('regexp:day-after-tomorrow'),  2],
+  [getMsg('regexp:day-before-yesterday'), -2],
+  [getMsg('regexp:tomorrow'),            1],
+  [getMsg('regexp:yesterday'),          -1],
+  [getMsg('regexp:today'),               0],
+]
+const NATURAL_DATE_PREFIX = getMsg('regexp:date-prefix')
+const NATURAL_HOUR_REG = `[0-9]{1,2} ?(?::|${getMsg('regexp:hour-words')})s? ?[0-9]{0,2}`
+const NATURAL_NUMERIC_DATE_REG = new RegExp(`^(?:${NATURAL_DATE_PREFIX})?([0-9]{1,2})[ :\\-\\/]([0-9]{1,2})(?:[ :\\-\\/]([0-9]{2,4}))?(?: ${getMsg('date/at')} (${NATURAL_HOUR_REG}))?$`)
+const NATURAL_DURATION_IN_REG = new RegExp(getMsg('regexp:duration-in'))

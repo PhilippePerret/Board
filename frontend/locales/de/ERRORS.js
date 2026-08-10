@@ -10,6 +10,8 @@ const ERRORS = {
     'premier': 'pour-virgule'
     // --- Données générales ---
     , 'hour-not-valid': "ungültige Uhrzeit: '$1'"
+    , 'error-date': "Das Datum '$1' ist ungültig. Gültige Formate: TT/MM/JJJJ, 'morgen', 'übermorgen', oder 'in X Stunden/Tagen/Wochen/Monaten'."
+    , 'deadline-before-start': "Die Frist '$1' muss nach dem Startdatum '$2' liegen."
     , 'repeat-not-valid': "die Wiederholung ist in '$1' ungültig"
     , 'error-duration': "Die Dauer « $1 » sollte die Form '&lt;Zahl> &lt;Einheit>' haben, wobei Einheit 'Monat', 'Woche', 'Tag', 'Stunde', 'Minute' oder deren Abkürzungen sein kann (zum Beispiel '12 h')."
     , 'prop-cant-be-empty': "Die Eigenschaft « $1 » darf nicht leer sein."

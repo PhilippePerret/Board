@@ -35,7 +35,7 @@ class ServiceDefiner {
         id: 'service-name', type:'service-name', default: this.service.name
       })
     }
-    console.log("[ServiceDefiner.params", this.params)
+    // console.log("[ServiceDefiner.params", this.params)
     const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet)
     serviceDefiner.define()
   }
@@ -44,9 +44,9 @@ class ServiceDefiner {
    * paramètres.
    */
   onDefined(definers){
-    console.log('-> onDefined avec definers = ', definers)
+    // console.log('-> onDefined avec definers = ', definers)
     if (definers) {
-      console.info("Définers retournés", definers)
+      // console.info("Définers retournés", definers)
 
       // Pour savoir si les valeurs projets on été
       // modifiées => save

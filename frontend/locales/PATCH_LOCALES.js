@@ -7,6 +7,14 @@
 Object.assign(MESSAGES, {
   'premier':"juste pour virgule"
   // Nouveaux messages à mettre dans les MESSAGES.js
+
+  // Verbes
+  , 'View': "Afficher"
+
+
+  // À MODIFIER
+  , 'action-on-checked-issues': "Sélectionnez les issues à traiter et choisissez l'action."
+
 })
 
 Object.assign(ERRORS, {

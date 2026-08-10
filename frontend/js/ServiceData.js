@@ -24,12 +24,26 @@
  *    pour indiquer qu'ils étaient à redéfinir à chaque fois. Ces 
  *    paramètres-là sont à définir dans dynParams et nulle par 
  *    ailleurs.
+ *    Propriété spéciales/rares :
+ *    --------------------------
+ *    :if [Function] 
+ *        Définit si le paramètre doit être défini ou non. Si la 
+ *        fonction retourne true, le paramètre est défini normalement
+ *        Sinon, il n'est pas défini et il prend la valeur null.
+ *        La fonction reçoit en argument tous les "definers" courant,
+ *        c'est-à-dire, dans l'ordre de la définition des paramètres,
+ *        leurs propriétés et notamment la propriété :value qui 
+ *        définit la valeur. Donc, par exemple, si la condition dé-
+ *        pend du deuxième paramètre défini, on teste : 
+ *          definers[1].value
  * 
  *  dynParams
  *    Alors que les +params+ sont enregistrés une fois pour toutes
  *    pour le projet donné, les +dynParams (pour "paramètres dyna-
  *    miques") sont demandés chaque fois. C'est par exemple les 
  *    fichiers à commiter et le message pour le commit
+ *    Propriétés spéciales/rares :
+ *    :if [Function] Cf. params
  *
  *  onError
  *    Pour définir ce qui doit se passer en cas d'erreur. C'est une 
@@ -62,6 +76,11 @@
  * 
 
 */
+
+// Action qu'on peut accomplir sur les Git issues
+const ISSUE_ACTION_LIST = [['view', getMsg('View')], ['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]
+const ISSUE_ACTION_WITHOUT_COMS = {'view': true, 'pin': true, 'unpin': true}
+
 const COUNTDOWN_PROPERTIES = {
     front: Clock.instance.toggle.bind(Clock.instance)
   , params: [
@@ -71,7 +90,7 @@ const COUNTDOWN_PROPERTIES = {
 }
 
 const GITHUB_LABELS = [
-  'todo', 'bug', 'improve', 'amélioration', 'documentation', 'docu', 'aide', 'help', 
+  'todo', 'bug', 'test', 'improve', 'amélioration', 'documentation', 'docu', 'aide', 'help', 
   'feature', 'fonctionnalité', 'help wanted', 'erreur', 'error',
   'typo', 'correction'
 ] //.map(n => [n, n])
@@ -164,23 +183,32 @@ const COMMON_SERVICES_DATA = [
     , dynParams: [
           {id: 'issue_label', type: 'select', q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
-        , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: 
-          [['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]}
-        , {id: 'gh_message', type: 'string', q: getMsg('gh-message-operation'), width: '600px', title: getMsg('git-issue-gestion')}
+        , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: ISSUE_ACTION_LIST}
+        , {id: 'gh_message', if: (definers) => {
+            console.log("dans if, paramLister = ", definers)
+            const action = definers[2].value
+            return !ISSUE_ACTION_WITHOUT_COMS[action]
+            }, type: 'string', q: getMsg('gh-message-operation'), width: '600px', title: getMsg('git-issue-gestion')}
       ]
     , afterDefinedParams: (params) => {
       Project.current.updateLabelList(params[1][0])
       return params
     }
     , afterRunWithSuccess(projet, retour){
-        console.log("Après exécution / projet / retour ", projet, retour)
+        console.log("Après exécution avec succès / projet / retour ", projet, retour)
+        // Dans le cas d'un affichage demancé, il faut afficher le contenu
+        // des issues.
       }
     , beforeExec(dict){
+        // En fonction de l'opération à exécuter, le message (gh_message)
+        // sera utilisé différemment.
+        //
         const option = (function(ope){
           switch(ope){
             case 'close': return 'comment'
             case 'lock':  return 'reason'
-            case 'pin': case 'unpin': return null
+            // Ceux qui ne prennent pas de messages
+            case 'pin': case 'unpin': case 'view': return null
             default:      return 'body'
           }
         })(dict.gh_operation)
@@ -206,6 +234,10 @@ const COMMON_SERVICES_DATA = [
         return command
       }
   },
+
+
+
+
 
   // Labels (à mettre dans tools)
   {

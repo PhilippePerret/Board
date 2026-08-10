@@ -135,8 +135,8 @@ class Project {
   static onRetourInfoFinderProjet(retour){
     // console.info("Retour : ", retour)
     if (retour.data.ok === false) {
-      if (retour.data.error == 'Not a folder') return error(getErr('folder-required'))
-      else if (retour.data.error == 'No selection') return error(getErr('project-folder-not-selected'))
+      if (retour.data.error == 'not-a-folder') return error(getErr('folder-required'))
+      else if (retour.data.error == 'no-selection') return error(getErr('project-folder-not-selected'))
     }
     const projet = new Project(Object.assign(retour.data, {
         id: uniqId()
@@ -875,10 +875,10 @@ class Project {
   /**
    * Retour de l'enregistrement des nouvelles tâches, des tâches
    * modifiées et des tâches achevées.
-   * 
-   * La fonction actualise la liste des tâches [TODO] et le
-   * badge todoist pour refléter les changements [TODO]
-   * 
+   *
+   * La fonction actualise la liste des tâches et le badge todoist
+   * pour refléter les changements.
+   *
    * @param retour Données remontées par le backend
    */
   updateTasksAfterMarkAndCreate(retour){

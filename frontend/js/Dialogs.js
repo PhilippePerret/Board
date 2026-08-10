@@ -548,7 +548,7 @@ class TasksDialog extends Dialog {
         return ['due', val]
       case 'deadline':    case this._deadline_  : 
         Validator.date(val, errors)
-        Validator.dateAfter('/* on doit avoir la date start */', val, errors)
+        Validator.dateAfter(val, task['due'] || task['start'], errors)
         return ['deadline', val]
       case 'duration':    case this._duration_  : 
         Validator.duration(val, errors)

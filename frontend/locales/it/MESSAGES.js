@@ -364,4 +364,25 @@ const MESSAGES = {
 
     // --- Documentation ---
     , 'docu-opened-in-browser': "Documentazione aperta."
+
+    // --- Validator (regexp) ---
+    , 'regexp:date-prefix': "(?:)"
+    , 'regexp:hour-words': "ora|h"
+    , 'regexp:relative-days': "l'altro ieri|dopodomani|ieri|domani|oggi"
+    , 'regexp:date-unit': "mese|mesi|settimana|settimane|sett|giorno|giorni|g|ora|ore|h|minuto|minuti|min"
+    , 'regexp:duration-in': "tra ([0-9]+) (mese|mesi|settimana|settimane|sett|giorno|giorni|g|ora|ore|h|minuto|minuti|min)"
+    , 'regexp:every-prefix': "ogni "
+    , 'regexp:day-word': "giorni"
+    , 'regexp:weekdays': "lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica"
+    , 'regexp:of-month': "del mese"
+    , 'regexp:unit-month': "mese|mesi"
+    , 'regexp:unit-week': "settimana|settimane|sett"
+    , 'regexp:unit-day': "giorno|giorni|g"
+    , 'regexp:unit-hour': "ora|ore|h"
+    , 'regexp:unit-minute': "minuto|minuti|min"
+    , 'regexp:day-before-yesterday': "l'altro ieri"
+    , 'regexp:yesterday': "ieri"
+    , 'regexp:today': "oggi"
+    , 'regexp:tomorrow': "domani"
+    , 'regexp:day-after-tomorrow': "dopodomani"
 }

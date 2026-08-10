@@ -364,4 +364,25 @@ const MESSAGES = {
 
     // --- Documentation ---
     , 'docu-opened-in-browser': "Documentación abierta."
+
+    // --- Validator (regexp) ---
+    , 'regexp:date-prefix': "(?:)"
+    , 'regexp:hour-words': "hora|h"
+    , 'regexp:relative-days': "anteayer|pasado mañana|ayer|mañana|hoy"
+    , 'regexp:date-unit': "mes|meses|semana|semanas|sem|día|días|d|hora|horas|h|minuto|minutos|min"
+    , 'regexp:duration-in': "en ([0-9]+) (mes|meses|semana|semanas|sem|día|días|d|hora|horas|h|minuto|minutos|min)"
+    , 'regexp:every-prefix': "cada "
+    , 'regexp:day-word': "días"
+    , 'regexp:weekdays': "lunes|martes|miércoles|jueves|viernes|sábado|domingo"
+    , 'regexp:of-month': "del mes"
+    , 'regexp:unit-month': "mes|meses"
+    , 'regexp:unit-week': "semana|semanas|sem"
+    , 'regexp:unit-day': "día|días|d"
+    , 'regexp:unit-hour': "hora|horas|h"
+    , 'regexp:unit-minute': "minuto|minutos|min"
+    , 'regexp:day-before-yesterday': "anteayer"
+    , 'regexp:yesterday': "ayer"
+    , 'regexp:today': "hoy"
+    , 'regexp:tomorrow': "mañana"
+    , 'regexp:day-after-tomorrow': "pasado mañana"
 }

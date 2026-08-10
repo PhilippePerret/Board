@@ -10,6 +10,8 @@ const ERRORS = {
     'premier': 'pour-virgule'
     // --- Données générales ---
     , 'hour-not-valid': "hora no válida: '$1'"
+    , 'error-date': "La fecha '$1' no es válida. Formatos válidos: DD/MM/AAAA, 'mañana', 'pasado mañana', o 'en X horas/días/semanas/meses'."
+    , 'deadline-before-start': "La fecha límite '$1' debe ser posterior a la fecha de inicio '$2'."
     , 'repeat-not-valid': "la repetición no es válida en '$1'"
     , 'error-duration': "La duración « $1 » debería tener la forma '&lt;número> &lt;unidad>' donde unidad puede ser 'mes', 'semana', 'día', 'hora', 'minuto' y sus abreviaturas (por ejemplo '12 h')."
     , 'prop-cant-be-empty': "La propiedad « $1 » no puede estar vacía."

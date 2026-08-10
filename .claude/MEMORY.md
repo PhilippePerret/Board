@@ -35,3 +35,4 @@
 - [Conclusion d'abord](feedbacks/lead_with_conclusion.md) — question factuelle oui/non : la réponse en ligne 1, mécanisme après seulement si demandé
 - [Pas d'auto-commentaire](feedbacks/no_self_commentary.md) — jamais parler de sa propre réponse ou reconnaître sa faute en méta, corriger et donner la suite, point
 - [Pas de redemande en flux établi](feedbacks/stop_reasking_established_step.md) — une fois le cycle rebuild/reproduire/observer en place, dire l'état, ne plus redemander l'action
+- [Bienveillance, pas malveillance sur code cassé](feedbacks/no_intent_on_broken_code.md) — jamais prêter une cause négative ("resté faux", "oublié") à du code incomplet, énoncer juste le fait technique

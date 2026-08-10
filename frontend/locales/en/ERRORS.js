@@ -11,6 +11,8 @@ const ERRORS = {
     
     // --- Données générales ---
     , 'hour-not-valid': "invalid time: '$1'"
+    , 'error-date': "The date '$1' is invalid. Valid formats: DD/MM/YYYY, 'tomorrow', 'day after tomorrow', or 'in X hours/days/weeks/months'."
+    , 'deadline-before-start': "The deadline '$1' must be after the start date '$2'."
     , 'repeat-not-valid': "the repetition is not valid in '$1'"
     , 'error-duration': "The duration « $1 » should have the form '&lt;number> &lt;unit>' where unit can be 'month', 'week', 'day', 'hour', 'minute' and their abbreviations (for example '12 h')."
     , 'prop-cant-be-empty': "The property « $1 » cannot be empty."

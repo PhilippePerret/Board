@@ -364,4 +364,25 @@ const MESSAGES = {
 
     // --- Documentation ---
     , 'docu-opened-in-browser': "Dokumentation geöffnet."
+
+    // --- Validator (regexp) ---
+    , 'regexp:date-prefix': "(?:)"
+    , 'regexp:hour-words': "Uhr|Std|h"
+    , 'regexp:relative-days': "vorgestern|übermorgen|gestern|morgen|heute"
+    , 'regexp:date-unit': "Monat|Monate|Woche|Wochen|Wo|Tag|Tage|T|Stunde|Stunden|Std|h|Minute|Minuten|Min"
+    , 'regexp:duration-in': "in ([0-9]+) (Monat|Monate|Woche|Wochen|Wo|Tag|Tage|T|Stunde|Stunden|Std|h|Minute|Minuten|Min)"
+    , 'regexp:every-prefix': "jeden "
+    , 'regexp:day-word': "Tage"
+    , 'regexp:weekdays': "montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag"
+    , 'regexp:of-month': "des Monats"
+    , 'regexp:unit-month': "Monat|Monate"
+    , 'regexp:unit-week': "Woche|Wochen|Wo"
+    , 'regexp:unit-day': "Tag|Tage|T"
+    , 'regexp:unit-hour': "Stunde|Stunden|Std|h"
+    , 'regexp:unit-minute': "Minute|Minuten|Min"
+    , 'regexp:day-before-yesterday': "vorgestern"
+    , 'regexp:yesterday': "gestern"
+    , 'regexp:today': "heute"
+    , 'regexp:tomorrow': "morgen"
+    , 'regexp:day-after-tomorrow': "übermorgen"
 }

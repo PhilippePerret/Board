@@ -1,0 +1,23 @@
+__(niveau débutant)__
+
+On peut très facilement faire jouer du code dans un dossier en utilisant ChatGPT, Claude ou autre bot conversationnel.
+
+Par exemple, j'avais à modifier tous les noms d'une centaine de fichiers dans un dossier de mon projet. Il y avait "Vertueuse" dans le nom, et je voulais le faire remplacer par "Vertueuse-Roman".
+
+J'ai demandé à ChatGPT : « Fais-moi un script pour changer tous les noms des fichiers du sous-dossier `./2026/xArchives`, en ajoutant "-Roman" à "Vertueuse", donc "Vertueuse" → "Vertueuse-Roman". Fais-moi cette commande en une seule ligne.
+
+Et il a produit : 
+
+----
+cd ./2026/xArchives; for f in *Vertueuse*; do [ -f "$f" ] && mv "$f" "${f/Vertueuse/Vertueuse-Roman}"; done
+----
+
+J'ai :
+
+- copié ce code,
+- sélectionné le projet dans {app-name},
+- choisis le service “Ouvrir un Terminal au dossier”,
+- j'ai collé le code dans le champ qui me demande le code à jouer,
+- j'ai coché “OK”.
+
+Aussitôt, le code est exécuté et tous les noms sont changés, comme par magie.

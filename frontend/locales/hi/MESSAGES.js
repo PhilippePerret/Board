@@ -364,4 +364,25 @@ const MESSAGES = {
 
     // --- Documentation ---
     , 'docu-opened-in-browser': "दस्तावेज़ खोला गया।"
+
+    // --- Validator (regexp) ---
+    , 'regexp:date-prefix': "(?:)"
+    , 'regexp:hour-words': "बजे"
+    , 'regexp:relative-days': "परसों|कल|आज"
+    , 'regexp:date-unit': "महीना|माह|सप्ताह|हफ्ता|दिन|घंटा|मिनट"
+    , 'regexp:duration-in': "([0-9]+) ?(महीना|माह|सप्ताह|हफ्ता|दिन|घंटा|मिनट) ?में"
+    , 'regexp:every-prefix': "हर "
+    , 'regexp:day-word': "दिन"
+    , 'regexp:weekdays': "सोमवार|मंगलवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार"
+    , 'regexp:of-month': "महीने की"
+    , 'regexp:unit-month': "महीना|माह"
+    , 'regexp:unit-week': "सप्ताह|हफ्ता"
+    , 'regexp:unit-day': "दिन"
+    , 'regexp:unit-hour': "घंटा"
+    , 'regexp:unit-minute': "मिनट"
+    , 'regexp:day-before-yesterday': "परसों"
+    , 'regexp:yesterday': "कल"
+    , 'regexp:today': "आज"
+    , 'regexp:tomorrow': "कल"
+    , 'regexp:day-after-tomorrow': "परसों"
 }

@@ -364,4 +364,25 @@ const MESSAGES = {
 
     // --- Documentation ---
     , 'docu-opened-in-browser': "文档已打开。"
+
+    // --- Validator (regexp) ---
+    , 'regexp:date-prefix': "(?:)"
+    , 'regexp:hour-words': "点|时"
+    , 'regexp:relative-days': "前天|后天|昨天|明天|今天"
+    , 'regexp:date-unit': "月|周|星期|天|日|小时|时|分钟|分"
+    , 'regexp:duration-in': "([0-9]+) ?(月|周|星期|天|日|小时|时|分钟|分)后"
+    , 'regexp:every-prefix': "每"
+    , 'regexp:day-word': "天"
+    , 'regexp:weekdays': "星期一|星期二|星期三|星期四|星期五|星期六|星期日"
+    , 'regexp:of-month': "号"
+    , 'regexp:unit-month': "月"
+    , 'regexp:unit-week': "周|星期"
+    , 'regexp:unit-day': "天|日"
+    , 'regexp:unit-hour': "小时|时"
+    , 'regexp:unit-minute': "分钟|分"
+    , 'regexp:day-before-yesterday': "前天"
+    , 'regexp:yesterday': "昨天"
+    , 'regexp:today': "今天"
+    , 'regexp:tomorrow': "明天"
+    , 'regexp:day-after-tomorrow': "后天"
 }

@@ -27,9 +27,14 @@ def run_test
   wait_for('__tools_app_window_bounds__', 4)
 
   set_value('__tools_app_window_bounds__', 'Board')
+  selected = get_value('__tools_app_window_bounds__')
+  raise "sélection 'Board' pas prise (valeur = #{selected.inspect})" unless selected == 'Board'
   click_suffix('btn-oui')
 
-  wait_for('__window-infos__', 4)
+  wait_until(4, desc: -> { "ni '__window-infos__' ni ErrorsDialog (errors_dialog_text = #{(errors_dialog_text rescue '(erreur)').inspect})" }) do
+    exists?('__window-infos__') || !((errors_dialog_text rescue '').empty?)
+  end
+  raise "ErrorsDialog ouverte au lieu de window-infos : #{errors_dialog_text.inspect}" unless exists?('__window-infos__')
   infos = get_value('__window-infos__').to_s
   raise "infos de fenêtre incomplètes : #{infos.inspect}" unless %w[top left width height].all? { |k| infos =~ /#{k}/i }
 
