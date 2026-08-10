@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "Un servicio debe tener un :name. ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "No se pudo abrir el archivo '$1' con la aplicación '$2'."
     , 'scserv-abort': "Servicio cancelado"
     , 'Script-service-definition-error': 'Error de definición del Script-service'
     , 'Script-service-file-contains-errors': 'El archivo de definición del script-service contiene errores.'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "Un paso de script-service ($1) siempre debe tener un tipo ($2)."
     , 'scserv-id-required': "Un paso de script-service debe tener obligatoriamente un identificador ($1) ($2)."
     , 'scserv-id-invalid': "El identificador del paso $1 no es válido ($2)."
-    , 'scserv-step-type-unknowned': "tipo de paso desconocido: $1 ($2)."
-    , 'scserv-param-required': "El parámetro '$1' es obligatorio, para el tipo '$2' ($3)."
-    , 'scserv-unknown-param': "El parámetro '$1' es desconocido para el servicio de tipo '$2' ($3)."
+    , 'scserv-step-type-unknowned': "paso '$1': tipo de paso desconocido: $2 ($3)."
+    , 'scserv-param-required': "paso '$1': el parámetro '$2' es obligatorio, para el tipo '$3' ($4)."
+    , 'scserv-unknown-param': "paso '$1': el parámetro '$2' es desconocido para el servicio de tipo '$3' ($4)."
     , 'scserv-param-bad-type': "El parámetro '$1' no tiene el tipo correcto. Esperado: $2, actual: $3 ($4)."
     , 'scserv-on-get-file-values': "Se produjo un error al intentar leer los datos del archivo '$1': $2 ($3)."
     , 'scserv-select-with-object-requires-key-values': "El select del paso $1, cuyos datos son tablas, requiere el parámetro key_value que define el valor del menú ($2)"

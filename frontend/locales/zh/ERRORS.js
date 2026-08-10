@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "服务必须有一个 :name。($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "无法用应用 '$2' 打开文件 '$1'。"
     , 'scserv-abort': "服务已取消"
     , 'Script-service-definition-error': '脚本服务定义错误'
     , 'Script-service-file-contains-errors': '脚本服务的定义文件包含错误。'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "脚本服务的步骤 ($1) 必须始终具有类型 ($2)。"
     , 'scserv-id-required': "脚本服务的步骤必须具有标识符 ($1) ($2)。"
     , 'scserv-id-invalid': "步骤 $1 的标识符无效 ($2)。"
-    , 'scserv-step-type-unknowned': "未知的步骤类型：$1 ($2)。"
-    , 'scserv-param-required': "参数 '$1' 是必需的，对于类型 '$2' ($3)。"
-    , 'scserv-unknown-param': "参数 '$1' 对于类型为 '$2' 的服务是未知的 ($3)。"
+    , 'scserv-step-type-unknowned': "步骤 '$1'：未知的步骤类型：$2 ($3)。"
+    , 'scserv-param-required': "步骤 '$1'：参数 '$2' 是必需的，对于类型 '$3' ($4)。"
+    , 'scserv-unknown-param': "步骤 '$1'：参数 '$2' 对于类型为 '$3' 的服务是未知的 ($4)。"
     , 'scserv-param-bad-type': "参数 '$1' 的类型不正确。预期：$2，实际：$3 ($4)。"
     , 'scserv-on-get-file-values': "尝试读取文件 '$1' 的数据时发生错误：$2 ($3)。"
     , 'scserv-select-with-object-requires-key-values': "步骤 $1 的 select（数据为表格）需要 key_value 参数来定义菜单值 ($2)"

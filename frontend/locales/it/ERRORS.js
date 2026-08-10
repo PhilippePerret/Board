@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "Un servizio deve avere un :name. ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "Impossibile aprire il file '$1' con l'applicazione '$2'."
     , 'scserv-abort': "Servizio annullato"
     , 'Script-service-definition-error': 'Errore di definizione dello Script-service'
     , 'Script-service-file-contains-errors': 'Il file di definizione dello script-service contiene errori.'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "Una fase di script-service ($1) deve sempre avere un tipo ($2)."
     , 'scserv-id-required': "Una fase di script-service deve assolutamente avere un identificatore ($1) ($2)."
     , 'scserv-id-invalid': "L'identificatore della fase $1 non è valido ($2)."
-    , 'scserv-step-type-unknowned': "tipo di fase sconosciuto: $1 ($2)."
-    , 'scserv-param-required': "Il parametro '$1' è obbligatorio, per il tipo '$2' ($3)."
-    , 'scserv-unknown-param': "Il parametro '$1' è sconosciuto per il servizio di tipo '$2' ($3)."
+    , 'scserv-step-type-unknowned': "fase '$1': tipo di fase sconosciuto: $2 ($3)."
+    , 'scserv-param-required': "fase '$1': il parametro '$2' è obbligatorio, per il tipo '$3' ($4)."
+    , 'scserv-unknown-param': "fase '$1': il parametro '$2' è sconosciuto per il servizio di tipo '$3' ($4)."
     , 'scserv-param-bad-type': "Il parametro '$1' non ha il tipo corretto. Atteso: $2, attuale: $3 ($4)."
     , 'scserv-on-get-file-values': "Si è verificato un errore cercando di leggere i dati del file '$1': $2 ($3)."
     , 'scserv-select-with-object-requires-key-values': "Il select della fase $1, i cui dati sono tabelle, richiede il parametro key_value che definisce il valore del menu ($2)"

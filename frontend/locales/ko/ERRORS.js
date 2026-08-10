@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "서비스는 :name을(를) 가져야 합니다. ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "'$2' 애플리케이션으로 파일 '$1'을(를) 열 수 없습니다."
     , 'scserv-abort': "서비스가 취소되었습니다"
     , 'Script-service-definition-error': '스크립트 서비스 정의 오류'
     , 'Script-service-file-contains-errors': '스크립트 서비스 정의 파일에 오류가 있습니다.'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "스크립트 서비스 단계 ($1)는 항상 유형을 가져야 합니다 ($2)."
     , 'scserv-id-required': "스크립트 서비스 단계는 반드시 식별자를 가져야 합니다 ($1) ($2)."
     , 'scserv-id-invalid': "단계 $1의 식별자가 유효하지 않습니다 ($2)."
-    , 'scserv-step-type-unknowned': "알 수 없는 단계 유형: $1 ($2)."
-    , 'scserv-param-required': "매개변수 '$1'은(는) 유형 '$2'에서 필수입니다 ($3)."
-    , 'scserv-unknown-param': "매개변수 '$1'은(는) 유형 '$2'의 서비스에서 알 수 없습니다 ($3)."
+    , 'scserv-step-type-unknowned': "단계 '$1': 알 수 없는 단계 유형: $2 ($3)."
+    , 'scserv-param-required': "단계 '$1': 매개변수 '$2'은(는) 유형 '$3'에서 필수입니다 ($4)."
+    , 'scserv-unknown-param': "단계 '$1': 매개변수 '$2'은(는) 유형 '$3'의 서비스에서 알 수 없습니다 ($4)."
     , 'scserv-param-bad-type': "매개변수 '$1'의 유형이 올바르지 않습니다. 예상: $2, 실제: $3 ($4)."
     , 'scserv-on-get-file-values': "파일 '$1'의 데이터를 읽으려는 중 오류가 발생했습니다: $2 ($3)."
     , 'scserv-select-with-object-requires-key-values': "데이터가 테이블인 단계 $1의 select는 메뉴 값을 정의하는 key_value 매개변수가 필요합니다 ($2)"

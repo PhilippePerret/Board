@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "Ein Dienst muss einen :name haben. ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "Die Datei '$1' konnte nicht mit der Anwendung '$2' geöffnet werden."
     , 'scserv-abort': "Dienst abgebrochen"
     , 'Script-service-definition-error': 'Fehler bei der Definition des Script-Service'
     , 'Script-service-file-contains-errors': 'Die Definitionsdatei des Script-Service enthält Fehler.'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "Ein Script-Service-Schritt ($1) muss immer einen Typ haben ($2)."
     , 'scserv-id-required': "Ein Script-Service-Schritt muss unbedingt eine Kennung haben ($1) ($2)."
     , 'scserv-id-invalid': "Die Kennung des Schritts $1 ist ungültig ($2)."
-    , 'scserv-step-type-unknowned': "unbekannter Schritttyp: $1 ($2)."
-    , 'scserv-param-required': "Der Parameter '$1' ist erforderlich, für den Typ '$2' ($3)."
-    , 'scserv-unknown-param': "Der Parameter '$1' ist für den Dienst vom Typ '$2' unbekannt ($3)."
+    , 'scserv-step-type-unknowned': "Schritt '$1': unbekannter Schritttyp: $2 ($3)."
+    , 'scserv-param-required': "Schritt '$1': der Parameter '$2' ist erforderlich, für den Typ '$3' ($4)."
+    , 'scserv-unknown-param': "Schritt '$1': der Parameter '$2' ist für den Dienst vom Typ '$3' unbekannt ($4)."
     , 'scserv-param-bad-type': "Der Parameter '$1' hat nicht den richtigen Typ. Erwartet: $2, aktuell: $3 ($4)."
     , 'scserv-on-get-file-values': "Beim Versuch, die Daten der Datei '$1' zu lesen, ist ein Fehler aufgetreten: $2 ($3)."
     , 'scserv-select-with-object-requires-key-values': "Das Select des Schritts $1, dessen Daten Tabellen sind, benötigt den Parameter key_value, der den Menüwert definiert ($2)"

@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "Un service doit avoir un :name. ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "Impossible d'ouvrir le fichier '$1' avec l'application '$2'."
     , 'scserv-abort': "Abandon du service"
     , 'Script-service-definition-error': 'Erreur de définition du Script-service'
     , 'Script-service-file-contains-errors': 'Le fichier de définition du script-service contient des erreurs.'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "Une étape de script-service ($1) doit toujours avoir un type ($2)."
     , 'scserv-id-required': "Une étape de script-service doit absolument avoir un identifiant ($1) ($2)."
     , 'scserv-id-invalid': "L’identifiant de l'étape $1 n'est pas valide ($2)."
-    , 'scserv-step-type-unknowned': "type d’étape inconnu : $1 ($2)."
-    , 'scserv-param-required': "Le paramètre '$1' est requis, pour le type '$2' ($3)."
-    , 'scserv-unknown-param': "Le paramètre '$1' est inconnu du service de type '$2' ($3)."
+    , 'scserv-step-type-unknowned': "étape '$1' : type d’étape inconnu : $2 ($3)."
+    , 'scserv-param-required': "étape '$1' : le paramètre '$2' est requis, pour le type '$3' ($4)."
+    , 'scserv-unknown-param': "étape '$1' : le paramètre '$2' est inconnu du service de type '$3' ($4)."
     , 'scserv-param-bad-type': "Le paramètre '$1' n'a pas le bon type. Attendu: $2, actuel: $3 ($4)."
     , 'scserv-on-get-file-values': "Une erreur s'est produite en essayant de relever les données du fichier '$1' : $2 ($3)."
     , 'scserv-select-with-object-requires-key-values': "Le select de l'étape $1 dont les données sont des tables nécessite le paramètre key_value définissant la valeur du menu ($2)"

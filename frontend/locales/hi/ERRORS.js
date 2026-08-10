@@ -39,6 +39,7 @@ const ERRORS = {
     , 'service-requires-a-name': "एक सेवा में :name होना चाहिए। ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "फ़ाइल '$1' को एप्लिकेशन '$2' के साथ नहीं खोला जा सका।"
     , 'scserv-abort': "सेवा रद्द की गई"
     , 'Script-service-definition-error': 'स्क्रिप्ट-सेवा परिभाषा त्रुटि'
     , 'Script-service-file-contains-errors': 'स्क्रिप्ट-सेवा परिभाषा फ़ाइल में त्रुटियाँ हैं।'
@@ -47,9 +48,9 @@ const ERRORS = {
     , 'scserv-type-required': "स्क्रिप्ट-सेवा चरण ($1) में हमेशा एक प्रकार होना चाहिए ($2)।"
     , 'scserv-id-required': "स्क्रिप्ट-सेवा चरण में अनिवार्य रूप से एक पहचानकर्ता होना चाहिए ($1) ($2)।"
     , 'scserv-id-invalid': "चरण $1 का पहचानकर्ता मान्य नहीं है ($2)।"
-    , 'scserv-step-type-unknowned': "अज्ञात चरण प्रकार: $1 ($2)।"
-    , 'scserv-param-required': "पैरामीटर '$1' आवश्यक है, प्रकार '$2' के लिए ($3)।"
-    , 'scserv-unknown-param': "पैरामीटर '$1' प्रकार '$2' की सेवा के लिए अज्ञात है ($3)।"
+    , 'scserv-step-type-unknowned': "चरण '$1': अज्ञात चरण प्रकार: $2 ($3)।"
+    , 'scserv-param-required': "चरण '$1': पैरामीटर '$2' आवश्यक है, प्रकार '$3' के लिए ($4)।"
+    , 'scserv-unknown-param': "चरण '$1': पैरामीटर '$2' प्रकार '$3' की सेवा के लिए अज्ञात है ($4)।"
     , 'scserv-param-bad-type': "पैरामीटर '$1' का प्रकार सही नहीं है। अपेक्षित: $2, वास्तविक: $3 ($4)।"
     , 'scserv-on-get-file-values': "फ़ाइल '$1' का डेटा पढ़ने की कोशिश करते समय एक त्रुटि हुई: $2 ($3)।"
     , 'scserv-select-with-object-requires-key-values': "चरण $1 के select, जिसका डेटा तालिकाएँ हैं, को मेनू मान परिभाषित करने वाले key_value पैरामीटर की आवश्यकता है ($2)"

@@ -40,6 +40,7 @@ const ERRORS = {
     , 'service-requires-a-name': "A service must have a :name. ($1)"
 
     // Scripts services
+    , 'backend-open-file-failed': "Unable to open the file '$1' with the application '$2'."
     , 'scserv-abort': "Service aborted"
     , 'Script-service-definition-error': 'Script-service definition error'
     , 'Script-service-file-contains-errors': 'The script-service definition file contains errors.'
@@ -48,9 +49,9 @@ const ERRORS = {
     , 'scserv-type-required': "A script-service step ($1) must always have a type ($2)."
     , 'scserv-id-required': "A script-service step must absolutely have an identifier ($1) ($2)."
     , 'scserv-id-invalid': "The identifier of step $1 is not valid ($2)."
-    , 'scserv-step-type-unknowned': "unknown step type: $1 ($2)."
-    , 'scserv-param-required': "Parameter '$1' is required, for type '$2' ($3)."
-    , 'scserv-unknown-param': "Parameter '$1' is unknown for the service of type '$2' ($3)."
+    , 'scserv-step-type-unknowned': "step '$1': unknown step type: $2 ($3)."
+    , 'scserv-param-required': "step '$1': parameter '$2' is required, for type '$3' ($4)."
+    , 'scserv-unknown-param': "step '$1': parameter '$2' is unknown for the service of type '$3' ($4)."
     , 'scserv-param-bad-type': "Parameter '$1' does not have the right type. Expected: $2, actual: $3 ($4)."
     , 'scserv-on-get-file-values': "An error occurred while trying to read the data of file '$1': $2 ($3)."
     , 'scserv-select-with-object-requires-key-values': "The select of step $1, whose data are tables, requires the key_value parameter defining the menu value ($2)"
