@@ -1,0 +1,26 @@
+div.git-issue {
+  border: 1px solid #CCC;
+  border-radius: 0.5em;
+  padding: 1em;
+  margin-bottom: 0.5em
+}
+
+
+div.git-issue img.issue-goto {
+  margin-right: 0.5em;
+  cursor: pointer;
+}
+div.git-issue span.issue-number {
+  float: left;
+  margin-right: 0.5em;
+  font-family: Georgia;
+}
+
+div.git-issue div.issue-title {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+div.git-issue div.issue-body {
+  margin-left: 4em;
+  font-size: 0.75em;
+}
