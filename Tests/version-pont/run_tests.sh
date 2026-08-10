@@ -57,6 +57,8 @@ APP_DIR="$(dirname "$MAIN_TESTS_DIR")"
 TEST_VERSION="$(basename "$VTEST_DIR" | sed 's/^version-//')"
 RESULTS_DIR="$APP_DIR/tests/resultats"
 mkdir -p "$RESULTS_DIR"
+# Purge des logs de plus de 5 jours
+find "$RESULTS_DIR" -maxdepth 1 -name "*.log" -mtime +5 -delete
 RESULT_FILE="$RESULTS_DIR/$(date +%Y-%m-%d_%Hh%M).log"
 {
   echo "Moteur : $TEST_VERSION"

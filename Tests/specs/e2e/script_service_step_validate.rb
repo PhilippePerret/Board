@@ -31,7 +31,14 @@ CASES = [
   {
     desc: "'type' inconnu",
     data: { id: 'typeinconnu', type: 'nawak' },
-    expect: ['scserv-step-type-unknowned']
+    expect: ['scserv-step-type-unknowned'],
+    id_in_message: true
+  },
+  {
+    desc: "paramètre inconnu",
+    data: { id: 'paraminconnu', type: 'create-folder', path: './sortie-test', bidule: 'valeur' },
+    expect: ['scserv-unknown-param'],
+    id_in_message: true
   },
   {
     desc: "étape valide (select, 'values' en tableau d'objets)",
@@ -41,7 +48,8 @@ CASES = [
   {
     desc: "'select' sans 'values'",
     data: { id: 'selectsansvalues', type: 'select', key_value: 'k', key_title: 't' },
-    expect: ['scserv-param-required']
+    expect: ['scserv-param-required'],
+    id_in_message: true
   },
   {
     desc: "'select', 'values' type multiple (nombre) — pas de contrôle de type sur 'values' pour l'instant",
@@ -60,7 +68,9 @@ def validate_errors(step_data)
     (function(){
       var step = new ServStep({projet: null}, #{step_data.to_json});
       var errs = step.validate();
-      return JSON.stringify(errs.map(function(e){ return e && e.key ? e.key : String(e) }));
+      return JSON.stringify(errs.map(function(e){
+        return {key: (e && e.key) ? e.key : null, text: String(e)}
+      }));
     })()
   JS
 end
@@ -79,8 +89,13 @@ def run_test
     raise "[#{c[:desc]}] nombre d'erreurs inattendu, attendu #{c[:expect].length}, obtenu #{errors.inspect}" unless errors.length == c[:expect].length
 
     c[:expect].each_with_index do |expected_key, i|
-      unless errors[i].include?(expected_key)
+      key = errors[i]['key']
+      unless key && key.include?(expected_key)
         raise "[#{c[:desc]}] erreur ##{i} attendue '#{expected_key}', obtenu #{errors[i].inspect}"
+      end
+      if c[:id_in_message]
+        text = errors[i]['text']
+        raise "[#{c[:desc]}] message #{text.inspect} ne mentionne pas l'id de l'étape (#{c[:data][:id].inspect})" unless text.include?(c[:data][:id])
       end
     end
   end

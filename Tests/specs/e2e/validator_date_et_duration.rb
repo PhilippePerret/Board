@@ -2,7 +2,7 @@ require_relative '../../support/helpers'
 
 include BoardTest
 
-# Test unitaire de Validator.date() et Validator.duration() (Validator-fr.js),
+# Test unitaire de Validator.date() et Validator.duration() (Validator.js),
 # appelés directement via le pont JS. Chaque cas couvre soit une branche
 # valide, soit un rejet attendu, tel que défini par les regex du fichier
 # (dateReg, dateDansReg, dureeReg, et la liste de mots-clés naturels).
