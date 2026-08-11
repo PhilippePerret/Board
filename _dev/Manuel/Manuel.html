@@ -440,11 +440,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_bugs">BUGS</a></li>
-<li><a href="#_todo_en_cours">Todo En cours</a></li>
-<li><a href="#_todo_list">Todo list</a></li>
-<li><a href="#_idées_dautres_services">Idées d&#8217;autres services</a></li>
-<li><a href="#_autres_versions">Autres versions</a></li>
 <li><a href="#_présentation">Présentation</a></li>
 <li><a href="#_prise_en_main">Prise en main</a>
 <ul class="sectlevel2">
@@ -487,6 +482,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
 <li><a href="#_lancer_un_script_quelconque">Lancer un script quelconque</a></li>
+<li><a href="#_faire_jouer_du_code_au_dossier">Faire jouer du code au dossier</a></li>
 </ul>
 </li>
 <li><a href="#_développement">Développement</a>
@@ -504,111 +500,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_bugs">BUGS</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>BUG #4 Gérer le cas où on utilise gh sans git init dans le dossier</p>
-</li>
-<li>
-<p>Les rappels/alertes programmés ne fonctionnent pas
-Pourtant :</p>
-</li>
-<li>
-<p>ils sont bien registrés</p>
-</li>
-<li>
-<p>Reminder est bien runing</p>
-</li>
-<li>
-<p>les erreurs mineures (footer) quand un panneau est ouvert, ne se lisent pas
-essayer en essayant de modifier une tâche sans en avoir sélectionné une</p>
-</li>
-<li>
-<p>Problème d&#8217;icône dans la documentation : fonctionne hors app, pas avec l&#8217;app</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_todo_en_cours">Todo En cours</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>git issue create (tout type)</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_todo_list">Todo list</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>pour essayer : git push</p>
-</li>
-<li>
-<p>on choisit les fichiers dans la list des status (coche)</p>
-</li>
-<li>
-<p>on donne le message</p>
-</li>
-<li>
-<p>ça push</p>
-</li>
-<li>
-<p>service git pour ajouter un truc au choix select → texte → description
-le sélection propose : erreur, amélioration, warning, feature (voir les autres)</p>
-</li>
-<li>
-<p>surveiller des mots ? (rêve que j&#8217;ai fait : :error quand on est en train d&#8217;écrire (ou pas : la page pourrait surveille ":" ou ":[a-z]" et passer en mode pour insérer quelque chose)). :note, :idee, :error,</p>
-</li>
-<li>
-<p>pouvoir mettre une note gh (github) du type voulu</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_idées_dautres_services">Idées d&#8217;autres services</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>git init (tout le flux, juste en donnant le nom du repo sur Github)</p>
-</li>
-<li>
-<p>Lancer un serveur de dev (<code>npm run dev</code>, <code>rails server</code>&#8230;&#8203;) — terminal dédié, pas juste "jouer un script"</p>
-</li>
-<li>
-<p>Ouvrir le repo Git (statut, ou <code>git pull</code>/<code>push</code>)</p>
-</li>
-<li>
-<p>Ouvrir l&#8217;URL locale du projet dans le navigateur</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_autres_versions">Autres versions</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>pour le type 'select', il faudrait un select customisé (le même que dans Eventer) avec possibilité de filtrer les valeurs.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_présentation">Présentation</h2>
 <div class="sectionbody">
@@ -751,7 +642,7 @@ le sélection propose : erreur, amélioration, warning, feature (voir les autres
 <h2 id="todoist">Todoist</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Une autre force de Board est de pouvoir travailler avec l&#8217;application Todoist.</p>
+<p>Une autre force de Super Board est de pouvoir travailler avec l&#8217;application Todoist.</p>
 </div>
 <div class="paragraph">
 <p>Il suffit de cliquer sur la petite icône <span class="image"><img src="../../frontend/images/todoist-none.png" alt="Logo Todoist" width="32px"></span> pour avoir un accès direct à l&#8217;application pour :</p>
@@ -775,10 +666,10 @@ le sélection propose : erreur, amélioration, warning, feature (voir les autres
 <div class="sect2">
 <h3 id="td-link-project">Lier le projet</h3>
 <div class="paragraph">
-<p>Si le projet existe déjà dans Todoist, il suffit de le lier en cliquant une première fois sur le logo. Board demandera son titre (qui peut être différent du titre dans Board) et le retrouvera, s&#8217;il existe sous ce nom, dans Todoist.</p>
+<p>Si le projet existe déjà dans Todoist, il suffit de le lier en cliquant une première fois sur le logo. Super Board demandera son titre (qui peut être différent du titre dans Super Board) et le retrouvera, s&#8217;il existe sous ce nom, dans Todoist.</p>
 </div>
 <div class="paragraph">
-<p>Le projet dans Board sera alors automatiquement lié au projet dans Todois. Cela, concrètement, signifie qu&#8217;on peut :</p>
+<p>Le projet dans Super Board sera alors automatiquement lié au projet dans Todois. Cela, concrètement, signifie qu&#8217;on peut :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -808,7 +699,7 @@ le sélection propose : erreur, amélioration, warning, feature (voir les autres
 <p>Au démarrage de l&#8217;application, on peut voir sur l&#8217;idône Todoists une pastille indiquant le nombre de tâches du jour courant.</p>
 </div>
 <div class="paragraph">
-<p>Pour les lires dans Board, il suffit de cliquer sur l&#8217;icône.</p>
+<p>Pour les lires dans Super Board, il suffit de cliquer sur l&#8217;icône.</p>
 </div>
 </div>
 <div class="sect3">
@@ -3307,7 +3198,7 @@ Dans la suite, dès que nous parlerons de <em><strong>valeur d’étape</strong>
 <div class="sect3">
 <h4 id="gh-issue-create">Création d&#8217;une issue Github</h4>
 <div class="paragraph">
-<p>Si votre projet est versionné sur <a href="https://github.com" class="bare">https://github.com</a> (ce que nous ne saurions trop vous conseiller), vous pouvez enregistrer directement depuis Board des <em>issues</em> c&#8217;est-à-dires des erreurs, des fonctionnalités à implémenter et autre documentation à faire.</p>
+<p>Si votre projet est versionné sur <a href="https://github.com" class="bare">https://github.com</a> (ce que nous ne saurions trop vous conseiller), vous pouvez enregistrer directement depuis Super Board des <em>issues</em> c&#8217;est-à-dires des erreurs, des fonctionnalités à implémenter et autre documentation à faire.</p>
 </div>
 <div class="paragraph">
 <p>Si vous changer la liste des labels Github que vous utilisez, il vous faut remettre la propriété <code>github_labels</code> du projet à rien pour qu&#8217;elle soit rafraichie :</p>
@@ -3599,7 +3490,7 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <div class="sect2">
 <h3 id="_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</h3>
 <div class="paragraph">
-<p>On peut très facilement gérer les fichiers versionnés avec Board. On peut même choisir son système préféré :</p>
+<p>On peut très facilement gérer les fichiers versionnés avec Super Board. On peut même choisir son système préféré :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -3612,13 +3503,13 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 </ul>
 </div>
 <div class="paragraph">
-<p>Ces deux modes sont invisibles, Board se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
+<p>Ces deux modes sont invisibles, Super Board se charge de déterminer quel mode est utilisé pour le fichier choisi.</p>
 </div>
 <div class="paragraph">
 <p>Bien entendu, on peut choisir autant de fichiers versionné qu&#8217;on le désire, pour le même projet.</p>
 </div>
 <div class="paragraph">
-<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, Board demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
+<p>Une fois qu&#8217;on a ajouté le service au projet en déterminant le fichier visé, dès qu&#8217;on clique dessus, Super Board demande quel numéro changer, entre le numéro de version majeure, mineure, ou le patch.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3740,6 +3631,54 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="_faire_jouer_du_code_au_dossier">Faire jouer du code au dossier</h3>
+<div class="paragraph">
+<p><em>(niveau débutant)</em></p>
+</div>
+<div class="paragraph">
+<p>On peut très facilement faire jouer du code dans un dossier en utilisant ChatGPT, Claude ou autre bot conversationnel.</p>
+</div>
+<div class="paragraph">
+<p>Par exemple, j&#8217;avais à modifier tous les noms d&#8217;une centaine de fichiers dans un dossier de mon projet. Il y avait "Vertueuse" dans le nom, et je voulais le faire remplacer par "Vertueuse-Roman".</p>
+</div>
+<div class="paragraph">
+<p>J&#8217;ai demandé à ChatGPT : « Fais-moi un script pour changer tous les noms des fichiers du sous-dossier <code>./2026/xArchives</code>, en ajoutant "-Roman" à "Vertueuse", donc "Vertueuse" → "Vertueuse-Roman". Fais-moi cette commande en une seule ligne.</p>
+</div>
+<div class="paragraph">
+<p>Et il a produit :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cd ./2026/xArchives; for f in *Vertueuse*; do [ -f "$f" ] &amp;&amp; mv "$f" "${f/Vertueuse/Vertueuse-Roman}"; done</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>J&#8217;ai :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>copié ce code,</p>
+</li>
+<li>
+<p>sélectionné le projet dans Super Board,</p>
+</li>
+<li>
+<p>choisis le service “Ouvrir un Terminal au dossier”,</p>
+</li>
+<li>
+<p>j&#8217;ai collé le code dans le champ qui me demande le code à jouer,</p>
+</li>
+<li>
+<p>j&#8217;ai coché “OK”.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Aussitôt, le code est exécuté et tous les noms sont changés, comme par magie.</p>
+</div>
 </div>
 </div>
 </div>
@@ -4038,7 +3977,7 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 <div class="sect2">
 <h3 id="_applescript">AppleScript</h3>
 <div class="paragraph">
-<p><strong>Board</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
+<p><strong>Super Board</strong> fonctionne sur la base de nombreux scripts AppleScript pour commander les différentes applications.</p>
 </div>
 <div class="paragraph">
 <p>Une librairie avec des méthodes utiles est implémentée dans backend/script/lib/Lib.scpt (c&#8217;est un exécutable qui ne peut pas être modifié, il faut modifier <code>Lib-editable.scpt</code>).</p>
@@ -4572,7 +4511,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-30 09:24:34 +0200
+Last updated 2026-08-11 07:28:35 +0200
 </div>
 </div>
 </body>

@@ -3,7 +3,7 @@
 
 
 // Noms généraux
-:app-name: Board
+:app-name: Super Board
 
 // Nom des boutons
 :start-work: Démarrer le travail
@@ -14,8 +14,9 @@
 :img-folder: ../../frontend
 :js-folder: {frontend}/js
 
+//================================================================
 
-include::adocs/_TODO_.adoc[]
+// include::adocs/_TODO_.adoc[]
 
 // Présentation
 include::adocs/presentation.adoc[]

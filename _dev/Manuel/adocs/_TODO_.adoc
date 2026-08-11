@@ -1,15 +1,3 @@
-== BUGS ==
-
-cf. gh
-
-== Todo En cours
-
-== Todo list ==
-
-- un type 'services' qui permet de définir la liste des services à afficher dans les panneaux en fonction du projet. Certains utilisateurs, par exemple, ne se serviront jamais de git.
-
-- service git pour ouvrir Github distant
-  
 == Réflexions ==
 
 == Idées d'autres services ==

@@ -1,8 +1,8 @@
 == Présentation ==
 
-Cette application est pensée pour simplifier la gestion de l'installation du travail lorsqu'on développe plusieurs projets de front.
+Cette application est pensée pour grandement **simplifier le travail sur des projets quelconque**, que l'on développe un seul projet ou plusieurs de front.
 
-Elle se présent comme un panneau affichant chaque projet avec, pour chaque projet, un bouton permettant d'installer et de préparer le travail.
+Elle se présente comme un panneau affichant la __carte__ de chaque projet ainsi qu'une liste de __services__ qui sont autant de commandes qu'on peut appliquer au projet.
 
 Cette instllation peut consister à : 
 
