@@ -18,7 +18,8 @@ class ServiceDefiner {
     // Donnée qui remplaceront params dans le service pour le projet
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
     // Maintenant, elles sont groupées par paramètre.
-    this.paramsValues = []
+    // - utiliser dictParamsValues pour obtenir les valeurs par id
+    this.arraysParamsValues = []
 
     // Mis à false quand le service est renommé
     this.unnamed = service.unnamed ?? true
@@ -36,17 +37,25 @@ class ServiceDefiner {
       })
     }
     // console.log("[ServiceDefiner.params", this.params)
-    const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet)
+    // Dictionnaire des valeurs des paramètres (fixes et dynamiques) en cours d'exécution, par identifiant de paramètre.
+    const dictParamsValues = {}
+    this.params.forEach(p => { if (p.actual !== undefined && p.actual !== null) dictParamsValues[p.id] = p.actual })
+    const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet, dictParamsValues)
     serviceDefiner.define()
   }
   /**
    * Méthode appelée à la fin de la définition des valeurs de 
    * paramètres.
    */
-  onDefined(definers){
+  onDefined(definers, dictParamsValues){
     // console.log('-> onDefined avec definers = ', definers)
     if (definers) {
       // console.info("Définers retournés", definers)
+
+      // Le projet CIBLE de cette définition, pas forcément le projet
+      // courant (l'utilisateur a pu changer de sélection pendant qu'un
+      // dialogue de cette définition était ouvert).
+      const targetProjet = this.projet ?? Project.current
 
       // Pour savoir si les valeurs projets on été
       // modifiées => save
@@ -54,7 +63,7 @@ class ServiceDefiner {
       // Boucle sur tous les paramètres.
       // On définit ceux qui sont des propriétés du projet
       // et l'on rassemble tous les paramètres pour service
-      let paramsValues = []
+      let arraysParamsValues = []
       try {
         definers.forEach(definer => {
           switch(definer.type){
@@ -63,27 +72,27 @@ class ServiceDefiner {
               this.service.setData('name', definer.value)
               break
             case 'project':
-              if (Project.current[definer.id] != definer.value){
+              if (targetProjet[definer.id] != definer.value){
                 projectHasNewValue = true
-                Project.current[definer.id] = definer.value
+                targetProjet[definer.id] = definer.value
               }
-              paramsValues.push([definer.value])
+              arraysParamsValues.push([definer.value])
               break
             case 'finder-window':
               // console.log("'finder-window', definer = ", definer)
               definer.value.position = definer.value.position.map(n => n - 20)
-              paramsValues.push([definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType])
+              arraysParamsValues.push([definer.value.path, ...definer.value.position, ...definer.value.size, definer.value.sidebarWidth, definer.value.viewType])
               break
             case 'bounds': {
               // console.log("'bounds', define =", definer)
               definer.value.position = definer.value.position.map(n => n - 20)
               const [boundsX, boundsY] = definer.value.position
               const [boundsW, boundsH] = definer.value.size
-              paramsValues.push([boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
+              arraysParamsValues.push([boundsX, boundsY, boundsX + boundsW, boundsY + boundsH])
               break
             }
             default:
-              paramsValues.push([definer.value])
+              arraysParamsValues.push([definer.value])
           }
         })
       } catch (e) {
@@ -95,12 +104,12 @@ class ServiceDefiner {
         console.error('[ServiceDefiner.onDefined] erreur pendant le traitement des definers :', e, definers)
         return
       }
-      this.service.params = paramsValues
+      this.service.params = arraysParamsValues
 
       // Si des propriétés projet ont été modifiées, il
       // faut enregistrer le projet
       if (projectHasNewValue) {
-        Project.current.save(this.callback)
+        targetProjet.save(this.callback)
       } else {
         this.callback.call(this)
       }

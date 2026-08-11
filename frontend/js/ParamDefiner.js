@@ -26,13 +26,20 @@ class ParamsDefiner {
   /**
    * @param params Array des paramètres (p.e. {id: 'mon-id', name: 'Nome' ………})
    * @param callback Function à appeler enfin de processus avec la liste des
-   *                  ParamDefiner créer pour chaque paramètre.
+   *                  ParamDefiner créer pour chaque paramètre, et la table
+   *                  dictParamsValues (cf. ci-dessous).
+   * @param dictParamsValues Table {id: valeur} déjà connue avant même de
+   *   commencer (params fixes déjà persistés, résolus par ailleurs) —
+   *   s'enrichit ensuite d'une entrée par paramètre au fur et à mesure de
+   *   sa résolution, AVANT que le paramètre suivant ne soit défini. Un
+   *   `:if` ne voit donc jamais que ce qui précède le paramètre courant.
    */
-  constructor(params, callback, projet = null){
+  constructor(params, callback, projet = null, dictParamsValues = {}){
     this.params   = [...params].reverse()
     this.definers = []
     this.callback = callback
     this.projet   = projet
+    this.dictParamsValues = {...dictParamsValues}
   }
   define(){
     historize('-> ParamsDefiner.define', this)
@@ -52,7 +59,7 @@ class ParamsDefiner {
   }
   resolve(){
     historize('-> ParamsDefiner.resolve', this)
-    this.callback(this.definers)
+    this.callback(this.definers, this.dictParamsValues)
   }
 }
 
@@ -174,7 +181,7 @@ class ParamDefiner {
 
   define() {
     historize('-> ParamDefiner.define', this)
-    if ('function' == typeof this.if && this.if(this.paramLister.definers) === false) {
+    if ('function' == typeof this.if && this.if(this.paramLister.dictParamsValues) === false) {
       this.setValue(null)
     } else {
       // cas normal de définition
@@ -203,6 +210,7 @@ class ParamDefiner {
       , default:  defaultValue
       , actual:   this.actual
       , definers: this.paramLister.definers // Pour disposer partout des choix et valeurs
+      , dictParamsValues: this.paramLister.dictParamsValues // Table {id: valeur} des paramètres précédents déjà résolus
       , projet:   this.projet
       , ifUndefined: this.param.if_undefined
     })
@@ -220,6 +228,7 @@ class ParamDefiner {
 
   setValue(value){
     this.value = value
+    this.paramLister.dictParamsValues[this.id] = value
     this.paramLister.define()
   }
   // Méthode appelée quand on renonce, qu'on fait non, ou par Prompter avec value=null

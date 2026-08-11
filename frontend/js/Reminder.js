@@ -37,6 +37,7 @@ class Reminder extends ExtendedObject {
    * Données requises : cf. @usage ci-dessus.
   */
   static register(data){
+    if (this.isDuplicate(data)) return
     const reminder = new Reminder(data)
     if (reminder.immediat) {
       reminder.exec()
@@ -51,7 +52,22 @@ class Reminder extends ExtendedObject {
         this.run()
       }
     }
-      
+
+  }
+
+  // Doublon si un rappel déjà enregistré a le même message, la même heure
+  // ET la même tâche/projet (taskId/projectId discriminants — deux tâches
+  // différentes peuvent légitimement avoir le même texte à la même heure).
+  static isDuplicate(data){
+    const time = new Date(data.time).getTime()
+    const taskId = data.taskId ?? data.task?.id
+    const projectId = data.projectId ?? data.project?.id
+    return this.asArray().some(r => {
+      return r.message == data.message
+          && new Date(r.time).getTime() == time
+          && (r.taskId ?? r.task?.id) == taskId
+          && (r.projectId ?? r.project?.id) == projectId
+    })
   }
 
   /**
@@ -75,20 +91,21 @@ class Reminder extends ExtendedObject {
 
   // Lancement du reminder
   static run(){
+    if (this.running || this.startRunningTimer) return // déjà lancé ou en cours de lancement
     // console.log("-> Reminder::run")
     // On lance pile à la minute
-    this.startRunningTimer = setTimeout(setTimeout(() => { 
-      clearTimeout(this.startRunningTimer)
+    this.startRunningTimer = setTimeout(() => {
       delete this.startRunningTimer
       this.runTimer = setInterval(this.poll.bind(this), 60 * 1000)
       this.running = true
       console.log("Lancement réel du poll", new Date())
-    }, 60000 - (Date.now() % 60000)))
-    
+    }, 60000 - (Date.now() % 60000))
   }
 
   static stop(){
     // console.log("-> Reminder::stop")
+    clearTimeout(this.startRunningTimer)
+    delete this.startRunningTimer
     clearInterval(this.runTimer)
     delete this.runTimer
     this.running = false

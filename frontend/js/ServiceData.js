@@ -184,20 +184,21 @@ const COMMON_SERVICES_DATA = [
           {id: 'issue_label', type: 'select', q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: ISSUE_ACTION_LIST}
-        , {id: 'gh_message', if: (definers) => {
-            console.log("dans if, paramLister = ", definers)
-            const action = definers[2].value
-            return !ISSUE_ACTION_WITHOUT_COMS[action]
+        , {id: 'gh_message', if: (dictParamsValues) => {
+            return !ISSUE_ACTION_WITHOUT_COMS[dictParamsValues.gh_operation]
             }, type: 'string', q: getMsg('gh-message-operation'), width: '600px', title: getMsg('git-issue-gestion')}
       ]
     , afterDefinedParams: (params) => {
       Project.current.updateLabelList(params[1][0])
       return params
     }
-    , afterRunWithSuccess(projet, retour){
-        console.log("Après exécution avec succès / projet / retour ", projet, retour)
-        // Dans le cas d'un affichage demancé, il faut afficher le contenu
-        // des issues.
+    , afterRunWithSuccess(projet, retour, dictParamsValues){
+        console.log("Après exécution avec succès / projet / retour / service, dictParamsValues", projet, retour, dictParamsValues)
+        if (dictParamsValues.gh_operation == 'view') {
+          // <= Opération particulière, pour voir les issues sélectionnées
+          // => Il faut les afficher.
+          Git.view(retour.message)
+        }
       }
     , beforeExec(dict){
         // En fonction de l'opération à exécuter, le message (gh_message)
@@ -215,7 +216,13 @@ const COMMON_SERVICES_DATA = [
         const issues  = dict.issue_list.join(' ')
         // On doit faire la commande 
         var command
-        if (option) {
+        if (dict.gh_operation == 'view') {
+          command = `
+            for n in ${issues}; do
+              gh issue view "$n" --json number,title,body,author,labels,assignees,milestone,comments,state,url,createdAt,updatedAt;
+            done;
+          `
+        } else if (option) {
           const message = shellEscape(dict.gh_message)
           command = `
             for n in ${issues}; do
@@ -230,7 +237,7 @@ const COMMON_SERVICES_DATA = [
           `
         }
         command = command.replace(/\n\s+/g, ' ').trim()
-        console.log("COMMANDE EN UNE LIGNE", command)
+        // console.log("COMMANDE EN UNE LIGNE", command)
         return command
       }
   },

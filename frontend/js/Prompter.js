@@ -80,8 +80,8 @@ class Prompter {
           const valueDefiner = definers[0]
           const prop = valueDefiner.id
           TBL_PROJECT_DATA[prop] || raise(`[System] La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
-          Project.current[prop] = valueDefiner.value
-          Project.current.save()
+          projet[prop] = valueDefiner.value
+          projet.save()
           callback(valueDefiner.value)
         }
       )

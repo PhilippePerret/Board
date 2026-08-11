@@ -49,6 +49,19 @@ begin
 
   RETOUR.init(request)
 
+  # Ouvre +path+ avec l'application +editor+ (nom configuré dans APP_DATA,
+  # p.e. 'yaml-editor'/'text-editor'/'code-editor') — si aucune n'est
+  # configurée, ouvre avec l'application par défaut du système (`open`
+  # sans `-a`). Signale une erreur si l'ouverture échoue, plutôt que de
+  # lancer silencieusement une commande cassée.
+  def open_file_with_editor(path, editor)
+    if editor.nil? || editor.empty?
+      `open "#{path}"`
+    else
+      `open -a "#{editor}" "#{path}"`
+    end
+    RETOUR.error = ['backend-open-file-failed', [path, editor || '']] unless $?.success?
+  end
 
   #######################################
   ###       DISPATCH de l'ACTION      ###
@@ -161,11 +174,11 @@ begin
     end
 
   when 'open-file-yaml'
-    `open -a "#{APP_DATA['yaml-editor'] || APP_DATA['text-editor']}" "#{request['path']}"`
+    open_file_with_editor(request['path'], APP_DATA['yaml-editor'] || APP_DATA['text-editor'])
   when 'open-file-text'
-    `open -a "#{APP_DATA['text-editor']}" "#{request['path']}"`
+    open_file_with_editor(request['path'], APP_DATA['text-editor'])
   when 'open-file-code'
-    `open -a "#{APP_DATA['code-editor']}" "#{request['path']}"`
+    open_file_with_editor(request['path'], APP_DATA['code-editor'])
   when 'create-folder'
     begin
       FileUtils.mkdir_p(request['data'])

@@ -100,7 +100,8 @@ begin
       # puts sorted_files.inspect
       # rdata = sorted_files.map {|mf| mf.name + mf.ksort.inspect }.join(', ')
       lastfile = sorted_files.last
-      dest = File.join(ARCHIVE_FOLDER, lastfile.next_version(VERSIONTERM))
+      new_archive_name = lastfile ? lastfile.next_version(VERSIONTERM) : "#{myfile.prefix}-1.0.0#{myfile.postfix}"
+      dest = File.join(ARCHIVE_FOLDER, new_archive_name)
       FileUtils.cp(FILEPATH, dest)
       if File.exist?(dest)
         message << 'backend-archiv-saved'

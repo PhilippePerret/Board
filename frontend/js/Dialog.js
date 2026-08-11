@@ -19,6 +19,15 @@
  *    fenêtre suivant qu'elle doit flotter sur le reste ou 
  *    bloquer les opération (modal)
  * 
+ * message      [String]
+ *    Le message à afficher, qui peut être défini par :message
+ *    ou :q (question) dans les données.
+ * 
+ * content      [HTMLElement]
+ *    Le message ou complément de message, mais cette fois en version
+ *    HTML, avec tout l'arsenal possible de gestionnaires d'event ou
+ *    de formulaires.
+ * 
  * ouiBtn
  *    Définition du bouton OK. :name, :onclick
  *    :if peut définir une condition qui doit être rempli pour que le

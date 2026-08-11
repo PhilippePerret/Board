@@ -129,6 +129,8 @@ class ScriptService {
   openData(retour){
     if (undefined == retour) {
       server.send({action: 'open-file-yaml', path: this.scriptPath}, this.openData.bind(this))
+    } else if (retour.error) {
+      error(retour.error)
     } else {
       message(getMsg('file-opened', this.scriptPath.split('/').pop()))
     }
@@ -417,14 +419,14 @@ class ServStep extends ExtendedObject {
   id_is_required(){ this.id ?? raise('scserv-id-required', [JSON.stringify(this.data), aide('scripts-services')]) }
   id_is_valid() { this.id.replace(/[0-9a-z_\-]/gi, '') == '' || raise('scserv-id-invalid', [this.id, aide('script-service-valid-id')]) }
   type_is_required() { this.type ?? raise('scserv-type-required', [this.id, aide('scripts-services')]) }
-  type_is_known() { SCRIPT_SERVICES_KNOWN_TYPES[this.type] || raise('scserv-step-type-unknowned', [this.type, aide('script-service-types-valides')]) }
+  type_is_known() { SCRIPT_SERVICES_KNOWN_TYPES[this.type] || raise('scserv-step-type-unknowned', [this.id, this.type, aide('script-service-types-valides')]) }
   has_all_required_params() {
     this.required_params = {}
     for (var kparam in this.paramsSpecs){
       // Condition : le paramètre doit être défini
       if (! this.paramsSpecs[kparam].required === true) return
       Object.assign(this.required_params, {[kparam]: true})
-      this[kparam] || raise('scserv-param-required', [kparam, this.type, this.aideByType])
+      this[kparam] || raise('scserv-param-required', [this.id, kparam, this.type, this.aideByType])
     }
   }
   other_params_are_valid(){
@@ -442,7 +444,7 @@ class ServStep extends ExtendedObject {
       // Si on rencontre dans les données le paramètre 'defaut',
       // c'est un paramètre qui n'existe pas (un select n'a pas de
       // paramètre 'defaut') et c'est donc une erreur
-      paramSpec || this.addFatalError( 'scserv-unknown-param', [kparam, this.type, this.aideByType])
+      paramSpec || raise('scserv-unknown-param', [this.id, kparam, this.type, this.aideByType])
       // --- On s'arrête là pour la pré-validation ---
     }
     return true

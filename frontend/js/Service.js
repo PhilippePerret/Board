@@ -346,7 +346,7 @@ class Service {
   defineCommonServiceParameters(projet){
     historize('-> defineCommonServiceParameters')
     this.unnamed = false // Pour ne pas redemander le nomage
-    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet, this))
+    const definer = new ServiceDefiner(this, this.onReturnFromDefineProjetParams.bind(this, projet, this), projet)
     definer.define()
     return false
   }
