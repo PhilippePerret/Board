@@ -105,19 +105,26 @@ class SelectDialog extends Dialog {
     this.content  = this.buildMenu()
   }
 
+  // Injecté dans le header du dialogue (pas dans le contenu) — cf. afterBuild.
+  buildToolbar(){
+    const toolbar = DCreate('DIV', {class: 'custom-select-toolbar'})
+    const selectAllBtn = DCreate('IMG', {src: 'images/list-check.svg', class: 'custom-select-toolbar-btn', title: getMsg('select-all-tooltip')})
+    const selectNoneBtn = DCreate('IMG', {src: 'images/list-uncheck.svg', class: 'custom-select-toolbar-btn', title: getMsg('select-none-tooltip')})
+    listen(selectAllBtn, 'click', () => this.selectAllVisible())
+    listen(selectNoneBtn, 'click', () => this.selectNoneVisible())
+    toolbar.appendChild(selectAllBtn)
+    toolbar.appendChild(selectNoneBtn)
+    return toolbar
+  }
+
+  afterBuild(){
+    if (!this.isMulti) return
+    const titleEl = this.obj.querySelector('.title')
+    titleEl && titleEl.appendChild(this.buildToolbar())
+  }
+
   buildMenu(){
     const container = DCreate('DIV', {id: this.FId, class: 'custom-select' + (this.data.select_class ? ' ' + this.data.select_class : '')})
-
-    if (this.isMulti) {
-      const toolbar = DCreate('DIV', {class: 'custom-select-toolbar'})
-      const selectAllBtn = DCreate('IMG', {src: 'images/list-check.svg', class: 'custom-select-toolbar-btn', title: getMsg('select-all-tooltip')})
-      const selectNoneBtn = DCreate('IMG', {src: 'images/list-uncheck.svg', class: 'custom-select-toolbar-btn', title: getMsg('select-none-tooltip')})
-      listen(selectAllBtn, 'click', () => this.selectAllVisible())
-      listen(selectNoneBtn, 'click', () => this.selectNoneVisible())
-      toolbar.appendChild(selectAllBtn)
-      toolbar.appendChild(selectNoneBtn)
-      container.appendChild(toolbar)
-    }
 
     const filterInput = DCreate('INPUT', {type: 'text', class: 'custom-select-filter', placeholder: getMsg('select-filter-placeholder')})
     listen(filterInput, 'keydown', (ev) => ev.stopPropagation())

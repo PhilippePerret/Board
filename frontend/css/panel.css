@@ -38,6 +38,9 @@ button.mid-btn {
   opacity: 0.95;
 }
 .panel .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid #EEE;
   font-weight: 601;
   font-size: 0.7em;
