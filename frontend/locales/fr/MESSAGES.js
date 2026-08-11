@@ -52,6 +52,8 @@ const MESSAGES = {
     , 'choosing-files-to': "Choix des fichiers à $1"
     , 'choose-files-to': "Choisisez les fichiers à $1"
     , 'select-filter-placeholder': "Filtrer…"
+    , 'select-all-tooltip': "Tout sélectionner"
+    , 'select-none-tooltip': "Tout désélectionner"
     , 'fatal-error': "Erreur fatale"
     , 'ope-aborted': 'Opération abandonnée'
     , 'samples': "Échantillons" // (musique)

@@ -108,6 +108,17 @@ class SelectDialog extends Dialog {
   buildMenu(){
     const container = DCreate('DIV', {id: this.FId, class: 'custom-select' + (this.data.select_class ? ' ' + this.data.select_class : '')})
 
+    if (this.isMulti) {
+      const toolbar = DCreate('DIV', {class: 'custom-select-toolbar'})
+      const selectAllBtn = DCreate('IMG', {src: 'images/list-check.svg', class: 'custom-select-toolbar-btn', title: getMsg('select-all-tooltip')})
+      const selectNoneBtn = DCreate('IMG', {src: 'images/list-uncheck.svg', class: 'custom-select-toolbar-btn', title: getMsg('select-none-tooltip')})
+      listen(selectAllBtn, 'click', () => this.selectAllVisible())
+      listen(selectNoneBtn, 'click', () => this.selectNoneVisible())
+      toolbar.appendChild(selectAllBtn)
+      toolbar.appendChild(selectNoneBtn)
+      container.appendChild(toolbar)
+    }
+
     const filterInput = DCreate('INPUT', {type: 'text', class: 'custom-select-filter', placeholder: getMsg('select-filter-placeholder')})
     listen(filterInput, 'keydown', (ev) => ev.stopPropagation())
     listen(filterInput, 'input', () => this.applyFilter(filterInput.value))
@@ -155,6 +166,14 @@ class SelectDialog extends Dialog {
 
   selectOnly(item){
     this.items.forEach(it => this.setItemSelected(it, it === item))
+  }
+
+  selectAllVisible(){
+    this.items.forEach(it => { if (it.visible) this.setItemSelected(it, true) })
+  }
+
+  selectNoneVisible(){
+    this.items.forEach(it => { if (it.visible) this.setItemSelected(it, false) })
   }
 
   setItemSelected(item, selected){

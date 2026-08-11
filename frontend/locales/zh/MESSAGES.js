@@ -52,6 +52,8 @@ const MESSAGES = {
     , 'choosing-files-to': "选择要$1的文件"
     , 'choose-files-to': "选择要$1的文件"
     , 'select-filter-placeholder': "筛选…"
+    , 'select-all-tooltip': "全选"
+    , 'select-none-tooltip': "取消全选"
     , 'fatal-error': "严重错误"
     , 'ope-aborted': '操作已取消'
     , 'samples': "示例" // (musique)

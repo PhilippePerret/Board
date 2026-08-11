@@ -52,6 +52,8 @@ const MESSAGES = {
     , 'choosing-files-to': "$1 के लिए फ़ाइलों का चयन"
     , 'choose-files-to': "$1 के लिए फ़ाइलें चुनें"
     , 'select-filter-placeholder': "फ़िल्टर करें…"
+    , 'select-all-tooltip': "सभी का चयन करें"
+    , 'select-none-tooltip': "सभी का चयन रद्द करें"
     , 'fatal-error': "गंभीर त्रुटि"
     , 'ope-aborted': 'ऑपरेशन रद्द कर दिया गया'
     , 'samples': "नमूने" // (musique)

@@ -68,6 +68,24 @@ button.svg32 {
   font-size: 14pt;
 }
 
+.custom-select-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.custom-select-toolbar-btn {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: 0.55;
+}
+
+.custom-select-toolbar-btn:hover {
+  opacity: 1;
+}
+
 .custom-select-filter {
   width: 100%;
   background: transparent;
