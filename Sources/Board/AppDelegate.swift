@@ -3,11 +3,23 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
+    var activityToken: NSObjectProtocol?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
 
         NSApp.setActivationPolicy(.regular)
+        _ = NativeNotifier.shared
         NativeNotifier.requestAuthorization()
+
+        // Sans ça, macOS met en pause les timers JS de la WKWebView (App Nap)
+        // quand Board est masquée (Hide) ou en arrière-plan — les rappels
+        // (Reminder.js, setInterval) cessent de se déclencher tant que la
+        // fenêtre n'est pas réaffichée. Empêche l'App Nap pour Board sans
+        // empêcher le Mac de dormir normalement.
+        activityToken = ProcessInfo.processInfo.beginActivity(
+            options: .userInitiatedAllowingIdleSystemSleep,
+            reason: "Rappels actifs même app masquée"
+        )
 
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "Quitter Board", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")

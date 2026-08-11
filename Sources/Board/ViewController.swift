@@ -66,6 +66,56 @@ class ViewController: NSViewController, WKNavigationDelegate {
             url,
             allowingReadAccessTo: URL(fileURLWithPath: "/")
         )
+
+        // App masquée (Hide) : WKWebView suspend les timers JS des pages non
+        // visibles (occlusion, indépendant de l'App Nap déjà traité côté
+        // AppDelegate) — Reminder.js#poll ne se déclenche plus tout seul, ET
+        // même quand on le relance depuis l'hôte (evaluateJavaScript, qui lui
+        // s'exécute normalement), le postMessage que Notifier.notify utilise
+        // pour parler au natif reste en attente tant que la page est masquée
+        // — la notification n'arrivait donc qu'au moment de la réactivation.
+        // Ici, on contourne ce postMessage bloqué : les rappels dus renvoient
+        // directement leurs données via la valeur de retour d'evaluateJavaScript
+        // (qui, elle, arrive normalement), et c'est Swift qui affiche le
+        // panneau, sans passer par ce canal.
+        Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            guard NSApp.isHidden else { return }
+            let pollJS = """
+            (function(){
+              var results = [];
+              Reminder.asArray().forEach(function(r){
+                var now = new Date();
+                if (r.time <= now) {
+                  if (DateUtils.close(r.time, now, 60)) {
+                    if (r.execCount % 3 === 0) {
+                      var raw = r.dataNotifierByType(r.type);
+                      var prepared = Notifier._ensure_data(Object.assign({}, raw));
+                      results.push(prepared);
+                      if (r.onDue) r.onDue();
+                    }
+                    r.execCount++;
+                  } else {
+                    Reminder.remove(r);
+                  }
+                }
+              });
+              Reminder.count > 0 || Reminder.stop();
+              return JSON.stringify(results);
+            })()
+            """
+            self.webView.evaluateJavaScript(pollJS) { result, error in
+                guard let json = result as? String, let jsonData = json.data(using: .utf8) else {
+                    Debug.log("poll natif : réponse inattendue=\(String(describing: result)) erreur=\(String(describing: error))")
+                    return
+                }
+                guard let items = (try? JSONSerialization.jsonObject(with: jsonData)) as? [[String: Any]] else { return }
+                Debug.log("poll natif : \(items.count) rappel(s) dû(s)")
+                for request in items {
+                    NativeNotifier.handle(request: request) { _ in }
+                }
+            }
+        }
     }
 
     // N'ouvrir le socket du moteur de test "pont" qu'une fois index.html

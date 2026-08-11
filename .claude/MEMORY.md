@@ -35,3 +35,5 @@
 - [Pas d'auto-commentaire](feedbacks/no_self_commentary.md) — jamais parler de sa propre réponse ou reconnaître sa faute en méta, corriger et donner la suite, point
 - [Pas de redemande en flux établi](feedbacks/stop_reasking_established_step.md) — une fois le cycle rebuild/reproduire/observer en place, dire l'état, ne plus redemander l'action
 - [Bienveillance, pas malveillance sur code cassé](feedbacks/no_intent_on_broken_code.md) — jamais prêter une cause négative ("resté faux", "oublié") à du code incomplet, énoncer juste le fait technique
+- [Corriger d'abord, pas de recherche de coupable](feedbacks/fix_first_dont_blame.md) — sur un signalement mineur, corriger tout de suite, jamais "c'est pas moi"
+- [Pas de permission pour la suite évidente](feedbacks/no_permission_for_obvious_next_step.md) — suite mécanique déjà actée = exécuter directement, pas de "je fais ça aussi ?"

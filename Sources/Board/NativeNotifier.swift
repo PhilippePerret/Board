@@ -15,6 +15,24 @@ class NativeNotifier: NSObject {
     static let shared = NativeNotifier()
     private var floatingPanels: [NSPanel] = []
 
+    private override init() {
+        super.init()
+        // Cmd+H (Hide) masque TOUTES les fenêtres de l'app, panneaux flottants
+        // compris (hidesOnDeactivate = false ne protège que de la simple perte
+        // de focus, pas du Hide explicite) — on les réaffiche de force juste
+        // après, indépendamment de l'état masqué de l'app.
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(reorderFloatingPanels),
+            name: NSApplication.didHideNotification, object: nil
+        )
+    }
+
+    @objc private func reorderFloatingPanels() {
+        guard !floatingPanels.isEmpty else { return }
+        NSApp.unhideWithoutActivation()
+        floatingPanels.forEach { $0.orderFrontRegardless() }
+    }
+
     static func requestAuthorization() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
     }
@@ -165,6 +183,7 @@ class NativeNotifier: NSObject {
             webView.loadHTMLString(html, baseURL: baseURL)
             panel.contentView = webView
             finalizeFrame(fittingSize: nil)
+            if NSApp.isHidden { NSApp.unhideWithoutActivation() }
             panel.orderFrontRegardless()
             floatingPanels.append(panel)
             if let delay = delay {
@@ -222,6 +241,7 @@ class NativeNotifier: NSObject {
         ])
         panel.contentView = container
         finalizeFrame(fittingSize: stack.fittingSize)
+        if NSApp.isHidden { NSApp.unhideWithoutActivation() }
         panel.orderFrontRegardless()
 
         floatingPanels.append(panel)

@@ -20,8 +20,7 @@ class HelpWindowController: NSObject, WKScriptMessageHandler {
     }
 
     func openHelp(fichier: String, anchor: String?) {
-        let repoRoot = Bundle.main.bundleURL.deletingLastPathComponent()
-        let dossierManuel = repoRoot.appendingPathComponent("_dev/Manuel")
+        let dossierManuel = Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/Manuel")
         let fichierURL = dossierManuel.appendingPathComponent(fichier)
 
         if let window = window, let webView = webView, currentFichier == fichier {

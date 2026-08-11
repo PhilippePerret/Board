@@ -11,7 +11,7 @@
 // Chemins d'accès
 // Utiliser {id}
 :frontend: ../../../../frontend
-:img-folder: ../../frontend
+:img-folder: .
 :js-folder: {frontend}/js
 
 //================================================================

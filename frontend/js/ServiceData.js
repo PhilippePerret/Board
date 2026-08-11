@@ -328,9 +328,10 @@ const COMMON_SERVICES_DATA = [
     , script: 'OpenOrUpdateInBrowser.scpt'
     , params: [
         {id: 'docu-main-file-html', type: 'project', if_undefined: {q: getMsg('select-doc-main-final-file'), type: 'path'}}
+      , {id: 'default-browser', type: 'app'}
       ]
     , afterDefinedParams: (params) => {
-        return [[`file://${params[0][0]}`]]
+        return [[`file://${params[0][0]}`], [params[1][0]]]
     }
   },
 

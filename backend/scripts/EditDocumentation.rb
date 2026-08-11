@@ -5,8 +5,12 @@ EDITOR_NAME = ARGV[1]
 
 table = {ok: true, message: nil, error: nil}
 
-if File.exist?(DOCU_FOLDER) 
-  `open -a "#{EDITOR_NAME}" "#{DOCU_FOLDER}"`
+if File.exist?(DOCU_FOLDER)
+  if EDITOR_NAME.nil? || EDITOR_NAME.strip.empty?
+    `open "#{DOCU_FOLDER}"`
+  else
+    `open -a "#{EDITOR_NAME}" "#{DOCU_FOLDER}"`
+  end
   table[:message] = ['backend-docu-opened-in', EDITOR_NAME]
 else
   table[:ok] = false

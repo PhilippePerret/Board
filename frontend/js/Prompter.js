@@ -44,12 +44,7 @@ class Prompter {
   }
 
   static promptApp(spec, callback){
-    const value = App.getData([spec.id])
-    if (!value) {
-      console.error(getErr('unknown-app-data', spec.id))
-    } else {
-      callback(value)
-    }
+    callback(App.getData([spec.id]) ?? '')
   }
 
   // Propriété du projet ciblé par la définition (spec.projet — le projet
@@ -298,7 +293,7 @@ class Prompter {
       , values:   this.APPS_LIST
       , defaultValue: spec.default
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
-      , midBtn: {name: getMsg('other-app'), onclick: () => this.promptString(spec, callback)}
+      , midBtn: {name: getMsg('other-app'), onclick: () => this.promptString(spec, (v) => callback(v && v.trim() ? v : 'none'))}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     })).show()
   }

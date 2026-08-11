@@ -6,7 +6,7 @@ if [ ! -e "$path" ]; then
   exit 0
 fi
 
-if [ "$logiciel" = "none" ]; then
+if [ -z "$logiciel" ] || [ "$logiciel" = "none" ]; then
   /usr/bin/open "$path"
 else
   /usr/bin/open -a "$logiciel" "$path"

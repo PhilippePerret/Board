@@ -10,6 +10,8 @@ CUR_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 cp -R $CUR_DIR/frontend/* "$CUR_DIR/Board.app/Contents/Resources/frontend/"
 cp -R $CUR_DIR/backend/* "$CUR_DIR/Board.app/Contents/Resources/backend/"
+mkdir -p "$CUR_DIR/Board.app/Contents/Resources/Manuel"
+cp -R $CUR_DIR/_dev/Manuel/* "$CUR_DIR/Board.app/Contents/Resources/Manuel/"
 
 sleep 0.5
 

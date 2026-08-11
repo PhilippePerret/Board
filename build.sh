@@ -25,11 +25,13 @@ echo "📦 build app bundle..."
 mkdir -p "$APP_NAME.app/Contents/MacOS"
 mkdir -p "$APP_NAME.app/Contents/Resources/frontend"
 mkdir -p "$APP_NAME.app/Contents/Resources/backend"
+mkdir -p "$APP_NAME.app/Contents/Resources/Manuel"
 
 cp "$APP_NAME" "$APP_NAME.app/Contents/MacOS/"
 
 cp -R frontend/* "$APP_NAME.app/Contents/Resources/frontend/"
 cp -R backend/* "$APP_NAME.app/Contents/Resources/backend/"
+cp -R _dev/Manuel/* "$APP_NAME.app/Contents/Resources/Manuel/"
 
 cp Info.plist "$APP_NAME.app/Contents/" 2>/dev/null || true
 
