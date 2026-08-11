@@ -52,6 +52,31 @@ class GitIssue extends ExtendedObject {
     div.appendChild(tit)
     const desc = DCreate('DIV', {class:'issue-body', text: this.body.replace(/\n/g,'<br>')})
     div.appendChild(desc)
+    // Les infos
+    const infos = DCreate('DIV', {class:'issue-infos'})
+    div.appendChild(infos)
+    const auteur = DCreate('SPAN', {class:'issue-author', text: this.author.name})
+    infos.appendChild(auteur)
+    const date = DCreate('SPAN', {class: 'issue-date', text: DateUtils.formate(this.createdAt)})
+    infos.appendChild(date)
+
+    // Traitement des commentaires s'il y en a
+    if (this.comments) {
+      // Construction d'un commentaire
+      function buildComment(data) {
+        const div = DCreate('DIV', {class: 'issue-comment'})
+        const body = DCreate('DIV', {class: 'issue-comment-body', text: data.body.replace(/\n/, '<br>')})
+        div.appendChild(body)
+        return div
+      }
+      const comments = DCreate('DIV', {class:'issue-comments'})
+      div.appendChild(comments)
+      var comment
+      while (comment = this.comments.shift()){
+        comments.appendChild(buildComment(comment))
+      }
+    }
+
     // Observation
     listen(url, 'click', this.openUrl.bind(this))
     // On retourne le div qui doit être inscrit

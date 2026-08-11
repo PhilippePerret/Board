@@ -24,3 +24,20 @@ div.git-issue div.issue-body {
   margin-left: 4em;
   font-size: 0.75em;
 }
+
+div.git-issue div.issue-infos {
+  text-align: right;
+}
+
+div.git-issue div.issue-infos > span {
+  font-size: 0.75em;
+  margin-left: 1em;
+}
+
+div.git-issue div.issue-comments {
+  margin-left: 4em;
+  font-size: 0.9em;
+  padding: 0.5;
+  border-top: 1px solid #ccc;
+  margin-top: 0.5em;
+}
