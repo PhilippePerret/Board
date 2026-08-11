@@ -28,7 +28,6 @@
 - [Paramètre ≠ décision](feedbacks/param_not_decision.md) — si la réponse honnête est "ça dépend de l'appel", c'est un param, pas une question à poser
 - [Pas de condescendance](feedbacks/no_condescending_overexplain.md) — si sa phrase exclut déjà l'explication évidente, la redonner = le prendre pour un con
 - [Pas de jargon interne](feedbacks/no_internal_jargon_labels.md) — jamais "volet 1/2" ou label maison sans redire ce que ça désigne concrètement
-- [Vérifier TDD avant de citer un échec](feedbacks/check_tdd_before_citing_failure.md) — un ✗ peut être un test TDD normal (fonctionnalité pas codée), pas une preuve de bug
 - [Expliquer avant de rediriger la faute](feedbacks/explain_before_redirecting_blame.md) — si le diagnostic mène à un autre fichier que celui accusé, le dire d'abord, ne pas éditer direct
 - [Répondre avant d'enchaîner les outils](feedbacks/respond_before_more_tools.md) — après question directe, répondre en texte d'abord, pas silencieusement un nouvel appel d'outil
 - [Pas d'étiquette "pas urgent/plus tard"](feedbacks/no_vague_later_labels.md) — perd son sens avec le temps, confusionnant ; soit priorité maintenant, soit pas d'étiquette temporelle floue
