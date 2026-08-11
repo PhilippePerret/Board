@@ -336,6 +336,15 @@ for spec in "${SPECS[@]}"; do
   [ -e "$spec" ] || continue
   rel_spec="${spec#$VTEST_DIR/}"
   echo "${GRAY}--- $rel_spec ---${RESET}"
+  # Nettoyage AVANT (pas APRÈS) : vidé et recréé pour chaque test, plutôt
+  # que de compter sur le remove_fixture_project de chaque spec — un test
+  # ne doit jamais pouvoir hériter d'un résidu d'un test précédent.
+  rm -rf "$BOARD_TEST_DATA_DIR"
+  mkdir -p "$BOARD_TEST_DATA_DIR"
+  # create_fixture_project (helpers_base.rb) lit/réécrit appdata.yaml AVANT
+  # tout launch_app — certaines specs l'appellent avant de relancer Board :
+  # le fichier doit donc déjà exister, pas seulement après le 1er lancement.
+  printf 'projects-in: []\nprojects-out: []\n' > "$BOARD_TEST_DATA_DIR/appdata.yaml"
   t_start=$(date +%s.%N)
   if output=$(BOARD_TEST_ENGINE=pont BOARD_TEST_BRIDGE_SOCKET="$BOARD_TEST_BRIDGE_SOCKET" BOARD_TEST_DATA_DIR="$BOARD_TEST_DATA_DIR" ruby "$spec" 2>&1); then code=0; else code=$?; fi
   t_end=$(date +%s.%N)
