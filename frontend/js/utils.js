@@ -42,19 +42,8 @@ function traceError(){
   console.trace()
 }
 
-const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'décembre']
-const Mois = MOIS.map(m => {return m[0].toUpperCase() + m.slice(1)})
-
 function formateDate(date, format = '%J %M %Y'){
-  if ('string' == typeof date) date = parseDate(date)
-  const fyear = String(date.getFullYear())
-  return format
-    .replace(/\%YY/, fyear[2] + fyear[3])
-    .replace(/\%Y/, fyear)
-    .replace(/\%_M/, MOIS[date.getMonth()])
-    .replace(/\%M/,  String(date.getMonth() + 1).padStart(2, '0'))
-    .replace(/\%JJ/, String(date.getDate()).padStart(2, '0'))
-    .replace(/\%J/, date.getDate())
+  return DateUtils.formate(date, format)
 }
 
 /**

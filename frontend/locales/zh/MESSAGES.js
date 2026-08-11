@@ -35,6 +35,8 @@ const MESSAGES = {
     , 'error:': "错误："
     , 'other-value…': '其他值…'
     , 'date/at': '于' // pour une date avec heure
+    , 'date/months': "1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月"
+    , 'date/format': "%Y年%_M%J日"
     , 'Cancel': "取消"
     , 'Correct': "更正"
     , 'its-noted': "知道了"

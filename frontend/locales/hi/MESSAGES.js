@@ -35,6 +35,8 @@ const MESSAGES = {
     , 'error:': "त्रुटि:"
     , 'other-value…': 'अन्य मान…'
     , 'date/at': 'को' // pour une date avec heure
+    , 'date/months': "जनवरी|फ़रवरी|मार्च|अप्रैल|मई|जून|जुलाई|अगस्त|सितंबर|अक्टूबर|नवंबर|दिसंबर"
+    , 'date/format': "%J %_M %Y"
     , 'Cancel': "रद्द करें"
     , 'Correct': "सुधारें"
     , 'its-noted': "समझ गया"

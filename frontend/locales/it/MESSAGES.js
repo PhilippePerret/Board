@@ -35,6 +35,8 @@ const MESSAGES = {
     , 'error:': "Errore:"
     , 'other-value…': 'Altro valore…'
     , 'date/at': 'alle' // pour une date avec heure
+    , 'date/months': "gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre"
+    , 'date/format': "%J %_M %Y"
     , 'Cancel': "Annulla"
     , 'Correct': "Correggi"
     , 'its-noted': "Va bene"

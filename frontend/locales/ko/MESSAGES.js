@@ -35,6 +35,8 @@ const MESSAGES = {
     , 'error:': "오류:"
     , 'other-value…': '다른 값…'
     , 'date/at': '시각' // pour une date avec heure
+    , 'date/months': "1월|2월|3월|4월|5월|6월|7월|8월|9월|10월|11월|12월"
+    , 'date/format': "%Y년 %_M %J일"
     , 'Cancel': "취소"
     , 'Correct': "수정"
     , 'its-noted': "확인했습니다"

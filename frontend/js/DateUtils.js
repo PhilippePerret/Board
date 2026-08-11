@@ -1,7 +1,8 @@
 /**
  * DateUtils/DateUtils.js
  * v1.0.0
- * Méthodes utiles pour les Date
+ * Méthodes utiles pour les Dates
+ * 
  */
 
 const REG_HOUR = /([0-9]{1,2}) ?(?:(?::|heure|hour|hr|h)s?) ?([0-9]{2})?(?:\:([0-9]{2}))?/
@@ -10,6 +11,20 @@ const REG_HOUR = /([0-9]{1,2}) ?(?:(?::|heure|hour|hr|h)s?) ?([0-9]{2})?(?:\:([0
 const REG_ISO_8601= /([0-9]{4})\-([0-9]{2})\-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})?$/
 
 class DateUtils {
+
+  static formate(dateRef, format) {
+    format = format || getMsg('date/format')
+    var date = dateRef instanceof Date ? dateRef : new Date(dateRef)
+    const fyear = String(date.getFullYear())
+    const mois = getMsg('date/months').split('|')
+    return format
+      .replace(/\%YY/, fyear[2] + fyear[3])
+      .replace(/\%Y/, fyear)
+      .replace(/\%_M/, mois[date.getMonth()])
+      .replace(/\%M/,  String(date.getMonth() + 1).padStart(2, '0'))
+      .replace(/\%JJ/, String(date.getDate()).padStart(2, '0'))
+      .replace(/\%J/, date.getDate())
+  }
 
   /**
    * @api
@@ -229,10 +244,11 @@ class DateUtils {
    */
   static parseNatural(str){
     if (!str) return null
+    const L = this._naturalLocaleData()
     var found
     if ( found = this.parseAsIso8601(str) ) return found
 
-    if ( found = str.match(NATURAL_NUMERIC_DATE_REG) ) {
+    if ( found = str.match(L.numericDateReg) ) {
       const day   = parseInt(found[1], 10)
       const month = parseInt(found[2], 10) - 1
       const year  = found[3] ? (found[3].length == 2 ? 2000 + parseInt(found[3], 10) : parseInt(found[3], 10)) : new Date().getFullYear()
@@ -244,42 +260,47 @@ class DateUtils {
       return d
     }
 
-    for (const [word, offset] of NATURAL_RELATIVE_DAY_OFFSET) {
+    for (const [word, offset] of L.relativeDayOffset) {
       if (word && str.match(new RegExp(`(${word})`))) {
         return this.dateIn(offset, 'day')
       }
     }
 
-    if ( found = str.match(NATURAL_DURATION_IN_REG) ) {
+    if ( found = str.match(L.durationInReg) ) {
       const amount = parseInt(found[1], 10)
       const unitWord = found[2]
-      const unitEntry = NATURAL_UNIT_TO_CANON.find(([w]) => new RegExp(`^(${w})$`).test(unitWord))
+      const unitEntry = L.unitToCanon.find(([w]) => new RegExp(`^(${w})$`).test(unitWord))
       return this.dateIn(amount, unitEntry ? unitEntry[1] : 'day')
     }
 
     return null
   }
-}
 
-// --- Localisation (mots utilisés par Validator.js et parseNatural) ---
-const NATURAL_UNIT_TO_CANON = [
-  [getMsg('regexp:unit-month'),  'month'],
-  [getMsg('regexp:unit-week'),   'week'],
-  [getMsg('regexp:unit-day'),    'day'],
-  [getMsg('regexp:unit-hour'),   'hour'],
-  [getMsg('regexp:unit-minute'), 'minute'],
-]
-// Ordre important : les formes longues ("après-demain") contiennent parfois
-// les formes courtes ("demain") comme sous-chaîne — elles doivent être
-// testées en premier.
-const NATURAL_RELATIVE_DAY_OFFSET = [
-  [getMsg('regexp:day-after-tomorrow'),  2],
-  [getMsg('regexp:day-before-yesterday'), -2],
-  [getMsg('regexp:tomorrow'),            1],
-  [getMsg('regexp:yesterday'),          -1],
-  [getMsg('regexp:today'),               0],
-]
-const NATURAL_DATE_PREFIX = getMsg('regexp:date-prefix')
-const NATURAL_HOUR_REG = `[0-9]{1,2} ?(?::|${getMsg('regexp:hour-words')})s? ?[0-9]{0,2}`
-const NATURAL_NUMERIC_DATE_REG = new RegExp(`^(?:${NATURAL_DATE_PREFIX})?([0-9]{1,2})[ :\\-\\/]([0-9]{1,2})(?:[ :\\-\\/]([0-9]{2,4}))?(?: ${getMsg('date/at')} (${NATURAL_HOUR_REG}))?$`)
-const NATURAL_DURATION_IN_REG = new RegExp(getMsg('regexp:duration-in'))
+  // Calculé au premier appel seulement (pas au chargement du module :
+  // DateUtils.js est chargé avant Messagerie.js/getMsg dans index.html).
+  static _naturalLocaleData(){
+    if (this.__naturalLocaleData) return this.__naturalLocaleData
+    const unitToCanon = [
+      [getMsg('regexp:unit-month'),  'month'],
+      [getMsg('regexp:unit-week'),   'week'],
+      [getMsg('regexp:unit-day'),    'day'],
+      [getMsg('regexp:unit-hour'),   'hour'],
+      [getMsg('regexp:unit-minute'), 'minute'],
+    ]
+    // Ordre important : les formes longues ("après-demain") contiennent
+    // parfois les formes courtes ("demain") comme sous-chaîne — elles
+    // doivent être testées en premier.
+    const relativeDayOffset = [
+      [getMsg('regexp:day-after-tomorrow'),  2],
+      [getMsg('regexp:day-before-yesterday'), -2],
+      [getMsg('regexp:tomorrow'),            1],
+      [getMsg('regexp:yesterday'),          -1],
+      [getMsg('regexp:today'),               0],
+    ]
+    const datePrefix = getMsg('regexp:date-prefix')
+    const hourReg = `[0-9]{1,2} ?(?::|${getMsg('regexp:hour-words')})s? ?[0-9]{0,2}`
+    const numericDateReg = new RegExp(`^(?:${datePrefix})?([0-9]{1,2})[ :\\-\\/]([0-9]{1,2})(?:[ :\\-\\/]([0-9]{2,4}))?(?: ${getMsg('date/at')} (${hourReg}))?$`)
+    const durationInReg = new RegExp(getMsg('regexp:duration-in'))
+    return this.__naturalLocaleData = { unitToCanon, relativeDayOffset, numericDateReg, durationInReg }
+  }
+}
