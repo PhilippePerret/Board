@@ -107,7 +107,7 @@ class ServiceExecuter {
       Spinner.stop()
       return
     }
-    console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
+    // console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
     params.forEach((p, i) => {
       try { JSON.stringify(p) } catch (e) {
         console.error(`[DIAG] appel n°${this._execCount} — params[${i}] invalide (${e.message}) :`, p)
