@@ -14,6 +14,36 @@ require_relative 'usefull.rb'
 require 'shellwords'
 
 class Git
+
+  attr_reader :project_path
+
+  def initialize(project_path)
+    @project_path = project_path
+  end
+
+  def installed?
+    File.exist?(File.join(project_path, '.git'))
+  end
+
+  # @return true si le status de Git est clean, donc sans rien à 
+  # commiter
+  def status_clean?
+    res = `cd "#{project_path}" && git status -s --branch`
+    if res.strip.start_with?('## main')
+      return true # pas d'erreur
+    else
+      res = res.strip.split("\n")
+      r = []
+      res.count - 1 == 0        || r << ['git-status-not-clean', ['git-status-not-empty']]
+      res[0].strip.start_with?('## main') || r << 'git-branch-not-main'
+      return r
+    end
+  end
+
+
+
+#################### C L A S S E #####################
+
 class << self
 
 
@@ -291,4 +321,9 @@ class << self
   end
 
 end #/<< self
+
+
+
+################## INSTANCE #############################
+# Une instance est souvent le git d'un projet particulier
 end #/Git
