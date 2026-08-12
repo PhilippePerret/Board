@@ -57,6 +57,8 @@
  *    La fonction doit obligatoirement retourner la nouvelle liste 
  *    des paramètres qui remplacera la liste fournie.
  *    Se souvenir que toutes les valeurs se trouvent dans un array.
+ *    Mais chaque fonction reçoit maintenant en argument un dict de
+ *    toutes les valeurs.
  *  
  *  bypassExec
  *    Fonction à exécuter avant d'exécuter le service (par exemple un
@@ -71,8 +73,10 @@
  *    Attention à la valeur renvoyée, suivant le script qui doit la 
  *    recevoir. Des erreurs sont facilement possibles.
  * 
- *  afterRunWithSuccess   (projet, retour)
+ *  afterRunWithSuccess   (projet, retour, dictValues)
  *    Fonction appelée après avoir exécuté le service avec succès.
+ *    dictValues est une table de toutes les valeurs avec en clé l'id
+ *    du param/dynparam et en valeur, la valeur du paramètre.
  * 
 
 */
@@ -121,6 +125,8 @@ const COMMON_SERVICES_DATA = [
     , name: getMsg('start-clock')
     , group: getMsg('group-tools')
   }, COUNTDOWN_PROPERTIES), 
+
+
 
   // Git issue bug
   {
@@ -243,6 +249,24 @@ const COMMON_SERVICES_DATA = [
   },
 
 
+  {
+    id: 'github-pr-cycle-init'
+    , name: getMsg('github-pr-cycle-init')
+    , aide: 'github-pull-request-cycle'
+    , group: 'Git'
+    , script: 'PR_Github_Cycle.rb'
+    , params: [
+        {id:'path', type:'project'}
+      , {id: 'phase', type:'raw', value: 'init'}
+    ]
+    , dynParams: [
+      {id: 'branche-name', q: getMsg('github-pr-cycle-branch-name'), type: 'string', validIf: (v) => {v.match(/^[a-z0-9_-]+$/)}}
+    ]
+    , afterRunWithSuccess(projet, retour, dictValue) {
+        // On enregistre le branche courante.
+        projet.set('git_pr_cycle_branche', dictValue['branche-name'], true)
+      }
+  },
 
 
 
@@ -363,7 +387,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Consoles'
     , params: [ 
           {id: 'path', type: 'project'} 
-        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true}
+        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true, noCorrection: true}
       ]
   },
   {
@@ -372,7 +396,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Consoles'
     , params: [
           {id: 'path', type: 'project'}
-        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true}
+        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true, noCorrection: true}
       ]
   },
   {
