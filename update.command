@@ -12,6 +12,9 @@ cp -R $CUR_DIR/frontend/* "$CUR_DIR/Board.app/Contents/Resources/frontend/"
 cp -R $CUR_DIR/backend/* "$CUR_DIR/Board.app/Contents/Resources/backend/"
 mkdir -p "$CUR_DIR/Board.app/Contents/Resources/Manuel"
 cp -R $CUR_DIR/_dev/Manuel/* "$CUR_DIR/Board.app/Contents/Resources/Manuel/"
+mkdir -p "$CUR_DIR/Board.app/Contents/Resources/ruby"
+chmod -R u+w "$CUR_DIR/Board.app/Contents/Resources/ruby"
+cp -R $CUR_DIR/vendor/ruby/* "$CUR_DIR/Board.app/Contents/Resources/ruby/"
 
 sleep 0.5
 
