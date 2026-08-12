@@ -10,7 +10,7 @@ class Backend {
         let pipeErr = Pipe()
 
         let scriptPath = Bundle.main.resourcePath! + "/backend/backend.rb"
-        process.executableURL = URL(fileURLWithPath: NSHomeDirectory() + "/.rbenv/versions/3.4.7/bin/ruby")
+        process.executableURL = URL(fileURLWithPath: Bundle.main.resourcePath! + "/ruby/bin/ruby")
         process.arguments = [scriptPath]
 
         process.currentDirectoryURL = URL(fileURLWithPath: Bundle.main.resourcePath! + "/backend")
