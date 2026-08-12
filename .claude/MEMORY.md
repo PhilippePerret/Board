@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-08](2026-08-08-Etat-fin-de-session.md) — vérification finale avant présentation publique (tests, localisation, config minimale, README multilingue, plan de diffusion)
+- PRIORITÉ : [État fin de session 2026-08-11](2026-08-11-Etat-fin-de-session.md) — README multilingue et plan de diffusion
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
@@ -17,7 +17,6 @@
 - [Dossier .claude = à moi](feedbacks/claude_dir_is_mine.md) — CLAUDE.md et tout .claude/ sous ma responsabilité, tenir à jour sans demander
 - [Presse-papier pour commandes test](feedbacks/clipboard_test_command.md) — toujours pbcopy la commande de test donnée à l'user
 - [Synchro _tests_a_faire.adoc](feedbacks/keep_tests_todo_synced.md) — retirer une entrée dès que sa spec existe dans Tests/specs/e2e/, sans attendre demande
-- [État fin de session](feedbacks/daily_etat_fin_session.md) — seulement s'il reste du non résolu à reporter, sinon pas de fichier
 - [Refermer les fenêtres de debug](feedbacks/close_debug_windows.md) — refermer immédiatement après lecture, pas seulement en fin de tâche
 - [Numéroter = garder le texte entier](feedbacks/numbering_keeps_full_text.md) — ajouter des numéros ne veut pas dire raccourcir
 - [Régler plutôt que virer un garde-fou](feedbacks/tune_dont_remove_safety_code.md) — une plainte sur un timeout/garde-fou peut vouloir dire "ajuste-le", pas "supprime-le"
@@ -37,3 +36,5 @@
 - [Bienveillance, pas malveillance sur code cassé](feedbacks/no_intent_on_broken_code.md) — jamais prêter une cause négative ("resté faux", "oublié") à du code incomplet, énoncer juste le fait technique
 - [Corriger d'abord, pas de recherche de coupable](feedbacks/fix_first_dont_blame.md) — sur un signalement mineur, corriger tout de suite, jamais "c'est pas moi"
 - [Pas de permission pour la suite évidente](feedbacks/no_permission_for_obvious_next_step.md) — suite mécanique déjà actée = exécuter directement, pas de "je fais ça aussi ?"
+- [État fin de session](feedbacks/daily_etat_fin_session.md) — seulement s'il reste du non résolu à reporter, sinon pas de fichier ; jamais d'archive, toujours recréé et l'ancien détruit
+- [Pas de suggestions d'action](feedbacks/no_suggestions.md) — fin de réponse = état des lieux seul, jamais "teste maintenant"/"tu peux..."
