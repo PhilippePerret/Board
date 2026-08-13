@@ -1,4 +1,4 @@
-Cette table présente les codes qui sont utilisés pour vérifier les fichiers, soit sur simple demande (outil « Vérifier le code… »), soit lorsqu'ils doivent être commités, par le service <<git-commit>> ou le service <<github-pr-cycle-commit>> par exemple.
+Cette table présente les codes qui sont utilisés pour vérifier les fichiers, soit sur simple demande (outil « Vérifier le code… »), soit lorsqu'ils doivent être commités, par le service <<git-commit>> ou le service <<github-pr-cycle-commit>> par exemple.
 
 [cols="1,2,2,4",options="header"]
 |===
@@ -20,7 +20,7 @@ Cette table présente les codes qui sont utilisés pour vérifier les fichiers, 
 |TypeScript
 |`.ts`, `.mts`, `.cts`
 |`tsc --noEmit fichier.ts`
-|`tsc --noEmit` accepte plusieurs fichiers, mais son comportement dépend aussi de la configuration TypeScript. Pour un projet, `tsc --noEmit` utilise `tsconfig.json`. Les motifs de fichiers sont gérés par `tsconfig.json` (`include`, `exclude`, `files`), pas par une option regex.
+|`tsc --noEmit` accepte plusieurs fichiers, mais son comportement dépend aussi de la configuration TypeScript. Pour un projet, `tsc --noEmit` utilise `tsconfig.json`. Les motifs de fichiers sont gérés par `tsconfig.json` (`include`, `exclude`, `files`).
 
 |Python
 |`.py`, `.pyw`
@@ -30,91 +30,101 @@ Cette table présente les codes qui sont utilisés pour vérifier les fichiers, 
 |PHP
 |`.php`, `.php3`, `.php4`, `.php5`, `.phtml`
 |`php -l fichier.php`
-|Un seul fichier par invocation. Pas de dossier ni de regex natifs. Utilisation possible avec une expansion du shell.
+|Un seul fichier par invocation. Utilisation possible avec une expansion du shell.
 
 |Perl
 |`.pl`, `.pm`, `.t`, `.psgi`
 |`perl -c fichier.pl`
-|Un seul fichier par invocation. Pas de dossier ni de regex natifs. Le shell peut fournir plusieurs fichiers à une boucle.
+|Un seul fichier par invocation. Le shell peut fournir plusieurs fichiers à une boucle.
 
 |Bash
 |`.sh`, `.bash`, `.bats`
 |`bash -n fichier.sh`
-|Un seul script par invocation. Pas de dossier ni de regex natifs. `find` permet de sélectionner les fichiers, notamment avec `-name` ou `-regex`.
+|Un seul script par invocation. `find` permet de sélectionner les fichiers, notamment avec `-name` ou `-regex`.
 
 |Zsh
 |`.zsh`
 |`zsh -n fichier.zsh`
-|Un seul script par invocation. Pas de dossier ni de regex natifs. Les globes du shell et `find` peuvent sélectionner les fichiers.
+|Un seul script par invocation. Les globes du shell et `find` peuvent sélectionner les fichiers.
 
 |Fish
 |`.fish`
 |`fish --no-execute fichier.fish`
-|Un seul script par invocation. Pas de dossier ni de regex natifs. `find` peut sélectionner les fichiers.
+|Un seul script par invocation. `find` peut sélectionner les fichiers.
 
 |Lua
 |`.lua`
 |`luac -p fichier.lua`
-|Un seul fichier par invocation. Plusieurs fichiers peuvent être passés à `luac -p`. Pas de sélection par regex native ; le shell ou `find` peut être utilisé.
+|Un seul fichier par invocation. Plusieurs fichiers peuvent être passés à `luac -p`. Le shell ou `find` peut être utilisé.
 
 |Go
 |`.go`
 |`go build fichier.go`
-|Pour un fichier précis, `go build fichier.go`. Pour un package ou un dossier, `go build ./chemin/...` permet de traiter récursivement les packages. Les sélections sont basées sur les packages Go, pas sur des regex.
+|Pour un fichier précis, `go build fichier.go`. Pour un package ou un dossier, `go build ./chemin/...` permet de traiter récursivement les packages. Les sélections sont basées sur les packages Go.
 
 |Rust
 |`.rs`
 |`rustc fichier.rs`
-|Un fichier source principal par invocation. Pour un projet Cargo, `cargo check` vérifie le projet sans produire l'exécutable final. `cargo check --workspace` traite tous les packages du workspace. Pas de regex native pour sélectionner les fichiers.
+|Un fichier source principal par invocation. Pour un projet Cargo, `cargo check` vérifie le projet sans produire l'exécutable final. `cargo check --workspace` traite tous les packages du workspace.
 
 |C
 |`.c`, `.h`
 |`gcc -fsyntax-only fichier.c`
-|Un ou plusieurs fichiers source peuvent être passés à GCC. Les fichiers `.h` sont normalement inclus depuis les sources plutôt que vérifiés isolément. Pas de dossier ni de regex natifs ; le shell ou `find` peut sélectionner les fichiers.
+|Un ou plusieurs fichiers source peuvent être passés à GCC. Les fichiers `.h` sont normalement inclus depuis les sources plutôt que vérifiés isolément. Le shell ou `find` peut sélectionner les fichiers.
 
 |C++
 |`.cc`, `.cp`, `.cpp`, `.cxx`, `.c++`, `.C`, `.h`, `.hh`, `.hp`, `.hpp`, `.hxx`, `.h++`
 |`g++ -fsyntax-only fichier.cpp`
-|Un ou plusieurs fichiers source peuvent être passés à GCC. Les headers sont normalement inclus depuis les sources plutôt que vérifiés isolément. Pas de dossier ni de regex natifs ; le shell ou `find` peut sélectionner les fichiers.
+|Un ou plusieurs fichiers source peuvent être passés à GCC. Les headers sont normalement inclus depuis les sources plutôt que vérifiés isolément. Le shell ou `find` peut sélectionner les fichiers.
 
 |Java
 |`.java`
 |`javac fichier.java`
-|`javac` accepte plusieurs fichiers. Un dossier peut être traité avec `javac dossier/*.java` ou récursivement via une sélection externe. Pas de regex native comme sélection de fichiers.
+|`javac` accepte plusieurs fichiers. Un dossier peut être traité avec `javac dossier/*.java` ou récursivement via une sélection externe.
 
 |Kotlin
 |`.kt`, `.kts`
 |`kotlinc fichier.kt`
-|Plusieurs fichiers peuvent être passés. Pour un projet, l'outil de build (Gradle/Maven) est généralement utilisé. Pas de regex native pour sélectionner les fichiers.
+|Plusieurs fichiers peuvent être passés. Pour un projet, l'outil de build (Gradle/Maven) est généralement utilisé.
 
 |Swift
 |`.swift`
 |`swiftc -parse fichier.swift`
-|Plusieurs fichiers source peuvent être passés. Pas de traitement récursif de dossier ni de regex native ; le shell ou `find` peut sélectionner les fichiers.
+|Plusieurs fichiers source peuvent être passés. Le shell ou `find` peut sélectionner les fichiers.
 
 |Dart
 |`.dart`
 |`dart analyze fichier.dart`
-|`dart analyze` peut analyser un fichier, un dossier ou un projet. Exemple : `dart analyze dossier/`. La sélection par regex n'est pas une option native ; l'analyse d'un dossier suit la structure du projet.
+|`dart analyze` peut analyser un fichier, un dossier ou un projet. Exemple : `dart analyze dossier/`. L'analyse d'un dossier suit la structure du projet.
 
 |R
 |`.R`, `.r`, `.Rmd`
 |`Rscript -e "parse(file='fichier.R')"`
-|`parse()` vérifie la syntaxe R sans exécuter le contenu. Pas de traitement récursif de dossier ni de sélection regex native ; `find` ou un script R peuvent sélectionner les fichiers.
+|`parse()` vérifie la syntaxe R sans exécuter le contenu. `find` ou un script R peuvent sélectionner les fichiers.
 
 |SQL
 |`.sql`
 |Dépend du SGBD
-|Il n'existe pas de vérificateur syntaxique SQL universel. PostgreSQL, MySQL, SQLite, etc. ont des parseurs et des comportements différents. Le traitement de dossiers et la sélection par regex dépendent de l'outil utilisé.
+|PostgreSQL, MySQL, SQLite, etc. ont des parseurs et des comportements différents. Le traitement de dossiers et la sélection par regex dépendent de l'outil utilisé.
 
 |HTML
 |`.html`, `.htm`
-|Pas de commande universelle
-|La validation syntaxique/structurelle se fait avec un validateur HTML, par exemple Nu Html Checker. Le traitement de dossiers et les sélections de fichiers dépendent de l'outil utilisé.
+|`tidy -q -e fichier.html`
+|`tidy` (inclus sur macOS) rapporte les erreurs de syntaxe/structure. Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de `find`.
 
 |CSS
 |`.css`
-|Pas de commande universelle
-|La vérification se fait généralement avec un linter ou parseur CSS. Le traitement de dossiers et les sélections de fichiers dépendent de l'outil utilisé.
+|`stylelint fichier.css`
+|(nécessite d'être installé) vérifie la syntaxe et le style. Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de `find`.
+
+|AsciiDoc
+|`.adoc`, `.asciidoc`
+|`asciidoctor --failure-level=WARN -o /dev/null fichier.adoc`
+|`--failure-level=WARN` fait échouer la commande dès un avertissement (par défaut, `asciidoctor` réussit même avec des avertissements). Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de `find`.
+
+|Elixir
+|`.ex`, `.exs`
+|`elixirc -o /tmp fichier.ex`
+|`elixirc` exécute le code de premier niveau du fichier en le compilant (pas seulement sa syntaxe). Un seul fichier par invocation ; `-o` évite d'écrire les `.beam` à côté de la source.
 
 |===

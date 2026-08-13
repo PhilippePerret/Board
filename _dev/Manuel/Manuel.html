@@ -487,6 +487,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_faire_jouer_du_code_au_dossier">Faire jouer du code au dossier</a></li>
 </ul>
 </li>
+<li><a href="#annexes">Annexes</a>
+<ul class="sectlevel2">
+<li><a href="#check-files-code">Check de la syntax des fichiers</a></li>
+</ul>
+</li>
 <li><a href="#_développement">Développement</a>
 <ul class="sectlevel2">
 <li><a href="#_fonctionnalités">fonctionnalités</a></li>
@@ -3608,7 +3613,7 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 
 </div>
 <div class="sect3">
-<h4 id="git-pull-request-cycle">Cycle pull request Github</h4>
+<h4 id="github-pull-request-cycle">Cycle pull request Github</h4>
 <div class="paragraph">
 <p>Ce service permet d&#8217;entreprendre un pull request complet sur Github, depuis un état stable (branche main propre) jusqu&#8217;à la soumission des fichiers dernièrement modifiés et leur traitement pour revenir à un état stable. Il fait exactement cela :</p>
 </div>
@@ -3788,6 +3793,167 @@ ou (autre que squash) : <code>gh pr merge --auto</code></p>
 <div class="paragraph">
 <p>Aussitôt, le code est exécuté et tous les noms sont changés, comme par magie.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="annexes">Annexes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="check-files-code">Check de la syntax des fichiers</h3>
+<div class="paragraph">
+<p>Cette table présente les codes qui sont utilisés pour vérifier les fichiers, soit sur simple demande (outil « Vérifier le code… »), soit lorsqu&#8217;ils doivent être commités, par le service <a href="#git-commit">[git-commit]</a> ou le service <a href="#github-pr-cycle-commit">[github-pr-cycle-commit]</a> par exemple.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 44.4445%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Langage</th>
+<th class="tableblock halign-left valign-top">Fichiers</th>
+<th class="tableblock halign-left valign-top">Commande</th>
+<th class="tableblock halign-left valign-top">Spécificités</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ruby</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.rb</code>, <code>.rbw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ruby -c fichier.rb</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul fichier par invocation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JavaScript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.js</code>, <code>.mjs</code>, <code>.cjs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>node --check fichier.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul fichier par invocation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeScript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.ts</code>, <code>.mts</code>, <code>.cts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tsc --noEmit fichier.ts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tsc --noEmit</code> accepte plusieurs fichiers, mais son comportement dépend aussi de la configuration TypeScript. Pour un projet, <code>tsc --noEmit</code> utilise <code>tsconfig.json</code>. Les motifs de fichiers sont gérés par <code>tsconfig.json</code> (<code>include</code>, <code>exclude</code>, <code>files</code>).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Python</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.py</code>, <code>.pyw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>python -m py_compile fichier.py</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plusieurs fichiers peuvent être fournis. Pour un arbre de fichiers, <code>compileall</code> est prévu pour cela : <code>python -m compileall dossier</code>. Les motifs doivent être fournis par le shell ou par un script.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PHP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.php</code>, <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.phtml</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>php -l fichier.php</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul fichier par invocation. Utilisation possible avec une expansion du shell.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Perl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.pl</code>, <code>.pm</code>, <code>.t</code>, <code>.psgi</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>perl -c fichier.pl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul fichier par invocation. Le shell peut fournir plusieurs fichiers à une boucle.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bash</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.sh</code>, <code>.bash</code>, <code>.bats</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bash -n fichier.sh</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul script par invocation. <code>find</code> permet de sélectionner les fichiers, notamment avec <code>-name</code> ou <code>-regex</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zsh</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.zsh</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>zsh -n fichier.zsh</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul script par invocation. Les globes du shell et <code>find</code> peuvent sélectionner les fichiers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fish</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.fish</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fish --no-execute fichier.fish</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul script par invocation. <code>find</code> peut sélectionner les fichiers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lua</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.lua</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>luac -p fichier.lua</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un seul fichier par invocation. Plusieurs fichiers peuvent être passés à <code>luac -p</code>. Le shell ou <code>find</code> peut être utilisé.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Go</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.go</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>go build fichier.go</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour un fichier précis, <code>go build fichier.go</code>. Pour un package ou un dossier, <code>go build ./chemin/&#8230;&#8203;</code> permet de traiter récursivement les packages. Les sélections sont basées sur les packages Go.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rust</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.rs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rustc fichier.rs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un fichier source principal par invocation. Pour un projet Cargo, <code>cargo check</code> vérifie le projet sans produire l&#8217;exécutable final. <code>cargo check --workspace</code> traite tous les packages du workspace.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.c</code>, <code>.h</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gcc -fsyntax-only fichier.c</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un ou plusieurs fichiers source peuvent être passés à GCC. Les fichiers <code>.h</code> sont normalement inclus depuis les sources plutôt que vérifiés isolément. Le shell ou <code>find</code> peut sélectionner les fichiers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.cc</code>, <code>.cp</code>, <code>.cpp</code>, <code>.cxx</code>, <code>.c`, `.C`, `.h`, `.hh`, `.hp`, `.hpp`, `.hxx`, `.h</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>g++ -fsyntax-only fichier.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un ou plusieurs fichiers source peuvent être passés à GCC. Les headers sont normalement inclus depuis les sources plutôt que vérifiés isolément. Le shell ou <code>find</code> peut sélectionner les fichiers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.java</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>javac fichier.java</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>javac</code> accepte plusieurs fichiers. Un dossier peut être traité avec <code>javac dossier/*.java</code> ou récursivement via une sélection externe.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kotlin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.kt</code>, <code>.kts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kotlinc fichier.kt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plusieurs fichiers peuvent être passés. Pour un projet, l&#8217;outil de build (Gradle/Maven) est généralement utilisé.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Swift</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.swift</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swiftc -parse fichier.swift</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plusieurs fichiers source peuvent être passés. Le shell ou <code>find</code> peut sélectionner les fichiers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dart</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.dart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dart analyze fichier.dart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dart analyze</code> peut analyser un fichier, un dossier ou un projet. Exemple : <code>dart analyze dossier/</code>. L&#8217;analyse d&#8217;un dossier suit la structure du projet.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.R</code>, <code>.r</code>, <code>.Rmd</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Rscript -e "parse(file='fichier.R')"</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>parse()</code> vérifie la syntaxe R sans exécuter le contenu. <code>find</code> ou un script R peuvent sélectionner les fichiers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SQL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.sql</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dépend du SGBD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PostgreSQL, MySQL, SQLite, etc. ont des parseurs et des comportements différents. Le traitement de dossiers et la sélection par regex dépendent de l&#8217;outil utilisé.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTML</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.html</code>, <code>.htm</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tidy -q -e fichier.html</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tidy</code> (inclus sur macOS) rapporte les erreurs de syntaxe/structure. Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de <code>find</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.css</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stylelint fichier.css</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(nécessite d&#8217;être installé) vérifie la syntaxe et le style. Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de <code>find</code>.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -4620,7 +4786,7 @@ des propriétés ne correspondent à rien.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-11 11:30:26 +0200
+Last updated 2026-08-13 09:52:58 +0200
 </div>
 </div>
 </body>
