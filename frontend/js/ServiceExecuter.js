@@ -99,21 +99,22 @@ class ServiceExecuter {
     // Tenu jusqu'à afterRunService (ou juste après this.front ci-dessous) —
     // compteur (Spinner.js) : n'éteint pas un sablier déjà tenu par ailleurs
     // (Dialog.onOui), ne s'éteint que quand tous les tenants ont relâché.
-    Spinner.start()
-    if (this.front) {
-      // Pas un script backend, mais un traitement frontend
-      // Typiquement : le minuteur ou l'exécution de code javascript
-      this.front(this.projet, params)
-      Spinner.stop()
-      return
-    }
-    // console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
-    params.forEach((p, i) => {
-      try { JSON.stringify(p) } catch (e) {
-        console.error(`[DIAG] appel n°${this._execCount} — params[${i}] invalide (${e.message}) :`, p)
+    Spinner.start(getMsg('running-service-x', [this.name]), () => {
+      if (this.front) {
+        // Pas un script backend, mais un traitement frontend
+        // Typiquement : le minuteur ou l'exécution de code javascript
+        this.front(this.projet, params)
+        Spinner.stop()
+        return
       }
+      // console.log("finalyExec (script '%s') avec les paramètres : ", this.script, params)
+      params.forEach((p, i) => {
+        try { JSON.stringify(p) } catch (e) {
+          console.error(`[DIAG] appel n°${this._execCount} — params[${i}] invalide (${e.message}) :`, p)
+        }
+      })
+      server.send({action: `exec-service`, script: this.script, params: params, no_raise: true}, this.afterRunService.bind(this))
     })
-    server.send({action: `exec-service`, script: this.script, params: params, no_raise: true}, this.afterRunService.bind(this))
   }
 
   // -- Appelée après avoir exécuté le service --
