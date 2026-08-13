@@ -41,3 +41,7 @@
 - [ERRORS/MESSAGES via PATCH_LOCALES](feedbacks/errors_via_patch_locales.md) — nouvelle clé toujours dans PATCH_LOCALES.js, jamais direct dans locales/<lang>/
 - [Jamais synchroniser le bundle moi-même](feedbacks/never_sync_bundle_myself.md) — ne jamais copier vers Board.app/Contents/Resources, c'est le geste de déploiement de Phil
 - [Pas de commentaire après vérification](feedbacks/no_verification_commentary.md) — donner le fait seul, jamais "propre"/"parfait", même positif
+- [Dire l'état complet d'un plan](feedbacks/declare_done_against_full_plan.md) — jamais "Fait." sur une étape isolée si un plan à plusieurs points reste ouvert
+- [Convention ok:true/false](feedbacks/ok_true_false_convention.md) — ok:false=erreur générique xbridge.js, ok:true+error=géré par la fonction appelante, pas un bug
+- [Pas de répétition d'un point déjà dit](feedbacks/no_repeat_already_said.md) — "compris"/"oui" = ne pas reformuler le même constat
+- ["Liste" = liste seule](feedbacks/list_means_list_only.md) — énumération brute, zéro intro/synthèse/commentaire
