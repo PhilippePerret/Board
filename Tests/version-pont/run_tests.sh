@@ -339,7 +339,11 @@ for spec in "${SPECS[@]}"; do
   # Nettoyage AVANT (pas APRÈS) : vidé et recréé pour chaque test, plutôt
   # que de compter sur le remove_fixture_project de chaque spec — un test
   # ne doit jamais pouvoir hériter d'un résidu d'un test précédent.
-  rm -rf "$BOARD_TEST_DATA_DIR"
+  # "-backups" (backend/lib/app_backup.rb#APP_BACKUPS_FOLDER, dérivé de
+  # BOARD_TEST_DATA_DIR) est un dossier SIBLING, pas vidé par le rm -rf
+  # ci-dessous — sans ce 2e rm, les backups d'une spec polluent la
+  # suivante (previous .infos d'un test précédent lu par un autre).
+  rm -rf "$BOARD_TEST_DATA_DIR" "$BOARD_TEST_DATA_DIR-backups"
   mkdir -p "$BOARD_TEST_DATA_DIR"
   # create_fixture_project (helpers_base.rb) lit/réécrit appdata.yaml AVANT
   # tout launch_app — certaines specs l'appellent avant de relancer Board :

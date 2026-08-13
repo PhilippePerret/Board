@@ -1,12 +1,14 @@
 = Tests à faire
 
+*TENIR CE FICHIER À JOUR !!! SUPPRIMER LES TESTS DÈS QU'ILS SONT IMPLÉMENTÉS !!!*
+
 :dossier support: ~/Libary/Application\ Support/Board
 :bouton add project: button#btn-add-project
 :bouton oui: div#btn-oui
 
 == Tout de suite
 
-- Test à faire : sélection d'un projet → relance → projet sélectionné → le retirer → relancer → pas de bug, et last_project de App a été vidé
+- Tests sérieux (live + fichiers) pour le nouveau Spinner (frontend/js/Spinner.js). Cas concret : service "Commiter sur Github" — après clic "OK" (body du message enregistré), le dialog doit se fermer IMMÉDIATEMENT et un Spinner s'afficher pendant l'opération ; actuellement le dialog reste bloqué pendant tout le traitement.
 
 == Plus tard
 
