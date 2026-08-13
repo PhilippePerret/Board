@@ -1,0 +1,6 @@
+[[annexes, Annexes]]
+== Annexes ==
+
+[[check-files-code, vérification du code des fichiers]]
+=== Check de la syntax des fichiers ===
+include::annexes/check_syntax.adoc[]

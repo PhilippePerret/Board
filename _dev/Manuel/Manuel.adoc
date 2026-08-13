@@ -36,4 +36,6 @@ include::adocs/services/scripts-services.adoc[]
 
 include::adocs/services.adoc[]
 
+include::adocs/annexes.adoc[]
+
 include::adocs/xdev.adoc[]
