@@ -268,6 +268,22 @@ const COMMON_SERVICES_DATA = [
       }
   },
 
+  {
+    id: 'github-pr-cycle-commit'
+    , name: getMsg('github-pr-cycle-commit')
+    , aide: 'github-pull-request-cycle'
+    , group: 'Git'
+    , script: 'PR_Github_Cycle.rb'
+    , params: [
+        {id:'path', type:'project'}
+      , {id: 'phase', type:'raw', value: 'commit'}
+    ]
+    , dynParams: [
+      {id: 'commit-title', q: getMsg('github-pr-cycle-commit-title'), type: 'string'}
+      , {id: 'commit-body', q: getMsg('github-pr-cycle-commit-body'), type: 'string'}
+    ]
+  },
+
   // TODO: POURSUIVRE
 
 

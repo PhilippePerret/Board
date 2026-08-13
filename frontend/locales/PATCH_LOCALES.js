@@ -17,7 +17,11 @@ Object.assign(MESSAGES, {
 
   // Git
   , 'github-pr-cycle-init': "Initier le PR Cycle Github"
+  , 'github-pr-cycle-commit': "PR Cycle - Commiter"
+
   , 'github-pr-cycle-branch-name': "Nom de la branche de développement à créer"
+  , 'github-pr-cycle-commit-title': "Titre de ce commit"
+  , 'github-pr-cycle-commit-body': "Corps de texte de ce commit (peut rester vide)"
   , 'github-pr-cycle-inited': "Github PR Cycle initié pour $1."
   , 'git-pr-cycle-branche': "Nom de la branche d'un Cycle PR Github."
 

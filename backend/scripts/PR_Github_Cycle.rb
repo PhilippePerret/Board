@@ -40,6 +40,11 @@ class << self
     retour[:message] = ['github-pr-cycle-inited', PROJECT_PATH]
   end
   
+  # Commit des fichiers développés
+  # ------------------------------
+  # 2e phase du Github PR Cycle, on commit des fichiers à transmettre
+  # En plus du simple commit, le programme fait des vérifications
+  # basiques de syntaxe avec `ruby -c`, `node --check`, etc.
   def exec_commit
     retour[:message] += "/commiter dans #{PROJECT_PATH}"
   end
