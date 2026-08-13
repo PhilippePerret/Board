@@ -1,0 +1,16 @@
+div#spinner-message {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--hauteur-footer));
+  transform: translateX(-50%);
+  z-index: 10000;
+  pointer-events: none;
+  font: 22px Arial, Helvetica;
+  color: #eee;
+  padding: 7px 18px;
+  border-radius: 7px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+#spinner-message.visible { opacity: 0.75; }
+#spinner-message.dissolving { opacity: 0; transition: opacity 1.2s ease; }
