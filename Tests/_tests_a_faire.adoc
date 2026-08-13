@@ -8,7 +8,5 @@
 
 == Tout de suite
 
-- Tests sérieux (live + fichiers) pour le nouveau Spinner (frontend/js/Spinner.js). Cas concret : service "Commiter sur Github" — après clic "OK" (body du message enregistré), le dialog doit se fermer IMMÉDIATEMENT et un Spinner s'afficher pendant l'opération ; actuellement le dialog reste bloqué pendant tout le traitement.
-
 == Plus tard
 
