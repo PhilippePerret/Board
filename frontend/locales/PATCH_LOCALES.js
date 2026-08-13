@@ -8,12 +8,24 @@ Object.assign(MESSAGES, {
   'premier':"juste pour virgule"
   // Nouveaux messages à mettre dans les MESSAGES.js
 
+  
+  // À MODIFIER
+  , 'action-on-checked-issues': "Sélectionnez les issues à traiter et choisissez l'action."
+  
   // Verbes
   , 'View': "Afficher"
 
-
-  // À MODIFIER
-  , 'action-on-checked-issues': "Sélectionnez les issues à traiter et choisissez l'action."
+  // App
+  , 'app-launching': "Initialisation de l'application…"
+  , 'init-projects-services-and-reminders': "Initialisation des projets, services et des rappels…"
+  , 'app-backup-running': "Sauvegarde de sécurité…"
+  , 'app-ready': "Application prête."
+  , 'app-backup-discrepancy-title': "Grande différence de données"
+  , 'app-backup-discrepancy-intro': "Grande différence de données :"
+  , 'app-backup-projects-diff': "$1 projet$3 précédemment, $2 maintenant"
+  , 'app-backup-services-diff': "$1 service$3 précédemment, $2 maintenant"
+  , 'app-backup-confirm-btn': "Je confirme"
+  , 'app-backup-restore-btn': "Revenir au backup précédent"
 
   // Git
   , 'github-pr-cycle-init': "Initier le PR Cycle Github"
@@ -30,6 +42,11 @@ Object.assign(MESSAGES, {
 Object.assign(ERRORS, {
   'premier': "juste pour virgule"
   // Nouveaus messages d'erreur à mettre dans les ERRORS.js
+
+  // App
+  , 'backend-app-backup-failed': "Le backup quotidien a échoué."
+  , 'backend-app-backup-no-previous': "Aucun backup précédent disponible."
+  , 'backend-app-backup-restore-failed': "La restauration du backup précédent a échoué."
 
   // Git
   , 'git-status-not-clean': "Le statut de Git n'est pas clean."
