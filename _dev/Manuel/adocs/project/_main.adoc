@@ -2,3 +2,7 @@
 == Les Projets ==
 
 include::data.adoc[]
+
+[[project-tools, Outils projet]]
+=== Outils projet ===
+include::tools.adoc[]

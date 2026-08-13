@@ -450,6 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#projects">Les Projets</a>
 <ul class="sectlevel2">
 <li><a href="#_données_des_projets">Données des projets</a></li>
+<li><a href="#project-tools">Outils projet</a></li>
 </ul>
 </li>
 <li><a href="#todoist">Todoist</a>
@@ -481,6 +482,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_gérer_les_versions_dun_fichier">Gérer les versions d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_version_majeur_dun_fichier">Actualiser la version majeur d&#8217;un fichier</a></li>
 <li><a href="#_actualiser_la_verion_mineure_dun_fichier">Actualiser la verion mineure d&#8217;un fichier</a></li>
+<li><a href="#services-git">Tous les services Git</a></li>
 <li><a href="#_lancer_un_script_quelconque">Lancer un script quelconque</a></li>
 <li><a href="#_faire_jouer_du_code_au_dossier">Faire jouer du code au dossier</a></li>
 </ul>
@@ -634,6 +636,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>Todo: à implémenter : un panneau affichant toutes les données de projet et permettant de les détruire.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="project-tools">Outils projet</h3>
+<div class="sect3">
+<h4 id="tool-git-install">Initier Git sur le projet</h4>
+
 </div>
 </div>
 </div>
@@ -3575,6 +3584,106 @@ Typiquement, c&#8217;est le cas par exemple du code à jouer dans la fenêtre de
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="services-git">Tous les services Git</h3>
+<div class="sect3">
+<h4 id="git-create-erreur">Enregistrer une erreur</h4>
+
+</div>
+<div class="sect3">
+<h4 id="git-create-any-issue">Nouvelle issue de type…</h4>
+
+</div>
+<div class="sect3">
+<h4 id="git-opes-on-issue-list">Issue de type…</h4>
+
+</div>
+<div class="sect3">
+<h4 id="git-set-labels">Définition des labels Git</h4>
+
+</div>
+<div class="sect3">
+<h4 id="git-commiter">Commiter sur Github</h4>
+
+</div>
+<div class="sect3">
+<h4 id="git-pull-request-cycle">Cycle pull request Github</h4>
+<div class="paragraph">
+<p>Ce service permet d&#8217;entreprendre un pull request complet sur Github, depuis un état stable (branche main propre) jusqu&#8217;à la soumission des fichiers dernièrement modifiés et leur traitement pour revenir à un état stable. Il fait exactement cela :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>REQUIS
+- Git installé dans le dossier.
+- Branche main comme branche principale</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pour installer Git dans le dossier, voir l&#8217;outil <a href="#tool-git-install">Initier Git sur le projet</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Interactif
+-
+- demande du nom de la branche
+- demande du nom du message de commit</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>s&#8217;assurer qu&#8217;aucun fichier ne soit modifié (sinon, le commiter et le pousser)</p>
+</li>
+<li>
+<p>changer de branche : <code>git checkout -b ma-nouvelle-branche</code></p>
+</li>
+<li>
+<p>commencer le travail sur les fichiers</p>
+</li>
+<li>
+<p>ajouter et commiter les fichiers à loisir :</p>
+</li>
+<li>
+<p><code>git add &lt;fichier&gt; &lt;fichier&gt; &#8230;&#8203;</code> ou <code>git add -A</code></p>
+</li>
+<li>
+<p><code>git commit -m "&lt;titre message&gt;" -m "&lt;corps&gt;"</code></p>
+</li>
+<li>
+<p><code>git add</code>/<code>git commit</code>&#8230;&#8203;</p>
+</li>
+<li>
+<p>une fois le travail fini et checké (<code>ruby -c</code>, <code>node --check</code>, tests, etc.), le pusher :
+<code>git push -u origin ma-nouvelle-branch</code></p>
+</li>
+<li>
+<p>création de la PR : <code>gh pr create -t "&lt;titre&gt;" -b "&lt;body&gt;"</code>
+ou : <code>gh pr create --fill</code>  # pour prendre dernier commit</p>
+</li>
+<li>
+<p>attendre la fin du check et le vérifier : <code>gh pr checks</code></p>
+</li>
+<li>
+<p>revenir sur la branche main : <code>git checkout main</code></p>
+</li>
+<li>
+<p>merger la PR : <code>gh pr merge --squash --delete-branch</code>
+ou (autre que squash) : <code>gh pr merge --auto</code></p>
+</li>
+<li>
+<p>récupérer le code en local : <code>git pull</code></p>
+</li>
+<li>
+<p>changer de branche pour poursuivre (recommencer cette boucle)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="git-change-branch">Changer de branche</h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="_lancer_un_script_quelconque">Lancer un script quelconque</h3>

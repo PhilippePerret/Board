@@ -38,3 +38,5 @@
 - [Pas de permission pour la suite évidente](feedbacks/no_permission_for_obvious_next_step.md) — suite mécanique déjà actée = exécuter directement, pas de "je fais ça aussi ?"
 - [État fin de session](feedbacks/daily_etat_fin_session.md) — seulement s'il reste du non résolu à reporter, sinon pas de fichier ; jamais d'archive, toujours recréé et l'ancien détruit
 - [Pas de suggestions d'action](feedbacks/no_suggestions.md) — fin de réponse = état des lieux seul, jamais "teste maintenant"/"tu peux..."
+- [ERRORS/MESSAGES via PATCH_LOCALES](feedbacks/errors_via_patch_locales.md) — nouvelle clé toujours dans PATCH_LOCALES.js, jamais direct dans locales/<lang>/
+- [Jamais synchroniser le bundle moi-même](feedbacks/never_sync_bundle_myself.md) — ne jamais copier vers Board.app/Contents/Resources, c'est le geste de déploiement de Phil

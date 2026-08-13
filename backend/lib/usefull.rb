@@ -2,6 +2,7 @@ require "json"
 require 'yaml'
 require "fileutils"
 require "timeout"
+require "rbconfig"
 
 def ensure_folder(dpath)
   File.join(dpath).tap { |p| FileUtils.mkdir_p(p) }
@@ -133,7 +134,7 @@ end
   
   COMMAND_PER_EXT = {
   '.scpt' => 'osascript',
-  '.rb'   => 'ruby',
+  '.rb'   => RbConfig.ruby,
   '.sh'   => 'zsh'
 }
 SCRIPT_TIMEOUT = 60 # secondes

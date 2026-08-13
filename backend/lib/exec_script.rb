@@ -1,5 +1,7 @@
 ### === Jouer un script du dossier /scripts/ ===
 
+require 'open3'
+
 def exec_script(script_name, params = "")
 
   # RETOUR.ok = true
@@ -53,17 +55,28 @@ def exec_script(script_name, params = "")
     cmd = argv.join(' ') # pour affichage/debug (RETOUR.command) seulement
     RETOUR.command = cmd
     res = nil
+    res_err = nil
     # Timeout dur : un script (ou une commande qu'il lance, ex. osascript
     # "tell application Board to activate" pendant que le thread principal
     # de Board attend justement CE process) peut bloquer indéfiniment sinon,
     # gelant toute l'app (le bridge est synchrone côté Swift).
     status = nil
     Timeout.timeout(SCRIPT_TIMEOUT) do
-      IO.popen(argv, err: [:child, :out]) do |io|
-        pid = io.pid
-        res = io.read
+      # stdout et stderr capturés SÉPARÉMENT (jamais fusionnés) : tout ce
+      # qu'un sous-processus lancé PAR le script (ex. `git checkout -b`,
+      # dont les messages informatifs sortent sur stderr) écrit sur le
+      # stderr hérité du script atterrit dans res_err, jamais mélangé au
+      # stdout — seul flux sur lequel le script écrit son JSON final
+      # (`puts …to_json`), seul flux que JSON.parse doit lire.
+      Open3.popen3(*argv) do |stdin, stdout, stderr, wait_thr|
+        pid = wait_thr.pid
+        stdin.close
+        out_reader = Thread.new { stdout.read }
+        err_reader = Thread.new { stderr.read }
+        res     = out_reader.value
+        res_err = err_reader.value
+        status  = wait_thr.value
       end
-      status = $?
     end
     RETOUR.ok = status.success?
     if status.success?
@@ -89,10 +102,11 @@ def exec_script(script_name, params = "")
       end
     else
       RETOUR.ok     = false
-      if res.match?(/-25211|accès d.aide|assistive access/i)
+      erreur = [res, res_err].compact.join("\n")
+      if erreur.match?(/-25211|accès d.aide|assistive access/i)
         RETOUR.error = ['backend-access-unabled']
       else
-        RETOUR.error = res
+        RETOUR.error = erreur
       end
     end
   rescue Timeout::Error

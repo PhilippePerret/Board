@@ -283,6 +283,7 @@ button.aide {
   background-color: cadetblue;
   color: white;
   opacity: 0.6;
+  float: right;
 }
 button.aide:hover { opacity: 1; }
 

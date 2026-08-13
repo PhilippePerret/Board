@@ -106,6 +106,7 @@ class Prompter {
     new TextFieldDialog(Object.assign(this.dialogBase(spec), {
         default:  spec.default ?? ''
       , errorMessage: spec.errorMessage
+      , noCorrection: spec.noCorrection
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     })).show()

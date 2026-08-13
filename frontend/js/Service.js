@@ -339,8 +339,18 @@ class Service {
   ensureServiceData(projet){
     historize("-> ensureServiceData", projet)
     if (this.transient) return this.defineCommonServiceParameters(projet)
-    if (projet.common_services_data && projet.common_services_data[this.id]) return true
-    return this.defineCommonServiceParameters(projet)
+    const stored = projet.common_services_data && projet.common_services_data[this.id]
+    if (!stored) return this.defineCommonServiceParameters(projet)
+    // this.params.length = nombre de paramètres attendus par le schéma
+    // courant (ServiceData.js) : peut avoir grandi depuis la dernière
+    // définition persistée pour ce projet (ex. ajout d'un paramètre).
+    if (stored.length !== this.params.length) {
+      return error('project-data-invalid-bad-count', [
+          projet.title, this.name, this.params.length, stored.length
+        , this.params.length == 1 ? '' : 's', stored.length == 1 ? '' : 's'
+      ])
+    }
+    return true
   }
 
   defineCommonServiceParameters(projet){

@@ -34,9 +34,9 @@ class << self
     cd "#{PROJECT_PATH}"
     git checkout -b #{branche}
     BASH
-    retour[:command] = cmd
+    retour[:git_command] = cmd
     res = `#{cmd}` # protection ou erreur impossible après vérifications précédentes ?
-    retour[:res_command] = res
+    retour[:git_response] = res
     retour[:message] = ['github-pr-cycle-inited', PROJECT_PATH]
   end
   

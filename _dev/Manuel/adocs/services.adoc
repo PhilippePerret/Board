@@ -20,6 +20,10 @@ include::services/update-major-version.adoc[]
 === Actualiser la verion mineure d'un fichier ===
 include::services/update-minor-version.adoc[]
 
+[[services-git]]
+=== Tous les services Git ===
+include::services/git.adoc[]
+
 === Lancer un script quelconque ===
 include::services/run-custom-script.adoc[]
 
