@@ -5,11 +5,11 @@ Module ruby pour gérer les PR Github
 =end
 require_relative './lib/utils.rb'
 require_relative '../lib/git.rb'
+require_relative '../lib/syntax_checker.rb'
 
 ARGS = ARGV.clone
 PROJECT_PATH    = ARGS.shift # ARGV[0]
 PR_CYCLE_PHASE  = ARGS.shift # ARGV[1]
-# ARG1            = ARGV[2]
 GIT = Git.new(PROJECT_PATH)
 
 class PRCycle 
@@ -38,6 +38,7 @@ class << self
     res = `#{cmd}` # protection ou erreur impossible après vérifications précédentes ?
     retour[:git_response] = res
     retour[:message] = ['github-pr-cycle-inited', PROJECT_PATH]
+    return retour
   end
   
   # Commit des fichiers développés
@@ -46,11 +47,59 @@ class << self
   # En plus du simple commit, le programme fait des vérifications
   # basiques de syntaxe avec `ruby -c`, `node --check`, etc.
   def exec_commit
-    retour[:message] += "/commiter dans #{PROJECT_PATH}"
+    branch_name     = ARGS.shift
+    commit_message  = ARGS.shift
+    retour[:message] += "/commiter dans #{PROJECT_PATH}, branche #{branch_name}"
+    # S'assurer d'abord qu'on est sur la bonne branche
+    unless GIT.branch?(branch_name)
+      retour[:ok] = true
+      retour[:error] = ['git-bad-branch', branch_name]
+      return retour
+    end
+    # Prendre les fichiers commitables
+    files   = GIT.get_commitable_files
+    # => liste de hash {:path, :state[, :error]}
+    # => on ne prend que les fichiers modifiés ou nouveau
+    files_with_git_conflict = []
+    files_with_syntax_error = []
+    files_with_no_syn_error = []
+    files_not_checked_byext = []
+    files_deleted           = []
+    files.each do |dfile|
+      if dfile[:error]
+        files_with_git_conflict << dfile
+      elsif dfile[:state] == 'D'
+        files_deleted << dfile
+      else
+        case error = SyntaxChecker.check_file(File.join(PROJECT_PATH, dfile[:path]), true)
+        when nil
+          files_with_no_syn_error << dfile
+        when :ok
+          files_not_checked_byext << dfile
+        else
+          dfile[:error] = error
+          files_with_syntax_error << dfile
+        end
+      end
+    end
+    if files_with_syntax_error.empty? && files_with_git_conflict.empty?
+      # On peut commiter
+      relpath_list = (files_with_no_syn_error + files_not_checked_byext + files_deleted).map { |dfile| dfile[:path] }
+      res = GIT.commit_files(relpath_list, commit_message)
+      unless res.nil?
+        retour[:error] = res
+      end
+    else
+      retour[:ok] = true # no raise, pour traiter l'erreur dans la fonction
+      retour[:error] = {syntax: files_with_syntax_error, conflict: files_with_git_conflict}
+    end
+    return retour
   end
   
   def exec_submit
     retour[:message] += "/submit dans #{PROJECT_PATH}"
+
+    return retour
   end
 
 

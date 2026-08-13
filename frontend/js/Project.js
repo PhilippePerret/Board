@@ -373,9 +373,10 @@ class Project {
   }
   afterSave(callback, retour){
     // console.log("retour Project.afterSave et callback", retour, callback)
+    if (retour.data?.newProjectsIn) App.setData('projects-in', retour.data.newProjectsIn)
     message(getMsg('project-saved-success', [this.title, heureCourante()]))
     callback && 'function' == typeof callback && callback()
-  }  
+  }
 
   editData(){
     historize("-> Project.editData", this)

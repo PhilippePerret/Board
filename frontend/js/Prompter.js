@@ -6,6 +6,12 @@
  *    - lui demander une valeur
  *    - exécuter une opération (comme créer un dossier)
  * 
+ *    type            Méthode
+ *    string          promptString
+ *    cancel          promptCancel      Un dialog pour annuler
+ *    select          promptSelect      Pour sélectionner parmi une 
+ *                                      liste de valeurs.
+ * 
  * Utilisé à part égale, pour le moment, mais en développement, par le
  * paramDefiner des Services que par le Script-Services (ServStep)
  *
@@ -100,6 +106,12 @@ class Prompter {
       , message: spec.message || spec.q
       , width:   spec.width
     }
+  }
+
+  static promptCancel(spec) {
+    new OKDialog(Object.assign(this.dialogBase(spec), {
+        ouiBtn: {name: getMsg('Cancel'), onclick: () => {}}
+    })).show()
   }
 
   static promptString(spec, callback){

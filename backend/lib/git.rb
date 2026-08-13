@@ -13,6 +13,17 @@ au fichier.
 require_relative 'usefull.rb'
 require 'shellwords'
 
+
+GIT_CONFLICT_PREFIX = {
+  'AA' => 'git-status-added-both-sides',
+  'DD' => 'git-status-deleted-both-sides',
+  'UU' => 'git-status-modified-both-sides',
+  'AU' => 'git-status-add-and-absent',
+  'UA' => 'git-status-absent-and-add',
+  'DU' => 'git-status-deleted-and-modified',
+  'UD' => 'git-status-modified-and-deleted'
+}
+
 class Git
 
   attr_reader :project_path
@@ -38,6 +49,56 @@ class Git
       res[0].strip.start_with?('## main') || r << 'git-branch-not-main'
       return r
     end
+  end
+
+  # Return true si on se trouve sur la branche +branch_name+
+  def branch?(branch_name)
+    res = `cd "#{project_path}" && git status -s --branch`
+    res.strip.match?(/\A## #{Regexp.escape(branch_name)}(\.\.\.|\z| )/)
+  end
+
+  # Commit les fichiers de la liste +relpaths+ [Array] 
+  # Note : ces fichiers ont été testés pour être valides
+  def commit_files(relpaths, message)
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    git add #{relpaths.map{|p| Shellwords.escape(p)}.join(' ')}
+    git commit -m #{Shellwords.escape(message)}
+    ZSH
+    res = `#{cmd}`
+    if $?.success?
+      nil
+    else
+      ['git-commit-error', res]
+    end
+  end
+
+  # @return la liste des fichiers à commiter
+  # @param smart_list:  Si true (defaut) retourne une liste d'objets
+  #   définissant {path:, state: 'M|D|R|C'}
+  #           ou {path:, error:} en cas de conflit
+  #   A=ajouté M= modification, D= délétion, R= renommage, C= création
+  def get_commitable_files
+    res = `cd "#{project_path}" && git -c core.precomposeUnicode=true -c core.quotePath=false status -s`
+    cfiles = res.split("\n").map do |line|
+      oper = line[0..2].strip
+      path = line[3..-1].strip.gsub(/"/, '')
+      if GIT_CONFLICT_PREFIX[oper]
+        {path: path, error: GIT_CONFLICT_PREFIX[oper]}
+      else
+        oper = oper[0]
+        oper = case oper[0]
+        when '?' then 'C'
+        when 'R' then 
+          path = path.split(' -> ')[1].strip.gsub(/"/, '')
+          'R'
+        else oper[0]
+        end
+        {path: path, state: oper}
+      end
+    end
+    cfiles
   end
 
 

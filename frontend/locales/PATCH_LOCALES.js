@@ -36,6 +36,8 @@ Object.assign(MESSAGES, {
   , 'github-pr-cycle-commit-body': "Corps de texte de ce commit (peut rester vide)"
   , 'github-pr-cycle-inited': "Github PR Cycle initié pour $1."
   , 'git-pr-cycle-branche': "Nom de la branche d'un Cycle PR Github."
+  , 'git-title-conflict-errors-section': "<div class=title>Problèmes de conflit</div>"
+  , 'git-title-syntax-errors-section': "<div class=title>Problèmes de syntaxe détectés</div>"
 
 })
 
@@ -48,10 +50,24 @@ Object.assign(ERRORS, {
   , 'backend-app-backup-no-previous': "Aucun backup précédent disponible."
   , 'backend-app-backup-restore-failed': "La restauration du backup précédent a échoué."
 
+  // File
+  , 'unknown-syntax-file-extension': 'Extension non répertoriée dans la table de vérification : $1.'
+
   // Git
+  , 'git-commit-title-erros': "Erreurs survenues au cours du commit"
   , 'git-status-not-clean': "Le statut de Git n'est pas clean."
   , 'git-status-not-empty': "Des fichiers/dossiers restent à commiter."
   , 'git-branch-not-main': "On devrait se trouver sur la branche main."
+  , 'git-status-added-both-sides':'ajouté des deux côtés (contenus différents).'
+  , 'git-status-deleted-both-sides' : 'supprimé des deux côtés.'
+  , 'git-status-modified-both-sides': 'modifié des deux côtés.'
+  , 'git-status-add-and-absent': 'ajouté par nous, absent en face.'
+  , 'git-status-absent-and-add': 'ajouté en face, absent chez nous.'
+  , 'git-status-deleted-and-modified': 'supprimé par nous, modifié en face.'
+  , 'git-status-modified-and-deleted': 'modifié par nous, supprimé en face.'
+  , 'git-bad-branch': "Vous vous trouvez sur la mauvaise branch Git. Attendue : $1."
+  , 'git-commit-error': "Erreur Git en commitant les fichiers : $1."
+  , 'git-commit-init-required': 'Pour pouvoir commiter vos fichiers dans un Github PR Cyle, vous devez au préalable initier ce cycle (principalement : choisir une branche de développement).'+"\n\nSi cette branche est déjà définie sans initialisation, vous pouvez la renseigner dans les données du projet, dans la propriété `git_pr_cycle_branche`."
 
   // Services
   , 'project-data-invalid-bad-count': "Les données du projet $1 pour le service $2 sont invalides. $3 donnée$5 attendue$5, $4 donnée$6 fournie$6."

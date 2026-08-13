@@ -277,11 +277,52 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id:'path', type:'project'}
       , {id: 'phase', type:'raw', value: 'commit'}
+      , { id: 'git_pr_cycle_branche', type:'project'
+          , if_undefined: {type: 'cancel', title: 'github-pr-cycle-commit', q: getErr('git-commit-init-required')}}
     ]
     , dynParams: [
       {id: 'commit-title', q: getMsg('github-pr-cycle-commit-title'), type: 'string'}
       , {id: 'commit-body', q: getMsg('github-pr-cycle-commit-body'), type: 'string'}
     ]
+    , onError: (error) => {
+        // On passe ici quand une erreur s'est produite au commit. 
+        // Cette erreur peut avoir de nombreuses causes : 
+        // 1- des erreurs de syntaxe ont été trouvé dans les fichiers
+        //    à commiter. Fonction première de ces erreurs.
+        // 2- un erreur au commit lui-même 
+        // 3- une erreur de commande inexistante 
+        // 4- une autre erreur
+        if (Array.isArray(error) && error.length == 2) { 
+          error(getErr(...error))
+        } else if (error.syntax && error.conflict) {
+          // conflict:  [ {path: string, error: errId }]
+          // syntax:    [ {path: string, error: errId | [errId, vals]} ]
+          const msg = []
+          msg.push(getMsg('git-title-conflict-errors-section'))
+          error.conflict.forEach(conf => {
+            msg.push(`<div>${conf.path} : ${getErr(conf.error)}</div>`)
+          })
+          msg.push(getMsg('git-title-syntax-errors-section'))
+          error.syntax.forEach(synt => {
+            if ('string' == typeof synt.error) {
+              msg.push(`<div>${synt.path} : ${getErr(synt.error)}</div>`)
+            } else {
+              msg.push(`<div>${synt.path} : ${getErr(...synt.error)}</div>`)
+            }
+          })
+          const divError = DCreate('DIV', {class:'error'})
+          divError.innerHTML = msg.join('')
+          const dataDial = {
+            title: 'git-commit-title-erros'
+            , message: ""
+            , content: divError
+            , nonBtn: null
+          }
+        }
+
+        
+
+    }
   },
 
   // TODO: POURSUIVRE

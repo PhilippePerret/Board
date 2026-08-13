@@ -83,7 +83,7 @@ class ErrorsDialog extends Dialog {
 class OKDialog extends Dialog {
   constructor(data) {
     super(data)
-    this.ouiData = {name: getMsg('OK'), onclick: null }
+    this.ouiData = data.ouiBtn || {name: getMsg('OK'), onclick: null }
     this.nonData = null
     this.midData = null
   }
