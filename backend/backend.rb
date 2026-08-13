@@ -85,6 +85,7 @@ begin
     IO.write(project_path(project_id), data.to_yaml)
     APP_DATA['projects-in'] << project_id unless APP_DATA['projects-in'].include?(project_id)
     save_app_data
+    RETOUR.data = {newProjectsIn: APP_DATA['projects-in']}
     # Debug.log("save-project terminé, id=#{project_id.inspect}")
 
   # === Sauvegarde des données de l'application ===
@@ -99,7 +100,22 @@ begin
   when 'load-all'
     require_relative 'lib/app.rb'
     RETOUR.data = App.load_all
-    
+
+  # Backup quotidien, appelé en fin de cycle de démarrage (App.init)
+  when 'app-backup'
+    require_relative 'lib/app_backup.rb'
+    RETOUR.data = app_backup_run
+
+  # Confirmation user malgré la baisse détectée (bouton "Je confirme")
+  when 'app-backup-confirm'
+    require_relative 'lib/app_backup.rb'
+    RETOUR.data = app_backup_run(confirmed: true)
+
+  # Bouton "Revenir au backup précédent"
+  when 'app-backup-restore-previous'
+    require_relative 'lib/app_backup.rb'
+    RETOUR.data = app_backup_restore_previous
+
   # Lancement d'un script osascript
   when "run-osascript"
     require_relative 'lib/exec_script.rb'

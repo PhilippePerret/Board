@@ -14,20 +14,69 @@ class App {
    * 
    * Point d'entrée
    */
-  static init(retour){ D.on && D.trace(retour, 'App::')
+  static init(retour){              D.on && D.trace(retour, 'App::')
     if (undefined == retour) {
-      return server.send({action: 'load-all'}, this.init.bind(this))
+      Spinner.start(
+          getMsg('app-launching')
+        , this._loadAll.bind(this)
+      )
     } else {
       this.setTitle()
-      Spinner.start()
       this.data = retour.data.appData
       this.observe()
-      Service.init()
-      Reminder.init()
-      Project.initAllProjects(retour.data.projectsData)
-      // Réveil si nécessaire des rappels
-      this.awakeReminders()
+      Spinner.continue(
+          getMsg('init-projects-services-and-reminders')
+        , this._initProjectsServicesAndReminders.bind(this, retour)
+      )
     }
+  }
+  static _loadAll(){
+    server.send({action: 'load-all'}, this.init.bind(this))
+  }
+  static _initProjectsServicesAndReminders(retour){
+    Service.init()
+    Reminder.init()
+    Project.initAllProjects(retour.data.projectsData)
+    // Réveil si nécessaire des rappels
+    this.awakeReminders()
+    Spinner.continue(getMsg('app-backup-running'), this._runAppBackup.bind(this))
+  }
+  static _runAppBackup(){
+    server.send({action: 'app-backup'}, this._afterAppBackup.bind(this))
+  }
+  static _afterAppBackup(retour){
+    if (retour.data?.needsConfirmation) {
+      return this._confirmAppBackupDiscrepancy(retour.data)
+    }
+    Spinner.stop(getMsg('app-ready'))
+  }
+  static _confirmAppBackupDiscrepancy(data){
+    const parts = []
+    if (data.currentProjects !== data.previousProjects) {
+      parts.push(getMsg('app-backup-projects-diff', [data.previousProjects, data.currentProjects, data.previousProjects > 1 ? 's' : '']))
+    }
+    if (data.triggered.includes('services')) {
+      parts.push(getMsg('app-backup-services-diff', [data.previousServices, data.currentServices, data.previousServices > 1 ? 's' : '']))
+    }
+    new ConfirmDialog({
+        title: getMsg('app-backup-discrepancy-title')
+      , message: getMsg('app-backup-discrepancy-intro') + ' ' + parts.join(', ')
+      , ouiBtn: {name: getMsg('app-backup-confirm-btn'), onclick: this._confirmAppBackup.bind(this)}
+      , midBtn: {name: getMsg('app-backup-restore-btn'), onclick: this._restorePreviousAppBackup.bind(this)}
+      , nonBtn: {name: getMsg('Cancel'), onclick: this._cancelAppBackup.bind(this)}
+    }).show()
+  }
+  static _confirmAppBackup(){
+    server.send({action: 'app-backup-confirm'}, this._afterAppBackup.bind(this))
+  }
+  static _restorePreviousAppBackup(){
+    server.send({action: 'app-backup-restore-previous'}, (retour) => {
+      if (retour.error) error(retour.error)
+      Spinner.stop(getMsg('app-ready'))
+    })
+  }
+  static _cancelAppBackup(){
+    Spinner.stop(getMsg('app-ready'))
   }
 
   static setTitle() {
