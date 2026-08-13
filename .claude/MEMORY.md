@@ -40,3 +40,4 @@
 - [Pas de suggestions d'action](feedbacks/no_suggestions.md) — fin de réponse = état des lieux seul, jamais "teste maintenant"/"tu peux..."
 - [ERRORS/MESSAGES via PATCH_LOCALES](feedbacks/errors_via_patch_locales.md) — nouvelle clé toujours dans PATCH_LOCALES.js, jamais direct dans locales/<lang>/
 - [Jamais synchroniser le bundle moi-même](feedbacks/never_sync_bundle_myself.md) — ne jamais copier vers Board.app/Contents/Resources, c'est le geste de déploiement de Phil
+- [Pas de commentaire après vérification](feedbacks/no_verification_commentary.md) — donner le fait seul, jamais "propre"/"parfait", même positif
