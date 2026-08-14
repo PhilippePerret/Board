@@ -53,7 +53,11 @@ Les services sont définis précisément dans le fichier `frontend/js/ServiceDat
 | `params`    | Définition des <<fix-params, _paramètres fixes_>> |
 | `dynParams` | Définition des <<dyn-params, _paramètres dynamiques_>> |
 | `scType`    | Le type du <<script-backend, script backend>> si ça n'est pas un AppleScript | `.rb`, `.py`
+| `transient`     2+ | OBSOLÈTE. Ne doit plus être utilisé.
+| `noCorrection`  2+| Pour marquer qu'un champ d'édition ne devra pas être corrigé. Typiquement : un champ devant contenir du code.
 | `afterDefinedParams` | Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l'enregistrement. |
+| `if_undefined` 2+|  Propriété définissant ce qu'il faut faire lorsqu'une propriété projet ou application n'est pas définie. Voir <<params-prop-if-undefined>>.
+| `onError` 2+| Fonction appelée en cas d'erreur. Reçoit seulement les erreurs. Doit appeler `new ErrorsDialog(data).show()` pour les afficher après les avoir construites.
 |====
 
 
@@ -123,6 +127,48 @@ include::{js-folder}/ServiceData.js[tag="exemple-dyn-params"]
 |====
 
 Comme pour les _paramètres fixes_, ces paramètres doivent être définis dans l'ordre où ils seront consommés par le <<script-backend, script backdend>> qui va les jouer.
+
+
+[[params-prop-if-undefined, Propriété `if_undefined`]]
+==== Propriété `if_undefined` ====
+
+C'est une propriété dont la valeur ressemble à s'y méprendre à la définition d'un paramètre. Et pour cause. Elle sert à définir une valeur qui ne serait pas définie. 
+
+Imaginons par exemple que l'on veuille récupérer la valeur `github_account` du projet. On va utiliser ce paramètre :
+
+----
+params: [
+  {id: 'github_account', type: 'project'}
+]
+----
+
+Mais cette propriété n'est pas forcément définie. On met alors la sécurité : 
+
+----
+params: [
+  {id: 'github_account', type: 'project', if_undefined: { ... } }
+]
+----
+
+… qui va permettre de donner cette information (et même, dans ce cas, de l'enregistrer pour le projet) :
+
+----
+params: [
+  {
+      id: 'github_account'
+    , type: 'project'
+    , if_undefined: {
+          title: "Définition du compte Github"
+          q: "Quel est le nom de votre compte Github ?"
+          type: 'string'
+      } }
+]
+----
+
+
+===== Annulation du service =====
+
+La propriété `if_undefined` peut servir à annuler un service grâce au type `cancel`. C'est le type qui est utilisé, par exemple, pour annuler le commit d'un <<github-pull-request-cycle, Cycle PR dans Github>> lorsque l'on ne se trouve pas sur la bonne branche.
 
 
 [#script-backend]

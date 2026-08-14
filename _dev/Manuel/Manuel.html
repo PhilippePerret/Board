@@ -3952,6 +3952,18 @@ ou (autre que squash) : <code>gh pr merge --auto</code></p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>stylelint fichier.css</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">(nécessite d&#8217;être installé) vérifie la syntaxe et le style. Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de <code>find</code>.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AsciiDoc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.adoc</code>, <code>.asciidoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoctor --failure-level=WARN -o /dev/null fichier.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--failure-level=WARN</code> fait échouer la commande dès un avertissement (par défaut, <code>asciidoctor</code> réussit même avec des avertissements). Le traitement de dossiers et les sélections de fichiers dépendent du shell ou de <code>find</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Elixir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.ex</code>, <code>.exs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>elixirc -o /tmp fichier.ex</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>elixirc</code> exécute le code de premier niveau du fichier en le compilant (pas seulement sa syntaxe). Un seul fichier par invocation ; <code>-o</code> évite d&#8217;écrire les <code>.beam</code> à côté de la source.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -4486,6 +4498,10 @@ des propriétés ne correspondent à rien.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l&#8217;enregistrement.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>if_undefined</code></p></td>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Propriété définissant ce qu&#8217;il faut faire lorsqu&#8217;une propriété projet ou application n&#8217;est pas définie. Voir <a href="#params-prop-if-undefined">Propriété <code>if_undefined</code></a>.</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect3">
@@ -4640,6 +4656,55 @@ des propriétés ne correspondent à rien.</p></td>
 </table>
 <div class="paragraph">
 <p>Comme pour les <em>paramètres fixes</em>, ces paramètres doivent être définis dans l&#8217;ordre où ils seront consommés par le <a href="#script-backend">script backdend</a> qui va les jouer.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="params-prop-if-undefined">Propriété <code>if_undefined</code></h4>
+<div class="paragraph">
+<p>C&#8217;est une propriété dont la valeur ressemble à s&#8217;y méprendre à la définition d&#8217;un paramètre. Et pour cause. Elle sert à définir une valeur qui ne serait pas définie.</p>
+</div>
+<div class="paragraph">
+<p>Imaginons par exemple que l&#8217;on veuille récupérer la valeur <code>github_account</code> du projet. On va utiliser ce paramètre :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>params: [
+  {id: 'github_account', type: 'project'}
+]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mais cette propriété n&#8217;est pas forcément définie. On met alors la sécurité :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>params: [
+  {id: 'github_account', type: 'project', if_undefined: { ... } }
+]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>… qui va permettre de donner cette information (et même, dans ce cas, de l&#8217;enregistrer pour le projet) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>params: [
+  {
+      id: 'github_account'
+    , type: 'project'
+    , if_undefined: {
+          title: "Définition du compte Github"
+          q: "Quel est le nom de votre compte Github ?"
+          type: 'string'
+      } }
+]</pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_annulation_du_service">Annulation du service</h5>
+<div class="paragraph">
+<p>La propriété <code>if_undefined</code> peut servir à annuler un service grâce au type <code>cancel</code>. C&#8217;est le type qui est utilisé, par exemple, pour annuler le commit d&#8217;un <a href="#github-pull-request-cycle">Cycle PR dans Github</a> lorsque l&#8217;on ne se trouve pas sur la bonne branche.</p>
 </div>
 </div>
 </div>
