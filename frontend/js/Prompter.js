@@ -78,6 +78,7 @@ class Prompter {
       const definers = new ParamsDefiner(
         [ifUndefined],
         (definers) => {
+          if (!definers) return callback(null) // annulation propre : propage l'abandon au paramètre parent
           const valueDefiner = definers[0]
           const prop = valueDefiner.id
           TBL_PROJECT_DATA[prop] || raise(`[System] La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
@@ -108,9 +109,9 @@ class Prompter {
     }
   }
 
-  static promptCancel(spec) {
+  static promptCancel(spec, callback) {
     new OKDialog(Object.assign(this.dialogBase(spec), {
-        ouiBtn: {name: getMsg('Cancel'), onclick: () => {}}
+        ouiBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     })).show()
   }
 
@@ -138,6 +139,17 @@ class Prompter {
         defaultKey: spec.actual === false ? getMsg('btn-no') : getMsg('btn-yes')
       , ouiBtn: {name: getMsg('btn-yes'), onclick: () => callback(true)}
       , nonBtn: {name: getMsg('btn-no'), onclick: () => callback(false)}
+    })).show()
+  }
+
+  // Comme promptBoolean, mais un "non" abandonne tout le service (valeur
+  // null, cf. convention en tête de fichier) au lieu de continuer avec
+  // false — pour un dynParam de confirmation qui doit pouvoir interrompre
+  // le cycle (ex. confirm_submit, github-pr-cycle-submit).
+  static promptConfirm(spec, callback){
+    new ConfirmDialog(Object.assign(this.dialogBase(spec), {
+        ouiBtn: {name: getMsg('btn-yes'), onclick: () => callback(true)}
+      , nonBtn: {name: getMsg('btn-no'), onclick: () => callback(null)}
     })).show()
   }
 

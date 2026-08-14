@@ -15,10 +15,11 @@ class ServiceDefiner {
     this.callback = callback
     this.projet   = projet
 
-    // Donnée qui remplaceront params dans le service pour le projet
+    // Données qui remplaceront params dans le service pour le projet
     // C'est une liste de valeurs qui sera envoyée au script osascript (ou autre script bash)
-    // Maintenant, elles sont groupées par paramètre.
-    // - utiliser dictParamsValues pour obtenir les valeurs par id
+    // Maintenant, elles sont groupées par paramètre (array de arrays).
+    // NB : Si l'on désire obtenir les valeurs par identifiant de 
+    // paramètre, utiliser dictParamsValues
     this.arraysParamsValues = []
 
     // Mis à false quand le service est renommé

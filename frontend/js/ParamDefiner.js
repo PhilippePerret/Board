@@ -174,6 +174,7 @@ class ParamDefiner {
     this.actual   = param.actual  ?? null // valeur en vigueur, distincte de default
     this.values   = param.values  ?? null
     this.if       = param.if      ?? null
+    this.validIf  = param.validIf ?? null
   }
 
   get currentOrDefault(){ return this.actual ?? this.default }
@@ -217,11 +218,18 @@ class ParamDefiner {
   }
 
   onPrompted(value, error){
-    if (error) { 
+    if (error) {
       new ErrorsDialog({
         errors: error.split("\n")
       }).show()
-      console.error(error); return 
+      console.error(error); return
+    }
+    // validIf(value) : optionnel, générique à TOUS les types de dialogue
+    // (passe par onPrompted quel que soit le type) — retourne truthy si la
+    // valeur est valide, sinon redemande la même valeur (dialogue réaffiché
+    // avec un message d'erreur). Jamais appliqué à une annulation (null).
+    if (value !== null && this.validIf && !this.validIf(value)) {
+      return Prompter.prompt(Object.assign(this.promptSpec(), {errorMessage: getErr('invalid-value', [value])}), this.onPrompted.bind(this))
     }
     this.onNonButton(value)
   }
