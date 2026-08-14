@@ -51,10 +51,8 @@ class << self
     commit_message  = ARGS.shift
     retour[:message] += "/commiter dans #{PROJECT_PATH}, branche #{branch_name}"
     # S'assurer d'abord qu'on est sur la bonne branche
-    unless GIT.branch?(branch_name)
-      retour[:ok] = true
-      retour[:error] = ['git-bad-branch', branch_name]
-      return retour
+    unless GIT.on_branch?(branch_name)
+      return err(['git-bad-branch', branch_name])
     end
     # Prendre les fichiers commitables
     files   = GIT.get_commitable_files
@@ -96,10 +94,47 @@ class << self
     return retour
   end
   
+
+  # Soumission final du PR
+  # ----------------------
   def exec_submit
     retour[:message] += "/submit dans #{PROJECT_PATH}"
+    branch_name = ARGS.shift
 
-    return retour
+    # Guard: La branche courante devrait avoir été fournie
+    GIT.on_branch?(branch_name) or return err(['git-bad-branch', branch_name])
+
+    # Guard: Il ne doit subsister aucun fichier à commiter
+    GIT.status_clean? or return err('github-pr-cycle-require-clean-status-to-submit')
+
+    # Guard: Le push doit réussir
+    err_on = GIT.push_branch(branch_name) and return err(err_on)
+
+    # Guard: La PR doit être créée
+    err_on = GIT.create_pull_request and return err(err_on)
+
+    # Attendre que le check ait été effectué
+    err_on = GIT.wait_for_pr_checks and return err(err_on)
+
+    # Retour à la branche principale
+    err_on = GIT.back_to_main_branch and return err(err_on)
+
+    # Guard: la branche de développement doit avoir été détruite
+    if GIT.branch?(branch_name) 
+      # On essaie de la détruire de force
+      err_on = GIT.destroy_branch(branch_name) and return err(err_on)
+      if GIT.branch?(branch_name)
+        return err('github-pr-cycle-branch-should-have-been-deleted')
+      end
+    end
+
+    # Merge la pull request
+    err_on = GIT.merge_pull_request and return err(err_on)
+
+    # Et finalement pull le nouveau code
+    err_on = GIT.pull_on_main and return err(err_on)
+
+    return retour[:message] = 'github-pr-cycle-submission-ok'
   end
 
 
@@ -111,10 +146,11 @@ class << self
     unless GIT.installed?
       return err(['backend-not-a-git-repo', PROJECT_PATH])
     end
-    if (ret = GIT.status_clean?) === true
+    if GIT.status_clean? && GIT.on_branch?('main')
       return true
-    else
-      return err(ret)
+    elsif !GIT.status_clean?
+
+    elsif !GIT.on_branch?('main')
     end
   end
 

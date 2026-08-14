@@ -10,9 +10,11 @@ Toutes ces fonctions sont appelées par :
 Toutes les fonctions ont en premier argument le chemin d'accès
 au fichier.
 =end
-require_relative 'usefull.rb'
+require 'timeout'
 require 'shellwords'
+require_relative 'usefull.rb'
 
+class TimeoutError < StandardError; end
 
 GIT_CONFLICT_PREFIX = {
   'AA' => 'git-status-added-both-sides',
@@ -28,6 +30,17 @@ class Git
 
   attr_reader :project_path
 
+  # Exécution du code +cmd+. Return nil en cas de succès ou 
+  # l'erreur +err+ (errId qui doit recevoir res en valeur)
+  def _exec(cmd, err)
+    res = `#{cmd}`
+    if $?.success?
+      nil
+    else
+      [err, res]
+    end
+  end
+
   def initialize(project_path)
     @project_path = project_path
   end
@@ -39,22 +52,30 @@ class Git
   # @return true si le status de Git est clean, donc sans rien à 
   # commiter
   def status_clean?
-    res = `cd "#{project_path}" && git status -s --branch`
-    if res.strip.start_with?('## main')
-      return true # pas d'erreur
-    else
-      res = res.strip.split("\n")
-      r = []
-      res.count - 1 == 0        || r << ['git-status-not-clean', ['git-status-not-empty']]
-      res[0].strip.start_with?('## main') || r << 'git-branch-not-main'
-      return r
-    end
+    return `cd "#{project_path}" && git status -s`.split("\n").count == 0
   end
 
   # Return true si on se trouve sur la branche +branch_name+
-  def branch?(branch_name)
+  def on_branch?(branch_name)
     res = `cd "#{project_path}" && git status -s --branch`
-    res.strip.match?(/\A## #{Regexp.escape(branch_name)}(\.\.\.|\z| )/)
+    return !!res.split("\n").first.strip.match?(/\A## #{Regexp.escape(branch_name)}(\.\.\.|\z| )/)
+  end
+
+  # Return true si la branche +branch_name+ existe ?
+  def branch?(branch_name)
+    res = `
+    exec 2>&1
+    cd "#{project_path}" && git branch
+    `
+    if $?.success?
+      res.strip.split("\n").map do |line|
+        branche = line.gsub(/(\* )/, '').strip
+        return true if branche == branch_name
+      end
+      return false
+    else
+      return 'git-error-reading-branch'
+    end
   end
 
   # Commit les fichiers de la liste +relpaths+ [Array] 
@@ -66,12 +87,7 @@ class Git
     git add #{relpaths.map{|p| Shellwords.escape(p)}.join(' ')}
     git commit -m #{Shellwords.escape(message)}
     ZSH
-    res = `#{cmd}`
-    if $?.success?
-      nil
-    else
-      ['git-commit-error', res]
-    end
+    return _exec(cmd, 'git-commit-error') # nil ou l'erreur
   end
 
   # @return la liste des fichiers à commiter
@@ -101,6 +117,82 @@ class Git
     cfiles
   end
 
+  # Destruction d'une branche
+  def destroy_branch(branch_name)
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    git branch -D #{branch_name}
+    ZSH
+    return _exec(cmd, 'git-unable-destroy-branch')
+  end
+
+  def push_branch(branch_name)
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    git push -u origin #{branch_name}
+    ZSH
+    return _exec(cmd, 'git-push-error')
+  end
+
+  def create_pull_request()
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    gh pr create --fill
+    ZSH
+    return _exec(cmd, 'git-pr-create-error')
+  end
+
+  # Méthode qui attend les résultats pour une PR soumise
+  def wait_for_pr_checks
+    begin
+      Timeout.timeout(45, TimeoutError, 'git-pr-checks-timeout') do
+        cmd = <<~ZSH
+        exec 2>&1
+        cd #{Shellwords.escape(project_path)}
+        gh pr checks --fail-fast --watch --interval 3
+        ZSH
+        res = `#{cmd}`
+        case $?.exitstatus
+        when 0 then return nil # tout ok
+        when 1 then return 'git-pr-waiting-checks-failure'
+        else        return ['git-pr-waiting-checks-error', res]
+        end
+      end
+    rescue TimeoutError => e
+      return e.message
+    end
+  end
+
+  # Pour revenir à la branche principale
+  def back_to_main_branch
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    git checkout main
+    ZSH
+    return _exec(cmd, 'git-unable-checkout-main')
+  end
+  
+  def merge_pull_request
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    gh pr merge --squash --delete-branch
+    ZSH
+    return _exec(cmd, 'git-unable-pr-merge')
+  end
+  
+  def pull_on_main
+    cmd = <<~ZSH
+    exec 2>&1
+    cd #{Shellwords.escape(project_path)}
+    git pull
+    ZSH
+    return _exec(cmd, 'git-unable-pr-merge')
+  end
 
 
 #################### C L A S S E #####################

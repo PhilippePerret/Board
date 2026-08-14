@@ -292,12 +292,12 @@ const COMMON_SERVICES_DATA = [
         // 2- un erreur au commit lui-même 
         // 3- une erreur de commande inexistante 
         // 4- une autre erreur
+        const msg = []
         if (Array.isArray(error) && error.length == 2) { 
-          error(getErr(...error))
+          msg.push(getErr(...error))
         } else if (error.syntax && error.conflict) {
           // conflict:  [ {path: string, error: errId }]
           // syntax:    [ {path: string, error: errId | [errId, vals]} ]
-          const msg = []
           msg.push(getMsg('git-title-conflict-errors-section'))
           error.conflict.forEach(conf => {
             msg.push(`<div>${conf.path} : ${getErr(conf.error)}</div>`)
@@ -310,22 +310,45 @@ const COMMON_SERVICES_DATA = [
               msg.push(`<div>${synt.path} : ${getErr(...synt.error)}</div>`)
             }
           })
-          const divError = DCreate('DIV', {class:'error'})
-          divError.innerHTML = msg.join('')
-          const dataDial = {
-            title: 'git-commit-title-erros'
-            , message: ""
-            , content: divError
-            , nonBtn: null
-          }
         }
-
-        
-
+        // Affichage du message d'erreur
+        const divError = DCreate('DIV', {class:'error'})
+        divError.innerHTML = msg.join('')
+        const dataDial = {
+          title: 'git-commit-title-erros'
+          , message: ""
+          , content: divError
+          , nonBtn: null
+        }
+        new ErrorsDialog(dataDial).show()
     }
   },
 
-  // TODO: POURSUIVRE
+  {
+    id: 'github-pr-cycle-submit'
+    , name: getMsg('github-pr-cycle-submit')
+    , aide: 'github-pull-request-cycle'
+    , group: 'Git'
+    , script: 'PR_Github_Cycle.rb'
+    , params: [
+        {id:'path', type:'project'}
+      , {id: 'phase', type:'raw', value: 'submit'}
+      , { id: 'git_pr_cycle_branche', type:'project'
+          , if_undefined: {type: 'cancel', title: 'github-pr-cycle-commit', q: getErr('git-commit-init-required')}}
+    ]
+    , dynParams: [
+      {id: 'confirm_submit'
+        , title:  getMsg('github-pr-cycle-confirming-submit')
+        , q:      getMsg('github-pr-cycle-confirm-submit')
+        , type:   'confirm'
+      }
+    ]
+    , afterRunWithSuccess(dictValues, retour){
+        console.log("Retour après github-pr-cycle-submit", retour, dictValues)
+        message(true, getMsg('github-pr-cycle-submission-ok'))
+      }
+
+  },
 
 
 
@@ -440,22 +463,28 @@ const COMMON_SERVICES_DATA = [
         projet.set('docu-main-file-html', mainDispFile, true)
       }
   },
+  // Ouvrir un iTerm au dossier (pour jouer un code)
   {
       id: 'open-iterm-at-folder'
     , name: getMsg('iterm-at-folder')
     , group: 'Consoles'
     , params: [ 
-          {id: 'path', type: 'project'} 
-        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true, noCorrection: true}
+        {id: 'path', type: 'project'} 
+      ]
+    , dynParams: [ 
+        {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
       ]
   },
+  // Ouvrir un Terminal au dossier (pour jouer un code)
   {
       id: 'open-terminal-at-folder'
     , name: getMsg('terminal-at-folder')
     , group: 'Consoles'
     , params: [
-          {id: 'path', type: 'project'}
-        , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), transient: true, noCorrection: true}
+        {id: 'path', type: 'project'}
+      ]
+    , dynParams: [
+        {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
       ]
   },
   {
@@ -598,12 +627,11 @@ const CUSTOM_SERVICES_DATA = [
  // dans ALL_SERVICES_DATA à l'exécution.
  const SERVICES_DATA_TABLE = {}
 
- function defineSomeVolatileProps(s, stype) {
+ function registerServiceData(s, stype) {
   SERVICES_DATA_TABLE[s.id] = Object.assign({stype: stype}, s)
-  if (s.params.some(p => p.transient)) Object.assign(s, {transient: true})
  }
 
- CUSTOM_SERVICES_DATA.forEach(s => {defineSomeVolatileProps(s, 'custom')})
- COMMON_SERVICES_DATA.forEach(s => {defineSomeVolatileProps(s, 'common')})
+ CUSTOM_SERVICES_DATA.forEach(s => {registerServiceData(s, 'custom')})
+ COMMON_SERVICES_DATA.forEach(s => {registerServiceData(s, 'common')})
 
  const ALL_SERVICES_DATA = [...CUSTOM_SERVICES_DATA, ...COMMON_SERVICES_DATA]

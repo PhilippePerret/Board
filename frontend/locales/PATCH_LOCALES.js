@@ -28,8 +28,12 @@ Object.assign(MESSAGES, {
   , 'app-backup-restore-btn': "Revenir au backup précédent"
 
   // Git
-  , 'github-pr-cycle-init': "Initier le PR Cycle Github"
-  , 'github-pr-cycle-commit': "PR Cycle - Commiter"
+  , 'github-pr-cycle-init': "PR Cycle Github – Initier"
+  , 'github-pr-cycle-commit': "PR Cycle Github – Commiter"
+  , 'github-pr-cycle-submit': "PR Cycle Github – Soumettre"
+  , 'github-pr-cycle-confirming-submit': "Confirmation de la soumission."
+  , 'github-pr-cycle-confirm-submit': "Êtes-vous sûr de confirmer la soumission des fichiers commités pour générer une Pull Request Github ?\n\nTrès vraisemblabement, cette PR va entrainer un lancement de tests (Github Action) et peut-être une actualisation de site ou d'application. Confirmez donc en toute connaissance de cause."
+  , 'github-pr-cycle-submission-ok': "Soumission de Pull-Request effectuée avec succès !"
 
   , 'github-pr-cycle-branch-name': "Nom de la branche de développement à créer"
   , 'github-pr-cycle-commit-title': "Titre de ce commit"
@@ -67,7 +71,16 @@ Object.assign(ERRORS, {
   , 'git-status-modified-and-deleted': 'modifié par nous, supprimé en face.'
   , 'git-bad-branch': "Vous vous trouvez sur la mauvaise branch Git. Attendue : $1."
   , 'git-commit-error': "Erreur Git en commitant les fichiers : $1."
+  , 'git-push-error': "Erreur Git en pushant les commits : $1"
+  , 'git-pr-create-error': "Erreur GH en créant la pull-request Github : $1."
+  , 'git-pr-waiting-checks-error': "Erreur GH au cours de l'attente du check : $1."
+  , 'git-pr-waiting-checks-failure': "Erreur GH au cours du check : un test a échoué."
+  , 'git-unable-checkout-main': "Erreur Git : impossible de revenir à la branche principale ($1)."
+  , 'git-unable-pr-merge': "Erreur Git : impossible de merger la Pull-Request ($1)."
   , 'git-commit-init-required': 'Pour pouvoir commiter vos fichiers dans un Github PR Cyle, vous devez au préalable initier ce cycle (principalement : choisir une branche de développement).'+"\n\nSi cette branche est déjà définie sans initialisation, vous pouvez la renseigner dans les données du projet, dans la propriété `git_pr_cycle_branche`."
+  , 'github-pr-cycle-require-clean-status-to-submit': "La soumission pour une PR Gitub nécessite un status clean (aucun fichier ne devrait être à commiter.\n\nUtilisez le service précédent pour le faire."
+  , 'git-unable-destroy-branch': "Impossible de détruire la branche Git : $1."
+  , 'github-pr-cycle-branch-should-have-been-deleted': "Impossible de détruire la branche de développement $1 : $2"
 
   // Services
   , 'project-data-invalid-bad-count': "Les données du projet $1 pour le service $2 sont invalides. $3 donnée$5 attendue$5, $4 donnée$6 fournie$6."
