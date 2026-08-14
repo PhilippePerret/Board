@@ -7,7 +7,7 @@ require_relative '../../support/pr_github_cycle_helpers'
 include BoardTest
 include PRCycleTestHelpers
 
-board_test("PR_Github_Cycle.rb (commit) : timeout de vérification syntaxique") do
+board_test("IMPOSSIBLE À TESTER — PR_Github_Cycle.rb (commit) : timeout de vérification syntaxique") do
   pending "CHECK_TIMEOUT (60s, syntax_checker.rb) n'est pas configurable depuis l'extérieur — " \
     "nécessiterait soit un paramètre d'injection, soit d'attendre réellement 60s par run"
 end

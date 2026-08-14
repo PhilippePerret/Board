@@ -260,8 +260,21 @@ const COMMON_SERVICES_DATA = [
       , {id: 'phase', type:'raw', value: 'init'}
     ]
     , dynParams: [
-      {id: 'branche-name', q: getMsg('github-pr-cycle-branch-name'), type: 'string', validIf: (v) => {v.match(/^[a-z0-9_-]+$/)}}
+      {id: 'confirm_init'
+        , title:  getMsg('github-pr-cycle-confirming-init')
+        , q:      getMsg('github-pr-cycle-confirm-init')
+        , type:   'confirm'
+      }
+      , {id: 'branche-name', q: getMsg('github-pr-cycle-branch-name'), type: 'string', validIf: (v) => v.match(/^[a-z0-9_-]+$/)}
     ]
+    // confirm_init n'est qu'une porte d'entrée (annule tout le service si
+    // refusé, cf. Prompter#promptConfirm) : sa valeur ne doit JAMAIS être
+    // envoyée au script backend, qui attend [path, phase, branche] en
+    // positions fixes — sans ce filtre, un "oui" (true) se retrouverait
+    // en 3e position à la place du nom de branche.
+    , beforeExec(dict){
+        return [dict.path, dict.phase, dict['branche-name']]
+      }
     , afterRunWithSuccess(projet, retour, dictValue) {
         // On enregistre le branche courante.
         projet.set('git_pr_cycle_branche', dictValue['branche-name'], true)

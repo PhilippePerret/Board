@@ -34,9 +34,11 @@ module PRCycleTestHelpers
   end
 
   # Supprime la branche distante +branch_name+ (si présente) — nettoyage de
-  # fin de test pour les scénarios qui poussent sans merger.
+  # fin de test pour les scénarios qui poussent sans merger. Cible le remote
+  # par URL explicite (pas 'origin' du cwd) : appelé depuis un `ensure` après
+  # que le clone temporaire (with_remote_fixture_repo) a déjà été détruit.
   def delete_remote_branch(branch_name)
-    system('git', 'push', 'origin', '--delete', branch_name, out: File::NULL, err: File::NULL)
+    system('git', 'push', REMOTE_REPO_SSH, '--delete', branch_name, out: File::NULL, err: File::NULL)
   end
 
   # Ferme (sans merger) une PR ouverte sur +branch_name+, s'il y en a une.
