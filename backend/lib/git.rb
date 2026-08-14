@@ -201,36 +201,98 @@ class << self
 
 
 
-  # Initier git pour le projet donné
-  def init_for_project(project_path, github_account, github_name, labels)
-    
+  # Interroge Github pour savoir si le dépôt <github_account>/<github_name>
+  # existe déjà, et si oui, s'il est vide et si on a les droits de push.
+  # @return {ok:, exists:, error:} — error non nil bloque l'initialisation
+  # (droits insuffisants ou dépôt déjà occupé) même si ok est true (ce n'est
+  # pas une erreur technique, juste un état qui interdit de poursuivre).
+  def check_remote_repo(github_account, github_project_name)
+    slug = "#{github_account}/#{github_project_name}"
+    if ENV['APP_BOARD_TESTS_RUNNING'] && ENV['BOARD_TEST_GIT_REMOTE']
+      # Tests : le remote est un dépôt bare LOCAL (git_e2e_stub.rb), jamais
+      # interrogé via `gh` — toujours considéré existant, vide, disponible.
+      return {ok: true, exists: true, error: nil}
+    end
+    out = `gh api repos/#{Shellwords.escape(slug)} 2>&1`
+    if $?.success?
+      data = JSON.parse(out)
+      return {ok: true, exists: true, error: ['git-init-no-push-permission', slug]} unless data.dig('permissions', 'push')
+      return {ok: true, exists: true, error: ['git-init-repo-exists-not-empty', slug]} unless data['size'].to_i == 0
+      {ok: true, exists: true, error: nil}
+    elsif out.include?('HTTP 404')
+      {ok: true, exists: false, error: nil}
+    else
+      {ok: false, exists: nil, error: ['backend-github-api-error', out]}
+    end
+  rescue JSON::ParserError => e
+    {ok: false, exists: nil, error: ['backend-github-api-error', e.message]}
+  end
+
+  # Crée le dépôt Github <github_account>/<github_name>, avec la visibilité
+  # demandée ('private' par défaut).
+  def create_remote_repo(github_account, github_project_name, visibility)
+    slug = "#{github_account}/#{github_project_name}"
+    vis_flag = visibility == 'public' ? '--public' : '--private'
+    out = `gh repo create #{Shellwords.escape(slug)} #{vis_flag} 2>&1`
+    if $?.success?
+      {ok: true}
+    else
+      {ok: false, error: ['backend-github-repo-create-error', out]}
+    end
+  end
+
+  # Initier git pour le projet donné.
+  # @param visibility  'private' ou 'public' — utilisé UNIQUEMENT si le
+  #   dépôt distant n'existe pas encore (sinon ignoré, le dépôt existant
+  #   garde sa visibilité actuelle).
+  def init_for_project(project_path, github_account, github_name, labels, visibility = nil)
+
     retour = {
       ok: true,
       error: nil,
       message: nil,
       labels: labels
     }
-    
+
     begin
       # Primo vérification (il ne faut pas que git soit déjà installé)
       if git_exist_for_project?(project_path)
+        retour[:ok] = false
         retour[:error] = ['backend-already-git']
-      else
-        # Initialisation dans le dossier
-        res = git_init(project_path, github_account, github_name)
-        retour.merge!(res)
-        return retour if res[:ok] === false
+        return retour
+      end
 
-        # Création des lables
-        if labels.count > 0
-          res_ope = update_labels(project_path: project_path, labels: labels.join(','))
-          if (res_ope[:ok])
-            msg = retour[:message]
-            msg = [msg] if msg.is_a?(String)
-            msg << 'backend-add-labels-ajout'
-          else
-            retour = res_ope
-          end
+      # Le dépôt distant doit soit déjà exister (vide, droits ok), soit
+      # être créé maintenant.
+      status = check_remote_repo(github_account, github_name)
+      unless status[:ok] && status[:error].nil?
+        retour[:ok] = false
+        retour[:error] = status[:error] || status
+        return retour
+      end
+      unless status[:exists]
+        create_res = create_remote_repo(github_account, github_name, visibility)
+        unless create_res[:ok]
+          retour[:ok] = false
+          retour[:error] = create_res[:error]
+          return retour
+        end
+      end
+
+      # Initialisation dans le dossier
+      res = git_init(project_path, github_account, github_name)
+      retour.merge!(res)
+      return retour if res[:ok] === false
+
+      # Création des lables
+      if labels.count > 0
+        res_ope = update_labels(project_path: project_path, labels: labels.join(','))
+        if (res_ope[:ok])
+          msg = retour[:message]
+          msg = [msg] if msg.is_a?(String)
+          msg << 'backend-add-labels-ajout'
+        else
+          retour = res_ope
         end
       end
     rescue Exception => e
