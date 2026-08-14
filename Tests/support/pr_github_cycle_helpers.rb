@@ -13,6 +13,37 @@ require 'json'
 module PRCycleTestHelpers
   PR_CYCLE_RB = File.join(BoardTest::ROOT, 'backend', 'scripts', 'PR_Github_Cycle.rb')
 
+  # Dépôt GitHub jetable dédié aux tests de la phase 'submit' du cycle
+  # (push/PR/checks/merge réels — décision explicite : pas de fake `gh`).
+  # Un workflow CI minimal est poussé sur sa branche main (bootstrap manuel,
+  # hors suite de tests) : `echo ok`, ou échec/lenteur pilotés par la
+  # présence des fichiers FAIL_CI / SLEEP_CI_SECONDS dans le commit testé.
+  REMOTE_REPO_SSH = 'git@github.com:PhilippePerret/Repo-For-Tests.git'
+  REMOTE_REPO_SLUG = 'PhilippePerret/Repo-For-Tests'
+
+  # Clone frais du dépôt jetable réel, à utiliser pour les tests de la
+  # phase 'submit' (push/PR/checks/merge contre GitHub, pas un remote local).
+  def with_remote_fixture_repo
+    Dir.mktmpdir('board-pr-cycle-remote-') do |dir|
+      system('git', 'clone', '-q', REMOTE_REPO_SSH, dir, out: File::NULL, err: File::NULL) \
+        or raise "clone de #{REMOTE_REPO_SSH} a échoué"
+      system('git', '-C', dir, 'config', 'user.email', 'test@example.com', out: File::NULL, err: File::NULL)
+      system('git', '-C', dir, 'config', 'user.name', 'Board Test', out: File::NULL, err: File::NULL)
+      yield dir
+    end
+  end
+
+  # Supprime la branche distante +branch_name+ (si présente) — nettoyage de
+  # fin de test pour les scénarios qui poussent sans merger.
+  def delete_remote_branch(branch_name)
+    system('git', 'push', 'origin', '--delete', branch_name, out: File::NULL, err: File::NULL)
+  end
+
+  # Ferme (sans merger) une PR ouverte sur +branch_name+, s'il y en a une.
+  def close_remote_pr(branch_name)
+    system('gh', 'pr', 'close', branch_name, '-R', REMOTE_REPO_SLUG, out: File::NULL, err: File::NULL)
+  end
+
   # Crée un dépôt git réel dans +dir+, avec un premier commit sur `main`.
   def init_fixture_repo(dir)
     system('git', 'init', '-q', '-b', 'main', dir, out: File::NULL, err: File::NULL) \
