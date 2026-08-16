@@ -343,17 +343,12 @@ class Project {
   lockSave(){ this._saveLocked = true }
   unlockSave(){
     this._saveLocked = false
-    const callbacks = this._pendingSaveCallbacks
-    this._pendingSaveCallbacks = null
-    if (callbacks && callbacks.length) {
-      this.save(() => callbacks.forEach(cb => cb()))
-    }
   }
 
   save(callback){
+    // Verrouillé : callback tout de suite (valeur déjà en mémoire), écriture réelle groupée après unlockSave().
     if (this._saveLocked) {
-      this._pendingSaveCallbacks = this._pendingSaveCallbacks || []
-      if (callback) this._pendingSaveCallbacks.push(callback)
+      callback && callback()
       return
     }
     const newData = {}

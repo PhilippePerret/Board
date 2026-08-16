@@ -372,7 +372,18 @@ module BoardTest
   # fermeture, même sécurité que with_finder_deselected).
   def with_finder_selection(posix_path)
     expected_name = finder_select(posix_path)
+    # finder_select rend la main dès que l'AppleScript termine, sans garantie
+    # que Finder ait fini de traiter fenêtre+sélection en interne. Marge
+    # avant que l'app ne tente de la lire (yield).
+    sleep 0.3
     yield
+    # yield ne fait typiquement que déclencher un clic (synchrone) — la
+    # lecture de la sélection Finder par l'app (getPathOfFinderSelection)
+    # se fait ensuite de façon ASYNC (aller-retour bridge). Fermer la
+    # fenêtre trop tôt fait échouer cette lecture ("Il est impossible
+    # d'obtenir item 1 of {}.", -1728, sélection déjà vidée). Petite
+    # marge avant fermeture pour laisser cet aller-retour se terminer.
+    sleep 0.3
   ensure
     (finder_close_front_window_if_named(expected_name) rescue nil) if expected_name && !expected_name.empty?
   end

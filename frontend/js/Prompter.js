@@ -111,6 +111,7 @@ class Prompter {
       , id:      spec.id
       , message: spec.message || spec.q
       , width:   spec.width
+      , errorMessage: spec.errorMessage
     }
   }
 
@@ -123,7 +124,6 @@ class Prompter {
   static promptString(spec, callback){
     new TextFieldDialog(Object.assign(this.dialogBase(spec), {
         default:  spec.default ?? ''
-      , errorMessage: spec.errorMessage
       , noCorrection: spec.noCorrection
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
@@ -133,7 +133,6 @@ class Prompter {
   static promptText(spec, callback){
     new TextareaDialog(Object.assign(this.dialogBase(spec), {
         default:  spec.default ?? ''
-      , errorMessage: spec.errorMessage
       , ouiBtn: {name: getMsg('OK'), onclick: callback}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     })).show()
@@ -189,7 +188,6 @@ class Prompter {
     new TextFieldDialog(Object.assign(this.dialogBase(spec, getMsg('phone-number')), {
         message:  spec.message || spec.q || getMsg('which-phone-number')
       , default:  spec.default || ''
-      , errorMessage: spec.errorMessage
       , ouiBtn: {name: getMsg('OK'), onclick: (retour) => this._validatePhone(retour, spec, callback)}
       , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
     })).show()

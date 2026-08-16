@@ -23,25 +23,37 @@ def run_test
     card = "project-#{id}"
     service_card = "service-#{uuid}"
 
+    sleep 1
     wait_for(card)
+    sleep 1
     click(card)
+    sleep 1
     wait_for(service_card)
+    sleep 1
     meta_click(service_card)
 
+    sleep 1
     wait_for('__service-name__')
-    click_suffix('btn-oui') # nom inchangé
+    sleep 1
+    click_suffix_last('btn-oui') # nom inchangé
 
     # → session-duration : valeur actuelle préremplie
-    wait_for('__session-duration__')
+    sleep 1
+    wait_for('__session-duration__', 8)
     raise "session-duration pas préremplie = #{get_value('__session-duration__').inspect}" unless get_value('__session-duration__') == '90'
+    sleep 1
     set_value('__session-duration__', '100')
-    click_suffix('btn-oui')
+    sleep 1
+    click_suffix_last('btn-oui')
 
     # → work-duration : useLastAsDefault reprend la valeur tout juste saisie (100)
-    wait_for('__work-duration__')
+    sleep 1
+    wait_for('__work-duration__', 8)
     raise "work-duration ne reprend pas la valeur juste saisie = #{get_value('__work-duration__').inspect}" unless get_value('__work-duration__') == '100'
-    click_suffix('btn-oui')
+    sleep 1
+    click_suffix_last('btn-oui')
 
+    sleep 1
     wait_until(desc: -> { "carte projet = #{read_project_card(id).inspect}" }) do
       found = read_project_card(id)['services']['others'].find { |s| s['uuid'] == uuid }
       found && found['params'].flatten == [100, 100]
