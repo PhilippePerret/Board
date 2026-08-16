@@ -151,16 +151,24 @@ class App {
   }
 
   static observe(){
+    logize('App.observe() démarre')
+    logize('éléments trouvés', {
+        'app-name': !!DGet('#app-name')
+      , 'tools-button': !!DGet('#tools-button')
+      , 'debug-button': !!DGet('#debug-button')
+      , 'help-link': !!DGet('#help-link')
+    })
     listen(DGet('#app-name')    , 'click' , this.editConfigData.bind(this))
     listen(DGet('#tools-button'), 'click' , this.openToolsPanel.bind(this))
     listen(DGet('#debug-button'), 'click' , D.toggle.bind(D))
-    listen(DGet('#help-link')   , 'click' , (ev) => {stopEvent(ev); Aide.open()})
+    listen(DGet('#help-link')   , 'click' , (ev) => {logize('clic sur #help-link'); stopEvent(ev); Aide.open()})
+    logize('App.observe() terminé sans erreur')
   }
 
   static get toolsPanel(){ return this._toolspan || (this._toolspan = new ToolsPanel()) }
 
   static getData(key){
-    return this.data[key]
+    return this.data[key] ?? TBL_APP_DATA[key]?.default ?? null
   }
 
   static setData(key, value, saveIt = false){

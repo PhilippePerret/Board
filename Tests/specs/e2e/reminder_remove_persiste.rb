@@ -8,6 +8,13 @@ include BoardTest
 
 def run_test
   launch_app
+  # launch_app garantit seulement que le socket de test répond (page
+  # chargée), pas que App.init() a fini (App.data assigné, Reminder.init()
+  # tourné) — sans cette attente, Reminder.register() plus bas peut
+  # s'exécuter trop tôt : soit il plante (this.remindedTasks undefined),
+  # soit App.setData('reminders',...) no-op silencieusement (garde
+  # `if (!this.data) return`, App.js) et rien n'est persisté.
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   tomorrow_iso = (Time.now + 24 * 3600).strftime('%Y-%m-%dT%H:%M:%S')
   bridge_eval(<<~JS)
@@ -32,6 +39,9 @@ def run_test
   sleep 1.2 # debounce de la sauvegarde déclenchée par remove()
 
   launch_app # relance : awakeReminders() ne doit PAS re-régistrer le rappel supprimé
+  # Même attente qu'au premier launch_app : sans elle, la lecture qui suit
+  # peut arriver AVANT que awakeReminders() n'ait tourné.
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   # String(...) : un bridge_eval numérique nu peut renvoyer un résultat vide
   # côté Swift, masqué en 0 par .to_i sans rapport avec l'état réel.

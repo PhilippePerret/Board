@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-13](2026-08-13-Etat-fin-de-session.md) — README multilingue et plan de diffusion
+- PRIORITÉ : [État fin de session 2026-08-15](2026-08-15-Etat-fin-de-session.md) — Github PR Cycle (init/commit/submit) à traiter en priorité
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
@@ -45,3 +45,13 @@
 - [Convention ok:true/false](feedbacks/ok_true_false_convention.md) — ok:false=erreur générique xbridge.js, ok:true+error=géré par la fonction appelante, pas un bug
 - [Pas de répétition d'un point déjà dit](feedbacks/no_repeat_already_said.md) — "compris"/"oui" = ne pas reformuler le même constat
 - ["Liste" = liste seule](feedbacks/list_means_list_only.md) — énumération brute, zéro intro/synthèse/commentaire
+- [params vs dynParams intouchable](feedbacks/never_break_persisted_param_semantics.md) — jamais reclassifier un param entre les deux sans demande explicite, ça casse la persistance silencieusement
+- [Bug d'infra de test démontré = corriger direct](feedbacks/test_infra_fix_dont_ask.md) — pas de permission à demander, contrairement au code app
+- [Retirer le code obsoleté dans le même tour](feedbacks/remove_obsoleted_code_same_turn.md) — grep les appelants après tout remplacement X→Y, avant de dire "fini"
+- [Pas de confirmation pour action déjà visible](feedbacks/no_confirm_visible_actions.md) — pbcopy etc., Phil le voit, inutile de le dire
+- [Format explication test](feedbacks/test_explanation_format.md) — bloc aperçu conventionnel + points numérotés, même pour un diagnostic technique long
+- [Le fix doit découler du diagnostic](feedbacks/fix_must_follow_diagnosis.md) — pas de solution à côté quand le diagnostic pointe déjà le mécanisme manquant
+- [Vérifier logs de tests avant de demander](feedbacks/check_test_logs_before_asking.md) — Tests/resultats/*.log donne l'état réel, jamais redemander à Phil ni se fier à un état de session périmé
+- [App.getData doit retomber sur le default](feedbacks/feedback_appgetdata_default_fallback.md) — clé absente d'appdata.yaml = fallback sur TBL_APP_DATA[key].default, jamais undefined brut
+- [docu_folder_name = partie de Phil](feedbacks/feedback_docu_folder_name_is_phils.md) — redesign du select docu-folder-name dans init-documentation, ne pas l'implémenter
+- [Course App.data au 1er clic post-launch](feedbacks/launch_app_race_app_data.md) — bouton statique cliqué avant App.data chargé = exception JS silencieuse ("Script error.")

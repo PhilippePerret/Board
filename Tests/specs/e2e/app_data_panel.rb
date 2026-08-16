@@ -42,6 +42,7 @@ include BoardTest
 
 def run_test
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   original = read_app_data.slice('changelog-file', 'code-editor')
 
@@ -85,6 +86,7 @@ def run_test
 
   # → persistance après rechargement (App.init relit appdata.json)
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
   click('app-name')
   wait_for('app-config')
   wait_until(desc: -> { "texte de la ligne = #{get_text('app-config-changelog-file-value').inspect}" }) do

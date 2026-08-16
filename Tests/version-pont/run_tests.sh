@@ -68,11 +68,24 @@ RESULT_FILE="$RESULTS_DIR/$(date +%Y-%m-%d_%Hh%M).log"
 } > "$RESULT_FILE"
 exec > >(tee >(sed -E $'s/\x1b\\[[0-9;]*m//g' >> "$RESULT_FILE")) 2>&1
 
-# Ids des fenêtres Finder déjà ouvertes AVANT toute action de la suite — on
-# n'y touche JAMAIS ; en teardown, on ferme uniquement les fenêtres dont l'id
-# n'est pas dans cette liste (celles ouvertes par les tests, y compris celles
-# qu'un test en échec aurait laissées traîner).
-INITIAL_FINDER_WINDOW_IDS=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" window-ids 2>/dev/null | tr '\n' ',' | sed 's/,$//' || true)
+# Dossiers ciblés par les fenêtres Finder déjà ouvertes AVANT toute action de
+# la suite — on n'y touche JAMAIS ; en teardown, on ferme uniquement les
+# fenêtres dont le dossier ciblé n'est pas dans cette liste (celles ouvertes
+# par les tests, y compris celles qu'un test en échec aurait laissées
+# traîner). Comparaison par dossier, PAS par id : une fenêtre personnelle
+# fermée puis recréée par un test (finder_close_all_windows / restore-windows,
+# ex. tool_window_bounds_*.rb) change d'id AppleScript en cours de route —
+# une comparaison par id la ferait passer pour "nouvelle" et la fermerait par
+# erreur en toute fin de suite.
+INITIAL_FINDER_WINDOW_TARGETS=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" window-targets 2>/dev/null || true)
+
+# Applis GUI déjà lancées AVANT la suite (ex. iTerm, CotEditor, VSCode — tout
+# ce que les services testés peuvent ouvrir) — snapshot pour ne quitter, en
+# teardown, QUE celles ouvertes PAR les tests. Finder (fenêtres gérées
+# ci-dessus/ci-dessous) et Board (process géré séparément) sont toujours
+# exclus, jamais quittés par ce mécanisme.
+INITIAL_RUNNING_APPS=$(osascript -e 'tell application "System Events" to get name of every process whose background only is false' 2>/dev/null || true)
+INITIAL_RUNNING_APPS_ARR=("${(s:,:)${INITIAL_RUNNING_APPS//, /,}}")
 
 mkdir -p "$MAIN_TESTS_DIR/.board-backups"
 
@@ -180,14 +193,34 @@ quit_app() {
   pkill -x Board 2>/dev/null || true
 }
 
+# Quitte toute appli GUI apparue depuis le snapshot INITIAL_RUNNING_APPS_ARR
+# (ex. iTerm/Terminal/CotEditor/VSCode ouverts par un service testé) —
+# jamais Finder ni Board, gérés par leurs propres mécanismes.
+quit_new_apps() {
+  local current_raw app found other
+  current_raw=$(osascript -e 'tell application "System Events" to get name of every process whose background only is false' 2>/dev/null || true)
+  local current_arr=("${(s:,:)${current_raw//, /,}}")
+  for app in "${current_arr[@]}"; do
+    [ -z "$app" ] && continue
+    [ "$app" = "Board" ] && continue
+    [ "$app" = "Finder" ] && continue
+    found=0
+    for other in "${INITIAL_RUNNING_APPS_ARR[@]}"; do
+      [ "$other" = "$app" ] && found=1 && break
+    done
+    [ "$found" -eq 0 ] && osascript -e "tell application \"$app\" to quit" 2>/dev/null
+  done
+}
+
 teardown() {
   quit_app
   restore_board
   rm -rf "$BOARD_TEST_DATA_DIR" 2>/dev/null || true
-  finder_cleanup=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" close-windows-except "$INITIAL_FINDER_WINDOW_IDS" 2>&1) || true
+  finder_cleanup=$(osascript "$MAIN_TESTS_DIR/support/finder.applescript" close-windows-except-targets "$INITIAL_FINDER_WINDOW_TARGETS" 2>&1) || true
   if [ -n "$finder_cleanup" ] && [ "$finder_cleanup" != "ok" ]; then
     echo "Nettoyage fenêtres Finder : $finder_cleanup"
   fi
+  quit_new_apps
   if [ "$BOARD_WAS_RUNNING" -eq 1 ]; then
     open "$APP_DIR/Board.app"
   fi

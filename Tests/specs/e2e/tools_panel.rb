@@ -20,6 +20,7 @@ include BoardTest
 
 def run_test
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   # → construit à la volée, pas encore dans le DOM avant le 1er clic
   raise 'tools-panel présent dans le DOM avant tout clic sur "Outils"' if exists?('tools-panel')

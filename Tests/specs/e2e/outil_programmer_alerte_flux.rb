@@ -26,6 +26,7 @@ include BoardTest
 
 def run_test
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   datetime_str = (Time.now + 600).strftime('%H:%M') # +10 min, aujourd'hui
   message_str  = 'Message de test alerte'

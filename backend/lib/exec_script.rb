@@ -61,6 +61,8 @@ def exec_script(script_name, params = "")
     # de Board attend justement CE process) peut bloquer indéfiniment sinon,
     # gelant toute l'app (le bridge est synchrone côté Swift).
     status = nil
+    require_relative 'debug.rb'
+    Debug.log("exec_script : lancement #{cmd.inspect}")
     Timeout.timeout(SCRIPT_TIMEOUT) do
       # stdout et stderr capturés SÉPARÉMENT (jamais fusionnés) : tout ce
       # qu'un sous-processus lancé PAR le script (ex. `git checkout -b`,
@@ -78,6 +80,7 @@ def exec_script(script_name, params = "")
         status  = wait_thr.value
       end
     end
+    Debug.log("exec_script : terminé #{cmd.inspect}, success=#{status.success?}, stdout=#{res.inspect}, stderr=#{res_err.inspect}")
     RETOUR.ok = status.success?
     if status.success?
       #################################################

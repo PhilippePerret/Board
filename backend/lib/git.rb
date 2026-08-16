@@ -58,7 +58,9 @@ class Git
   # Return true si on se trouve sur la branche +branch_name+
   def on_branch?(branch_name)
     res = `cd "#{project_path}" && git status -s --branch`
-    return !!res.split("\n").first.strip.match?(/\A## #{Regexp.escape(branch_name)}(\.\.\.|\z| )/)
+    first_line = res.split("\n").first
+    return false if first_line.nil?
+    !!first_line.strip.match?(/\A## #{Regexp.escape(branch_name)}(\.\.\.|\z| )/)
   end
 
   # Return true si la branche +branch_name+ existe ?
@@ -230,10 +232,11 @@ class << self
 
   # Crée le dépôt Github <github_account>/<github_name>, avec la visibilité
   # demandée ('private' par défaut).
-  def create_remote_repo(github_account, github_project_name, visibility)
+  def create_remote_repo(github_account, github_project_name, visibility, description = nil)
     slug = "#{github_account}/#{github_project_name}"
     vis_flag = visibility == 'public' ? '--public' : '--private'
-    out = `gh repo create #{Shellwords.escape(slug)} #{vis_flag} 2>&1`
+    desc_flag = description && !description.strip.empty? ? "--description #{Shellwords.escape(description)}" : ''
+    out = `gh repo create #{Shellwords.escape(slug)} #{vis_flag} #{desc_flag} 2>&1`
     if $?.success?
       {ok: true}
     else
@@ -245,7 +248,9 @@ class << self
   # @param visibility  'private' ou 'public' — utilisé UNIQUEMENT si le
   #   dépôt distant n'existe pas encore (sinon ignoré, le dépôt existant
   #   garde sa visibilité actuelle).
-  def init_for_project(project_path, github_account, github_name, labels, visibility = nil)
+  # @param description  description du dépôt Github — même règle que
+  #   visibility : utilisée UNIQUEMENT à la création, ignorée sinon.
+  def init_for_project(project_path, github_account, github_name, labels, visibility = nil, description = nil)
 
     retour = {
       ok: true,
@@ -271,7 +276,7 @@ class << self
         return retour
       end
       unless status[:exists]
-        create_res = create_remote_repo(github_account, github_name, visibility)
+        create_res = create_remote_repo(github_account, github_name, visibility, description)
         unless create_res[:ok]
           retour[:ok] = false
           retour[:error] = create_res[:error]

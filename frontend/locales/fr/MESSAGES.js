@@ -286,7 +286,6 @@ const MESSAGES = {
     , 'initing-documentation': "Initier la documentation"
     , 'update-documentation': 'Actualiser la documentation'
     , 'open-documentation': 'Ouvrir la documentation'
-    , 'select-docu-folder-and-ok': 'Sélectionner le dossier dans lequel placer la documentation, puis “OK”.'
     , 'select-docu-folder': 'Sélectionner le dossier de documentation dans le Finder'
     , 'select-docu-main-file': 'Sélectionner le fichier principal de documentation (défaut : docu.adoc)'
     , 'select-doc-main-final-file': 'Sélectionner le fichier du manuel (défaut : docu.html)'

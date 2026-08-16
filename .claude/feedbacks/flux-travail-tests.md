@@ -7,6 +7,8 @@ metadata:
 
 **OBLIGATION FORMELLE** DE RELIRE CE FICHIER APRÈS CHAQUE CORRECTION EFFECTUÉE
 
+**Rappel du 2026-08-15** (déjà écrit ci-dessous mais pas appliqué ce jour-là) : un test JAMAIS encore rejoué à cette session doit toujours être JOUÉ D'ABORD, même si une description d'échec existante (état de fin de session précédente, etc.) semble déjà donner la cause — cette description peut être obsolète (fix déjà en place ailleurs, cause différente). Ne commencer les corrections qu'après un run frais de CE test précis.
+
 **Corriger les tests les uns après les autres en respectant ce fluc de travail :**
 
 1.1 Indiquer pour commencer : Indice fichier test / nombre fichiers à corriger. Par exemple : "3/14 Test du lancement de l'horloge prêt"

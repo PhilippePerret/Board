@@ -31,6 +31,7 @@ def run_test
   pending("#{EDITOR_NAME} non installé sur cette machine") unless coteditor_installed?
 
   id = nil
+  expected_name = nil
   coteditor_was_running = system('pgrep', '-x', 'CotEditor', out: File::NULL, err: File::NULL)
 
   Dir.mktmpdir('board-test-project-') do |fixture_dir|
@@ -85,9 +86,26 @@ def run_test
   end
 ensure
   remove_fixture_project(id) if id
-  # → ferme CotEditor uniquement si c'est ce test qui l'a lancé (jamais si
-  #   déjà ouvert avant, pour ne pas fermer un travail en cours)
-  system('osascript', '-e', 'quit app "CotEditor"') if id && !coteditor_was_running
+  if id
+    if coteditor_was_running
+      # CotEditor tournait déjà (travail en cours) : fermer UNIQUEMENT la
+      # fenêtre ouverte par ce test (nom exact, vérifié juste avant de la
+      # fermer — jamais tout l'appli, jamais un balayage).
+      system('osascript', '-e', <<~APPLESCRIPT)
+        tell application "System Events"
+          tell process "CotEditor"
+            set targetWindows to (windows whose name is #{expected_name.to_s.inspect})
+            if (count of targetWindows) > 0 then
+              perform action "AXPress" of (button 1 of item 1 of targetWindows)
+            end if
+          end tell
+        end tell
+      APPLESCRIPT
+    else
+      # CotEditor n'existait pas avant ce test : on peut le quitter entier.
+      system('osascript', '-e', 'quit app "CotEditor"')
+    end
+  end
 end
 
 board_test("service commun 'éditer la documentation' : définition au premier clic, exécution directe ensuite") { run_test }

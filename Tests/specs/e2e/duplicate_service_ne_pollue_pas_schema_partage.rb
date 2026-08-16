@@ -26,6 +26,14 @@ def run_test
   result = bridge_eval(<<~JS)
     (function(){
       var id = 'open-folder-project'
+      // Service.get(id) ne renvoie une instance que si le panneau des
+      // services communs a déjà été construit au moins une fois (c'est
+      // cette construction qui crée les instances, cf. Service.js) — dans
+      // l'usage réel, c'est toujours vrai (on glisse un bouton du panneau,
+      // qui n'existe donc déjà que si le panneau est là). On le force ici
+      // pour reproduire cette condition, jamais remplie sinon juste après
+      // launch_app.
+      Service.CommonPanel
       var originalLength = SERVICES_DATA_TABLE[id].params.length
 
       // Simule 3 glissés successifs du même service abstrait, dans la

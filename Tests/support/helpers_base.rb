@@ -45,6 +45,14 @@ module BoardTest
     [@@osascript_calls, @@osascript_time]
   end
 
+  # Dernières lignes de Board-debug.log (Debug.log, backend/lib/debug.rb) —
+  # pour inclure dans un message d'échec sans que Phil ait à aller le lire
+  # lui-même.
+  def debug_log_tail(n = 20)
+    return '(fichier absent)' unless File.exist?(DEBUG_LOG_FILE)
+    File.readlines(DEBUG_LOG_FILE).last(n).join
+  end
+
   def pending(message)
     raise Pending, message
   end
@@ -331,10 +339,6 @@ module BoardTest
     end
   end
 
-  def finder_window_ids
-    osascript(FINDER_SCRIPT, 'window-ids').split("\n")
-  end
-
   def finder_close_window(window_id)
     osascript(FINDER_SCRIPT, 'close-window', window_id)
   end
@@ -490,6 +494,20 @@ module BoardTest
     raise "\"open #{BOARD_APP}\" a échoué après 3 essais" unless opened
 
     wait_until(desc: -> { 'btn-add-project introuvable après ouverture de Board.app' }) { exists?('btn-add-project') }
+
+    # btn-add-project est un bouton statique (onclick inline dans index.html),
+    # présent dans le DOM dès le parse — donc TOUJOURS trouvé par le wait
+    # ci-dessus, bien avant que App.data (App.js#init, rempli seulement à la
+    # réponse async 'load-all') existe. Cliquer avant : App.getData(...) lit
+    # this.data alors que this.data est encore undefined -> exception (ex.
+    # Project.addProject -> App.getData('projects-out').length plante),
+    # jamais affichée (onclick inline : WebKit ne rapporte que "Script
+    # error." à window.onerror, sans fichier/ligne) — constaté et capturé en
+    # direct le 2026-08-16 sur 'création d'un nouveau projet, sélection
+    # Finder = un fichier', premier spec du run.
+    wait_until(desc: -> { 'App.data jamais rempli (load-all) après ouverture de Board.app' }) do
+      bridge_eval("typeof App !== 'undefined' && App.data != null") == 'true'
+    end
   end
 
   def quit_app

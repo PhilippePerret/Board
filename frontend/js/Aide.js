@@ -9,9 +9,16 @@ function aide(key, mark, file) {
 
 class Aide {
   static open(anchor, fichier) { D.on && D.trace(anchor, fichier)
-    fichier = fichier || 'Manuel.html' 
+    logize('Aide.open appelé', {anchor, fichier})
+    fichier = fichier || 'Manuel.html'
     if ( anchor && anchor == '') anchor = undefined
-    window.webkit.messageHandlers.openHelp.postMessage({fichier, anchor})
+    logize('openHelp handler présent ?', {present: !!(window.webkit?.messageHandlers?.openHelp)})
+    try {
+      window.webkit.messageHandlers.openHelp.postMessage({fichier, anchor})
+      logize('postMessage(openHelp) envoyé sans erreur')
+    } catch (e) {
+      logize('postMessage(openHelp) a levé une erreur', {message: e.message})
+    }
   }
 
   static link(anchor, mark = '?', file = ''){

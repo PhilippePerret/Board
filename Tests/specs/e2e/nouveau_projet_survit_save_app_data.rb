@@ -21,6 +21,12 @@ include BoardTest
 
 def run_test
   launch_app
+  # launch_app garantit seulement que le socket de test répond (page chargée),
+  # pas que App.init() a fini (App.data assigné à la réponse 'load-all') —
+  # sans cette attente, new Project() plus bas peut s'exécuter AVANT, et son
+  # constructeur (App.getData('support_folder'), Project.js:270) plante sur
+  # App.data encore undefined.
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   project_id = "fixture-#{Time.now.to_i}#{rand(36**4).to_s(36)}"
 

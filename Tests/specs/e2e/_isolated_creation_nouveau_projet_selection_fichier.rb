@@ -14,6 +14,10 @@ def run_test
   fixture_file = Tempfile.new('board-test-file-')
   fixture_path = fixture_file.path
 
+  # 1er spec du run entier : App.data (rempli par la réponse async
+  # 'load-all') doit être prêt avant tout clic — cf. launch_app.
+  launch_app
+
   # - Click sur le bouton "add project"
   click('btn-add-project')
 

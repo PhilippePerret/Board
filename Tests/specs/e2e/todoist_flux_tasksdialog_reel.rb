@@ -71,7 +71,7 @@ def run_test
     click_suffix('btn-oui') # Confirmer -> onMarkAndCreateTodoistTask -> backend
 
     wait_until(10, desc: -> { "message en exergue = #{(exergue_message_text rescue '(erreur)').inspect}" }) do
-      (exergue_message_text rescue '') =~ /achevées : 1/
+      (exergue_message_text rescue '') =~ /achev\u00e9es\u00a0: 1/
     end
 
     # → l'appel de clôture a bien ciblé LA tâche cochée

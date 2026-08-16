@@ -13,7 +13,7 @@
 --     précis — contrairement à "select"/reveal, qui ouvre une fenêtre sur le
 --     dossier PARENT avec l'élément juste sélectionné dedans)
 --   deselect                    (ouvre une fenêtre sur un dossier neutre, sans rien sélectionner dedans)
---   window-ids                 (id des fenêtres Finder ouvertes, une par ligne)
+--   window-targets              (dossier ciblé — POSIX path — de chaque fenêtre Finder ouverte, une par ligne)
 --   close-window <id>          (ferme la fenêtre si elle existe encore)
 --   front-window-name          (nom de la fenêtre Finder au premier plan, "" si aucune)
 --   close-front-window-if-named <name> (ferme la fenêtre Finder au premier
@@ -23,11 +23,13 @@
 --   close-all-windows           (ferme toutes les fenêtres Finder actuelles —
 --     à utiliser seulement après un snapshot-windows, pour repartir propre
 --     en début de suite ; la restauration se fait via restore-windows)
---   close-windows-except <ids>  (ferme toute fenêtre Finder dont l'id n'est
---     PAS dans la liste <ids> séparée par virgules — ids obtenus via
---     window-ids AVANT la suite ; ne touche jamais aux fenêtres déjà
---     ouvertes avant la suite, contrairement à snapshot/restore qui les
---     ferme puis les recrée)
+--   close-windows-except-targets <paths> (ferme toute fenêtre Finder dont le
+--     dossier ciblé n'est PAS dans la liste <paths> séparée par retours à la
+--     ligne — paths obtenus via window-targets AVANT la suite ; comparaison
+--     par dossier, pas par id, pour survivre à une fenêtre fermée puis
+--     recréée en cours de suite (restore-windows change l'id) ; ne touche
+--     jamais aux fenêtres déjà ouvertes avant la suite, contrairement à
+--     snapshot/restore qui les ferme puis les recrée)
 --   snapshot-windows            (dossier + position de TOUTES les fenêtres
 --     Finder ouvertes, une ligne par fenêtre, champs séparés par tabulation :
 --     targetPath, bounds "x1,y1,x2,y2", sélection (chemins séparés par
@@ -95,13 +97,23 @@ on run argv
 			return name of front window
 		end tell
 
-	else if theAction is "window-ids" then
+	else if theAction is "window-targets" then
+		-- Dossier ciblé (POSIX path) de chaque fenêtre, pas son id AppleScript :
+		-- une fenêtre fermée puis recréée (restore-windows) change d'id mais
+		-- garde le même dossier — seule identité stable pour reconnaître "la
+		-- même fenêtre" d'un bout à l'autre de la suite.
 		set out to ""
 		tell application "Finder"
 			set wids to id of every window
 		end tell
 		repeat with wid in wids
-			set out to out & wid & linefeed
+			tell application "Finder"
+				try
+					set w to (first window whose id is wid)
+					set wPath to POSIX path of (target of w as alias)
+					set out to out & wPath & linefeed
+				end try
+			end tell
 		end repeat
 		return out
 
@@ -178,13 +190,19 @@ on run argv
 		end tell
 		return "ok"
 
-	else if theAction is "close-windows-except" then
-		set keepIdsText to ""
-		if (count of argv) > 1 then set keepIdsText to item 2 of argv
-		set keepIds to {}
-		if keepIdsText is not "" then
-			set AppleScript's text item delimiters to ","
-			set keepIds to text items of keepIdsText
+	else if theAction is "close-windows-except-targets" then
+		-- Compare le dossier ciblé (POSIX path) plutôt que l'id : nécessaire
+		-- pour les fenêtres personnelles
+		-- fermées puis recréées en cours de suite (restore-windows change
+		-- l'id, jamais le dossier ciblé). Chaque chemin de la liste à garder
+		-- n'est consommé qu'une fois, pour ne pas fermer un doublon légitime
+		-- (deux fenêtres perso ouvertes sur le même dossier).
+		set keepPathsText to ""
+		if (count of argv) > 1 then set keepPathsText to item 2 of argv
+		set keepPaths to {}
+		if keepPathsText is not "" then
+			set AppleScript's text item delimiters to linefeed
+			set keepPaths to text items of keepPathsText
 			set AppleScript's text item delimiters to ""
 		end if
 		set diag to ""
@@ -192,16 +210,29 @@ on run argv
 			set allIds to id of every window
 		end tell
 		repeat with wid in allIds
-			set widText to wid as string
-			if keepIds does not contain widText then
-				tell application "Finder"
-					try
-						close (first window whose id is wid)
-					on error errMsg
-						set diag to diag & "fenêtre " & widText & " : " & errMsg & linefeed
-					end try
-				end tell
-			end if
+			tell application "Finder"
+				try
+					set w to (first window whose id is wid)
+					set wPath to POSIX path of (target of w as alias)
+					if keepPaths contains wPath then
+						-- Consommé : retiré pour ne pas protéger un doublon en trop.
+						set newKeep to {}
+						set already to false
+						repeat with p in keepPaths
+							if (not already) and (p as string) is wPath then
+								set already to true
+							else
+								set end of newKeep to (p as string)
+							end if
+						end repeat
+						set keepPaths to newKeep
+					else
+						close w
+					end if
+				on error errMsg
+					set diag to diag & "fenêtre " & (wid as string) & " : " & errMsg & linefeed
+				end try
+			end tell
 		end repeat
 		if diag is "" then
 			return "ok"

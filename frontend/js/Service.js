@@ -98,7 +98,6 @@ class Service {
     this.beforeExec = data.beforeExec
     this.bypassExec = data.bypassExec
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
-    this.transient  = data.transient ?? false // service common depuis panneau
     this.afterDefinedParams = data.afterDefinedParams ?? SERVICES_DATA_TABLE[data.id]?.afterDefinedParams ?? null
     this.constructor.get(this.uuid || this.id) && raise(`[SYSTEM] L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
@@ -338,7 +337,6 @@ class Service {
    */
   ensureServiceData(projet){
     historize("-> ensureServiceData", projet)
-    if (this.transient) return this.defineCommonServiceParameters(projet)
     const stored = projet.common_services_data && projet.common_services_data[this.id]
     if (!stored) return this.defineCommonServiceParameters(projet)
     // this.params.length = nombre de paramètres attendus par le schéma
@@ -362,20 +360,11 @@ class Service {
   }
 
   onReturnFromDefineProjetParams(projet, service){
-    const realParamsValues = [...service.params] // valeurs remises après enregistrement
-    let paramValuesForProjet = [...service.params]
-    if (service.transient) {
-      // Si c'est un service transitoire (commun depuis panneau), il 
-      // faut retirer les paramètres transient
-      service.data.params.forEach((param, i) => {
-        if (param.transient) { paramValuesForProjet[i] = ':transient:'}
-      })
-    }      
+    const realParamsValues = [...service.params]
     projet.common_services_data = projet.common_services_data ?? {}
-    Object.assign(projet.common_services_data, {[service.id]: paramValuesForProjet})
+    Object.assign(projet.common_services_data, {[service.id]: realParamsValues})
     console.log("Projet après définition des paramètres", projet, service)
     projet.save(() => {
-      Object.assign(projet.common_services_data, {[service.id]: realParamsValues})
       new ServiceExecuter(this).execOnProject(projet)
     })
   }

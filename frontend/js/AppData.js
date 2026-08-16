@@ -54,9 +54,6 @@ const APP_DATA = [
   , {id: 'text-editor'                , name: getMsg('text-simple-editor')        , type: 'select'    , values: TEXT_EDITORS}
   , {id: 'yaml-editor'                , name: getMsg('yaml-editor')               , type: 'select'    , values: [...YAML_EDITORS, ...CODE_EDITORS]}
   , {id: 'documentation-editor'       , name: getMsg('docu-editor')               , type: 'select'    , values: TEXT_EDITORS}
-  , {id: 'docu-folder-name'           , name: getMsg('docu-folder-name')          , type: 'string'    , default: getMsg('Documentation') }
-  , {id: 'docu-main-edit-file'        , name: getMsg('docu-main-file-name')       , type: 'string'    , default: 'docu.adoc'}
-  , {id: 'docu-main-disp-file'        , name: getMsg('docu-main-disp-file')       , type: 'string'    , default: 'docu.html'}
   , {id: 'changelog-file'             , name: getMsg('changelog-file-name')       , type: 'string'    , default: 'CHANGELOG.md' }
   , {id: 'todo-file'                  , name: getMsg('todo-file-name')            , type: 'string'    , default: 'TODO.md'}
   , {id: 'version'                    , name: getMsg('app-version')               , type: 'string'    , locked: true}
@@ -66,23 +63,3 @@ const APP_DATA = [
 
 const TBL_APP_DATA = {}
 APP_DATA.forEach(prop => Object.assign(TBL_APP_DATA, {[prop.id]: prop}))
-
-class AppData {
-
-
-  static get(propId){ 
-    var propAbsData
-    if (prop?.id) {
-      prop = prop.id
-      propAbsData = prop
-    } else {
-      propAbsData = TBL_APP_DATA[propId]
-    }
-    return App.getData(propId) ?? propAbsData.default ?? ''
-  }
-  
-  
-  static update(prop, value){
-
-  }
-}

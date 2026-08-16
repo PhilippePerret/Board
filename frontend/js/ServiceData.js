@@ -461,17 +461,19 @@ const COMMON_SERVICES_DATA = [
     , group: getMsg('group-documentation')
     , scType: '.rb'
     , params: [
-        {id: 'docu_folder', absolute: true, q: getMsg('select-docu-folder-and-ok'), type: 'path'}
+        {id: 'docu-folder', type: 'project'
+          , if_undefined: {type: 'path', q: getMsg('select-docu-folder-and-ok')}}
       ]
     , beforeExec(dict){
-        return [dict.docu_folder, App.getData('docu-folder-name'), App.getData('docu-main-edit-file')]
+        return [ dict['docu-folder'] ]
       }
-    , afterRunWithSuccess: (projet, retour) => {
-        const folder = `${retour.request.params[0]}/${App.getData('docu-folder-name')}`
-        const mainEditFile = `${folder}/${App.getData('docu-main-edit-file')}`
-        const mainDispFile = `${folder}/${App.getData('docu-main-disp-file')}`
+    , afterRunWithSuccess: (projet, retour, dictValues) => {
+        const folder = dictValues['docu-folder']
+        const mainEditFileName = `${folder.split('/').at(-1)}.adoc`
+        const mainDispFileName = `${folder.split('/').at(-1)}.html`
+        const mainEditFile = `${folder}/${mainEditFileName}`
+        const mainDispFile = `${folder}/${mainDispFileName}`
         // On les enregistre pour le projet
-        projet.set('docu-folder', folder)
         projet.set('docu-main-file-adoc', mainEditFile)
         projet.set('docu-main-file-html', mainDispFile, true)
       }
@@ -481,11 +483,9 @@ const COMMON_SERVICES_DATA = [
       id: 'open-iterm-at-folder'
     , name: getMsg('iterm-at-folder')
     , group: 'Consoles'
-    , params: [ 
-        {id: 'path', type: 'project'} 
-      ]
-    , dynParams: [ 
-        {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
+    , params: [
+        {id: 'path', type: 'project'}
+      , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
       ]
   },
   // Ouvrir un Terminal au dossier (pour jouer un code)
@@ -495,9 +495,7 @@ const COMMON_SERVICES_DATA = [
     , group: 'Consoles'
     , params: [
         {id: 'path', type: 'project'}
-      ]
-    , dynParams: [
-        {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
+      , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
       ]
   },
   {

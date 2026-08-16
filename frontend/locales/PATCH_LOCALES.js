@@ -9,6 +9,9 @@ Object.assign(MESSAGES, {
   // Nouveaux messages à mettre dans les MESSAGES.js
 
   // À MODIFIER
+  , 'github-repo-description': "Description du repo"
+  , 'github-repo-description-q': "Quelle description pour ce repo Github ?"
+  , 'select-docu-folder-and-ok': 'Créez le dossier et sélectionnez-le dans le Finder, puis “OK”.'
 
 })
 

@@ -33,7 +33,6 @@ réponse de Phil avant de s'y attaquer (cf. questions en fin de fichier).
 == C. Service.js / ServiceExecuter.js
 
 - 12. `[x]` `service.onError` custom — échec de "Actualiser la documentation" → `ErrorsDialog` avec bouton "Corriger" (`Tests/specs/e2e/service_commun_update_documentation_erreur.rb`). LIMITE DÉCOUVERTE : `Service.runService` (le relance censé suivre un clic sur "Corriger") est un stub qui ne fait rien de fonctionnel — testé seulement l'affichage du dialogue/bouton, pas le relance réelle.
-- 13. `[x]` Nettoyage d'un service `transient` après exécution réussie (`Tests/specs/e2e/service_transient_nettoyage_cache.rb`)
 - 14. `[x]` Meta+clic sur un bouton de service **commun** du panneau (pas encore attaché à un projet) pour rééditer ses paramètres déjà en cache (`Tests/specs/e2e/service_commun_meta_clic_panneau_redefinition.rb`) — confirmé : contrairement à la redéfinition d'un service attaché (`Service#redefine`), celle-ci NE préreamplit PAS les valeurs actuelles (`Service#defineCommonServiceParameters` n'injecte pas `actual`)
 
 == D. SidePanel.js / Clock.js

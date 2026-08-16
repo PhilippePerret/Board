@@ -2,28 +2,21 @@
 
 Script permettant d'initier la documentation AsciiDoctor
 
-Créer :
-- dans le container désigné…
-- un fichier principal docu.adoc
+Reçoit le dossier de documentation (qui existe déjà). Y créer :
+- le fichier principal <nom-du-dossier>.adoc
 - un dossier adocs/ pour mettre les fichiers
-- le fichier de raccourcis macros.rb
 
 =end
 require_relative 'lib/utils.rb'
 
 
 begin
-  
-  table = inited_table
-  
-  CONTAINER         = ARGV[0].strip
-  DOCU_FOLDER_NAME  = ARGV[1].strip
-  MAIN_FILE_NAME    = ARGV[2].strip
 
-  if File.exist?(File.join(CONTAINER, DOCU_FOLDER_NAME))
-    raise "Le dossier existe déjà, je ne peux pas créer la documentation ici."
-  end
-  DOCU_FOLDER = ensure_folder(CONTAINER, DOCU_FOLDER_NAME)
+  table = inited_table
+
+  DOCU_FOLDER = ARGV[0].strip
+
+  MAIN_FILE_NAME = "#{File.basename(DOCU_FOLDER)}.adoc"
 
   ADOCS_FOLDER = ensure_folder(DOCU_FOLDER, 'adocs')
   FIRST_ADOC_FILE = File.join(ADOCS_FOLDER, 'introduction.adoc')

@@ -11,6 +11,12 @@ include BoardTest
 
 def run_test
   launch_app
+  # launch_app garantit seulement que le socket de test répond (page
+  # chargée), pas que Reminder.init() a tourné (this.remindedTasks assigné,
+  # App._initProjectsServicesAndReminders) — sans cette attente, le
+  # bridge_eval plus bas peut s'exécuter avant, et planter sur
+  # this.remindedTasks encore undefined (Reminder.js ~122).
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   result = bridge_eval(<<~JS)
     (function(){

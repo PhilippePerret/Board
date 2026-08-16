@@ -16,6 +16,7 @@ include BoardTest
 
 def run_test
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   tomorrow = Time.now + 24 * 3600
   datetime_str = format('%d %02d %02d:%02d', tomorrow.day, tomorrow.month, tomorrow.hour, tomorrow.min)

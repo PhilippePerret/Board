@@ -18,6 +18,7 @@ def run_test
   finder_close_all_windows
 
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   click('tools-button')
   wait_for('tools-panel')
@@ -29,7 +30,11 @@ def run_test
   set_value('__tools_app_window_bounds__', 'Finder')
   click_suffix('btn-oui')
 
-  wait_until(4, desc: -> { "ErrorsDialog absente ou inattendue (#{(errors_dialog_text rescue '(erreur)').inspect})" }) do
+  wait_until(4, desc: -> {
+    "ErrorsDialog absente ou inattendue (#{(errors_dialog_text rescue '(erreur)').inspect})" \
+    " — LOGS = #{bridge_eval('JSON.stringify(window.LOGS || [])')}" \
+    " — Board-debug.log (fin) :\n#{debug_log_tail}"
+  }) do
     (errors_dialog_text rescue '') =~ /Aucune fenêtre ouverte/
   end
 ensure

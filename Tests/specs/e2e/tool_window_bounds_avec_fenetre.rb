@@ -25,6 +25,7 @@ def run_test
   finder_open_window(Dir.home)
 
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   click('tools-button')
   wait_for('tools-panel')
@@ -38,7 +39,11 @@ def run_test
   raise "sélection 'Finder' pas prise (valeur = #{selected.inspect})" unless selected == 'Finder'
   click_suffix('btn-oui')
 
-  wait_until(4, desc: -> { "ni '__window-infos__' ni ErrorsDialog (errors_dialog_text = #{(errors_dialog_text rescue '(erreur)').inspect})" }) do
+  wait_until(4, desc: -> {
+    "ni '__window-infos__' ni ErrorsDialog (errors_dialog_text = #{(errors_dialog_text rescue '(erreur)').inspect})" \
+    " — LOGS = #{bridge_eval('JSON.stringify(window.LOGS || [])')}" \
+    " — Board-debug.log (fin) :\n#{debug_log_tail}"
+  }) do
     exists?('__window-infos__') || !((errors_dialog_text rescue '').empty?)
   end
   raise "ErrorsDialog ouverte au lieu de window-infos : #{errors_dialog_text.inspect}" unless exists?('__window-infos__')

@@ -210,6 +210,17 @@ module BoardTest
     JS
   end
 
+  # Texte affiché dans #spinner-message (Spinner.js) — distinct du footer
+  # #message (footer_message_text) et du message en exergue.
+  def spinner_message_text
+    bridge_eval(<<~JS)
+      (function(){
+        var el = document.getElementById('spinner-message');
+        return el ? el.textContent : '';
+      })()
+    JS
+  end
+
   # Texte du footer #message (Messagerie.js#footerError et #message appelé
   # SANS true en 1er argument) — distinct du message "en exergue"
   # (exergue_message_text ci-dessus).

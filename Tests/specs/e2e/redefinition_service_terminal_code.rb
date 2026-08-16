@@ -1,7 +1,5 @@
 # Test : redéfinition d'un service "open-terminal-at-folder" — couvre le
-# type 'string' (param 'code', marqué transient — sans effet sur la
-# redéfinition d'un service déjà attaché, ce marquage ne concerne que le
-# service commun joué direct depuis le panneau).
+# type 'string' (param 'code').
 # Source : demande explicite (2026-07-19).
 
 require_relative '../../support/helpers'

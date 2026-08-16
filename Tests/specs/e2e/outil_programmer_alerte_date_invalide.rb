@@ -18,6 +18,7 @@ include BoardTest
 
 def run_test
   launch_app
+  wait_until(10, desc: -> { "spinner = #{spinner_message_text.inspect}" }) { spinner_message_text.include?('prête') }
 
   click('tools-button')
   wait_for('tools-panel')

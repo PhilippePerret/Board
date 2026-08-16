@@ -136,10 +136,6 @@ class ServiceExecuter {
       if ( this.afterRunWithSuccess) this.afterRunWithSuccess(this.projet, retour, this.dictParamsValues)
       message(true, (retour.message || '').trimEnd() + getMsg('service-success', [this.name, this.id]))
       // console.log("ServiceExecuter # afterRunService termine normalement.")
-      if (this.service.transient /* common service joué depuis panneau */) {
-        Service.remove(this.service.uuid)
-        historize("- Service supprimé du cache")
-      }
       if (this.repeat) {
         // Un service qui se répète en boucle jusqu'à ce que l'user
         // l'abandonne — rejoue via le même point d'entrée que le premier

@@ -31,7 +31,7 @@ class Tools {
   }
 
   static toolGitInit(key, value){
-    console.log("key/retour", key, value)
+    // console.log("key/retour", key, value)
 
     // S'assurer qu'il y a un projet courant
     const project = Project.current || raiseError('folder-required')
@@ -48,8 +48,11 @@ class Tools {
           break
         case 'visibility':
           // Le dépôt distant n'existe pas encore : visibilité choisie,
-          // on peut passer directement aux labels.
+          // on demande maintenant la description (avant les labels).
           this._gitInitVisibility = value
+          return this.toolGitInitAskDescription()
+        case 'description':
+          this._gitInitDescription = value
           return this.toolGitInitAskLabels()
       }
     }
@@ -57,7 +60,8 @@ class Tools {
     const github_account = project.get('github_account')
     if (!github_account) {
       return Prompter.prompt({
-          title: getMsg('github-account')
+          id: 'github-account'
+        , title: getMsg('github-account')
         , type: 'string'
         , q: getMsg('github-account')
       }, this.toolGitInit.bind(this, 'github_account'))
@@ -66,7 +70,8 @@ class Tools {
     const github_name = project.get('github_name')
     if (!github_name) {
       return Prompter.prompt({
-          title: getMsg('github-project-name')
+          id: 'github-name'
+        , title: getMsg('github-project-name')
         , type: 'string'
         , q: getMsg('github-project-name')
       }, this.toolGitInit.bind(this, 'github_name'))
@@ -91,8 +96,10 @@ class Tools {
     if (data.error) return erreur(data.error)
     if (data.exists) {
       // Dépôt distant déjà présent, vide, droits ok : pas besoin de
-      // visibilité (elle existe déjà), direct aux labels.
+      // visibilité ni de description (le dépôt existe déjà tel quel),
+      // direct aux labels.
       this._gitInitVisibility = null
+      this._gitInitDescription = null
       return this.toolGitInitAskLabels()
     }
     // Dépôt distant absent : il va être créé, demander sa visibilité —
@@ -103,6 +110,15 @@ class Tools {
       , ouiBtn:  {name: getMsg('Private'), onclick: () => this.toolGitInit('visibility', 'private')}
       , nonBtn:  {name: getMsg('Public'),  onclick: () => this.toolGitInit('visibility', 'public')}
     }).show()
+  }
+
+  static toolGitInitAskDescription(){
+    Prompter.prompt({
+        id: 'github-repo-description'
+      , title: getMsg('github-repo-description')
+      , q: getMsg('github-repo-description-q')
+      , type: 'string'
+    }, this.toolGitInit.bind(this, 'description'))
   }
 
   static toolGitInitAskLabels(){
@@ -127,7 +143,7 @@ class Tools {
       server.send({
           action: "git-ope"
         , git_ope: 'init_for_project'
-        , git_args: [project.path, github_account, github_name, labels, this._gitInitVisibility]
+        , git_args: [project.path, github_account, github_name, labels, this._gitInitVisibility, this._gitInitDescription]
         , no_raise: true
       }, this.afterGitInitialisation.bind(this))
     })
@@ -148,14 +164,15 @@ class Tools {
 
 
   static onAppChosen(appName){
+    logize('Tools.onAppChosen : envoi get-app-window-bounds', {appName})
     server.send({action: 'get-app-window-bounds', appName: appName, no_raise: true}, this.onWindowBounds.bind(this, appName))
   }
 
   static onWindowBounds(appName, retour){
-    console.log("retour complet", retour)
+    logize('Tools.onWindowBounds : retour reçu', {appName, retour})
     const data = retour.data
-    if (data.error) { 
-      error(getErr(data.error, appName))
+    if (data.error) {
+      error(data.error)
     } else {
       const dataDial = {
           id: 'window-infos'

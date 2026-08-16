@@ -159,6 +159,21 @@ function historize(msg, params) {
   }
 }
 
+// Comme historize, mais pour du log de débogage temporaire (pas le suivi
+// du déroulement de l'app pour Phil) — buffer séparé (window.LOGS),
+// relisible depuis les tests via bridge_eval, puisqu'une console.log seule
+// (process WebContent séparé) n'est jamais capturée par le process Ruby.
+function logize(msg, params) {
+  if (undefined == window.LOGS) window.LOGS = []
+  if (params) {
+    console.log("%c" + msg, 'color: #e08a00;', params)
+    window.LOGS.push([msg, params])
+  } else {
+    console.log("%c" + msg, 'color: #e08a00;')
+    window.LOGS.push(msg)
+  }
+}
+
 function uniqId(){
   return Date.now() + Math.random().toString(16).slice(2);
 }

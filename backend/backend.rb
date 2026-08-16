@@ -156,7 +156,11 @@ begin
   # request['appName'] — copiées dans le presse-papier par le script lui-même
   when 'get-app-window-bounds'
     require_relative 'lib/exec_script.rb'
+    require_relative 'lib/debug.rb'
+    Debug.log("get-app-window-bounds : appel pour appName=#{request['appName'].inspect}")
+    t0 = Time.now
     exec_script('GetAppWindowBounds.scpt', [request['appName']])
+    Debug.log("get-app-window-bounds : retour en #{(Time.now - t0).round(3)}s, ok=#{RETOUR.ok.inspect}, error=#{RETOUR.error.inspect}")
   
   # Écriture du changelog et de la todo-list après minuteur
   when 'update-project-notes'
