@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-15](2026-08-15-Etat-fin-de-session.md) — Github PR Cycle (init/commit/submit) à traiter en priorité
+- PRIORITÉ : [État fin de session 2026-08-16](2026-08-16-Etat-fin-de-session.md) — Tests du Github PR Cycle et suite complète des tests à jouer
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
