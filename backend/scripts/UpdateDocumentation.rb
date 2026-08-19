@@ -5,11 +5,19 @@ begin
   MAIN_FILE_PATH = ARGV[0]
   MAIN_FILE_NAME = File.basename(MAIN_FILE_PATH)
   FOLDER_MAIN_FILE = File.dirname(MAIN_FILE_PATH)
-  MACROS_FILE = File.join(FOLDER_MAIN_FILE, 'macros.rb')
   cmd = "cd '#{FOLDER_MAIN_FILE}' && asciidoctor --failure-level=WARN "
+  
+  MACROS_FILE = File.join(FOLDER_MAIN_FILE, 'macros.rb')
   if File.exist?(MACROS_FILE)
     cmd += "-r ./macros.rb "
   end
+  
+  CSS_FILE    = File.join(FOLDER_MAIN_FILE, 'custom.css')
+  if File.exist?(CSS_FILE)
+    # Attention : cela remplace complètement la mise en forme
+    cmd += "-a stylesheet=custom.css "
+  end
+  
   cmd += "#{MAIN_FILE_NAME}"
 
   table[:command] = cmd
