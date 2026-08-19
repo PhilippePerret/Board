@@ -88,6 +88,10 @@ div.project div.title {
 div.project fieldset.services {
   background-color: transparent;
 }
+div.project fieldset.others-services {
+  max-height: 30vh;
+  overflow-y: auto;
+}
 .project .path {
   font-size: 12px;
 }

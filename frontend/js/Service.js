@@ -277,12 +277,10 @@ class Service {
 
     this.unnamed = true
     this.params  = schemaParams
-    projet.lockSave()
 
     const definer = new ServiceDefiner(this, () => {
       const nameEl = this.projectCard?.querySelector?.('.name')
       if (nameEl) nameEl.textContent = this.name
-      projet.unlockSave()
       projet.save()
     }, projet)
     definer.define()

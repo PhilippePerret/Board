@@ -343,12 +343,24 @@ class Project {
   lockSave(){ this._saveLocked = true }
   unlockSave(){
     this._saveLocked = false
+    const callbacks = this._pendingSaveCallbacks
+    this._pendingSaveCallbacks = null
+    if (callbacks && callbacks.length) {
+      // callback peut valoir true (cf. Project#set(key, val, true), pas une
+      // fonction) — même garde que Project#afterSave.
+      this.save(() => callbacks.forEach(cb => 'function' == typeof cb && cb()))
+    }
   }
 
   save(callback){
-    // Verrouillé : callback tout de suite (valeur déjà en mémoire), écriture réelle groupée après unlockSave().
+    // Verrouillé : rien pendant la définition d'un service (ServiceDefiner),
+    // uniquement pour bloquer un save EXTERNE (ex. Reminder.poll qui
+    // réactiverait un projet en veille pendant que ses services se
+    // définissent) — mis en file, rejoué en un seul save réel groupé au
+    // déverrouillage.
     if (this._saveLocked) {
-      callback && callback()
+      this._pendingSaveCallbacks = this._pendingSaveCallbacks || []
+      if (callback) this._pendingSaveCallbacks.push(callback)
       return
     }
     const newData = {}
@@ -675,7 +687,7 @@ class Project {
     }
     div.appendChild(this.startupField)
 
-    this.othersField = DCreate('FIELDSET', {id: `${divId}-others-field`, class:'services'})
+    this.othersField = DCreate('FIELDSET', {id: `${divId}-others-field`, class:'services others-services'})
     const legendautre = DCreate('LEGEND', {text: getMsg('others-services')})
     this.othersField.appendChild(legendautre)
     ;(this.services.others ?? []).forEach((service) => {

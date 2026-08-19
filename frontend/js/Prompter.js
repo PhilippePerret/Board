@@ -83,13 +83,10 @@ class Prompter {
           const prop = valueDefiner.id
           TBL_PROJECT_DATA[prop] || raise(`[System] La propriété ${prop} doit être ajoutée Project.PROPERITES, la liste des propriétés des projets, pour pouvoir être enregistrée.`)
           projet[prop] = valueDefiner.value
-          // save() attendu (callback), pas tiré à la volée : sinon plusieurs
-          // params 'project' résolus coup sur coup (ex. horloge :
-          // session-duration puis work-duration) déclenchent des saves
-          // concurrents non ordonnés, dont un peut écraser sur disque une
-          // sauvegarde plus complète faite entre-temps (ex. common_services_data
-          // posée juste après par ServiceDefiner/onReturnFromDefineProjetParams).
-          projet.save(() => callback(valueDefiner.value))
+          // Pas de save ici : valeur appliquée en mémoire, le save réel
+          // (unique) se fait à la fin de toute la définition du service
+          // (cf. ServiceDefiner/Service.js) — jamais pendant.
+          callback(valueDefiner.value)
         }
       )
       definers.define()

@@ -45,5 +45,10 @@ const TOOLS_DATA = [
       id: 'app-window-bounds'
     , name: 'Taille et position de fenêtre…'
     , run: () => Tools.toolGetWindowBounds()
+  },
+  {
+      id: 'eval-code'
+    , name: getMsg('eval-code-btn')
+    , run: () => Tools.toolEvalCode()
   }
 ]

@@ -1,4 +1,36 @@
 
+div.eval-code-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+select.eval-code-lang {
+  align-self: flex-end;
+  width: calc(50% - 5px);
+}
+div.eval-code-container {
+  display: flex;
+  gap: 10px;
+  height: 380px;
+}
+div.eval-code-container div.eval-code-result,
+div.eval-code-container textarea.eval-code-input {
+  flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 12pt;
+  border: 1px solid rgb(208, 208, 208);
+}
+div.eval-code-container div.eval-code-result {
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+div.eval-code-container div.eval-code-result.error {
+  color: red;
+}
+
 div.config-dialog-container {
   border: 1px solid #CCC;
 }

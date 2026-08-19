@@ -614,3 +614,83 @@ class TasksDialog extends Dialog {
     return this.list
   }
 }
+
+/**
+ * Outil "Évaluer du code" (panneau Outils) — dialog à deux colonnes :
+ * résultat/erreur à gauche, langage (menu) + code (textarea) à droite.
+ * cf. backend/lib/code_eval.rb pour l'exécution — RETOUR.ok y reste
+ * toujours true (convention ok:true/false) : un code qui échoue est un
+ * résultat normal de CET outil, pas une erreur de bridge, donc jamais
+ * l'ErrorsDialog générique de xbridge.js — géré ici, dans le dialog,
+ * dans le panneau gauche, sans jamais avoir à fermer quoi que ce soit.
+ */
+class EvalCodeDialog extends Dialog {
+  // Même liste que backend/lib/code_eval.rb#RUN_CMD_BY_LANG.
+  static LANGUAGES = [
+      ['ruby', 'Ruby'], ['javascript', 'JavaScript'], ['python', 'Python']
+    , ['php', 'PHP'], ['perl', 'Perl'], ['bash', 'Bash'], ['zsh', 'Zsh']
+    , ['fish', 'Fish'], ['lua', 'Lua'], ['go', 'Go'], ['swift', 'Swift']
+    , ['dart', 'Dart'], ['r', 'R'], ['elixir', 'Elixir'], ['kotlin', 'Kotlin']
+    , ['rust', 'Rust'], ['c', 'C'], ['c++', 'C++'], ['java', 'Java']
+  ]
+
+  constructor(data){
+    super(data)
+    this.width   = '900px'
+    this.height  = '480px'
+    this.content = this.buildEvalUI()
+    this.ouiData = {name: getMsg('eval-code-run-btn'), keep: true, onclick: this.onInterpret.bind(this)}
+    this.nonData = {name: getMsg('eval-code-finish-btn')}
+  }
+
+  onShow(){
+    DGet(`#${this.id}-input`).focus()
+  }
+
+  buildEvalUI(){
+    const wrapper = DCreate('DIV', {class: 'eval-code-wrapper'})
+
+    this.langSelect = DCreate('SELECT', {id: `${this.id}-lang`, class: 'eval-code-lang'})
+    EvalCodeDialog.LANGUAGES.forEach(([value, label]) => {
+      this.langSelect.appendChild(DCreate('OPTION', {value: value, text: label}))
+    })
+    wrapper.appendChild(this.langSelect)
+
+    const container = DCreate('DIV', {class: 'eval-code-container'})
+    this.resultEl = DCreate('DIV', {id: `${this.id}-result`, class: 'eval-code-result'})
+    const input = DCreate('TEXTAREA', {
+        id: `${this.id}-input`, class: 'eval-code-input'
+      // Jamais de correction automatique dans du code : macOS/WebKit
+      // remplace sinon les guillemets droits par des chevrons/guillemets
+      // typographiques à la volée.
+      , autocorrect: 'off', autocapitalize: 'off', autocomplete: 'off', spellcheck: 'false'
+    })
+    // Même garde que TextareaDialog#buildField : sans ça, Entrée remonte
+    // jusqu'au listener global de Dialog.js (posé sur window) et déclenche
+    // le bouton par défaut au lieu d'un retour à la ligne.
+    listen(input, 'keydown', ev => ev.stopPropagation())
+    container.appendChild(this.resultEl)
+    container.appendChild(input)
+    wrapper.appendChild(container)
+
+    return wrapper
+  }
+
+  onInterpret(){
+    const language = this.langSelect.value
+    const code = DGet(`#${this.id}-input`).value
+    this.resultEl.classList.remove('error')
+    this.resultEl.textContent = getMsg('eval-code-running')
+    server.send({action: 'eval-code', language: language, code: code}, this.onEvalReturn.bind(this))
+  }
+
+  onEvalReturn(retour){
+    if (retour.data.ok) {
+      this.resultEl.classList.remove('error')
+      this.resultEl.textContent = retour.data.result
+    } else {
+      this.resultEl.classList.add('error')
+      this.resultEl.textContent = retour.data.error
+    }
+  }
+}

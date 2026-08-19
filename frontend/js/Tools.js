@@ -14,6 +14,18 @@ class Tools {
    * 
    * TODO Utiliser plutôt le Prompter
    */
+  /**
+   * @api
+   *
+   * Ouvre le dialog d'évaluation rapide de code (cf. Dialogs.js#EvalCodeDialog).
+   */
+  static toolEvalCode(){
+    new EvalCodeDialog({
+        title: getMsg('eval-code-title')
+      , id: 'tools_eval_code'
+    }).show()
+  }
+
   static toolGetWindowBounds(retour){
     if (undefined == retour) {
       server.send({action: 'list-running-apps'}, this.toolGetWindowBounds.bind(this))

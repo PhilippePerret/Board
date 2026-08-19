@@ -41,6 +41,12 @@ class ServiceDefiner {
     // Dictionnaire des valeurs des paramètres (fixes et dynamiques) en cours d'exécution, par identifiant de paramètre.
     const dictParamsValues = {}
     this.params.forEach(p => { if (p.actual !== undefined && p.actual !== null) dictParamsValues[p.id] = p.actual })
+    // Verrouillé pour toute la durée de la définition (pas seulement le save
+    // final ci-dessous) : bloque un save EXTERNE (ex. Reminder.poll) tombant
+    // pendant que les paramètres sont en cours de résolution — retiré dans
+    // les deux issues possibles de onDefined (succès et abandon).
+    this._lockedProjet = this.projet ?? Project.current
+    this._lockedProjet.lockSave()
     const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet, dictParamsValues)
     serviceDefiner.define()
   }
@@ -50,6 +56,10 @@ class ServiceDefiner {
    */
   onDefined(definers, dictParamsValues){
     // console.log('-> onDefined avec definers = ', definers)
+    // Déverrouillé ici, avant toute autre issue (succès, abandon, erreur de
+    // traitement ci-dessous) : la définition des paramètres elle-même est
+    // terminée dans tous les cas, jamais de sortie sans déverrouiller.
+    this._lockedProjet.unlockSave()
     if (definers) {
       // console.info("Définers retournés", definers)
 
@@ -58,9 +68,6 @@ class ServiceDefiner {
       // dialogue de cette définition était ouvert).
       const targetProjet = this.projet ?? Project.current
 
-      // Pour savoir si les valeurs projets on été
-      // modifiées => save
-      var projectHasNewValue = false
       // Boucle sur tous les paramètres.
       // On définit ceux qui sont des propriétés du projet
       // et l'on rassemble tous les paramètres pour service
@@ -73,10 +80,7 @@ class ServiceDefiner {
               this.service.setData('name', definer.value)
               break
             case 'project':
-              if (targetProjet[definer.id] != definer.value){
-                projectHasNewValue = true
-                targetProjet[definer.id] = definer.value
-              }
+              targetProjet[definer.id] = definer.value
               arraysParamsValues.push([definer.value])
               break
             case 'finder-window':
@@ -107,13 +111,9 @@ class ServiceDefiner {
       }
       this.service.params = arraysParamsValues
 
-      // Si des propriétés projet ont été modifiées, il
-      // faut enregistrer le projet
-      if (projectHasNewValue) {
-        targetProjet.save(this.callback)
-      } else {
-        this.callback.call(this)
-      }
+      // Le save réel (unique) est à la charge du caller, dans this.callback
+      // (cf. Service.js) — plus aucun save ici, pendant la définition.
+      this.callback.call(this)
 
     } else {
       // <= Il n'y a pas de definers
