@@ -7,3 +7,5 @@ tests/resultats/
 Board.app/*
 
 Tests/.board-backups/
+
+.claude/
