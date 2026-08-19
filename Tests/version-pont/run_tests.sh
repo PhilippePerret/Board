@@ -315,7 +315,7 @@ resolve_path() {
 
 ALL_SPECS=()
 if [ "$#" -eq 0 ]; then
-  for f in "$SPECS_DIR"/e2e/*.rb; do
+  for f in "$SPECS_DIR"/e2e/*.rb "$SPECS_DIR"/unit/*.rb; do
     [ -e "$f" ] && ALL_SPECS+=("$f")
   done
 else
