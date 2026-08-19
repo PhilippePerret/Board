@@ -1,6 +1,6 @@
 # MEMORY
 
-- PRIORITÉ : [État fin de session 2026-08-16](2026-08-16-Etat-fin-de-session.md) — Tests du Github PR Cycle et suite complète des tests à jouer
+- PRIORITÉ : [État fin de session 2026-08-17](2026-08-17-Etat-fin-de-session.md) — bugs de tests diagnostiqués non corrigés, PR Cycle toujours en échec
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
@@ -55,3 +55,5 @@
 - [App.getData doit retomber sur le default](feedbacks/feedback_appgetdata_default_fallback.md) — clé absente d'appdata.yaml = fallback sur TBL_APP_DATA[key].default, jamais undefined brut
 - [docu_folder_name = partie de Phil](feedbacks/feedback_docu_folder_name_is_phils.md) — redesign du select docu-folder-name dans init-documentation, ne pas l'implémenter
 - [Course App.data au 1er clic post-launch](feedbacks/launch_app_race_app_data.md) — bouton statique cliqué avant App.data chargé = exception JS silencieuse ("Script error.")
+- [Rapports ultra courts](feedbacks/terse_reports_only.md) — faits bruts seulement, jamais de paragraphe explicatif spontané
+- [Pas de hedging défensif](feedbacks/no_defensive_hedging.md) — pas de clause préemptive pour se couvrir avant critique
