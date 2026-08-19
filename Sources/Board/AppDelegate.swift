@@ -21,11 +21,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             reason: "Rappels actifs même app masquée"
         )
 
+        // Menu App standard (identique à ce que génère un template Xcode
+        // normal) : À propos, Réglages (cmd+,), Services, Masquer/Masquer
+        // les autres/Tout afficher (cmd+H / alt+cmd+H), Quitter.
         let appMenu = NSMenu()
+        appMenu.addItem(withTitle: "À propos de Board", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        appMenu.addItem(NSMenuItem.separator())
+        // Réglages (cmd+,) : ouvre pour l'instant App.editConfigData (données
+        // app, pas vraiment des "réglages") — brancher autre chose plus tard
+        // ne touchera que cette ligne, pas le menu Swift.
+        let prefsItem = NSMenuItem(title: "Réglages…", action: #selector(openPreferences(_:)), keyEquivalent: ",")
+        prefsItem.target = self
+        appMenu.addItem(prefsItem)
+        appMenu.addItem(NSMenuItem.separator())
+        let servicesMenu = NSMenu(title: "Services")
+        NSApp.servicesMenu = servicesMenu
+        appMenu.addItem(withTitle: "Services", action: nil, keyEquivalent: "").submenu = servicesMenu
+        appMenu.addItem(NSMenuItem.separator())
+        appMenu.addItem(withTitle: "Masquer Board", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        let hideOthersItem = NSMenuItem(title: "Masquer les autres", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+        hideOthersItem.keyEquivalentModifierMask = [.command, .option]
+        appMenu.addItem(hideOthersItem)
+        appMenu.addItem(withTitle: "Tout afficher", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
+        appMenu.addItem(NSMenuItem.separator())
         appMenu.addItem(withTitle: "Quitter Board", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         let appMenuItem = NSMenuItem()
         appMenuItem.submenu = appMenu
+
         let editMenu = NSMenu(title: "Edition")
+        editMenu.addItem(withTitle: "Annuler", action: Selector(("undo:")), keyEquivalent: "z")
+        let redoItem = NSMenuItem(title: "Rétablir", action: Selector(("redo:")), keyEquivalent: "z")
+        redoItem.keyEquivalentModifierMask = [.command, .shift]
+        editMenu.addItem(redoItem)
+        editMenu.addItem(NSMenuItem.separator())
         editMenu.addItem(withTitle: "Couper", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
         editMenu.addItem(withTitle: "Copier", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
         editMenu.addItem(withTitle: "Coller", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
@@ -33,9 +61,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let editMenuItem = NSMenuItem()
         editMenuItem.submenu = editMenu
 
+        let windowMenu = NSMenu(title: "Fenêtre")
+        windowMenu.addItem(withTitle: "Réduire", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        windowMenu.addItem(withTitle: "Zoomer", action: #selector(NSWindow.performZoom(_:)), keyEquivalent: "")
+        windowMenu.addItem(NSMenuItem.separator())
+        windowMenu.addItem(withTitle: "Tout ramener au premier plan", action: #selector(NSApplication.arrangeInFront(_:)), keyEquivalent: "")
+        let windowMenuItem = NSMenuItem()
+        windowMenuItem.submenu = windowMenu
+        NSApp.windowsMenu = windowMenu
+
         let mainMenu = NSMenu()
         mainMenu.addItem(appMenuItem)
         mainMenu.addItem(editMenuItem)
+        mainMenu.addItem(windowMenuItem)
         NSApp.mainMenu = mainMenu
 
         let contentViewController = ViewController()
@@ -68,5 +106,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         true
+    }
+
+    @objc func openPreferences(_ sender: Any?) {
+        (window.contentViewController as? ViewController)?.openPreferences()
     }
 }

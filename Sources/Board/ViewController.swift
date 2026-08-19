@@ -6,6 +6,13 @@ class ViewController: NSViewController, WKNavigationDelegate {
     private var webView: WKWebView!
     private var backend: Backend!
 
+    // Cible provisoire du menu Réglages (cmd+,, AppDelegate) — données app,
+    // pas de vrais réglages pour l'instant. À rebrancher ailleurs plus tard
+    // sans toucher au menu Swift.
+    func openPreferences() {
+        webView.evaluateJavaScript("App.editConfigData()")
+    }
+
     override func loadView() {
         self.view = NSView(frame: NSRect(x: 0, y: 400, width: 1600, height: 700))
     }
