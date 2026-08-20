@@ -228,11 +228,11 @@ class Dialog {
     this.btnMid = DCreate('BUTTON', {id: `${this.id}-btn-mid`, class: 'btn-mid, mid-btn' + ' ' + (this.midData?'':'invisible'), style: `width:${this.midData?.width ?? 'auto'}` , text: this.midData?.title || this.midData?.name ||''})
     footer.appendChild(this.btnMid)
     this.btnMid.disabled = (this.midData?.enable === false)
-    this.btnOui = DCreate('BUTTON', {id: `${this.id}-btn-oui`, class:'btn-oui right-btn main', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
+    this.btnOui = DCreate('BUTTON', {id: `${this.id}-btn-oui`, class:'btn-oui right-btn', style: `width:${this.ouiData.width ?? 'auto'}` , text: this.ouiData.title || this.ouiData.name})
     footer.appendChild(this.btnOui)
     this.btnOui.disabled = (this.ouiData?.enable === false)
 
-    this[`btn${this.defaultKey}`].classList.add('default-btn')
+    this[`btn${this.defaultKey}`].classList.add('default-btn', 'main')
 
     div.appendChild(footer)
     this.obj = scrim
