@@ -1,4 +1,4 @@
-# version 1.1
+# version 2.1
 require 'asciidoctor'
 require 'asciidoctor/extensions'
 
@@ -20,9 +20,8 @@ class Combo < Asciidoctor::Extensions::InlineMacroProcessor
   }
 
   def process(parent, target, attrs)
-    target.split('+')
-      .map {|k| %(<kbd style="font-size:1.25em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }
-      .join('+')
+    html = target.split('+').map {|k| %(<kbd style="font-size:1.25em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }.join('+')
+    create_anchor(parent, html, type: :link)
   end
 end
 
