@@ -220,7 +220,7 @@ const COMMON_SERVICES_DATA = [
           }
         })(dict.gh_operation)
         const issues  = dict.issue_list.join(' ')
-        // On doit faire la commande 
+        // On doit faire la commande
         var command
         if (dict.gh_operation == 'view') {
           command = `
@@ -242,7 +242,7 @@ const COMMON_SERVICES_DATA = [
             done;
           `
         }
-        command = command.replace(/\n\s+/g, ' ').trim()
+        command = `cd ${shellEscape(dict.path)} && ` + command.replace(/\n\s+/g, ' ').trim()
         // console.log("COMMANDE EN UNE LIGNE", command)
         return command
       }
