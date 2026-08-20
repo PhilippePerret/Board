@@ -548,7 +548,7 @@ const CUSTOM_SERVICES_DATA = [
     /* tag::exemple-fix-param[] */
     , params: [
         {id: 'window', q: null, value: null, type: 'finder-window', required: true},
-        {id: 'sidebar', q: getMsg('sidebar?') , value: null, type: 'boolean', required: false}
+        {id: 'sidebar', q: getMsg('sidebar?') , value: null, default: false, type: 'boolean', required: false}
       ]
     /* end::exemple-fix-param[] */
 
