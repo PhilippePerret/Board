@@ -434,11 +434,11 @@ class << self
   def get_status_files(path)
     longuest_name = 0
     longuest_path = 0
-    res = `cd "#{path}" && git status -s`
+    res = `cd "#{path}" && git -c core.quotePath=false status -s`
       .split("\n")
       .map do |file|
         mark = file[0..1].strip
-        path = file[3..-1]
+        path = file[3..-1].strip.gsub(/\A"|"\z/, '')
         name = File.basename(path)
         folder = File.dirname(path)
         longuest_name = name.length if name.length < 21 && name.length > longuest_name
