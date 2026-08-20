@@ -1,6 +1,13 @@
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
 /**
  * Reçoit une valeur et en déduit un type
- * 
+ *
  * note : un "type" de l'application, par exemple 'file' ou 'boolean
  */
 const REG_BOOL = /^true|false$/

@@ -65,7 +65,7 @@ class GitIssue extends ExtendedObject {
       // Construction d'un commentaire
       function buildComment(data) {
         const div = DCreate('DIV', {class: 'issue-comment'})
-        const body = DCreate('DIV', {class: 'issue-comment-body', text: data.body.replace(/\n/, '<br>')})
+        const body = DCreate('DIV', {class: 'issue-comment-body', text: escapeHTML(data.body).replace(/\n/, '<br>')})
         div.appendChild(body)
         return div
       }

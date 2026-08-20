@@ -137,7 +137,7 @@ class Prompter {
 
   static promptBoolean(spec, callback){
     new ConfirmDialog(Object.assign(this.dialogBase(spec), {
-        defaultKey: spec.actual === false ? getMsg('btn-no') : getMsg('btn-yes')
+        defaultKey: (spec.actual ?? spec.default) === false ? getMsg('btn-no') : getMsg('btn-yes')
       , ouiBtn: {name: getMsg('btn-yes'), onclick: () => callback(true)}
       , nonBtn: {name: getMsg('btn-no'), onclick: () => callback(false)}
     })).show()
