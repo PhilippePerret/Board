@@ -640,6 +640,7 @@ class EvalCodeDialog extends Dialog {
     this.height  = '480px'
     this.content = this.buildEvalUI()
     this.ouiData = {name: getMsg('eval-code-run-btn'), keep: true, onclick: this.onInterpret.bind(this)}
+    this.midData = {name: getMsg('eval-code-make-script-btn'), keep: true, onclick: this.onMakeScript.bind(this)}
     this.nonData = {name: getMsg('eval-code-finish-btn')}
   }
 
@@ -692,5 +693,72 @@ class EvalCodeDialog extends Dialog {
       this.resultEl.classList.add('error')
       this.resultEl.textContent = retour.data.error
     }
+  }
+
+  /**
+   * Bouton mid "En faire un script" : dossier → nom → création (shebang
+   * + chmod +x) → lancement immédiat (au choix) → service projet (au
+   * choix, si projet courant).
+   */
+  onMakeScript(){
+    const language = this.langSelect.value
+    const code = DGet(`#${this.id}-input`).value
+    Prompter.promptChooseFolder({message: getMsg('eval-code-choose-script-folder')}, folder => {
+      if (!folder) return
+      this.askScriptName(language, code, folder)
+    })
+  }
+
+  askScriptName(language, code, folder){
+    new TextFieldDialog({
+        title: getMsg('eval-code-script-name-title')
+      , q: getMsg('eval-code-script-name-q')
+      , ouiBtn: {name: getMsg('OK'), onclick: name => {
+          if (!name) return
+          this.createScript(language, code, folder, name)
+        }}
+    }).show()
+  }
+
+  createScript(language, code, folder, name){
+    server.send({action: 'eval-code-create-script', language, code, folder, name}, retour => {
+      this.askRunNow(retour.data.path)
+    })
+  }
+
+  askRunNow(path){
+    new ConfirmDialog({
+        title: getMsg('eval-code-run-now-title')
+      , q: getMsg('eval-code-run-now-q')
+      , ouiBtn: {name: getMsg('btn-yes'), onclick: () => {
+          server.send({action: 'exec-service', script: 'RunScript.rb', params: [path], no_raise: true}, () => this.askAddService(path))
+        }}
+      , nonBtn: {name: getMsg('btn-no'), onclick: this.askAddService.bind(this, path)}
+    }).show()
+  }
+
+  askAddService(path){
+    const projet = Project.current
+    if (!projet) return
+    new ConfirmDialog({
+        title: getMsg('eval-code-add-service-title')
+      , q: getMsg('eval-code-add-service-q', [projet.title])
+      , ouiBtn: {name: getMsg('btn-yes'), onclick: this.askServiceButtonName.bind(this, projet, path)}
+      , nonBtn: {name: getMsg('btn-no')}
+    }).show()
+  }
+
+  askServiceButtonName(projet, path){
+    new TextFieldDialog({
+        title: getMsg('eval-code-service-name-title')
+      , q: getMsg('eval-code-service-name-q')
+      , ouiBtn: {name: getMsg('OK'), onclick: buttonName => {
+          if (!buttonName) return
+          const service = Service.get('run-script').duplicateService()
+          service.params = [[path]]
+          service.setData('name', buttonName)
+          projet.addService(service, 'others')
+        }}
+    }).show()
   }
 }

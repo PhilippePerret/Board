@@ -15,7 +15,13 @@ begin
   when '.py' then message = `python3 #{FILEPATH}`
   when '.sh' then message = `bash #{FILEPATH}`
   else
-    message = `open "#{FILEPATH}"`
+    # Sinon, si le script est exécutable, on le lance
+    if File.executable?(FILEPATH)
+      message = `"#{FILEPATH}"` 
+    else
+      ok = false
+      error = ['unrunnable-file', FILEPATH]
+    end
   end
 rescue Exception => e
   ok = false

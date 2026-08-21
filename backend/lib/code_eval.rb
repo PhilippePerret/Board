@@ -47,7 +47,50 @@ class << self
     'java'       => ->(p){ ['sh', '-c', "cp #{p} #{File.dirname(p)}/Main.java && cd #{File.dirname(p)} && javac Main.java 2>&1 && java Main"] }
   }
 
+  # Pour le bouton "En faire un script" (EvalCodeDialog) — interpréteur à
+  # placer en shebang. nil pour les langages compilés (rust/c/c++/java) :
+  # pas de notion de script autonome exécutable pour eux.
+  SHEBANG_BY_LANG = {
+    'ruby'       => '/usr/bin/env ruby',
+    'javascript' => '/usr/bin/env node',
+    'python'     => '/usr/bin/env python3',
+    'php'        => '/usr/bin/env php',
+    'perl'       => '/usr/bin/env perl',
+    'bash'       => '/usr/bin/env bash',
+    'zsh'        => '/usr/bin/env zsh',
+    'fish'       => '/usr/bin/env fish',
+    'lua'        => '/usr/bin/env lua',
+    'go'         => '/usr/bin/env -S go run',
+    'swift'      => '/usr/bin/env swift',
+    'dart'       => '/usr/bin/env -S dart run',
+    'r'          => '/usr/bin/env Rscript',
+    'elixir'     => '/usr/bin/env elixir',
+    'kotlin'     => '/usr/bin/env kotlin',
+    'rust'       => nil,
+    'c'          => nil,
+    'c++'        => nil,
+    'java'       => nil
+  }
+
   EVAL_TIMEOUT = 15 # secondes — outil "rapide", pas de raison d'attendre plus
+
+  # Crée +name+ dans +folder+ avec le shebang de +language+ suivi de
+  # +code+, puis le rend exécutable (chmod 0755).
+  def create_script(language, code, folder, name)
+    shebang = SHEBANG_BY_LANG[language]
+    if shebang.nil?
+      RETOUR.error = ['unknown-shebang', language]
+      return nil
+    end
+    path = File.join(folder, name)
+    if File.exist?(path)
+      RETOUR.error = ['file-already-exists-at', path]
+      return nil
+    end
+    File.write(path, "#!#{shebang}\n#{code}")
+    File.chmod(0755, path)
+    { path: path }
+  end
 
   def run(language, code)
     return { ok: false, error: "Langage non supporté : #{language}." } unless RUN_CMD_BY_LANG.key?(language)

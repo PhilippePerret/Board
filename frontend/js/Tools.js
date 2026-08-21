@@ -8,16 +8,12 @@ class Tools {
 
   /**
    * @api
-   * 
-   * Pour obtenir la dimension d'une fenêtre dans l'application 
-   * choisie
-   * 
-   * TODO Utiliser plutôt le Prompter
-   */
-  /**
-   * @api
    *
    * Ouvre le dialog d'évaluation rapide de code (cf. Dialogs.js#EvalCodeDialog).
+   * 
+   * La fenêtre permet aussi de faire un script et un service du
+   * code produit.
+   * 
    */
   static toolEvalCode(){
     new EvalCodeDialog({
@@ -26,6 +22,13 @@ class Tools {
     }).show()
   }
 
+  /**
+   * @api
+   * 
+   * Pour obtenir la dimension d'une fenêtre dans l'application 
+   * choisie
+   * 
+   */
   static toolGetWindowBounds(retour){
     if (undefined == retour) {
       server.send({action: 'list-running-apps'}, this.toolGetWindowBounds.bind(this))

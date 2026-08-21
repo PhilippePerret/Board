@@ -126,15 +126,18 @@ begin
     require_relative 'lib/exec_script.rb'
     exec_script("#{request['script-name']}.sh")
 
-  # Outil "Évaluer du code" (panneau Outils) — cf. backend/lib/code_eval.rb.
-  # RETOUR.ok reste TOUJOURS true ici : un code qui échoue est un résultat
-  # normal de l'outil (à afficher dans le dialog), pas une erreur de
-  # bridge — ok:false ouvrirait l'ErrorsDialog générique de xbridge.js à
-  # la place du callback de EvalCodeDialog (cf. convention ok:true/false).
-  when 'eval-code'
+  when /^eval-code/
     require_relative 'lib/code_eval.rb'
-    RETOUR.data = CodeEval.run(request['language'], request['code'])
+    case request['action']
+    # Outil "Évaluer du code" (panneau Outils) — cf. backend/lib/code_eval.rb.
+    when 'eval-code'
+      RETOUR.data = CodeEval.run(request['language'], request['code'])
 
+    # Bouton "En faire un script" (EvalCodeDialog)
+    when 'eval-code-create-script'
+      RETOUR.data = CodeEval.create_script(request['language'], request['code'], request['folder'], request['name'])
+    end
+    
   # Liste des logiciels installés (type de param 'logiciel', ParamDefiner.js)
   # /System/Applications (+ Utilities) : apps système (Preview, Terminal…),
   # pas dans /Applications depuis macOS Ventura.

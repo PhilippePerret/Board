@@ -17,6 +17,16 @@ Object.assign(MESSAGES, {
   , 'eval-code-run-btn': 'Interpréter…'
   , 'eval-code-finish-btn': 'Finir'
   , 'eval-code-running': '…'
+  , 'eval-code-make-script-btn': 'En faire un script'
+  , 'eval-code-choose-script-folder': 'Sélectionnez le dossier où mettre le script, puis « OK ».'
+  , 'eval-code-script-name-title': 'Nom du script'
+  , 'eval-code-script-name-q': 'Quel nom pour le script ?'
+  , 'eval-code-run-now-title': 'Lancer le script'
+  , 'eval-code-run-now-q': 'Lancer le script maintenant ?'
+  , 'eval-code-add-service-title': 'Service du projet'
+  , 'eval-code-add-service-q': "Faire de ce script un service du projet $1 ?"
+  , 'eval-code-service-name-title': 'Nom du bouton'
+  , 'eval-code-service-name-q': 'Quel nom pour ce bouton de service ?'
 
 })
 
@@ -24,4 +34,8 @@ Object.assign(ERRORS, {
   'premier': "juste pour virgule"
   // Nouveaus messages d'erreur à mettre dans les ERRORS.js
 
+  // File
+  , 'file-already-exists-at': "Un fichier existe déjà à cet emplacement : $1"
+  , 'unknown-shebang': "$1 n'est pas un langage scriptable directement."
+  , 'unrunnable-file': "Le fichier $1 n'est ni exécutable, ni d'un langage connu."
 })
