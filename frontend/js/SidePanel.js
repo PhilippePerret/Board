@@ -38,7 +38,7 @@ class SidePanel extends Draggable {
     //*/
     this.built || this.build()
     console.log("Avant open ou close, this.opened = ", this.opened)
-    this[this.opened ? 'close' : 'open']()
+    this[this.opened ? 'closeAndRestore' : 'open']()
     historize("← SidePanel#toggle Panneau %s", this.title)
   }
   open(){
@@ -50,11 +50,25 @@ class SidePanel extends Draggable {
     }
     this.setState('opened')
     App.currentPanel = this
+    this.previousPanel = previous
     this.setOppositeButton() // Si nécessaire
   }
   close(){
     this.setState('closed')
     if (App.currentPanel === this) App.currentPanel = null
+  }
+  // Fermeture EXPLICITE (bouton "Fermer" ou toggle) — par opposition à
+  // close(), aussi appelé par App.closeCurrentPanel() quand un AUTRE
+  // panneau prend le relais : celui-là ne doit jamais rouvrir quoi que ce
+  // soit, sous peine de réentrance avec l'open() en cours plus haut dans
+  // la pile.
+  closeAndRestore(){
+    this.close()
+    if (this.previousPanel && this.previousPanel !== this) {
+      const previous = this.previousPanel
+      this.previousPanel = null
+      previous.open()
+    }
   }
   setState(state){
     this.opened = (state == 'opened')
@@ -104,7 +118,7 @@ class SidePanel extends Draggable {
     }
     if (this.closeLabel) {
       const closeBtn = DCreate('BUTTON', {id: `${this.domId}-close`, class: 'btn-deal-with-services', text: this.closeLabel})
-      listen(closeBtn, 'click', this.close.bind(this))
+      listen(closeBtn, 'click', this.closeAndRestore.bind(this))
       panel.appendChild(closeBtn)
     }
 
