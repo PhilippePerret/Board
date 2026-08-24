@@ -28,6 +28,9 @@ Object.assign(MESSAGES, {
   , 'eval-code-service-name-title': 'Nom du bouton'
   , 'eval-code-service-name-q': 'Quel nom pour ce bouton de service ?'
 
+  // Git
+  , 'git-commit-all-done': "Tous les fichiers ont été versés sur Github"
+
 })
 
 Object.assign(ERRORS, {

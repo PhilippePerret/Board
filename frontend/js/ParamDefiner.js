@@ -57,6 +57,13 @@ class ParamsDefiner {
     this.callback(null)
     return footerError(getMsg('ope-aborted'))
   }
+  // Termine le processus en succès, sans redemander les paramètres
+  // restants — utilisé quand il n'y a plus rien à faire (ex. git-commit
+  // en boucle : plus aucun fichier à commiter).
+  finish(msgKey){
+    this.callback(null)
+    return message(true, getMsg(msgKey))
+  }
   resolve(){
     historize('-> ParamsDefiner.resolve', this)
     this.callback(this.definers, this.dictParamsValues)
@@ -104,6 +111,13 @@ class ParamDefiner {
       , project_path: (data?.projet ?? Project.current).path
       , git_ope: 'get_status_files'
     }, (retour) => {
+      if (retour.data.length === 0) {
+        // Plus rien à commiter (git-commit en boucle) : terminer le
+        // service en succès plutôt que d'ouvrir un select vide forçant
+        // un clic sur "Annuler".
+        const currentDefiner = data.definers[data.definers.length - 1]
+        return currentDefiner.paramLister.finish('git-commit-all-done')
+      }
       // Fichiers iCloud "dataless" (contenu non rapatrié en local) : le
       // backend les marque d'un span.icloud-warn dans leur libellé —
       // avertir directement dans le panneau de sélection des fichiers
