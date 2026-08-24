@@ -397,6 +397,15 @@ class << self
     end
   end
 
+  # @return true si +path+ est un fichier iCloud "dataless" (présent en
+  # apparence mais contenu pas rapatrié en local — `ls -lO` affiche le
+  # flag "dataless"). Une lecture d'un tel fichier renvoie 0 octet, ce
+  # qui fait échouer `git add` silencieusement (short read).
+  def dataless_file?(path)
+    return false unless File.exist?(path)
+    `ls -lO #{Shellwords.escape(path)}`.match?(/\bdataless\b/)
+  end
+
   # Commit des fichiers avec un message
   def commit(project_path:, files:, message:)
     unless git_exist_for_project?(project_path)
@@ -404,6 +413,11 @@ class << self
       return
     end
     files = JSON.parse(files)
+
+    if files.any? { |f| dataless_file?(File.join(project_path, f)) }
+      return {ok: false, error: ['backend-icloud-dataless-files']}
+    end
+
     cmd = <<~BASH
     exec 2>&1
     cd #{Shellwords.escape(project_path)}
@@ -430,11 +444,11 @@ class << self
     res.split("\n").join(',')
   end
 
-  # Retourne les fichiers en cours de traitement 
-  def get_status_files(path)
+  # Retourne les fichiers en cours de traitement
+  def get_status_files(project_path)
     longuest_name = 0
     longuest_path = 0
-    res = `cd "#{path}" && git -c core.quotePath=false status -s`
+    res = `cd "#{project_path}" && git -c core.quotePath=false status -s`
       .split("\n")
       .map do |file|
         mark = file[0..1].strip
@@ -468,7 +482,8 @@ class << self
           else
             folder.ljust(longuest_path, ' ')
           end
-        [path, "<span title='#{original_name}'>#{name}</span> <span title='#{original_folder}'>#{folder}</span> (#{mark})"]
+        warn = dataless_file?(File.join(project_path, path)) ? " <span class='icloud-warn' title='Fichier iCloud non rapatrié en local — commiter ce fichier via le Terminal'>⚠️ iCloud</span>" : ''
+        [path, "<span title='#{original_name}'>#{name}</span> <span title='#{original_folder}'>#{folder}</span> (#{mark})#{warn}"]
       end
   end
 

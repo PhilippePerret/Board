@@ -3,6 +3,7 @@
 - [Lancement des tests](feedbacks/flux-travail-tests.md) — À RESPECTER IMPÉRATIVEMENT QUAND ON TRAVAIL SUR UN ENSEMBLE DE TESTS À FAIRE PASSER
 - [Jamais lancer les tests moi-même](feedbacks/never_run_tests_without_explicit_go.md) — interdit total, même en le proposant, toujours laisser Phil lancer
 - [Pas de règles prescriptives](feedbacks/no_prescriptive_rules.md) — énoncer les faits, jamais "doit/ne doit jamais" pour le futur
+- [Expliquer la logique avant un fix](feedbacks/explain_logic_before_code_fix.md) — texte court sans code, attendre le feu vert avant d'éditer
 - [Pas de citation de règle](feedbacks/no_rule_citing.md) — ne rien dire du tout, même pas le fait neutre qui découle de la règle
 - [Affirmation non vérifiée = mensonge](feedbacks/unverified_claim_is_a_lie.md) — vérifier (git log/blame) avant d'écrire un fait historique, jamais l'inventer
 - [Jamais de décision unilatérale](feedbacks/never_unilateral_decisions.md) — poser une question ouverte avant de choisir, pas présenter un plan tout fait

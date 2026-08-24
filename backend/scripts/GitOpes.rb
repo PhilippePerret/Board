@@ -23,6 +23,10 @@ begin
   else
     data[:error] = ['backend-git-unknown-ope', ope.inspect]
   end
+  if res.is_a?(Hash) && res[:ok] == false
+    data[:ok] = false
+    data[:error] = res[:error]
+  end
 rescue Exception => e
   data[:ok] = false
   data[:error] = e.message

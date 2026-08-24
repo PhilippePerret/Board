@@ -38,4 +38,7 @@ Object.assign(ERRORS, {
   , 'file-already-exists-at': "Un fichier existe déjà à cet emplacement : $1"
   , 'unknown-shebang': "$1 n'est pas un langage scriptable directement."
   , 'unrunnable-file': "Le fichier $1 n'est ni exécutable, ni d'un langage connu."
+
+  // Git
+  , 'backend-icloud-dataless-files': "Problème de synchro iCloud. Pour les fichiers marqués d'un ⚠️, passer par un Terminal au dossier."
 })

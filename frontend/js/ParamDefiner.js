@@ -103,7 +103,17 @@ class ParamDefiner {
         action: 'git-ope'
       , project_path: (data?.projet ?? Project.current).path
       , git_ope: 'get_status_files'
-    }, callback)
+    }, (retour) => {
+      // Fichiers iCloud "dataless" (contenu non rapatrié en local) : le
+      // backend les marque d'un span.icloud-warn dans leur libellé —
+      // avertir directement dans le panneau de sélection des fichiers
+      // (mécanisme errorMessage déjà géré par Dialog.js), plutôt qu'une
+      // ErrorsDialog après un commit voué à échouer sur ces fichiers.
+      data.errorMessage = retour.data.some(([path, label]) => label.includes('icloud-warn'))
+        ? getErr('backend-icloud-dataless-files')
+        : null
+      callback(retour)
+    })
   }
 
   /**

@@ -125,9 +125,10 @@ class ServiceExecuter {
       if (this.service.onError) {
         this.service.onError(retour.error)
       } else {
+        const errText = Array.isArray(retour.error) ? getErr(retour.error[0], retour.error.slice(1)) : retour.error
         new ErrorsDialog({
             title: getErr('serv-error-on-return')
-          , errors: retour.error.split("\n")
+          , errors: errText.split("\n")
         }).show()
       }
       return
