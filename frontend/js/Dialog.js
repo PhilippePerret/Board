@@ -204,13 +204,24 @@ class Dialog {
    * === CONSTRUCTION ===
    */
   build(){
+    const isMax = this.height === 'max'
     const scrim = DCreate('DIV', {class: 'scrim hidden'})
-    const div = DCreate('DIV', {class: 'overlay modal panel', id: this.id, style: `width:${this.width};`})
+    const panelStyle = isMax
+      ? `width:${this.width};height:${window.innerHeight - 8}px;display:flex;flex-direction:column;`
+      : `width:${this.width};`
+    const div = DCreate('DIV', {class: 'overlay modal panel', id: this.id, style: panelStyle})
     scrim.appendChild(div)
-    const tit = DCreate('DIV', {class: 'title', text: this.title})
+    const tit = DCreate('DIV', {class: 'title', text: this.title, style: isMax ? 'flex:0 0 auto;' : ''})
     div.appendChild(tit)
     if (this.message || this.content) {
-      const msg = DCreate('DIV', {class: 'message', text: this.message ?? '', style: "max-height:500px;overflow: auto;"})
+      const msgStyle = isMax
+        ? 'flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden;'
+        : `max-height:${this.height ? `calc(${this.height} + 4em)` : '500px'};overflow:auto;`
+      const msg = DCreate('DIV', {class: 'message', style: msgStyle})
+      if (this.message) {
+        const clampStyle = isMax ? 'flex:0 0 auto;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;' : ''
+        msg.appendChild(DCreate('DIV', {class: 'message-text', text: this.message, style: clampStyle}))
+      }
       // Du contenu HTML dans div.message
       if (this.content) msg.appendChild(this.content)
       if ( this.errorMessage ) {
@@ -220,7 +231,7 @@ class Dialog {
       div.appendChild(msg)
     }
     // Pied de page
-    const footer = DCreate('DIV', {class:'footer'})
+    const footer = DCreate('DIV', {class:'footer', style: isMax ? 'flex:0 0 auto;' : ''})
     if (this.nonData) {
       this.btnNon = DCreate('BUTTON', {id: `${this.id}-btn-non`, class:'btn-non left-btn', style: `width:${this.nonData.width ?? 'auto'}` , text: this.nonData.title || this.nonData.name})
       footer.appendChild(this.btnNon)

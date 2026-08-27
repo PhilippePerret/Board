@@ -529,7 +529,7 @@ const COMMON_SERVICES_DATA = [
                 Validator.fileExists(fullPath, (exists) => callback(exists ? getErr('file-already-exists-at', [relPath]) : null))
               }
           }
-        , {id: 'file_content', type: 'text', q: getMsg('ask-file-content'), width: '840px', height: '840px'}
+        , {id: 'file_content', type: 'text', q: getMsg('ask-file-content'), width: '840px', height: 'max'}
       ]
   },
 

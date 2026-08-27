@@ -34,7 +34,8 @@ button.mid-btn {
 }
 
 .panel {
-  border-radius: 0.75em;
+  border-radius: 0.6em;
+  overflow: hidden;
   opacity: 0.95;
 }
 .panel .title {
@@ -48,7 +49,6 @@ button.mid-btn {
   padding: 0.5em 1em;
   background-color: white;
   color: rgb(106, 106, 106);
-  border-radius: 0.5em 0.5em 0 0;
 }
 .panel .message {
   padding: 2em 2em 1em;
@@ -68,7 +68,7 @@ button.mid-btn {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 0 0 0.5em 0.5em;
+  border-radius: 0 0 4px 4px;
 }
 .panel .footer, .panel .message {
   background-color: #f2efef;

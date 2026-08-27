@@ -217,13 +217,17 @@ class TextareaDialog extends Dialog {
     super(data)
     this.content = this.buildField()
     if (!data.dontSelectContent){
-      this.onShow = ()=>{const tf = DGet(this.FDomId); tf.focus(); tf.select()}
+      this.onShow = () => { const tf = DGet(this.FDomId); tf.focus(); tf.select() }
     }
   }
 
   buildField(){
-    const div = DCreate('DIV', {style: 'padding: 1em;'})
-    const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? '200px'};`})
+    const isMax = this.height === 'max'
+    const div = DCreate('DIV', {style: isMax ? 'padding:1em;flex:1 1 auto;min-height:0;display:flex;' : 'padding: 1em;'})
+    const input = DCreate('TEXTAREA', {id: this.FId, style: isMax
+      ? 'box-sizing:border-box;width:100%;flex:1 1 auto;min-height:0;'
+      : `box-sizing:border-box;width: 100%;height:${this.height ?? '200px'};`
+    })
     input.value = this.defaultValue || this.default
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
