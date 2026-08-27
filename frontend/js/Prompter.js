@@ -108,6 +108,7 @@ class Prompter {
       , id:      spec.id
       , message: spec.message || spec.q
       , width:   spec.width
+      , height:  spec.height
       , errorMessage: spec.errorMessage
     }
   }

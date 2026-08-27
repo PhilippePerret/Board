@@ -33,7 +33,7 @@ Object.assign(MESSAGES, {
 
   // File
   , 'create-a-file': "Créer un fichier"
-  , 'ask-path-to-file-in-folder': 'Chemin d’accès au fichier\n\n(relatif au dossier du projet, et tous les nouveaux dossiers seront créés) :'
+  , 'ask-path-to-file-in-folder': 'Chemin d’accès au fichier :\n\n(relatif au dossier du projet, et tous les nouveaux dossiers seront créés)'
   , 'ask-file-content': "Contenu du fichier :"
 })
 

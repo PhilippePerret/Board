@@ -13,7 +13,7 @@ def run_test
   bridge_eval(<<~JS)
     window.__testResult = undefined;
     new ParamsDefiner(
-      [{id: 'test_url', type: 'url', q: 'URL de test', validIf: (v) => v.startsWith('https://')}],
+      [{id: 'test_url', type: 'url', q: 'URL de test', validIf: (v, dict, callback) => callback(v.startsWith('https://') ? null : 'Valeur invalide')}],
       (definers) => { window.__testResult = definers ? definers[0].value : null }
     ).define();
     '';

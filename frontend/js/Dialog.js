@@ -64,6 +64,7 @@ class Dialog {
     this.returnedIdValues = data.idValues ?? null // Pour savoir quelles valeurs retourner avec oui
     this.id    = data.id ?? `panel-${++Dialog.panelIndex}`
     this.width = data.width ?? data.w ?? '520px'
+    this.height = data.height ?? null
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? data.q ?? null
     this.errorMessage = data.errorMessage // en cas d'erreur

@@ -57,3 +57,5 @@
 - [Course App.data au 1er clic post-launch](feedbacks/launch_app_race_app_data.md) — bouton statique cliqué avant App.data chargé = exception JS silencieuse ("Script error.")
 - [Rapports ultra courts](feedbacks/terse_reports_only.md) — faits bruts seulement, jamais de paragraphe explicatif spontané
 - [Pas de hedging défensif](feedbacks/no_defensive_hedging.md) — pas de clause préemptive pour se couvrir avant critique
+- [Confirmer chaque point avant de coder](feedbacks/confirm_every_point_before_coding.md) — liste numérotée : ré-afficher TOUS les points avec statut, jamais coder sur un sous-ensemble confirmé
+- [Pas de commentaire roman](feedbacks/no_verbose_code_comments.md) — aucun commentaire multi-lignes dans le code, même pour expliquer un WHY non-évident

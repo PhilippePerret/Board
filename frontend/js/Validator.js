@@ -156,4 +156,13 @@ class Validator {
       }
     }
   }
+
+  static fileExists(path, callback){
+    server.send({
+        action: 'exec-service'
+      , script: 'ExecCommand.sh'
+      , params: [`test -e ${shellEscape(path)} && echo yes || echo no`]
+      , no_raise: true
+    }, (retour) => callback(retour.message.trim() === 'yes'))
+  }
 }

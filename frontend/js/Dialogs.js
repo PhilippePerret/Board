@@ -223,7 +223,7 @@ class TextareaDialog extends Dialog {
 
   buildField(){
     const div = DCreate('DIV', {style: 'padding: 1em;'})
-    const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? 200}px;`})
+    const input = DCreate('TEXTAREA', {id: this.FId, style: `width: 100%;height:${this.height ?? '200px'};`})
     input.value = this.defaultValue || this.default
     div.appendChild(input)
     listen(input, 'keydown', this.onKeyDown.bind(this))
@@ -232,6 +232,7 @@ class TextareaDialog extends Dialog {
 
   onKeyDown(ev){
     ev.stopPropagation()
+    if (ev.metaKey && ev.key == 'Enter') this.onOui(ev)
   }
 
 }

@@ -36,6 +36,12 @@
  *        définit la valeur. Donc, par exemple, si la condition dé-
  *        pend du deuxième paramètre défini, on teste : 
  *          definers[1].value
+ *    :validIf [Function]
+ *        Permet de tester la valeur du paramètre avant de poursuivre
+ *        et demande de la corriger le cas échéant.
+ *        C'est une fonction qui reçoit trois paramètres : la valeur,
+ *        le dictionnaire des valeurs définies et le callback à appe-
+ *        ler en fin de processus. Cf. ci-dessous.
  * 
  *  dynParams
  *    Alors que les +params+ sont enregistrés une fois pour toutes
@@ -265,7 +271,7 @@ const COMMON_SERVICES_DATA = [
         , q:      getMsg('github-pr-cycle-confirm-init')
         , type:   'confirm'
       }
-      , {id: 'branche-name', q: getMsg('github-pr-cycle-branch-name'), type: 'string', validIf: (v) => v.match(/^[a-z0-9_-]+$/)}
+      , {id: 'branche-name', q: getMsg('github-pr-cycle-branch-name'), type: 'string', validIf: (v, dictParamsValues, callback) => callback(v.match(/^[a-z0-9_-]+$/) ? null : getErr('invalid-value', [v]))}
     ]
     // confirm_init n'est qu'une porte d'entrée (annule tout le service si
     // refusé, cf. Prompter#promptConfirm) : sa valeur ne doit JAMAIS être
@@ -517,8 +523,13 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       ]
     , dynParams: [
-          {id: 'file_path', type: 'string', q: getMsg('ask-path-to-file-in-folder'), width: '800px'}
-        , {id: 'file_content', type: 'text', q: getMsg('ask-file-content'), width: '840px'}
+          {id: 'file_path', type: 'string', q: getMsg('ask-path-to-file-in-folder'), width: '800px'
+            , validIf: (relPath, dictParamsValues, callback) => {
+                const fullPath = relPath.startsWith('/') ? relPath : `${dictParamsValues.path}/${relPath}`
+                Validator.fileExists(fullPath, (exists) => callback(exists ? getErr('file-already-exists-at', [relPath]) : null))
+              }
+          }
+        , {id: 'file_content', type: 'text', q: getMsg('ask-file-content'), width: '840px', height: '840px'}
       ]
   },
 

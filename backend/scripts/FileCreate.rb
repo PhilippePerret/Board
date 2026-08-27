@@ -10,10 +10,14 @@ begin
 
   full_path = FILE_PATH.start_with?('/') ? FILE_PATH : File.join(PROJECT_PATH, FILE_PATH)
 
-  FileUtils.mkdir_p(File.dirname(full_path))
-  File.write(full_path, FILE_CONTENT)
-
-  table[:message] = ['backend-file-created', full_path]
+  if File.exist?(full_path)
+    table[:ok]    = false
+    table[:error] = ['file-already-exists-at', full_path]
+  else
+    FileUtils.mkdir_p(File.dirname(full_path))
+    File.write(full_path, FILE_CONTENT)
+    table[:message] = ['backend-file-created', full_path]
+  end
 end
 
 puts table.to_json

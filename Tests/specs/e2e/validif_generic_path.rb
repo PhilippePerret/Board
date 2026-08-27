@@ -20,7 +20,7 @@ def run_test
     bridge_eval(<<~JS)
       window.__testResult = undefined;
       new ParamsDefiner(
-        [{id: 'test_path', type: 'path', q: 'Chemin de test', validIf: (v) => /^[a-zA-Z0-9\\/_-]+$/.test(v)}],
+        [{id: 'test_path', type: 'path', q: 'Chemin de test', validIf: (v, dict, callback) => callback(/^[a-zA-Z0-9\\/_-]+$/.test(v) ? null : 'Valeur invalide')}],
         (definers) => { window.__testResult = definers ? definers[0].value : null }
       ).define();
       '';

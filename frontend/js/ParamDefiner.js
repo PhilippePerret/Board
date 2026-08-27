@@ -250,12 +250,14 @@ class ParamDefiner {
       }).show()
       console.error(error); return
     }
-    // validIf(value) : optionnel, générique à TOUS les types de dialogue
-    // (passe par onPrompted quel que soit le type) — retourne truthy si la
-    // valeur est valide, sinon redemande la même valeur (dialogue réaffiché
-    // avec un message d'erreur). Jamais appliqué à une annulation (null).
-    if (value !== null && this.validIf && !this.validIf(value)) {
-      return Prompter.prompt(Object.assign(this.promptSpec(), {errorMessage: getErr('invalid-value', [value])}), this.onPrompted.bind(this))
+    if (value !== null && this.validIf) {
+      return this.validIf(value, this.paramLister.dictParamsValues, (errorMessage) => {
+        if (!errorMessage) {
+          this.onNonButton(value)
+        } else {
+          Prompter.prompt(Object.assign(this.promptSpec(), {errorMessage, default: value}), this.onPrompted.bind(this))
+        }
+      })
     }
     this.onNonButton(value)
   }

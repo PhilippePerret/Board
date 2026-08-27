@@ -13,7 +13,7 @@ def run_test
   bridge_eval(<<~JS)
     window.__testResult = undefined;
     new ParamsDefiner(
-      [{id: 'test_int', type: 'integer', q: 'Entier de test', default: 7, validIf: (v) => v >= 5 && v <= 10}],
+      [{id: 'test_int', type: 'integer', q: 'Entier de test', default: 7, validIf: (v, dict, callback) => callback(v >= 5 && v <= 10 ? null : 'Valeur invalide')}],
       (definers) => { window.__testResult = definers ? definers[0].value : null }
     ).define();
     '';

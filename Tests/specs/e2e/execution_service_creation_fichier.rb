@@ -9,7 +9,7 @@ require_relative '../../support/helpers'
 
 include BoardTest
 
-SERVICE_DOM_ID = 'create-file'
+SERVICE_DOM_ID = 'file-create'
 
 def run_test
   id = nil
