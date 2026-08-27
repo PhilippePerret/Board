@@ -123,7 +123,7 @@ function textSubstitute(msg, params){
         }
       }
       if (!msg) raise("msg indéfini après traitement des params")
-      msg = msg.replace(/[^\\]\n/g, '<br>').replace(/\\\n/g, "\n")
+      msg = msg.replace(/(?<!\\)\n/g, '<br>').replace(/\\\n/g, "\n")
     }
   } catch(err) {
     traceError()

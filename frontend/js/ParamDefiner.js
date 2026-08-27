@@ -34,12 +34,13 @@ class ParamsDefiner {
    *   sa résolution, AVANT que le paramètre suivant ne soit défini. Un
    *   `:if` ne voit donc jamais que ce qui précède le paramètre courant.
    */
-  constructor(params, callback, projet = null, dictParamsValues = {}){
+  constructor(params, callback, projet = null, dictParamsValues = {}, serviceName = null){
     this.params   = [...params].reverse()
     this.definers = []
     this.callback = callback
     this.projet   = projet
     this.dictParamsValues = {...dictParamsValues}
+    this.serviceName = serviceName
   }
   define(){
     historize('-> ParamsDefiner.define', this)
@@ -231,6 +232,7 @@ class ParamDefiner {
         type:     this.type
       , id:       this.id
       , name:     this.name
+      , title:    this.param.title ?? this.paramLister.serviceName
       , message:  this.message
       , default:  defaultValue
       , actual:   this.actual

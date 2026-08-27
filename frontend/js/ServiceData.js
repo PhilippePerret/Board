@@ -507,6 +507,21 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       ]
   },
+
+  {
+      id: 'file-create'
+    , name: getMsg('create-a-file')
+    , group: 'Consoles'
+    , scType: '.rb'
+    , params: [
+        {id: 'path', type: 'project'}
+      ]
+    , dynParams: [
+          {id: 'file_path', type: 'string', q: getMsg('ask-path-to-file-in-folder'), width: '800px'}
+        , {id: 'file_content', type: 'text', q: getMsg('ask-file-content'), width: '840px'}
+      ]
+  },
+
   {
       id: 'edit-projet'
     , name: getMsg('editing-project-data') 

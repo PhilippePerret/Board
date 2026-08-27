@@ -40,7 +40,7 @@ class ServiceExecuter {
     const dynParams = SDATA.dynParams || []
     const dictParamsValues = this.persistedDictParamsValues(SDATA, baseParams)
     if (dynParams.length > 0) {
-      new ParamsDefiner(dynParams, (definers, dictParamsValues) => this.onDynParamsDefined(baseParams, definers, dictParamsValues), this.projet, dictParamsValues).define()
+      new ParamsDefiner(dynParams, (definers, dictParamsValues) => this.onDynParamsDefined(baseParams, definers, dictParamsValues), this.projet, dictParamsValues, this.name).define()
     } else {
       this.dictParamsValues = dictParamsValues
       this.finalyExec(this.applyAfterDefinedParams(baseParams), dictParamsValues)

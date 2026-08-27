@@ -195,7 +195,7 @@ class SelectDialog extends Dialog {
   applyFilter(query){
     const q = query.trim().toLowerCase()
     this.items.forEach(item => {
-      const visible = !q || SelectDialog.fuzzyMatch(q, item.title)
+      const visible = !q || item.title.includes(q)
       if (visible === item.visible) return
       item.visible = visible
       item.el.classList.toggle('hidden', !visible)
@@ -203,14 +203,6 @@ class SelectDialog extends Dialog {
     })
   }
 
-  static fuzzyMatch(query, text){
-    let i = 0
-    for (const ch of text) {
-      if (ch === query[i]) i++
-      if (i === query.length) return true
-    }
-    return query.length === 0
-  }
 }
 
 // Pour faire un Dialog présentant un textarea 

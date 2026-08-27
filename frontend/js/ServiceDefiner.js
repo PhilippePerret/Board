@@ -47,7 +47,7 @@ class ServiceDefiner {
     // les deux issues possibles de onDefined (succès et abandon).
     this._lockedProjet = this.projet ?? Project.current
     this._lockedProjet.lockSave()
-    const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet, dictParamsValues)
+    const serviceDefiner = new ParamsDefiner(this.params, this.onDefined.bind(this), this.projet, dictParamsValues, this.service.name)
     serviceDefiner.define()
   }
   /**
