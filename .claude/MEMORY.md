@@ -56,6 +56,8 @@
 - [docu_folder_name = partie de Phil](feedbacks/feedback_docu_folder_name_is_phils.md) — redesign du select docu-folder-name dans init-documentation, ne pas l'implémenter
 - [Course App.data au 1er clic post-launch](feedbacks/launch_app_race_app_data.md) — bouton statique cliqué avant App.data chargé = exception JS silencieuse ("Script error.")
 - [Rapports ultra courts](feedbacks/terse_reports_only.md) — faits bruts seulement, jamais de paragraphe explicatif spontané
+- ["Fait." seul suffit](feedbacks/terse_done_only.md) — après une action, aucun détail spontané, même pas un résumé minimal
+- [message(true,…) pour être vu](feedbacks/message_true_exergue.md) — message() simple = footer discret quasi invisible, jamais pour une confirmation qui doit être vue
 - [Pas de hedging défensif](feedbacks/no_defensive_hedging.md) — pas de clause préemptive pour se couvrir avant critique
 - [Confirmer chaque point avant de coder](feedbacks/confirm_every_point_before_coding.md) — liste numérotée : ré-afficher TOUS les points avec statut, jamais coder sur un sous-ensemble confirmé
 - [Pas de commentaire roman](feedbacks/no_verbose_code_comments.md) — aucun commentaire multi-lignes dans le code, même pour expliquer un WHY non-évident

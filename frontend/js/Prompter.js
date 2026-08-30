@@ -128,6 +128,36 @@ class Prompter {
     })).show()
   }
 
+  // Champ texte listant des dossiers (séparés par une virgule), avec un
+  // bouton "Dossier…" qui ouvre le Finder pour en ajouter un — restreint
+  // aux sous-dossiers du projet (cf. service 'search-project', ServiceData.js).
+  // Le dialogue reste ouvert après ce bouton (midBtn.keep) pour permettre
+  // d'ajouter plusieurs dossiers avant de valider.
+  static promptExcludedFolders(spec, callback){
+    const projet = spec.projet ?? Project.current
+    let dialog
+    const addFolder = () => {
+      server.send({action: 'run-osascript', 'script-name': 'getPathOfFinderSelection'}, (retour) => {
+        const chosen = retour.data.filepath
+        if (!chosen || !chosen.startsWith(projet.path + '/')) {
+          return new ErrorsDialog({errors: [getErr('excluded-folder-outside-project')]}).show()
+        }
+        const relative = chosen.replace(projet.path + '/', '')
+        const input = DGet(dialog.FDomId)
+        const current = input.value.split(',').map(s => s.trim()).filter(s => s)
+        if (!current.includes(relative)) current.push(relative)
+        input.value = current.join(', ')
+      })
+    }
+    dialog = new TextFieldDialog(Object.assign(this.dialogBase(spec), {
+        default: spec.default ?? ''
+      , ouiBtn: {name: getMsg('OK'), onclick: callback}
+      , nonBtn: {name: getMsg('Cancel'), onclick: () => callback(null)}
+      , midBtn: {name: getMsg('choose-folder-btn'), keep: true, onclick: addFolder}
+    }))
+    dialog.show()
+  }
+
   static promptText(spec, callback){
     new TextareaDialog(Object.assign(this.dialogBase(spec), {
         default:  spec.default ?? ''
@@ -299,6 +329,10 @@ class Prompter {
     console.log("-> _getSelectValuesFromFunction/spec/callback/retour", spec, callback, retour)
     spec.values = retour.data
     this.promptSelect.call(this, spec, callback)
+  }
+
+  static promptDropdown(spec, callback){
+    this.promptSelect(Object.assign({}, spec, {dropdown: true}), callback)
   }
 
   // Choix d'un logiciel installé (lu dans /Applications, mis en cache),

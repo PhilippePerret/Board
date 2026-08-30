@@ -90,11 +90,7 @@ class ScriptService {
         // Fin des opérations
         console.log("this.getValue('conclusion')", this.getValue('conclusion'))
         const messageFin = this.getValue('conclusion') || getMsg('scserv-end')
-        message(messageFin)
-        new OKDialog({
-          title: getMsg('Scripts-services'),
-          message: messageFin
-        }).show()
+        message(true, messageFin)
         // Si un callback est défini (cf. les outils)
         if (this.callback) this.callback(this)
         return

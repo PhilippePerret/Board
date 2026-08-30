@@ -135,7 +135,13 @@ class ServiceExecuter {
     } else {
       // S'il y a une méthode à appeler après le succès du service
       if ( this.afterRunWithSuccess) this.afterRunWithSuccess(this.projet, retour, this.dictParamsValues)
-      message(true, (retour.message || '').trimEnd() + getMsg('service-success', [this.name, this.id]))
+      // Un service peut définir son propre message de succès (localisé,
+      // spécifique) — il remplace alors ENTIÈREMENT le message générique
+      // "Service … joué avec succès" (jamais les deux concaténés).
+      const successText = this.service.data.successMessage
+        ? this.service.data.successMessage(retour, this.dictParamsValues, this.projet)
+        : (retour.message || '').trimEnd() + getMsg('service-success', [this.name, this.id])
+      message(true, successText)
       // console.log("ServiceExecuter # afterRunService termine normalement.")
       if (this.repeat) {
         // Un service qui se répète en boucle jusqu'à ce que l'user

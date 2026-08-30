@@ -101,6 +101,7 @@ class SelectDialog extends Dialog {
     super(data)
     this.values   = data.values
     this.isMulti  = !!data.multi
+    this.dropdown = !!data.dropdown
     this.items    = []
     this.content  = this.buildMenu()
   }
@@ -123,18 +124,47 @@ class SelectDialog extends Dialog {
     titleEl && titleEl.appendChild(this.buildToolbar())
   }
 
-  buildMenu(){
-    const container = DCreate('DIV', {id: this.FId, class: 'custom-select' + (this.data.select_class ? ' ' + this.data.select_class : '')})
+  // .modal (panel.css) a overflow:hidden — une liste positionnée en enfant
+  // y serait rognée dès qu'elle dépasse le cadre du dialogue. Détachée en
+  // body au lieu d'être un descendant du modal, purement pour échapper à
+  // ce clip ; retirée à la fermeture (cf. hide() ci-dessous).
+  hide(){
+    this.dropdownListEl && this.dropdownListEl.remove()
+    super.hide()
+  }
 
-    const filterInput = DCreate('INPUT', {type: 'text', class: 'custom-select-filter', placeholder: getMsg('select-filter-placeholder')})
-    listen(filterInput, 'keydown', (ev) => ev.stopPropagation())
-    listen(filterInput, 'input', () => this.applyFilter(filterInput.value))
-    container.appendChild(filterInput)
+  buildMenu(){
+    const container = DCreate('DIV', {id: this.FId, class: 'custom-select' + (this.dropdown ? ' custom-select-dropdown' : '') + (this.data.select_class ? ' ' + this.data.select_class : '')})
+
+    if (this.dropdown) {
+      this.trigger = DCreate('DIV', {class: 'custom-select-trigger'})
+      container.appendChild(this.trigger)
+      listen(this.trigger, 'click', () => {
+        if (list.classList.contains('hidden')) {
+          const rect = this.trigger.getBoundingClientRect()
+          list.style.left   = `${rect.left}px`
+          list.style.width  = `${rect.width}px`
+          list.style.bottom = `${window.innerHeight - rect.top}px`
+        }
+        list.classList.toggle('hidden')
+      })
+    } else {
+      const filterInput = DCreate('INPUT', {type: 'text', class: 'custom-select-filter', placeholder: getMsg('select-filter-placeholder')})
+      listen(filterInput, 'keydown', (ev) => ev.stopPropagation())
+      listen(filterInput, 'input', () => this.applyFilter(filterInput.value))
+      container.appendChild(filterInput)
+    }
 
     const selectClass = ['custom-select-list']
     if (this.data.select_class) selectClass.push(this.data.select_class)
+    if (this.dropdown) selectClass.push('custom-select-list-popup', 'hidden')
     const list = DCreate('DIV', {class: selectClass.join(' ')})
-    container.appendChild(list)
+    if (this.dropdown) {
+      this.dropdownListEl = list
+      document.body.appendChild(list)
+    } else {
+      container.appendChild(list)
+    }
 
     const defVal = this.defaultValue
     let indexOfDefault = -1
@@ -147,8 +177,14 @@ class SelectDialog extends Dialog {
       }
       const el = DCreate('DIV', {class: 'custom-select-option', text: tit})
       list.appendChild(el)
-      const item = {value: val, title: String(tit).toLowerCase(), el, visible: true, selected: false}
-      listen(el, 'click', () => this.chooseItem(item))
+      const item = {value: val, title: String(tit).toLowerCase(), label: tit, el, visible: true, selected: false}
+      listen(el, 'click', () => {
+        this.chooseItem(item)
+        if (this.dropdown) {
+          list.classList.add('hidden')
+          this.onOui()
+        }
+      })
       if (!this.isMulti && indexOfDefault == -1 && (defVal === val || defVal === tit)) indexOfDefault = i
       return item
     })
@@ -186,6 +222,7 @@ class SelectDialog extends Dialog {
   setItemSelected(item, selected){
     item.selected = selected
     item.el.classList.toggle('selected', selected)
+    if (this.dropdown && selected) this.trigger.textContent = item.label
   }
 
   chooseItem(item){
@@ -205,7 +242,72 @@ class SelectDialog extends Dialog {
 
 }
 
-// Pour faire un Dialog présentant un textarea 
+// Résultats des services 'search-documentation'/'search-project' (ServiceData.js)
+// — une ligne cliquable par occurrence, ouvre le fichier concerné (cf.
+// data.openAction, action backend 'open-documentation-result' par défaut).
+class SearchResultsDialog extends Dialog {
+  constructor(data){
+    super(data)
+    this.title      = getMsg('search-results-title')
+    this.width      = '900px'
+    this.results    = data.results
+    this.searchText = data.searchText
+    this.openAction = data.openAction ?? 'open-documentation-result'
+    this.content    = this.buildContent()
+    this.ouiData    = {name: getMsg('search-results-close-btn')}
+    this.nonData    = null
+  }
+
+  buildContent(){
+    const wrapper = DCreate('DIV')
+    const query = DCreate('DIV', {class: 'search-results-query'})
+    const count = this.results.length
+    const countMsg = getMsg(count === 1 ? 'search-results-count-one' : 'search-results-count-many', [count])
+    query.textContent = getMsg('search-results-query', [this.searchText]) + countMsg
+    wrapper.appendChild(query)
+    wrapper.appendChild(DCreate('HR'))
+    wrapper.appendChild(this.buildList())
+    return wrapper
+  }
+
+  buildList(){
+    const list = DCreate('DIV', {class: 'search-results-list'})
+    if (this.results.length == 0) {
+      list.appendChild(DCreate('DIV', {class: 'search-results-empty', text: getMsg('search-results-empty')}))
+      return list
+    }
+    this.results.forEach(res => {
+      const row = DCreate('DIV', {class: 'search-result-row'})
+      const location = DCreate('DIV', {class: 'search-result-location'})
+      location.textContent = `${res.file}:${res.line}`
+      const excerpt = DCreate('DIV', {class: 'search-result-excerpt'})
+      this.appendHighlighted(excerpt, res.excerpt)
+      row.appendChild(location)
+      row.appendChild(excerpt)
+      listen(row, 'click', () => server.send({action: this.openAction, path: res.path, line: res.line}, null))
+      list.appendChild(row)
+    })
+    return list
+  }
+
+  // Découpe +text+ autour des occurrences de this.searchText (même regex
+  // que le backend, cf. SearchDocumentation.rb) et surligne chacune.
+  appendHighlighted(el, text){
+    const regex = new RegExp(this.searchText, 'g')
+    let lastIndex = 0, m
+    while ((m = regex.exec(text)) !== null) {
+      if (m.index > lastIndex) el.appendChild(document.createTextNode(text.slice(lastIndex, m.index)))
+      const mark = DCreate('SPAN', {class: 'search-result-match'})
+      mark.textContent = m[0]
+      el.appendChild(mark)
+      lastIndex = regex.lastIndex
+      if (m[0].length === 0) regex.lastIndex += 1
+    }
+    el.appendChild(document.createTextNode(text.slice(lastIndex)))
+  }
+}
+
+// Pour faire un Dialog présentant un textarea
 /**
  * 
  * Propriétés spéciales

@@ -131,9 +131,22 @@ class ParamDefiner {
     })
   }
 
+  // Extensions de fichiers présentes dans le projet (hors .git/node_modules
+  // et les dossiers exclus choisis pour le service 'search-project'), pour
+  // remplir le select multi 'extensions' (ServiceData.js).
+  // Pour +data+ et +callback+, cf. ci-dessus.
+  static projectExtensionsForSelect(data, callback){
+    const projet = data?.projet ?? Project.current
+    server.send({
+        action: 'exec-service'
+      , script: 'ListProjectExtensions.rb'
+      , params: [projet.path, data.dictParamsValues['excluded-folders'] ?? '']
+    }, (retour) => callback({data: (retour.data.extensions || []).map(ext => [ext, ext])}))
+  }
+
   /**
    * Obtenir la liste des issues du label donné
-   * 
+   *
    */
   static issuesListOfTypeForSelect(spec, callback, retour){
     if (retour) {

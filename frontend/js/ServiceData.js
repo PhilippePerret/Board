@@ -130,7 +130,35 @@ const COMMON_SERVICES_DATA = [
       id: 'work-clock'
     , name: getMsg('start-clock')
     , group: getMsg('group-tools')
-  }, COUNTDOWN_PROPERTIES), 
+  }, COUNTDOWN_PROPERTIES),
+
+  {
+      id: 'search-project'
+    , name: getMsg('search-project')
+    , group: getMsg('group-tools')
+    , scType: '.rb'
+    , params: [
+        {id: 'path', type: 'project'}
+      , {id: 'excluded-folders', type: 'excluded-folders', default: 'documentation', q: getMsg('excluded-folders-q'), width: '1040px'}
+      ]
+    , dynParams: [
+        {id: 'extensions', type: 'select', multi: true, q: getMsg('extensions-q'), values: ParamDefiner.projectExtensionsForSelect.bind(ParamDefiner)}
+      , {id: 'search-text', type: 'string', q: getMsg('search-text-q'), width: '620px'
+          , validIf: (v, dictParamsValues, callback) => callback(v && v.trim() ? null : getErr('prop-cant-be-empty', [getMsg('search-text-q')]))
+        }
+      ]
+    , afterDefinedParams(params){
+        params[2][0] = JSON.stringify(params[2][0])
+        return params
+      }
+    , afterRunWithSuccess: (projet, retour, dictParamsValues) => {
+        new SearchResultsDialog({
+            results:    retour.data.results ?? []
+          , searchText: dictParamsValues['search-text']
+          , openAction: 'open-project-search-result'
+        }).show()
+      }
+  },
 
 
 
@@ -150,6 +178,7 @@ const COMMON_SERVICES_DATA = [
     , beforeExec: (dict) => {
         return `cd ${shellEscape(dict.path)} && gh issue create -l bug -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
       }
+    , successMessage: (retour) => getMsg('gh-issue-created', [(retour.message || '').match(/\/issues\/(\d+)/)?.[1] ?? '?'])
   },
 
   // Git create issue quelconque
@@ -180,6 +209,7 @@ const COMMON_SERVICES_DATA = [
     , beforeExec: (dict) => {
         return `cd ${shellEscape(dict.path)} && gh issue create -l ${shellEscape(dict.issue_label)} -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
       }
+    , successMessage: (retour) => getMsg('gh-issue-created', [(retour.message || '').match(/\/issues\/(\d+)/)?.[1] ?? '?'])
   },
 
   // Travail sur une liste d'issues
@@ -426,6 +456,32 @@ const COMMON_SERVICES_DATA = [
       ]
   },
 
+  {
+      id: 'search-documentation'
+    , name: getMsg('search-documentation')
+    , group: getMsg('group-documentation')
+    , scType: '.rb'
+    , params: [
+        {id: 'docu-folder', type: 'project', if_undefined: {type: 'path', q: getMsg('select-docu-folder')}}
+      ]
+    , dynParams: [
+        {id: 'search-type', type: 'dropdown', q: getMsg('search-type-q'), values: [
+            ['any',    getMsg('search-type-any')]
+          , ['target', getMsg('search-type-target')]
+          , ['link',   getMsg('search-type-link')]
+        ]}
+      , {id: 'search-text', type: 'string', q: getMsg('search-text-q'), width: '620px'
+          , validIf: (v, dictParamsValues, callback) => callback(v && v.trim() ? null : getErr('prop-cant-be-empty', [getMsg('search-text-q')]))
+        }
+      ]
+    , afterRunWithSuccess: (projet, retour, dictParamsValues) => {
+        new SearchResultsDialog({
+            results:    retour.data.results ?? []
+          , searchText: dictParamsValues['search-text']
+        }).show()
+      }
+  },
+
   // Update de la documentation
   {
       id: 'update-documentation'
@@ -543,11 +599,12 @@ const COMMON_SERVICES_DATA = [
       ]
     , afterDefinedParams: (params) => params[0]
     , bypassExec: (callback) => {
-        message(true, getMsg('alert-before-edit-projet'))
-        const timerbeforeexec = setTimeout(() => {
-          clearTimeout(timerbeforeexec)
-          callback()
-        }, 3000)
+        new ConfirmDialog({
+            title: getMsg('editing-project-data')
+          , message: getMsg('alert-before-edit-projet') + "<br><br>" + getMsg('edit-projet-reload-hint', [svg('reload', 'btn')])
+          , ouiBtn: {name: getMsg('OK'), onclick: callback}
+          , nonBtn: {name: getMsg('Cancel')}
+        }).show()
       }
   }
 ]

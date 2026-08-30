@@ -35,6 +35,35 @@ Object.assign(MESSAGES, {
   , 'create-a-file': "Créer un fichier"
   , 'ask-path-to-file-in-folder': 'Chemin d’accès au fichier :\n\n(relatif au dossier du projet, et tous les nouveaux dossiers seront créés)'
   , 'ask-file-content': "Contenu du fichier :"
+
+  // Rechargement des données persistantes du projet
+  , 'reload-project-data-title': "Recharger les données persistantes du projet"
+  , 'edit-projet-reload-hint': "Pour recharger les données modifiées, cliquez sur l'outil $1"
+  , 'project-data-reloaded': "Données de « $1 » rechargées."
+
+  // Recherche dans la documentation
+  , 'search-documentation': "Rechercher…"
+  , 'search-type-q': "Type de recherche :"
+  , 'search-type-any': "Texte quelconque"
+  , 'search-type-target': "Cible : [[...]]"
+  , 'search-type-link': "Lien : <<...>>"
+  , 'search-text-q': "Texte à rechercher (expression régulière possible) :"
+  , 'search-results-title': "Résultats de la recherche"
+  , 'search-results-query': "Recherche : $1"
+  , 'search-results-empty': "Aucun résultat."
+  , 'search-results-close-btn': "Fermer"
+  , 'backend-search-done': "$1 résultat(s) trouvé(s)."
+
+  // Recherche dans le projet
+  , 'search-project': "Rechercher dans le projet…"
+  , 'excluded-folders-q': "Dossiers à exclure de la recherche (séparés par une virgule) :"
+  , 'choose-folder-btn': "Dossier…"
+  , 'extensions-q': "Extensions de fichiers à rechercher (aucune cochée = toutes) :"
+  , 'search-results-count-one': " ($1 occurrence)"
+  , 'search-results-count-many': " ($1 occurrences)"
+
+  // Création d'issue Git (create-git-issue, gh-issue-create)
+  , 'gh-issue-created': "Issue #$1 bien enregistrée."
 })
 
 Object.assign(ERRORS, {
@@ -48,4 +77,11 @@ Object.assign(ERRORS, {
 
   // Git
   , 'backend-icloud-dataless-files': "Problème de synchro iCloud. Pour les fichiers marqués d'un ⚠️, passer par un Terminal au dossier."
+
+  // Recherche dans la documentation
+  , 'backend-search-invalid-regex': "Expression régulière invalide : $1 ($2)"
+
+  // Recherche dans le projet
+  , 'backend-search-project-unfound-folder': "Le dossier du projet '$1' est introuvable."
+  , 'excluded-folder-outside-project': "Ce dossier n'est pas un sous-dossier du projet — sélection ignorée."
 })

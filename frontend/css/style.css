@@ -1,5 +1,6 @@
 :root {
   --hauteur-footer: 40px;
+  --color-project-name: rgb(249, 249, 21);
 }
 body {
   font-size: 16pt;
@@ -46,6 +47,7 @@ button {
   margin: 0 10px;
   background-color: white;
   border: 1px solid rgb(208, 208, 208);
+  cursor: pointer;
 }
 button:active:not(:disabled) { 
   outline: auto; 
@@ -118,6 +120,65 @@ button.svg32 {
   color: white;
 }
 
+.custom-select-dropdown {
+  position: relative;
+}
+
+.custom-select-trigger {
+  padding: 4px 8px;
+  border: 1px solid rgb(208, 208, 208);
+  cursor: pointer;
+  background-color: white;
+}
+
+.custom-select-list-popup {
+  position: fixed;
+  z-index: 1002;
+  background-color: white;
+  min-height: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.search-results-list {
+  max-height: 20em;
+  overflow-y: auto;
+}
+
+.search-result-row {
+  padding: 6px 8px;
+  cursor: pointer;
+  border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+.search-result-row:hover {
+  background-color: rgb(230, 230, 230);
+}
+
+.search-result-location {
+  font-family: Monospace;
+  font-size: 0.75em;
+  opacity: 0.6;
+}
+
+.search-result-excerpt {
+  white-space: pre-wrap;
+}
+
+.search-result-match {
+  color: rgb(177, 64, 180);
+}
+
+.search-results-empty {
+  padding: 6px 8px;
+  opacity: 0.6;
+}
+
+.search-results-query {
+  font-weight: bold;
+}
+
 .picto {
   width: 32px;
   background-color: inherit;
@@ -166,7 +227,7 @@ div#current-project-mark {
   position:absolute;
   left: 50%;
   top: 20%;
-  color: rgb(249, 249, 21);
+  color: var(--color-project-name);
 }
 
 header div#tools-button,

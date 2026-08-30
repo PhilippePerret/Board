@@ -128,6 +128,20 @@ class Project {
     }
   }
 
+  /**
+   * Fonction appelée par le bouton "Recharger les données"
+   *
+   * Recharge et applique les données persistantes (fichier YAML) du
+   * projet courant.
+   */
+  static reloadData(){
+    if (this.current) {
+      this.current.reloadData.call(this.current)
+    } else {
+      erreur(getErr('no-current-projet'))
+    }
+  }
+
   // Sélection du projet dans le Finder
   static onProjectSelectedInFinder(){
     server.send({action: 'getInfoFinderSelection', type: 'folder', no_raise: true}, this.onRetourInfoFinderProjet.bind(this))
@@ -420,6 +434,21 @@ class Project {
     this.save()
   }
 
+  reloadData(){
+    server.send({action: 'load-yaml-file', path: this.card_path}, this.afterReloadData.bind(this))
+  }
+  afterReloadData(retour){
+    const data = retour.data
+    ;[...(this.services?.startup ?? []), ...(this.services?.others ?? [])].forEach(s => Service.remove(s.uuid ?? s.id))
+    PROJECT_DATA.forEach(dprop => this[dprop.id] = data[dprop.id])
+    this.data = data
+    if (!this.services) this.services = {startup: [], others: []}
+    this.initServices()
+    this.buildCard()
+    this.constructor.select(this)
+    message(true, getMsg('project-data-reloaded', [this.title]))
+  }
+
   /**
    * Pour mettre le projet en stand-by ou le réactiver
    */
@@ -623,7 +652,13 @@ class Project {
   }
 
   buildCard(){
-    if (this.obj) this.obj.remove()
+    if (this.obj) {
+      this.obj.remove()
+      // cf. removeServiceFromListe() : évite que buildStartupContainer() réutilise l'ancien conteneur détaché
+      this.startupContainer = null
+      this.divSServices = null
+      this.btnStartup = null
+    }
     const divId = `project-${this.id}`
     this.divId = divId
     const div = DCreate('DIV', {id: divId, class: 'project', role: 'group'})

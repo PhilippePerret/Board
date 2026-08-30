@@ -49,12 +49,37 @@ begin
 
   RETOUR.init(request)
 
+  # Éditeurs (noms tels que stockés dans APP_DATA, cf. CODE_EDITORS/
+  # TEXT_EDITORS dans AppData.js) pour lesquels une syntaxe CLI de saut à
+  # la ligne est connue et vérifiée. Les éditeurs absents de cette table
+  # (Typora, TextEdit, LibreOffice, Word, Note.app…) n'ont pas de CLI de
+  # ce type — ouverture simple pour eux, sans que ce soit un oubli.
+  LINE_JUMP_COMMANDS = {
+    'Visual Studio Code' => ->(path, line) { ['code', '-g', "#{path}:#{line}"] },
+    'Sublime Text'        => ->(path, line) { ['subl', "#{path}:#{line}"] },
+    'TextMate'            => ->(path, line) { ['mate', '-l', line.to_s, path] },
+    'CotEditor'           => ->(path, line) { ['cot', '--line', line.to_s, path] },
+    'BBEdit'              => ->(path, line) { ['bbedit', "+#{line}", path] },
+    'Xcode'               => ->(path, line) { ['xed', '-l', line.to_s, path] },
+    'Nova'                => ->(path, line) { ['nova', path, '-l', line.to_s] },
+    'Zed'                 => ->(path, line) { ['zed', "#{path}:#{line}"] },
+    'Atom'                => ->(path, line) { ['atom', "#{path}:#{line}"] },
+    'IntelliJ IDEA'       => ->(path, line) { ['idea', '--line', line.to_s, path] },
+    'WebStorm'            => ->(path, line) { ['webstorm', '--line', line.to_s, path] },
+  }
+
   # Ouvre +path+ avec l'application +editor+ (nom configuré dans APP_DATA,
-  # p.e. 'yaml-editor'/'text-editor'/'code-editor') — si aucune n'est
-  # configurée, ouvre avec l'application par défaut du système (`open`
-  # sans `-a`). Signale une erreur si l'ouverture échoue, plutôt que de
-  # lancer silencieusement une commande cassée.
-  def open_file_with_editor(path, editor)
+  # p.e. 'yaml-editor'/'text-editor'/'code-editor'/'documentation-editor') —
+  # si aucune n'est configurée, ouvre avec l'application par défaut du
+  # système (`open` sans `-a`). Signale une erreur si l'ouverture échoue,
+  # plutôt que de lancer silencieusement une commande cassée.
+  # +line+ optionnel : saut direct à la ligne via LINE_JUMP_COMMANDS quand
+  # l'éditeur y figure, sinon simple ouverture du fichier.
+  def open_file_with_editor(path, editor, line = nil)
+    if line && (jump = LINE_JUMP_COMMANDS[editor])
+      system(*jump.call(path, line.to_i))
+      return if $?.success?
+    end
     if editor.nil? || editor.empty?
       `open "#{path}"`
     else
@@ -211,6 +236,10 @@ begin
     open_file_with_editor(request['path'], APP_DATA['text-editor'])
   when 'open-file-code'
     open_file_with_editor(request['path'], APP_DATA['code-editor'])
+  when 'open-documentation-result'
+    open_file_with_editor(request['path'], APP_DATA['documentation-editor'], request['line'])
+  when 'open-project-search-result'
+    open_file_with_editor(request['path'], APP_DATA['code-editor'], request['line'])
   when 'create-folder'
     begin
       FileUtils.mkdir_p(request['data'])

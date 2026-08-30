@@ -48,7 +48,7 @@ class GitIssue extends ExtendedObject {
     const url  = DCreate('IMG', {class:'issue-goto picto fleft', src:"images/goto.svg"})
     div.appendChild(url)
     const num = DCreate('SPAN', {class:'issue-number', text: String(this.number)})
-    const tit = DCreate('DIV', {class:'issue-title', text: escapeHTML(this.title)})
+    const tit = DCreate('DIV', {class:'issue-title', text: escapeHTML(this.title) + ` (#${this.number})`})
     div.appendChild(tit)
     const desc = DCreate('DIV', {class:'issue-body', text: escapeHTML(this.body).replace(/\n/g,'<br>')})
     div.appendChild(desc)
