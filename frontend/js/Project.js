@@ -184,6 +184,7 @@ class Project {
   // Pour afficher et masquer les boutons du projet sélectionné
   static affProjectButtons(){
     this.divButtons.classList.remove('invisible')
+    this.reloadBtn.classList.toggle('invisible', !this.current?.dataEdited)
     Service.showCommonPanel()
   }
   static maskProjectButtons(){
@@ -191,6 +192,7 @@ class Project {
     Service.maskCommonPanel()
   }
   static get divButtons(){return this._dbutons || (this._dbutons = DGet('span#project-buttons')) }
+  static get reloadBtn(){return this._reloadBtn || (this._reloadBtn = DGet('#btn-reload-project-data')) }
 
   /**
    * Méthode pour retirer le projet (appelé par le bouton moins)
@@ -288,6 +290,11 @@ class Project {
     if (undefined == this.collapsed) {
       this.collapsed = false
     }
+    // Purement une marque de session (jamais persistée) : le bouton
+    // "Rafraîchir les données du projet" (#btn-reload-project-data) ne
+    // devient visible qu'après un passage par le service 'edit-projet'
+    // (édition manuelle du YAML) — cf. Project.affProjectButtons/ServiceData.js.
+    this.dataEdited = false
     this.initServices()
     
   }

@@ -608,6 +608,10 @@ const COMMON_SERVICES_DATA = [
           , nonBtn: {name: getMsg('Cancel')}
         }).show()
       }
+    , afterRunWithSuccess: (projet) => {
+        projet.dataEdited = true
+        Project.affProjectButtons()
+      }
   }
 ]
 
