@@ -420,4 +420,46 @@ const MESSAGES = {
     , 'Private': "Private"
     , 'Public': "Public"
     , 'github-repo-checking': "Checking the Github repository…"
+    , 'github-repo-description': "Repo description"
+    , 'github-repo-description-q': "What description for this Github repo?"
+    , 'eval-code-btn': 'Evaluate code…'
+    , 'eval-code-title': 'Evaluate code'
+    , 'eval-code-run-btn': 'Interpret…'
+    , 'eval-code-finish-btn': 'Finish'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': 'Turn into a script'
+    , 'eval-code-choose-script-folder': "Select the folder to place the script in, then “OK”."
+    , 'eval-code-script-name-title': 'Script name'
+    , 'eval-code-script-name-q': 'What name for the script?'
+    , 'eval-code-run-now-title': 'Run the script'
+    , 'eval-code-run-now-q': 'Run the script now?'
+    , 'eval-code-add-service-title': 'Project service'
+    , 'eval-code-add-service-q': "Make this script a service of project $1?"
+    , 'eval-code-service-name-title': 'Button name'
+    , 'eval-code-service-name-q': 'What name for this service button?'
+    , 'git-commit-all-done': "All files have been pushed to Github."
+    , 'create-a-file': "Create a file"
+    , 'ask-path-to-file-in-folder': 'Path to the file:\n\n(relative to the project folder, and any new folders will be created)'
+    , 'ask-file-content': "File content:"
+    , 'reload-project-data-title': "Reload the project's persistent data"
+    , 'edit-projet-reload-hint': "To reload the modified data, click on the $1 tool"
+    , 'project-data-reloaded': "Data for “$1” reloaded."
+    , 'search-documentation': "Search…"
+    , 'search-type-q': "Search type:"
+    , 'search-type-any': "Any text"
+    , 'search-type-target': "Target: [[...]]"
+    , 'search-type-link': "Link: <<...>>"
+    , 'search-text-q': "Text to search for (regular expression allowed):"
+    , 'search-results-title': "Search results"
+    , 'search-results-query': "Search: $1"
+    , 'search-results-empty': "No results."
+    , 'search-results-close-btn': "Close"
+    , 'backend-search-done': "$1 result(s) found."
+    , 'search-project': "Search the project…"
+    , 'excluded-folders-q': "Folders to exclude from the search (comma-separated):"
+    , 'choose-folder-btn': "Folder…"
+    , 'extensions-q': "File extensions to search (none checked = all):"
+    , 'search-results-count-one': " ($1 occurrence)"
+    , 'search-results-count-many': " ($1 occurrences)"
+    , 'gh-issue-created': "Issue #$1 successfully saved."
 }

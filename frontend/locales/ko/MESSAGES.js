@@ -420,4 +420,47 @@ const MESSAGES = {
     , 'Private': "비공개"
     , 'Public': "공개"
     , 'github-repo-checking': "Github 저장소 확인 중…"
+    , 'github-repo-description': "저장소 설명"
+    , 'github-repo-description-q': "이 Github 저장소에 대한 설명은 무엇입니까?"
+    , 'select-docu-folder-and-ok': '폴더를 만들고 Finder에서 선택한 다음 "OK"를 클릭하세요.'
+    , 'eval-code-btn': '코드 평가…'
+    , 'eval-code-title': '코드 평가'
+    , 'eval-code-run-btn': '해석…'
+    , 'eval-code-finish-btn': '완료'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': '스크립트로 만들기'
+    , 'eval-code-choose-script-folder': '스크립트를 넣을 폴더를 선택한 다음 "OK"를 클릭하세요.'
+    , 'eval-code-script-name-title': '스크립트 이름'
+    , 'eval-code-script-name-q': '스크립트 이름은 무엇으로 하시겠습니까?'
+    , 'eval-code-run-now-title': '스크립트 실행'
+    , 'eval-code-run-now-q': '지금 스크립트를 실행하시겠습니까?'
+    , 'eval-code-add-service-title': '프로젝트 서비스'
+    , 'eval-code-add-service-q': "이 스크립트를 프로젝트 $1의 서비스로 만들까요?"
+    , 'eval-code-service-name-title': '버튼 이름'
+    , 'eval-code-service-name-q': '이 서비스 버튼의 이름은 무엇으로 하시겠습니까?'
+    , 'git-commit-all-done': "모든 파일이 Github에 푸시되었습니다."
+    , 'create-a-file': "파일 만들기"
+    , 'ask-path-to-file-in-folder': '파일 경로:\n\n(프로젝트 폴더 기준 상대 경로이며, 새 폴더는 모두 생성됩니다)'
+    , 'ask-file-content': "파일 내용:"
+    , 'reload-project-data-title': "프로젝트의 영구 데이터 다시 불러오기"
+    , 'edit-projet-reload-hint': "수정된 데이터를 다시 불러오려면 $1 도구를 클릭하세요"
+    , 'project-data-reloaded': '"$1"의 데이터를 다시 불러왔습니다.'
+    , 'search-documentation': "검색…"
+    , 'search-type-q': "검색 유형:"
+    , 'search-type-any': "모든 텍스트"
+    , 'search-type-target': "대상: [[...]]"
+    , 'search-type-link': "링크: <<...>>"
+    , 'search-text-q': "검색할 텍스트(정규 표현식 사용 가능):"
+    , 'search-results-title': "검색 결과"
+    , 'search-results-query': "검색: $1"
+    , 'search-results-empty': "결과 없음."
+    , 'search-results-close-btn': "닫기"
+    , 'backend-search-done': "$1개의 결과를 찾았습니다."
+    , 'search-project': "프로젝트에서 검색…"
+    , 'excluded-folders-q': "검색에서 제외할 폴더(쉼표로 구분):"
+    , 'choose-folder-btn': "폴더…"
+    , 'extensions-q': "검색할 파일 확장자(선택 없음 = 전체):"
+    , 'search-results-count-one': " ($1건)"
+    , 'search-results-count-many': " ($1건)"
+    , 'gh-issue-created': "이슈 #$1이(가) 성공적으로 저장되었습니다."
 }

@@ -420,4 +420,47 @@ const MESSAGES = {
     , 'Private': "Privado"
     , 'Public': "Público"
     , 'github-repo-checking': "Comprobando el repositorio de Github…"
+    , 'github-repo-description': "Descripción del repo"
+    , 'github-repo-description-q': "¿Qué descripción para este repo de Github?"
+    , 'select-docu-folder-and-ok': "Cree la carpeta y selecciónela en el Finder, luego «OK»."
+    , 'eval-code-btn': 'Evaluar código…'
+    , 'eval-code-title': 'Evaluar código'
+    , 'eval-code-run-btn': 'Interpretar…'
+    , 'eval-code-finish-btn': 'Finalizar'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': 'Convertir en script'
+    , 'eval-code-choose-script-folder': "Seleccione la carpeta donde colocar el script, luego «OK»."
+    , 'eval-code-script-name-title': 'Nombre del script'
+    , 'eval-code-script-name-q': '¿Qué nombre para el script?'
+    , 'eval-code-run-now-title': 'Ejecutar el script'
+    , 'eval-code-run-now-q': '¿Ejecutar el script ahora?'
+    , 'eval-code-add-service-title': 'Servicio del proyecto'
+    , 'eval-code-add-service-q': "¿Convertir este script en un servicio del proyecto $1?"
+    , 'eval-code-service-name-title': 'Nombre del botón'
+    , 'eval-code-service-name-q': '¿Qué nombre para este botón de servicio?'
+    , 'git-commit-all-done': "Todos los archivos se han subido a Github."
+    , 'create-a-file': "Crear un archivo"
+    , 'ask-path-to-file-in-folder': 'Ruta del archivo:\n\n(relativa a la carpeta del proyecto; se crearán todas las carpetas nuevas)'
+    , 'ask-file-content': "Contenido del archivo:"
+    , 'reload-project-data-title': "Recargar los datos persistentes del proyecto"
+    , 'edit-projet-reload-hint': "Para recargar los datos modificados, haga clic en la herramienta $1"
+    , 'project-data-reloaded': "Datos de «$1» recargados."
+    , 'search-documentation': "Buscar…"
+    , 'search-type-q': "Tipo de búsqueda:"
+    , 'search-type-any': "Cualquier texto"
+    , 'search-type-target': "Destino: [[...]]"
+    , 'search-type-link': "Enlace: <<...>>"
+    , 'search-text-q': "Texto a buscar (se admite expresión regular):"
+    , 'search-results-title': "Resultados de la búsqueda"
+    , 'search-results-query': "Búsqueda: $1"
+    , 'search-results-empty': "Ningún resultado."
+    , 'search-results-close-btn': "Cerrar"
+    , 'backend-search-done': "$1 resultado(s) encontrado(s)."
+    , 'search-project': "Buscar en el proyecto…"
+    , 'excluded-folders-q': "Carpetas a excluir de la búsqueda (separadas por comas):"
+    , 'choose-folder-btn': "Carpeta…"
+    , 'extensions-q': "Extensiones de archivo a buscar (ninguna marcada = todas):"
+    , 'search-results-count-one': " ($1 ocurrencia)"
+    , 'search-results-count-many': " ($1 ocurrencias)"
+    , 'gh-issue-created': "Issue #$1 registrada correctamente."
 }

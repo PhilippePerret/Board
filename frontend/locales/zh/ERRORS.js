@@ -139,4 +139,11 @@ const ERRORS = {
     , 'backend-github-api-error': "查询 Github API 时出错：$1。"
     , 'backend-github-repo-create-error': "创建 Github 仓库时出错：$1。"
     , 'project-data-invalid-bad-count': "项目 $1 的服务 $2 数据无效。预期 $3 项数据，提供了 $4 项。"
+    , 'file-already-exists-at': "该位置已存在文件：$1"
+    , 'unknown-shebang': "$1 不是可直接作为脚本运行的语言。"
+    , 'unrunnable-file': "文件 $1 既不可执行，也不属于已知语言。"
+    , 'backend-icloud-dataless-files': "iCloud 同步问题。对于标有 ⚠️ 的文件，请通过 Terminal 访问该文件夹。"
+    , 'backend-search-invalid-regex': "正则表达式无效：$1（$2）"
+    , 'backend-search-project-unfound-folder': "未找到项目文件夹 '$1'。"
+    , 'excluded-folder-outside-project': "该文件夹不是项目的子文件夹 — 已忽略此选择。"
 }

@@ -420,4 +420,47 @@ const MESSAGES = {
     , 'Private': "Privato"
     , 'Public': "Pubblico"
     , 'github-repo-checking': "Verifica del repository Github…"
+    , 'github-repo-description': "Descrizione del repo"
+    , 'github-repo-description-q': "Quale descrizione per questo repo Github?"
+    , 'select-docu-folder-and-ok': "Crea la cartella e selezionala nel Finder, quindi «OK»."
+    , 'eval-code-btn': 'Valuta codice…'
+    , 'eval-code-title': 'Valuta codice'
+    , 'eval-code-run-btn': 'Interpreta…'
+    , 'eval-code-finish-btn': 'Termina'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': 'Trasformalo in uno script'
+    , 'eval-code-choose-script-folder': "Seleziona la cartella in cui inserire lo script, quindi «OK»."
+    , 'eval-code-script-name-title': 'Nome dello script'
+    , 'eval-code-script-name-q': 'Quale nome per lo script?'
+    , 'eval-code-run-now-title': 'Esegui lo script'
+    , 'eval-code-run-now-q': 'Eseguire subito lo script?'
+    , 'eval-code-add-service-title': 'Servizio del progetto'
+    , 'eval-code-add-service-q': "Trasformare questo script in un servizio del progetto $1?"
+    , 'eval-code-service-name-title': 'Nome del pulsante'
+    , 'eval-code-service-name-q': 'Quale nome per questo pulsante di servizio?'
+    , 'git-commit-all-done': "Tutti i file sono stati inviati su Github."
+    , 'create-a-file': "Crea un file"
+    , 'ask-path-to-file-in-folder': 'Percorso del file:\n\n(relativo alla cartella del progetto; tutte le nuove cartelle verranno create)'
+    , 'ask-file-content': "Contenuto del file:"
+    , 'reload-project-data-title': "Ricarica i dati persistenti del progetto"
+    , 'edit-projet-reload-hint': "Per ricaricare i dati modificati, fai clic sullo strumento $1"
+    , 'project-data-reloaded': "Dati di «$1» ricaricati."
+    , 'search-documentation': "Cerca…"
+    , 'search-type-q': "Tipo di ricerca:"
+    , 'search-type-any': "Testo qualsiasi"
+    , 'search-type-target': "Destinazione: [[...]]"
+    , 'search-type-link': "Link: <<...>>"
+    , 'search-text-q': "Testo da cercare (è possibile un'espressione regolare):"
+    , 'search-results-title': "Risultati della ricerca"
+    , 'search-results-query': "Ricerca: $1"
+    , 'search-results-empty': "Nessun risultato."
+    , 'search-results-close-btn': "Chiudi"
+    , 'backend-search-done': "$1 risultato/i trovato/i."
+    , 'search-project': "Cerca nel progetto…"
+    , 'excluded-folders-q': "Cartelle da escludere dalla ricerca (separate da virgola):"
+    , 'choose-folder-btn': "Cartella…"
+    , 'extensions-q': "Estensioni dei file da cercare (nessuna selezionata = tutte):"
+    , 'search-results-count-one': " ($1 occorrenza)"
+    , 'search-results-count-many': " ($1 occorrenze)"
+    , 'gh-issue-created': "Issue #$1 registrata correttamente."
 }

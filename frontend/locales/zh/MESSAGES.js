@@ -420,4 +420,47 @@ const MESSAGES = {
     , 'Private': "私有"
     , 'Public': "公开"
     , 'github-repo-checking': "正在检查 Github 仓库…"
+    , 'github-repo-description': "仓库描述"
+    , 'github-repo-description-q': "这个 Github 仓库要写什么描述？"
+    , 'select-docu-folder-and-ok': "创建该文件夹，在 Finder 中选中它，然后点击“好”。"
+    , 'eval-code-btn': '执行代码…'
+    , 'eval-code-title': '执行代码'
+    , 'eval-code-run-btn': '解释执行…'
+    , 'eval-code-finish-btn': '完成'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': '转为脚本'
+    , 'eval-code-choose-script-folder': "选择存放脚本的文件夹，然后点击“好”。"
+    , 'eval-code-script-name-title': '脚本名称'
+    , 'eval-code-script-name-q': '脚本叫什么名字？'
+    , 'eval-code-run-now-title': '运行脚本'
+    , 'eval-code-run-now-q': '现在运行脚本吗？'
+    , 'eval-code-add-service-title': '项目服务'
+    , 'eval-code-add-service-q': "要将此脚本设为项目 $1 的服务吗？"
+    , 'eval-code-service-name-title': '按钮名称'
+    , 'eval-code-service-name-q': '这个服务按钮叫什么名字？'
+    , 'git-commit-all-done': "所有文件已推送到 Github。"
+    , 'create-a-file': "创建文件"
+    , 'ask-path-to-file-in-folder': '文件路径：\n\n（相对于项目文件夹，所有新文件夹都会被创建）'
+    , 'ask-file-content': "文件内容："
+    , 'reload-project-data-title': "重新加载项目的持久化数据"
+    , 'edit-projet-reload-hint': "要重新加载修改后的数据，请点击工具 $1"
+    , 'project-data-reloaded': "“$1” 的数据已重新加载。"
+    , 'search-documentation': "搜索…"
+    , 'search-type-q': "搜索类型："
+    , 'search-type-any': "任意文本"
+    , 'search-type-target': "目标：[[...]]"
+    , 'search-type-link': "链接：<<...>>"
+    , 'search-text-q': "要搜索的文本（可使用正则表达式）："
+    , 'search-results-title': "搜索结果"
+    , 'search-results-query': "搜索：$1"
+    , 'search-results-empty': "没有结果。"
+    , 'search-results-close-btn': "关闭"
+    , 'backend-search-done': "找到 $1 个结果。"
+    , 'search-project': "在项目中搜索…"
+    , 'excluded-folders-q': "要从搜索中排除的文件夹（用逗号分隔）："
+    , 'choose-folder-btn': "文件夹…"
+    , 'extensions-q': "要搜索的文件扩展名（未勾选任何项 = 全部）："
+    , 'search-results-count-one': "（$1 处）"
+    , 'search-results-count-many': "（$1 处）"
+    , 'gh-issue-created': "Issue #$1 已成功保存。"
 }

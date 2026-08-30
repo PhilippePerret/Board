@@ -420,4 +420,47 @@ const MESSAGES = {
     , 'Private': "निजी"
     , 'Public': "सार्वजनिक"
     , 'github-repo-checking': "Github रिपॉज़िटरी की जाँच हो रही है…"
+    , 'github-repo-description': "रिपॉज़िटरी का विवरण"
+    , 'github-repo-description-q': "इस Github रिपॉज़िटरी के लिए कौन-सा विवरण?"
+    , 'select-docu-folder-and-ok': 'फ़ोल्डर बनाएँ और उसे Finder में चुनें, फिर "OK" पर क्लिक करें।'
+    , 'eval-code-btn': 'कोड का मूल्यांकन करें…'
+    , 'eval-code-title': 'कोड का मूल्यांकन'
+    , 'eval-code-run-btn': 'इंटरप्रेट करें…'
+    , 'eval-code-finish-btn': 'समाप्त करें'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': 'इसे स्क्रिप्ट बनाएँ'
+    , 'eval-code-choose-script-folder': 'वह फ़ोल्डर चुनें जहाँ स्क्रिप्ट रखनी है, फिर "OK" पर क्लिक करें।'
+    , 'eval-code-script-name-title': 'स्क्रिप्ट का नाम'
+    , 'eval-code-script-name-q': 'स्क्रिप्ट के लिए कौन-सा नाम?'
+    , 'eval-code-run-now-title': 'स्क्रिप्ट चलाएँ'
+    , 'eval-code-run-now-q': 'क्या अभी स्क्रिप्ट चलाई जाए?'
+    , 'eval-code-add-service-title': 'प्रोजेक्ट सेवा'
+    , 'eval-code-add-service-q': "क्या इस स्क्रिप्ट को प्रोजेक्ट $1 की सेवा बनाया जाए?"
+    , 'eval-code-service-name-title': 'बटन का नाम'
+    , 'eval-code-service-name-q': 'इस सेवा बटन के लिए कौन-सा नाम?'
+    , 'git-commit-all-done': "सभी फ़ाइलें Github पर भेज दी गई हैं।"
+    , 'create-a-file': "फ़ाइल बनाएँ"
+    , 'ask-path-to-file-in-folder': 'फ़ाइल का पथ:\n\n(प्रोजेक्ट फ़ोल्डर के सापेक्ष; सभी नए फ़ोल्डर बना दिए जाएँगे)'
+    , 'ask-file-content': "फ़ाइल की सामग्री:"
+    , 'reload-project-data-title': "प्रोजेक्ट का स्थायी डेटा फिर से लोड करें"
+    , 'edit-projet-reload-hint': "संशोधित डेटा फिर से लोड करने के लिए, टूल $1 पर क्लिक करें"
+    , 'project-data-reloaded': '"$1" का डेटा फिर से लोड किया गया।'
+    , 'search-documentation': "खोजें…"
+    , 'search-type-q': "खोज का प्रकार:"
+    , 'search-type-any': "कोई भी टेक्स्ट"
+    , 'search-type-target': "लक्ष्य: [[...]]"
+    , 'search-type-link': "लिंक: <<...>>"
+    , 'search-text-q': "खोजने के लिए टेक्स्ट (रेगुलर एक्सप्रेशन भी मान्य):"
+    , 'search-results-title': "खोज परिणाम"
+    , 'search-results-query': "खोज: $1"
+    , 'search-results-empty': "कोई परिणाम नहीं।"
+    , 'search-results-close-btn': "बंद करें"
+    , 'backend-search-done': "$1 परिणाम मिले।"
+    , 'search-project': "प्रोजेक्ट में खोजें…"
+    , 'excluded-folders-q': "खोज से बाहर रखे जाने वाले फ़ोल्डर (अल्पविराम से अलग करें):"
+    , 'choose-folder-btn': "फ़ोल्डर…"
+    , 'extensions-q': "खोजी जाने वाली फ़ाइल एक्सटेंशन (कोई चयनित नहीं = सभी):"
+    , 'search-results-count-one': " ($1 बार मिला)"
+    , 'search-results-count-many': " ($1 बार मिले)"
+    , 'gh-issue-created': "इश्यू #$1 सफलतापूर्वक सहेजा गया।"
 }

@@ -139,4 +139,11 @@ const ERRORS = {
     , 'backend-github-api-error': "Github API 조회 중 오류: $1."
     , 'backend-github-repo-create-error': "Github 저장소 생성 중 오류: $1."
     , 'project-data-invalid-bad-count': "서비스 $2에 대한 프로젝트 $1의 데이터가 유효하지 않습니다. $3개 데이터 예상, $4개 데이터 제공됨."
+    , 'file-already-exists-at': "이 위치에 이미 파일이 존재합니다: $1"
+    , 'unknown-shebang': "$1은(는) 직접 실행할 수 있는 스크립트 언어가 아닙니다."
+    , 'unrunnable-file': "파일 $1은(는) 실행 파일도 아니고 알려진 언어도 아닙니다."
+    , 'backend-icloud-dataless-files': "iCloud 동기화 문제입니다. ⚠️ 표시가 있는 파일은 Terminal을 통해 폴더에 접근하세요."
+    , 'backend-search-invalid-regex': "잘못된 정규 표현식입니다: $1 ($2)"
+    , 'backend-search-project-unfound-folder': "프로젝트 폴더 '$1'을(를) 찾을 수 없습니다."
+    , 'excluded-folder-outside-project': "이 폴더는 프로젝트의 하위 폴더가 아닙니다 — 선택이 무시되었습니다."
 }

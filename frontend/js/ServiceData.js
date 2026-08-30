@@ -242,6 +242,7 @@ const COMMON_SERVICES_DATA = [
           Git.view(retour.message)
         }
       }
+    , successMessage: () => undefined // pas de message de confirmation pour ce service
     , beforeExec(dict){
         // En fonction de l'opération à exécuter, le message (gh_message)
         // sera utilisé différemment.
@@ -454,6 +455,7 @@ const COMMON_SERVICES_DATA = [
           {id: 'docu-folder', type: 'project', if_undefined: {type: 'path', q: getMsg('select-docu-folder')}}
         , {id: 'documentation-editor', type: 'app'}
       ]
+    , successMessage: () => undefined // pas de message de confirmation pour ce service
   },
 
   {

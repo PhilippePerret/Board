@@ -140,4 +140,11 @@ const ERRORS = {
     , 'backend-github-api-error': "Error while querying the Github API: $1."
     , 'backend-github-repo-create-error': "Error while creating the Github repository: $1."
     , 'project-data-invalid-bad-count': "The data of project $1 for service $2 is invalid. $3 data$5 expected, $4 data$6 provided."
+    , 'file-already-exists-at': "A file already exists at this location: $1"
+    , 'unknown-shebang': "$1 is not a directly scriptable language."
+    , 'unrunnable-file': "The file $1 is neither executable nor in a known language."
+    , 'backend-icloud-dataless-files': "iCloud sync issue. For files marked with ⚠️, access the folder via a Terminal."
+    , 'backend-search-invalid-regex': "Invalid regular expression: $1 ($2)"
+    , 'backend-search-project-unfound-folder': "The project folder '$1' was not found."
+    , 'excluded-folder-outside-project': "This folder is not a subfolder of the project — selection ignored."
 }

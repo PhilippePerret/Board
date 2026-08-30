@@ -420,4 +420,47 @@ const MESSAGES = {
     , 'Private': "Privat"
     , 'Public': "Öffentlich"
     , 'github-repo-checking': "Überprüfung des Github-Repositorys…"
+    , 'github-repo-description': "Repo-Beschreibung"
+    , 'github-repo-description-q': "Welche Beschreibung für dieses Github-Repository?"
+    , 'select-docu-folder-and-ok': "Erstellen Sie den Ordner, wählen Sie ihn im Finder aus und klicken Sie dann auf „OK“."
+    , 'eval-code-btn': 'Code auswerten…'
+    , 'eval-code-title': 'Code auswerten'
+    , 'eval-code-run-btn': 'Interpretieren…'
+    , 'eval-code-finish-btn': 'Beenden'
+    , 'eval-code-running': '…'
+    , 'eval-code-make-script-btn': 'Daraus ein Skript machen'
+    , 'eval-code-choose-script-folder': "Wählen Sie den Ordner für das Skript aus und klicken Sie dann auf „OK“."
+    , 'eval-code-script-name-title': 'Skriptname'
+    , 'eval-code-script-name-q': 'Welcher Name für das Skript?'
+    , 'eval-code-run-now-title': 'Skript ausführen'
+    , 'eval-code-run-now-q': 'Skript jetzt ausführen?'
+    , 'eval-code-add-service-title': 'Projektdienst'
+    , 'eval-code-add-service-q': "Dieses Skript zu einem Dienst des Projekts $1 machen?"
+    , 'eval-code-service-name-title': 'Name der Schaltfläche'
+    , 'eval-code-service-name-q': 'Welcher Name für diese Dienst-Schaltfläche?'
+    , 'git-commit-all-done': "Alle Dateien wurden auf Github übertragen."
+    , 'create-a-file': "Datei erstellen"
+    , 'ask-path-to-file-in-folder': 'Pfad zur Datei:\n\n(relativ zum Projektordner; alle neuen Ordner werden erstellt)'
+    , 'ask-file-content': "Dateiinhalt:"
+    , 'reload-project-data-title': "Persistente Projektdaten neu laden"
+    , 'edit-projet-reload-hint': "Um die geänderten Daten neu zu laden, klicken Sie auf das Werkzeug $1"
+    , 'project-data-reloaded': "Daten von „$1“ neu geladen."
+    , 'search-documentation': "Suchen…"
+    , 'search-type-q': "Suchtyp:"
+    , 'search-type-any': "Beliebiger Text"
+    , 'search-type-target': "Ziel: [[...]]"
+    , 'search-type-link': "Link: <<...>>"
+    , 'search-text-q': "Zu suchender Text (regulärer Ausdruck möglich):"
+    , 'search-results-title': "Suchergebnisse"
+    , 'search-results-query': "Suche: $1"
+    , 'search-results-empty': "Kein Ergebnis."
+    , 'search-results-close-btn': "Schließen"
+    , 'backend-search-done': "$1 Ergebnis(se) gefunden."
+    , 'search-project': "Im Projekt suchen…"
+    , 'excluded-folders-q': "Von der Suche auszuschließende Ordner (durch Kommas getrennt):"
+    , 'choose-folder-btn': "Ordner…"
+    , 'extensions-q': "Zu durchsuchende Dateiendungen (keine ausgewählt = alle):"
+    , 'search-results-count-one': " ($1 Treffer)"
+    , 'search-results-count-many': " ($1 Treffer)"
+    , 'gh-issue-created': "Issue #$1 erfolgreich gespeichert."
 }

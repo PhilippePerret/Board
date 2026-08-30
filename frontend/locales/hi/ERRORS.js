@@ -139,4 +139,11 @@ const ERRORS = {
     , 'backend-github-api-error': "Github API से पूछताछ करते समय त्रुटि: $1।"
     , 'backend-github-repo-create-error': "Github रिपॉज़िटरी बनाते समय त्रुटि: $1।"
     , 'project-data-invalid-bad-count': "सेवा $2 के लिए प्रोजेक्ट $1 का डेटा अमान्य है। $3 डेटा अपेक्षित, $4 डेटा प्रदान किया गया।"
+    , 'file-already-exists-at': "इस स्थान पर पहले से ही एक फ़ाइल मौजूद है: $1"
+    , 'unknown-shebang': "$1 सीधे स्क्रिप्ट के रूप में चलाई जा सकने वाली भाषा नहीं है।"
+    , 'unrunnable-file': "फ़ाइल $1 न तो चलाने योग्य है, न ही किसी ज्ञात भाषा में है।"
+    , 'backend-icloud-dataless-files': "iCloud सिंक की समस्या। ⚠️ से चिह्नित फ़ाइलों के लिए, Terminal से फ़ोल्डर तक पहुँचें।"
+    , 'backend-search-invalid-regex': "अमान्य रेगुलर एक्सप्रेशन: $1 ($2)"
+    , 'backend-search-project-unfound-folder': "प्रोजेक्ट फ़ोल्डर '$1' नहीं मिला।"
+    , 'excluded-folder-outside-project': "यह फ़ोल्डर प्रोजेक्ट का उप-फ़ोल्डर नहीं है — चयन को नज़रअंदाज़ किया गया।"
 }
