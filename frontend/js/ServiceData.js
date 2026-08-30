@@ -88,8 +88,8 @@
 */
 
 // Action qu'on peut accomplir sur les Git issues
-const ISSUE_ACTION_LIST = [['view', getMsg('View')], ['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')]]
-const ISSUE_ACTION_WITHOUT_COMS = {'view': true, 'pin': true, 'unpin': true}
+const ISSUE_ACTION_LIST = [['view', getMsg('View')], ['close', getMsg('gh-close')], ['comment', getMsg('gh-comment')], ['pin', getMsg('gh-pin')], ['unpin', getMsg('gh-unpin')], ['fixed-clipboard', getMsg('gh-fixed-clipboard')]]
+const ISSUE_ACTION_WITHOUT_COMS = {'view': true, 'pin': true, 'unpin': true, 'fixed-clipboard': true}
 
 const COUNTDOWN_PROPERTIES = {
     front: Clock.instance.toggle.bind(Clock.instance)
@@ -242,8 +242,18 @@ const COMMON_SERVICES_DATA = [
           Git.view(retour.message)
         }
       }
-    , successMessage: () => undefined // pas de message de confirmation pour ce service
+    , successMessage: (retour, dictParamsValues) => dictParamsValues.gh_operation == 'fixed-clipboard'
+        ? getMsg('gh-fixed-clipboard-done')
+        : undefined // pas de message de confirmation pour les autres opérations
     , beforeExec(dict){
+        // 'fixed-clipboard' n'est pas une opération gh : rien à distance,
+        // juste copier "Fixed #N" (une par issue sélectionnée, séparées
+        // par un espace — destiné au title d'un commit, donc sans retour
+        // chariot) dans le presse-papier local.
+        if (dict.gh_operation == 'fixed-clipboard') {
+          const text = dict.issue_list.map(n => `Fixed #${n}`).join(' ')
+          return `printf '%s' ${shellEscape(text)} | pbcopy`
+        }
         // En fonction de l'opération à exécuter, le message (gh_message)
         // sera utilisé différemment.
         //
@@ -501,6 +511,7 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id: 'docu-main-file-adoc', type: 'project', if_undefined: {q: getMsg('select-docu-main-file'), type: 'path'}}
       ]
+    , successMessage: (retour, dictParamsValues, projet) => getMsg('docu-updated', [projet.title])
   },
 
   // Ouverture de la documentation

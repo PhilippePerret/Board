@@ -8,6 +8,9 @@ Object.assign(MESSAGES, {
   'premier':"juste pour virgule"
   // Nouveaux messages à mettre dans les MESSAGES.js
 
+  , 'docu-updated': "Documentation de $1 actualisée."
+  , 'gh-fixed-clipboard': "Fixed #… (presse-papier)"
+  , 'gh-fixed-clipboard-done': "Texte copié dans le presse-papier."
 })
 
 Object.assign(ERRORS, {
