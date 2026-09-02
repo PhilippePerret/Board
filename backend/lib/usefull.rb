@@ -1,5 +1,6 @@
 require "json"
 require 'yaml'
+require 'time'
 require "fileutils"
 require "timeout"
 require "rbconfig"

@@ -120,7 +120,18 @@ begin
     IO.write(APP_DATA_FILE, request['data'].to_yaml)
     RETOUR.ok = true
     RETOUR.message = 'backend-app-data-save'
-   
+
+  # Appelé par Sources/Board/ViewController.swift pendant que l'app est
+  # masquée (NSApp.isHidden) : lit les rappels persistés directement sur
+  # le disque, sans passer par le JS de la WKWebView (suspendu par macOS
+  # tant que la fenêtre est totalement invisible, cf. issue #53).
+  when 'reminders-due'
+    now = Time.now
+    RETOUR.data = (APP_DATA['reminders'] || []).select do |r|
+      t = Time.parse(r['time']) rescue nil
+      t && t <= now && (now - t) < 3600
+    end
+
   # à l'initialisation (App.init)
   when 'load-all'
     require_relative 'lib/app.rb'

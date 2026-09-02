@@ -183,7 +183,12 @@ class NativeNotifier: NSObject {
             webView.loadHTMLString(html, baseURL: baseURL)
             panel.contentView = webView
             finalizeFrame(fittingSize: nil)
-            if NSApp.isHidden { NSApp.unhideWithoutActivation() }
+            // unhideWithoutActivation() ne suffit pas pour une fenêtre créée
+            // APRÈS coup pendant que l'app est masquée (constaté : le panneau
+            // reste invisible tant que l'app n'est pas ramenée au premier
+            // plan) — activation complète en dernier recours, uniquement
+            // quand l'app est effectivement masquée.
+            if NSApp.isHidden { NSApp.activate(ignoringOtherApps: true) }
             panel.orderFrontRegardless()
             floatingPanels.append(panel)
             if let delay = delay {
@@ -241,7 +246,8 @@ class NativeNotifier: NSObject {
         ])
         panel.contentView = container
         finalizeFrame(fittingSize: stack.fittingSize)
-        if NSApp.isHidden { NSApp.unhideWithoutActivation() }
+        // Cf. remarque équivalente dans la branche html ci-dessus.
+        if NSApp.isHidden { NSApp.activate(ignoringOtherApps: true) }
         panel.orderFrontRegardless()
 
         floatingPanels.append(panel)

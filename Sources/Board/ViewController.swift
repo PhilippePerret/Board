@@ -5,6 +5,9 @@ class ViewController: NSViewController, WKNavigationDelegate {
 
     private var webView: WKWebView!
     private var backend: Backend!
+    // Rappels déjà affichés par le poll natif (cf. viewDidLoad) — évite de
+    // réafficher le même rappel à chaque tick tant que l'app reste masquée.
+    private var natifRemindersDejaAffiches: Set<String> = []
 
     // Cible provisoire du menu Réglages (cmd+,, AppDelegate) — données app,
     // pas de vrais réglages pour l'instant. À rebrancher ailleurs plus tard
@@ -74,51 +77,56 @@ class ViewController: NSViewController, WKNavigationDelegate {
             allowingReadAccessTo: URL(fileURLWithPath: "/")
         )
 
-        // App masquée (Hide) : WKWebView suspend les timers JS des pages non
-        // visibles (occlusion, indépendant de l'App Nap déjà traité côté
-        // AppDelegate) — Reminder.js#poll ne se déclenche plus tout seul, ET
-        // même quand on le relance depuis l'hôte (evaluateJavaScript, qui lui
-        // s'exécute normalement), le postMessage que Notifier.notify utilise
-        // pour parler au natif reste en attente tant que la page est masquée
-        // — la notification n'arrivait donc qu'au moment de la réactivation.
-        // Ici, on contourne ce postMessage bloqué : les rappels dus renvoient
-        // directement leurs données via la valeur de retour d'evaluateJavaScript
-        // (qui, elle, arrive normalement), et c'est Swift qui affiche le
-        // panneau, sans passer par ce canal.
+        // App masquée (Hide) : WKWebView suspend tout son process WebContent
+        // tant que la fenêtre est totalement invisible (occlusion,
+        // indépendant de l'App Nap déjà traité côté AppDelegate) —
+        // Reminder.js#poll ne se déclenche plus, ET une évaluation de JS
+        // demandée depuis l'hôte (evaluateJavaScript) reste elle aussi en
+        // attente tant que la page est masquée, donc la notification
+        // n'arrivait qu'au moment de la réactivation (issue #53). Ici, on
+        // ne passe plus du tout par le JS de la page : on relit directement
+        // les rappels persistés sur le disque (via le process Ruby du
+        // backend, indépendant de la WKWebView) et c'est Swift qui affiche
+        // le panneau.
         Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             guard NSApp.isHidden else { return }
-            let pollJS = """
-            (function(){
-              var results = [];
-              Reminder.asArray().forEach(function(r){
-                var now = new Date();
-                if (r.time <= now) {
-                  if (DateUtils.close(r.time, now, 60)) {
-                    if (r.execCount % 3 === 0) {
-                      var raw = r.dataNotifierByType(r.type);
-                      var prepared = Notifier._ensure_data(Object.assign({}, raw));
-                      results.push(prepared);
-                      if (r.onDue) r.onDue();
-                    }
-                    r.execCount++;
-                  } else {
-                    Reminder.remove(r);
-                  }
-                }
-              });
-              Reminder.count > 0 || Reminder.stop();
-              return JSON.stringify(results);
-            })()
-            """
-            self.webView.evaluateJavaScript(pollJS) { result, error in
-                guard let json = result as? String, let jsonData = json.data(using: .utf8) else {
-                    Debug.log("poll natif : réponse inattendue=\(String(describing: result)) erreur=\(String(describing: error))")
+            self.backend.run(json: #"{"action":"reminders-due"}"#) { [weak self] output in
+                guard let self = self else { return }
+                guard let jsonData = output.data(using: .utf8),
+                      let retour = (try? JSONSerialization.jsonObject(with: jsonData)) as? [String: Any],
+                      let items = retour["data"] as? [[String: Any]]
+                else {
+                    Debug.log("poll natif : réponse inattendue=\(output)")
                     return
                 }
-                guard let items = (try? JSONSerialization.jsonObject(with: jsonData)) as? [[String: Any]] else { return }
                 Debug.log("poll natif : \(items.count) rappel(s) dû(s)")
-                for request in items {
+                for reminder in items {
+                    let cle = [
+                        reminder["taskId"] as? String ?? "",
+                        reminder["projectId"] as? String ?? "",
+                        reminder["message"] as? String ?? "",
+                        reminder["time"] as? String ?? ""
+                    ].joined(separator: "|")
+                    guard !self.natifRemindersDejaAffiches.contains(cle) else { continue }
+                    self.natifRemindersDejaAffiches.insert(cle)
+
+                    var request: [String: Any] = [
+                        "mode": "floating",
+                        "title": reminder["title"] as? String ?? "",
+                        "message": reminder["message"] as? String ?? "",
+                        // Sans delay, le panneau ne se ferme jamais tout seul,
+                        // reste dans floatingPanels (NativeNotifier) et bloque
+                        // alors tout Hide ultérieur (reorderFloatingPanels le
+                        // réaffiche aussitôt) — cf. incident constaté.
+                        "delay": reminder["delay"] as? Double ?? 60
+                    ]
+                    if let icon = reminder["icon"] as? String {
+                        request["icon"] = icon
+                    }
+                    if let boutons = reminder["buttons"] as? [[String: Any]] {
+                        request["buttons"] = boutons.map { [$0["name"] as? String ?? ""] }
+                    }
                     NativeNotifier.handle(request: request) { _ in }
                 }
             }
