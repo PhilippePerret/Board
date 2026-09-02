@@ -14,6 +14,11 @@ class NativeNotifier: NSObject {
 
     static let shared = NativeNotifier()
     private var floatingPanels: [NSPanel] = []
+    // Panneaux déjà réaffichés de force une fois après un Hide (cf.
+    // reorderFloatingPanels) — protège seulement contre le cas où le Hide et
+    // l'apparition du panneau tombent en même temps ; un Hide voulu ensuite,
+    // pendant que le panneau est encore ouvert, doit fonctionner normalement.
+    private var panelsDejaReaffiches: Set<ObjectIdentifier> = []
 
     private override init() {
         super.init()
@@ -28,9 +33,13 @@ class NativeNotifier: NSObject {
     }
 
     @objc private func reorderFloatingPanels() {
-        guard !floatingPanels.isEmpty else { return }
+        let panelsAReafficher = floatingPanels.filter { !panelsDejaReaffiches.contains(ObjectIdentifier($0)) }
+        guard !panelsAReafficher.isEmpty else { return }
         NSApp.unhideWithoutActivation()
-        floatingPanels.forEach { $0.orderFrontRegardless() }
+        panelsAReafficher.forEach {
+            $0.orderFrontRegardless()
+            panelsDejaReaffiches.insert(ObjectIdentifier($0))
+        }
     }
 
     static func requestAuthorization() {
@@ -155,6 +164,7 @@ class NativeNotifier: NSObject {
             finished = true
             panel.close()
             self.floatingPanels.removeAll { $0 == panel }
+            self.panelsDejaReaffiches.remove(ObjectIdentifier(panel))
             completion(button)
         }
 

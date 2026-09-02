@@ -88,47 +88,62 @@ class ViewController: NSViewController, WKNavigationDelegate {
         // les rappels persistés sur le disque (via le process Ruby du
         // backend, indépendant de la WKWebView) et c'est Swift qui affiche
         // le panneau.
-        Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            guard NSApp.isHidden else { return }
-            self.backend.run(json: #"{"action":"reminders-due"}"#) { [weak self] output in
-                guard let self = self else { return }
-                guard let jsonData = output.data(using: .utf8),
-                      let retour = (try? JSONSerialization.jsonObject(with: jsonData)) as? [String: Any],
-                      let items = retour["data"] as? [[String: Any]]
-                else {
-                    Debug.log("poll natif : réponse inattendue=\(output)")
-                    return
-                }
-                Debug.log("poll natif : \(items.count) rappel(s) dû(s)")
-                for reminder in items {
-                    let cle = [
-                        reminder["taskId"] as? String ?? "",
-                        reminder["projectId"] as? String ?? "",
-                        reminder["message"] as? String ?? "",
-                        reminder["time"] as? String ?? ""
-                    ].joined(separator: "|")
-                    guard !self.natifRemindersDejaAffiches.contains(cle) else { continue }
-                    self.natifRemindersDejaAffiches.insert(cle)
+        //
+        // Alignement sur la minute pile (comme Reminder.js#run côté JS,
+        // qui calibre son setInterval sur la prochaine minute pleine) :
+        // sans ça, ce timer démarré à l'instant du lancement de l'app
+        // tique toutes les 60s à partir de CET instant, donc décalé de
+        // ses propres secondes — un rappel programmé pour 10:07:00 pile
+        // n'était détecté qu'à 10:07:<secondes de lancement de l'app>.
+        let msDansLaMinute = Int(Date().timeIntervalSince1970 * 1000) % 60000
+        let delaiAvantMinutePile = Double(60000 - msDansLaMinute) / 1000.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + delaiAvantMinutePile) { [weak self] in
+            self?.pollRemindersSiMasque()
+            Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+                self?.pollRemindersSiMasque()
+            }
+        }
+    }
 
-                    var request: [String: Any] = [
-                        "mode": "floating",
-                        "title": reminder["title"] as? String ?? "",
-                        "message": reminder["message"] as? String ?? "",
-                        // Sans delay, le panneau ne se ferme jamais tout seul,
-                        // reste dans floatingPanels (NativeNotifier) et bloque
-                        // alors tout Hide ultérieur (reorderFloatingPanels le
-                        // réaffiche aussitôt) — cf. incident constaté.
-                        "delay": reminder["delay"] as? Double ?? 60
-                    ]
-                    if let icon = reminder["icon"] as? String {
-                        request["icon"] = icon
-                    }
-                    if let boutons = reminder["buttons"] as? [[String: Any]] {
-                        request["buttons"] = boutons.map { [$0["name"] as? String ?? ""] }
-                    }
-                    NativeNotifier.handle(request: request) { _ in }
+    private func pollRemindersSiMasque() {
+        guard NSApp.isHidden else { return }
+        self.backend.run(json: #"{"action":"reminders-due"}"#) { [weak self] output in
+            guard let self = self else { return }
+            guard let jsonData = output.data(using: .utf8),
+                  let retour = (try? JSONSerialization.jsonObject(with: jsonData)) as? [String: Any],
+                  let items = retour["data"] as? [[String: Any]]
+            else {
+                Debug.log("poll natif : réponse inattendue=\(output)")
+                return
+            }
+            Debug.log("poll natif : \(items.count) rappel(s) dû(s)")
+            for reminder in items {
+                let cle = [
+                    reminder["taskId"] as? String ?? "",
+                    reminder["projectId"] as? String ?? "",
+                    reminder["message"] as? String ?? "",
+                    reminder["time"] as? String ?? ""
+                ].joined(separator: "|")
+                guard !self.natifRemindersDejaAffiches.contains(cle) else { continue }
+                self.natifRemindersDejaAffiches.insert(cle)
+
+                var request: [String: Any] = [
+                    "mode": "floating",
+                    "title": reminder["title"] as? String ?? "",
+                    "message": reminder["message"] as? String ?? "",
+                    // Sans delay, le panneau ne se ferme jamais tout seul,
+                    // reste dans floatingPanels (NativeNotifier) et bloque
+                    // alors tout Hide ultérieur (reorderFloatingPanels le
+                    // réaffiche aussitôt) — cf. incident constaté.
+                    "delay": reminder["delay"] as? Double ?? 60
+                ]
+                if let icon = reminder["icon"] as? String {
+                    request["icon"] = icon
                 }
+                if let boutons = reminder["buttons"] as? [[String: Any]] {
+                    request["buttons"] = boutons.map { [$0["name"] as? String ?? ""] }
+                }
+                NativeNotifier.handle(request: request) { _ in }
             }
         }
     }
