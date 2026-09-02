@@ -71,10 +71,8 @@ class ScriptService {
   /************************************************************/
   execNextStep(){
     D.start()
-    if (this.errors.length) {
-      console.log("this.errors au retour de step.exec", this.errors)
-    } else if (this.currentStep) {
-      if (this.currentStep.aborted) return message(getMsg('script-service-canceled'))
+    if (this.currentStep && this.currentStep.aborted) {
+      return this.errors.length ? this.displayErrors(this.errors) : message(getMsg('script-service-canceled'))
     }
     const step = this.steps.shift()
     // console.log("step = ", step)
@@ -102,12 +100,18 @@ class ScriptService {
 
   // Retourne la valeur (value) d'une étape évaluée précédemment
   getValue(stepId){
-    this.stepById[stepId] || this.errors.push(getErr('scserv-unknown-step', [stepId]))
+    if (!this.stepById[stepId]) {
+      this.errors.push(getErr('scserv-unknown-step', [stepId]))
+      return null
+    }
     return this.stepById[stepId].value
   }
   // Pour définir la valeur d'une étape
   setValue(stepId, stepValue){
-    this.stepById[stepId] || this.errors.push(getErr('scserv-unknown-step', [stepId]))
+    if (!this.stepById[stepId]) {
+      this.errors.push(getErr('scserv-unknown-step', [stepId]))
+      return
+    }
     this.stepById[stepId].value = stepValue
   }
 
@@ -221,6 +225,7 @@ class ServStep extends ExtendedObject {
     this.setValue(':abort:')
     this.errors || (this.errors = []);
     this.errors.push(getErr(msg, params))
+    this.callback()
     return false
   }
 
@@ -258,7 +263,7 @@ class ServStep extends ExtendedObject {
 
     // Remplacements communs dans les paramètres
     Object.keys(this.data).forEach( param => {if (this[param]) { this[param] = this.evaluateProp(param)}})
-    if (this.path) this.path = this.expandPath(this.path)
+    this.expandPathParams()
     if (this.value) this.ifSet() // pourra être modifié
 
     Prompter.prompt(this.promptSpec(), this.onPrompted.bind(this))
@@ -281,7 +286,10 @@ class ServStep extends ExtendedObject {
 
   // Réception de la valeur obtenue par Prompter pour cette étape
   onPrompted(value, error){
-    if (error) return this.addFatalError(error)
+    if (error) {
+      const [msg, params] = Array.isArray(error) ? error : [error, undefined]
+      return this.addFatalError(msg, params)
+    }
     if (value === null) return this.setValue(':abort:')
     // Types 'set' et 'translate' : quand this.step est défini, la valeur
     // est écrite dans une AUTRE étape, pas dans celle-ci.
@@ -351,6 +359,17 @@ class ServStep extends ExtendedObject {
     }
   }
   resolvePath(path){return this.expandPath(path)}
+
+  // Convertit en chemin absolu du projet tout paramètre de cette étape
+  // dont le type déclaré (SCRIPT_SERVICES_KNOWN_TYPES) est (ou contient) 'path'.
+  expandPathParams(){
+    Object.keys(this.paramsSpecs).forEach(key => {
+      const types = [].concat(this.paramsSpecs[key].type || [])
+      if (types.includes('path') && 'string' == typeof this[key]) {
+        this[key] = this.expandPath(this[key])
+      }
+    })
+  }
 
   /**
    * Retourne true si la condition de l'étape n'est pas satisfaite,

@@ -326,6 +326,9 @@ button.btn-add-project {
   line-height: 0em;
   border: 1px solid lightgrey;
 }
+span#project-buttons button.invisible {
+  visibility: hidden;
+}
 div#tools button.btn-add-project {
   font-family: -apple-system;
 }

@@ -224,7 +224,7 @@ const COMMON_SERVICES_DATA = [
       ]
     , dynParams: [
           {id: 'issue_label', type: 'select', q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
-        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, abortIfEmpty: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: ISSUE_ACTION_LIST}
         , {id: 'gh_message', if: (dictParamsValues) => {
             return !ISSUE_ACTION_WITHOUT_COMS[dictParamsValues.gh_operation]
@@ -429,6 +429,19 @@ const COMMON_SERVICES_DATA = [
         params[2][0] = params[2][0].join(',')
         return params
       }
+  },
+
+  // Ouvrir le repos Github dans le navigateur
+  {
+      id: 'git-join-github'
+    , name: getMsg('git-join-github')
+    , group: 'Git'
+    , script: 'ExecCommand.sh'
+    , params: [
+        {id: 'github_account', type: 'project', if_undefined: {type: 'string', q: getMsg('github-account')}}
+      , {id: 'github_name', type: 'project', if_undefined: {type: 'string', q: getMsg('github-project-name')}}
+      ]
+    , beforeExec: (dict) => `open ${shellEscape('https://github.com/' + dict.github_account + '/' + dict.github_name)}`
   },
 
   // Git commit push

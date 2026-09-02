@@ -280,7 +280,7 @@ class Prompter {
     try {
       values = this._normalizeSelectValues(spec)
     } catch(err) {
-      return callback(null, err.message)
+      return callback(null, [err.message, err.params])
     }
     // Cas d'une valeur customisée : l'ajouter dans le menu
     if ( spec.default && !values.find(d => d[0] == spec.default)) {
@@ -309,10 +309,11 @@ class Prompter {
       } else if (Array.isArray(value) && value.length == 2) {
         return value
       } else if (Object.isObject(value)) {
-        spec.key_value ?? raise('scserv-select-with-object-requires-key-values', [spec.id])
-        spec.key_title ?? raise('scserv-select-with-object-requires-title-values', [spec.id])
-        value[spec.key_value] ?? raise('scserv-select-with-object-unknown-key', [spec.id, JSON.stringify(value), spec.key_value])
-        value[spec.key_title] ?? raise('scserv-select-with-object-unknown-title', [spec.id, JSON.stringify(value), spec.key_title])
+        const aideSelect = aide('script-service-type-select')
+        spec.key_value ?? raise('scserv-select-with-object-requires-key-values', [spec.id, aideSelect])
+        spec.key_title ?? raise('scserv-select-with-object-requires-title-values', [spec.id, aideSelect])
+        value[spec.key_value] ?? raise('scserv-select-with-object-unknown-key', [spec.id, JSON.stringify(value), spec.key_value, aideSelect])
+        value[spec.key_title] ?? raise('scserv-select-with-object-unknown-title', [spec.id, JSON.stringify(value), spec.key_title, aideSelect])
         return [value[spec.key_value], value[spec.key_title]]
       } else {
         raise('scserv-param-bad-type', ['values', '[value, title]', typeof value])
@@ -534,7 +535,7 @@ class Prompter {
   }
 
   static promptGetProjectData(spec, callback){
-    callback(spec.projet.get(spec.key || spec.id) || null)
+    callback(spec.projet.get(spec.key || spec.id))
   }
 
   static promptSet(spec, callback){

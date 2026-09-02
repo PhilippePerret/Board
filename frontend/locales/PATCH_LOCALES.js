@@ -11,6 +11,7 @@ Object.assign(MESSAGES, {
   , 'docu-updated': "Documentation de $1 actualisée."
   , 'gh-fixed-clipboard': "Fixed #… (presse-papier)"
   , 'gh-fixed-clipboard-done': "Texte copié dans le presse-papier."
+  , 'git-join-github': "Rejoindre sur Github"
 })
 
 Object.assign(ERRORS, {

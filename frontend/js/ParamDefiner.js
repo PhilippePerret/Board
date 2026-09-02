@@ -213,6 +213,7 @@ class ParamDefiner {
     this.values   = param.values  ?? null
     this.if       = param.if      ?? null
     this.validIf  = param.validIf ?? null
+    this.abortIfEmpty = param.abortIfEmpty ?? false
   }
 
   get currentOrDefault(){ return this.actual ?? this.default }
@@ -282,7 +283,8 @@ class ParamDefiner {
   }
   // Méthode appelée quand on renonce, qu'on fait non, ou par Prompter avec value=null
   onNonButton(value) {
-    if ( value === null && this.type !== 'path-or-null' ) {
+    const isEmptyArray = this.abortIfEmpty && Array.isArray(value) && value.length === 0
+    if ( (value === null && this.type !== 'path-or-null') || isEmptyArray ) {
       this.abort()
     } else {
       this.setValue(value)

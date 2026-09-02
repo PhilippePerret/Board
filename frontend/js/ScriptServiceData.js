@@ -73,7 +73,7 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'save-data': {
     params: {
-        path:   {required: true, type: 'string'}
+        path:   {required: true, type: 'path'}
       , keys:   {required: true, type: 'any'}
       , prefix: {required: false, type: 'string'}
     }
@@ -81,35 +81,35 @@ const SCRIPT_SERVICES_KNOWN_TYPES = {
 
   'get-data': {
     params: {
-        path:     {required: true , type: 'string', name: getMsg('path-to-data')}
+        path:     {required: true , type: 'path', name: getMsg('path-to-data')}
       , data_id:  {required: false, type: 'string', name: getMsg('id-in-data')}
     }
   },
-  
+
   'create-folder' : {
     params: {
-      path: {required: true, type: 'string'}
+      path: {required: true, type: 'path'}
     }
   },
 
   'create-file': {
     params: {
         content:  {required: true, type: 'string'}
-      , path:     {required: true, type: 'string'}
+      , path:     {required: true, type: 'path'}
     }
   },
 
   'copy-file': {
     params: {
-        source: {required: true, type: 'string'}
-      , dest:   {name: getMsg('destination-folder-or-file'), required: true, type: 'string'}
+        source: {required: true, type: 'path'}
+      , dest:   {name: getMsg('destination-folder-or-file'), required: true, type: 'path'}
     }
   },
 
   'add-to-file': {
       description: getMsg('add-to-file-at')
     , params: {
-          path:     {required: true, type: 'string'}
+          path:     {required: true, type: 'path'}
         , content:  {required: true, type: 'string'}
         , after:    {required: false, type: 'string'}
         , before:   {required: false, type: 'string'}
