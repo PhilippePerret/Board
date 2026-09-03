@@ -63,3 +63,6 @@
 - [Pas de commentaire roman](feedbacks/no_verbose_code_comments.md) — aucun commentaire multi-lignes dans le code, même pour expliquer un WHY non-évident
 - [CSS natif plutôt qu'arithmétique JS](feedbacks/prefer_css_layout_over_js_arithmetic.md) — pour répartir un espace fixe entre zones, flexbox plutôt que sommer des offsetHeight en JS
 - [typecheck ≠ "Compile OK"](feedbacks/typecheck_is_not_compile_ok.md) — swiftc -typecheck seul n'est pas un build, le dire explicitement, jamais "Compile OK" sec
+- [Toujours numéroter](feedbacks/always_number_points.md) — ≥2 points dans une réponse = numérotés par défaut, sans qu'on le redemande
+- [Pas de faux "Recommandé"](feedbacks/no_fake_recommended_tag.md) — jamais d'étiquette "(Recommandé)" sur un choix de pur scope/design sans base technique objective
+- [Évidence de but = pas de validation](feedbacks/obvious_purpose_no_confirm.md) — conséquence logique du but même de la feature = inclure direct dans le plan, jamais présenter comme point à valider

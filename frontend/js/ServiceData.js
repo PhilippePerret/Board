@@ -111,6 +111,7 @@ const GITHUB_LABELS = [
 const COMMON_SERVICES_DATA = [
   {
       id: 'open-folder-project'
+    , uid: 1
     , name: getMsg('open-folder-project')
     , group: getMsg('group-tools')
     , params: [
@@ -128,12 +129,14 @@ const COMMON_SERVICES_DATA = [
   
   Object.assign({
       id: 'work-clock'
+    , uid: 2
     , name: getMsg('start-clock')
     , group: getMsg('group-tools')
   }, COUNTDOWN_PROPERTIES),
 
   {
       id: 'search-project'
+    , uid: 3
     , name: getMsg('search-project')
     , group: getMsg('group-tools')
     , scType: '.rb'
@@ -165,6 +168,7 @@ const COMMON_SERVICES_DATA = [
   // Git issue bug
   {
       id: 'create-git-issue'
+    , uid: 4
     , name: getMsg('gh-save-a-error')
     , group: 'Git'
     , script: 'ExecCommand.sh'
@@ -190,6 +194,7 @@ const COMMON_SERVICES_DATA = [
    */
   {
       id: 'gh-issue-create'
+    , uid: 5
     , name: getMsg('gh-issues-create')
     , aide: 'gh-issue-create'
     , group: 'Git'
@@ -215,6 +220,7 @@ const COMMON_SERVICES_DATA = [
   // Travail sur une liste d'issues
   {
       id: 'git-issue-list'
+    , uid: 6
     , name: getMsg('git-issue-list')
     , aide: 'gh-issue-list'
     , group: 'Git'
@@ -298,6 +304,7 @@ const COMMON_SERVICES_DATA = [
 
   {
     id: 'github-pr-cycle-init'
+    , uid: 7
     , name: getMsg('github-pr-cycle-init')
     , aide: 'github-pull-request-cycle'
     , group: 'Git'
@@ -330,6 +337,7 @@ const COMMON_SERVICES_DATA = [
 
   {
     id: 'github-pr-cycle-commit'
+    , uid: 8
     , name: getMsg('github-pr-cycle-commit')
     , aide: 'github-pull-request-cycle'
     , group: 'Git'
@@ -386,6 +394,7 @@ const COMMON_SERVICES_DATA = [
 
   {
     id: 'github-pr-cycle-submit'
+    , uid: 9
     , name: getMsg('github-pr-cycle-submit')
     , aide: 'github-pull-request-cycle'
     , group: 'Git'
@@ -415,6 +424,7 @@ const COMMON_SERVICES_DATA = [
   // Labels (à mettre dans tools)
   {
       id: 'git-install-labels'
+    , uid: 10
     , name: getMsg('git-installing-labels')
     , group: 'Git'
     , script: 'GitOpes.rb'
@@ -434,6 +444,7 @@ const COMMON_SERVICES_DATA = [
   // Ouvrir le repos Github dans le navigateur
   {
       id: 'git-join-github'
+    , uid: 11
     , name: getMsg('git-join-github')
     , group: 'Git'
     , script: 'ExecCommand.sh'
@@ -447,6 +458,7 @@ const COMMON_SERVICES_DATA = [
   // Git commit push
   {
       id: 'git-commit'
+    , uid: 12
     , name: getMsg('git-committing')
     , group: 'Git'
     , script: 'GitOpes.rb'
@@ -468,6 +480,7 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'edit-documentation'
+    , uid: 13
     , name: getMsg('editing-documentation') 
     , group: getMsg('group-documentation')
     , scType: '.rb'
@@ -483,6 +496,7 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'search-documentation'
+    , uid: 14
     , name: getMsg('search-documentation')
     , group: getMsg('group-documentation')
     , scType: '.rb'
@@ -510,6 +524,7 @@ const COMMON_SERVICES_DATA = [
   // Update de la documentation
   {
       id: 'update-documentation'
+    , uid: 15
     , name: getMsg('update-documentation')
     , group: getMsg('group-documentation')
     , scType: '.rb'
@@ -530,6 +545,7 @@ const COMMON_SERVICES_DATA = [
   // Ouverture de la documentation
   {
       id:   'open-a-file'
+    , uid: 16
     , name: getMsg('open-documentation')
     , group: getMsg('group-documentation')
     , script: 'OpenOrUpdateInBrowser.scpt'
@@ -545,6 +561,7 @@ const COMMON_SERVICES_DATA = [
   // Initialisation de la documentation
   {
       id:   'init-documentation'
+    , uid: 17
     , name: getMsg('initing-documentation')
     , group: getMsg('group-documentation')
     , scType: '.rb'
@@ -569,6 +586,7 @@ const COMMON_SERVICES_DATA = [
   // Ouvrir un iTerm au dossier (pour jouer un code)
   {
       id: 'open-iterm-at-folder'
+    , uid: 18
     , name: getMsg('iterm-at-folder')
     , group: 'Consoles'
     , params: [
@@ -579,6 +597,7 @@ const COMMON_SERVICES_DATA = [
   // Ouvrir un Terminal au dossier (pour jouer un code)
   {
       id: 'open-terminal-at-folder'
+    , uid: 19
     , name: getMsg('terminal-at-folder')
     , group: 'Consoles'
     , params: [
@@ -588,6 +607,7 @@ const COMMON_SERVICES_DATA = [
   },
   {
       id: 'open-in-vscode'
+    , uid: 20
     , name: getMsg('open-in-vscode') 
     , group: 'Consoles'
     , scType: '.sh'
@@ -598,6 +618,7 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'file-create'
+    , uid: 21
     , name: getMsg('create-a-file')
     , group: 'Consoles'
     , scType: '.rb'
@@ -617,6 +638,7 @@ const COMMON_SERVICES_DATA = [
 
   {
       id: 'edit-projet'
+    , uid: 22
     , name: getMsg('editing-project-data') 
     , group: 'Prudence'
     , script: 'OpenAFile.rb'
@@ -645,6 +667,7 @@ const COMMON_SERVICES_DATA = [
 const CUSTOM_SERVICES_DATA = [
   {
       id: 'open-file'
+    , uid: 23
     , name: getMsg('open-file…')
     , group: getMsg('opening')
     , scType: '.sh'
@@ -656,6 +679,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'open-finder-window'
+    , uid: 24
     , name: getMsg('opening-window-in-finder')
     , group: getMsg('opening')
     /* tag::exemple-fix-param[] */
@@ -672,6 +696,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'open-URL'
+    , uid: 25
     , name: getMsg('Open-url…')
     , group: getMsg('opening')
     , params: [
@@ -681,6 +706,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'file-versioning'
+    , uid: 26
     , name: getMsg('versioning-file')
     , group: getMsg('lifecycle')
     , scType: '.rb'
@@ -698,6 +724,7 @@ const CUSTOM_SERVICES_DATA = [
   // Minuteur pour un projet
   Object.assign({
       id: 'run-chronometre'
+    , uid: 27
     , name: getMsg('countdown-timer')
     , group: getMsg('lifecycle')
 
@@ -705,6 +732,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'run-script-service'
+    , uid: 28
     , name: getMsg('run-a-script-service') + aide('scripts-services')
     , group: getMsg('scripts')
     , front: ScriptService.run
@@ -715,6 +743,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'exec-bash-code'
+    , uid: 29
     , name: getMsg('service-exec-bash-code')
     , group: getMsg('scripts')
     , script: 'ExecCommand.sh'
@@ -725,6 +754,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'exec-js-code'
+    , uid: 30
     , name: getMsg('service-exec-js-code')
     , group: getMsg('scripts')
     , front: Service.evalJavascript.bind(Service)
@@ -737,6 +767,7 @@ const CUSTOM_SERVICES_DATA = [
 
   {
       id: 'run-script'
+    , uid: 31
     , name: getMsg('run-a-script')
     , group: getMsg('scripts')
     , scType: '.rb'

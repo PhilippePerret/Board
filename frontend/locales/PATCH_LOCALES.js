@@ -12,6 +12,12 @@ Object.assign(MESSAGES, {
   , 'gh-fixed-clipboard': "Fixed #… (presse-papier)"
   , 'gh-fixed-clipboard-done': "Texte copié dans le presse-papier."
   , 'git-join-github': "Rejoindre sur Github"
+  , 'give-up': "Renoncer"
+  , 'services-visibility-btn': "Services affichés…"
+  , 'services-visibility-title': "Services affichés — $1"
+  , 'services-visibility-excluded': "Services retirés"
+  , 'services-visibility-included': "Services affichés"
+  , 'reset-services-visibility-btn': "Réinitialiser"
 })
 
 Object.assign(ERRORS, {

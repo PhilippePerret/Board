@@ -194,6 +194,7 @@ class Service {
     listen(card, 'click', this.onClickOnProjectService.bind(this, projet))
     listen(card, 'dragstart', e => {
       projet.draggedService = this
+      projet.dropTargetType = null
       // La carte elle-même (celle qui se déplace en direct entre les
       // autres pendant le survol, cf. dragover ci-dessous) doit rester
       // reconnaissable — sinon confondue avec un bouton normal une fois
@@ -210,10 +211,17 @@ class Service {
     // déplacé dès le survol, pas seulement au drop (retour visuel
     // immédiat). preventDefault() ici change dropEffect (plus "none"),
     // ce qui empêche le retrait ci-dessous de se déclencher.
+    //
+    // .type différent (lâché sur la liste d'en face) : on retient juste
+    // la liste survolée (projet.dropTargetType), sans déplacer le nœud en
+    // direct (il reste dans sa liste d'origine pendant le survol) — le
+    // déplacement réel se fait au dragend, cf. ci-dessous.
     listen(card, 'dragover', e => {
       const dragged = projet.draggedService
-      if (!dragged || dragged === this || dragged.type !== this.type) return
+      if (!dragged || dragged === this) return
+      projet.dropTargetType = this.type
       e.preventDefault()
+      if (dragged.type !== this.type) return
       const rect = card.getBoundingClientRect()
       const before = (e.clientY - rect.top) < rect.height / 2
       card.parentNode.insertBefore(dragged.projectCard, before ? card : card.nextSibling)
@@ -221,7 +229,11 @@ class Service {
     listen(card, 'dragend', e => {
       card.classList.remove('service-drag-ghost')
       if (e.dataTransfer.dropEffect != "none") {
-        projet.persistServiceOrder(this.type)
+        if (projet.dropTargetType && projet.dropTargetType !== this.type) {
+          projet.moveServiceType(this, projet.dropTargetType)
+        } else {
+          projet.persistServiceOrder(this.type)
+        }
         return
       }
       projet.removeServiceFromListe();

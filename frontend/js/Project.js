@@ -5,6 +5,8 @@ class Project {
   static set current(p){
     this._current = p
     this.markCurrentProject.textContent = p?.title ?? ""
+    ServicePanel.commonPanel?.refresh()
+    ServicePanel.customPanel?.refresh()
   }
   static get markCurrentProject(){
     return this._markcurproj || (this._markcurproj = DGet('#current-project-mark'))
@@ -424,6 +426,16 @@ class Project {
       }
     }
 
+    // Snapshot pris avant toute ouverture du panneau de services (lui-même
+    // ré-ouvrable plusieurs fois) : ServiceVisibilityPanel#onApply ne fait
+    // que modifier ces propriétés en mémoire (+ prévisualiser sur les
+    // panneaux réels) — jamais de save() propre — pour que "Annuler" ici
+    // les restaure et que "Save" les persiste avec le reste (this.save()
+    // dans onSaveEditedData couvre tout PROJECT_DATA, donc ces deux
+    // propriétés aussi).
+    const originalIncludedServices = this.included_services
+    const originalExcludedServices = this.excluded_services
+
     const dataConfDial = {
       id:         `project-${this.id}-panel-data`
       , title:    getMsg('title-data-of-project', this.title)
@@ -431,6 +443,13 @@ class Project {
       , props:    props
       , projet:   this
       , ouiBtn:   {name: getMsg('Save'), onclick: this.onSaveEditedData.bind(this)}
+      , midBtn:   {name: getMsg('services-visibility-btn'), keep: true, onclick: () => new ServiceVisibilityPanel(this).show()}
+      , nonBtn:   {name: getMsg('Cancel'), onclick: () => {
+          this.included_services = originalIncludedServices
+          this.excluded_services = originalExcludedServices
+          ServicePanel.commonPanel?.refresh()
+          ServicePanel.customPanel?.refresh()
+        }}
     }
     new ConfigDialog(dataConfDial).show()
   }
@@ -787,12 +806,13 @@ class Project {
     
     let dragged = null
 
-    this.startupField.addEventListener("dragover", e => {e.preventDefault()})
+    this.startupField.addEventListener("dragover", e => {this.dropTargetType = 'startup'; e.preventDefault()})
     this.startupField.addEventListener("drop", e => {
         e.preventDefault();
-        // dataTransfer "id" vide : glissé de réordonnement (service déjà
-        // attaché, cf. Service.js#observeServiceCard), pas un ajout depuis
-        // le panneau — déjà géré par dragover/dragend, rien à faire ici.
+        // dataTransfer "id" vide : glissé de réordonnement/déplacement
+        // (service déjà attaché, cf. Service.js#observeServiceCard), pas un
+        // ajout depuis le panneau — déjà géré par dragover/dragend, rien à
+        // faire ici.
         const id = e.dataTransfer.getData("id")
         if (!id) return
         const service = Service.get(id)
@@ -800,7 +820,7 @@ class Project {
         this.addStartupService(service)
       })
 
-    this.othersField.addEventListener("dragover", e => e.preventDefault())
+    this.othersField.addEventListener("dragover", e => {this.dropTargetType = 'others'; e.preventDefault()})
     this.othersField.addEventListener("drop", e => {
           e.preventDefault();
           const id = e.dataTransfer.getData("id")
@@ -809,6 +829,35 @@ class Project {
           // console.log("Drop sur la zone autres services", service)
           this.addOtherService(service)
       })
+  }
+
+  /**
+   * DÉPLACER UN SERVICE DÉJÀ ATTACHÉ VERS L'AUTRE LISTE (startup <-> others)
+   * -------------------------------------------------------------------------
+   * Appelée au dragend d'un glisser-déposer inter-liste (Service.js#observeServiceCard) :
+   * contrairement à preAddService/addService, ne repasse pas par la
+   * définition des paramètres — le service garde ses réglages déjà faits,
+   * seule sa liste change.
+   */
+  moveServiceType(service, newType){
+    const oldType = service.type
+    if (oldType === newType) return
+    this.services[oldType] = this.services[oldType].filter(s => s.uuid != service.uuid)
+    service.type = newType
+    this.services[newType].push(service)
+    if (newType === 'startup') {
+      this.buildStartupContainer()
+      this.divSServices.appendChild(service.projectCard)
+    } else {
+      this.othersField.appendChild(service.projectCard)
+    }
+    if (oldType === 'startup' && this.services.startup.length === 0 && this.startupContainer) {
+      this.startupContainer.remove()
+      this.startupContainer = null
+      this.divSServices = null
+      this.btnStartup = null
+    }
+    this.save()
   }
 
   onMouseDown(ev){
