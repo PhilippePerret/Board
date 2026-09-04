@@ -185,6 +185,11 @@ class SelectDialog extends Dialog {
           this.onOui()
         }
       })
+      listen(el, 'dblclick', () => {
+        this.chooseItem(item)
+        if (this.dropdown) list.classList.add('hidden')
+        this.onOui()
+      })
       if (!this.isMulti && indexOfDefault == -1 && (defVal === val || defVal === tit)) indexOfDefault = i
       return item
     })
