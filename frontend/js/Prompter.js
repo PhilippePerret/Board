@@ -313,8 +313,14 @@ class Prompter {
         spec.key_value ?? raise('scserv-select-with-object-requires-key-values', [spec.id, aideSelect])
         spec.key_title ?? raise('scserv-select-with-object-requires-title-values', [spec.id, aideSelect])
         value[spec.key_value] ?? raise('scserv-select-with-object-unknown-key', [spec.id, JSON.stringify(value), spec.key_value, aideSelect])
-        value[spec.key_title] ?? raise('scserv-select-with-object-unknown-title', [spec.id, JSON.stringify(value), spec.key_title, aideSelect])
-        return [value[spec.key_value], value[spec.key_title]]
+        let title
+        if (spec.key_title.includes('{')) {
+          title = spec.key_title.replace(/\{([^}]+)\}/g, (_, prop) => value[prop] ?? '')
+        } else {
+          value[spec.key_title] ?? raise('scserv-select-with-object-unknown-title', [spec.id, JSON.stringify(value), spec.key_title, aideSelect])
+          title = value[spec.key_title]
+        }
+        return [value[spec.key_value], title]
       } else {
         raise('scserv-param-bad-type', ['values', '[value, title]', typeof value])
       }

@@ -17,7 +17,7 @@ Object.assign(MESSAGES, {
   , 'services-visibility-title': "Services affichés — $1"
   , 'services-visibility-excluded': "Services retirés"
   , 'services-visibility-included': "Services affichés"
-  , 'reset-services-visibility-btn': "Réinitialiser"
+  , 'reset-services-visibility-btn': "Tout réinitialiser"
 })
 
 Object.assign(ERRORS, {

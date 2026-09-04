@@ -116,6 +116,19 @@ fieldset.services fieldset.services-group legend {
 }
 
 /* Panneau de réglage des services affichés d'un projet (ServiceVisibilityPanel) */
+.service-visibility-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.service-visibility-toggle-btn {
+  flex: 0 0 auto;
+  align-self: center;
+  margin-bottom: 1em;
+  font-family: "Arial Narrow";
+  font-size: 13px;
+}
 .service-visibility-wrapper {
   display: flex;
   gap: 1.5em;
@@ -125,6 +138,9 @@ fieldset.services fieldset.services-group legend {
   box-sizing: border-box;
   user-select: none;
   -webkit-user-select: none;
+}
+.service-visibility-wrapper.hidden {
+  display: none;
 }
 .service-visibility-col-wrap {
   flex: 1;
@@ -145,20 +161,6 @@ fieldset.services fieldset.services-group legend {
   border: 1px solid #888;
   border-radius: 6px;
   padding: 0.5em;
-}
-.service-visibility-type-box {
-  border: 1px solid #666;
-  border-radius: 6px;
-  padding: 0.5em;
-}
-.service-visibility-type-box + .service-visibility-type-box {
-  margin-top: 1em;
-}
-.service-visibility-type-title {
-  font-size: 0.85em;
-  font-weight: bold;
-  color: #aaa;
-  margin-bottom: 0.4em;
 }
 .service-visibility-column .services-group legend {
   cursor: move;

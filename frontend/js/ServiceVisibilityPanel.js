@@ -1,29 +1,41 @@
 /**
  * Panneau de réglage des services affichés pour un projet (issue #56).
  *
- * Deux colonnes :
+ * Un seul type de service affiché à la fois (communs OU personnalisés),
+ * calqué sur les panneaux de service de l'appli (ServicePanel.js /
+ * SidePanel.js#toggleOpposites) : un bouton au-dessus de la double liste
+ * bascule vers l'autre type, avec pour libellé le nom de CET AUTRE type.
+ *
+ * Pour le type affiché, deux colonnes :
  *   - gauche  : services retirés pour ce projet, classés par groupe
- *   - droite  : services affichés, dans les deux blocs tels qu'affichés
- *               dans l'appli (communs au-dessus, personnalisés en dessous)
+ *   - droite  : services affichés, classés par groupe
+ *
+ * Les deux types sont construits une fois pour toutes (this.views.common /
+ * this.views.custom) et ne sont plus jamais détruits — seule leur visibilité
+ * (classe .hidden) change à la bascule : les réarrangements faits sur le
+ * type quitté restent donc en mémoire tels quels tant que la dialog reste
+ * ouverte, et "Appliquer" les prend en compte tous les deux, qu'ils soient
+ * affichés ou non au moment du clic.
  *
  * Drag-and-drop calqué sur Service.js#observeServiceCard : le nœud DOM
  * bougé EN DIRECT au survol (dragover), rien au 'drop' — seul dragend sert
  * à trancher les cas qui ne peuvent pas se décider en direct (transfert
  * d'un groupe entier vers l'autre colonne).
  *
- * Un service ne change jamais de groupe (dataset.group fixe) : il ne
- * réordonne qu'à l'intérieur du groupe de même nom, quelle que soit la
- * colonne. Un groupe (poignée = LEGEND) se réordonne dans SA colonne comme
- * un service dans son groupe ; déposé dans L'AUTRE colonne, il transfère
- * tout ce qu'il contient encore vers le groupe de même nom là-bas (créé si
- * besoin) — le groupe d'origine reste en place, vide.
+ * Un service ne change jamais de type ni de groupe (dataset.group fixe) :
+ * il ne réordonne qu'à l'intérieur du groupe de même nom, quelle que soit
+ * la colonne. Un groupe (poignée = LEGEND) se réordonne dans SA colonne
+ * comme un service dans son groupe ; déposé dans L'AUTRE colonne (même
+ * type), il transfère tout ce qu'il contient encore vers le groupe de même
+ * nom là-bas (créé si besoin) — le groupe d'origine reste en place, vide.
  *
- * "Réinitialiser" (bouton du milieu) remet l'aperçu à l'état par défaut
- * (rien d'exclu, ordre de déclaration) — la dialog reste ouverte.
+ * "Tout réinitialiser" (bouton du milieu) remet l'aperçu des DEUX types à
+ * l'état par défaut (rien d'exclu, ordre de déclaration) — la dialog reste
+ * ouverte.
  *
- * "Appliquer" relit l'ordre effectif dans le DOM et enregistre
- * included_services / excluded_services en mémoire (pas de save() ici, cf.
- * Project#editData) ; "Renoncer" ferme sans rien faire.
+ * "Appliquer" relit l'ordre effectif dans le DOM (des deux types) et
+ * enregistre included_services / excluded_services en mémoire (pas de
+ * save() ici, cf. Project#editData) ; "Renoncer" ferme sans rien faire.
  */
 class ServiceVisibilityPanel extends Dialog {
   constructor(projet){
@@ -34,62 +46,74 @@ class ServiceVisibilityPanel extends Dialog {
       , height: 'max'
     })
     this.projet = projet
-    this.leftFieldsets  = {} // groupName -> FIELDSET (créés à la volée)
-    this.rightFieldsets = {} // groupName -> FIELDSET (tous pré-créés)
-    this.dragged  = null     // {type: 'service'|'group', el}
-    this.dropSide = null     // dernière colonne survolée pendant le drag en cours
+    this.currentType = 'common'
+    this.views    = {} // 'common'|'custom' -> {root, leftColumn, rightColumn, leftFieldsets, rightFieldsets}
+    this.dragged  = null // {type: 'service'|'group', el, view}
+    this.dropSide = null // dernière colonne survolée pendant le drag en cours
     this.content  = this.buildUI()
     this.ouiData  = {name: getMsg('Apply'), onclick: this.onApply.bind(this)}
-    this.midData  = {name: getMsg('reset-services-visibility-btn'), keep: true, onclick: this.resetToDefault.bind(this)}
+    this.midData  = {name: getMsg('reset-services-visibility-btn'), keep: true, onclick: this.resetAllToDefault.bind(this)}
     this.nonData  = {name: getMsg('give-up')}
   }
 
+  get typeInfo(){
+    return {
+        common: {label: getMsg('Common-services'), data: COMMON_SERVICES_DATA}
+      , custom: {label: getMsg('Custom-services'), data: CUSTOM_SERVICES_DATA}
+    }
+  }
+  get oppositeType(){ return this.currentType === 'common' ? 'custom' : 'common' }
+
   buildUI(){
-    const wrapper = DCreate('DIV', {class: 'service-visibility-wrapper'})
+    const container = DCreate('DIV', {class: 'service-visibility-container'})
+
+    this.toggleBtn = DCreate('BUTTON', {class: 'service-visibility-toggle-btn'})
+    listen(this.toggleBtn, 'click', this.toggleType.bind(this))
+    container.appendChild(this.toggleBtn)
+
+    Object.keys(this.typeInfo).forEach(type => {
+      const view = this.buildTypeView(type)
+      this.views[type] = view
+      container.appendChild(view.root)
+      this.fillType(type)
+    })
+
+    this.showType(this.currentType)
+
+    return container
+  }
+
+  buildTypeView(type){
+    const root = DCreate('DIV', {class: 'service-visibility-wrapper'})
 
     const leftWrap = DCreate('DIV', {class: 'service-visibility-col-wrap'})
     leftWrap.appendChild(DCreate('DIV', {class:'service-visibility-col-title', text: getMsg('services-visibility-excluded')}))
-    this.leftColumn = DCreate('DIV', {class: 'service-visibility-column service-visibility-left'})
-    leftWrap.appendChild(this.leftColumn)
-    wrapper.appendChild(leftWrap)
+    const leftColumn = DCreate('DIV', {class: 'service-visibility-column service-visibility-left'})
+    leftWrap.appendChild(leftColumn)
+    root.appendChild(leftWrap)
 
     const rightWrap = DCreate('DIV', {class: 'service-visibility-col-wrap'})
     rightWrap.appendChild(DCreate('DIV', {class:'service-visibility-col-title', text: getMsg('services-visibility-included')}))
-    this.rightColumn = DCreate('DIV', {class: 'service-visibility-column service-visibility-right'})
-    this.rightCommonBlock = this.buildRightBlockContainer(getMsg('Common-services'))
-    this.rightCustomBlock = this.buildRightBlockContainer(getMsg('Custom-services'))
-    rightWrap.appendChild(this.rightColumn)
-    wrapper.appendChild(rightWrap)
+    const rightColumn = DCreate('DIV', {class: 'service-visibility-column service-visibility-right'})
+    rightWrap.appendChild(rightColumn)
+    root.appendChild(rightWrap)
 
-    this.observeColumn(this.leftColumn, 'left')
-    this.observeColumn(this.rightCommonBlock, 'right')
-    this.observeColumn(this.rightCustomBlock, 'right')
-
-    this.fillAll()
-
-    return wrapper
+    const view = {root, leftColumn, rightColumn, leftFieldsets: {}, rightFieldsets: {}}
+    this.observeColumn(view, leftColumn, 'left')
+    this.observeColumn(view, rightColumn, 'right')
+    return view
   }
 
-  // Boîte visuellement séparée (titre + cadre) pour un des deux types de
-  // service côté droit — jamais mélangés (cf. groupes/services jamais
-  // transférables hors de leur bloc d'origine, cf. plus bas).
-  buildRightBlockContainer(label){
-    const box = DCreate('DIV', {class: 'service-visibility-type-box'})
-    box.appendChild(DCreate('DIV', {class: 'service-visibility-type-title', text: label}))
-    const block = DCreate('DIV', {class: 'service-visibility-block'})
-    box.appendChild(block)
-    this.rightColumn.appendChild(box)
-    return block
+  // Bascule d'affichage entre les deux types déjà construits — rien n'est
+  // recréé ni relu, cf. en-tête du fichier.
+  showType(type){
+    this.currentType = type
+    Object.keys(this.views).forEach(t => {
+      this.views[t].root.classList[t === type ? 'remove' : 'add']('hidden')
+    })
+    this.toggleBtn.textContent = this.typeInfo[this.oppositeType].label
   }
-
-  // +source+ : objet {included_services, excluded_services} à résoudre —
-  // this.projet par défaut, ou un objet vierge pour un aperçu (resetToDefault)
-  // qui ne doit toucher ni this.projet ni les panneaux réels.
-  fillAll(source = this.projet){
-    this.fillRightBlock(this.rightCommonBlock, COMMON_SERVICES_DATA, source)
-    this.fillRightBlock(this.rightCustomBlock, CUSTOM_SERVICES_DATA, source)
-    this.fillLeftColumn(source)
-  }
+  toggleType(){ this.showType(this.oppositeType) }
 
   // -- Construction / reconstruction --------------------------------------
 
@@ -100,45 +124,49 @@ class ServiceVisibilityPanel extends Dialog {
     return groups
   }
 
-  fillRightBlock(block, servicesDataArray, source = this.projet){
+  // +source+ : objet {included_services, excluded_services} à résoudre —
+  // this.projet par défaut, ou un objet vierge pour un aperçu (resetAllToDefault)
+  // qui ne doit toucher ni this.projet ni les panneaux réels.
+  fillType(type, source = this.projet){
+    const view = this.views[type]
+    const servicesDataArray = this.typeInfo[type].data
     const visible = orderedVisibleServiceData(servicesDataArray, source)
-    // Pré-créer TOUS les groupes de ce bloc (même vides, restent en place).
+    // Pré-créer TOUS les groupes de ce type (même vides, restent en place).
     this.uniqueGroupsOf(servicesDataArray).forEach(group => {
-      this.rightFieldsets[group] = this.createFieldset(block, group)
+      view.rightFieldsets[group] = this.createFieldset(view, view.rightColumn, group)
     })
     visible.forEach(dataService => {
-      const fieldset = this.rightFieldsets[dataService.group]
+      const fieldset = view.rightFieldsets[dataService.group]
+      fieldset.appendChild(this.buildChip(dataService))
+    })
+    excludedServiceDataOrdered(servicesDataArray, source).forEach(dataService => {
+      const fieldset = view.leftFieldsets[dataService.group] || (view.leftFieldsets[dataService.group] = this.createFieldset(view, view.leftColumn, dataService.group))
       fieldset.appendChild(this.buildChip(dataService))
     })
   }
 
-  fillLeftColumn(source = this.projet){
-    excludedServiceDataOrdered(ALL_SERVICES_DATA, source).forEach(dataService => {
-      const fieldset = this.leftFieldsets[dataService.group] || (this.leftFieldsets[dataService.group] = this.createFieldset(this.leftColumn, dataService.group))
-      fieldset.appendChild(this.buildChip(dataService))
+  // Remet l'APERÇU des DEUX types à l'état par défaut — ne touche ni
+  // this.projet ni les panneaux réels : c'est "Appliquer" (ou "Renoncer")
+  // qui tranche, comme pour n'importe quel autre réarrangement fait dans
+  // cette dialog.
+  resetAllToDefault(){
+    Object.keys(this.views).forEach(type => {
+      const view = this.views[type]
+      view.leftColumn.innerHTML  = ''
+      view.rightColumn.innerHTML = ''
+      view.leftFieldsets  = {}
+      view.rightFieldsets = {}
+      this.fillType(type, {included_services: '', excluded_services: ''})
     })
   }
 
-  // Remet seulement l'APERÇU de cette dialog à l'état par défaut (tout à
-  // droite, ordre de déclaration) — ne touche ni this.projet ni les
-  // panneaux réels : c'est "Appliquer" (ou "Renoncer") qui tranche, comme
-  // pour n'importe quel autre réarrangement fait dans cette dialog.
-  resetToDefault(){
-    this.leftColumn.innerHTML = ''
-    this.rightCommonBlock.innerHTML = ''
-    this.rightCustomBlock.innerHTML = ''
-    this.leftFieldsets  = {}
-    this.rightFieldsets = {}
-    this.fillAll({included_services: '', excluded_services: ''})
-  }
-
-  createFieldset(column, group){
+  createFieldset(view, column, group){
     const fieldset = DCreate('FIELDSET', {class: 'services-group'})
     const legend = DCreate('LEGEND', {text: group})
     legend.draggable = true
     listen(legend, 'dragstart', ev => {
       ev.stopPropagation()
-      this.dragged = {type: 'group', el: fieldset, group: group}
+      this.dragged = {type: 'group', el: fieldset, group: group, view: view}
       ev.dataTransfer.setData('text/plain', 'group')
       setTimeout(() => fieldset.classList.add('service-drag-ghost'), 0)
     })
@@ -157,23 +185,23 @@ class ServiceVisibilityPanel extends Dialog {
       const before = (ev.clientY - rect.top) < rect.height / 2
       column.insertBefore(dragged.el, before ? fieldset : fieldset.nextSibling)
     })
-    listen(legend, 'dragend', () => this.onGroupDragEnd(fieldset, group))
+    listen(legend, 'dragend', () => this.onGroupDragEnd(view, fieldset, group))
     fieldset.appendChild(legend)
     column.appendChild(fieldset)
     return fieldset
   }
 
   // Décide, une fois le drag terminé, si le groupe traîné doit transférer
-  // ce qu'il contient encore vers l'autre colonne (jamais déplacé lui-même
-  // — seul son contenu bouge, cf. en-tête du fichier).
-  onGroupDragEnd(fieldset, group){
+  // ce qu'il contient encore vers l'autre colonne DU MÊME TYPE (jamais
+  // déplacé lui-même — seul son contenu bouge, cf. en-tête du fichier).
+  onGroupDragEnd(view, fieldset, group){
     fieldset.classList.remove('service-drag-ghost')
     if (this.dragged?.type === 'group' && this.dragged.el === fieldset && this.dropSide) {
-      const originSide = fieldset.parentNode === this.leftColumn ? 'left' : 'right'
+      const originSide = fieldset.parentNode === view.leftColumn ? 'left' : 'right'
       if (this.dropSide !== originSide) {
         const targetFieldset = this.dropSide === 'left'
-          ? (this.leftFieldsets[group] || (this.leftFieldsets[group] = this.createFieldset(this.leftColumn, group)))
-          : this.rightFieldsets[group]
+          ? (view.leftFieldsets[group] || (view.leftFieldsets[group] = this.createFieldset(view, view.leftColumn, group)))
+          : view.rightFieldsets[group]
         if (targetFieldset) {
           Array.from(fieldset.querySelectorAll(':scope > .service')).forEach(chip => targetFieldset.appendChild(chip))
         }
@@ -226,7 +254,7 @@ class ServiceVisibilityPanel extends Dialog {
   // déplacer un service dans un groupe encore vide côté droit, ou à créer
   // à la volée le groupe côté gauche (services), et à mémoriser la colonne
   // survolée pour trancher le cas des groupes au dragend.
-  observeColumn(container, side){
+  observeColumn(view, container, side){
     listen(container, 'dragover', ev => {
       const dragged = this.dragged
       if (!dragged) return
@@ -235,8 +263,8 @@ class ServiceVisibilityPanel extends Dialog {
       if (dragged.type !== 'service') return
       const group = dragged.el.dataset.group
       const targetFieldset = side === 'left'
-        ? (this.leftFieldsets[group] || (this.leftFieldsets[group] = this.createFieldset(this.leftColumn, group)))
-        : this.rightFieldsets[group]
+        ? (view.leftFieldsets[group] || (view.leftFieldsets[group] = this.createFieldset(view, view.leftColumn, group)))
+        : view.rightFieldsets[group]
       if (targetFieldset && dragged.el.parentNode !== targetFieldset) {
         targetFieldset.appendChild(dragged.el)
       }
@@ -247,10 +275,13 @@ class ServiceVisibilityPanel extends Dialog {
 
   onApply(){
     const includedUids = [
-        ...this.readFieldsetUids(this.rightCommonBlock)
-      , ...this.readFieldsetUids(this.rightCustomBlock)
+        ...this.readFieldsetUids(this.views.common.rightColumn)
+      , ...this.readFieldsetUids(this.views.custom.rightColumn)
     ]
-    const excludedUids = this.readFieldsetUids(this.leftColumn)
+    const excludedUids = [
+        ...this.readFieldsetUids(this.views.common.leftColumn)
+      , ...this.readFieldsetUids(this.views.custom.leftColumn)
+    ]
     // Pas de save() ici : seulement une modification en mémoire (+ aperçu
     // live sur les panneaux réels) — la persistance effective est le job
     // du "Save" de la dialog d'édition du projet (cf. Project#editData,
