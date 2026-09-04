@@ -43,8 +43,11 @@ function message(arg1, arg2, arg3){
       msg = textSubstitute(msg, params)
     }
     if ( inExergueWindow ) {
+      if (message._exergueTimer) clearTimeout(message._exergueTimer)
+      message._exergueDiv?.remove()
       const divMsg = DCreate('DIV', {class:'exergue-message', text: msg})
-      var timer = setTimeout(() => {clearTimeout(timer); divMsg.remove()}, 6000)
+      message._exergueDiv = divMsg
+      message._exergueTimer = setTimeout(() => {clearTimeout(message._exergueTimer); divMsg.remove()}, 6000)
       document.body.appendChild(divMsg)
     } else {
       divMessage().innerHTML = '<span class="notice">' + msg + '</span>'
