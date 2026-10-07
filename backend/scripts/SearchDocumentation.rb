@@ -28,9 +28,19 @@ rescue RegexpError => e
 end
 
 results = []
+skipped = []
 Dir.glob(File.join(DOCU_FOLDER, '**', '*.adoc')).sort.each do |file|
   relative_path = Pathname.new(file).relative_path_from(Pathname.new(DOCU_FOLDER)).to_s
-  File.readlines(file).each_with_index do |line, idx|
+  begin
+    lines = File.readlines(file)
+  rescue SystemCallError, IOError => e
+    # Fichier illisible (ex. stub iCloud "dataless" orphelin dont le
+    # contenu n'est plus récupérable) : on le signale et on continue
+    # au lieu de faire échouer toute la recherche.
+    skipped << {path: file, file: relative_path, error: e.message}
+    next
+  end
+  lines.each_with_index do |line, idx|
     struct_regex = STRUCT_REGEXES[SEARCH_TYPE]
     matched = struct_regex \
       ? line.scan(struct_regex).any? { |m| m[0].split(',').first.to_s.strip.match?(regex) }
@@ -40,6 +50,7 @@ Dir.glob(File.join(DOCU_FOLDER, '**', '*.adoc')).sort.each do |file|
 end
 
 table[:results] = results
+table[:skipped] = skipped
 table[:message] = ['backend-search-done', [results.length]]
 
 puts table.to_json

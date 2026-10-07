@@ -556,6 +556,7 @@ const COMMON_SERVICES_DATA = [
     , afterDefinedParams: (params) => {
         return [[`file://${params[0][0]}`], [params[1][0]]]
     }
+    , successMessage: false
   },
 
   // Initialisation de la documentation
@@ -699,9 +700,11 @@ const CUSTOM_SERVICES_DATA = [
     , uid: 25
     , name: getMsg('Open-url…')
     , group: getMsg('opening')
+    , script: 'OpenOrUpdateInBrowser.scpt'
     , params: [
       {id: 'url', q:getMsg('which-url-to-reach'), type: 'url', required: true}
     ]
+    , successMessage: false
   },
 
   {

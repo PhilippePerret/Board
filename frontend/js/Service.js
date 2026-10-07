@@ -219,6 +219,7 @@ class Service {
     listen(card, 'dragover', e => {
       const dragged = projet.draggedService
       if (!dragged || dragged === this) return
+      if (e.dataTransfer.types.includes('id')) return
       projet.dropTargetType = this.type
       e.preventDefault()
       if (dragged.type !== this.type) return
@@ -234,9 +235,10 @@ class Service {
         } else {
           projet.persistServiceOrder(this.type)
         }
-        return
+      } else {
+        projet.removeServiceFromListe();
       }
-      projet.removeServiceFromListe();
+      projet.draggedService = null
     })
   }
 
