@@ -520,6 +520,7 @@ class Project {
       message(getMsg('running-service-x', startupservice.name))
       startupservice.exec(this, null /* event */, this.startStartupServices.bind(this))
     } else {
+      this.startupservices = undefined
       message(getMsg('ending-startup-project-x', this.title))
     }
     return stopEvent(ev)
