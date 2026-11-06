@@ -89,3 +89,10 @@ button.mid-btn {
   outline: 2px solid rgb(44, 182, 44);
   outline-offset: 2px;
 }
+.panel .note {
+  padding: 0 2em 0.8em;
+  font-size: 0.85em;
+  font-style: italic;
+  color: rgb(106, 106, 106);
+  background-color: #f2efef;
+}

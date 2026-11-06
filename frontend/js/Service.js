@@ -98,6 +98,7 @@ class Service {
     this.beforeExec = data.beforeExec
     this.bypassExec = data.bypassExec
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
+    this.fixed      = data.fixed ?? null // valeurs des dynParams fixables, propres au bouton du projet
     this.afterDefinedParams = data.afterDefinedParams ?? SERVICES_DATA_TABLE[data.id]?.afterDefinedParams ?? null
     this.constructor.get(this.uuid || this.id) && raise(`[SYSTEM] L'id '${this.id}' existe déjà…`)
     this.constructor.add(this)
@@ -134,7 +135,19 @@ class Service {
   // Seules données à persister pour un service attaché à un projet — tout
   // le reste (script, name, group…) se retrouve via absData.
   toPersistData(){
-    return {id: this.id, name: this.name, uuid: this.uuid, params: this.params}
+    const persistData = {id: this.id, name: this.name, uuid: this.uuid, params: this.params}
+    if (this.fixed) persistData.fixed = this.fixed
+    return persistData
+  }
+
+  // dynParams fixables (cf. ServiceData.js), à définir avec les params
+  // quand le service est ajouté au projet ou redéfini.
+  fixableDynParams(){
+    return (this.absData.dynParams ?? []).filter(p => p.fixable).map(p => {
+      const fixParam = Object.assign({}, p, {note: getMsg('fixable-values-note')})
+      if (this.fixed && this.fixed[p.id] !== undefined) fixParam.actual = this.fixed[p.id]
+      return fixParam
+    })
   }
 
   // Donnée abstraite du service (ServiceData.js), retrouvée par id — jamais
@@ -168,6 +181,7 @@ class Service {
 
   // Appelée pour définir le service pour le projet, +projet+
   define(projet, callback){
+    this.params = [...this.params, ...this.fixableDynParams()]
     new ServiceDefiner(this, callback, projet).define()
   }
   
@@ -290,7 +304,7 @@ class Service {
         })
 
     this.unnamed = true
-    this.params  = schemaParams
+    this.params  = [...schemaParams, ...this.fixableDynParams()]
 
     const definer = new ServiceDefiner(this, () => {
       const nameEl = this.projectCard?.querySelector?.('.name')

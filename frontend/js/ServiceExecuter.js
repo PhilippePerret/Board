@@ -39,20 +39,26 @@ class ServiceExecuter {
     const SDATA = (ALL_SERVICES_DATA).filter(d => d.id == this.id)[0]
     const dynParams = SDATA.dynParams || []
     const dictParamsValues = this.persistedDictParamsValues(SDATA, baseParams)
-    if (dynParams.length > 0) {
-      new ParamsDefiner(dynParams, (definers, dictParamsValues) => this.onDynParamsDefined(baseParams, definers, dictParamsValues), this.projet, dictParamsValues, this.name).define()
+    const fixed = this.service.fixed ?? {}
+    Object.assign(dictParamsValues, fixed)
+    const toDefine = dynParams.filter(p => !(p.fixable && p.id in fixed))
+    if (toDefine.length > 0) {
+      new ParamsDefiner(toDefine, (definers, dictParamsValues) => this.onDynParamsDefined(baseParams, dynParams, definers, dictParamsValues), this.projet, dictParamsValues, this.name).define()
+    } else if (dynParams.length > 0) {
+      this.onDynParamsDefined(baseParams, dynParams, [], dictParamsValues)
     } else {
       this.dictParamsValues = dictParamsValues
       this.finalyExec(this.applyAfterDefinedParams(baseParams), dictParamsValues)
     }
   }
 
-  onDynParamsDefined(baseParams, definers, dictParamsValues){
+  onDynParamsDefined(baseParams, dynParams, definers, dictParamsValues){
     if (!definers) return // définition abandonnée
     // dictParamsValues a déjà été enrichie d'une entrée par dynParam au fil
     // de sa résolution (ParamDefiner#setValue) — rien à y ajouter ici.
     this.dictParamsValues = dictParamsValues
-    const arraysValues = definers.map(definer => [definer.value])
+    // Ordre déclaré des dynParams, valeurs fixées (bouton du projet) comprises
+    const arraysValues = dynParams.map(p => [dictParamsValues[p.id] ?? null])
     this.finalyExec(this.applyAfterDefinedParams([...baseParams, ...arraysValues]), dictParamsValues)
   }
 

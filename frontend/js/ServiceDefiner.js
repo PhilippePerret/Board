@@ -72,8 +72,13 @@ class ServiceDefiner {
       // On définit ceux qui sont des propriétés du projet
       // et l'on rassemble tous les paramètres pour service
       let arraysParamsValues = []
+      const fixedValues = {}
       try {
         definers.forEach(definer => {
+          if (definer.param.fixable) {
+            fixedValues[definer.id] = definer.value
+            return
+          }
           switch(definer.type){
             case 'service-name':
               // console.log("define pour service-name", definer)
@@ -110,6 +115,7 @@ class ServiceDefiner {
         return
       }
       this.service.params = arraysParamsValues
+      if (Object.keys(fixedValues).length) this.service.fixed = fixedValues
 
       // Le save réel (unique) est à la charge du caller, dans this.callback
       // (cf. Service.js) — plus aucun save ici, pendant la définition.

@@ -197,6 +197,8 @@ class SelectDialog extends Dialog {
     if (!this.isMulti) {
       const chosen = this.items[indexOfDefault == -1 ? 0 : indexOfDefault]
       if (chosen) this.selectOnly(chosen)
+    } else if (Array.isArray(defVal)) {
+      this.items.forEach(it => { if (defVal.includes(it.value)) this.setItemSelected(it, true) })
     }
 
     Object.defineProperty(container, 'value', {

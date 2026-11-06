@@ -110,6 +110,7 @@ class Prompter {
       , width:   spec.width
       , height:  spec.height
       , errorMessage: spec.errorMessage
+      , note:    spec.note
     }
   }
 
@@ -283,7 +284,7 @@ class Prompter {
       return callback(null, [err.message, err.params])
     }
     // Cas d'une valeur customisée : l'ajouter dans le menu
-    if ( spec.default && !values.find(d => d[0] == spec.default)) {
+    if ( spec.default && !Array.isArray(spec.default) && !values.find(d => d[0] == spec.default)) {
       values.unshift([spec.default, spec.default])
     }
     const data = Object.assign({}, spec, this.dialogBase(spec), {

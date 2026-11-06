@@ -158,7 +158,7 @@ class ParamDefiner {
       server.send({
           action:'git-ope'
         , git_ope: 'get_issues'
-        , git_args: [spec.definers[0].value]
+        , git_args: [spec.dictParamsValues.issue_label]
         , project_path: (spec?.projet ?? Project.current).path
       }, this.issuesListOfTypeForSelect.bind(this, spec, callback))
     }

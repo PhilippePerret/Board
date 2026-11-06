@@ -50,6 +50,12 @@
  *    fichiers à commiter et le message pour le commit
  *    Propriétés spéciales/rares :
  *    :if [Function] Cf. params
+ *    :fixable [Boolean]
+ *        Si true, le paramètre est demandé UNE FOIS quand le service
+ *        est ajouté à un projet (ou redéfini par cmd+clic), mémorisé
+ *        pour ce bouton, et plus jamais redemandé au clic sur le bouton
+ *        du projet. Depuis le panneau des services, il reste demandé à
+ *        chaque fois.
  *
  *  onError
  *    Pour définir ce qui doit se passer en cas d'erreur. C'est une 
@@ -203,7 +209,7 @@ const COMMON_SERVICES_DATA = [
       {id: 'path', type: 'project'}
     ]
     , dynParams: [
-        {id: 'issue_label', type: 'select', q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
+        {id: 'issue_label', type: 'select', fixable: true, q: getMsg('github-label'), values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner)}
       , {id: 'issue_title', type: 'string', q: getMsg('Message:'), width: '680px'}
       , {id: 'issue_body' , type: 'text'  , q: getMsg('gh-description:'), width: '680px'}
     ]
@@ -229,9 +235,9 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       ]
     , dynParams: [
-          {id: 'issue_label', type: 'select', q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+          {id: 'issue_label', type: 'select', fixable: true, q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, abortIfEmpty: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
-        , {id: 'gh_operation', type: 'select', q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: ISSUE_ACTION_LIST}
+        , {id: 'gh_operation', type: 'select', fixable: true, q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: ISSUE_ACTION_LIST}
         , {id: 'gh_message', if: (dictParamsValues) => {
             return !ISSUE_ACTION_WITHOUT_COMS[dictParamsValues.gh_operation]
             }, type: 'string', q: getMsg('gh-message-operation'), width: '600px', title: getMsg('git-issue-gestion')}

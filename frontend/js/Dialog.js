@@ -68,6 +68,7 @@ class Dialog {
     this.title = data.title ?? '- panneau sans titre (title) -'
     this.message = data.message ?? data.q ?? null
     this.errorMessage = data.errorMessage // en cas d'erreur
+    this.note         = data.note ?? null // remarque affichée au-dessus des boutons
     this.content      = data.content ?? null
     this.default      = data.default
     this.defaultValue = data.defaultValue
@@ -230,6 +231,7 @@ class Dialog {
       }
       div.appendChild(msg)
     }
+    if (this.note) div.appendChild(DCreate('DIV', {class: 'note', text: this.note}))
     // Pied de page
     const footer = DCreate('DIV', {class:'footer', style: isMax ? 'flex:0 0 auto;' : ''})
     if (this.nonData) {

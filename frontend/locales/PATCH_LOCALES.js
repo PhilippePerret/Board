@@ -18,6 +18,7 @@ Object.assign(MESSAGES, {
   , 'services-visibility-excluded': "Services retirés"
   , 'services-visibility-included': "Services affichés"
   , 'reset-services-visibility-btn': "Tout réinitialiser"
+  , 'fixable-values-note': "(Valeurs propres au bouton ajouté au projet)"
 })
 
 Object.assign(ERRORS, {
