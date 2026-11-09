@@ -254,6 +254,7 @@ class ParamDefiner {
       , dictParamsValues: this.paramLister.dictParamsValues // Table {id: valeur} des paramètres précédents déjà résolus
       , projet:   this.projet
       , ifUndefined: this.param.if_undefined
+      , onSkip:   this.param.fixing ? this.onSkip.bind(this) : null
     })
   }
 
@@ -279,6 +280,12 @@ class ParamDefiner {
   setValue(value){
     this.value = value
     this.paramLister.dictParamsValues[this.id] = value
+    this.paramLister.define()
+  }
+  // Bouton « Passer » : propriété fixable non fixée, à demander à chaque usage
+  onSkip(){
+    this.skipped = true
+    this.value = null
     this.paramLister.define()
   }
   // Méthode appelée quand on renonce, qu'on fait non, ou par Prompter avec value=null

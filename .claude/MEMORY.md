@@ -65,3 +65,5 @@
 - [typecheck ≠ "Compile OK"](feedbacks/typecheck_is_not_compile_ok.md) — swiftc -typecheck seul n'est pas un build, le dire explicitement, jamais "Compile OK" sec
 - [Toujours numéroter](feedbacks/always_number_points.md) — ≥2 points dans une réponse = numérotés par défaut, sans qu'on le redemande
 - [Pas de faux "Recommandé"](feedbacks/no_fake_recommended_tag.md) — jamais d'étiquette "(Recommandé)" sur un choix de pur scope/design sans base technique objective
+- [Portée du fix explicite](feedbacks/state_fix_scope.md) — dire « tous les services » si fix général, jamais formuler autour du seul cas signalé
+- [App portable, embarqué seul](feedbacks/app_portable_embedded_only.md) — jamais proposer un outil installé localement (pandoc…), tout doit être dans vendor/bundle

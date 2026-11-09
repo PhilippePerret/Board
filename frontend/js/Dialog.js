@@ -74,6 +74,11 @@ class Dialog {
     this.defaultValue = data.defaultValue
     this.ouiData      = data.ouiBtn ?? {name: getMsg('btn-yes'), onclick: () => message("[SYSTEM] Bouton oui à définir")}
     this.midData      = data.midBtn ?? null
+    // Propriété fixable en cours de définition : « OK » devient « Fixer » et bouton « Passer »
+    this.onSkipFixing = data.fixing ? data.onSkip : null
+    if (this.onSkipFixing && this.ouiData.name === getMsg('OK')) {
+      this.ouiData = Object.assign({}, this.ouiData, {name: getMsg('btn-fix')})
+    }
     if (data.nonBtn == ':none:') {
       this.nonData = null
     } else {
@@ -172,6 +177,11 @@ class Dialog {
     }
     return stopEvent(ev)
   }
+  onSkip(ev){
+    this.hide()
+    this.onSkipFixing()
+    return stopEvent(ev)
+  }
   onMid(ev){
     ;(this.midData && this.midData.keep) || this.hide()
     if ('function' == typeof this.midData?.onclick) {
@@ -232,6 +242,13 @@ class Dialog {
       div.appendChild(msg)
     }
     if (this.note) div.appendChild(DCreate('DIV', {class: 'note', text: this.note}))
+    if (this.onSkipFixing) {
+      const skipBox = DCreate('DIV', {class: 'skip-box'})
+      skipBox.appendChild(DCreate('DIV', {class: 'skip-text', text: getMsg('fixable-skip-note') + aide('service-fixable-dynparams')}))
+      this.btnSkip = DCreate('BUTTON', {id: `${this.id}-btn-skip`, class: 'btn-skip', text: getMsg('btn-skip')})
+      skipBox.appendChild(this.btnSkip)
+      div.appendChild(skipBox)
+    }
     // Pied de page
     const footer = DCreate('DIV', {class:'footer', style: isMax ? 'flex:0 0 auto;' : ''})
     if (this.nonData) {
@@ -266,6 +283,7 @@ class Dialog {
     }
     
     listen(this.btnMid, 'click', this.onMid.bind(this))
+    if (this.btnSkip) listen(this.btnSkip, 'click', this.onSkip.bind(this))
     listen(window, 'keydown', this._boundOnKeyDown)
   }
 }

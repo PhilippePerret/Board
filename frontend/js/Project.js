@@ -332,7 +332,7 @@ class Project {
   apply(id, value) {
     switch(id){
       case 'title':
-        console.error("Je dois apprendre à corriger le titre dans l'affichage")
+        this.displayTitle()
         break
       case 'path':
         console.error("Je dois apprendre à corriger le path dans l'affichage")
@@ -541,9 +541,15 @@ class Project {
     } else {
       // Enregistrement du titre
       this.title = aryData
-      this.divTitle.textContent = this.title
+      this.displayTitle()
       this.save()
     }
+  }
+
+  // Report du titre sur la fiche et sur la marque du projet courant
+  displayTitle(){
+    if (this.divTitle) this.divTitle.textContent = this.title
+    if (this.constructor.current === this) this.constructor.markCurrentProject.textContent = this.title
   }
 
   /**

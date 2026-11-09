@@ -11,7 +11,7 @@ class SyntaxChecker
 class << self
 
   CHECKERS_BY_EXT = {
-    %w[.rb .rbw]                                          => ->(p){ ['ruby', '-c', p] },
+    %w[.rb .rbw]                                          => ->(p){ [RbConfig.ruby, '-c', p] },
     %w[.js .mjs .cjs]                                     => ->(p){ ['node', '--check', p] },
     %w[.ts .mts .cts]                                     => ->(p){ ['tsc', '--noEmit', p] },
     %w[.py .pyw]                                          => ->(p){ ['python3', '-m', 'py_compile', p] },
@@ -32,7 +32,7 @@ class << self
     %w[.R .r .Rmd]                                        => ->(p){ ['Rscript', '-e', "parse(file=#{p.inspect})"] },
     %w[.html .htm]                                        => ->(p){ ['tidy', '-q', '-e', p] },
     %w[.css]                                              => ->(p){ ['stylelint', p] },
-    %w[.adoc .asciidoc]                                   => ->(p){ ['asciidoctor', '--failure-level=WARN', '-o', File::NULL, p] },
+    %w[.adoc .asciidoc]                                   => ->(p){ [RbConfig.ruby, Gem.bin_path('asciidoctor', 'asciidoctor'), '--failure-level=WARN', '-o', File::NULL, p] },
     %w[.ex .exs]                                          => ->(p){ ['elixirc', '-o', Dir.mktmpdir, p] }
   }.each_with_object({}) { |(exts, cmd), h| exts.each { |e| h[e] = cmd } }
 

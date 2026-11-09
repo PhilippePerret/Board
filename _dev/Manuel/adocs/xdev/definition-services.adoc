@@ -15,15 +15,21 @@ Par exemple, on peut avoir :
 Les différences se trouvent ici : 
 
 |====
-| **Service abstrait**    | **Service concret**
-| reconnu par `id`        | même id, mais pas utilisé
-| pas d'`uuid`            | reconnu par `uuid`
+| **Service abstrait**
+| **Service concret**
+
+| reconnu par `id`
+| même id, mais pas utilisé
+
+| pas d'`uuid`
+| reconnu par `uuid`
 
 | `id` correspond au script qui sera joué : `mot-dans-un` → `scripts/MotDansUn.script`
 | `uuid` ne correspond à l'identifiant (utiliser pour suppression, déplacement, etc.)
 
 | `params` est une table qui définit précisément chaque paramètre utile.
 | `params` est une **liste** de valeurs qui seront ajoutées en argument du script.
+
 | `params` est une table  
 | `params` est une liste de valeurs sans indication. +
 L'ordre est défini dans `paramsOrder` mais purement à titre indicatif car les nom
@@ -53,7 +59,7 @@ Les services sont définis précisément dans le fichier `frontend/js/ServiceDat
 | `params`    | Définition des <<fix-params, _paramètres fixes_>> |
 | `dynParams` | Définition des <<dyn-params, _paramètres dynamiques_>> |
 | `scType`    | Le type du <<script-backend, script backend>> si ça n'est pas un AppleScript | `.rb`, `.py`
-| `transient`     2+ | OBSOLÈTE. Ne doit plus être utilisé.
+| `transient`     2+| OBSOLÈTE. Ne doit plus être utilisé.
 | `noCorrection`  2+| Pour marquer qu'un champ d'édition ne devra pas être corrigé. Typiquement : un champ devant contenir du code.
 | `afterDefinedParams` | Fonction appelée en toute fin de processus de définition, qui reçoit les paramètres récupérés, les transforme et les retourne pour l'enregistrement. |
 | `if_undefined` 2+|  Propriété définissant ce qu'il faut faire lorsqu'une propriété projet ou application n'est pas définie. Voir <<params-prop-if-undefined>>.

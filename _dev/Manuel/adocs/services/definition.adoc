@@ -38,8 +38,8 @@ include::common-services.adoc[]
 |`name`     | Le nom affiché du service +
 (pour les <<custom-services>>, ce nom est modifiable dès l'attribution.)
 | `params`    | Les <<script-params>> (très importants, ils font l'objet d'un détail propre)
-| `dynParams` | Optionnellement, il peut y avoir des paramètres à définir à l'utilisation du bouton. +
-Ils fonctionnent essentiellement commes les <<script-params>>, mais les valeurs ne sont pas persistées.
+| `dynParams` | Beaucoup de services utilisent des paramètres à définir à l'utilisation du bouton. +
+Ils fonctionnent essentiellement commes les <<script-params>>, mais les valeurs ne sont pas persistées (elles peuvent l'être, en étant <<service-fixable-dynparams, fixées>>).
 |====
 
 [[script-params, paramètres de script]]
@@ -94,3 +94,21 @@ Cette méthode doit recevoir :
 
 - le projet en premier argument,
 - les données propres au service (`sdata[<service-id>]`) en second argument, comme une liste de valeurs.
+
+[[service-dynamique-properties]]
+==== Propriétés dynamiques ====
+
+Les **propriétés dynamiques** des services sont des propriétés qui ne sont définies qu'à l'usage du bouton dans le projet (sauf si cette propriété est <<service-fixable-dynparams, fixée>>). 
+
+Par exemple, si on ajoute à un projet le bouton « Créer un fichier », à chaque utilisation, le service va demander l'emplacement (le dossier) et le nom du fichier à créer.
+
+[[service-fixable-dynparams]]
+==== Propriétés fixables ====
+
+Certaines <<service-dynamique-properties, propriétés dynamiques>> des services sont « fixables » ce qui permet d'obtenir encore plus d'efficacité, en prédéfinissant les propriétés des services.
+
+Par exemple, si l'on reprend l'exemple du service « Créer un fichier », on peut le glisser sur un projet pour créer un bouton « Créer un fichier documentation » et **fixer** l'emplacement (le dossier) pour qu'il soit toujours le dossier documentation. De cette manière, lorsque l'on cliquera sur ce bouton, le service ne demandera que le nom du fichier, et le créera automatiquement dans le dossier.
+
+Autre exemple. On peut imaginer trois boutons pour versionner un fichier : « Nouveau patch », « Nouvelle version mineure », « Nouvelle version majeure ». Pour chaque bouton, on définit les paramètres non dynamiques que sont 1) le fichier à versionner, 2) le dossier d'archive où mettre la version archivées. En ensuite, on fixe la **nature** de la version pour chaque bouton, « patch » pour le premier, « version mineure » pour le deuxième et « version majeure » pour le troisième.
+
+De cette manière, chaque bouton peut avoir une portée large (aucune propriété dynamique **fixée**, avec nécessité de la redéfinir chaque fois) ou au contraire une portée très précise (avec un simple clic pour l'activer, sans avoir rien à définir).

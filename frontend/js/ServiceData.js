@@ -151,8 +151,8 @@ const COMMON_SERVICES_DATA = [
       , {id: 'excluded-folders', type: 'excluded-folders', default: 'documentation', q: getMsg('excluded-folders-q'), width: '1040px'}
       ]
     , dynParams: [
-        {id: 'extensions', type: 'select', multi: true, q: getMsg('extensions-q'), values: ParamDefiner.projectExtensionsForSelect.bind(ParamDefiner)}
-      , {id: 'search-text', type: 'string', q: getMsg('search-text-q'), width: '620px'
+        {id: 'extensions', type: 'select', fixable: true, multi: true, q: getMsg('extensions-q'), values: ParamDefiner.projectExtensionsForSelect.bind(ParamDefiner)}
+      , {id: 'search-text', type: 'string', fixable: true, q: getMsg('search-text-q'), width: '620px'
           , validIf: (v, dictParamsValues, callback) => callback(v && v.trim() ? null : getErr('prop-cant-be-empty', [getMsg('search-text-q')]))
         }
       ]
@@ -182,8 +182,8 @@ const COMMON_SERVICES_DATA = [
           {id: 'path', type: 'project'}
         ]
     , dynParams: [
-          {id: 'issue_title', type: 'string', q: getMsg('error:'), width: '680px', title: getMsg('gh-save-a-error')}
-        , {id: 'issue_body' , type: 'text'  , q: getMsg('error-precise-description:'), width: '680px', title: getMsg('gh-save-a-error')}
+          {id: 'issue_title', type: 'string', fixable: true, q: getMsg('error:'), width: '680px', title: getMsg('gh-save-a-error')}
+        , {id: 'issue_body' , type: 'text'  , fixable: true, q: getMsg('error-precise-description:'), width: '680px', title: getMsg('gh-save-a-error')}
     ]
     , beforeExec: (dict) => {
         return `cd ${shellEscape(dict.path)} && gh issue create -l bug -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
@@ -236,7 +236,7 @@ const COMMON_SERVICES_DATA = [
       ]
     , dynParams: [
           {id: 'issue_label', type: 'select', fixable: true, q: getMsg('github-label'), multi: true, values: ParamDefiner.projectIssueLabelsForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
-        , {id: 'issue_list', type: 'select', q: getMsg('action-on-checked-issues'), multi: true, abortIfEmpty: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
+        , {id: 'issue_list', type: 'select', fixable: true, q: getMsg('action-on-checked-issues'), multi: true, abortIfEmpty: true, width: '1000px', values: ParamDefiner.issuesListOfTypeForSelect.bind(ParamDefiner), title: getMsg('git-issue-gestion')}
         , {id: 'gh_operation', type: 'select', fixable: true, q: getMsg('gh-operation'), title: getMsg('git-issue-gestion'), values: ISSUE_ACTION_LIST}
         , {id: 'gh_message', if: (dictParamsValues) => {
             return !ISSUE_ACTION_WITHOUT_COMS[dictParamsValues.gh_operation]
@@ -475,7 +475,7 @@ const COMMON_SERVICES_DATA = [
       ]
     , dynParams: [
         {id: 'files', title: getMsg('choosing-files-to',['commit']), ouiBtnIf:function(dialog){return dialog.values.length > 0}, type: 'select', select_class: 'monospace', q: getMsg('choose-files-to', getMsg('vb-commit')), width: '840px', multi: true, values: ParamDefiner.gitGetStatusFiles.bind(ParamDefiner)}
-      , {id: 'message', type: 'string', width: '740px', title: getMsg('git-commit-message-title'), q: getMsg('git-message-commit')}
+      , {id: 'message', type: 'string', fixable: true, width: '740px', title: getMsg('git-commit-message-title'), q: getMsg('git-message-commit')}
       ]
     , afterDefinedParams(params){
         // console.log("params de git-commit", params)
@@ -510,12 +510,12 @@ const COMMON_SERVICES_DATA = [
         {id: 'docu-folder', type: 'project', if_undefined: {type: 'path', q: getMsg('select-docu-folder')}}
       ]
     , dynParams: [
-        {id: 'search-type', type: 'dropdown', q: getMsg('search-type-q'), values: [
+        {id: 'search-type', type: 'dropdown', fixable: true, q: getMsg('search-type-q'), values: [
             ['any',    getMsg('search-type-any')]
           , ['target', getMsg('search-type-target')]
           , ['link',   getMsg('search-type-link')]
         ]}
-      , {id: 'search-text', type: 'string', q: getMsg('search-text-q'), width: '620px'
+      , {id: 'search-text', type: 'string', fixable: true, q: getMsg('search-text-q'), width: '620px'
           , validIf: (v, dictParamsValues, callback) => callback(v && v.trim() ? null : getErr('prop-cant-be-empty', [getMsg('search-text-q')]))
         }
       ]
@@ -639,7 +639,7 @@ const COMMON_SERVICES_DATA = [
                 Validator.fileExists(fullPath, (exists) => callback(exists ? getErr('file-already-exists-at', [relPath]) : null))
               }
           }
-        , {id: 'file_content', type: 'text', q: getMsg('ask-file-content'), width: '840px', height: 'max'}
+        , {id: 'file_content', type: 'text', fixable: true, q: getMsg('ask-file-content'), width: '840px', height: 'max'}
       ]
   },
 
@@ -679,7 +679,7 @@ const CUSTOM_SERVICES_DATA = [
     , group: getMsg('opening')
     , scType: '.sh'
     , params: [
-        {name: getMsg('file-to-open'), id: 'path', type: 'path', q: getMsg('select-file-in-finder-and-btn') , required: true},
+        {name: getMsg('file-to-open'), id: 'path', type: 'path', q: getMsg('select-file-in-finder-and-btn'), okName: getMsg('Choose'), required: true},
         {name: getMsg('app-to-use'), id: 'app', type: 'logiciel', required: true}
       ]
   },
@@ -725,7 +725,7 @@ const CUSTOM_SERVICES_DATA = [
     ]
     /* tag::exemple-dyn-params[] */
     , dynParams: [
-        {id: 'nature-version', q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]]}
+        {id: 'nature-version', fixable: true, q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]]}
       ]
     /* end::exemple-dyn-params[] */
   },

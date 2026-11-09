@@ -111,6 +111,8 @@ class Prompter {
       , height:  spec.height
       , errorMessage: spec.errorMessage
       , note:    spec.note
+      , fixing:  spec.fixing
+      , onSkip:  spec.onSkip
     }
   }
 
@@ -372,7 +374,7 @@ class Prompter {
 
   static promptPath(spec, callback){
     const q = spec.message || spec.q || getMsg('select-el-in-finder-and-ok')
-    const options = {midBtn: {name: getMsg('Empty'), onclick: () => callback('')}}
+    const options = {ouiBtn: spec.okName, midBtn: {name: getMsg('Empty'), onclick: () => callback('')}}
     this._waitForWindow(spec, q, (retour) => this._getPathOfFinderSelection(null, callback, retour), null, options, callback)
   }
 

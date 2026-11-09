@@ -94,9 +94,9 @@ class Service {
     this.params     = data.params || raise("[SYSTEM] Il faut définir les :params du servive " + this.id)
     this.uuid       = data.uuid ?? null
     this.type       = data.type ?? null // idem (others ou startup)
-    this.onError    = data.onError
-    this.beforeExec = data.beforeExec
-    this.bypassExec = data.bypassExec
+    this.onError    = data.onError ?? SERVICES_DATA_TABLE[data.id]?.onError
+    this.beforeExec = data.beforeExec ?? SERVICES_DATA_TABLE[data.id]?.beforeExec
+    this.bypassExec = data.bypassExec ?? SERVICES_DATA_TABLE[data.id]?.bypassExec
     this.projectId  = data.projectId ?? null // pas encore mis (voir si utile)
     this.fixed      = data.fixed ?? null // valeurs des dynParams fixables, propres au bouton du projet
     this.afterDefinedParams = data.afterDefinedParams ?? SERVICES_DATA_TABLE[data.id]?.afterDefinedParams ?? null
@@ -144,7 +144,7 @@ class Service {
   // quand le service est ajouté au projet ou redéfini.
   fixableDynParams(){
     return (this.absData.dynParams ?? []).filter(p => p.fixable).map(p => {
-      const fixParam = Object.assign({}, p, {note: getMsg('fixable-values-note')})
+      const fixParam = Object.assign({}, p, {fixing: true})
       if (this.fixed && this.fixed[p.id] !== undefined) fixParam.actual = this.fixed[p.id]
       return fixParam
     })

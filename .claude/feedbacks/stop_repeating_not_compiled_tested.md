@@ -9,4 +9,4 @@ Ne pas ajouter systématiquement "écrit, pas compilé, pas testé" (ou variante
 
 **Why:** Phil trouve ça pénible et inutile — répété à chaque tour, ça n'apporte rien de nouveau.
 
-**How to apply:** Faire la modification, dire ce qui a changé, s'arrêter là. Ne pas rappeler l'état compilé/testé sauf si ça change concrètement quelque chose (ex: vient de compiler/tester réellement) ou si demandé. Ça inclut toute variante ("Pas relancé", "Pas lancé les tests", etc.) — récidive constatée le 2026-07-21 malgré cette entrée déjà en place.
+**How to apply:** Faire la modification, dire ce qui a changé, s'arrêter là. Ne pas rappeler l'état compilé/testé sauf si ça change concrètement quelque chose (ex: vient de compiler/tester réellement) ou si demandé. Ça inclut toute variante ("Pas relancé", "Pas lancé les tests", etc.) — récidive constatée le 2026-07-21 et le 2026-11-08 ("pas lancé l'app, seule la syntaxe vérifiée"). C'est TOUJOURS Phil qui actualise le code : dire que ça ne tourne pas encore est une évidence qui pollue.
