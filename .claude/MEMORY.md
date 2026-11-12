@@ -66,4 +66,6 @@
 - [Toujours numéroter](feedbacks/always_number_points.md) — ≥2 points dans une réponse = numérotés par défaut, sans qu'on le redemande
 - [Pas de faux "Recommandé"](feedbacks/no_fake_recommended_tag.md) — jamais d'étiquette "(Recommandé)" sur un choix de pur scope/design sans base technique objective
 - [Portée du fix explicite](feedbacks/state_fix_scope.md) — dire « tous les services » si fix général, jamais formuler autour du seul cas signalé
+- [Commit "Fixed #N" par issue](feedbacks/commit_fixed_issue.md) — autorisation permanente : chaque issue corrigée commitée avec "Fixed #N", pas de push
+- [Commande "!" = pas de réponse](feedbacks/no_reply_to_bang_commands.md) — sortie d'une commande lancée par Phil avec "!" : réponse vide
 - [App portable, embarqué seul](feedbacks/app_portable_embedded_only.md) — jamais proposer un outil installé localement (pandoc…), tout doit être dans vendor/bundle

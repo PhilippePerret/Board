@@ -51,11 +51,16 @@ begin
     def version_in_name? = name.match?(REG_VERSION)
     def ksort = [major, minor, patch]
 
+    def next_version_number(term)
+      case term
+      when 'major' then "#{major + 1}.0.0"
+      when 'minor' then "#{major}.#{minor + 1}.0"
+      else "#{major}.#{minor}.#{patch + 1}"
+      end
+    end
+
     def next_version(term)
-      pa = term == 'patch' ? patch + 1 : patch
-      mi = term == 'minor' ? minor + 1 : minor
-      ma = term == 'major' ? major + 1 : major
-      "#{prefix}#{ma}.#{mi}.#{pa}#{postfix}"
+      "#{prefix}#{next_version_number(term)}#{postfix}"
     end
 
   end # end class MyFile
@@ -77,15 +82,19 @@ begin
   has_version_in_name = myfile.version_in_name?
   if has_version_in_name
     new_version_name = myfile.next_version(VERSIONTERM)
+    new_version_num  = myfile.next_version_number(VERSIONTERM)
   end
 
   if ARCHIVE_FOLDER
     if has_version_in_name
-      # On déplace le fichier dans les archives et l'on change son nom
+      # On place le fichier dans les archives et l'on change son nom
       dest = File.join(ARCHIVE_FOLDER, FILENAME)
-      FileUtils.mv(FILEPATH, dest)
-      File.rename(FILEPATH, new_version_name)
-      message << ['backend-archiv-move-and-num', new_version_name.inspect]
+      FileUtils.cp(FILEPATH, dest)
+      File.rename(FILEPATH, File.join(File.dirname(FILEPATH), new_version_name))
+      table[:version]   = new_version_num
+      table[:new_name]  = new_version_name
+      table[:archived]  = true
+      message << 'backend-archiv-move-and-num'
     elsif File.exist?(ARCHIVE_FOLDER)
       # C'est la version dans le dossier qu'il faut prendre
       sorted_files = Dir["#{ARCHIVE_FOLDER}/*#{FEXTNAME}"]
@@ -104,6 +113,9 @@ begin
       dest = File.join(ARCHIVE_FOLDER, new_archive_name)
       FileUtils.cp(FILEPATH, dest)
       if File.exist?(dest)
+        table[:version]   = lastfile ? lastfile.next_version_number(VERSIONTERM) : '1.0.0'
+        table[:new_name]  = new_archive_name
+        table[:archived]  = true
         message << 'backend-archiv-saved'
       else
         puts({'ok' => false, 'error' => ['backend-archiv-unknown-problem']}.to_json)
@@ -117,9 +129,12 @@ begin
     if has_version_in_name
       new_version_path = File.join(File.dirname(FILEPATH), new_version_name)
       File.rename(FILEPATH, new_version_path)
+      table[:version]   = new_version_num
+      table[:new_name]  = new_version_name
+      table[:archived]  = false
       message << "Renommage du fichier : #{new_version_name.inspect}."
     else
-      puts({'ok' => false, 'error' => ['backend-version-no-num', new_version_name.inspect]}.to_json)
+      puts({'ok' => false, 'error' => ['backend-version-no-num', FILENAME.inspect]}.to_json)
       exit 0
     end
   end  

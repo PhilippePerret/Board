@@ -147,7 +147,7 @@ class ServiceExecuter {
       if (this.service.data.successMessage !== false) {
         const successText = this.service.data.successMessage
           ? this.service.data.successMessage(retour, this.dictParamsValues, this.projet)
-          : (retour.message || '').trimEnd() + getMsg('service-success', [this.name, this.id])
+          : Service.successWithOutput(getMsg('service-done', [this.name]), retour)
         message(true, successText)
       }
       // console.log("ServiceExecuter # afterRunService termine normalement.")

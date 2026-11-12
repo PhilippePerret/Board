@@ -131,6 +131,7 @@ const COMMON_SERVICES_DATA = [
       newBoundsGroup[4] = sidebarGroup[0]          // écrase sidebarWidth (index 4 après ce retrait) par la valeur configurée
       return [pathGroup, newBoundsGroup]
     }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-open-folder-project', [projet.title])
   },
   
   Object.assign({
@@ -167,6 +168,7 @@ const COMMON_SERVICES_DATA = [
           , openAction: 'open-project-search-result'
         }).show()
       }
+    , successMessage: false // les résultats s'affichent dans leur propre fenêtre
   },
 
 
@@ -185,8 +187,20 @@ const COMMON_SERVICES_DATA = [
           {id: 'issue_title', type: 'string', fixable: true, q: getMsg('error:'), width: '680px', title: getMsg('gh-save-a-error')}
         , {id: 'issue_body' , type: 'text'  , fixable: true, q: getMsg('error-precise-description:'), width: '680px', title: getMsg('gh-save-a-error')}
     ]
+    // Label « bug », sinon « erreur » ou « error », sinon aucun label
     , beforeExec: (dict) => {
-        return `cd ${shellEscape(dict.path)} && gh issue create -l bug -t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
+        const tb = `-t ${shellEscape(dict.issue_title)} -b ${shellEscape(dict.issue_body)}`
+        const command = `
+          cd ${shellEscape(dict.path)} &&
+          labels=$(gh label list --limit 500 --json name --jq '.[].name');
+          lab="";
+          for l in bug erreur error; do
+            lab=$(printf '%s\\n' "$labels" | grep -ix -m1 -- "$l");
+            [ -n "$lab" ] && break;
+          done;
+          if [ -n "$lab" ]; then gh issue create -l "$lab" ${tb}; else gh issue create ${tb}; fi
+        `
+        return command.replace(/\n\s+/g, ' ').trim()
       }
     , successMessage: (retour) => getMsg('gh-issue-created', [(retour.message || '').match(/\/issues\/(\d+)/)?.[1] ?? '?'])
   },
@@ -339,6 +353,7 @@ const COMMON_SERVICES_DATA = [
         // On enregistre le branche courante.
         projet.set('git_pr_cycle_branche', dictValue['branche-name'], true)
       }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-pr-cycle-init', [projet.title, dict['branche-name']])
   },
 
   {
@@ -396,6 +411,7 @@ const COMMON_SERVICES_DATA = [
         }
         new ErrorsDialog(dataDial).show()
     }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-pr-cycle-commit', [projet.title, dict.git_pr_cycle_branche])
   },
 
   {
@@ -423,6 +439,7 @@ const COMMON_SERVICES_DATA = [
         message(true, getMsg('github-pr-cycle-submission-ok'))
       }
 
+    , successMessage: false // message déjà affiché par afterRunWithSuccess
   },
 
 
@@ -445,6 +462,7 @@ const COMMON_SERVICES_DATA = [
         params[2][0] = params[2][0].join(',')
         return params
       }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-git-install-labels', [projet.title])
   },
 
   // Ouvrir le repos Github dans le navigateur
@@ -459,6 +477,7 @@ const COMMON_SERVICES_DATA = [
       , {id: 'github_name', type: 'project', if_undefined: {type: 'string', q: getMsg('github-project-name')}}
       ]
     , beforeExec: (dict) => `open ${shellEscape('https://github.com/' + dict.github_account + '/' + dict.github_name)}`
+    , successMessage: (retour, dict) => getMsg('service-done-git-join-github', [`${dict.github_account}/${dict.github_name}`])
   },
 
   // Git commit push
@@ -482,6 +501,7 @@ const COMMON_SERVICES_DATA = [
         params[2][0] = JSON.stringify(params[2][0])
         return params
       }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-git-commit', [projet.title])
   },
 
   {
@@ -525,6 +545,7 @@ const COMMON_SERVICES_DATA = [
           , searchText: dictParamsValues['search-text']
         }).show()
       }
+    , successMessage: false // les résultats s'affichent dans leur propre fenêtre
   },
 
   // Update de la documentation
@@ -589,6 +610,7 @@ const COMMON_SERVICES_DATA = [
         projet.set('docu-main-file-adoc', mainEditFile)
         projet.set('docu-main-file-html', mainDispFile, true)
       }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-init-documentation', [projet.title, dict['docu-folder']])
   },
   // Ouvrir un iTerm au dossier (pour jouer un code)
   {
@@ -600,6 +622,7 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
       ]
+    , successMessage: (retour, dict) => getMsg('service-done-open-console', ['iTerm', dict.path])
   },
   // Ouvrir un Terminal au dossier (pour jouer un code)
   {
@@ -611,6 +634,7 @@ const COMMON_SERVICES_DATA = [
         {id: 'path', type: 'project'}
       , {id: 'code', type: 'string', q: getMsg('code-to-run-at-launch'), noCorrection: true}
       ]
+    , successMessage: (retour, dict) => getMsg('service-done-open-console', ['Terminal', dict.path])
   },
   {
       id: 'open-in-vscode'
@@ -621,6 +645,7 @@ const COMMON_SERVICES_DATA = [
     , params: [
         {id: 'path', type: 'project'}
       ]
+    , successMessage: (retour, dict) => getMsg('service-done-open-in-vscode', [dict.path])
   },
 
   {
@@ -641,6 +666,7 @@ const COMMON_SERVICES_DATA = [
           }
         , {id: 'file_content', type: 'text', fixable: true, q: getMsg('ask-file-content'), width: '840px', height: 'max'}
       ]
+    , successMessage: (retour, dict) => getMsg('service-done-file-create', [dict.file_path])
   },
 
   {
@@ -665,6 +691,7 @@ const COMMON_SERVICES_DATA = [
         projet.dataEdited = true
         Project.affProjectButtons()
       }
+    , successMessage: (retour, dict, projet) => getMsg('service-done-edit-projet', [projet.title])
   }
 ]
 
@@ -682,6 +709,7 @@ const CUSTOM_SERVICES_DATA = [
         {name: getMsg('file-to-open'), id: 'path', type: 'path', q: getMsg('select-file-in-finder-and-btn'), okName: getMsg('Choose'), required: true},
         {name: getMsg('app-to-use'), id: 'app', type: 'logiciel', required: true}
       ]
+    , successMessage: (retour, dict) => getMsg('service-done-open-file', [(dict['path'] || '').split('/').at(-1)])
   },
 
   {
@@ -699,6 +727,7 @@ const CUSTOM_SERVICES_DATA = [
     /* tag::exemple-param-order[] */
     , paramsOrder: ['path', 'x', 'y', 'width', 'height', 'sidebar-width', 'type-view', 'show-sidebar']
     /* end::exemple-param-order[] */
+    , successMessage: (retour, dict) => getMsg('service-done-open-finder-window', [Array.isArray(dict.window) ? dict.window[0] : (dict.window?.path ?? '')])
   },
 
   {
@@ -728,6 +757,11 @@ const CUSTOM_SERVICES_DATA = [
         {id: 'nature-version', fixable: true, q: getMsg('versionning-which-num'), value: null, type: 'select', values: [['patch', getMsg('versionning-patch')], ['minor', getMsg('versionning-minor')], ['major', getMsg('versionning-major')]]}
       ]
     /* end::exemple-dyn-params[] */
+    , successMessage: (retour, dictParamsValues) => {
+        const fileName = (dictParamsValues.path || '').split('/').at(-1)
+        const msgId = retour.data?.archived ? 'versioning-done-archived' : 'versioning-done'
+        return getMsg(msgId, [fileName, retour.data?.version ?? '?', retour.data?.new_name ?? '?'])
+      }
   },
 
   // Minuteur pour un projet
@@ -759,6 +793,7 @@ const CUSTOM_SERVICES_DATA = [
     , params: [
         {id: 'code', q: getMsg('ask-for-code-to-exec'), description: "(en bash/zsh)", type: 'string'}
       ]
+    , successMessage: (retour) => Service.successWithOutput(getMsg('service-done-exec-bash-code'), retour)
   },
 
   {
@@ -783,6 +818,7 @@ const CUSTOM_SERVICES_DATA = [
     , params: [
         {id: 'path', value: null, type: 'path', required: true}
       ]
+    , successMessage: (retour, dict) => Service.successWithOutput(getMsg('service-done-run-script', [(dict['path'] || '').split('/').at(-1)]), retour)
   },
 
  ]

@@ -29,10 +29,18 @@ class Project {
     // Maintenant que les projets sont affichés, on peut chercher les
     // tâches qu'ils peuvent avoir
     this.getTachesProjects()
+    this.getTodosProjects()
   } 
   
   static getTachesProjects(){
     this.eachAsync('getTachesAndSetBadges', 'setTodoistBadge')
+  }
+
+  // Pastilles des tâches todo, projet après projet
+  static getTodosProjects(projets = [...Object.values(this.ensureProjects)]){
+    const projet = projets.shift()
+    if (!projet) return
+    projet.getTodosAndSetBadge(() => this.getTodosProjects(projets))
   }
 
   /**
@@ -335,7 +343,7 @@ class Project {
         this.displayTitle()
         break
       case 'path':
-        console.error("Je dois apprendre à corriger le path dans l'affichage")
+        this.displayPath()
         break
       case 'todoist_id':
         this.todoistImg.src = `images/todoist${this.todoistBadgeByTasks()}.png`
@@ -344,8 +352,8 @@ class Project {
         this.setBackground(undefined, value)
         break
       case 'icon':
-        const icon = this.buildIcon()
-        this.obj.insertBefore(icon, this.divTitle)
+        this.obj.querySelector('img.project-icon')?.remove()
+        if (value) this.obj.insertBefore(this.buildIcon(), this.obj.firstChild)
         break
     }
   }
@@ -552,6 +560,14 @@ class Project {
     if (this.constructor.current === this) this.constructor.markCurrentProject.textContent = this.title
   }
 
+  // Report du path sur la fiche (et de l'icône, relative au path)
+  displayPath(){
+    if (this.divPath) this.divPath.textContent = this.path
+    if (this.icon && this.obj) {
+      this.obj.querySelector('img.project-icon')?.replaceWith(this.buildIcon())
+    }
+  }
+
   /**
    * Pour actualiser et/ou enregistrer la liste des labels
    * 
@@ -713,6 +729,10 @@ class Project {
     this.todoistCont.appendChild(this.todoistImg)
     div.appendChild(this.todoistCont)
 
+    // Pastille des tâches todo (côté opposé à Todoist)
+    this.todoBadge = DCreate('DIV', {class: 'badge todo-badge hidden'})
+    div.appendChild(this.todoBadge)
+
     // Bouton Standby
     this.standbyBtn = DCreate('IMG', {src: 'images/pile.svg', class:'picto standby-btn'})
     div.appendChild(this.standbyBtn)
@@ -720,8 +740,8 @@ class Project {
     const tit = DCreate('DIV', {id: `${divId}-title`, class:'title', text: this.title, title: getMsg('click-to-modify-title'), style: 'display:inline-block;z-index:1;'})
     this.divTitle = tit
     div.appendChild(tit)
-    const path  = DCreate('DIV', {class:'path', text: this.path})
-    div.appendChild(path)
+    this.divPath = DCreate('DIV', {class:'path', text: this.path})
+    div.appendChild(this.divPath)
     const dates = DCreate('DIV', {class: 'dates'})
     div.appendChild(dates)
     const crea  = DCreate('SPAN', {class: 'date', text: getMsg('created-at:') + this.createdAt})
@@ -806,6 +826,7 @@ class Project {
 
     // Pour pouvoir voir les tâches du projet
     listen(this.todoistCont, 'click', this.onClickTodoist.bind(this))
+    listen(this.todoBadge, 'click', this.onClickTodoBadge.bind(this))
 
     // Pour mettre le projet en standby (ou le sortir)
     listen(this.standbyBtn, 'mousedown', this.standbyize.bind(this))
@@ -1028,6 +1049,65 @@ class Project {
     }
     this.setNombreTachesInBadge(nombre)
   }
+  // Pastille todo : cases non cochées du fichier todo du projet + issues
+  // GitHub ouvertes de label "todo" (si le projet est sur GitHub).
+  // +fileOnly+ : recompte seulement le fichier (suivi), le nombre d'issues
+  // GitHub restant celui du dernier comptage complet.
+  getTodosAndSetBadge(callback, fileOnly = false){
+    server.send({
+        action:     'count-todos'
+      , path:       this.path
+      , todo_file:  (App.data && App.getData('todo-file')) || 'TODO.md'
+      , github:     !fileOnly && !!this.github_name
+    }, (retour) => {
+      this.setTodoBadge(retour, fileOnly)
+      'function' == typeof callback && callback()
+    })
+  }
+  setTodoBadge(retour, fileOnly = false){
+    const data = retour?.data ?? {}
+    this.todoFilePath   = data.todo_file
+    this.todoFileExists = !!data.file_exists
+    this.todoFileCount  = data.file ?? 0
+    if (!fileOnly) this.todoGithubCount = data.github ?? 0
+    const nombre = this.todoFileCount + (this.todoGithubCount ?? 0)
+    this.todoBadge.textContent = nombre
+    this.todoBadge.title = getMsg('todo-badge-title', [this.todoFileCount, this.todoGithubCount ?? 0])
+    this.todoBadge.classList[nombre ? 'remove' : 'add']('hidden')
+  }
+  // Fichier todo ouvert (et suivi) s'il existe, issues GitHub "todo"
+  // ouvertes dans le navigateur s'il y en a
+  onClickTodoBadge(ev){
+    stopEvent(ev)
+    if (this.todoFileExists) {
+      server.send({action: 'open-file-text', path: this.todoFilePath}, null)
+      this.watchTodoFile()
+    }
+    if (this.todoGithubCount) {
+      server.send({action: 'open-todo-issues', path: this.path}, null)
+    }
+  }
+  // Suivi du fichier todo après ouverture : recomptage régulier (et au
+  // retour dans Board) pendant TODO_WATCH_DURATION
+  static TODO_WATCH_INTERVAL = 10 * 1000
+  static TODO_WATCH_DURATION = 60 * 60 * 1000
+  watchTodoFile(){
+    this.todoWatchEnd = Date.now() + Project.TODO_WATCH_DURATION
+    if (this.todoWatchTimer) return
+    this.todoWatchOnFocus = () => this.refreshWatchedTodo()
+    listen(window, 'focus', this.todoWatchOnFocus)
+    this.todoWatchTimer = setInterval(() => this.refreshWatchedTodo(), Project.TODO_WATCH_INTERVAL)
+  }
+  refreshWatchedTodo(){
+    if (Date.now() > this.todoWatchEnd) return this.unwatchTodoFile()
+    this.getTodosAndSetBadge(null, true)
+  }
+  unwatchTodoFile(){
+    clearInterval(this.todoWatchTimer)
+    this.todoWatchTimer = null
+    window.removeEventListener('focus', this.todoWatchOnFocus)
+  }
+
   setNombreTachesInBadge(nombre){
     this.tasksBadge.textContent = nombre
     this.tasksBadge.classList[nombre?'remove':'add']('hidden')

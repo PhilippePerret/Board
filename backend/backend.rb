@@ -215,6 +215,14 @@ begin
     require_relative 'lib/project_files.rb'
     update_project_notes(request)
 
+  # Pastille des tâches todo d'un projet
+  when 'count-todos'
+    require_relative 'lib/project_files.rb'
+    count_project_todos(request)
+  when 'open-todo-issues'
+    require_relative 'lib/project_files.rb'
+    open_todo_issues(request)
+
   # ========== EXÉCUTIONS DES SERVICES =================
 
   when 'exec-service'

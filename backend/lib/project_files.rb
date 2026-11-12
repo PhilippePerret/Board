@@ -30,3 +30,35 @@ def update_project_notes(request)
 
   RETOUR.ok = true
 end
+
+# Nombre de tâches à faire d'un projet (pastille todo) : cases non cochées
+# du fichier todo + issues GitHub ouvertes de label "todo".
+def count_project_todos(request)
+  require 'json'
+  require 'open3'
+  require 'timeout'
+  project_dir = request['path']
+  todo_file   = File.join(project_dir, request['todo_file'] || 'TODO.md')
+  file_count  = File.exist?(todo_file) ? IO.read(todo_file).scan(/^\s*[-*] \[ \]/).count : 0
+  gh_count    = 0
+  if request['github'] && File.exist?(File.join(project_dir, '.git'))
+    begin
+      out = Timeout.timeout(8) do
+        Open3.capture2('gh', 'issue', 'list', '--label', 'todo', '--state', 'open', '--json', 'number', chdir: project_dir)[0]
+      end
+      gh_count = JSON.parse(out).count
+    rescue Exception => e
+      Debug.log("count-todos : gh indisponible pour #{project_dir.inspect} (#{e.message})")
+    end
+  end
+  RETOUR.data = {file: file_count, github: gh_count, total: file_count + gh_count, todo_file: todo_file, file_exists: File.exist?(todo_file)}
+  RETOUR.ok = true
+end
+
+# Issues GitHub ouvertes de label "todo" du projet, dans le navigateur
+def open_todo_issues(request)
+  require 'open3'
+  _out, err, status = Open3.capture3('gh', 'issue', 'list', '--label', 'todo', '--state', 'open', '--web', chdir: request['path'])
+  RETOUR.ok = status.success?
+  RETOUR.error = err unless status.success?
+end

@@ -296,6 +296,13 @@ footer div#message > span.notice {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   animation: fadeOut 3s 3s forwards 
 }
+.exergue-message pre.service-output {
+  font-size: 13px;
+  max-height: 200px;
+  overflow: auto;
+  white-space: pre-wrap;
+  text-shadow: none;
+}
 @keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
@@ -359,6 +366,14 @@ div.todoist .badge {
   top: -16px;
   right: -6px;
   z-index: 10;
+}
+div.project div.todo-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 10;
+  cursor: pointer;
+  background-color: rgb(200, 120, 0);
 }
 div.todoist img.picto {
   position: absolute;

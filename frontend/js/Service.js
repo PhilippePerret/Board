@@ -44,6 +44,12 @@ class Service {
     const serv = this.get(serviceId)
   }
 
+  // Message de succès suivi de la sortie éventuelle du script
+  static successWithOutput(msg, retour){
+    const output = ('string' == typeof retour.message ? retour.message : '').trim()
+    return output ? `${msg}<pre class="service-output">${escapeHTML(output)}</pre>` : msg
+  }
+
   /**
    * Jouer un code javascript lors d'un click
    */

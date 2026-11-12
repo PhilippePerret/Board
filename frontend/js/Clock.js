@@ -433,6 +433,7 @@ class Clock extends Draggable {
         if (workDiv) workDiv.textContent = getMsg('clock-work-time') + getMsg(':')+ this.projet.workTime
       })
 
+      this.projet.getTodosAndSetBadge()
       this.close()
       message(`Séance terminée : ${this.pendingElapsedMinutes} min.`)
     })
